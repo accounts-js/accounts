@@ -1,0 +1,24 @@
+{
+
+  "parser": "babel-eslint",
+
+  "env": {
+    "es6": true,
+    "mocha": true,
+    "node": true,
+    "browser": true
+  },
+  
+  "rules": {
+    "strict": 0
+  },
+
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "experimentalObjectRestSpread": true,
+    "sourceType": "module"
+  },
+
+  "extends": [ "eslint:recommended" ]
+
+}
