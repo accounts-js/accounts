@@ -8,9 +8,11 @@
     "node": true,
     "browser": true
   },
-  
+
   "rules": {
-    "strict": 0
+    "strict": 0,
+    "import/no-extraneous-dependencies": 0,
+    "no-underscore-dangle": 0
   },
 
   "parserOptions": {
@@ -19,6 +21,5 @@
     "sourceType": "module"
   },
 
-  "extends": [ "eslint:recommended" ]
-
+  "extends": "airbnb"
 }
