@@ -17,6 +17,7 @@
     "url": "https://github.com/graphql-accounts/graphql-accounts"
   },
   "keywords": [
+    "rest"
     "graphql",
     "passport",
     "grant",
