@@ -3,8 +3,30 @@
 /* eslint-disable max-len */
 
 import { each, keys, includes } from 'lodash';
+import { createStore } from 'redux';
+import client from './client';
+
+console.log(client);
+
+const reducer = (state = initialState, action) => {
+  const nextState = {};
+  switch (action.type) {
+
+  }
+  return nextState;
+};
+
+const store = createStore(reducer, {});
 
 const Accounts = {
+  client,
+  reducer,
+  store,
+  login({ username, email, password, ...otherArgs }) {
+    client.login({
+      username, email, password, ...otherArgs,
+    });
+  },
 };
 
 /**
