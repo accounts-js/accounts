@@ -55,8 +55,5 @@
     "webpack": "^1.13.3",
     "webpack-node-externals": "^1.5.4",
     "yarn": "^0.16.1"
-  },
-  "peerDependencies": {
-    "eslint-plugin-import": "^2.0.1"
   }
 }
