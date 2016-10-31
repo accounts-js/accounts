@@ -1,20 +1,20 @@
-module.exports = function(wallaby) {
+module.exports = function (wallaby) {
   return {
     files: [
       'src/**/*.js',
-      '!src/**/*.spec.js'
+      '!src/**/*.spec.js',
     ],
 
     tests: [
-      'src/**/*.spec.js'
+      'src/**/*.spec.js',
     ],
 
     compilers: {
-      'src/**/*.js': wallaby.compilers.babel()
+      'src/**/*.js': wallaby.compilers.babel(),
     },
 
     env: {
-      type: 'node'
-    }
+      type: 'node',
+    },
   };
 };

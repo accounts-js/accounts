@@ -1,19 +1,28 @@
-import chai from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-import chaiAsPromised from "chai-as-promised";
+/* eslint-disable no-unused-expressions */
 
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import chaiAsPromised from 'chai-as-promised';
 import Accounts from './index';
 
-const should = chai.should();
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
 
-describe('graphql-accounts', () => {
-
-  it('sets foo', () => {
-    const accounts = new Accounts();
-    accounts.foo.should.be.true;
+describe('Accounts', () => {
+  it('throws error on invalid keys', () => {
+    () => Accounts.ui.config({
+      'bad key': 'bad value',
+    }).should.throw.error;
   });
-
+  it('redirect hooks must be strings or functions', () => {
+    () => Accounts.ui.config({
+      onSignedInHook: () => null,
+    }).should.be.ok;
+    () => Accounts.ui.config({
+      onSignedInHook: '',
+    }).should.be.ok;
+    () => Accounts.ui.config({
+      onSignedInHook: {},
+    }).should.throw.error;
+  });
 });

@@ -1,10 +1,11 @@
 {
   "presets": [
-    "es2015-node4"
+    "es2015"
   ],
   "plugins": [
     "syntax-async-functions",
-    "transform-async-to-generator",
-    "transform-object-rest-spread"
+    "transform-regenerator",
+    "transform-object-rest-spread",
+    "transform-async-to-generator"
   ]
 }
