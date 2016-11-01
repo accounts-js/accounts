@@ -8,7 +8,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, '/lib'),
     filename: 'index.js',
-    library: 'graphql-accounts',
+    library: 'accounts/@accounts',
     libraryTarget: 'umd',
   },
   modulesDirectories: [

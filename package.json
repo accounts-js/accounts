@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/graphql-accounts/graphql-accounts"
+    "url": "https://github.com/js-accounts/accounts"
   },
   "keywords": [
     "rest",
