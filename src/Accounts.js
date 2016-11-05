@@ -19,25 +19,21 @@ const reducer = (state = initialState, action) => {
 };
 
 const store = createStore({
-  reducer: {
+  reducers: {
     accounts: reducer,
   },
 });
 
 const Accounts = {
-  // client,
   reducer,
   store,
-  clientConfig(config) {
-    client.config(config);
-  },
   login({ username, email, password, ...otherArgs }) {
-    client.login({
+    this.client.login({
       username, email, password, ...otherArgs,
     });
   },
   signup({ username, email, password, ...otherArgs }) {
-    client.register({
+    this.client.register({
       username, email, password, ...otherArgs,
     });
   },
@@ -48,7 +44,8 @@ const Accounts = {
  * @namespace
  * @memberOf Accounts
  */
-Accounts.ui = {};
+Accounts.ui = {
+};
 
 Accounts.ui._options = {
   title: '',
@@ -56,6 +53,7 @@ Accounts.ui._options = {
   requestOfflineToken: {},
   forceApprovalPrompt: {},
   requireEmailVerification: false,
+  // TODO Replace these strings with references to './passwordSignupFields'
   passwordSignupFields: 'EMAIL_ONLY_NO_PASSWORD',
   minimumPasswordLength: 7,
   loginPath: '/',
@@ -85,6 +83,8 @@ Accounts.ui._options = {
  * @param {String} options.passwordSignupFields Which fields to display in the user creation form. One of '`USERNAME_AND_EMAIL`', '`USERNAME_AND_OPTIONAL_EMAIL`', '`USERNAME_ONLY`', '`EMAIL_ONLY`', or '`NO_PASSWORD`' (default).
  */
 Accounts.ui.config = (options) => {
+  const serverConfig = {};
+  // const serverConfig = await Accounts.client.accountsConfig();
   // validate options keys
   const VALID_KEYS = [
     'title',
@@ -245,6 +245,8 @@ Accounts.ui.config = (options) => {
       }
     }
   }
+
+  Accounts.ui._options = { ...Accounts.ui._options, ...serverConfig };
 };
 
 export default Accounts;
