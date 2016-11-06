@@ -4,7 +4,11 @@
 
 import { each, keys, includes } from 'lodash';
 import createStore from './createStore';
+import toUsernameAndEmail from './toUsernameAndEmail';
 // import client from './client';
+
+const PATH = 'js-accounts/';
+const LOGIN = `${PATH}LOGIN`;
 
 const initialState = {
   formType: 'login',
@@ -28,6 +32,12 @@ const Accounts = {
   reducer,
   store,
   login({ username, email, password, ...otherArgs }) {
+    store.dispatch({
+      type: LOGIN,
+      payload: {
+        username, email, password,
+      },
+    });
     this.client.login({
       username, email, password, ...otherArgs,
     });
@@ -71,6 +81,7 @@ Accounts.ui._options = {
   // onVerifyEmailHook: () => redirect(`${Accounts.ui._options.profilePath}`),
   onSignedInHook: () => null,
   onSignedOutHook: () => null,
+  forbidClientAccountCreation: false,
 };
 
 /**
@@ -121,6 +132,8 @@ Accounts.ui.config = (options) => {
   } else {
     throw new Error(`Accounts.ui.config: Invalid option for \`title\`: ${options.title}`);
   }
+
+  Accounts.ui._options.forbidClientAccountCreation = options.forbidClientAccountCreation;
 
   // deal with `passwordSignupFields`
   if (options.passwordSignupFields) {

@@ -6,8 +6,10 @@
   "scripts": {
     "start": "webpack -p --config --progress --watch",
     "compile": "webpack -p --config --progress",
-    "prepublish": "yarn run compile",
-    "test": "mocha --compilers js:babel-core/register \"src/**/*.spec.js\"",
+    "prepublish": "npm run compile",
+    "pretest": "npm run lint",
+    "test": "npm run testonly",
+    "testonly": "mocha --compilers js:babel-core/register \"src/**/*.spec.js\"",
     "lint": "eslint src",
     "coverage": "istanbul cover _mocha -- --compilers js:babel-core/register \"src/**/*.spec.js\" -R spec",
     "coveralls": "istanbul cover _mocha --report lcovonly -- --compilers js:babel-core/register \"src/**/*.spec.js\" -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
