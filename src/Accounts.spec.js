@@ -28,7 +28,7 @@ describe('Accounts', () => {
   describe('validateLogin', () => {
     it('empty username and password', () => {
       const isValid = Accounts.validateLogin({ user: '', password: '' });
-      const { user, password } = Accounts.getState().accounts.loginForm.fields;
+      const { user, password } = Accounts.getState().accounts.forms.loginForm.fields;
       expect(isValid).to.eql(false);
       expect(user.errors).to.include.members(['A username or email is required.']);
       expect(password.errors).to.include.members(['Password is required.']);

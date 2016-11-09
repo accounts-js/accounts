@@ -2,10 +2,8 @@
 
 /* eslint-disable max-len */
 
-import { compose } from 'redux';
 import { each, keys, includes, trim, isEmpty, merge } from 'lodash';
 import createStore from './createStore';
-import toUsernameAndEmail from './toUsernameAndEmail';
 // import client from './client';
 
 const PATH = 'js-accounts/';
@@ -15,21 +13,23 @@ const ADD_ERROR = `${PATH}ADD_ERROR`;
 
 const initialState = {
   formType: 'login',
-  loginForm: {
-    fields: {
-      user: {
-        value: '',
-        errors: [],
+  forms: {
+    loginForm: {
+      fields: {
+        user: {
+          value: '',
+          errors: [],
+        },
+        password: {
+          value: '',
+          errors: [],
+        },
       },
-      password: {
-        value: '',
-        errors: [],
-      },
+      errors: [],
     },
-    errors: [],
-  },
-  signupForm: {
+    signupForm: {
 
+    },
   },
 };
 
@@ -42,7 +42,9 @@ const reducer = (state = initialState, action) => {
     case CLEAR_FORM: {
       const { form } = action.payload;
       nextState = merge({}, state, {
-        [form]: initialState[form],
+        forms: {
+          [form]: initialState[form],
+        },
       });
       break;
     }
@@ -50,18 +52,22 @@ const reducer = (state = initialState, action) => {
       const { form, field, error } = action.payload;
       if (field) {
         nextState = merge({}, state, {
-          [form]: {
-            fields: {
-              [field]: {
-                errors: [...state[form].fields[field].errors, error],
+          forms: {
+            [form]: {
+              fields: {
+                [field]: {
+                  errors: [...state.forms[form].fields[field].errors, error],
+                },
               },
             },
           },
         });
       } else {
         nextState = merge({}, state, {
-          [form]: {
-            errors: [...state[form].errors, error],
+          forms: {
+            [form]: {
+              errors: [...state.forms[form].errors, error],
+            },
           },
         });
       }
@@ -106,7 +112,7 @@ const Accounts = {
     return this.hasError('loginForm');
   },
   hasError(form) {
-    const formState = this.getState().accounts[form];
+    const formState = this.getState().accounts.forms[form];
     // Checks all the form's fields for errors and the top level form error
     const hasError = keys(formState.fields).reduce((prev, curr) =>
       !prev && curr.errors.length > 0) || formState.errors.length > 0;
@@ -115,7 +121,7 @@ const Accounts = {
   login({ user, password }) {
     this.validateLogin({ user, password });
     return this.client.login({ user, password })
-      .then(() => {
+      .then(({ accessToken, refreshToken }) => {
         // Clear the existing login form
         this.dispatch({
           type: CLEAR_FORM,
@@ -123,6 +129,8 @@ const Accounts = {
             form: 'loginForm',
           },
         });
+        sessionStorage.setItem('js-accounts:accessToken', accessToken);
+        sessionStorage.setItem('js-accounts:refreshToken', refreshToken);
         // Store tokens in local storage
         // Store user object in redux
       })
