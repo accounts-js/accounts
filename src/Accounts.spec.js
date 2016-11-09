@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 
-import chai from 'chai';
+import chai, { expect } from 'chai';
 import sinonChai from 'sinon-chai';
 import chaiAsPromised from 'chai-as-promised';
 import Accounts from './Accounts';
@@ -24,5 +24,14 @@ describe('Accounts', () => {
     () => Accounts.ui.config({
       onSignedInHook: {},
     }).should.throw.error;
+  });
+  describe('validateLogin', () => {
+    it('empty username and password', () => {
+      const isValid = Accounts.validateLogin({ user: '', password: '' });
+      const { user, password } = Accounts.getState().accounts.loginForm.fields;
+      expect(isValid).to.eql(false);
+      expect(user.errors).to.include.members(['A username or email is required.']);
+      expect(password.errors).to.include.members(['Password is required.']);
+    });
   });
 });

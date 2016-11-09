@@ -2,45 +2,133 @@
 
 /* eslint-disable max-len */
 
-import { each, keys, includes } from 'lodash';
+import { compose } from 'redux';
+import { each, keys, includes, trim, isEmpty, merge } from 'lodash';
 import createStore from './createStore';
 import toUsernameAndEmail from './toUsernameAndEmail';
 // import client from './client';
 
 const PATH = 'js-accounts/';
 const LOGIN = `${PATH}LOGIN`;
+const CLEAR_FORM = `${PATH}CLEAR_FORM`;
+const ADD_ERROR = `${PATH}ADD_ERROR`;
 
 const initialState = {
   formType: 'login',
+  loginForm: {
+    fields: {
+      user: {
+        value: '',
+        errors: [],
+      },
+      password: {
+        value: '',
+        errors: [],
+      },
+    },
+    errors: [],
+  },
+  signupForm: {
+
+  },
 };
 
 const reducer = (state = initialState, action) => {
-  const nextState = {};
+  let nextState = state;
   switch (action.type) {
-
+    case LOGIN: {
+      break;
+    }
+    case CLEAR_FORM: {
+      const { form } = action.payload;
+      nextState = merge({}, state, {
+        [form]: initialState[form],
+      });
+      break;
+    }
+    case ADD_ERROR: {
+      const { form, field, error } = action.payload;
+      if (field) {
+        nextState = merge({}, state, {
+          [form]: {
+            fields: {
+              [field]: {
+                errors: [...state[form].fields[field].errors, error],
+              },
+            },
+          },
+        });
+      } else {
+        nextState = merge({}, state, {
+          [form]: {
+            errors: [...state[form].errors, error],
+          },
+        });
+      }
+      break;
+    }
+    default:
+      break;
   }
   return nextState;
 };
 
-const store = createStore({
+const { getState, dispatch } = createStore({
   reducers: {
     accounts: reducer,
   },
 });
 
 const Accounts = {
-  reducer,
-  store,
-  login({ username, email, password, ...otherArgs }) {
-    store.dispatch({
-      type: LOGIN,
-      payload: {
-        username, email, password,
-      },
-    });
-    this.client.login({
-      username, email, password, ...otherArgs,
-    });
+  getState,
+  dispatch,
+  validateLogin({ user, password }) {
+    if (isEmpty(trim(user))) {
+      this.dispatch({
+        type: ADD_ERROR,
+        payload: {
+          form: 'loginForm',
+          field: 'user',
+          error: 'A username or email is required.',
+        },
+      });
+    }
+    if (isEmpty(trim(password))) {
+      this.dispatch({
+        type: ADD_ERROR,
+        payload: {
+          form: 'loginForm',
+          field: 'password',
+          error: 'Password is required.',
+        },
+      });
+    }
+    return this.hasError('loginForm');
+  },
+  hasError(form) {
+    const formState = this.getState().accounts[form];
+    // Checks all the form's fields for errors and the top level form error
+    const hasError = keys(formState.fields).reduce((prev, curr) =>
+      !prev && curr.errors.length > 0) || formState.errors.length > 0;
+    return hasError;
+  },
+  login({ user, password }) {
+    this.validateLogin({ user, password });
+    return this.client.login({ user, password })
+      .then(() => {
+        // Clear the existing login form
+        this.dispatch({
+          type: CLEAR_FORM,
+          payload: {
+            form: 'loginForm',
+          },
+        });
+        // Store tokens in local storage
+        // Store user object in redux
+      })
+      .catch(() => {
+        // Dispatch to update store with errors
+      });
   },
   signup({ username, email, password, ...otherArgs }) {
     this.client.register({

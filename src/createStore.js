@@ -4,7 +4,7 @@ export default ({
   reducers = {},
   middleware = [],
   state,
-}) => {
+}) =>
   createStore(
     combineReducers(reducers),
     state,
@@ -12,4 +12,3 @@ export default ({
       applyMiddleware(...middleware),
     )
   );
-};
