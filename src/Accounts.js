@@ -34,7 +34,8 @@ const initialState = {
 
     },
   },
-  accessToken: localStorage.getItem(''),
+  accessToken: localStorage.getItem(ACCESS_TOKEN),
+  refreshToken: localStorage.getItem(REFRESH_TOKEN),
 };
 
 const reducer = (state = initialState, action) => {
