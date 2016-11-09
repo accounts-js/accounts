@@ -3,6 +3,7 @@
 import chai, { expect } from 'chai';
 import sinonChai from 'sinon-chai';
 import chaiAsPromised from 'chai-as-promised';
+import 'localstorage-polyfill';
 import Accounts from './Accounts';
 
 chai.use(sinonChai);

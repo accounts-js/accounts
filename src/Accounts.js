@@ -6,6 +6,9 @@ import { each, keys, includes, trim, isEmpty, merge } from 'lodash';
 import createStore from './createStore';
 // import client from './client';
 
+const ACCESS_TOKEN = 'js-accounts:accessToken';
+const REFRESH_TOKEN = 'js-accounts:refreshToken';
+
 const PATH = 'js-accounts/';
 const LOGIN = `${PATH}LOGIN`;
 const CLEAR_FORM = `${PATH}CLEAR_FORM`;
@@ -31,6 +34,7 @@ const initialState = {
 
     },
   },
+  accessToken: localStorage.getItem(''),
 };
 
 const reducer = (state = initialState, action) => {
@@ -129,8 +133,8 @@ const Accounts = {
             form: 'loginForm',
           },
         });
-        sessionStorage.setItem('js-accounts:accessToken', accessToken);
-        sessionStorage.setItem('js-accounts:refreshToken', refreshToken);
+        sessionStorage.setItem(ACCESS_TOKEN, accessToken);
+        sessionStorage.setItem(REFRESH_TOKEN, refreshToken);
         // Store tokens in local storage
         // Store user object in redux
       })

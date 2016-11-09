@@ -51,6 +51,7 @@
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.4.1",
     "istanbul": "^1.1.0-alpha.1",
+    "localstorage-polyfill": "^1.0.1",
     "lodash": "^4.16.4",
     "mocha": "^3.1.2",
     "sinon": "^1.17.6",
