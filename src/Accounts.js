@@ -13,9 +13,11 @@ const PATH = 'js-accounts/';
 const LOGIN = `${PATH}LOGIN`;
 const CLEAR_FORM = `${PATH}CLEAR_FORM`;
 const ADD_ERROR = `${PATH}ADD_ERROR`;
+const SET_LOADING = `${PATH}SET_LOADING`;
 
 const initialState = {
   formType: 'login',
+  isLoading: false,
   forms: {
     loginForm: {
       fields: {
@@ -78,6 +80,13 @@ const reducer = (state = initialState, action) => {
       }
       break;
     }
+    case SET_LOADING: {
+      const { isLoading } = action.payload;
+      nextState = merge({}, state, {
+        isLoading,
+      });
+      break;
+    }
     default:
       break;
   }
@@ -124,6 +133,7 @@ const Accounts = {
     return hasError;
   },
   login({ user, password }) {
+    this.setLoading(true);
     this.validateLogin({ user, password });
     return this.client.login({ user, password })
       .then(({ accessToken, refreshToken }) => {
@@ -146,6 +156,14 @@ const Accounts = {
   signup({ username, email, password, ...otherArgs }) {
     this.client.register({
       username, email, password, ...otherArgs,
+    });
+  },
+  setLoading(isLoading) {
+    this.dispatch({
+      type: SET_LOADING,
+      payload: {
+        isLoading,
+      },
     });
   },
 };

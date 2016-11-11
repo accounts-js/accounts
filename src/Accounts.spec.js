@@ -35,4 +35,11 @@ describe('Accounts', () => {
       expect(password.errors).to.include.members(['Password is required.']);
     });
   });
+  describe('setLoading', () => {
+    it('set loading', () => {
+      Accounts.setLoading(true);
+      const isLoading = Accounts.getState().accounts.isLoading;
+      expect(isLoading).to.eql(true);
+    });
+  });
 });
