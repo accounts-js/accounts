@@ -1,10 +1,7 @@
-// Heavily inspired by https://github.com/studiointeract/accounts-ui/
-
 /* eslint-disable max-len */
 
 import { each, keys, includes, trim, isEmpty, merge } from 'lodash';
 import createStore from './createStore';
-// import client from './client';
 
 const ACCESS_TOKEN = 'js-accounts:accessToken';
 const REFRESH_TOKEN = 'js-accounts:refreshToken';
@@ -93,15 +90,21 @@ const reducer = (state = initialState, action) => {
   return nextState;
 };
 
-const { getState, dispatch } = createStore({
+const store = createStore({
   reducers: {
     accounts: reducer,
   },
 });
 
+const { dispatch } = store;
+
 const Accounts = {
-  getState,
+  reducer,
+  store,
   dispatch,
+  getState() {
+    return store.getState().accounts;
+  },
   validateLogin({ user, password }) {
     if (isEmpty(trim(user))) {
       this.dispatch({
@@ -126,7 +129,7 @@ const Accounts = {
     return this.hasError('loginForm');
   },
   hasError(form) {
-    const formState = this.getState().accounts.forms[form];
+    const formState = this.getState().forms[form];
     // Checks all the form's fields for errors and the top level form error
     const hasError = keys(formState.fields).reduce((prev, curr) =>
       !prev && curr.errors.length > 0) || formState.errors.length > 0;
@@ -167,6 +170,9 @@ const Accounts = {
     });
   },
 };
+
+
+// Heavily inspired by https://github.com/studiointeract/accounts-ui/
 
 /**
  * @summary Accounts UI
