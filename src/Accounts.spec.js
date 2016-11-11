@@ -29,7 +29,7 @@ describe('Accounts', () => {
   describe('validateLogin', () => {
     it('empty username and password', () => {
       const isValid = Accounts.validateLogin({ user: '', password: '' });
-      const { user, password } = Accounts.getState().accounts.forms.loginForm.fields;
+      const { user, password } = Accounts.getState().forms.loginForm.fields;
       expect(isValid).to.eql(false);
       expect(user.errors).to.include.members(['A username or email is required.']);
       expect(password.errors).to.include.members(['Password is required.']);
@@ -38,8 +38,19 @@ describe('Accounts', () => {
   describe('setLoading', () => {
     it('set loading', () => {
       Accounts.setLoading(true);
-      const isLoading = Accounts.getState().accounts.isLoading;
+      const isLoading = Accounts.getState().isLoading;
       expect(isLoading).to.eql(true);
+    });
+  });
+  describe('setField', () => {
+    it('sets field value', () => {
+      Accounts.setField({
+        form: 'loginForm',
+        field: 'user',
+        value: 'user1',
+      });
+      const form = Accounts.getState().forms.loginForm;
+      expect(form.fields.user.value).to.eql('user1');
     });
   });
 });

@@ -11,6 +11,7 @@ const LOGIN = `${PATH}LOGIN`;
 const CLEAR_FORM = `${PATH}CLEAR_FORM`;
 const ADD_ERROR = `${PATH}ADD_ERROR`;
 const SET_LOADING = `${PATH}SET_LOADING`;
+const SET_FIELD = `${PATH}SET_FIELD`;
 
 const initialState = {
   formType: 'login',
@@ -81,6 +82,21 @@ const reducer = (state = initialState, action) => {
       const { isLoading } = action.payload;
       nextState = merge({}, state, {
         isLoading,
+      });
+      break;
+    }
+    case SET_FIELD: {
+      const { form, field, value } = action.payload;
+      nextState = merge({}, state, {
+        forms: {
+          [form]: {
+            fields: {
+              [field]: {
+                value,
+              },
+            },
+          },
+        },
       });
       break;
     }
@@ -166,6 +182,14 @@ const Accounts = {
       type: SET_LOADING,
       payload: {
         isLoading,
+      },
+    });
+  },
+  setField({ form, field, value }) {
+    this.dispatch({
+      type: SET_FIELD,
+      payload: {
+        form, field, value,
       },
     });
   },
