@@ -122,13 +122,10 @@ const Accounts = {
   },
   validateLogin({ user, password }) {
     if (isEmpty(trim(user))) {
-      this.dispatch({
-        type: ADD_ERROR,
-        payload: {
-          form: 'login',
-          field: 'user',
-          error: 'A username or email is required.',
-        },
+      this.addError({
+        form: 'login',
+        field: 'user',
+        error: 'A username or email is required.',
       });
     }
     if (isEmpty(trim(password))) {
@@ -141,14 +138,7 @@ const Accounts = {
         },
       });
     }
-    return this.hasError('login');
-  },
-  hasError(form) {
-    const formState = this.getAccountsState(this.store.getState()).forms[form];
-    // Checks all the form's fields for errors and the top level form error
-    const hasError = keys(formState.fields).reduce((prev, curr) =>
-      !prev && curr.errors.length > 0) || formState.errors.length > 0;
-    return hasError;
+    return !this.hasError('login');
   },
   login({ user, password }) {
     this.setLoading(true);
@@ -162,8 +152,13 @@ const Accounts = {
       field: 'password',
       value: password,
     });
-    this.validateLogin({ user, password });
-    return this.client.login({ user, password })
+    return Promise.resolve()
+      .then(() => {
+        if (!this.validateLogin({ user, password })) {
+          throw new Error('test error');
+        }
+      })
+      .then(() => this.client.login({ user, password }))
       .then(({ accessToken, refreshToken }) => {
         // Clear the existing login form
         this.dispatch({
@@ -211,6 +206,20 @@ const Accounts = {
         form,
       },
     });
+  },
+  addError({ form, field, error }) {
+    this.dispatch({
+      type: ADD_ERROR,
+      payload: { form, field, error },
+    });
+  },
+  hasError(form) {
+    const formState = this.getAccountsState(this.store.getState()).forms[form];
+    // Checks all the form's fields for errors and the top level form error
+    const hasError = keys(formState.fields).reduce((prev, curr) =>
+       prev || (prev === false && formState.fields[curr].errors.length > 0)
+    , false) || formState.errors.length > 0;
+    return hasError;
   },
 };
 

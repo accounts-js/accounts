@@ -5,11 +5,19 @@ import sinonChai from 'sinon-chai';
 import chaiAsPromised from 'chai-as-promised';
 import 'localstorage-polyfill';
 import Accounts from './Accounts';
+import createStore from './createStore';
 
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
 
 describe('Accounts', () => {
+  beforeEach(() => {
+    Accounts.store = createStore({
+      reducers: {
+        accounts: Accounts.reducer,
+      },
+    });
+  });
   it('throws error on invalid keys', () => {
     () => Accounts.ui.config({
       'bad key': 'bad value',
@@ -33,6 +41,45 @@ describe('Accounts', () => {
       expect(isValid).to.eql(false);
       expect(user.errors).to.include.members(['A username or email is required.']);
       expect(password.errors).to.include.members(['Password is required.']);
+    });
+  });
+  describe('addError', () => {
+    it('adds an error to a field', () => {
+      Accounts.addError({
+        form: 'login',
+        field: 'user',
+        error: 'error',
+      });
+      const errors = Accounts.store.getState().accounts.forms.login.fields.user.errors;
+      expect(errors).to.eql(['error']);
+    });
+    it('adds an error to a form', () => {
+      Accounts.addError({
+        form: 'login',
+        error: 'error',
+      });
+      const errors = Accounts.store.getState().accounts.forms.login.errors;
+      expect(errors).to.eql(['error']);
+    });
+  });
+  describe('hasError', () => {
+    it('returns true if field has error', () => {
+      Accounts.addError({
+        form: 'login',
+        field: 'user',
+        error: 'error',
+      });
+      expect(Accounts.hasError('login')).to.eql(true);
+    });
+    it('return true if has no errors', () => {
+      expect(Accounts.hasError('login')).to.eql(false);
+    });
+    it('returns true if form has error', () => {
+      Accounts.addError({
+        form: 'login',
+        error: 'error',
+      });
+      expect(Accounts.hasError('login')).to.eql(true);
     });
   });
   describe('setLoading', () => {
