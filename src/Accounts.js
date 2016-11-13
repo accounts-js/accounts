@@ -155,8 +155,6 @@ const Accounts = {
     });
   },
   login({ user, password }) {
-    this.setLoading(true);
-
     this.clearErrors('login');
 
     // In case the fields aren't set in the redux store, in the scenario that login is being called outside the context of React + Redux
@@ -177,19 +175,24 @@ const Accounts = {
       if (!this.validateLogin({ user, password })) {
         throw new Error('test error');
       }
+      this.setLoading(true);
     })
     .then(() => this.client.login({ user, password }))
     .then(({ accessToken, refreshToken, userId }) => {
       // TODO Handle tokens
-      sessionStorage.setItem(ACCESS_TOKEN, accessToken);
-      sessionStorage.setItem(REFRESH_TOKEN, refreshToken);
+      localStorage.setItem(ACCESS_TOKEN, accessToken);
+      localStorage.setItem(REFRESH_TOKEN, refreshToken);
       // TODO Get user id out of token
-      this.setUser({ userId });
+      const loggedInUser = {
+        userId,
+      };
+      this.setUser(user);
       this.setLoading(false);
+      return loggedInUser;
     })
-    .catch(() => {
-      this.setLoading(false);
+    .catch((err) => {
       // Dispatch to update store with errors
+      this.setLoading(false);
     });
   },
   validateLogin({ user, password }) {

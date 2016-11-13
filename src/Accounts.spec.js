@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
-
+import 'regenerator-runtime/runtime'; // For async / await syntax
 import chai, { expect } from 'chai';
+import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import chaiAsPromised from 'chai-as-promised';
 import 'localstorage-polyfill';
@@ -158,6 +159,29 @@ describe('Accounts', () => {
       expect(Accounts.user()).to.eql({
         userId: '123',
       });
+    });
+  });
+  describe('login', () => {
+    it('login succesfully', async () => {
+      // Mock the result of a succesful login
+      Accounts.client = {
+        login() {
+          return new Promise(resolve => resolve({
+            accessToken: 'access token',
+            refreshToken: 'refresh token',
+            userId: '123',
+          }));
+        },
+      };
+
+      const res = await Accounts.login({
+        user: 'user1',
+        password: '123',
+      });
+
+      expect(res.userId).to.eql('123');
+      // TODO Should also test isLoading === true during the execution of login
+      expect(Accounts.store.getState().accounts.isLoading).to.eql(false);
     });
   });
 });
