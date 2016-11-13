@@ -150,4 +150,14 @@ describe('Accounts', () => {
       });
     });
   });
+  describe('setUser', () => {
+    it('sets user', () => {
+      Accounts.setUser({
+        userId: '123',
+      });
+      expect(Accounts.user()).to.eql({
+        userId: '123',
+      });
+    });
+  });
 });

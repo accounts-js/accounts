@@ -14,6 +14,7 @@ const ADD_ERROR = `${PATH}ADD_ERROR`;
 const SET_LOADING = `${PATH}SET_LOADING`;
 const SET_FIELD = `${PATH}SET_FIELD`;
 const CLEAR_ERRORS = `${PATH}CLEAR_ERRORS`;
+const SET_USER = `${PATH}SET_USER`;
 
 const initialState = {
   formType: 'login',
@@ -38,6 +39,7 @@ const initialState = {
   },
   accessToken: localStorage.getItem(ACCESS_TOKEN),
   refreshToken: localStorage.getItem(REFRESH_TOKEN),
+  user: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -83,7 +85,7 @@ const reducer = (state = initialState, action) => {
     case CLEAR_ERRORS: {
       const { form } = action.payload;
       nextState = merge({}, state);
-      const fields = state.forms[form].fields;
+      const fields = nextState.forms[form].fields;
       const fieldsWithNoErrors = keys(fields).reduce((prev, curr) =>
          ({ ...prev, [curr]: { ...fields[curr], errors: [] } })
       , {});
@@ -115,6 +117,13 @@ const reducer = (state = initialState, action) => {
       });
       break;
     }
+    case SET_USER: {
+      const { user } = action.payload;
+      nextState = merge({}, state, {
+        user,
+      });
+      break;
+    }
     default:
       break;
   }
@@ -133,6 +142,17 @@ const Accounts = {
   getAccountsState: state => (Iterable.isIterable(state) ? state.get('accounts') : state.accounts),
   dispatch(args) {
     return this.store.dispatch(args);
+  },
+  user() {
+    return this.getAccountsState(this.store.getState()).user;
+  },
+  setUser(user) {
+    this.dispatch({
+      type: SET_USER,
+      payload: {
+        user,
+      },
+    });
   },
   login({ user, password }) {
     this.setLoading(true);
@@ -159,11 +179,12 @@ const Accounts = {
       }
     })
     .then(() => this.client.login({ user, password }))
-    .then(({ accessToken, refreshToken }) => {
+    .then(({ accessToken, refreshToken, userId }) => {
+      // TODO Handle tokens
       sessionStorage.setItem(ACCESS_TOKEN, accessToken);
       sessionStorage.setItem(REFRESH_TOKEN, refreshToken);
-      // Store tokens in local storage
-      // Store user object in redux
+      // TODO Get user id out of token
+      this.setUser({ userId });
       this.setLoading(false);
     })
     .catch(() => {
