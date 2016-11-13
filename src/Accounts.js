@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 
-import { each, keys, includes, trim, isEmpty, merge } from 'lodash';
+import { each, keys, includes, trim, isEmpty, merge, extend } from 'lodash';
+import { Iterable } from 'immutable';
 import createStore from './createStore';
 
 const ACCESS_TOKEN = 'js-accounts:accessToken';
@@ -17,7 +18,7 @@ const initialState = {
   formType: 'login',
   isLoading: false,
   forms: {
-    loginForm: {
+    login: {
       fields: {
         user: {
           value: '',
@@ -46,9 +47,9 @@ const reducer = (state = initialState, action) => {
     }
     case CLEAR_FORM: {
       const { form } = action.payload;
-      nextState = merge({}, state, {
+      nextState = extend({}, state, {
         forms: {
-          [form]: initialState[form],
+          [form]: initialState.forms[form],
         },
       });
       break;
@@ -112,21 +113,19 @@ const store = createStore({
   },
 });
 
-const { dispatch } = store;
-
 const Accounts = {
   reducer,
   store,
-  dispatch,
-  getState() {
-    return store.getState().accounts;
+  getAccountsState: state => (Iterable.isIterable(state) ? state.get('accounts') : state.accounts),
+  dispatch(args) {
+    return this.store.dispatch(args);
   },
   validateLogin({ user, password }) {
     if (isEmpty(trim(user))) {
       this.dispatch({
         type: ADD_ERROR,
         payload: {
-          form: 'loginForm',
+          form: 'login',
           field: 'user',
           error: 'A username or email is required.',
         },
@@ -136,16 +135,16 @@ const Accounts = {
       this.dispatch({
         type: ADD_ERROR,
         payload: {
-          form: 'loginForm',
+          form: 'login',
           field: 'password',
           error: 'Password is required.',
         },
       });
     }
-    return this.hasError('loginForm');
+    return this.hasError('login');
   },
   hasError(form) {
-    const formState = this.getState().forms[form];
+    const formState = this.getAccountsState(this.store.getState()).forms[form];
     // Checks all the form's fields for errors and the top level form error
     const hasError = keys(formState.fields).reduce((prev, curr) =>
       !prev && curr.errors.length > 0) || formState.errors.length > 0;
@@ -153,6 +152,16 @@ const Accounts = {
   },
   login({ user, password }) {
     this.setLoading(true);
+    this.setField({
+      form: 'login',
+      field: 'user',
+      value: user,
+    });
+    this.setField({
+      form: 'login',
+      field: 'password',
+      value: password,
+    });
     this.validateLogin({ user, password });
     return this.client.login({ user, password })
       .then(({ accessToken, refreshToken }) => {
@@ -160,15 +169,17 @@ const Accounts = {
         this.dispatch({
           type: CLEAR_FORM,
           payload: {
-            form: 'loginForm',
+            form: 'login',
           },
         });
         sessionStorage.setItem(ACCESS_TOKEN, accessToken);
         sessionStorage.setItem(REFRESH_TOKEN, refreshToken);
         // Store tokens in local storage
         // Store user object in redux
+        this.setLoading(false);
       })
       .catch(() => {
+        this.setLoading(false);
         // Dispatch to update store with errors
       });
   },
@@ -190,6 +201,14 @@ const Accounts = {
       type: SET_FIELD,
       payload: {
         form, field, value,
+      },
+    });
+  },
+  clearForm(form) {
+    this.dispatch({
+      type: CLEAR_FORM,
+      payload: {
+        form,
       },
     });
   },
@@ -234,7 +253,7 @@ Accounts.ui._options = {
 };
 
 /**
- * @summary Configure the behavior of [`<Accounts.ui.LoginForm />`](#react-accounts-ui).
+ * @summary Configure the behavior of [`<Accounts.ui.login />`](#react-accounts-ui).
  * @anywhere
  * @param {Object} options
  * @param {Object} options.requestPermissions Which [permissions](#requestpermissions) to request from the user for each external service.

@@ -61,6 +61,7 @@
     "yarn": "^0.16.1"
   },
   "dependencies": {
+    "immutable": "^3.8.1",
     "redux": "^3.6.0"
   }
 }
