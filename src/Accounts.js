@@ -13,6 +13,7 @@ const CLEAR_FORM = `${PATH}CLEAR_FORM`;
 const ADD_ERROR = `${PATH}ADD_ERROR`;
 const SET_LOADING = `${PATH}SET_LOADING`;
 const SET_FIELD = `${PATH}SET_FIELD`;
+const CLEAR_ERRORS = `${PATH}CLEAR_ERRORS`;
 
 const initialState = {
   formType: 'login',
@@ -79,6 +80,19 @@ const reducer = (state = initialState, action) => {
       }
       break;
     }
+    case CLEAR_ERRORS: {
+      const { form } = action.payload;
+      nextState = merge({}, state);
+      const fields = state.forms[form].fields;
+      const fieldsWithNoErrors = keys(fields).reduce((prev, curr) =>
+         ({ ...prev, [curr]: { ...fields[curr], errors: [] } })
+      , {});
+      nextState.forms[form] = {
+        fields: fieldsWithNoErrors,
+        errors: [],
+      };
+      break;
+    }
     case SET_LOADING: {
       const { isLoading } = action.payload;
       nextState = merge({}, state, {
@@ -120,6 +134,43 @@ const Accounts = {
   dispatch(args) {
     return this.store.dispatch(args);
   },
+  login({ user, password }) {
+    this.setLoading(true);
+
+    this.clearErrors('login');
+
+    // In case the fields aren't set in the redux store, in the scenario that login is being called outside the context of React + Redux
+    this.setField({
+      form: 'login',
+      field: 'user',
+      value: user,
+    });
+
+    this.setField({
+      form: 'login',
+      field: 'password',
+      value: password,
+    });
+
+    return Promise.resolve()
+    .then(() => {
+      if (!this.validateLogin({ user, password })) {
+        throw new Error('test error');
+      }
+    })
+    .then(() => this.client.login({ user, password }))
+    .then(({ accessToken, refreshToken }) => {
+      sessionStorage.setItem(ACCESS_TOKEN, accessToken);
+      sessionStorage.setItem(REFRESH_TOKEN, refreshToken);
+      // Store tokens in local storage
+      // Store user object in redux
+      this.setLoading(false);
+    })
+    .catch(() => {
+      this.setLoading(false);
+      // Dispatch to update store with errors
+    });
+  },
   validateLogin({ user, password }) {
     if (isEmpty(trim(user))) {
       this.addError({
@@ -129,54 +180,13 @@ const Accounts = {
       });
     }
     if (isEmpty(trim(password))) {
-      this.dispatch({
-        type: ADD_ERROR,
-        payload: {
-          form: 'login',
-          field: 'password',
-          error: 'Password is required.',
-        },
+      this.addError({
+        form: 'login',
+        field: 'password',
+        error: 'Password is required.',
       });
     }
     return !this.hasError('login');
-  },
-  login({ user, password }) {
-    this.setLoading(true);
-    this.setField({
-      form: 'login',
-      field: 'user',
-      value: user,
-    });
-    this.setField({
-      form: 'login',
-      field: 'password',
-      value: password,
-    });
-    return Promise.resolve()
-      .then(() => {
-        if (!this.validateLogin({ user, password })) {
-          throw new Error('test error');
-        }
-      })
-      .then(() => this.client.login({ user, password }))
-      .then(({ accessToken, refreshToken }) => {
-        // Clear the existing login form
-        this.dispatch({
-          type: CLEAR_FORM,
-          payload: {
-            form: 'login',
-          },
-        });
-        sessionStorage.setItem(ACCESS_TOKEN, accessToken);
-        sessionStorage.setItem(REFRESH_TOKEN, refreshToken);
-        // Store tokens in local storage
-        // Store user object in redux
-        this.setLoading(false);
-      })
-      .catch(() => {
-        this.setLoading(false);
-        // Dispatch to update store with errors
-      });
   },
   signup({ username, email, password, ...otherArgs }) {
     this.client.register({
@@ -210,7 +220,11 @@ const Accounts = {
   addError({ form, field, error }) {
     this.dispatch({
       type: ADD_ERROR,
-      payload: { form, field, error },
+      payload: {
+        form,
+        field,
+        error,
+      },
     });
   },
   hasError(form) {
@@ -220,6 +234,14 @@ const Accounts = {
        prev || (prev === false && formState.fields[curr].errors.length > 0)
     , false) || formState.errors.length > 0;
     return hasError;
+  },
+  clearErrors(form) {
+    this.dispatch({
+      type: CLEAR_ERRORS,
+      payload: {
+        form,
+      },
+    });
   },
 };
 

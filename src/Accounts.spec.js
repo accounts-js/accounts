@@ -82,6 +82,30 @@ describe('Accounts', () => {
       expect(Accounts.hasError('login')).to.eql(true);
     });
   });
+  describe('clearErrors', () => {
+    it('clears all errors on a form', () => {
+      Accounts.setField({
+        form: 'login',
+        field: 'user',
+        value: 'user1',
+      });
+      Accounts.addError({
+        form: 'login',
+        field: 'user',
+        error: 'field error',
+      });
+      Accounts.addError({
+        form: 'login',
+        error: 'form error',
+      });
+      const beforeClearForm = Accounts.store.getState().accounts.forms.login;
+      expect(beforeClearForm.fields.user.value).to.eql('user1');
+      Accounts.clearErrors('login');
+      const afterClearForm = Accounts.store.getState().accounts.forms.login;
+      expect(afterClearForm.errors).to.eql([]);
+      expect(afterClearForm.fields.user.errors).to.eql([]);
+    });
+  });
   describe('setLoading', () => {
     it('set loading', () => {
       Accounts.setLoading(true);
