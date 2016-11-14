@@ -185,15 +185,22 @@ const Accounts = {
     let toReturn = {};
 
     try {
-      const { accessToken, refreshToken, userId } = await this.client.login({ user, password });
+      const { accessToken, refreshToken, userId, username } = await this.client.login({ user, password });
       // TODO Handle tokens
       localStorage.setItem(ACCESS_TOKEN, accessToken);
       localStorage.setItem(REFRESH_TOKEN, refreshToken);
       // TODO Get user id out of token
       toReturn = {
+        // TODO Test for accessToken and refreshToken in relevant test cases
+        accessToken,
+        refreshToken,
         userId,
+        username,
       };
-      this.setUser(user);
+      this.setUser({
+        userId,
+        username,
+      });
       this.setLoading(false);
     } catch (err) {
       // Dispatch to update store with errors

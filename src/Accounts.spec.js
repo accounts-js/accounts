@@ -177,18 +177,24 @@ describe('Accounts', () => {
             accessToken: 'access token',
             refreshToken: 'refresh token',
             userId: '123',
+            username: 'user',
           }));
         },
       };
 
       const res = await Accounts.login({
-        user: 'user1',
+        user: 'user',
         password: '123',
       });
 
       expect(res.userId).to.eql('123');
       // TODO Should also test isLoading === true during the execution of login
-      expect(Accounts.store.getState().accounts.isLoading).to.eql(false);
+      const accounts = Accounts.store.getState().accounts;
+      expect(accounts.isLoading).to.eql(false);
+      expect(accounts.user).to.eql({
+        userId: '123',
+        username: 'user',
+      });
     });
     it('login failure', async () => {
       // Mock the result of a failed login
