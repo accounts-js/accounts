@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions */
 import 'regenerator-runtime/runtime'; // For async / await syntax
 import chai, { expect } from 'chai';
-import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import chaiAsPromised from 'chai-as-promised';
 import 'localstorage-polyfill';

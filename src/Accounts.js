@@ -140,12 +140,12 @@ const store = createStore({
 const Accounts = {
   reducer,
   store,
-  getAccountsState: state => (Iterable.isIterable(state) ? state.get('accounts') : state.accounts),
+  getState: (state = Accounts.store.getState()) => (Iterable.isIterable(state) ? state.get('accounts') : state.accounts),
   dispatch(args) {
     return this.store.dispatch(args);
   },
   user() {
-    return this.getAccountsState(this.store.getState()).user;
+    return this.getState(this.store.getState()).user;
   },
   setUser(user) {
     this.dispatch({
@@ -278,7 +278,7 @@ const Accounts = {
     });
   },
   hasError(form) {
-    const formState = this.getAccountsState(this.store.getState()).forms[form];
+    const formState = this.getState(this.store.getState()).forms[form];
     // Checks all the form's fields for errors and the top level form error
     const hasError = keys(formState.fields).reduce((prev, curr) =>
        prev || (prev === false && formState.fields[curr].errors.length > 0)
