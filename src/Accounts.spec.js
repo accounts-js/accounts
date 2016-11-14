@@ -229,4 +229,37 @@ describe('Accounts', () => {
       expect(form.fields.user.errors).to.include.members(['Username already exists']);
     });
   });
+  describe('logout', () => {
+    it('logs in and out succesfully', async () => {
+      // Mock the result of a succesful login
+      Accounts.client = {
+        login() {
+          return new Promise(resolve => resolve({
+            accessToken: 'access token',
+            refreshToken: 'refresh token',
+            userId: '123',
+            username: 'user',
+          }));
+        },
+        logout() {
+          return new Promise(resolve => resolve());
+        },
+      };
+
+      const res = await Accounts.login({
+        user: 'user',
+        password: '123',
+      });
+
+      expect(res.userId).to.eql('123');
+      let accounts = Accounts.store.getState().accounts;
+      expect(accounts.user).to.eql({
+        userId: '123',
+        username: 'user',
+      });
+      await Accounts.logout();
+      accounts = Accounts.store.getState().accounts;
+      expect(accounts.user).to.eql(null);
+    });
+  });
 });

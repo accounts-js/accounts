@@ -37,8 +37,6 @@ const initialState = {
 
     },
   },
-  accessToken: localStorage.getItem(ACCESS_TOKEN),
-  refreshToken: localStorage.getItem(REFRESH_TOKEN),
   user: null,
 };
 
@@ -220,6 +218,11 @@ const Accounts = {
     }
 
     return toReturn;
+  },
+  async logout() {
+    const result = await this.client.logout();
+    this.setUser(null);
+    return result;
   },
   validateLogin({ user, password }) {
     if (isEmpty(trim(user))) {
