@@ -162,6 +162,13 @@ describe('Accounts', () => {
     });
   });
   describe('login', () => {
+    beforeEach(() => {
+      Accounts.store = createStore({
+        reducers: {
+          accounts: Accounts.reducer,
+        },
+      });
+    });
     it('login succesfully', async () => {
       // Mock the result of a succesful login
       Accounts.client = {

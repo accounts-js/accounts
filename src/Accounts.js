@@ -59,13 +59,14 @@ const reducer = (state = initialState, action) => {
     }
     case ADD_ERROR: {
       const { form, field, error } = action.payload;
+      const errors = !Array.isArray(error) ? [error] : error;
       if (field) {
         nextState = merge({}, state, {
           forms: {
             [form]: {
               fields: {
                 [field]: {
-                  errors: [...state.forms[form].fields[field].errors, error],
+                  errors: [...state.forms[form].fields[field].errors, ...errors],
                 },
               },
             },
@@ -75,7 +76,7 @@ const reducer = (state = initialState, action) => {
         nextState = merge({}, state, {
           forms: {
             [form]: {
-              errors: [...state.forms[form].errors, error],
+              errors: [...state.forms[form].errors, ...errors],
             },
           },
         });
@@ -154,7 +155,7 @@ const Accounts = {
       },
     });
   },
-  login({ user, password }) {
+  async login({ user, password }) {
     this.clearErrors('login');
 
     // In case the fields aren't set in the redux store, in the scenario that login is being called outside the context of React + Redux
@@ -170,27 +171,31 @@ const Accounts = {
       value: password,
     });
 
-    return Promise.resolve()
-    .then(() => {
-      if (!this.validateLogin({ user, password })) {
-        throw new Error('test error');
-      }
+    // TODO Improve client side validation
+    if (!this.validateLogin({ user, password })) {
+      this.addError({
+        form: 'login',
+        error: 'Invalid fields',
+      });
+      throw new Error('Invalid fields');
+    } else {
       this.setLoading(true);
-    })
-    .then(() => this.client.login({ user, password }))
-    .then(({ accessToken, refreshToken, userId }) => {
+    }
+
+    let toReturn = {};
+
+    try {
+      const { accessToken, refreshToken, userId } = await this.client.login({ user, password });
       // TODO Handle tokens
       localStorage.setItem(ACCESS_TOKEN, accessToken);
       localStorage.setItem(REFRESH_TOKEN, refreshToken);
       // TODO Get user id out of token
-      const loggedInUser = {
+      toReturn = {
         userId,
       };
       this.setUser(user);
       this.setLoading(false);
-      return loggedInUser;
-    })
-    .catch((err) => {
+    } catch (err) {
       // Dispatch to update store with errors
       this.addError({
         form: 'login',
@@ -204,8 +209,10 @@ const Accounts = {
         }));
       }
       this.setLoading(false);
-      return err;
-    });
+      toReturn = err;
+    }
+
+    return toReturn;
   },
   validateLogin({ user, password }) {
     if (isEmpty(trim(user))) {
