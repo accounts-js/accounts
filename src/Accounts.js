@@ -192,7 +192,19 @@ const Accounts = {
     })
     .catch((err) => {
       // Dispatch to update store with errors
+      this.addError({
+        form: 'login',
+        error: err.message,
+      });
+      if (Array.isArray(err.errors)) {
+        err.errors.forEach(({ field, message }) => this.addError({
+          field,
+          form: 'login',
+          error: message,
+        }));
+      }
       this.setLoading(false);
+      return err;
     });
   },
   validateLogin({ user, password }) {

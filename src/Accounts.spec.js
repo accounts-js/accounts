@@ -183,5 +183,38 @@ describe('Accounts', () => {
       // TODO Should also test isLoading === true during the execution of login
       expect(Accounts.store.getState().accounts.isLoading).to.eql(false);
     });
+    it('login failure', async () => {
+      // Mock the result of a failed login
+      Accounts.client = {
+        login() {
+          return new Promise((resolve, reject) => reject({
+            message: 'Invalid username',
+            errors: [{
+              field: 'user',
+              message: 'Username already exists',
+            }],
+          }));
+        },
+      };
+
+      const res = await Accounts.login({
+        user: 'user1',
+        password: '123',
+      });
+
+      expect(res).to.eql({
+        message: 'Invalid username',
+        errors: [{
+          field: 'user',
+          message: 'Username already exists',
+        }],
+      });
+
+      expect(Accounts.store.getState().accounts.isLoading).to.eql(false);
+
+      const form = Accounts.store.getState().accounts.forms.login;
+      expect(form.errors).to.include.members(['Invalid username']);
+      expect(form.fields.user.errors).to.include.members(['Username already exists']);
+    });
   });
 });
