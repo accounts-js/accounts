@@ -6,15 +6,17 @@
   "scripts": {
     "start": "webpack -p --config --progress --watch",
     "compile": "webpack -p --config --progress",
-    "prepublish": "yarn run compile",
-    "test": "mocha --compilers js:babel-core/register \"src/**/*.spec.js\"",
+    "prepublish": "npm run compile",
+    "pretest": "npm run lint",
+    "test": "npm run testonly",
+    "testonly": "mocha --compilers js:babel-core/register \"src/**/*.spec.js\"",
     "lint": "eslint src",
     "coverage": "istanbul cover _mocha -- --compilers js:babel-core/register \"src/**/*.spec.js\" -R spec",
     "coveralls": "istanbul cover _mocha --report lcovonly -- --compilers js:babel-core/register \"src/**/*.spec.js\" -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/graphql-accounts/graphql-accounts"
+    "url": "https://github.com/js-accounts/accounts"
   },
   "keywords": [
     "rest",
@@ -49,8 +51,10 @@
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.4.1",
     "istanbul": "^1.1.0-alpha.1",
+    "localstorage-polyfill": "^1.0.1",
     "lodash": "^4.16.4",
     "mocha": "^3.1.2",
+    "regenerator-runtime": "^0.9.6",
     "sinon": "^1.17.6",
     "sinon-chai": "^2.8.0",
     "webpack": "^1.13.3",
@@ -58,6 +62,7 @@
     "yarn": "^0.16.1"
   },
   "dependencies": {
+    "immutable": "^3.8.1",
     "redux": "^3.6.0"
   }
 }
