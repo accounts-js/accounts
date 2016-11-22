@@ -1,7 +1,8 @@
 /* eslint-disable max-len */
 
 import { each, keys, includes, trim, isEmpty, merge, extend } from 'lodash';
-import { Iterable } from 'immutable';
+import { Iterable, Map, fromJS } from 'immutable';
+import { combineReducers } from 'redux-immutable';
 import createStore from './createStore';
 
 const ACCESS_TOKEN = 'js-accounts:accessToken';
@@ -16,7 +17,7 @@ const SET_FIELD = `${PATH}SET_FIELD`;
 const CLEAR_ERRORS = `${PATH}CLEAR_ERRORS`;
 const SET_USER = `${PATH}SET_USER`;
 
-const initialState = {
+const initialState = fromJS({
   formType: 'login',
   isLoading: false,
   forms: {
@@ -38,7 +39,7 @@ const initialState = {
     },
   },
   user: null,
-};
+});
 
 const reducer = (state = initialState, action) => {
   let nextState = state;
@@ -129,11 +130,11 @@ const reducer = (state = initialState, action) => {
   return nextState;
 };
 
-const store = createStore({
+const store = createStore(combineReducers({
   reducers: {
     accounts: reducer,
   },
-});
+}));
 
 const Accounts = {
   reducer,
