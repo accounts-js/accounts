@@ -1,5 +1,9 @@
 import { Map } from 'immutable';
 
+const PATH = 'js-accounts/';
+const LOGIN = `${PATH}LOGIN`;
+const SET_USER = `${PATH}SET_USER`;
+
 const initialState = Map({
   formType: 'login',
   isLoading: false,
