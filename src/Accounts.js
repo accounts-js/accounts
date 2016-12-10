@@ -1,43 +1,21 @@
 /* eslint-disable max-len */
 
 import { each, keys, includes, trim, isEmpty, merge, extend } from 'lodash';
-import { Iterable, Map, fromJS } from 'immutable';
-import { combineReducers } from 'redux-immutable';
+import { Iterable, fromJS, Map, Stack } from 'immutable';
+import { Form } from 'immutable-form';
 import createStore from './createStore';
+import toUsernameAndEmail from './toUsernameAndEmail';
 
 const ACCESS_TOKEN = 'js-accounts:accessToken';
 const REFRESH_TOKEN = 'js-accounts:refreshToken';
 
 const PATH = 'js-accounts/';
 const LOGIN = `${PATH}LOGIN`;
-const CLEAR_FORM = `${PATH}CLEAR_FORM`;
-const ADD_ERROR = `${PATH}ADD_ERROR`;
-const SET_LOADING = `${PATH}SET_LOADING`;
-const SET_FIELD = `${PATH}SET_FIELD`;
-const CLEAR_ERRORS = `${PATH}CLEAR_ERRORS`;
 const SET_USER = `${PATH}SET_USER`;
 
 const initialState = fromJS({
   formType: 'login',
   isLoading: false,
-  forms: {
-    login: {
-      fields: {
-        user: {
-          value: '',
-          errors: [],
-        },
-        password: {
-          value: '',
-          errors: [],
-        },
-      },
-      errors: [],
-    },
-    signupForm: {
-
-    },
-  },
   user: null,
 });
 
@@ -45,76 +23,6 @@ const reducer = (state = initialState, action) => {
   let nextState = state;
   switch (action.type) {
     case LOGIN: {
-      break;
-    }
-    case CLEAR_FORM: {
-      const { form } = action.payload;
-      nextState = extend({}, state, {
-        forms: {
-          [form]: initialState.forms[form],
-        },
-      });
-      break;
-    }
-    case ADD_ERROR: {
-      const { form, field, error } = action.payload;
-      const errors = !Array.isArray(error) ? [error] : error;
-      if (field) {
-        nextState = merge({}, state, {
-          forms: {
-            [form]: {
-              fields: {
-                [field]: {
-                  errors: [...state.forms[form].fields[field].errors, ...errors],
-                },
-              },
-            },
-          },
-        });
-      } else {
-        nextState = merge({}, state, {
-          forms: {
-            [form]: {
-              errors: [...state.forms[form].errors, ...errors],
-            },
-          },
-        });
-      }
-      break;
-    }
-    case CLEAR_ERRORS: {
-      const { form } = action.payload;
-      nextState = merge({}, state);
-      const fields = nextState.forms[form].fields;
-      const fieldsWithNoErrors = keys(fields).reduce((prev, curr) =>
-         ({ ...prev, [curr]: { ...fields[curr], errors: [] } })
-      , {});
-      nextState.forms[form] = {
-        fields: fieldsWithNoErrors,
-        errors: [],
-      };
-      break;
-    }
-    case SET_LOADING: {
-      const { isLoading } = action.payload;
-      nextState = merge({}, state, {
-        isLoading,
-      });
-      break;
-    }
-    case SET_FIELD: {
-      const { form, field, value } = action.payload;
-      nextState = merge({}, state, {
-        forms: {
-          [form]: {
-            fields: {
-              [field]: {
-                value,
-              },
-            },
-          },
-        },
-      });
       break;
     }
     case SET_USER: {
@@ -130,21 +38,38 @@ const reducer = (state = initialState, action) => {
   return nextState;
 };
 
-const store = createStore(combineReducers({
+const store = createStore({
   reducers: {
     accounts: reducer,
   },
-}));
+});
+
+const validateUser = (value) => {
+
+};
+
+const validatePassword = (value) => {
+
+};
+
+const createLoginForm = () => new Form('login', {
+  fields: {
+    user: {
+      value: '',
+      validate: [validateUser],
+    },
+    password: {
+      value: '',
+      validate: [validatePassword],
+    },
+  },
+});
 
 const Accounts = {
   reducer,
   store,
-  getState: (state = Accounts.store.getState()) => (Iterable.isIterable(state) ? state.get('accounts') : state.accounts),
-  dispatch(args) {
-    return this.store.dispatch(args);
-  },
-  user() {
-    return this.getState(this.store.getState()).user;
+  forms: {
+    login: createLoginForm(),
   },
   setUser(user) {
     this.dispatch({
@@ -154,154 +79,29 @@ const Accounts = {
       },
     });
   },
-  async login({ user, password }) {
-    this.clearErrors('login');
-
-    // In case the fields aren't set in the redux store, in the scenario that login is being called outside the context of React + Redux
-    this.setField({
-      form: 'login',
-      field: 'user',
+  async loginWithPassword(user, password, callback) {
+    this.forms.login.setField('user', {
       value: user,
+      error: null,
     });
 
-    this.setField({
-      form: 'login',
-      field: 'password',
-      value: password,
+    this.forms.login.setField('login', {
+      value: user,
+      error: null,
     });
 
-    // TODO Improve client side validation
-    if (!this.validateLogin({ user, password })) {
-      this.addError({
-        form: 'login',
-        error: 'Invalid fields',
-      });
-      throw new Error('Invalid fields');
-    } else {
-      this.setLoading(true);
-    }
+    const promise = new Promise((resolve) => {
+      resolve();
+    });
 
-    let toReturn = {};
+    return this.forms.login(promise);
 
-    try {
-      const { accessToken, refreshToken, userId, username } = await this.client.login({ user, password });
-      // TODO Handle tokens
-      localStorage.setItem(ACCESS_TOKEN, accessToken);
-      localStorage.setItem(REFRESH_TOKEN, refreshToken);
-      // TODO Get user id out of token
-      toReturn = {
-        // TODO Test for accessToken and refreshToken in relevant test cases
-        accessToken,
-        refreshToken,
-        userId,
-        username,
-      };
-      this.setUser({
-        userId,
-        username,
-      });
-      this.setLoading(false);
-    } catch (err) {
-      // Dispatch to update store with errors
-      this.addError({
-        form: 'login',
-        error: err.message,
-      });
-      if (Array.isArray(err.errors)) {
-        err.errors.forEach(({ field, message }) => this.addError({
-          field,
-          form: 'login',
-          error: message,
-        }));
-      }
-      this.setLoading(false);
-      toReturn = err;
-    }
+    // TODO Validation
 
-    return toReturn;
-  },
-  async logout() {
-    const result = await this.client.logout();
-    this.setUser(null);
-    return result;
-  },
-  validateLogin({ user, password }) {
-    if (isEmpty(trim(user))) {
-      this.addError({
-        form: 'login',
-        field: 'user',
-        error: 'A username or email is required.',
-      });
-    }
-    if (isEmpty(trim(password))) {
-      this.addError({
-        form: 'login',
-        field: 'password',
-        error: 'Password is required.',
-      });
-    }
-    return !this.hasError('login');
-  },
-  signup({ username, email, password, ...otherArgs }) {
-    this.client.register({
-      username, email, password, ...otherArgs,
-    });
-  },
-  setLoading(isLoading) {
-    this.dispatch({
-      type: SET_LOADING,
-      payload: {
-        isLoading,
-      },
-    });
-  },
-  setField({ form, field, value }) {
-    this.dispatch({
-      type: SET_FIELD,
-      payload: {
-        form, field, value,
-      },
-    });
-  },
-  clearForm(form) {
-    this.dispatch({
-      type: CLEAR_FORM,
-      payload: {
-        form,
-      },
-    });
-  },
-  addError({ form, field, error }) {
-    this.dispatch({
-      type: ADD_ERROR,
-      payload: {
-        form,
-        field,
-        error,
-      },
-    });
-  },
-  hasError(form) {
-    const formState = this.getState(this.store.getState()).forms[form];
-    // Checks all the form's fields for errors and the top level form error
-    const hasError = keys(formState.fields).reduce((prev, curr) =>
-       prev || (prev === false && formState.fields[curr].errors.length > 0)
-    , false) || formState.errors.length > 0;
-    return hasError;
-  },
-  clearErrors(form) {
-    this.dispatch({
-      type: CLEAR_ERRORS,
-      payload: {
-        form,
-      },
-    });
+    // TODO Send login request with client
+    // TODO Run on success or failure hooks
   },
 };
-
-
-// Heavily inspired by https://github.com/studiointeract/accounts-ui/
-
 /**
  * @summary Accounts UI
  * @namespace
