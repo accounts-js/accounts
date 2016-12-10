@@ -5,8 +5,8 @@ import reducer from './module';
 
 class AccountsClient extends AccountsCommon {
   // TODO Handle options
-  constructor(options) {
-    super(options);
+  constructor(client, options) {
+    super(client, options);
     this.store = createStore({
       reducers: {
         accounts: reducer,
@@ -23,8 +23,20 @@ class AccountsClient extends AccountsCommon {
     if (isEmpty(trim(email)) && isEmpty(trim(username))) {
       throw new Error('Username or Email is required');
     }
-    if (isFunction(callback)) {
-      callback();
+    try {
+      const res = await this.client.createUser({
+        password,
+        username,
+        email,
+      });
+      if (isFunction(callback)) {
+        callback();
+      }
+    } catch (err) {
+      if (isFunction(callback)) {
+        callback(err);
+        throw new Error(err);
+      }
     }
   }
   loginWithPassword(user, password, callback) {

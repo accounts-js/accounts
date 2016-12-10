@@ -11,7 +11,8 @@ const defaultConfig = {
 
 class AccountsCommon {
   // TODO Handle options
-  constuctor(options) {
+  constructor(client, options) {
+    this.client = client;
     this.accountsConfig = defaultConfig;
   }
   userId() {
