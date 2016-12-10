@@ -32,6 +32,9 @@ class AccountsCommon {
   onLogout(func) {
     this.onLogout = func;
   }
+  createUser(options, callback) {
+
+  }
 }
 
 export default AccountsCommon;

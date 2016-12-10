@@ -15,12 +15,31 @@ class AccountsClient extends AccountsCommon {
   loggingIn() {
 
   }
-  logout(func) {
+  logout(callback) {
 
   }
-  logoutOtherClients(func) {
+  logoutOtherClients(callback) {
 
   }
+  createUser(options, callback) {
+
+  }
+  changePassword(oldPassword, newPassword, callback) {
+
+  }
+  resetPassword(token, newPassword, callback) {
+
+  }
+  onResetPasswordLink(callback) {
+
+  }
+  onEnrollmentLink(callback) {
+
+  }
+  onEmailVerificationLink(callback) {
+
+  }
+
 }
 
 export default AccountsClient;
