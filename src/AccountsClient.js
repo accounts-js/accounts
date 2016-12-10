@@ -12,6 +12,12 @@ class AccountsClient extends AccountsCommon {
       },
     });
   }
+  loginWithPassword(user, password, callback) {
+
+  }
+  loginWith(service, options, callback) {
+
+  }
   loggingIn() {
 
   }
