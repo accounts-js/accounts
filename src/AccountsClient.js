@@ -13,6 +13,7 @@ class AccountsClient extends AccountsCommon {
       },
     });
   }
+  // TODO Accept 'profile' in the options
   async createUser({ password, username, email }, callback) {
     // TODO Throw error if client user creation is disabled
     // TODO Check that password complexity satisfies the config
