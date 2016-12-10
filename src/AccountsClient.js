@@ -33,6 +33,7 @@ class AccountsClient extends AccountsCommon {
       if (isFunction(callback)) {
         callback();
       }
+      // TODO Login user on succesfull completion
     } catch (err) {
       if (isFunction(callback)) {
         callback(err);
