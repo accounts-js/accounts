@@ -10,37 +10,47 @@ import Accounts from './AccountsClient';
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
 
-let accounts;
 describe('Accounts', () => {
-  describe('createUser', () => {
-    beforeEach(() => {
-      accounts = new Accounts({
-        createUser: () => Promise.resolve(true),
-      });
+  describe('config', () => {
+    it('requires a client', () => {
+      expect(() => Accounts.config().to.throw('A REST or GraphQL client is required'));
     });
+    it('sets the client', () => {
+      const client = {};
+      Accounts.config({}, client);
+      expect(Accounts.instance.client).to.equal(client);
+    });
+  });
+  describe('createUser', () => {
     it('requires password', async () => {
       try {
-        await accounts.createUser({
+        await Accounts.createUser({
           password: null,
         });
       } catch (err) {
-        expect(err).to.eql(new Error('Password is required'));
+        const { message } = err.serialize();
+        expect(message).to.eql('Password is required');
       }
     });
     it('requires username or an email', async () => {
       try {
-        await accounts.createUser({
+        await Accounts.createUser({
           password: '123456',
           username: '',
           email: '',
         });
       } catch (err) {
-        expect(err).to.eql(Error('Username or Email is required'));
+        const { message } = err.serialize();
+        expect(message).to.eql('Username or Email is required');
       }
     });
     it('calls callback on succesfull user creation', async () => {
       const callback = sinon.spy();
-      await accounts.createUser({
+      const client = {
+        createUser: () => Promise.resolve(true),
+      };
+      Accounts.config({}, client);
+      await Accounts.createUser({
         password: '123456',
         username: 'user',
       }, callback);
@@ -49,20 +59,20 @@ describe('Accounts', () => {
     });
     it('calls callback on failure with error message', async () => {
       const client = {
-        createUser: () => Promise.reject('error'),
+        createUser: () => Promise.reject('error message'),
       };
 
-      accounts = new Accounts(client);
+      Accounts.config({}, client);
 
       const callback = sinon.spy();
 
       try {
-        await accounts.createUser({
+        await Accounts.createUser({
           password: '123456',
           username: 'user',
         }, callback);
       } catch (err) {
-        expect(callback).to.have.been.calledWith('error');
+        expect(callback).to.have.been.calledWith('error message');
       }
     });
   });
