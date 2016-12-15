@@ -76,4 +76,55 @@ describe('Accounts', () => {
       }
     });
   });
+  describe('loginWithPassword', () => {
+    it('throws error if password is undefined', async () => {
+      const client = {
+        loginWithPassword: () => Promise.resolve(),
+      };
+      Accounts.config({}, client);
+      try {
+        await Accounts.loginWithPassword();
+      } catch (err) {
+        const { message } = err.serialize();
+        expect(message).to.eql('Unrecognized options for login request [400]');
+      }
+    });
+    it('throws error if user is undefined', async () => {
+      const client = {
+        loginWithPassword: () => Promise.resolve(),
+      };
+      Accounts.config({}, client);
+      try {
+        await Accounts.loginWithPassword();
+      } catch (err) {
+        const { message } = err.serialize();
+        expect(message).to.eql('Unrecognized options for login request [400]');
+      }
+    });
+    it('throws error user is not a string or is an empty object', async () => {
+      const client = {
+        loginWithPassword: () => Promise.resolve(),
+      };
+      Accounts.config({}, client);
+      try {
+        await Accounts.loginWithPassword({}, 'password');
+      } catch (err) {
+        console.log(err);
+        const { message } = err.serialize();
+        expect(message).to.eql('Match failed [400]');
+      }
+    });
+    it('throws error password is not a string', async () => {
+      const client = {
+        loginWithPassword: () => Promise.resolve(),
+      };
+      Accounts.config({}, client);
+      try {
+        await Accounts.loginWithPassword({ user: 'username' }, {});
+      } catch (err) {
+        const { message } = err.serialize();
+        expect(message).to.eql('Match failed [400]');
+      }
+    });
+  });
 });
