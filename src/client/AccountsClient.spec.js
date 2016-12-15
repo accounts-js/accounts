@@ -109,7 +109,6 @@ describe('Accounts', () => {
       try {
         await Accounts.loginWithPassword({}, 'password');
       } catch (err) {
-        console.log(err);
         const { message } = err.serialize();
         expect(message).to.eql('Match failed [400]');
       }
@@ -124,6 +123,27 @@ describe('Accounts', () => {
       } catch (err) {
         const { message } = err.serialize();
         expect(message).to.eql('Match failed [400]');
+      }
+    });
+    it('calls callback on successful login', async () => {
+      const client = {
+        loginWithPassword: () => Promise.resolve(),
+      };
+      Accounts.config({}, client);
+      const callback = sinon.spy();
+      await Accounts.loginWithPassword('username', 'password', callback);
+      expect(callback).to.have.been.called;
+    });
+    it('calls callback with error on failed login', async () => {
+      const client = {
+        loginWithPassword: () => Promise.reject('error'),
+      };
+      Accounts.config({}, client);
+      const callback = sinon.spy();
+      try {
+        await Accounts.loginWithPassword('username', 'password', callback);
+      } catch (err) {
+        expect(callback).to.have.been.calledWith('error');
       }
     });
   });
