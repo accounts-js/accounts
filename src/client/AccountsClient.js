@@ -68,9 +68,6 @@ class Accounts extends AccountsCommon {
       }
     }
     this.store.dispatch(loggingIn(false));
-    // TODO User not found
-    // TODO Incorrect password
-    // TODO User has no password set
   }
   // loginWith(service, options, callback) {
   //
