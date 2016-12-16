@@ -1,9 +1,10 @@
-import { isFunction, isString, isObject, has } from 'lodash';
+import { isFunction, isString, has } from 'lodash';
 import { defaultClientConfig } from '../common/defaultConfigs';
 import { AccountsError } from '../common/errors';
 import store from './store';
 import AccountsCommon from '../common/AccountsCommon';
 import { loggingIn } from './module';
+import ui from './ui';
 
 const isValidUserObject = user => has(user, 'user') || has(user, 'email') || has(user, 'id');
 
@@ -100,6 +101,7 @@ class Accounts extends AccountsCommon {
 
 
 const AccountsClient = {
+  ui,
   config(options, client) {
     this.instance = new Accounts({
       ...defaultClientConfig,
