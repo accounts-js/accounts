@@ -1,3 +1,4 @@
+/* @flow */
 import { trim, isEmpty } from 'lodash';
 import { AccountsError } from './errors';
 
@@ -6,24 +7,24 @@ import { AccountsError } from './errors';
 
 class AccountsCommon {
   // TODO Handle options
-  constructor(options) {
+  constructor(options: object) {
     this.options = options;
   }
-  validateEmail(email, throwError = true) {
+  validateEmail(email: string, throwError: boolean = true): boolean {
     const hasError = isEmpty(trim(email));
     if (hasError && throwError) {
       throw new AccountsError({ message: 'Email is required' });
     }
     return hasError;
   }
-  validatePassword(password, throwError = true) {
+  validatePassword(password: string, throwError: boolean = true) {
     const hasError = isEmpty(trim(password));
     if (hasError && throwError) {
       throw new AccountsError({ message: 'Password is required' });
     }
     return hasError;
   }
-  validateUsername(username, throwError = true) {
+  validateUsername(username: string, throwError = true) {
     const hasError = isEmpty(trim(username));
     if (hasError && throwError) {
       throw new AccountsError({ message: 'Username is required' });
