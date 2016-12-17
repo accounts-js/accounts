@@ -20,6 +20,7 @@ export const defaultServerConfig = {
 };
 
 export const defaultUiConfig = {
+  title: '',
   requestPermissions: [],
   requestOfflineToken: {},
   forceApprovalPrompt: {},
