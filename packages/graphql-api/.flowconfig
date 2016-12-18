@@ -1,0 +1,7 @@
+[libs]
+flow/decl
+
+[options]
+# webpack loaders
+module.name_mapper='.*\.graphql$' -> '<PROJECT_ROOT>/flow/stub/graphql-loader.js'
+module.system=node

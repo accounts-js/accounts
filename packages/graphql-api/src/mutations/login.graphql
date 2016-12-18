@@ -1,0 +1,7 @@
+mutation login($user: UserPasswordInput!) {
+    loginWithPassword(user: $user) {
+        userId
+        token
+        tokenExpiration
+    }
+}

@@ -1,0 +1,7 @@
+mutation createUser($user: UserPasswordInput!) {
+    createAccountAndLogin(user: $user) {
+        token
+        tokenExpiration
+        userId
+    }
+}
