@@ -6,6 +6,10 @@
 
 Copyright (c) 2016 by Gadi Cohen & Tim Mikeladze.  Released under the MIT license.
 
+## Note
+
+This package, along with the rest of the packages under the `js-accounts` organization are under active development and are **not** ready for consumption.
+
 ## Getting Started
 
 Install the core package.
