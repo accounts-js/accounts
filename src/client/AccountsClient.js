@@ -1,41 +1,65 @@
+// @flow
+
 import { isFunction, isString, has } from 'lodash';
+import type { Map } from 'immutable';
+
 import { defaultClientConfig } from '../common/defaultConfigs';
 import { AccountsError } from '../common/errors';
 import store from './store';
 import AccountsCommon from '../common/AccountsCommon';
 import { loggingIn } from './module';
 import ui from './ui';
+import type { AccountsOptionsType } from '../common/AccountsCommon';
 
-const isValidUserObject = user => has(user, 'user') || has(user, 'email') || has(user, 'id');
+export type UserObjectType = {username: ?string, email: ?string, id: ?string};
+const isValidUserObject = (user: UserObjectType) => has(user, 'user') || has(user, 'email') || has(user, 'id');
+
+export type UserCreationInputType = {
+  username: ?string,
+  password: ?string,
+  email: ?string
+};
+
+export type AccountTokenType = {
+  token: string,
+  tokenExpiration: Date,
+  userId: ?string
+};
+
+export interface AccountsTransportClient {
+  createUser(user: UserCreationInputType): AccountTokenType,
+  loginWithPassword(user: UserObjectType, password: string): AccountTokenType
+}
 
 class Accounts extends AccountsCommon {
-  constructor(options, client) {
+
+  constructor(options: AccountsOptionsType, client: AccountsTransportClient) {
     super(options);
+
     if (!client) {
       throw new AccountsError({
         message: 'A REST or GraphQL client is required',
       });
     }
-    this.store = store;
+
     this.client = client;
   }
-  getState() {
-    return this.getState().get('accounts');
+
+  getState(): Map<string, any> {
+    return store.getState().get('accounts');
   }
+
   // TODO Accept 'profile' in the options
-  async createUser({ password, username, email }, callback) {
-    this.validatePassword(password);
+  async createUser(user: UserCreationInputType, callback: Function): Promise<void> {
+    this.validatePassword(user.password);
     // TODO Throw error if client user creation is disabled
 
-    if (!this.validateUsername(username, false) && !this.validateEmail(email, false)) {
+    if (!this.validateUsername(user.username, false) && !this.validateEmail(user.email, false)) {
       throw new AccountsError({ message: 'Username or Email is required' });
     }
     try {
-      const res = await this.client.createUser({
-        password,
-        username,
-        email,
-      });
+      await this.client.createUser(user);
+
       if (isFunction(callback)) {
         callback();
       }
@@ -47,7 +71,10 @@ class Accounts extends AccountsCommon {
       }
     }
   }
-  async loginWithPassword(user, password, callback) {
+
+  async loginWithPassword(user: UserObjectType,
+                          password: string,
+                          callback: Function): Promise<void> {
     if (!password || !user) {
       throw new AccountsError({ message: 'Unrecognized options for login request [400]' });
     }
@@ -55,9 +82,9 @@ class Accounts extends AccountsCommon {
       throw new AccountsError({ message: 'Match failed [400]' });
     }
 
-    this.store.dispatch(loggingIn(true));
+    store.dispatch(loggingIn(true));
     try {
-      const res = await this.client.loginWithPassword(user, password);
+      await this.client.loginWithPassword(user, password);
       // TODO Update redux store with user info
       if (isFunction(callback)) {
         callback();
@@ -68,14 +95,16 @@ class Accounts extends AccountsCommon {
         throw new AccountsError({ message: err });
       }
     }
-    this.store.dispatch(loggingIn(false));
+    store.dispatch(loggingIn(false));
   }
+
   // loginWith(service, options, callback) {
   //
   // }
-  loggingIn() {
-    return this.getState().get('loggingIn');
+  loggingIn(): boolean {
+    return (this.getState().get('loggingIn'): boolean);
   }
+
   // logout(callback) {
   //
   // }
@@ -97,21 +126,23 @@ class Accounts extends AccountsCommon {
   // onEmailVerificationLink(callback) {
   //
   // }
+
+  client: AccountsTransportClient;
 }
 
 
 const AccountsClient = {
   ui,
-  config(options, client) {
+  config(options: AccountsOptionsType, client: AccountsTransportClient) {
     this.instance = new Accounts({
       ...defaultClientConfig,
       ...options,
     }, client);
   },
-  createUser(...args) {
+  createUser(...args: Array<mixed>): void {
     return this.instance.createUser(...args);
   },
-  loginWithPassword(...args) {
+  loginWithPassword(...args: Array<mixed>): void {
     return this.instance.loginWithPassword(...args);
   },
 };

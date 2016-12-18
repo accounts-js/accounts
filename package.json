@@ -6,6 +6,7 @@
   "scripts": {
     "start": "webpack -p --config --progress --watch",
     "compile": "webpack -p --config --progress",
+    "flow:check": "flow check",
     "prepublish": "npm run compile",
     "pretest": "npm run lint",
     "test": "npm run testonly",
