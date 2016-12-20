@@ -1,9 +1,12 @@
+// @flow
+
 import { defaultServerConfig } from '../common/defaultConfigs';
 import { AccountsError } from '../common/errors';
 import AccountsCommon from '../common/AccountsCommon';
+import type { AccountsOptionsType } from '../common/AccountsCommon';
 
 class Accounts extends AccountsCommon {
-  constructor(options, db) {
+  constructor(options: AccountsOptionsType, db) {
     super(options);
     if (!db) {
       throw new AccountsError({
@@ -15,13 +18,13 @@ class Accounts extends AccountsCommon {
 }
 
 const AccountsServer = {
-  config(options, db) {
+  config(options: AccountsOptionsType, db) {
     this.instance = new Accounts({
       ...defaultServerConfig,
       ...options,
     }, db);
   },
-  createUser(...args) {
+  createUser(...args: Array<mixed>): Promise<any> {
     return this.instance.createUser(...args);
   },
 };

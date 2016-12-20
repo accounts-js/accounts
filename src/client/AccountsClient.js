@@ -17,7 +17,8 @@ const isValidUserObject = (user: UserObjectType) => has(user, 'user') || has(use
 export type UserCreationInputType = {
   username: ?string,
   password: ?string,
-  email: ?string
+  email: ?string,
+  profile: ?Object
 };
 
 export type AccountTokenType = {
@@ -35,7 +36,6 @@ class Accounts extends AccountsCommon {
 
   constructor(options: AccountsOptionsType, client: AccountsTransportClient) {
     super(options);
-
     if (!client) {
       throw new AccountsError({
         message: 'A REST or GraphQL client is required',
@@ -139,10 +139,10 @@ const AccountsClient = {
       ...options,
     }, client);
   },
-  createUser(...args: Array<mixed>): void {
+  createUser(...args: Array<mixed>): Promise<void> {
     return this.instance.createUser(...args);
   },
-  loginWithPassword(...args: Array<mixed>): void {
+  loginWithPassword(...args: Array<mixed>): Promise<void> {
     return this.instance.loginWithPassword(...args);
   },
 };
