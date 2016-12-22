@@ -8,10 +8,11 @@
     "compile:watch": "yarn compile -- --watch",
     "prepare": "yarn compile",
     "test": "yarn lint && yarn testonly",
+    "test-ci": "yarn lint && yarn coverage",
     "testonly": "jest",
     "lint": "eslint src",
     "coverage": "yarn testonly -- --coverage",
-    "coveralls": "yarn coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "jest": {
     "testEnvironment": "node",
