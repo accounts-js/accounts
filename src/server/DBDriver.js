@@ -2,8 +2,8 @@
 import type UserObjectType from '../common/UserObjectType';
 
 export interface DBDriverInterface {
-  findUserByEmail(email: string): Promise<UserObjectType> | Promise<null>,
-  findUserByUsername(username: string): Promise<UserObjectType> | Promise<null>,
+  findUserByEmail(email: string): Promise<?UserObjectType>,
+  findUserByUsername(username: string): Promise<?UserObjectType>,
   createUser(user: UserObjectType): Promise<string>
 }
 

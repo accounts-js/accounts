@@ -16,27 +16,27 @@ export default class AccountsCommon {
   }
 
   validateEmail(email: ?string, throwError: boolean = true): boolean {
-    const hasError = isEmpty(trim(email));
-    if (hasError && throwError) {
+    const isValid = !isEmpty(trim(email));
+    if (!isValid && throwError) {
       throw new AccountsError({ message: 'Email is required' });
     }
-    return hasError;
+    return isValid;
   }
 
   validatePassword(password: ?string, throwError: boolean = true): boolean {
-    const hasError = isEmpty(trim(password));
-    if (hasError && throwError) {
+    const isValid = !isEmpty(trim(password));
+    if (!isValid && throwError) {
       throw new AccountsError({ message: 'Password is required' });
     }
-    return hasError;
+    return isValid;
   }
 
   validateUsername(username: ?string, throwError: boolean = true): boolean {
-    const hasError = isEmpty(trim(username));
-    if (hasError && throwError) {
+    const isValid = !isEmpty(trim(username));
+    if (!isValid && throwError) {
       throw new AccountsError({ message: 'Username is required' });
     }
-    return hasError;
+    return isValid;
   }
 
   userId(): ?string {

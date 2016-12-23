@@ -54,7 +54,7 @@ class Accounts extends AccountsCommon {
     this.validatePassword(user.password);
     // TODO Throw error if client user creation is disabled
 
-    if (this.validateUsername(user.username, false) && this.validateEmail(user.email, false)) {
+    if (!this.validateUsername(user.username, false) && !this.validateEmail(user.email, false)) {
       throw new AccountsError({ message: 'Username or Email is required' });
     }
     try {

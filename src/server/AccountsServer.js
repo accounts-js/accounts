@@ -28,7 +28,7 @@ class Accounts extends AccountsCommon {
     this.db = db;
   }
   async createUser(user: UserCreationInputType): Promise<string> {
-    if (this.validateUsername(user.username, false) && this.validateEmail(user.email, false)) {
+    if (!this.validateUsername(user.username, false) && !this.validateEmail(user.email, false)) {
       throw new AccountsError({ message: 'Username or Email is required' });
     }
     if (user.username && await this.db.findUserByUsername(user.username)) {
