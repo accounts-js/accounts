@@ -10,6 +10,7 @@
     "prepublish": "npm run compile",
     "pretest": "npm run lint",
     "test": "npm run testonly",
+    "test-ci": "yarn lint && yarn coverage",
     "testonly": "jest",
     "lint": "eslint src",
     "coverage": "yarn testonly -- --coverage",
