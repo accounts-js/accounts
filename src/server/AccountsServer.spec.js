@@ -1,14 +1,5 @@
-/* eslint-disable no-unused-expressions */
-import 'regenerator-runtime/runtime'; // For async / await syntax
-import chai, { expect } from 'chai';
-// import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-import chaiAsPromised from 'chai-as-promised';
 // import 'localstorage-polyfill';
 import Accounts from './AccountsServer';
-
-chai.use(sinonChai);
-chai.use(chaiAsPromised);
 
 describe('Accounts', () => {
   beforeEach(() => {
@@ -18,12 +9,17 @@ describe('Accounts', () => {
     beforeEach(() => {
     });
     it('requires a db driver', () => {
-      expect(() => Accounts.config()).to.throw('A database driver is required');
+      try {
+        Accounts.config();
+      } catch (err) {
+        const { message } = err.serialize();
+        expect(message).toEqual('A database driver is required');
+      }
     });
     it('sets the db driver', () => {
       const db = {};
       Accounts.config({}, db);
-      expect(Accounts.instance.db).to.equal(db);
+      expect(Accounts.instance.db).toEqual(db);
     });
   });
   describe('createUser', () => {
@@ -42,10 +38,10 @@ describe('Accounts', () => {
           username: '',
           email: '',
         });
-        expect.fail();
+        throw new Error();
       } catch (err) {
         const { message } = err.serialize();
-        expect(message).to.eql('Username or Email is required');
+        expect(message).toEqual('Username or Email is required');
       }
     });
     it('throws error if username exists', async () => {
@@ -62,7 +58,7 @@ describe('Accounts', () => {
         expect.fail();
       } catch (err) {
         const { message } = err.serialize();
-        expect(message).to.eql('Username already exists');
+        expect(message).toEqual('Username already exists');
       }
     });
     it('throws error if email exists', async () => {
@@ -76,10 +72,10 @@ describe('Accounts', () => {
           username: '',
           email: 'email1',
         });
-        expect.fail();
+        throw new Error();
       } catch (err) {
         const { message } = err.serialize();
-        expect(message).to.eql('Email already exists');
+        expect(message).toEqual('Email already exists');
       }
     });
     it('succesfully create a user', async () => {
@@ -91,7 +87,7 @@ describe('Accounts', () => {
         password: '123456',
         username: 'user1',
       });
-      expect(userId).to.eql('123');
+      expect(userId).toEqual('123');
     });
   });
 });

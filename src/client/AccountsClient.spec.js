@@ -1,24 +1,20 @@
-/* eslint-disable no-unused-expressions */
-import 'regenerator-runtime/runtime'; // For async / await syntax
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-import chaiAsPromised from 'chai-as-promised';
 // import 'localstorage-polyfill';
 import Accounts from './AccountsClient';
-
-chai.use(sinonChai);
-chai.use(chaiAsPromised);
 
 describe('Accounts', () => {
   describe('config', () => {
     it('requires a client', () => {
-      expect(() => Accounts.config().to.throw('A REST or GraphQL client is required'));
+      try {
+        Accounts.config();
+      } catch (err) {
+        const { message } = err.serialize();
+        expect(message).toEqual('A REST or GraphQL client is required');
+      }
     });
     it('sets the client', () => {
       const client = {};
       Accounts.config({}, client);
-      expect(Accounts.instance.client).to.equal(client);
+      expect(Accounts.instance.client).toEqual(client);
     });
   });
   describe('createUser', () => {
@@ -29,7 +25,7 @@ describe('Accounts', () => {
         });
       } catch (err) {
         const { message } = err.serialize();
-        expect(message).to.eql('Password is required');
+        expect(message).toEqual('Password is required');
       }
     });
     it('requires username or an email', async () => {
@@ -41,11 +37,11 @@ describe('Accounts', () => {
         });
       } catch (err) {
         const { message } = err.serialize();
-        expect(message).to.eql('Username or Email is required');
+        expect(message).toEqual('Username or Email is required');
       }
     });
     it('calls callback on succesfull user creation', async () => {
-      const callback = sinon.spy();
+      const callback = jest.fn();
       const client = {
         createUser: () => Promise.resolve(true),
       };
@@ -55,7 +51,7 @@ describe('Accounts', () => {
         username: 'user',
       }, callback);
 
-      expect(callback).to.have.been.called;
+      expect(callback.mock.calls.length).toEqual(1);
     });
     it('calls callback on failure with error message', async () => {
       const client = {
@@ -64,7 +60,7 @@ describe('Accounts', () => {
 
       Accounts.config({}, client);
 
-      const callback = sinon.spy();
+      const callback = jest.fn();
 
       try {
         await Accounts.createUser({
@@ -72,7 +68,8 @@ describe('Accounts', () => {
           username: 'user',
         }, callback);
       } catch (err) {
-        expect(callback).to.have.been.calledWith('error message');
+        expect(callback.mock.calls.length).toEqual(1);
+        expect(callback.mock.calls[0][0]).toEqual('error message');
       }
     });
   });
@@ -86,7 +83,7 @@ describe('Accounts', () => {
         await Accounts.loginWithPassword();
       } catch (err) {
         const { message } = err.serialize();
-        expect(message).to.eql('Unrecognized options for login request [400]');
+        expect(message).toEqual('Unrecognized options for login request [400]');
       }
     });
     it('throws error if user is undefined', async () => {
@@ -98,7 +95,7 @@ describe('Accounts', () => {
         await Accounts.loginWithPassword();
       } catch (err) {
         const { message } = err.serialize();
-        expect(message).to.eql('Unrecognized options for login request [400]');
+        expect(message).toEqual('Unrecognized options for login request [400]');
       }
     });
     it('throws error user is not a string or is an empty object', async () => {
@@ -110,7 +107,7 @@ describe('Accounts', () => {
         await Accounts.loginWithPassword({}, 'password');
       } catch (err) {
         const { message } = err.serialize();
-        expect(message).to.eql('Match failed [400]');
+        expect(message).toEqual('Match failed [400]');
       }
     });
     it('throws error password is not a string', async () => {
@@ -122,7 +119,7 @@ describe('Accounts', () => {
         await Accounts.loginWithPassword({ user: 'username' }, {});
       } catch (err) {
         const { message } = err.serialize();
-        expect(message).to.eql('Match failed [400]');
+        expect(message).toEqual('Match failed [400]');
       }
     });
     it('calls callback on successful login', async () => {
@@ -130,20 +127,21 @@ describe('Accounts', () => {
         loginWithPassword: () => Promise.resolve(),
       };
       Accounts.config({}, client);
-      const callback = sinon.spy();
+      const callback = jest.fn();
       await Accounts.loginWithPassword('username', 'password', callback);
-      expect(callback).to.have.been.called;
+      expect(callback.mock.calls.length).toEqual(1);
     });
     it('calls callback with error on failed login', async () => {
       const client = {
         loginWithPassword: () => Promise.reject('error'),
       };
       Accounts.config({}, client);
-      const callback = sinon.spy();
+      const callback = jest.fn();
       try {
         await Accounts.loginWithPassword('username', 'password', callback);
       } catch (err) {
-        expect(callback).to.have.been.calledWith('error');
+        expect(callback.mock.calls.length).toEqual(1);
+        expect(callback.mock.calls[0][0]).toEqual('error');
       }
     });
   });

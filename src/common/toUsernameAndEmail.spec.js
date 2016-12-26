@@ -1,15 +1,14 @@
-import { expect } from 'chai';
 import toUsernameAndEmail from './toUsernameAndEmail';
 
 describe('toUsernameAndEmail', () => {
   it('username', () => {
-    expect(toUsernameAndEmail({ user: 'UserA' })).to.deep.equal({
+    expect(toUsernameAndEmail({ user: 'UserA' })).toEqual({
       username: 'UserA',
       email: null,
     });
   });
   it('email', () => {
-    expect(toUsernameAndEmail({ user: 'UserA@users.com' })).to.deep.equal({
+    expect(toUsernameAndEmail({ user: 'UserA@users.com' })).toEqual({
       username: null,
       email: 'UserA@users.com',
     });
@@ -17,7 +16,7 @@ describe('toUsernameAndEmail', () => {
   it('username and email', () => {
     expect(toUsernameAndEmail({
       user: null, username: 'UserA', email: 'UserA@users.com',
-    })).to.deep.equal({
+    })).toEqual({
       username: 'UserA',
       email: 'UserA@users.com',
     });
