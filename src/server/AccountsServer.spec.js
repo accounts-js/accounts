@@ -38,7 +38,7 @@ describe('Accounts', () => {
           username: '',
           email: '',
         });
-        expect.fail();
+        throw new Error();
       } catch (err) {
         const { message } = err.serialize();
         expect(message).toEqual('Username or Email is required');
@@ -72,7 +72,7 @@ describe('Accounts', () => {
           username: '',
           email: 'email1',
         });
-        expect.fail();
+        throw new Error();
       } catch (err) {
         const { message } = err.serialize();
         expect(message).toEqual('Email already exists');
