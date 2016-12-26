@@ -10,13 +10,13 @@ import AccountsCommon from '../common/AccountsCommon';
 import { loggingIn } from './module';
 import ui from './ui';
 import type { AccountsOptionsType } from '../common/AccountsCommon';
+import type UserObjectType from '../common/UserObjectType';
 
-export type UserObjectType = {username: ?string, email: ?string, id: ?string};
 const isValidUserObject = (user: UserObjectType) => has(user, 'user') || has(user, 'email') || has(user, 'id');
 
 export type UserCreationInputType = {
   username: ?string,
-  password: ?string,
+  password: string,
   email: ?string,
   profile: ?Object
 };
@@ -50,7 +50,7 @@ class Accounts extends AccountsCommon {
   }
 
   // TODO Accept 'profile' in the options
-  async createUser(user: UserCreationInputType, callback: Function): Promise<void> {
+  async createUser(user: UserCreationInputType, callback: ?Function): Promise<void> {
     this.validatePassword(user.password);
     // TODO Throw error if client user creation is disabled
 

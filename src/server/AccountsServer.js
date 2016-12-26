@@ -4,9 +4,21 @@ import { defaultServerConfig } from '../common/defaultConfigs';
 import { AccountsError } from '../common/errors';
 import AccountsCommon from '../common/AccountsCommon';
 import type { AccountsOptionsType } from '../common/AccountsCommon';
+import type { DBDriverInterface } from './DBDriver';
+import type UserObjectType from '../common/UserObjectType';
+
+
+export type UserCreationInputType = {
+  username: ?string,
+  password: ?string,
+  email: ?string,
+  profile: ?Object
+};
 
 class Accounts extends AccountsCommon {
-  constructor(options: AccountsOptionsType, db) {
+  options: AccountsOptionsType
+  db: DBDriverInterface
+  constructor(options: AccountsOptionsType, db: DBDriverInterface) {
     super(options);
     if (!db) {
       throw new AccountsError({
@@ -15,17 +27,38 @@ class Accounts extends AccountsCommon {
     }
     this.db = db;
   }
+  async createUser(user: UserCreationInputType): Promise<string> {
+    if (!this.validateUsername(user.username, false) && !this.validateEmail(user.email, false)) {
+      throw new AccountsError({ message: 'Username or Email is required' });
+    }
+    if (user.username && await this.db.findUserByUsername(user.username)) {
+      throw new AccountsError({
+        message: 'Username already exists',
+      });
+    }
+    if (user.email && await this.db.findUserByEmail(user.email)) {
+      throw new AccountsError({
+        message: 'Email already exists',
+      });
+    }
+
+    // TODO Accounts.onCreateUser
+    const createdUser : UserObjectType = await this.db.createUser(user);
+
+    return createdUser;
+  }
 }
 
 const AccountsServer = {
-  config(options: AccountsOptionsType, db) {
+  instance: Accounts,
+  config(options: AccountsOptionsType, db: DBDriverInterface) {
     this.instance = new Accounts({
       ...defaultServerConfig,
       ...options,
     }, db);
   },
-  createUser(...args: Array<mixed>): Promise<any> {
-    return this.instance.createUser(...args);
+  createUser(user: UserCreationInputType): Promise<string> {
+    return this.instance.createUser(user);
   },
 };
 
