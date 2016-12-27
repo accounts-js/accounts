@@ -11,15 +11,6 @@ export const defaultSharedConfig = {
 
 export const defaultClientConfig = {
   ...defaultSharedConfig,
-};
-
-export const defaultServerConfig = {
-  ...defaultSharedConfig,
-  // TODO Investigate oauthSecretKey
-  // oauthSecretKey
-};
-
-export const defaultUiConfig = {
   title: '',
   requestPermissions: [],
   requestOfflineToken: {},
@@ -42,4 +33,10 @@ export const defaultUiConfig = {
   // onVerifyEmailHook: () => redirect(`${Accounts.ui._options.profilePath}`),
   // onSignedInHook: () => redirect(`${Accounts.ui._options.homeRoutePath}`),
   // onSignedOutHook: () => redirect(`${Accounts.ui._options.homeRoutePath}`),
+};
+
+export const defaultServerConfig = {
+  ...defaultSharedConfig,
+  // TODO Investigate oauthSecretKey
+  // oauthSecretKey
 };

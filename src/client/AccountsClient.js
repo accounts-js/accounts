@@ -8,7 +8,6 @@ import { AccountsError } from '../common/errors';
 import store from './store';
 import AccountsCommon from '../common/AccountsCommon';
 import { loggingIn } from './module';
-import ui from './ui';
 import type { AccountsOptionsType } from '../common/AccountsCommon';
 import type UserObjectType from '../common/UserObjectType';
 
@@ -132,7 +131,9 @@ class Accounts extends AccountsCommon {
 
 
 const AccountsClient = {
-  ui,
+  ui: {
+
+  },
   config(options: AccountsOptionsType, client: AccountsTransportClient) {
     this.instance = new Accounts({
       ...defaultClientConfig,
@@ -144,6 +145,9 @@ const AccountsClient = {
   },
   loginWithPassword(...args: Array<mixed>): Promise<void> {
     return this.instance.loginWithPassword(...args);
+  },
+  options(): AccountsOptionsType {
+    return this.instance.options;
   },
 };
 
