@@ -1,4 +1,4 @@
-import { EMAIL_ONLY_NO_PASSWORD } from './passwordSignupFields';
+import { EMAIL_ONLY } from './passwordSignupFields';
 
 export const defaultSharedConfig = {
   sendVerificationEmail: false,
@@ -7,6 +7,8 @@ export const defaultSharedConfig = {
   loginExpirationInDays: 90,
   passwordResetTokenExpirationInDays: 3,
   passwordEnrollTokenExpirationInDays: 30,
+  passwordSignupFields: EMAIL_ONLY,
+  minimumPasswordLength: 7,
 };
 
 export const defaultClientConfig = {
@@ -16,8 +18,6 @@ export const defaultClientConfig = {
   requestOfflineToken: {},
   forceApprovalPrompt: {},
   requireEmailVerification: false,
-  passwordSignupFields: EMAIL_ONLY_NO_PASSWORD,
-  minimumPasswordLength: 7,
   loginPath: '/',
   signUpPath: null,
   resetPasswordPath: null,
