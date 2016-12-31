@@ -6,6 +6,7 @@ describe('Accounts', () => {
     it('requires a client', () => {
       try {
         Accounts.config();
+        throw new Error();
       } catch (err) {
         const { message } = err.serialize();
         expect(message).toEqual('A REST or GraphQL client is required');
@@ -18,23 +19,43 @@ describe('Accounts', () => {
     });
   });
   describe('createUser', () => {
+    it('requires user object', async () => {
+      Accounts.config({}, {
+        createUser: Promise.resolve(),
+      });
+      try {
+        await Accounts.createUser();
+        throw new Error();
+      } catch (err) {
+        const { message } = err.serialize();
+        expect(message).toEqual('Unrecognized options for create user request [400]');
+      }
+    });
     it('requires password', async () => {
+      Accounts.config({}, {
+        createUser: Promise.resolve(),
+      });
       try {
         await Accounts.createUser({
           password: null,
         });
+        throw new Error();
       } catch (err) {
         const { message } = err.serialize();
         expect(message).toEqual('Password is required');
       }
     });
     it('requires username or an email', async () => {
+      Accounts.config({}, {
+        createUser: Promise.resolve(),
+      });
       try {
         await Accounts.createUser({
           password: '123456',
           username: '',
           email: '',
         });
+        throw new Error();
       } catch (err) {
         const { message } = err.serialize();
         expect(message).toEqual('Username or Email is required');
@@ -67,6 +88,7 @@ describe('Accounts', () => {
           password: '123456',
           username: 'user',
         }, callback);
+        throw new Error();
       } catch (err) {
         expect(callback.mock.calls.length).toEqual(1);
         expect(callback.mock.calls[0][0]).toEqual('error message');
@@ -81,6 +103,7 @@ describe('Accounts', () => {
       Accounts.config({}, client);
       try {
         await Accounts.loginWithPassword();
+        throw new Error();
       } catch (err) {
         const { message } = err.serialize();
         expect(message).toEqual('Unrecognized options for login request [400]');
@@ -93,6 +116,7 @@ describe('Accounts', () => {
       Accounts.config({}, client);
       try {
         await Accounts.loginWithPassword();
+        throw new Error();
       } catch (err) {
         const { message } = err.serialize();
         expect(message).toEqual('Unrecognized options for login request [400]');
@@ -105,6 +129,7 @@ describe('Accounts', () => {
       Accounts.config({}, client);
       try {
         await Accounts.loginWithPassword({}, 'password');
+        throw new Error();
       } catch (err) {
         const { message } = err.serialize();
         expect(message).toEqual('Match failed [400]');
@@ -117,6 +142,7 @@ describe('Accounts', () => {
       Accounts.config({}, client);
       try {
         await Accounts.loginWithPassword({ user: 'username' }, {});
+        throw new Error();
       } catch (err) {
         const { message } = err.serialize();
         expect(message).toEqual('Match failed [400]');
@@ -139,6 +165,7 @@ describe('Accounts', () => {
       const callback = jest.fn();
       try {
         await Accounts.loginWithPassword('username', 'password', callback);
+        throw new Error();
       } catch (err) {
         expect(callback.mock.calls.length).toEqual(1);
         expect(callback.mock.calls[0][0]).toEqual('error');

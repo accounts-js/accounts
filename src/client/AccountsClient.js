@@ -49,9 +49,12 @@ class Accounts extends AccountsCommon {
   }
 
   // TODO Accept 'profile' in the options
+  // TODO Throw error if client user creation is disabled
   async createUser(user: UserCreationInputType, callback: ?Function): Promise<void> {
+    if (!user || user.password === undefined) {
+      throw new AccountsError({ message: 'Unrecognized options for create user request [400]' });
+    }
     this.validatePassword(user.password);
-    // TODO Throw error if client user creation is disabled
 
     if (!this.validateUsername(user.username, false) && !this.validateEmail(user.email, false)) {
       throw new AccountsError({ message: 'Username or Email is required' });

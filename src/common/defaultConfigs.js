@@ -9,6 +9,7 @@ export const defaultSharedConfig = {
   passwordEnrollTokenExpirationInDays: 30,
   passwordSignupFields: EMAIL_ONLY,
   minimumPasswordLength: 7,
+  path: '/accounts',
 };
 
 export const defaultClientConfig = {
@@ -37,7 +38,6 @@ export const defaultClientConfig = {
 
 export const defaultServerConfig = {
   ...defaultSharedConfig,
-  path: '/accounts',
   // TODO Investigate oauthSecretKey
   // oauthSecretKey
 };
