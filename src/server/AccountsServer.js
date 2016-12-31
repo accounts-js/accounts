@@ -60,6 +60,9 @@ const AccountsServer = {
   createUser(user: UserCreationInputType): Promise<string> {
     return this.instance.createUser(user);
   },
+  options(): AccountsOptionsType {
+    return this.instance.options;
+  },
 };
 
 

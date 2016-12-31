@@ -37,6 +37,7 @@ export const defaultClientConfig = {
 
 export const defaultServerConfig = {
   ...defaultSharedConfig,
+  path: '/accounts',
   // TODO Investigate oauthSecretKey
   // oauthSecretKey
 };
