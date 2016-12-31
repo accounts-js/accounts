@@ -14,6 +14,7 @@ export const defaultSharedConfig = {
 
 export const defaultClientConfig = {
   ...defaultSharedConfig,
+  server: '',
   title: '',
   requestPermissions: [],
   requestOfflineToken: {},
