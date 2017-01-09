@@ -1,4 +1,3 @@
-// import 'localstorage-polyfill';
 import Accounts from './AccountsServer';
 
 describe('Accounts', () => {
@@ -88,6 +87,86 @@ describe('Accounts', () => {
         username: 'user1',
       });
       expect(userId).toEqual('123');
+    });
+  });
+  describe('loginWithPassword', () => {
+    it('throws error if user is undefined', async () => {
+      try {
+        await Accounts.loginWithPassword(null, '123456');
+        throw new Error();
+      } catch (err) {
+        const { message } = err.serialize();
+        expect(message).toEqual('Unrecognized options for login request [400]');
+      }
+    });
+    it('throws error if password is undefined', async () => {
+      try {
+        await Accounts.loginWithPassword('username', null);
+        throw new Error();
+      } catch (err) {
+        const { message } = err.serialize();
+        expect(message).toEqual('Unrecognized options for login request [400]');
+      }
+    });
+    it('throws error if user is not a string', async () => {
+      try {
+        await Accounts.loginWithPassword({}, '123456');
+        throw new Error();
+      } catch (err) {
+        const { message } = err.serialize();
+        expect(message).toEqual('Match failed [400]');
+      }
+    });
+    it('throws error if password is not a string', async () => {
+      try {
+        await Accounts.loginWithPassword('username', {});
+        throw new Error();
+      } catch (err) {
+        const { message } = err.serialize();
+        expect(message).toEqual('Match failed [400]');
+      }
+    });
+    it('throws error if user is not found', async () => {
+      Accounts.config({}, {
+        findUserByUsername: () => Promise.resolve(null),
+        findUserByEmail: () => Promise.resolve(null),
+      });
+      try {
+        await Accounts.loginWithPassword('username', '123456');
+        throw new Error();
+      } catch (err) {
+        const { message } = err.serialize();
+        expect(message).toEqual('User not found [403]');
+      }
+    });
+    it('throws error if password not set', async () => {
+      Accounts.config({}, {
+        findUserByUsername: () => Promise.resolve('123'),
+        findUserByEmail: () => Promise.resolve(null),
+        findPasswordHash: () => Promise.resolve(null),
+      });
+      try {
+        await Accounts.loginWithPassword('username', '123456');
+        throw new Error();
+      } catch (err) {
+        const { message } = err.serialize();
+        expect(message).toEqual('User has no password set [403]');
+      }
+    });
+    it('throws error if password is incorrect', async () => {
+      Accounts.config({}, {
+        findUserByUsername: () => Promise.resolve('123'),
+        findUserByEmail: () => Promise.resolve(null),
+        findPasswordHash: () => Promise.resolve('hash'),
+        verifyPassword: () => Promise.resolve(false),
+      });
+      try {
+        await Accounts.loginWithPassword('username', '123456');
+        throw new Error();
+      } catch (err) {
+        const { message } = err.serialize();
+        expect(message).toEqual('Incorrect password [403]');
+      }
     });
   });
 });

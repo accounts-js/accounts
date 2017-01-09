@@ -1,11 +1,13 @@
 // @flow
 
+import { isString } from 'lodash';
 import { defaultServerConfig } from '../common/defaultConfigs';
 import { AccountsError } from '../common/errors';
 import AccountsCommon from '../common/AccountsCommon';
 import type { AccountsOptionsType } from '../common/AccountsCommon';
 import type UserObjectType from '../common/UserObjectType';
 import DBDriver from './DBDriver';
+import toUsernameAndEmail from '../common/toUsernameAndEmail';
 
 export type UserCreationInputType = {
   username: ?string,
@@ -25,6 +27,34 @@ class Accounts extends AccountsCommon {
       });
     }
     this.db = db;
+  }
+  async loginWithPassword(user: string, password: string): Promise<boolean> {
+    if (!user || !password) {
+      throw new AccountsError({ message: 'Unrecognized options for login request [400]' });
+    }
+    if (!isString(user) || !isString(password)) {
+      throw new AccountsError({ message: 'Match failed [400]' });
+    }
+    const { username, email } = toUsernameAndEmail({ user });
+    let userId;
+    if (username) {
+      userId = await this.db.findUserByUsername(username, true);
+    }
+    if (email) {
+      userId = await this.db.findUserByEmail(email, true);
+    }
+    if (!userId) {
+      throw new AccountsError({ message: 'User not found [403]' });
+    }
+    const hash = await this.db.findPasswordHash(userId);
+    if (!hash) {
+      throw new AccountsError({ message: 'User has no password set [403]' });
+    }
+    const isValidPassword = await this.db.verifyPassword(password, hash);
+    if (!isValidPassword) {
+      throw new AccountsError({ message: 'Incorrect password [403]' });
+    }
+    return isValidPassword;
   }
   async createUser(user: UserCreationInputType): Promise<string> {
     if (!this.validateUsername(user.username, false) && !this.validateEmail(user.email, false)) {
@@ -72,6 +102,9 @@ const AccountsServer = {
   },
   options(): AccountsOptionsType {
     return this.instance.options;
+  },
+  loginWithPassword(user: string, password: string): Promise<boolean> {
+    return this.instance.loginWithPassword(user, password);
   },
   createUser(user: UserCreationInputType): Promise<string> {
     return this.instance.createUser(user);
