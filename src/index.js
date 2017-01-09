@@ -4,7 +4,7 @@ import AccountsCommon from './common/AccountsCommon';
 import DBDriver from './server/DBDriver';
 import * as PasswordSignupFields from './common/passwordSignupFields';
 import UserObjectType from './common/UserObjectType';
-import encryption from './server/encryption';
+import * as encryption from './server/encryption';
 
 export {
   AccountsClient,
