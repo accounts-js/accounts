@@ -5,6 +5,7 @@ import DBDriver from './server/DBDriver';
 import * as PasswordSignupFields from './common/passwordSignupFields';
 import UserObjectType from './common/UserObjectType';
 import * as encryption from './server/encryption';
+import isEmail from './common/isEmail';
 
 export {
   AccountsClient,
@@ -14,4 +15,5 @@ export {
   PasswordSignupFields,
   UserObjectType,
   encryption,
+  isEmail,
 };
