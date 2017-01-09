@@ -4,9 +4,8 @@ import { defaultServerConfig } from '../common/defaultConfigs';
 import { AccountsError } from '../common/errors';
 import AccountsCommon from '../common/AccountsCommon';
 import type { AccountsOptionsType } from '../common/AccountsCommon';
-import type { DBDriverInterface } from './DBDriver';
 import type UserObjectType from '../common/UserObjectType';
-
+import DBDriver from './DBDriver';
 
 export type UserCreationInputType = {
   username: ?string,
@@ -17,8 +16,8 @@ export type UserCreationInputType = {
 
 class Accounts extends AccountsCommon {
   options: AccountsOptionsType
-  db: DBDriverInterface
-  constructor(options: AccountsOptionsType, db: DBDriverInterface) {
+  db: DBDriver
+  constructor(options: AccountsOptionsType, db: DBDriver) {
     super(options);
     if (!db) {
       throw new AccountsError({
@@ -43,25 +42,48 @@ class Accounts extends AccountsCommon {
     }
 
     // TODO Accounts.onCreateUser
-    const createdUser : UserObjectType = await this.db.createUser(user);
+    const userId: string = await this.db.createUser({
+      username: user.username,
+      email: user.email && user.email.toLowerCase(),
+      password: user.password,
+      profile: user.profile,
+    });
 
-    return createdUser;
+    return userId;
+  }
+  findUserByEmail(email: string, onlyId: ?boolean): Promise<UserObjectType | string | null> {
+    return this.db.findUserByEmail(email, onlyId);
+  }
+  findUserByUsername(username: string, onlyId: ?boolean): Promise<UserObjectType | string | null> {
+    return this.db.findUserByUsername(username, onlyId);
+  }
+  findUserById(userId: string): Promise<?UserObjectType> {
+    return this.db.findUserById(userId);
   }
 }
 
 const AccountsServer = {
   instance: Accounts,
-  config(options: AccountsOptionsType, db: DBDriverInterface) {
+  config(options: AccountsOptionsType, db: DBDriver) {
     this.instance = new Accounts({
       ...defaultServerConfig,
       ...options,
     }, db);
   },
+  options(): AccountsOptionsType {
+    return this.instance.options;
+  },
   createUser(user: UserCreationInputType): Promise<string> {
     return this.instance.createUser(user);
   },
-  options(): AccountsOptionsType {
-    return this.instance.options;
+  findUserByEmail(email: string, onlyId: ?boolean): Promise<UserObjectType | string | null> {
+    return this.instance.findUserByEmail(email, onlyId);
+  },
+  findUserByUsername(username: string, onlyId: ?boolean): Promise<UserObjectType | string | null> {
+    return this.instance.findUserByUsername(username, onlyId);
+  },
+  findUserById(userId: string): Promise<?UserObjectType> {
+    return this.instance.findUserById(userId);
   },
 };
 

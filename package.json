@@ -69,6 +69,7 @@
   },
   "dependencies": {
     "apollo-errors": "^1.2.1",
+    "bcryptjs": "^2.4.0",
     "immutable": "^3.8.1",
     "redux": "^3.6.0",
     "redux-immutable": "^3.0.8"

@@ -742,6 +742,10 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
+bcryptjs:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/bcryptjs/-/bcryptjs-2.4.0.tgz#fb7f4a0b133854503fe1b2da3f25db834cf0e678"
+
 big.js@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/big.js/-/big.js-3.1.3.tgz#4cada2193652eb3ca9ec8e55c9015669c9806978"
