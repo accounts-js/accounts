@@ -8,6 +8,7 @@ import type { AccountsOptionsType } from '../common/AccountsCommon';
 import type UserObjectType from '../common/UserObjectType';
 import DBDriver from './DBDriver';
 import toUsernameAndEmail from '../common/toUsernameAndEmail';
+import { verifyPassword } from './encryption';
 
 export type UserCreationInputType = {
   username: ?string,
@@ -50,7 +51,7 @@ class Accounts extends AccountsCommon {
     if (!hash) {
       throw new AccountsError({ message: 'User has no password set [403]' });
     }
-    const isValidPassword = await this.db.verifyPassword(password, hash);
+    const isValidPassword = await verifyPassword(password, hash);
     if (!isValidPassword) {
       throw new AccountsError({ message: 'Incorrect password [403]' });
     }
