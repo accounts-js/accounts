@@ -91,6 +91,18 @@ class Accounts extends AccountsCommon {
   findUserById(userId: string): Promise<?UserObjectType> {
     return this.db.findUserById(userId);
   }
+  addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
+    return this.db.addEmail(userId, newEmail, verified);
+  }
+  removeEmail(userId: string, email: string): Promise<void> {
+    return this.db.removeEmail(userId, email);
+  }
+  verifyEmail(userId: string, email: string): Promise<void> {
+    return this.db.verifyEmail(userId, email);
+  }
+  setPassword(userId: string, newPassword: string): Promise<void> {
+    return this.db.setPasssword(userId, newPassword);
+  }
 }
 
 const AccountsServer = {
@@ -119,50 +131,18 @@ const AccountsServer = {
   findUserById(userId: string): Promise<?UserObjectType> {
     return this.instance.findUserById(userId);
   },
+  addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
+    return this.instance.addEmail(userId, newEmail, verified);
+  },
+  removeEmail(userId: string, newEmail: string): Promise<void> {
+    return this.instance.addEmail(userId, newEmail);
+  },
+  verifyEmail(userId: string, email: string): Promise<void> {
+    return this.instance.addEmail(userId, email);
+  },
+  setPassword(userId: string, newPassword: string): Promise<void> {
+    return this.instance.setPassword(userId, newPassword);
+  },
 };
-
-
-//   validateUser(callback) {
-//
-//   },
-//   validateLoginAttempt(callback) {
-//   },
-//   createUser(options, callback) {
-//
-//   },
-//   setUsername(userId, newUsername) {
-//
-//   },
-//   addEmail(userId, newEmail, verified = false) {
-//
-//   },
-//   removeEmail(userId, email) {
-//
-//   },
-//   verifyEmail(token, callback) {
-//
-//   },
-//   findUserByUsername(username) {
-//
-//   },
-//   findUserByEmail(email) {
-//
-//   },
-//   setPassword(userId, newPassword, optons) {
-//
-//   },
-//   sendResetPasswordEmail(userId, email) {
-//
-//   },
-//   sendEnrollmentEmail(userId, email) {
-//
-//   },
-//   sendVerificationEmail(userId, email) {
-//
-//   },
-//   emailTemplates(templates) {
-//
-//   },
-// };
 
 export default AccountsServer;
