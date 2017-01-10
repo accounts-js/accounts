@@ -157,6 +157,22 @@ describe('Accounts', () => {
       await Accounts.loginWithPassword('username', 'password', callback);
       expect(callback.mock.calls.length).toEqual(1);
     });
+    it('calls transport', async () => {
+      const loginWithPassword = jest.fn()
+        .mockImplementationOnce(() => {
+
+        });
+      const client = {
+        loginWithPassword,
+      };
+      Accounts.config({}, client);
+      await Accounts.loginWithPassword('username', 'password');
+      expect(loginWithPassword.mock.calls[0][0]).toEqual({
+        user: 'username',
+        password: 'password',
+      });
+      expect(loginWithPassword.mock.calls.length).toEqual(1);
+    });
     it('calls callback with error on failed login', async () => {
       const client = {
         loginWithPassword: () => Promise.reject('error'),

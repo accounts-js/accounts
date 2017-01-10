@@ -74,7 +74,7 @@ class Accounts extends AccountsCommon {
     }
   }
 
-  async loginWithPassword(user: UserObjectType,
+  async loginWithPassword(user: UserObjectType | string,
                           password: string,
                           callback: Function): Promise<void> {
     if (!password || !user) {
@@ -86,7 +86,9 @@ class Accounts extends AccountsCommon {
 
     store.dispatch(loggingIn(true));
     try {
-      await this.client.loginWithPassword(user, password);
+      const res = await this.client.loginWithPassword({ user, password });
+      console.log(res);
+
       // TODO Update redux store with user info
       if (isFunction(callback)) {
         callback();
