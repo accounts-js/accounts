@@ -3,25 +3,26 @@
 import { isString } from 'lodash';
 import { defaultServerConfig } from '../common/defaultConfigs';
 import { AccountsError } from '../common/errors';
-import AccountsCommon from '../common/AccountsCommon';
-import type { AccountsOptionsType } from '../common/AccountsCommon';
-import type UserObjectType from '../common/UserObjectType';
-import DBDriver from './DBDriver';
+import type { DBInterface } from './DBInterface';
+
 import toUsernameAndEmail from '../common/toUsernameAndEmail';
 import { verifyPassword } from './encryption';
+import {
+  validateEmail,
+  validateUsername,
+} from '../common/validators';
 
-export type UserCreationInputType = {
-  username: ?string,
-  password: ?string,
-  email: ?string,
-  profile: ?Object
-};
+import type {
+  UserObjectType,
+  CreateUserType,
+  PasswordLoginUserType,
+  LoginReturnType,
+} from '../common/types';
 
-class Accounts extends AccountsCommon {
-  options: AccountsOptionsType
-  db: DBDriver
-  constructor(options: AccountsOptionsType, db: DBDriver) {
-    super(options);
+export class AccountsServer {
+  options: Object
+  db: DBInterface
+  constructor(options: Object, db: DBInterface) {
     if (!db) {
       throw new AccountsError({
         message: 'A database driver is required',
@@ -29,7 +30,11 @@ class Accounts extends AccountsCommon {
     }
     this.db = db;
   }
-  async loginWithPassword(user: string, password: string): Promise<boolean> {
+  generateTokens() {
+
+  }
+  // eslint-disable-next-line max-len
+  async loginWithPassword(user: PasswordLoginUserType, password: string): Promise<LoginReturnType> {
     if (!user || !password) {
       throw new AccountsError({ message: 'Unrecognized options for login request [400]' });
     }
@@ -47,18 +52,21 @@ class Accounts extends AccountsCommon {
     if (!userId) {
       throw new AccountsError({ message: 'User not found [403]' });
     }
+    // $FlowFixMe
     const hash = await this.db.findPasswordHash(userId);
     if (!hash) {
       throw new AccountsError({ message: 'User has no password set [403]' });
     }
     const isValidPassword = await verifyPassword(password, hash);
+
     if (!isValidPassword) {
       throw new AccountsError({ message: 'Incorrect password [403]' });
     }
+
     return isValidPassword;
   }
-  async createUser(user: UserCreationInputType): Promise<string> {
-    if (!this.validateUsername(user.username, false) && !this.validateEmail(user.email, false)) {
+  async createUser(user: CreateUserType): Promise<string> {
+    if (!validateUsername(user.username) && !validateEmail(user.email)) {
       throw new AccountsError({ message: 'Username or Email is required' });
     }
     if (user.username && await this.db.findUserByUsername(user.username)) {
@@ -105,21 +113,21 @@ class Accounts extends AccountsCommon {
   }
 }
 
-const AccountsServer = {
-  instance: Accounts,
-  config(options: AccountsOptionsType, db: DBDriver) {
-    this.instance = new Accounts({
+const Accounts = {
+  instance: AccountsServer,
+  config(options: Object, db: DBInterface) {
+    this.instance = new AccountsServer({
       ...defaultServerConfig,
       ...options,
     }, db);
   },
-  options(): AccountsOptionsType {
+  options(): Object {
     return this.instance.options;
   },
   loginWithPassword(user: string, password: string): Promise<boolean> {
     return this.instance.loginWithPassword(user, password);
   },
-  createUser(user: UserCreationInputType): Promise<string> {
+  createUser(user: CreateUserType): Promise<string> {
     return this.instance.createUser(user);
   },
   findUserByEmail(email: string, onlyId: ?boolean): Promise<UserObjectType | string | null> {
@@ -145,4 +153,4 @@ const AccountsServer = {
   },
 };
 
-export default AccountsServer;
+export default Accounts;

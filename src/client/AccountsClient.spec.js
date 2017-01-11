@@ -3,19 +3,19 @@ import Accounts from './AccountsClient';
 
 describe('Accounts', () => {
   describe('config', () => {
-    it('requires a client', () => {
+    it('requires a transport', () => {
       try {
         Accounts.config();
         throw new Error();
       } catch (err) {
         const { message } = err.serialize();
-        expect(message).toEqual('A REST or GraphQL client is required');
+        expect(message).toEqual('A REST or GraphQL transport is required');
       }
     });
-    it('sets the client', () => {
-      const client = {};
-      Accounts.config({}, client);
-      expect(Accounts.instance.client).toEqual(client);
+    it('sets the transport', () => {
+      const transport = {};
+      Accounts.config({}, transport);
+      expect(Accounts.instance.transport).toEqual(transport);
     });
   });
   describe('createUser', () => {
@@ -63,10 +63,10 @@ describe('Accounts', () => {
     });
     it('calls callback on succesfull user creation', async () => {
       const callback = jest.fn();
-      const client = {
+      const transport = {
         createUser: () => Promise.resolve(true),
       };
-      Accounts.config({}, client);
+      Accounts.config({}, transport);
       await Accounts.createUser({
         password: '123456',
         username: 'user',
@@ -75,11 +75,11 @@ describe('Accounts', () => {
       expect(callback.mock.calls.length).toEqual(1);
     });
     it('calls callback on failure with error message', async () => {
-      const client = {
+      const transport = {
         createUser: () => Promise.reject('error message'),
       };
 
-      Accounts.config({}, client);
+      Accounts.config({}, transport);
 
       const callback = jest.fn();
 
@@ -97,10 +97,10 @@ describe('Accounts', () => {
   });
   describe('loginWithPassword', () => {
     it('throws error if password is undefined', async () => {
-      const client = {
+      const transport = {
         loginWithPassword: () => Promise.resolve(),
       };
-      Accounts.config({}, client);
+      Accounts.config({}, transport);
       try {
         await Accounts.loginWithPassword();
         throw new Error();
@@ -110,10 +110,10 @@ describe('Accounts', () => {
       }
     });
     it('throws error if user is undefined', async () => {
-      const client = {
+      const transport = {
         loginWithPassword: () => Promise.resolve(),
       };
-      Accounts.config({}, client);
+      Accounts.config({}, transport);
       try {
         await Accounts.loginWithPassword();
         throw new Error();
@@ -123,10 +123,10 @@ describe('Accounts', () => {
       }
     });
     it('throws error user is not a string or is an empty object', async () => {
-      const client = {
+      const transport = {
         loginWithPassword: () => Promise.resolve(),
       };
-      Accounts.config({}, client);
+      Accounts.config({}, transport);
       try {
         await Accounts.loginWithPassword({}, 'password');
         throw new Error();
@@ -136,10 +136,10 @@ describe('Accounts', () => {
       }
     });
     it('throws error password is not a string', async () => {
-      const client = {
+      const transport = {
         loginWithPassword: () => Promise.resolve(),
       };
-      Accounts.config({}, client);
+      Accounts.config({}, transport);
       try {
         await Accounts.loginWithPassword({ user: 'username' }, {});
         throw new Error();
@@ -149,35 +149,31 @@ describe('Accounts', () => {
       }
     });
     it('calls callback on successful login', async () => {
-      const client = {
+      const transport = {
         loginWithPassword: () => Promise.resolve(),
       };
-      Accounts.config({}, client);
+      Accounts.config({}, transport);
       const callback = jest.fn();
       await Accounts.loginWithPassword('username', 'password', callback);
       expect(callback.mock.calls.length).toEqual(1);
     });
     it('calls transport', async () => {
       const loginWithPassword = jest.fn()
-        .mockImplementationOnce(() => {
-
-        });
-      const client = {
+        .mockImplementationOnce();
+      const transport = {
         loginWithPassword,
       };
-      Accounts.config({}, client);
+      Accounts.config({}, transport);
       await Accounts.loginWithPassword('username', 'password');
-      expect(loginWithPassword.mock.calls[0][0]).toEqual({
-        user: 'username',
-        password: 'password',
-      });
+      expect(loginWithPassword.mock.calls[0][0]).toEqual('username');
+      expect(loginWithPassword.mock.calls[0][1]).toEqual('password');
       expect(loginWithPassword.mock.calls.length).toEqual(1);
     });
     it('calls callback with error on failed login', async () => {
-      const client = {
+      const transport = {
         loginWithPassword: () => Promise.reject('error'),
       };
-      Accounts.config({}, client);
+      Accounts.config({}, transport);
       const callback = jest.fn();
       try {
         await Accounts.loginWithPassword('username', 'password', callback);

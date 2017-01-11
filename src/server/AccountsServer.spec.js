@@ -21,16 +21,17 @@ describe('Accounts', () => {
       expect(Accounts.instance.db).toEqual(db);
     });
   });
+  const db = {
+    findUserByUsername: () => Promise.resolve(),
+    findUserByEmail: () => Promise.resolve(),
+    createUser: () => Promise.resolve(),
+  };
   describe('createUser', () => {
-    const db = {
-      findUserByUsername: () => Promise.resolve(),
-      findUserByEmail: () => Promise.resolve(),
-      createUser: () => Promise.resolve(),
-    };
     beforeEach(() => {
       Accounts.config({}, db);
     });
     it('requires username or an email', async () => {
+      Accounts.config({}, db);
       try {
         await Accounts.createUser({
           password: '123456',
@@ -54,7 +55,7 @@ describe('Accounts', () => {
           username: 'user1',
           email: '',
         });
-        expect.fail();
+        throw new Error();
       } catch (err) {
         const { message } = err.serialize();
         expect(message).toEqual('Username already exists');

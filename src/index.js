@@ -1,19 +1,39 @@
+/* eslint-disable import/no-named-as-default */
 import AccountsClient from './client/AccountsClient';
 import AccountsServer from './server/AccountsServer';
-import AccountsCommon from './common/AccountsCommon';
-import DBDriver from './server/DBDriver';
 import * as PasswordSignupFields from './common/passwordSignupFields';
-import UserObjectType from './common/UserObjectType';
 import * as encryption from './server/encryption';
-import isEmail from './common/isEmail';
+import * as validators from './common/validators';
+import { AccountsError } from './common/errors';
+import type { DBInterface } from './server/DBInterface';
+import type { TransportInterface } from './client/TransportInterface';
+
+import type {
+  UserObjectType,
+  CreateUserType,
+  PasswordLoginUserType,
+  LoginReturnType,
+  SessionType,
+} from './common/types';
 
 export {
   AccountsClient,
   AccountsServer,
-  AccountsCommon,
-  DBDriver,
   PasswordSignupFields,
-  UserObjectType,
   encryption,
-  isEmail,
+  validators,
+  AccountsError,
+};
+
+export type {
+  DBInterface,
+  TransportInterface,
+};
+
+export type {
+  UserObjectType,
+  CreateUserType,
+  PasswordLoginUserType,
+  LoginReturnType,
+  SessionType,
 };

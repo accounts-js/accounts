@@ -1,4 +1,4 @@
-import isEmail from './isEmail';
+import { isEmail } from './validators';
 
 /**
   * Given a username, user and/or email figure out the username and/or email.
