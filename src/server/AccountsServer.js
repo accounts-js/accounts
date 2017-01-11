@@ -23,6 +23,7 @@ export class AccountsServer {
   options: Object
   db: DBInterface
   constructor(options: Object, db: DBInterface) {
+    this.options = options;
     if (!db) {
       throw new AccountsError({
         message: 'A database driver is required',
