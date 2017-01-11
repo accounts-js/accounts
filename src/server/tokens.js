@@ -7,7 +7,7 @@ export const generateAccessToken = ({
   config,
 }: {
   secret: string,
-  data: mixed,
+  data?: mixed,
   config: Object
 }) => jwt.sign({
   data,
@@ -19,7 +19,7 @@ export const generateRefreshToken = ({
   config,
 }: {
   secret: string,
-  data: mixed,
+  data?: mixed,
   config: Object
 }) => jwt.sign({
   data,
