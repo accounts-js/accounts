@@ -52,12 +52,14 @@ export class AccountsClient {
       throw new AccountsError({ message: 'Username or Email is required' });
     }
     try {
-      await this.transport.createUser(user);
+      const userId = await this.transport.createUser(user);
 
       if (callback && isFunction(callback)) {
         callback();
       }
       // TODO Login user on succesfull completion
+      // $FlowFixMe
+      await this.loginWithPassword({ id: userId }, user.password);
     } catch (err) {
       if (callback && isFunction(callback)) {
         callback(err);
@@ -68,7 +70,7 @@ export class AccountsClient {
 
   async loginWithPassword(user: PasswordLoginUserType,
                           password: string,
-                          callback: Function): Promise<void> {
+                          callback: ?Function): Promise<void> {
     if (!password || !user) {
       throw new AccountsError({ message: 'Unrecognized options for login request [400]' });
     }

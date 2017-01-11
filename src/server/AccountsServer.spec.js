@@ -110,9 +110,9 @@ describe('Accounts', () => {
         expect(message).toEqual('Unrecognized options for login request [400]');
       }
     });
-    it('throws error if user is not a string', async () => {
+    it('throws error if user is not a string or an object', async () => {
       try {
-        await Accounts.loginWithPassword({}, '123456');
+        await Accounts.loginWithPassword(1, '123456');
         throw new Error();
       } catch (err) {
         const { message } = err.serialize();
@@ -171,21 +171,22 @@ describe('Accounts', () => {
       }
     });
     describe('loginWithUser', () => {
-      it('return user and session objects', async () => {
+      it('login using id', async () => {
         const hash = hashPassword('1234567');
+        const findUserById = jest.fn(() => Promise.resolve({
+          id: '123',
+          username: 'username',
+          email: 'email@email.com',
+          profile: {
+            bio: 'bio',
+          },
+        }));
         Accounts.config({}, {
-          findUserByUsername: () => Promise.resolve({
-            id: '123',
-            username: 'username',
-            email: 'email@email.com',
-            profile: {
-              bio: 'bio',
-            },
-          }),
-          findUserByEmail: () => Promise.resolve(null),
+          findUserById,
           findPasswordHash: () => Promise.resolve(hash),
         });
-        const res = await Accounts.loginWithPassword('username', '1234567');
+        const res = await Accounts.loginWithPassword({ id: '123' }, '1234567');
+        expect(findUserById.mock.calls[0][0]).toEqual('123');
         expect(res.user).toEqual({
           id: '123',
           username: 'username',

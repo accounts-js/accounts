@@ -94,6 +94,22 @@ describe('Accounts', () => {
         expect(callback.mock.calls[0][0]).toEqual('error message');
       }
     });
+    it('calls login function with user id and password of created user', async () => {
+      const transport = {
+        createUser: () => Promise.resolve('123'),
+      };
+      Accounts.config({}, transport);
+
+      Accounts.instance.loginWithPassword = jest.fn(() => Accounts.instance.loginWithPassword);
+
+      await Accounts.createUser({
+        password: '123456',
+        username: 'user',
+      });
+
+      expect(Accounts.instance.loginWithPassword.mock.calls[0][0]).toEqual({ id: '123' });
+      expect(Accounts.instance.loginWithPassword.mock.calls[0][1]).toEqual('123456');
+    });
   });
   describe('loginWithPassword', () => {
     it('throws error if password is undefined', async () => {

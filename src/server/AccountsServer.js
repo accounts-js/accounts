@@ -1,6 +1,6 @@
 // @flow
 
-import { isString } from 'lodash';
+import { isString, isPlainObject } from 'lodash';
 import { defaultServerConfig } from '../common/defaultConfigs';
 import { AccountsError } from '../common/errors';
 import type { DBInterface } from './DBInterface';
@@ -38,15 +38,19 @@ export class AccountsServer {
     if (!user || !password) {
       throw new AccountsError({ message: 'Unrecognized options for login request [400]' });
     }
-    if (!isString(user) || !isString(password)) {
+    if ((!isString(user) && !isPlainObject(user)) || !isString(password)) {
       throw new AccountsError({ message: 'Match failed [400]' });
     }
 
-    const { username, email } = toUsernameAndEmail({ user });
+    const { username, email, id } = isString(user)
+      ? toUsernameAndEmail({ user })
+      // $FlowFixMe
+      : toUsernameAndEmail({ ...user });
 
     let foundUser;
-
-    if (username) {
+    if (id) {
+      foundUser = await this.db.findUserById(id);
+    } else if (username) {
       foundUser = await this.db.findUserByUsername(username);
     } else if (email) {
       foundUser = await this.db.findUserByEmail(email);
