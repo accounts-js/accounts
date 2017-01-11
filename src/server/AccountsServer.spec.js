@@ -1,4 +1,5 @@
 import Accounts from './AccountsServer';
+import { hashPassword } from './encryption';
 
 describe('Accounts', () => {
   beforeEach(() => {
@@ -90,7 +91,7 @@ describe('Accounts', () => {
       expect(userId).toEqual('123');
     });
   });
-  describe('loginWithPassword', () => {
+  describe('loginWithPassword - errors', () => {
     it('throws error if user is undefined', async () => {
       try {
         await Accounts.loginWithPassword(null, '123456');
@@ -168,6 +169,35 @@ describe('Accounts', () => {
         const { message } = err.serialize();
         expect(message).toEqual('Incorrect password [403]');
       }
+    });
+    describe('loginWithUser', () => {
+      it('return user and session objects', async () => {
+        const hash = hashPassword('1234567');
+        Accounts.config({}, {
+          findUserByUsername: () => Promise.resolve({
+            id: '123',
+            username: 'username',
+            email: 'email@email.com',
+            profile: {
+              bio: 'bio',
+            },
+          }),
+          findUserByEmail: () => Promise.resolve(null),
+          findPasswordHash: () => Promise.resolve(hash),
+        });
+        const res = await Accounts.loginWithPassword('username', '1234567');
+        expect(res.user).toEqual({
+          id: '123',
+          username: 'username',
+          email: 'email@email.com',
+          profile: {
+            bio: 'bio',
+          },
+        });
+        // TODO Improve token tests
+        expect(res.session.accessToken).toBeTruthy();
+        expect(res.session.refreshToken).toBeTruthy();
+      });
     });
   });
 });

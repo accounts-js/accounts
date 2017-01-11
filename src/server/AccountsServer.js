@@ -4,14 +4,16 @@ import { isString } from 'lodash';
 import { defaultServerConfig } from '../common/defaultConfigs';
 import { AccountsError } from '../common/errors';
 import type { DBInterface } from './DBInterface';
-
 import toUsernameAndEmail from '../common/toUsernameAndEmail';
 import { verifyPassword } from './encryption';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from './tokens';
 import {
   validateEmail,
   validateUsername,
 } from '../common/validators';
-
 import type {
   UserObjectType,
   CreateUserType,
@@ -31,9 +33,6 @@ export class AccountsServer {
     }
     this.db = db;
   }
-  generateTokens() {
-
-  }
   // eslint-disable-next-line max-len
   async loginWithPassword(user: PasswordLoginUserType, password: string): Promise<LoginReturnType> {
     if (!user || !password) {
@@ -42,12 +41,14 @@ export class AccountsServer {
     if (!isString(user) || !isString(password)) {
       throw new AccountsError({ message: 'Match failed [400]' });
     }
+
     const { username, email } = toUsernameAndEmail({ user });
+
     let foundUser;
+
     if (username) {
       foundUser = await this.db.findUserByUsername(username);
-    }
-    if (email) {
+    } else if (email) {
       foundUser = await this.db.findUserByEmail(email);
     }
     if (!foundUser) {
@@ -64,7 +65,21 @@ export class AccountsServer {
       throw new AccountsError({ message: 'Incorrect password [403]' });
     }
 
-    return isValidPassword;
+    const { tokenSecret, tokenConfigs } = this.options;
+
+    return {
+      user: foundUser,
+      session: {
+        accessToken: generateAccessToken({
+          secret: tokenSecret,
+          config: tokenConfigs.accessToken,
+        }),
+        refreshToken: generateRefreshToken({
+          secret: tokenSecret,
+          config: tokenConfigs.refreshToken,
+        }),
+      },
+    };
   }
   async createUser(user: CreateUserType): Promise<string> {
     if (!validateUsername(user.username) && !validateEmail(user.email)) {

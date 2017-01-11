@@ -1,5 +1,4 @@
 import { EMAIL_ONLY } from './passwordSignupFields';
-import { hashPassword, compareHash } from '../server/encryption';
 
 export const defaultSharedConfig = {
   sendVerificationEmail: false,
@@ -40,8 +39,15 @@ export const defaultClientConfig = {
 
 export const defaultServerConfig = {
   ...defaultSharedConfig,
-  hashPassword,
-  compareHash,
+  tokenSecret: 'terrible secret',
+  tokenConfigs: {
+    accessToken: {
+
+    },
+    refreshToken: {
+
+    },
+  },
   // TODO Investigate oauthSecretKey
   // oauthSecretKey
 };

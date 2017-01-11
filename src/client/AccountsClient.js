@@ -52,7 +52,7 @@ export class AccountsClient {
       throw new AccountsError({ message: 'Username or Email is required' });
     }
     try {
-      const userId = await this.transport.createUser(user);
+      await this.transport.createUser(user);
 
       if (callback && isFunction(callback)) {
         callback();
