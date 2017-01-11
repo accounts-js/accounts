@@ -43,18 +43,18 @@ export class AccountsServer {
       throw new AccountsError({ message: 'Match failed [400]' });
     }
     const { username, email } = toUsernameAndEmail({ user });
-    let userId;
+    let foundUser;
     if (username) {
-      userId = await this.db.findUserByUsername(username, true);
+      foundUser = await this.db.findUserByUsername(username);
     }
     if (email) {
-      userId = await this.db.findUserByEmail(email, true);
+      foundUser = await this.db.findUserByEmail(email);
     }
-    if (!userId) {
+    if (!foundUser) {
       throw new AccountsError({ message: 'User not found [403]' });
     }
     // $FlowFixMe
-    const hash = await this.db.findPasswordHash(userId);
+    const hash = await this.db.findPasswordHash(foundUser.id);
     if (!hash) {
       throw new AccountsError({ message: 'User has no password set [403]' });
     }
@@ -91,11 +91,11 @@ export class AccountsServer {
 
     return userId;
   }
-  findUserByEmail(email: string, onlyId: ?boolean): Promise<UserObjectType | string | null> {
-    return this.db.findUserByEmail(email, onlyId);
+  findUserByEmail(email: string): Promise<?UserObjectType> {
+    return this.db.findUserByEmail(email);
   }
-  findUserByUsername(username: string, onlyId: ?boolean): Promise<UserObjectType | string | null> {
-    return this.db.findUserByUsername(username, onlyId);
+  findUserByUsername(username: string): Promise<?UserObjectType> {
+    return this.db.findUserByUsername(username);
   }
   findUserById(userId: string): Promise<?UserObjectType> {
     return this.db.findUserById(userId);

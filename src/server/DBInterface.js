@@ -8,8 +8,8 @@ import type {
 export interface DBInterface {
   findPasswordHash(userId: string) : Promise<?string>,
   createUser(user: CreateUserType) : Promise<string>,
-  findUserByEmail(email: string, onlyId: ?boolean) : Promise<UserObjectType | string | null>,
-  findUserByUsername(username: string, onlyId: ?boolean) : Promise<UserObjectType | string | null>,
+  findUserByEmail(email: string) : Promise<?UserObjectType>,
+  findUserByUsername(username: string) : Promise<?UserObjectType>,
   findUserById(userId: string) : Promise<?UserObjectType>,
   setUsername(userId: string, newUsername: string) : Promise<void>,
   addEmail(userId: string, newEmail: string, verified: boolean) : Promise<void>,
