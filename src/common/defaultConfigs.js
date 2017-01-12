@@ -1,4 +1,7 @@
 import { EMAIL_ONLY } from './passwordSignupFields';
+import redirect from './redirect';
+// eslint-disable-next-line import/no-named-as-default
+import AccountsClient from '../client/AccountsClient';
 
 export const defaultSharedConfig = {
   sendVerificationEmail: false,
@@ -25,16 +28,16 @@ export const defaultClientConfig = {
   resetPasswordPath: null,
   profilePath: '/',
   changePasswordPath: null,
-  homeRoutePath: '/',
+  homePath: '/',
   // TODO enable all of these
   // onSubmitHook: () => {},
   // onPreSignUpHook: () => new Promise(resolve => resolve()),
   // onPostSignUpHook: () => {},
-  // onEnrollAccountHook: () => redirect(`${Accounts.ui._options.loginPath}`),
-  // onResetPasswordHook: () => redirect(`${Accounts.ui._options.loginPath}`),
-  // onVerifyEmailHook: () => redirect(`${Accounts.ui._options.profilePath}`),
-  // onSignedInHook: () => redirect(`${Accounts.ui._options.homeRoutePath}`),
-  // onSignedOutHook: () => redirect(`${Accounts.ui._options.homeRoutePath}`),
+  onEnrollAccountHook: () => redirect(AccountsClient.options().loginPath),
+  onResetPasswordHook: () => redirect(AccountsClient.options().loginPath),
+  onVerifyEmailHook: () => redirect(AccountsClient.options().profilePath),
+  onSignedInHook: () => redirect(AccountsClient.options().homePath),
+  onSignedOutHook: () => redirect(AccountsClient.options().homePath),
 };
 
 export const defaultServerConfig = {

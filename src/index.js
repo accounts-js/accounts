@@ -5,6 +5,7 @@ import * as PasswordSignupFields from './common/passwordSignupFields';
 import * as encryption from './server/encryption';
 import * as validators from './common/validators';
 import { AccountsError } from './common/errors';
+import redirect from './common/redirect';
 import type { DBInterface } from './server/DBInterface';
 import type { TransportInterface } from './client/TransportInterface';
 
@@ -23,6 +24,7 @@ export {
   encryption,
   validators,
   AccountsError,
+  redirect,
 };
 
 export type {

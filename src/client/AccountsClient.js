@@ -84,7 +84,7 @@ export class AccountsClient {
       localStorage.setItem('accounts:accessToken', res.session.accessToken);
       localStorage.setItem('accounts:refreshToken', res.session.refreshToken);
       store.dispatch(setUser(res.user));
-
+      this.options.onSignedInHook();
       if (callback && isFunction(callback)) {
         callback();
       }
