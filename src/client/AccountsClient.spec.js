@@ -174,8 +174,7 @@ describe('Accounts', () => {
       expect(callback.mock.calls.length).toEqual(1);
     });
     it('calls transport', async () => {
-      const loginWithPassword = jest.fn()
-        .mockImplementationOnce();
+      const loginWithPassword = jest.fn();
       const transport = {
         loginWithPassword,
       };
