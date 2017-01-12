@@ -21,8 +21,8 @@ export type PasswordLoginUserType = string | {
 };
 
 export type SessionType = {
-  accessToken: ?string,
-  refreshToken: ?string
+  accessToken: string,
+  refreshToken: string
 };
 
 export type LoginReturnType = {

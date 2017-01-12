@@ -1,5 +1,18 @@
-// import 'localstorage-polyfill';
+import { Map } from 'immutable';
+import '../common/mockLocalStorage';
 import Accounts from './AccountsClient';
+
+const loggedInUser = {
+  user: {
+    id: '123',
+    username: 'test',
+    email: 'test@test.com',
+  },
+  session: {
+    accessToken: 'accessToken',
+    refreshToken: 'refreshToken',
+  },
+};
 
 describe('Accounts', () => {
   describe('config', () => {
@@ -166,7 +179,7 @@ describe('Accounts', () => {
     });
     it('calls callback on successful login', async () => {
       const transport = {
-        loginWithPassword: () => Promise.resolve(),
+        loginWithPassword: () => Promise.resolve(loggedInUser),
       };
       Accounts.config({}, transport);
       const callback = jest.fn();
@@ -197,6 +210,25 @@ describe('Accounts', () => {
         expect(callback.mock.calls.length).toEqual(1);
         expect(callback.mock.calls[0][0]).toEqual('error');
       }
+    });
+    it('stores tokens in local storage', async () => {
+      const transport = {
+        loginWithPassword: () => Promise.resolve(loggedInUser),
+      };
+      Accounts.config({}, transport);
+      await Accounts.loginWithPassword('username', 'password');
+      expect(localStorage.getItem('accounts:accessToken')).toEqual('accessToken');
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual('refreshToken');
+    });
+    it('stores user in redux', async () => {
+      const transport = {
+        loginWithPassword: () => Promise.resolve(loggedInUser),
+      };
+      Accounts.config({}, transport);
+      await Accounts.loginWithPassword('username', 'password');
+      expect(Accounts.instance.getState().get('user')).toEqual(Map({
+        ...loggedInUser.user,
+      }));
     });
   });
 });

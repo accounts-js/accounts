@@ -6,7 +6,7 @@ import type { Map } from 'immutable';
 import { defaultClientConfig } from '../common/defaultConfigs';
 import { AccountsError } from '../common/errors';
 import store from './store';
-import { loggingIn } from './module';
+import { loggingIn, setUser } from './module';
 import {
   validateEmail,
   validatePassword,
@@ -16,6 +16,7 @@ import type { TransportInterface } from './TransportInterface';
 import type {
   CreateUserType,
   PasswordLoginUserType,
+  LoginReturnType,
 } from '../common/types';
 
 const isValidUserObject = (user: PasswordLoginUserType) => has(user, 'user') || has(user, 'email') || has(user, 'id');
@@ -51,13 +52,12 @@ export class AccountsClient {
     if (!validateUsername(user.username) && !validateEmail(user.email)) {
       throw new AccountsError({ message: 'Username or Email is required' });
     }
+
     try {
       const userId = await this.transport.createUser(user);
-
       if (callback && isFunction(callback)) {
         callback();
       }
-      // TODO Login user on succesfull completion
       // $FlowFixMe
       await this.loginWithPassword({ id: userId }, user.password);
     } catch (err) {
@@ -80,21 +80,22 @@ export class AccountsClient {
 
     store.dispatch(loggingIn(true));
     try {
-      await this.transport.loginWithPassword(user, password);
+      const res : LoginReturnType = await this.transport.loginWithPassword(user, password);
+      localStorage.setItem('accounts:accessToken', res.session.accessToken);
+      localStorage.setItem('accounts:refreshToken', res.session.refreshToken);
+      store.dispatch(setUser(res.user));
 
-      // TODO Update redux store with user info
-      if (isFunction(callback)) {
+      if (callback && isFunction(callback)) {
         callback();
       }
     } catch (err) {
-      if (isFunction(callback)) {
+      if (callback && isFunction(callback)) {
         callback(err);
         throw new AccountsError({ message: err });
       }
     }
     store.dispatch(loggingIn(false));
   }
-
   loggingIn(): boolean {
     return (this.getState().get('loggingIn'): boolean);
   }

@@ -6,7 +6,6 @@ const SET_USER = `${PATH}SET_USER`;
 const LOGGING_IN = `${PATH}/LOGGING_IN`;
 
 const initialState = Map({
-  formType: 'login',
   isLoading: false,
   user: null,
   loggingIn: false,
@@ -19,7 +18,8 @@ const reducer = (state = initialState, action) => {
       break;
     }
     case SET_USER: {
-      break;
+      const { user } = action.payload;
+      return state.set('user', Map(user));
     }
     case LOGGING_IN: {
       const { isLoggingIn } = action.payload;
@@ -34,8 +34,15 @@ const reducer = (state = initialState, action) => {
 export default reducer;
 
 export const loggingIn = isLoggingIn => ({
-  type: loggingIn,
+  type: LOGGING_IN,
   payload: {
     isLoggingIn,
+  },
+});
+
+export const setUser = user => ({
+  type: SET_USER,
+  payload: {
+    user,
   },
 });
