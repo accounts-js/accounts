@@ -163,10 +163,10 @@ const Accounts = {
     return this.instance.addEmail(userId, newEmail, verified);
   },
   removeEmail(userId: string, newEmail: string): Promise<void> {
-    return this.instance.addEmail(userId, newEmail);
+    return this.instance.removeEmail(userId, newEmail);
   },
   verifyEmail(userId: string, email: string): Promise<void> {
-    return this.instance.addEmail(userId, email);
+    return this.instance.verifyEmail(userId, email);
   },
   setPassword(userId: string, newPassword: string): Promise<void> {
     return this.instance.setPassword(userId, newPassword);
