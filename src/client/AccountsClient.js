@@ -2,11 +2,11 @@
 
 import { isFunction, isString, has } from 'lodash';
 import type { Map } from 'immutable';
-
+import type { Store } from 'redux';
+import createStore from './createStore';
 import { defaultClientConfig } from '../common/defaultConfigs';
 import { AccountsError } from '../common/errors';
-import store from './store';
-import { loggingIn, setUser } from './module';
+import reducer, { loggingIn, setUser } from './module';
 import {
   validateEmail,
   validatePassword,
@@ -24,6 +24,7 @@ const isValidUserObject = (user: PasswordLoginUserType) => has(user, 'user') || 
 export class AccountsClient {
   options: Object
   transport: TransportInterface
+  store: Store<Map<string, any>>
 
   constructor(options: Object, transport: TransportInterface) {
     this.options = options;
@@ -34,10 +35,21 @@ export class AccountsClient {
     }
 
     this.transport = transport;
+
+    const middleware = options.reduxLogger ? [
+      options.reduxLogger,
+    ] : [];
+
+    this.store = createStore({
+      reducers: {
+        accounts: reducer,
+      },
+      middleware,
+    });
   }
 
   getState(): Map<string, any> {
-    return store.getState().get('accounts');
+    return this.store.getState().get('accounts');
   }
 
   async createUser(user: CreateUserType, callback: ?Function): Promise<void> {
@@ -63,8 +75,8 @@ export class AccountsClient {
     } catch (err) {
       if (callback && isFunction(callback)) {
         callback(err);
-        throw new AccountsError({ message: err });
       }
+      throw new AccountsError({ message: err.message });
     }
   }
 
@@ -78,12 +90,12 @@ export class AccountsClient {
       throw new AccountsError({ message: 'Match failed [400]' });
     }
 
-    store.dispatch(loggingIn(true));
+    this.store.dispatch(loggingIn(true));
     try {
       const res : LoginReturnType = await this.transport.loginWithPassword(user, password);
       localStorage.setItem('accounts:accessToken', res.session.accessToken);
       localStorage.setItem('accounts:refreshToken', res.session.refreshToken);
-      store.dispatch(setUser(res.user));
+      this.store.dispatch(setUser(res.user));
       this.options.onSignedInHook();
       if (callback && isFunction(callback)) {
         callback();
@@ -91,10 +103,10 @@ export class AccountsClient {
     } catch (err) {
       if (callback && isFunction(callback)) {
         callback(err);
-        throw new AccountsError({ message: err });
       }
+      throw new AccountsError({ message: err.message });
     }
-    store.dispatch(loggingIn(false));
+    this.store.dispatch(loggingIn(false));
   }
   loggingIn(): boolean {
     return (this.getState().get('loggingIn'): boolean);

@@ -17,6 +17,7 @@ export const defaultSharedConfig = {
 
 export const defaultClientConfig = {
   ...defaultSharedConfig,
+  reduxLogger: null,
   server: '',
   title: '',
   requestPermissions: [],
