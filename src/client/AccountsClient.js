@@ -17,6 +17,7 @@ import type {
   CreateUserType,
   PasswordLoginUserType,
   LoginReturnType,
+  UserObjectType,
 } from '../common/types';
 
 const isValidUserObject = (user: PasswordLoginUserType) => has(user, 'user') || has(user, 'email') || has(user, 'id');
@@ -51,7 +52,9 @@ export class AccountsClient {
   getState(): Map<string, any> {
     return this.store.getState().get('accounts');
   }
-
+  user(): UserObjectType {
+    return this.getState().get('user').toJS();
+  }
   async createUser(user: CreateUserType, callback: ?Function): Promise<void> {
     if (!user || user.password === undefined) {
       throw new AccountsError({ message: 'Unrecognized options for create user request [400]' });
@@ -123,6 +126,9 @@ const Accounts = {
       ...defaultClientConfig,
       ...options,
     }, transport);
+  },
+  user(): UserObjectType {
+    return this.instance.user();
   },
   options(): Object {
     return this.instance.options;

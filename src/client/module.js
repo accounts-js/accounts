@@ -3,11 +3,11 @@ import { Map } from 'immutable';
 const PATH = 'js-accounts/';
 const LOGIN = `${PATH}LOGIN`;
 const SET_USER = `${PATH}SET_USER`;
-const LOGGING_IN = `${PATH}/LOGGING_IN`;
+const LOGGING_IN = `${PATH}LOGGING_IN`;
 
 const initialState = Map({
   isLoading: false,
-  user: null,
+  user: Map(),
   loggingIn: false,
 });
 
