@@ -6,6 +6,7 @@
     "syntax-async-functions",
     "transform-regenerator",
     "transform-object-rest-spread",
-    "transform-async-to-generator"
+    "transform-async-to-generator",
+    "transform-flow-strip-types"
   ]
 }
