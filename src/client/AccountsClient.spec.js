@@ -14,11 +14,20 @@ const loggedInUser = {
   },
 };
 
+// Mock history object passed to AccountsClient.config
+const history = {
+  push() {
+
+  },
+};
+
 describe('Accounts', () => {
   describe('config', () => {
     it('requires a transport', () => {
       try {
-        Accounts.config();
+        Accounts.config({
+          history,
+        });
         throw new Error();
       } catch (err) {
         const { message } = err.serialize();
@@ -27,13 +36,17 @@ describe('Accounts', () => {
     });
     it('sets the transport', () => {
       const transport = {};
-      Accounts.config({}, transport);
+      Accounts.config({
+        history,
+      }, transport);
       expect(Accounts.instance.transport).toEqual(transport);
     });
   });
   describe('createUser', () => {
     it('requires user object', async () => {
-      Accounts.config({}, {
+      Accounts.config({
+        history,
+      }, {
         createUser: Promise.resolve(),
       });
       try {
@@ -45,7 +58,9 @@ describe('Accounts', () => {
       }
     });
     it('requires password', async () => {
-      Accounts.config({}, {
+      Accounts.config({
+        history,
+      }, {
         createUser: Promise.resolve(),
       });
       try {
@@ -59,7 +74,7 @@ describe('Accounts', () => {
       }
     });
     it('requires username or an email', async () => {
-      Accounts.config({}, {
+      Accounts.config({ history }, {
         createUser: Promise.resolve(),
       });
       try {
@@ -77,9 +92,10 @@ describe('Accounts', () => {
     it('calls callback on succesfull user creation', async () => {
       const callback = jest.fn();
       const transport = {
-        createUser: () => Promise.resolve(true),
+        createUser: () => Promise.resolve(),
+        loginWithPassword: () => Promise.resolve(loggedInUser),
       };
-      Accounts.config({}, transport);
+      Accounts.config({ history }, transport);
       await Accounts.createUser({
         password: '123456',
         username: 'user',
@@ -92,7 +108,7 @@ describe('Accounts', () => {
         createUser: () => Promise.reject('error message'),
       };
 
-      Accounts.config({}, transport);
+      Accounts.config({ history }, transport);
 
       const callback = jest.fn();
 
@@ -111,7 +127,7 @@ describe('Accounts', () => {
       const transport = {
         createUser: () => Promise.resolve('123'),
       };
-      Accounts.config({}, transport);
+      Accounts.config({ history }, transport);
 
       Accounts.instance.loginWithPassword = jest.fn(() => Accounts.instance.loginWithPassword);
 
@@ -129,7 +145,7 @@ describe('Accounts', () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(),
       };
-      Accounts.config({}, transport);
+      Accounts.config({ history }, transport);
       try {
         await Accounts.loginWithPassword();
         throw new Error();
@@ -142,7 +158,7 @@ describe('Accounts', () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(),
       };
-      Accounts.config({}, transport);
+      Accounts.config({ history }, transport);
       try {
         await Accounts.loginWithPassword();
         throw new Error();
@@ -155,7 +171,7 @@ describe('Accounts', () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(),
       };
-      Accounts.config({}, transport);
+      Accounts.config({ history }, transport);
       try {
         await Accounts.loginWithPassword({}, 'password');
         throw new Error();
@@ -168,7 +184,7 @@ describe('Accounts', () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(),
       };
-      Accounts.config({}, transport);
+      Accounts.config({ history }, transport);
       try {
         await Accounts.loginWithPassword({ user: 'username' }, {});
         throw new Error();
@@ -181,17 +197,17 @@ describe('Accounts', () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(loggedInUser),
       };
-      Accounts.config({}, transport);
+      Accounts.config({ history }, transport);
       const callback = jest.fn();
       await Accounts.loginWithPassword('username', 'password', callback);
       expect(callback.mock.calls.length).toEqual(1);
     });
     it('calls transport', async () => {
-      const loginWithPassword = jest.fn();
+      const loginWithPassword = jest.fn(() => Promise.resolve(loggedInUser));
       const transport = {
         loginWithPassword,
       };
-      Accounts.config({}, transport);
+      Accounts.config({ history }, transport);
       await Accounts.loginWithPassword('username', 'password');
       expect(loginWithPassword.mock.calls[0][0]).toEqual('username');
       expect(loginWithPassword.mock.calls[0][1]).toEqual('password');
@@ -201,7 +217,7 @@ describe('Accounts', () => {
       const transport = {
         loginWithPassword: () => Promise.reject('error'),
       };
-      Accounts.config({}, transport);
+      Accounts.config({ history }, transport);
       const callback = jest.fn();
       try {
         await Accounts.loginWithPassword('username', 'password', callback);
@@ -215,7 +231,7 @@ describe('Accounts', () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(loggedInUser),
       };
-      Accounts.config({}, transport);
+      Accounts.config({ history }, transport);
       await Accounts.loginWithPassword('username', 'password');
       expect(localStorage.getItem('accounts:accessToken')).toEqual('accessToken');
       expect(localStorage.getItem('accounts:refreshToken')).toEqual('refreshToken');
@@ -224,7 +240,7 @@ describe('Accounts', () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(loggedInUser),
       };
-      Accounts.config({}, transport);
+      Accounts.config({ history }, transport);
       await Accounts.loginWithPassword('username', 'password');
       expect(Accounts.instance.getState().get('user')).toEqual(Map({
         ...loggedInUser.user,
