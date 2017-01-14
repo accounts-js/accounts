@@ -7,5 +7,6 @@ import type {
 
 export interface TransportInterface {
   createUser(user: CreateUserType): string,
-  loginWithPassword(user: PasswordLoginUserType, password: string): LoginReturnType
+  loginWithPassword(user: PasswordLoginUserType, password: string): LoginReturnType,
+  logout(): Promise<void>
 }

@@ -247,4 +247,25 @@ describe('Accounts', () => {
       }));
     });
   });
+  describe('logout', () => {
+    it('calls callback on successful logout', async () => {
+      const transport = {
+        logout: () => Promise.resolve(),
+      };
+      Accounts.config({ history }, transport);
+      const callback = jest.fn();
+      await Accounts.logout(callback);
+      expect(callback.mock.calls.length).toEqual(1);
+    });
+    it('calls callback on failure with error message', async () => {
+      const transport = {
+        logout: () => Promise.reject('error message'),
+      };
+      Accounts.config({ history }, transport);
+      const callback = jest.fn();
+      await Accounts.logout(callback);
+      expect(callback.mock.calls.length).toEqual(1);
+      expect(callback.mock.calls[0][0]).toEqual('error message');
+    });
+  });
 });

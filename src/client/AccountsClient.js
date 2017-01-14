@@ -114,6 +114,18 @@ export class AccountsClient {
   loggingIn(): boolean {
     return (this.getState().get('loggingIn'): boolean);
   }
+  async logout(callback: ?Function): Promise<void> {
+    try {
+      await this.transport.logout();
+      if (callback && isFunction(callback)) {
+        callback();
+      }
+    } catch (err) {
+      if (callback && isFunction(callback)) {
+        callback(err);
+      }
+    }
+  }
 }
 
 const Accounts = {
@@ -143,6 +155,9 @@ const Accounts = {
   },
   loggingIn(): boolean {
     return this.instance.loggingIn();
+  },
+  logout(callback: ?Function): Promise<void> {
+    return this.instance.logout(callback);
   },
 };
 
