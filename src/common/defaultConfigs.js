@@ -39,6 +39,7 @@ export const defaultClientConfig = {
   onVerifyEmailHook: () => redirect(AccountsClient.options().profilePath),
   onSignedInHook: () => redirect(AccountsClient.options().homePath),
   onSignedOutHook: () => redirect(AccountsClient.options().homePath),
+  onLogout: () => null,
 };
 
 export const defaultServerConfig = {

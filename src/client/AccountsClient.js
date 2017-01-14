@@ -120,6 +120,7 @@ export class AccountsClient {
       if (callback && isFunction(callback)) {
         callback();
       }
+      this.options.onLogout();
     } catch (err) {
       if (callback && isFunction(callback)) {
         callback(err);

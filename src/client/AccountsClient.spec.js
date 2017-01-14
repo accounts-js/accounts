@@ -257,6 +257,15 @@ describe('Accounts', () => {
       await Accounts.logout(callback);
       expect(callback.mock.calls.length).toEqual(1);
     });
+    it('calls onLogout on successful logout', async () => {
+      const onLogout = jest.fn();
+      const transport = {
+        logout: () => Promise.resolve(),
+      };
+      Accounts.config({ history, onLogout }, transport);
+      await Accounts.logout();
+      expect(onLogout.mock.calls.length).toEqual(1);
+    });
     it('calls callback on failure with error message', async () => {
       const transport = {
         logout: () => Promise.reject('error message'),
