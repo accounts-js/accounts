@@ -20,12 +20,12 @@ export type PasswordLoginUserType = string | {
   email: ?string
 };
 
-export type SessionType = {
+export type TokensType = {
   accessToken: string,
   refreshToken: string
 };
 
 export type LoginReturnType = {
   user: UserObjectType,
-  session: SessionType
+  tokens: TokensType
 };

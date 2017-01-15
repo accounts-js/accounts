@@ -15,5 +15,10 @@ export interface DBInterface {
   addEmail(userId: string, newEmail: string, verified: boolean) : Promise<void>,
   removeEmail(userId: string, email: string) : Promise<void>,
   verifyEmail(userId: string, email: string) : Promise<void>,
-  setPasssword(userId: string, newPassword: string) : Promise<void>
+  setPasssword(userId: string, newPassword: string) : Promise<void>,
+  createSession(userId: string, userAgent: ?string) : Promise<string>,
+  // TODO use SessionType
+  findSessionById(sessionId: string) : Promise<Object>,
+  updateSession(sessionId: string, updatedAt: string) : Promise<void>,
+  invalidateSession(sessionId: string): Promise<void>
 }

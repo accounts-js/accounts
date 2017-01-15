@@ -34,7 +34,7 @@ export class AccountsServer {
     this.db = db;
   }
   // eslint-disable-next-line max-len
-  async loginWithPassword(user: PasswordLoginUserType, password: string): Promise<LoginReturnType> {
+  async loginWithPassword(user: PasswordLoginUserType, password: string, userAgent: ?string): Promise<LoginReturnType> {
     if (!user || !password) {
       throw new AccountsError({ message: 'Unrecognized options for login request [400]' });
     }
@@ -71,10 +71,15 @@ export class AccountsServer {
 
     const { tokenSecret, tokenConfigs } = this.options;
 
+    const sessionId : string = await this.db.createSession(id, userAgent);
+
     return {
       user: foundUser,
-      session: {
+      tokens: {
         accessToken: generateAccessToken({
+          data: {
+            sessionId,
+          },
           secret: tokenSecret,
           config: tokenConfigs.accessToken,
         }),

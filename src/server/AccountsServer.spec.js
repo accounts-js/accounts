@@ -1,5 +1,7 @@
 import Accounts from './AccountsServer';
 import { hashPassword } from './encryption';
+import jwtDecode from 'jwt-decode';
+
 
 describe('Accounts', () => {
   beforeEach(() => {
@@ -184,6 +186,7 @@ describe('Accounts', () => {
         Accounts.config({}, {
           findUserById,
           findPasswordHash: () => Promise.resolve(hash),
+          createSession: () => Promise.resolve('sessionId'),
         });
         const res = await Accounts.loginWithPassword({ id: '123' }, '1234567');
         expect(findUserById.mock.calls[0][0]).toEqual('123');
@@ -195,9 +198,11 @@ describe('Accounts', () => {
             bio: 'bio',
           },
         });
-        // TODO Improve token tests
-        expect(res.session.accessToken).toBeTruthy();
-        expect(res.session.refreshToken).toBeTruthy();
+        const { accessToken, refreshToken } = res.tokens;
+        const decodedAccessToken = jwtDecode(accessToken);
+        expect(decodedAccessToken.data.sessionId).toEqual('sessionId');
+        expect(accessToken).toBeTruthy();
+        expect(refreshToken).toBeTruthy();
       });
     });
   });
