@@ -1,6 +1,6 @@
+import jwtDecode from 'jwt-decode';
 import Accounts from './AccountsServer';
 import { hashPassword } from './encryption';
-import jwtDecode from 'jwt-decode';
 
 
 describe('Accounts', () => {
@@ -203,6 +203,83 @@ describe('Accounts', () => {
         expect(decodedAccessToken.data.sessionId).toEqual('sessionId');
         expect(accessToken).toBeTruthy();
         expect(refreshToken).toBeTruthy();
+      });
+    });
+    describe('resumeSession', () => {
+      it('requires a session id', async () => {
+        Accounts.config({}, {});
+        try {
+          await Accounts.resumeSession(null);
+          throw new Error();
+        } catch (err) {
+          const { message } = err.serialize();
+          expect(message).toEqual('Session ID is required');
+        }
+      });
+      it('requires access token and refresh token', async () => {
+        Accounts.config({}, {});
+        try {
+          await Accounts.resumeSession('session id');
+          throw new Error();
+        } catch (err) {
+          const { message } = err.serialize();
+          expect(message).toEqual('An accessToken and refreshToken are required');
+        }
+        try {
+          await Accounts.resumeSession('session id', { accessToken: '' });
+          throw new Error();
+        } catch (err) {
+          const { message } = err.serialize();
+          expect(message).toEqual('An accessToken and refreshToken are required');
+        }
+        try {
+          await Accounts.resumeSession('session id', { refreshToken: '' });
+          throw new Error();
+        } catch (err) {
+          const { message } = err.serialize();
+          expect(message).toEqual('An accessToken and refreshToken are required');
+        }
+      });
+      it('throws error if session not found', async () => {
+        Accounts.config({}, {
+          findSessionById: () => Promise.resolve(null),
+        });
+        try {
+          await Accounts.resumeSession('session id', { accessToken: '', refreshToken: '' });
+          throw new Error();
+        } catch (err) {
+          const { message } = err.serialize();
+          expect(message).toEqual('Session not found');
+        }
+      });
+      it('throws error if user not found', async () => {
+        Accounts.config({}, {
+          findSessionById: () => Promise.resolve({
+            isValid: true,
+          }),
+          findUserById: () => Promise.resolve(null),
+        });
+        try {
+          await Accounts.resumeSession('session id', { accessToken: '', refreshToken: '' });
+          throw new Error();
+        } catch (err) {
+          const { message } = err.serialize();
+          expect(message).toEqual('User not found');
+        }
+      });
+      it('throws error if session not valid', async () => {
+        Accounts.config({}, {
+          findSessionById: () => Promise.resolve({
+            isValid: false,
+          }),
+        });
+        try {
+          await Accounts.resumeSession('session id', { accessToken: '', refreshToken: '' });
+          throw new Error();
+        } catch (err) {
+          const { message } = err.serialize();
+          expect(message).toEqual('Session is no longer valid');
+        }
       });
     });
   });

@@ -21,11 +21,26 @@ export type PasswordLoginUserType = string | {
 };
 
 export type TokensType = {
-  accessToken: string,
-  refreshToken: string
+  accessToken: ?string,
+  refreshToken: ?string
 };
 
 export type LoginReturnType = {
   user: UserObjectType,
   tokens: TokensType
+};
+
+// TODO ResumedSessionType is the same as LoginReturnType, should the two be unified?
+export type ResumedSessionType = {
+  user: UserObjectType,
+  tokens: TokensType
+};
+
+export type SessionType = {
+  sessionId: string,
+  userId: string,
+  valid: boolean,
+  userAgent: ?string,
+  createdAt: string,
+  updatedAt: string
 };

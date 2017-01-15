@@ -19,6 +19,9 @@ import type {
   CreateUserType,
   PasswordLoginUserType,
   LoginReturnType,
+  TokensType,
+  ResumedSessionType,
+  SessionType,
 } from '../common/types';
 
 export class AccountsServer {
@@ -115,6 +118,43 @@ export class AccountsServer {
 
     return userId;
   }
+  async resumeSession(sessionId: string, tokens: TokensType): Promise<ResumedSessionType> {
+    if (!sessionId && !isString(sessionId)) {
+      throw new AccountsError({
+        message: 'Session ID is required',
+      });
+    }
+    if (!isPlainObject(tokens)
+      || tokens.accessToken === undefined || tokens.refreshToken === undefined) {
+      throw new AccountsError({
+        message: 'An accessToken and refreshToken are required',
+      });
+    }
+
+    const session : SessionType = await this.db.findSessionById(sessionId);
+    if (!session) {
+      throw new AccountsError({
+        message: 'Session not found',
+      });
+    }
+    if (session.isValid) {
+      const user = await this.db.findUserById(session.userId);
+      if (!user) {
+        throw new AccountsError({
+          message: 'User not found',
+        });
+      }
+      return {
+        user,
+        // TODO Issue new tokens if expired
+        tokens,
+      };
+    } else { // eslint-disable-line no-else-return
+      throw new AccountsError({
+        message: 'Session is no longer valid',
+      });
+    }
+  }
   findUserByEmail(email: string): Promise<?UserObjectType> {
     return this.db.findUserByEmail(email);
   }
@@ -175,6 +215,9 @@ const Accounts = {
   },
   setPassword(userId: string, newPassword: string): Promise<void> {
     return this.instance.setPassword(userId, newPassword);
+  },
+  resumeSession(sessionId: string, tokens: TokensType): Promise<ResumedSessionType> {
+    return this.instance.resumeSession(sessionId, tokens);
   },
 };
 

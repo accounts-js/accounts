@@ -8,7 +8,7 @@ const loggedInUser = {
     username: 'test',
     email: 'test@test.com',
   },
-  session: {
+  tokens: {
     accessToken: 'accessToken',
     refreshToken: 'refreshToken',
   },
@@ -21,7 +21,17 @@ const history = {
   },
 };
 
+global.onload = () => {
+
+};
+
 describe('Accounts', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+  afterEach(() => {
+    localStorage.clear();
+  });
   describe('config', () => {
     it('requires a transport', () => {
       try {
@@ -276,5 +286,7 @@ describe('Accounts', () => {
       expect(callback.mock.calls.length).toEqual(1);
       expect(callback.mock.calls[0][0]).toEqual('error message');
     });
+  });
+  describe('resumeSession', () => {
   });
 });
