@@ -206,8 +206,10 @@ const Accounts = {
   options(): Object {
     return this.instance.options;
   },
-  loginWithPassword(user: string, password: string): Promise<LoginReturnType> {
-    return this.instance.loginWithPassword(user, password);
+  loginWithPassword(
+    user: string, password: string, ip: string, userAgent: string,
+  ): Promise<LoginReturnType> {
+    return this.instance.loginWithPassword(user, password, ip, userAgent);
   },
   createUser(user: CreateUserType): Promise<string> {
     return this.instance.createUser(user);
