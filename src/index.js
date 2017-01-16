@@ -15,6 +15,7 @@ import type {
   PasswordLoginUserType,
   LoginReturnType,
   TokensType,
+  SessionType,
 } from './common/types';
 
 export {
@@ -38,4 +39,5 @@ export type {
   PasswordLoginUserType,
   LoginReturnType,
   TokensType,
+  SessionType,
 };

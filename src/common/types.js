@@ -30,12 +30,6 @@ export type LoginReturnType = {
   tokens: TokensType
 };
 
-// TODO ResumedSessionType is the same as LoginReturnType, should the two be unified?
-export type ResumedSessionType = {
-  user: UserObjectType,
-  tokens: TokensType
-};
-
 export type SessionType = {
   sessionId: string,
   userId: string,

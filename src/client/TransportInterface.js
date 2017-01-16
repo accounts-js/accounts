@@ -1,15 +1,14 @@
 // @flow
+/* eslint-disable max-len */
 import type {
-  UserObjectType,
   CreateUserType,
   PasswordLoginUserType,
   LoginReturnType,
-  TokensType,
 } from '../common/types';
 
 export interface TransportInterface {
   createUser(user: CreateUserType): string,
-  loginWithPassword(user: PasswordLoginUserType, password: string): LoginReturnType,
+  loginWithPassword(user: PasswordLoginUserType, password: string): Promise<LoginReturnType>,
   logout(): Promise<void>,
-  resumeSession(sessionId: string, tokens: TokensType) : Promise<UserObjectType>
+  refreshTokens(accessToken: string, refreshToken: string) : Promise<LoginReturnType>
 }
