@@ -19,6 +19,7 @@ export const defaultClientConfig = {
   ...defaultSharedConfig,
   reduxLogger: null,
   server: '',
+  localStoragePrefix: '',
   title: '',
   requestPermissions: [],
   requestOfflineToken: {},
