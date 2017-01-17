@@ -73,6 +73,7 @@
     "history": "^4.5.1",
     "immutable": "^3.8.1",
     "jsonwebtoken": "^7.2.1",
+    "jwt-decode": "^2.1.0",
     "redux": "^3.6.0",
     "redux-immutable": "^3.0.8"
   }

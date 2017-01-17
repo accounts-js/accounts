@@ -1,6 +1,7 @@
 import { Map } from 'immutable';
 import '../common/mockLocalStorage';
 import Accounts from './AccountsClient';
+import { generateAccessToken, generateRefreshToken } from '../server/tokens';
 
 const loggedInUser = {
   user: {
@@ -8,7 +9,7 @@ const loggedInUser = {
     username: 'test',
     email: 'test@test.com',
   },
-  session: {
+  tokens: {
     accessToken: 'accessToken',
     refreshToken: 'refreshToken',
   },
@@ -21,7 +22,17 @@ const history = {
   },
 };
 
+global.onload = () => {
+
+};
+
 describe('Accounts', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+  afterEach(() => {
+    localStorage.clear();
+  });
   describe('config', () => {
     it('requires a transport', () => {
       try {
@@ -245,6 +256,132 @@ describe('Accounts', () => {
       expect(Accounts.instance.getState().get('user')).toEqual(Map({
         ...loggedInUser.user,
       }));
+    });
+  });
+  describe('logout', () => {
+    it('calls callback on successful logout', async () => {
+      const transport = {
+        logout: () => Promise.resolve(),
+      };
+      Accounts.config({ history }, transport);
+      const callback = jest.fn();
+      await Accounts.logout(callback);
+      expect(callback.mock.calls.length).toEqual(1);
+    });
+    it('calls onLogout on successful logout', async () => {
+      const onLogout = jest.fn();
+      const transport = {
+        logout: () => Promise.resolve(),
+      };
+      Accounts.config({ history, onLogout }, transport);
+      await Accounts.logout();
+      expect(onLogout.mock.calls.length).toEqual(1);
+    });
+    it('calls callback on failure with error message', async () => {
+      const transport = {
+        logout: () => Promise.reject('error message'),
+      };
+      Accounts.config({ history }, transport);
+      const callback = jest.fn();
+      await Accounts.logout(callback);
+      expect(callback.mock.calls.length).toEqual(1);
+      expect(callback.mock.calls[0][0]).toEqual('error message');
+    });
+  });
+  describe('resumeSession', async () => {
+    // TODO test that refreshSession is called if access token is expired
+    it('clears tokens if no accessToken set', async () => {
+      Accounts.config({}, {});
+      Accounts.instance.clearTokens = jest.fn(() => Accounts.instance.clearTokens);
+      await Accounts.resumeSession();
+      expect(Accounts.instance.clearTokens.mock.calls.length).toEqual(1);
+    });
+    it('clears tokens and throws error if bad access token provided', async () => {
+      Accounts.config({}, {});
+      localStorage.setItem('accounts:accessToken', 'bad token');
+      Accounts.instance.clearTokens = jest.fn(() => Accounts.instance.clearTokens);
+      try {
+        await Accounts.resumeSession();
+        throw new Error();
+      } catch (err) {
+        const { message } = err.serialize();
+        expect(message).toEqual('falsy token provided');
+      }
+    });
+    it('sets user if access token is still valid', async () => {
+      Accounts.config({}, {});
+      const secret = 'secret';
+      const user = {
+        id: '123',
+      };
+      const accessToken = generateAccessToken({
+        data: {
+          user,
+        },
+        secret,
+      });
+      localStorage.setItem('accounts:accessToken', accessToken);
+      await Accounts.resumeSession();
+      expect(Accounts.user()).toEqual(user);
+    });
+  });
+  describe('refreshSession', async () => {
+    // TODO test that user and tokens are cleared if refreshToken is expired
+    it('clears tokens and user if tokens are not set', async () => {
+      Accounts.config({}, {});
+      Accounts.instance.clearTokens = jest.fn(() => Accounts.instance.clearTokens);
+      Accounts.instance.clearUser = jest.fn(() => Accounts.instance.clearUser);
+      await Accounts.refreshSession();
+      expect(Accounts.instance.clearTokens.mock.calls.length).toEqual(1);
+      expect(Accounts.instance.clearUser.mock.calls.length).toEqual(1);
+    });
+    it('clears tokens, users and throws error if bad refresh token provided', async () => {
+      Accounts.config({}, {});
+      localStorage.setItem('accounts:refreshToken', 'bad token');
+      localStorage.setItem('accounts:accessToken', 'bad token');
+      Accounts.instance.clearTokens = jest.fn(() => Accounts.instance.clearTokens);
+      Accounts.instance.clearUser = jest.fn(() => Accounts.instance.clearUser);
+      try {
+        await Accounts.refreshSession();
+        throw new Error();
+      } catch (err) {
+        const { message } = err.serialize();
+        expect(message).toEqual('falsy token provided');
+      }
+    });
+    it('requests a new token pair, sets the tokens and the user', async () => {
+      Accounts.config({}, {
+        refreshTokens: () => Promise.resolve({
+          user: {
+            username: 'username',
+          },
+          tokens: {
+            accessToken: 'newAccessToken',
+            refreshToken: 'newRefreshToken',
+          },
+        }),
+      });
+      const secret = 'secret';
+      const user = {
+        id: '123',
+      };
+      const accessToken = generateAccessToken({
+        data: {
+          user,
+        },
+        secret,
+      });
+      const refreshToken = generateRefreshToken({
+        secret,
+      });
+      localStorage.setItem('accounts:accessToken', accessToken);
+      localStorage.setItem('accounts:refreshToken', refreshToken);
+      await Accounts.refreshSession();
+      expect(localStorage.getItem('accounts:accessToken')).toEqual('newAccessToken');
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual('newRefreshToken');
+      expect(Accounts.user()).toEqual({
+        username: 'username',
+      });
     });
   });
 });

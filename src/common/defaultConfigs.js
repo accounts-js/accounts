@@ -39,6 +39,8 @@ export const defaultClientConfig = {
   onVerifyEmailHook: () => redirect(AccountsClient.options().profilePath),
   onSignedInHook: () => redirect(AccountsClient.options().homePath),
   onSignedOutHook: () => redirect(AccountsClient.options().homePath),
+  onLogout: () => null,
+  loginOnSignUp: true,
 };
 
 export const defaultServerConfig = {
@@ -46,10 +48,10 @@ export const defaultServerConfig = {
   tokenSecret: 'terrible secret',
   tokenConfigs: {
     accessToken: {
-
+      expiresIn: '90m',
     },
     refreshToken: {
-
+      expiresIn: '1d',
     },
   },
   // TODO Investigate oauthSecretKey

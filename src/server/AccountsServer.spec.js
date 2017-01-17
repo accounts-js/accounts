@@ -1,3 +1,4 @@
+import jwtDecode from 'jwt-decode';
 import Accounts from './AccountsServer';
 import { hashPassword } from './encryption';
 
@@ -173,31 +174,108 @@ describe('Accounts', () => {
     describe('loginWithUser', () => {
       it('login using id', async () => {
         const hash = hashPassword('1234567');
-        const findUserById = jest.fn(() => Promise.resolve({
+        const user = {
           id: '123',
           username: 'username',
           email: 'email@email.com',
           profile: {
             bio: 'bio',
           },
-        }));
+        };
+        const findUserById = jest.fn(() => Promise.resolve(user));
         Accounts.config({}, {
           findUserById,
           findPasswordHash: () => Promise.resolve(hash),
+          createSession: () => Promise.resolve('sessionId'),
         });
         const res = await Accounts.loginWithPassword({ id: '123' }, '1234567');
         expect(findUserById.mock.calls[0][0]).toEqual('123');
-        expect(res.user).toEqual({
-          id: '123',
+        expect(res.user).toEqual(user);
+        const { accessToken, refreshToken } = res.tokens;
+        const decodedAccessToken = jwtDecode(accessToken);
+        expect(decodedAccessToken.data.user).toEqual(user);
+        expect(accessToken).toBeTruthy();
+        expect(refreshToken).toBeTruthy();
+      });
+    });
+    describe('refreshTokens', () => {
+      it('updates session and returns new tokens and user', async () => {
+        const updateSession = jest.fn(() => Promise.resolve());
+        const user = {
+          userId: '123',
           username: 'username',
-          email: 'email@email.com',
-          profile: {
-            bio: 'bio',
-          },
+        };
+        Accounts.config({}, {
+          findSessionByAccessToken: () => Promise.resolve({
+            sessionId: '456',
+            valid: true,
+            userId: '123',
+          }),
+          findUserById: () => Promise.resolve(user),
+          updateSession,
         });
-        // TODO Improve token tests
-        expect(res.session.accessToken).toBeTruthy();
-        expect(res.session.refreshToken).toBeTruthy();
+        const { accessToken, refreshToken } = Accounts.instance.createTokens(user);
+        Accounts.instance.createTokens = () => ({
+          accessToken: 'newAccessToken',
+          refreshToken: 'newRefreshToken',
+        });
+        const res = await Accounts.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
+        expect(updateSession.mock.calls[0]).toEqual([
+          '456',
+          'newAccessToken',
+          'newRefreshToken',
+          'ip',
+          'user agent',
+        ]);
+        expect(res.user).toEqual({
+          userId: '123',
+          username: 'username',
+        });
+      });
+
+      it('requires access and refresh tokens', async () => {
+        Accounts.config({}, {});
+        try {
+          await Accounts.refreshTokens();
+          throw new Error();
+        } catch (err) {
+          expect(err.serialize().message).toEqual('An accessToken and refreshToken are required');
+        }
+      });
+      it('throws error if tokens are not valid', async () => {
+        Accounts.config({}, {});
+        try {
+          await Accounts.refreshTokens('bad access token', 'bad refresh token');
+          throw new Error();
+        } catch (err) {
+          expect(err.serialize().message).toEqual('Tokens are not valid');
+        }
+      });
+      it('throws error if session not found', async () => {
+        Accounts.config({}, {
+          findSessionByAccessToken: () => Promise.resolve(null),
+        });
+        try {
+          const { accessToken, refreshToken } = Accounts.instance.createTokens();
+          await Accounts.refreshTokens(accessToken, refreshToken);
+          throw new Error();
+        } catch (err) {
+          expect(err.serialize().message).toEqual('Session not found');
+        }
+      });
+      it('throws error if session not valid', async () => {
+        Accounts.config({}, {
+          findSessionByAccessToken: () => Promise.resolve({
+            valid: false,
+          }),
+        });
+        try {
+          const { accessToken, refreshToken } = Accounts.instance.createTokens();
+          await Accounts.refreshTokens(accessToken, refreshToken);
+          throw new Error();
+        } catch (err) {
+          expect(err.serialize().message).toEqual('Session is no longer valid');
+        }
       });
     });
   });

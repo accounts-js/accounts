@@ -3,10 +3,11 @@
 import { isFunction, isString, has } from 'lodash';
 import type { Map } from 'immutable';
 import type { Store } from 'redux';
+import jwtDecode from 'jwt-decode';
 import createStore from './createStore';
 import { defaultClientConfig } from '../common/defaultConfigs';
 import { AccountsError } from '../common/errors';
-import reducer, { loggingIn, setUser } from './module';
+import reducer, { loggingIn, setUser, clearUser } from './module';
 import {
   validateEmail,
   validatePassword,
@@ -18,9 +19,13 @@ import type {
   PasswordLoginUserType,
   LoginReturnType,
   UserObjectType,
+  TokensType,
 } from '../common/types';
 
 const isValidUserObject = (user: PasswordLoginUserType) => has(user, 'user') || has(user, 'email') || has(user, 'id');
+
+const ACCESS_TOKEN = 'accounts:accessToken';
+const REFRESH_TOKEN = 'accounts:refreshToken';
 
 export class AccountsClient {
   options: Object
@@ -48,12 +53,74 @@ export class AccountsClient {
       middleware,
     });
   }
-
   getState(): Map<string, any> {
     return this.store.getState().get('accounts');
   }
   user(): UserObjectType {
     return this.getState().get('user').toJS();
+  }
+  tokens(): TokensType {
+    return {
+      accessToken: localStorage.getItem(ACCESS_TOKEN),
+      refreshToken: localStorage.getItem(REFRESH_TOKEN),
+    };
+  }
+  clearTokens() {
+    localStorage.removeItem(ACCESS_TOKEN);
+    localStorage.removeItem(REFRESH_TOKEN);
+  }
+  clearUser() {
+    this.store.dispatch(clearUser());
+  }
+  async resumeSession(): Promise<void> {
+    const { accessToken } = this.tokens();
+    if (accessToken) {
+      try {
+        const decodedAccessToken = jwtDecode(accessToken);
+        const currentTime = Date.now() / 1000;
+        if (decodedAccessToken.exp < currentTime) {
+          // Access token is expired, try to request a new token pair
+          await this.refreshSession();
+        } else { // Access token is still valid, resume the session
+          this.store.dispatch(setUser(decodedAccessToken.data.user));
+        }
+      } catch (err) {
+        this.clearTokens();
+        throw new AccountsError({ message: 'falsy token provided' });
+      }
+    } else {
+      this.clearTokens();
+    }
+  }
+  async refreshSession(): Promise<void> {
+    const { accessToken, refreshToken } = this.tokens();
+    if (accessToken && refreshToken) {
+      try {
+        const decodedRefreshToken = jwtDecode(refreshToken);
+        const currentTime = Date.now() / 1000;
+        // Refresh token is expired, user must sign back in
+        if (decodedRefreshToken.exp < currentTime) {
+          this.clearTokens();
+          this.clearUser();
+        } else {
+          // Request a new token pair
+          const refreshedSession : LoginReturnType =
+            await this.transport.refreshTokens(accessToken, refreshToken);
+          // $FlowFixMe
+          localStorage.setItem(ACCESS_TOKEN, refreshedSession.tokens.accessToken);
+          // $FlowFixMe
+          localStorage.setItem(REFRESH_TOKEN, refreshedSession.tokens.refreshToken);
+          this.store.dispatch(setUser(refreshedSession.user));
+        }
+      } catch (err) {
+        this.clearTokens();
+        this.clearUser();
+        throw new AccountsError({ message: 'falsy token provided' });
+      }
+    } else {
+      this.clearTokens();
+      this.clearUser();
+    }
   }
   async createUser(user: CreateUserType, callback: ?Function): Promise<void> {
     if (!user || user.password === undefined) {
@@ -96,8 +163,10 @@ export class AccountsClient {
     this.store.dispatch(loggingIn(true));
     try {
       const res : LoginReturnType = await this.transport.loginWithPassword(user, password);
-      localStorage.setItem('accounts:accessToken', res.session.accessToken);
-      localStorage.setItem('accounts:refreshToken', res.session.refreshToken);
+      // $FlowFixMe
+      localStorage.setItem(ACCESS_TOKEN, res.tokens.accessToken);
+      // $FlowFixMe
+      localStorage.setItem(REFRESH_TOKEN, res.tokens.refreshToken);
       this.store.dispatch(setUser(res.user));
       this.options.onSignedInHook();
       if (callback && isFunction(callback)) {
@@ -113,6 +182,24 @@ export class AccountsClient {
   }
   loggingIn(): boolean {
     return (this.getState().get('loggingIn'): boolean);
+  }
+  isLoading(): boolean {
+    return (this.getState().get('isLoading'): boolean);
+  }
+  async logout(callback: ?Function): Promise<void> {
+    try {
+      await this.transport.logout();
+      this.clearTokens();
+      this.store.dispatch(clearUser());
+      if (callback && isFunction(callback)) {
+        callback();
+      }
+      this.options.onLogout();
+    } catch (err) {
+      if (callback && isFunction(callback)) {
+        callback(err);
+      }
+    }
   }
 }
 
@@ -144,6 +231,31 @@ const Accounts = {
   loggingIn(): boolean {
     return this.instance.loggingIn();
   },
+  isLoading(): boolean {
+    return this.instance.isLoading();
+  },
+  logout(callback: ?Function): Promise<void> {
+    return this.instance.logout(callback);
+  },
+  tokens(): TokensType {
+    return this.instance.tokens();
+  },
+  resumeSession(): Promise<void> {
+    // $FlowFixMe
+    return this.instance.resumeSession();
+  },
+  refreshSession(): Promise<void> {
+    return this.instance.refreshSession();
+  },
 };
 
 export default Accounts;
+
+// TODO Could this be handled better?
+if (typeof window !== 'undefined') {
+  window.onload = async () => {
+    if (Accounts.instance) {
+      await Accounts.resumeSession();
+    }
+  };
+}

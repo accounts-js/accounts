@@ -1,6 +1,7 @@
 // @flow
 
 import { isString, isPlainObject } from 'lodash';
+import jwt from 'jsonwebtoken';
 import { defaultServerConfig } from '../common/defaultConfigs';
 import { AccountsError } from '../common/errors';
 import type { DBInterface } from './DBInterface';
@@ -19,6 +20,8 @@ import type {
   CreateUserType,
   PasswordLoginUserType,
   LoginReturnType,
+  TokensType,
+  SessionType,
 } from '../common/types';
 
 export class AccountsServer {
@@ -34,7 +37,7 @@ export class AccountsServer {
     this.db = db;
   }
   // eslint-disable-next-line max-len
-  async loginWithPassword(user: PasswordLoginUserType, password: string): Promise<LoginReturnType> {
+  async loginWithPassword(user: PasswordLoginUserType, password: string, ip: ?string, userAgent: ?string): Promise<LoginReturnType> {
     if (!user || !password) {
       throw new AccountsError({ message: 'Unrecognized options for login request [400]' });
     }
@@ -63,25 +66,21 @@ export class AccountsServer {
     if (!hash) {
       throw new AccountsError({ message: 'User has no password set [403]' });
     }
-    const isValidPassword = await verifyPassword(password, hash);
 
+    const isValidPassword = await verifyPassword(password, hash);
     if (!isValidPassword) {
       throw new AccountsError({ message: 'Incorrect password [403]' });
     }
 
-    const { tokenSecret, tokenConfigs } = this.options;
+    const { accessToken, refreshToken } = this.createTokens(foundUser);
+    // $FlowFixMe
+    await this.db.createSession(foundUser.id, accessToken, refreshToken, ip, userAgent);
 
     return {
       user: foundUser,
-      session: {
-        accessToken: generateAccessToken({
-          secret: tokenSecret,
-          config: tokenConfigs.accessToken,
-        }),
-        refreshToken: generateRefreshToken({
-          secret: tokenSecret,
-          config: tokenConfigs.refreshToken,
-        }),
+      tokens: {
+        refreshToken,
+        accessToken,
       },
     };
   }
@@ -109,6 +108,69 @@ export class AccountsServer {
     });
 
     return userId;
+  }
+  // eslint-disable-next-line max-len
+  async refreshTokens(accessToken: string, refreshToken: string, ip: string, userAgent: string): Promise<LoginReturnType> {
+    if (!isString(accessToken) || !isString(refreshToken)) {
+      throw new AccountsError({
+        message: 'An accessToken and refreshToken are required',
+      });
+    }
+
+    try {
+      jwt.verify(refreshToken, this.options.tokenSecret);
+      jwt.verify(accessToken, this.options.tokenSecret, {
+        ignoreExpiration: true,
+      });
+    } catch (err) {
+      throw new AccountsError({
+        message: 'Tokens are not valid',
+      });
+    }
+
+    const session : SessionType = await this.db.findSessionByAccessToken(accessToken);
+    if (!session) {
+      throw new AccountsError({
+        message: 'Session not found',
+      });
+    }
+
+    if (session.valid) {
+      const user = await this.db.findUserById(session.userId);
+      if (!user) {
+        throw new AccountsError({
+          message: 'User not found',
+        });
+      }
+      const tokens = this.createTokens(user);
+      await this.db.updateSession(
+        // $FlowFixMe
+        session.sessionId, tokens.accessToken, tokens.refreshToken, ip, userAgent,
+      );
+      return {
+        user,
+        tokens,
+      };
+    } else { // eslint-disable-line no-else-return
+      throw new AccountsError({
+        message: 'Session is no longer valid',
+      });
+    }
+  }
+  createTokens(user: UserObjectType): TokensType {
+    const { tokenSecret, tokenConfigs } = this.options;
+    const accessToken = generateAccessToken({
+      data: {
+        user,
+      },
+      secret: tokenSecret,
+      config: tokenConfigs.accessToken,
+    });
+    const refreshToken = generateRefreshToken({
+      secret: tokenSecret,
+      config: tokenConfigs.refreshToken,
+    });
+    return { accessToken, refreshToken };
   }
   findUserByEmail(email: string): Promise<?UserObjectType> {
     return this.db.findUserByEmail(email);
@@ -144,8 +206,10 @@ const Accounts = {
   options(): Object {
     return this.instance.options;
   },
-  loginWithPassword(user: string, password: string): Promise<boolean> {
-    return this.instance.loginWithPassword(user, password);
+  loginWithPassword(
+    user: string, password: string, ip: string, userAgent: string,
+  ): Promise<LoginReturnType> {
+    return this.instance.loginWithPassword(user, password, ip, userAgent);
   },
   createUser(user: CreateUserType): Promise<string> {
     return this.instance.createUser(user);
@@ -170,6 +234,11 @@ const Accounts = {
   },
   setPassword(userId: string, newPassword: string): Promise<void> {
     return this.instance.setPassword(userId, newPassword);
+  },
+  refreshTokens(
+    accessToken: string, refreshToken: string, ip: string, userAgent: string,
+  ): Promise<LoginReturnType> {
+    return this.instance.refreshTokens(accessToken, refreshToken, ip, userAgent);
   },
 };
 

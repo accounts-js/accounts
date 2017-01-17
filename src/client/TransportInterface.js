@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable max-len */
 import type {
   CreateUserType,
   PasswordLoginUserType,
@@ -7,5 +8,7 @@ import type {
 
 export interface TransportInterface {
   createUser(user: CreateUserType): string,
-  loginWithPassword(user: PasswordLoginUserType, password: string): LoginReturnType
+  loginWithPassword(user: PasswordLoginUserType, password: string): Promise<LoginReturnType>,
+  logout(): Promise<void>,
+  refreshTokens(accessToken: string, refreshToken: string) : Promise<LoginReturnType>
 }
