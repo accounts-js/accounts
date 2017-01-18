@@ -279,13 +279,18 @@ describe('Accounts', () => {
     });
     it('calls callback on failure with error message', async () => {
       const transport = {
-        logout: () => Promise.reject('error message'),
+        logout: () => Promise.reject({ message: 'error message' }),
       };
       Accounts.config({ history }, transport);
       const callback = jest.fn();
-      await Accounts.logout(callback);
-      expect(callback.mock.calls.length).toEqual(1);
-      expect(callback.mock.calls[0][0]).toEqual('error message');
+      try {
+        await Accounts.logout(callback);
+        throw new Error();
+      } catch (err) {
+        expect(err.serialize().message).toEqual('error message');
+        expect(callback.mock.calls.length).toEqual(1);
+        expect(callback.mock.calls[0][0]).toEqual({ message: 'error message' });
+      }
     });
   });
   describe('refreshSession', async () => {

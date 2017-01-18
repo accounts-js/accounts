@@ -193,6 +193,7 @@ export class AccountsClient {
       if (callback && isFunction(callback)) {
         callback(err);
       }
+      throw new AccountsError({ message: err.message });
     }
   }
 }
