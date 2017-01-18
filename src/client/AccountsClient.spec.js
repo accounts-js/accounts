@@ -269,60 +269,28 @@ describe('Accounts', () => {
       expect(callback.mock.calls.length).toEqual(1);
     });
     it('calls onLogout on successful logout', async () => {
-      const onLogout = jest.fn();
+      const onSignedOutHook = jest.fn();
       const transport = {
         logout: () => Promise.resolve(),
       };
-      Accounts.config({ history, onLogout }, transport);
+      Accounts.config({ history, onSignedOutHook }, transport);
       await Accounts.logout();
-      expect(onLogout.mock.calls.length).toEqual(1);
+      expect(onSignedOutHook.mock.calls.length).toEqual(1);
     });
     it('calls callback on failure with error message', async () => {
       const transport = {
-        logout: () => Promise.reject('error message'),
+        logout: () => Promise.reject({ message: 'error message' }),
       };
       Accounts.config({ history }, transport);
       const callback = jest.fn();
-      await Accounts.logout(callback);
-      expect(callback.mock.calls.length).toEqual(1);
-      expect(callback.mock.calls[0][0]).toEqual('error message');
-    });
-  });
-  describe('resumeSession', async () => {
-    // TODO test that refreshSession is called if access token is expired
-    it('clears tokens if no accessToken set', async () => {
-      Accounts.config({}, {});
-      Accounts.instance.clearTokens = jest.fn(() => Accounts.instance.clearTokens);
-      await Accounts.resumeSession();
-      expect(Accounts.instance.clearTokens.mock.calls.length).toEqual(1);
-    });
-    it('clears tokens and throws error if bad access token provided', async () => {
-      Accounts.config({}, {});
-      localStorage.setItem('accounts:accessToken', 'bad token');
-      Accounts.instance.clearTokens = jest.fn(() => Accounts.instance.clearTokens);
       try {
-        await Accounts.resumeSession();
+        await Accounts.logout(callback);
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
-        expect(message).toEqual('falsy token provided');
+        expect(err.serialize().message).toEqual('error message');
+        expect(callback.mock.calls.length).toEqual(1);
+        expect(callback.mock.calls[0][0]).toEqual({ message: 'error message' });
       }
-    });
-    it('sets user if access token is still valid', async () => {
-      Accounts.config({}, {});
-      const secret = 'secret';
-      const user = {
-        id: '123',
-      };
-      const accessToken = generateAccessToken({
-        data: {
-          user,
-        },
-        secret,
-      });
-      localStorage.setItem('accounts:accessToken', accessToken);
-      await Accounts.resumeSession();
-      expect(Accounts.user()).toEqual(user);
     });
   });
   describe('refreshSession', async () => {

@@ -193,7 +193,7 @@ describe('Accounts', () => {
         expect(res.user).toEqual(user);
         const { accessToken, refreshToken } = res.tokens;
         const decodedAccessToken = jwtDecode(accessToken);
-        expect(decodedAccessToken.data.user).toEqual(user);
+        expect(decodedAccessToken.data.sessionId).toEqual('sessionId');
         expect(accessToken).toBeTruthy();
         expect(refreshToken).toBeTruthy();
       });
@@ -206,7 +206,7 @@ describe('Accounts', () => {
           username: 'username',
         };
         Accounts.config({}, {
-          findSessionByAccessToken: () => Promise.resolve({
+          findSessionById: () => Promise.resolve({
             sessionId: '456',
             valid: true,
             userId: '123',
@@ -214,7 +214,7 @@ describe('Accounts', () => {
           findUserById: () => Promise.resolve(user),
           updateSession,
         });
-        const { accessToken, refreshToken } = Accounts.instance.createTokens(user);
+        const { accessToken, refreshToken } = Accounts.instance.createTokens('456');
         Accounts.instance.createTokens = () => ({
           accessToken: 'newAccessToken',
           refreshToken: 'newRefreshToken',
@@ -222,8 +222,6 @@ describe('Accounts', () => {
         const res = await Accounts.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
         expect(updateSession.mock.calls[0]).toEqual([
           '456',
-          'newAccessToken',
-          'newRefreshToken',
           'ip',
           'user agent',
         ]);
@@ -253,7 +251,7 @@ describe('Accounts', () => {
       });
       it('throws error if session not found', async () => {
         Accounts.config({}, {
-          findSessionByAccessToken: () => Promise.resolve(null),
+          findSessionById: () => Promise.resolve(null),
         });
         try {
           const { accessToken, refreshToken } = Accounts.instance.createTokens();
@@ -265,13 +263,81 @@ describe('Accounts', () => {
       });
       it('throws error if session not valid', async () => {
         Accounts.config({}, {
-          findSessionByAccessToken: () => Promise.resolve({
+          findSessionById: () => Promise.resolve({
             valid: false,
           }),
         });
         try {
           const { accessToken, refreshToken } = Accounts.instance.createTokens();
           await Accounts.refreshTokens(accessToken, refreshToken);
+          throw new Error();
+        } catch (err) {
+          expect(err.serialize().message).toEqual('Session is no longer valid');
+        }
+      });
+    });
+    describe('logout', () => {
+      it('invalidates session', async () => {
+        const invalidateSession = jest.fn(() => Promise.resolve());
+        const user = {
+          userId: '123',
+          username: 'username',
+        };
+        Accounts.config({}, {
+          findSessionById: () => Promise.resolve({
+            sessionId: '456',
+            valid: true,
+            userId: '123',
+          }),
+          findUserById: () => Promise.resolve(user),
+          invalidateSession,
+        });
+        const { accessToken } = Accounts.instance.createTokens('456');
+        await Accounts.logout(accessToken);
+        expect(invalidateSession.mock.calls[0]).toEqual([
+          '456',
+        ]);
+      });
+
+      it('requires access token', async () => {
+        Accounts.config({}, {});
+        try {
+          await Accounts.logout();
+          throw new Error();
+        } catch (err) {
+          expect(err.serialize().message).toEqual('An accessToken is required');
+        }
+      });
+      it('throws error if tokens are not valid', async () => {
+        Accounts.config({}, {});
+        try {
+          await Accounts.logout('bad access token');
+          throw new Error();
+        } catch (err) {
+          expect(err.serialize().message).toEqual('Tokens are not valid');
+        }
+      });
+      it('throws error if session not found', async () => {
+        Accounts.config({}, {
+          findSessionById: () => Promise.resolve(null),
+        });
+        try {
+          const { accessToken } = Accounts.instance.createTokens();
+          await Accounts.logout(accessToken);
+          throw new Error();
+        } catch (err) {
+          expect(err.serialize().message).toEqual('Session not found');
+        }
+      });
+      it('throws error if session not valid', async () => {
+        Accounts.config({}, {
+          findSessionById: () => Promise.resolve({
+            valid: false,
+          }),
+        });
+        try {
+          const { accessToken } = Accounts.instance.createTokens();
+          await Accounts.logout(accessToken);
           throw new Error();
         } catch (err) {
           expect(err.serialize().message).toEqual('Session is no longer valid');

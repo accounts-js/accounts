@@ -75,25 +75,9 @@ export class AccountsClient {
   clearUser() {
     this.store.dispatch(clearUser());
   }
-  async resumeSession(): Promise<void> {
-    const { accessToken } = this.tokens();
-    if (accessToken) {
-      try {
-        const decodedAccessToken = jwtDecode(accessToken);
-        const currentTime = Date.now() / 1000;
-        if (decodedAccessToken.exp < currentTime) {
-          // Access token is expired, try to request a new token pair
-          await this.refreshSession();
-        } else { // Access token is still valid, resume the session
-          this.store.dispatch(setUser(decodedAccessToken.data.user));
-        }
-      } catch (err) {
-        this.clearTokens();
-        throw new AccountsError({ message: 'falsy token provided' });
-      }
-    } else {
-      this.clearTokens();
-    }
+  resumeSession(): Promise<void> {
+    // TODO Should there be any additional resume session logic here?
+    return this.refreshSession();
   }
   async refreshSession(): Promise<void> {
     const { accessToken, refreshToken } = this.tokens();
@@ -196,17 +180,20 @@ export class AccountsClient {
   }
   async logout(callback: ?Function): Promise<void> {
     try {
-      await this.transport.logout();
+      const { accessToken } = this.tokens();
+      // $FlowFixMe
+      await this.transport.logout(accessToken);
       this.clearTokens();
       this.store.dispatch(clearUser());
       if (callback && isFunction(callback)) {
         callback();
       }
-      this.options.onLogout();
+      this.options.onSignedOutHook();
     } catch (err) {
       if (callback && isFunction(callback)) {
         callback(err);
       }
+      throw new AccountsError({ message: err.message });
     }
   }
 }

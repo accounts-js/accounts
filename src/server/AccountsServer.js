@@ -72,11 +72,13 @@ export class AccountsServer {
       throw new AccountsError({ message: 'Incorrect password [403]' });
     }
 
-    const { accessToken, refreshToken } = this.createTokens(foundUser);
     // $FlowFixMe
-    await this.db.createSession(foundUser.id, accessToken, refreshToken, ip, userAgent);
+    const sessionId = await this.db.createSession(foundUser.id, ip, userAgent);
+
+    const { accessToken, refreshToken } = this.createTokens(sessionId);
 
     return {
+      sessionId,
       user: foundUser,
       tokens: {
         refreshToken,
@@ -117,18 +119,20 @@ export class AccountsServer {
       });
     }
 
+    let sessionId;
     try {
       jwt.verify(refreshToken, this.options.tokenSecret);
-      jwt.verify(accessToken, this.options.tokenSecret, {
+      const decodedAccessToken = jwt.verify(accessToken, this.options.tokenSecret, {
         ignoreExpiration: true,
       });
+      sessionId = decodedAccessToken.data.sessionId;
     } catch (err) {
       throw new AccountsError({
         message: 'Tokens are not valid',
       });
     }
 
-    const session : SessionType = await this.db.findSessionByAccessToken(accessToken);
+    const session : SessionType = await this.db.findSessionById(sessionId);
     if (!session) {
       throw new AccountsError({
         message: 'Session not found',
@@ -142,12 +146,10 @@ export class AccountsServer {
           message: 'User not found',
         });
       }
-      const tokens = this.createTokens(user);
-      await this.db.updateSession(
-        // $FlowFixMe
-        session.sessionId, tokens.accessToken, tokens.refreshToken, ip, userAgent,
-      );
+      const tokens = this.createTokens(sessionId);
+      await this.db.updateSession(sessionId, ip, userAgent);
       return {
+        sessionId,
         user,
         tokens,
       };
@@ -157,11 +159,11 @@ export class AccountsServer {
       });
     }
   }
-  createTokens(user: UserObjectType): TokensType {
+  createTokens(sessionId: string): TokensType {
     const { tokenSecret, tokenConfigs } = this.options;
     const accessToken = generateAccessToken({
       data: {
-        user,
+        sessionId,
       },
       secret: tokenSecret,
       config: tokenConfigs.accessToken,
@@ -171,6 +173,44 @@ export class AccountsServer {
       config: tokenConfigs.refreshToken,
     });
     return { accessToken, refreshToken };
+  }
+  async logout(accessToken: string): Promise<void> {
+    if (!isString(accessToken)) {
+      throw new AccountsError({
+        message: 'An accessToken is required',
+      });
+    }
+
+    let sessionId;
+    try {
+      const decodedAccessToken = jwt.verify(accessToken, this.options.tokenSecret);
+      sessionId = decodedAccessToken.data.sessionId;
+    } catch (err) {
+      throw new AccountsError({
+        message: 'Tokens are not valid',
+      });
+    }
+
+    const session : SessionType = await this.db.findSessionById(sessionId);
+    if (!session) {
+      throw new AccountsError({
+        message: 'Session not found',
+      });
+    }
+
+    if (session.valid) {
+      const user = await this.db.findUserById(session.userId);
+      if (!user) {
+        throw new AccountsError({
+          message: 'User not found',
+        });
+      }
+      await this.db.invalidateSession(sessionId);
+    } else { // eslint-disable-line no-else-return
+      throw new AccountsError({
+        message: 'Session is no longer valid',
+      });
+    }
   }
   findUserByEmail(email: string): Promise<?UserObjectType> {
     return this.db.findUserByEmail(email);
@@ -239,6 +279,9 @@ const Accounts = {
     accessToken: string, refreshToken: string, ip: string, userAgent: string,
   ): Promise<LoginReturnType> {
     return this.instance.refreshTokens(accessToken, refreshToken, ip, userAgent);
+  },
+  logout(accessToken: string): Promise<void> {
+    return this.instance.logout(accessToken);
   },
 };
 

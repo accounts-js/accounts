@@ -17,10 +17,8 @@ export interface DBInterface {
   removeEmail(userId: string, email: string) : Promise<void>,
   verifyEmail(userId: string, email: string) : Promise<void>,
   setPasssword(userId: string, newPassword: string) : Promise<void>,
-  createSession(userId: string, accessToken: string, refreshToken: string, ip: string, userAgent: string) : Promise<string>,
-  updateSession(sessionId: string, accessToken: string, refreshToken: string, ip: string, userAgent: string) : Promise<void>,
+  createSession(userId: string, ip: string, userAgent: string) : Promise<string>,
+  updateSession(sessionId: string, ip: string, userAgent: string) : Promise<void>,
   invalidateSession(sessionId: string): Promise<void>,
-  findSessionById(sessionId: string) : Promise<SessionType>,
-  findSessionByAccessToken(accessToken: string) : Promise<SessionType>,
-  findSessionByRefreshToken(refreshToken: string) : Promise<SessionType>
+  findSessionById(sessionId: string) : Promise<SessionType>
 }
