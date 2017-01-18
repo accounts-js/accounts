@@ -174,6 +174,44 @@ export class AccountsServer {
     });
     return { accessToken, refreshToken };
   }
+  async logout(accessToken: string): Promise<void> {
+    if (!isString(accessToken)) {
+      throw new AccountsError({
+        message: 'An accessToken is required',
+      });
+    }
+
+    let sessionId;
+    try {
+      const decodedAccessToken = jwt.verify(accessToken, this.options.tokenSecret);
+      sessionId = decodedAccessToken.data.sessionId;
+    } catch (err) {
+      throw new AccountsError({
+        message: 'Tokens are not valid',
+      });
+    }
+
+    const session : SessionType = await this.db.findSessionById(sessionId);
+    if (!session) {
+      throw new AccountsError({
+        message: 'Session not found',
+      });
+    }
+
+    if (session.valid) {
+      const user = await this.db.findUserById(session.userId);
+      if (!user) {
+        throw new AccountsError({
+          message: 'User not found',
+        });
+      }
+      await this.db.invalidateSession(sessionId);
+    } else { // eslint-disable-line no-else-return
+      throw new AccountsError({
+        message: 'Session is no longer valid',
+      });
+    }
+  }
   findUserByEmail(email: string): Promise<?UserObjectType> {
     return this.db.findUserByEmail(email);
   }
@@ -241,6 +279,9 @@ const Accounts = {
     accessToken: string, refreshToken: string, ip: string, userAgent: string,
   ): Promise<LoginReturnType> {
     return this.instance.refreshTokens(accessToken, refreshToken, ip, userAgent);
+  },
+  logout(accessToken: string): Promise<void> {
+    return this.instance.logout(accessToken);
   },
 };
 

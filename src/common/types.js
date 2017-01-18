@@ -39,7 +39,3 @@ export type SessionType = {
   createdAt: string,
   updatedAt: string
 };
-
-export type ResumeSessionType = {
-  user: UserObjectType
-};

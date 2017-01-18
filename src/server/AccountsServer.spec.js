@@ -276,5 +276,73 @@ describe('Accounts', () => {
         }
       });
     });
+    describe('logout', () => {
+      it('invalidates session', async () => {
+        const invalidateSession = jest.fn(() => Promise.resolve());
+        const user = {
+          userId: '123',
+          username: 'username',
+        };
+        Accounts.config({}, {
+          findSessionById: () => Promise.resolve({
+            sessionId: '456',
+            valid: true,
+            userId: '123',
+          }),
+          findUserById: () => Promise.resolve(user),
+          invalidateSession,
+        });
+        const { accessToken } = Accounts.instance.createTokens('456');
+        await Accounts.logout(accessToken);
+        expect(invalidateSession.mock.calls[0]).toEqual([
+          '456',
+        ]);
+      });
+
+      it('requires access token', async () => {
+        Accounts.config({}, {});
+        try {
+          await Accounts.logout();
+          throw new Error();
+        } catch (err) {
+          expect(err.serialize().message).toEqual('An accessToken is required');
+        }
+      });
+      it('throws error if tokens are not valid', async () => {
+        Accounts.config({}, {});
+        try {
+          await Accounts.logout('bad access token');
+          throw new Error();
+        } catch (err) {
+          expect(err.serialize().message).toEqual('Tokens are not valid');
+        }
+      });
+      it('throws error if session not found', async () => {
+        Accounts.config({}, {
+          findSessionById: () => Promise.resolve(null),
+        });
+        try {
+          const { accessToken } = Accounts.instance.createTokens();
+          await Accounts.logout(accessToken);
+          throw new Error();
+        } catch (err) {
+          expect(err.serialize().message).toEqual('Session not found');
+        }
+      });
+      it('throws error if session not valid', async () => {
+        Accounts.config({}, {
+          findSessionById: () => Promise.resolve({
+            valid: false,
+          }),
+        });
+        try {
+          const { accessToken } = Accounts.instance.createTokens();
+          await Accounts.logout(accessToken);
+          throw new Error();
+        } catch (err) {
+          expect(err.serialize().message).toEqual('Session is no longer valid');
+        }
+      });
+    });
   });
 });

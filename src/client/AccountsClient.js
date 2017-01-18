@@ -180,15 +180,15 @@ export class AccountsClient {
   }
   async logout(callback: ?Function): Promise<void> {
     try {
-      const { accessToken, refreshToken } = this.tokens();
+      const { accessToken } = this.tokens();
       // $FlowFixMe
-      await this.transport.logout(accessToken, refreshToken);
+      await this.transport.logout(accessToken);
       this.clearTokens();
       this.store.dispatch(clearUser());
       if (callback && isFunction(callback)) {
         callback();
       }
-      this.options.onLogout();
+      this.options.onSignedOutHook();
     } catch (err) {
       if (callback && isFunction(callback)) {
         callback(err);
