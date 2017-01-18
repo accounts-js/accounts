@@ -27,6 +27,9 @@ const isValidUserObject = (user: PasswordLoginUserType) => has(user, 'user') || 
 const ACCESS_TOKEN = 'accounts:accessToken';
 const REFRESH_TOKEN = 'accounts:refreshToken';
 
+const getTokenKey = (type: string, options: Object) =>
+  (isString(options.localStoragePrefix) && options.localStoragePrefix.length > 0 ? `${options.localStoragePrefix}:${type}` : type);
+
 export class AccountsClient {
   options: Object
   transport: TransportInterface
@@ -61,13 +64,13 @@ export class AccountsClient {
   }
   tokens(): TokensType {
     return {
-      accessToken: localStorage.getItem(ACCESS_TOKEN),
-      refreshToken: localStorage.getItem(REFRESH_TOKEN),
+      accessToken: localStorage.getItem(getTokenKey(ACCESS_TOKEN, this.options)),
+      refreshToken: localStorage.getItem(getTokenKey(REFRESH_TOKEN, this.options)),
     };
   }
   clearTokens() {
-    localStorage.removeItem(ACCESS_TOKEN);
-    localStorage.removeItem(REFRESH_TOKEN);
+    localStorage.removeItem(getTokenKey(ACCESS_TOKEN, this.options));
+    localStorage.removeItem(getTokenKey(REFRESH_TOKEN, this.options));
   }
   clearUser() {
     this.store.dispatch(clearUser());
@@ -106,10 +109,15 @@ export class AccountsClient {
           // Request a new token pair
           const refreshedSession : LoginReturnType =
             await this.transport.refreshTokens(accessToken, refreshToken);
-          // $FlowFixMe
-          localStorage.setItem(ACCESS_TOKEN, refreshedSession.tokens.accessToken);
-          // $FlowFixMe
-          localStorage.setItem(REFRESH_TOKEN, refreshedSession.tokens.refreshToken);
+          localStorage.setItem(
+            getTokenKey(ACCESS_TOKEN, this.options),
+            // $FlowFixMe
+            refreshedSession.tokens.accessToken,
+          );
+          localStorage.setItem(
+            getTokenKey(REFRESH_TOKEN, this.options),
+            // $FlowFixMe
+            refreshedSession.tokens.refreshToken);
           this.store.dispatch(setUser(refreshedSession.user));
         }
       } catch (err) {
@@ -164,9 +172,9 @@ export class AccountsClient {
     try {
       const res : LoginReturnType = await this.transport.loginWithPassword(user, password);
       // $FlowFixMe
-      localStorage.setItem(ACCESS_TOKEN, res.tokens.accessToken);
+      localStorage.setItem(getTokenKey(ACCESS_TOKEN, this.options), res.tokens.accessToken);
       // $FlowFixMe
-      localStorage.setItem(REFRESH_TOKEN, res.tokens.refreshToken);
+      localStorage.setItem(getTokenKey(REFRESH_TOKEN, this.options), res.tokens.refreshToken);
       this.store.dispatch(setUser(res.user));
       this.options.onSignedInHook();
       if (callback && isFunction(callback)) {
