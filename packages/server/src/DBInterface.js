@@ -4,7 +4,7 @@ import type {
   UserObjectType,
   CreateUserType,
   SessionType,
-} from '../common/types';
+} from '@accounts/common';
 
 export interface DBInterface {
   findPasswordHash(userId: string) : Promise<?string>,

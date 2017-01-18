@@ -4,23 +4,19 @@ import { isFunction, isString, has } from 'lodash';
 import type { Map } from 'immutable';
 import type { Store } from 'redux';
 import jwtDecode from 'jwt-decode';
-import createStore from './createStore';
-import { defaultClientConfig } from '../common/defaultConfigs';
-import { AccountsError } from '../common/errors';
-import reducer, { loggingIn, setUser, clearUser } from './module';
 import {
-  validateEmail,
-  validatePassword,
-  validateUsername,
-} from '../common/validators';
-import type { TransportInterface } from './TransportInterface';
-import type {
+  AccountsError,
+  validators,
   CreateUserType,
   PasswordLoginUserType,
   LoginReturnType,
   UserObjectType,
   TokensType,
-} from '../common/types';
+} from '@accounts/common';
+import config from './config';
+import createStore from './createStore';
+import reducer, { loggingIn, setUser, clearUser } from './module';
+import type { TransportInterface } from './TransportInterface';
 
 const isValidUserObject = (user: PasswordLoginUserType) => has(user, 'user') || has(user, 'email') || has(user, 'id');
 
@@ -95,12 +91,10 @@ export class AccountsClient {
             await this.transport.refreshTokens(accessToken, refreshToken);
           localStorage.setItem(
             getTokenKey(ACCESS_TOKEN, this.options),
-            // $FlowFixMe
             refreshedSession.tokens.accessToken,
           );
           localStorage.setItem(
             getTokenKey(REFRESH_TOKEN, this.options),
-            // $FlowFixMe
             refreshedSession.tokens.refreshToken);
           this.store.dispatch(setUser(refreshedSession.user));
         }
@@ -119,11 +113,11 @@ export class AccountsClient {
       throw new AccountsError({ message: 'Unrecognized options for create user request [400]' });
     }
 
-    if (!validatePassword(user.password)) {
+    if (!validators.validatePassword(user.password)) {
       throw new AccountsError({ message: 'Password is required' });
     }
 
-    if (!validateUsername(user.username) && !validateEmail(user.email)) {
+    if (!validators.validateUsername(user.username) && !validators.validateEmail(user.email)) {
       throw new AccountsError({ message: 'Username or Email is required' });
     }
 
@@ -132,7 +126,6 @@ export class AccountsClient {
       if (callback && isFunction(callback)) {
         callback();
       }
-      // $FlowFixMe
       await this.loginWithPassword({ id: userId }, user.password);
     } catch (err) {
       if (callback && isFunction(callback)) {
@@ -155,9 +148,7 @@ export class AccountsClient {
     this.store.dispatch(loggingIn(true));
     try {
       const res : LoginReturnType = await this.transport.loginWithPassword(user, password);
-      // $FlowFixMe
       localStorage.setItem(getTokenKey(ACCESS_TOKEN, this.options), res.tokens.accessToken);
-      // $FlowFixMe
       localStorage.setItem(getTokenKey(REFRESH_TOKEN, this.options), res.tokens.refreshToken);
       this.store.dispatch(setUser(res.user));
       this.options.onSignedInHook();
@@ -205,7 +196,7 @@ const Accounts = {
   },
   config(options: Object, transport: TransportInterface) {
     this.instance = new AccountsClient({
-      ...defaultClientConfig,
+      ...config,
       ...options,
     }, transport);
   },

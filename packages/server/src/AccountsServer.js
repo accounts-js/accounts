@@ -2,19 +2,11 @@
 
 import { isString, isPlainObject } from 'lodash';
 import jwt from 'jsonwebtoken';
-import { defaultServerConfig } from '../common/defaultConfigs';
-import { AccountsError } from '../common/errors';
-import type { DBInterface } from './DBInterface';
-import toUsernameAndEmail from '../common/toUsernameAndEmail';
-import { verifyPassword } from './encryption';
 import {
-  generateAccessToken,
-  generateRefreshToken,
-} from './tokens';
-import {
-  validateEmail,
-  validateUsername,
-} from '../common/validators';
+  AccountsError,
+  toUsernameAndEmail,
+  validators,
+} from '@accounts/common';
 import type {
   UserObjectType,
   CreateUserType,
@@ -22,7 +14,14 @@ import type {
   LoginReturnType,
   TokensType,
   SessionType,
-} from '../common/types';
+} from '@accounts/common';
+import config from './config';
+import type { DBInterface } from './DBInterface';
+import { verifyPassword } from './encryption';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from './tokens';
 
 export class AccountsServer {
   options: Object
@@ -87,7 +86,7 @@ export class AccountsServer {
     };
   }
   async createUser(user: CreateUserType): Promise<string> {
-    if (!validateUsername(user.username) && !validateEmail(user.email)) {
+    if (!validators.validateUsername(user.username) && !validators.validateEmail(user.email)) {
       throw new AccountsError({ message: 'Username or Email is required' });
     }
     if (user.username && await this.db.findUserByUsername(user.username)) {
@@ -239,7 +238,7 @@ const Accounts = {
   instance: AccountsServer,
   config(options: Object, db: DBInterface) {
     this.instance = new AccountsServer({
-      ...defaultServerConfig,
+      ...config,
       ...options,
     }, db);
   },

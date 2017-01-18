@@ -1,0 +1,8 @@
+machine:
+  node:
+    version: 6.2.1
+test:
+  override:
+    - npm run test-ci
+  post:
+    - npm run coveralls
