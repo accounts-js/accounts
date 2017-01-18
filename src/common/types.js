@@ -26,6 +26,7 @@ export type TokensType = {
 };
 
 export type LoginReturnType = {
+  sessionId: string,
   user: UserObjectType,
   tokens: TokensType
 };
@@ -37,4 +38,8 @@ export type SessionType = {
   userAgent: ?string,
   createdAt: string,
   updatedAt: string
+};
+
+export type ResumeSessionType = {
+  user: UserObjectType
 };

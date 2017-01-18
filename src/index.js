@@ -16,6 +16,7 @@ import type {
   LoginReturnType,
   TokensType,
   SessionType,
+  ResumeSessionType,
 } from './common/types';
 
 export {
@@ -40,4 +41,5 @@ export type {
   LoginReturnType,
   TokensType,
   SessionType,
+  ResumeSessionType,
 };

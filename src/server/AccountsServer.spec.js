@@ -193,7 +193,7 @@ describe('Accounts', () => {
         expect(res.user).toEqual(user);
         const { accessToken, refreshToken } = res.tokens;
         const decodedAccessToken = jwtDecode(accessToken);
-        expect(decodedAccessToken.data.user).toEqual(user);
+        expect(decodedAccessToken.data.sessionId).toEqual('sessionId');
         expect(accessToken).toBeTruthy();
         expect(refreshToken).toBeTruthy();
       });
@@ -206,7 +206,7 @@ describe('Accounts', () => {
           username: 'username',
         };
         Accounts.config({}, {
-          findSessionByAccessToken: () => Promise.resolve({
+          findSessionById: () => Promise.resolve({
             sessionId: '456',
             valid: true,
             userId: '123',
@@ -214,7 +214,7 @@ describe('Accounts', () => {
           findUserById: () => Promise.resolve(user),
           updateSession,
         });
-        const { accessToken, refreshToken } = Accounts.instance.createTokens(user);
+        const { accessToken, refreshToken } = Accounts.instance.createTokens('456');
         Accounts.instance.createTokens = () => ({
           accessToken: 'newAccessToken',
           refreshToken: 'newRefreshToken',
@@ -222,8 +222,6 @@ describe('Accounts', () => {
         const res = await Accounts.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
         expect(updateSession.mock.calls[0]).toEqual([
           '456',
-          'newAccessToken',
-          'newRefreshToken',
           'ip',
           'user agent',
         ]);
@@ -253,7 +251,7 @@ describe('Accounts', () => {
       });
       it('throws error if session not found', async () => {
         Accounts.config({}, {
-          findSessionByAccessToken: () => Promise.resolve(null),
+          findSessionById: () => Promise.resolve(null),
         });
         try {
           const { accessToken, refreshToken } = Accounts.instance.createTokens();
@@ -265,7 +263,7 @@ describe('Accounts', () => {
       });
       it('throws error if session not valid', async () => {
         Accounts.config({}, {
-          findSessionByAccessToken: () => Promise.resolve({
+          findSessionById: () => Promise.resolve({
             valid: false,
           }),
         });
