@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "lerna run start",
+    "start": "lerna exec -- npm start",
+    "link": "lerna exec -- npm link",
     "compile": "lerna run compile",
     "lint": "lerna run lint",
     "prebootstrap": "npm install",
