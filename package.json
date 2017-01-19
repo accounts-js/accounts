@@ -1,4 +1,5 @@
 {
+  "private": true,
   "scripts": {
     "start": "lerna exec -- npm start",
     "link": "lerna exec -- npm link",
