@@ -13,7 +13,7 @@
     "test-ci": "npm lint && npm coverage",
     "testonly": "jest",
     "lint": "eslint src",
-    "coverage": "npm testonly -- --coverage",
+    "coverage": "npm run testonly -- --coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "jest": {

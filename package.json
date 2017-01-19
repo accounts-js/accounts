@@ -9,7 +9,7 @@
     "test": "npm run testonly",
     "posttest": "npm run lint",
     "testonly": "lerna run testonly",
-    "coverage": "npm testonly -- --coverage",
+    "coverage": "learn run coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {
