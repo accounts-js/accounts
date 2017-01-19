@@ -1,22 +1,9 @@
-import { EMAIL_ONLY } from './passwordSignupFields';
+import { config as sharedConfig } from '@accounts/common';
+import AccountsClient from './AccountsClient';
 import redirect from './redirect';
-// eslint-disable-next-line import/no-named-as-default
-import AccountsClient from '../client/AccountsClient';
 
-export const defaultSharedConfig = {
-  sendVerificationEmail: false,
-  forbidClientAccountCreation: false,
-  restrictCreationByEmailDomain: null,
-  loginExpirationInDays: 90,
-  passwordResetTokenExpirationInDays: 3,
-  passwordEnrollTokenExpirationInDays: 30,
-  passwordSignupFields: EMAIL_ONLY,
-  minimumPasswordLength: 7,
-  path: '/accounts',
-};
-
-export const defaultClientConfig = {
-  ...defaultSharedConfig,
+export default {
+  ...sharedConfig,
   reduxLogger: null,
   server: '',
   localStoragePrefix: '',
@@ -40,21 +27,5 @@ export const defaultClientConfig = {
   onVerifyEmailHook: () => redirect(AccountsClient.options().profilePath),
   onSignedInHook: () => redirect(AccountsClient.options().homePath),
   onSignedOutHook: () => redirect(AccountsClient.options().homePath),
-  onLogout: () => null,
   loginOnSignUp: true,
-};
-
-export const defaultServerConfig = {
-  ...defaultSharedConfig,
-  tokenSecret: 'terrible secret',
-  tokenConfigs: {
-    accessToken: {
-      expiresIn: '90m',
-    },
-    refreshToken: {
-      expiresIn: '1d',
-    },
-  },
-  // TODO Investigate oauthSecretKey
-  // oauthSecretKey
 };

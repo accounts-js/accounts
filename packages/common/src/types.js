@@ -26,6 +26,7 @@ export type TokensType = {
 };
 
 export type LoginReturnType = {
+  sessionId: string,
   user: UserObjectType,
   tokens: TokensType
 };
