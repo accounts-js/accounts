@@ -39,16 +39,6 @@
   ],
   "author": "Tim Mikeladze",
   "license": "MIT",
-  "keywords": [
-    "rest",
-    "graphql",
-    "grant",
-    "auth",
-    "authentication",
-    "accounts",
-    "users",
-    "oauth"
-  ],
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-core": "^6.18.0",
