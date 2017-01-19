@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "start": "webpack -p --config --progress --watch",
     "compile": "webpack -p --config --progress",
