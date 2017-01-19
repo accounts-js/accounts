@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/js-accounts/accounts"
+    "url": "https://github.com/js-accounts/accounts/tree/master/packages/server"
   },
   "keywords": [
     "rest",
@@ -34,8 +34,19 @@
     "users",
     "oauth"
   ],
-  "author": "Gadi Cohen & Tim Mikeladze",
+  "author": "Tim Mikeladze",
   "license": "MIT",
+  "dependencies": {
+    "@accounts/common": "^0.0.1",
+    "apollo-errors": "^1.2.1",
+    "bcryptjs": "^2.4.0",
+    "history": "^4.5.1",
+    "immutable": "^3.8.1",
+    "jsonwebtoken": "^7.2.1",
+    "jwt-decode": "^2.1.0",
+    "redux": "^3.6.0",
+    "redux-immutable": "^3.0.8"
+  },
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-core": "^6.18.0",
@@ -64,18 +75,6 @@
     "lodash": "^4.16.4",
     "regenerator-runtime": "^0.9.6",
     "webpack": "^1.13.3",
-    "webpack-node-externals": "^1.5.4",
-    "lerna": "2.0.0-beta.32"
-  },
-  "dependencies": {
-    "@accounts/common": "^0.0.1",
-    "apollo-errors": "^1.2.1",
-    "bcryptjs": "^2.4.0",
-    "history": "^4.5.1",
-    "immutable": "^3.8.1",
-    "jsonwebtoken": "^7.2.1",
-    "jwt-decode": "^2.1.0",
-    "redux": "^3.6.0",
-    "redux-immutable": "^3.0.8"
+    "webpack-node-externals": "^1.5.4"
   }
 }

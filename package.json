@@ -1,22 +1,21 @@
 {
-  "name": "@accounts/accounts",
-  "version": "0.0.1",
-  "description": "Fullstack authentication and accounts-management",
+  "scripts": {
+    "start": "lerna run start",
+    "compile": "lerna run compile",
+    "lint": "lerna run lint",
+    "prebootstrap": "npm install",
+    "postinstall": "lerna bootstrap",
+    "pretest": "npm run compile",
+    "test": "npm run testonly",
+    "posttest": "npm run lint",
+    "testonly": "lerna run testonly",
+    "coverage": "npm testonly -- --coverage",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/js-accounts/accounts"
   },
-  "keywords": [
-    "rest",
-    "graphql",
-    "passport",
-    "grant",
-    "auth",
-    "authentication",
-    "accounts",
-    "users"
-  ],
-  "author": "Gadi Cohen & Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
     "lerna": "2.0.0-beta.32"

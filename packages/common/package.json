@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/js-accounts/accounts"
+    "url": "https://github.com/js-accounts/accounts/tree/master/packages/common"
   },
   "keywords": [
     "rest",
@@ -34,7 +34,7 @@
     "users",
     "oauth"
   ],
-  "author": "Gadi Cohen & Tim Mikeladze",
+  "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.18.0",
@@ -64,8 +64,7 @@
     "lodash": "^4.16.4",
     "regenerator-runtime": "^0.9.6",
     "webpack": "^1.13.3",
-    "webpack-node-externals": "^1.5.4",
-    "lerna": "2.0.0-beta.32"
+    "webpack-node-externals": "^1.5.4"
   },
   "dependencies": {
     "apollo-errors": "^1.2.1",

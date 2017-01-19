@@ -6,7 +6,7 @@ export default Accounts;
 
 export {
   AccountsClient,
-  config
+  config,
 };
 
 export type {

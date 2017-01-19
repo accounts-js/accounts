@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/js-accounts/accounts"
+    "url": "https://github.com/js-accounts/accounts/tree/master/packages/client"
   },
   "keywords": [
     "rest",
@@ -34,8 +34,18 @@
     "users",
     "oauth"
   ],
-  "author": "Gadi Cohen & Tim Mikeladze",
+  "author": "Tim Mikeladze",
   "license": "MIT",
+  "keywords": [
+    "rest",
+    "graphql",
+    "grant",
+    "auth",
+    "authentication",
+    "accounts",
+    "users",
+    "oauth"
+  ],
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-core": "^6.18.0",
