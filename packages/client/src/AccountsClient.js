@@ -238,10 +238,10 @@ const Accounts = {
 export default Accounts;
 
 // TODO Could this be handled better?
-if (typeof window !== 'undefined') {
-  window.onload = async () => {
-    if (Accounts.instance) {
-      await Accounts.resumeSession();
-    }
-  };
-}
+// if (typeof window !== 'undefined') {
+//   window.onload = async () => {
+//     if (Accounts.instance && Accounts.instance.resumeSession) {
+//       await Accounts.resumeSession();
+//     }
+//   };
+// }

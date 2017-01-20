@@ -1,6 +1,6 @@
 {
   "name": "@accounts/common",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "publishConfig": {
@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "webpack -p --config --progress --watch",
-    "compile": "webpack -p --config --progress",
+    "compile": "babel ./src --out-dir ./lib",
     "flow:check": "flow check",
     "prepublish": "npm run compile",
     "pretest": "npm run lint",
