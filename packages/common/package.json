@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "webpack -p --config --progress --watch",
-    "compile": "webpack -p --config --progress",
+    "compile": "babel ./src --out-dir ./lib",
     "flow:check": "flow check",
     "prepublish": "npm run compile",
     "pretest": "npm run lint",
