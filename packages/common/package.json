@@ -9,7 +9,6 @@
   "scripts": {
     "start": "webpack -p --config --progress --watch",
     "compile": "babel ./src --out-dir ./lib",
-    "flow:check": "flow check",
     "prepublish": "npm run compile",
     "test": "npm run testonly",
     "test-ci": "npm lint && npm coverage",
@@ -19,7 +18,8 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "testRegex": "(/.*.(test|spec)).(js|jsx)$"
+    "testRegex": "(/.*.(test|spec)).(js|jsx)$",
+    "testPathDirs": ["src"]
   },
   "repository": {
     "type": "git",
