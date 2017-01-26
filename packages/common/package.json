@@ -19,7 +19,9 @@
   "jest": {
     "testEnvironment": "node",
     "testRegex": "(/.*.(test|spec)).(js|jsx)$",
-    "testPathDirs": ["src"]
+    "testPathDirs": [
+      "src"
+    ]
   },
   "repository": {
     "type": "git",
@@ -57,7 +59,6 @@
     "webpack-node-externals": "^1.5.4"
   },
   "dependencies": {
-    "apollo-errors": "^1.2.1",
     "lodash": "^4.16.4"
   }
 }

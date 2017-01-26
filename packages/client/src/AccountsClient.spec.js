@@ -41,7 +41,7 @@ describe('Accounts', () => {
         });
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
+        const { message } = err;
         expect(message).toEqual('A REST or GraphQL transport is required');
       }
     });
@@ -64,8 +64,8 @@ describe('Accounts', () => {
         await Accounts.createUser();
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
-        expect(message).toEqual('Unrecognized options for create user request [400]');
+        const { message } = err;
+        expect(message).toEqual('Unrecognized options for create user request');
       }
     });
     it('requires password', async () => {
@@ -80,7 +80,7 @@ describe('Accounts', () => {
         });
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
+        const { message } = err;
         expect(message).toEqual('Password is required');
       }
     });
@@ -96,7 +96,7 @@ describe('Accounts', () => {
         });
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
+        const { message } = err;
         expect(message).toEqual('Username or Email is required');
       }
     });
@@ -161,8 +161,8 @@ describe('Accounts', () => {
         await Accounts.loginWithPassword();
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
-        expect(message).toEqual('Unrecognized options for login request [400]');
+        const { message } = err;
+        expect(message).toEqual('Unrecognized options for login request');
       }
     });
     it('throws error if user is undefined', async () => {
@@ -174,8 +174,8 @@ describe('Accounts', () => {
         await Accounts.loginWithPassword();
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
-        expect(message).toEqual('Unrecognized options for login request [400]');
+        const { message } = err;
+        expect(message).toEqual('Unrecognized options for login request');
       }
     });
     it('throws error user is not a string or is an empty object', async () => {
@@ -187,8 +187,8 @@ describe('Accounts', () => {
         await Accounts.loginWithPassword({}, 'password');
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
-        expect(message).toEqual('Match failed [400]');
+        const { message } = err;
+        expect(message).toEqual('Match failed');
       }
     });
     it('throws error password is not a string', async () => {
@@ -200,8 +200,8 @@ describe('Accounts', () => {
         await Accounts.loginWithPassword({ user: 'username' }, {});
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
-        expect(message).toEqual('Match failed [400]');
+        const { message } = err;
+        expect(message).toEqual('Match failed');
       }
     });
     it('calls callback on successful login', async () => {
@@ -287,7 +287,7 @@ describe('Accounts', () => {
         await Accounts.logout(callback);
         throw new Error();
       } catch (err) {
-        expect(err.serialize().message).toEqual('error message');
+        expect(err.message).toEqual('error message');
         expect(callback.mock.calls.length).toEqual(1);
         expect(callback.mock.calls[0][0]).toEqual({ message: 'error message' });
       }
@@ -313,7 +313,7 @@ describe('Accounts', () => {
         await Accounts.refreshSession();
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
+        const { message } = err;
         expect(message).toEqual('falsy token provided');
       }
     });

@@ -13,7 +13,7 @@ describe('Accounts', () => {
       try {
         Accounts.config();
       } catch (err) {
-        const { message } = err.serialize();
+        const { message } = err;
         expect(message).toEqual('A database driver is required');
       }
     });
@@ -42,7 +42,7 @@ describe('Accounts', () => {
         });
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
+        const { message } = err;
         expect(message).toEqual('Username or Email is required');
       }
     });
@@ -59,7 +59,7 @@ describe('Accounts', () => {
         });
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
+        const { message } = err;
         expect(message).toEqual('Username already exists');
       }
     });
@@ -76,7 +76,7 @@ describe('Accounts', () => {
         });
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
+        const { message } = err;
         expect(message).toEqual('Email already exists');
       }
     });
@@ -98,8 +98,8 @@ describe('Accounts', () => {
         await Accounts.loginWithPassword(null, '123456');
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
-        expect(message).toEqual('Unrecognized options for login request [400]');
+        const { message } = err;
+        expect(message).toEqual('Unrecognized options for login request');
       }
     });
     it('throws error if password is undefined', async () => {
@@ -107,8 +107,8 @@ describe('Accounts', () => {
         await Accounts.loginWithPassword('username', null);
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
-        expect(message).toEqual('Unrecognized options for login request [400]');
+        const { message } = err;
+        expect(message).toEqual('Unrecognized options for login request');
       }
     });
     it('throws error if user is not a string or an object', async () => {
@@ -116,8 +116,8 @@ describe('Accounts', () => {
         await Accounts.loginWithPassword(1, '123456');
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
-        expect(message).toEqual('Match failed [400]');
+        const { message } = err;
+        expect(message).toEqual('Match failed');
       }
     });
     it('throws error if password is not a string', async () => {
@@ -125,8 +125,8 @@ describe('Accounts', () => {
         await Accounts.loginWithPassword('username', {});
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
-        expect(message).toEqual('Match failed [400]');
+        const { message } = err;
+        expect(message).toEqual('Match failed');
       }
     });
     it('throws error if user is not found', async () => {
@@ -138,8 +138,8 @@ describe('Accounts', () => {
         await Accounts.loginWithPassword('username', '123456');
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
-        expect(message).toEqual('User not found [403]');
+        const { message } = err;
+        expect(message).toEqual('User not found');
       }
     });
     it('throws error if password not set', async () => {
@@ -152,8 +152,8 @@ describe('Accounts', () => {
         await Accounts.loginWithPassword('username', '123456');
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
-        expect(message).toEqual('User has no password set [403]');
+        const { message } = err;
+        expect(message).toEqual('User has no password set');
       }
     });
     it('throws error if password is incorrect', async () => {
@@ -167,8 +167,8 @@ describe('Accounts', () => {
         await Accounts.loginWithPassword('username', '123456');
         throw new Error();
       } catch (err) {
-        const { message } = err.serialize();
-        expect(message).toEqual('Incorrect password [403]');
+        const { message } = err;
+        expect(message).toEqual('Incorrect password');
       }
     });
     describe('loginWithUser', () => {
@@ -237,7 +237,7 @@ describe('Accounts', () => {
           await Accounts.refreshTokens();
           throw new Error();
         } catch (err) {
-          expect(err.serialize().message).toEqual('An accessToken and refreshToken are required');
+          expect(err.message).toEqual('An accessToken and refreshToken are required');
         }
       });
       it('throws error if tokens are not valid', async () => {
@@ -246,7 +246,7 @@ describe('Accounts', () => {
           await Accounts.refreshTokens('bad access token', 'bad refresh token');
           throw new Error();
         } catch (err) {
-          expect(err.serialize().message).toEqual('Tokens are not valid');
+          expect(err.message).toEqual('Tokens are not valid');
         }
       });
       it('throws error if session not found', async () => {
@@ -258,7 +258,7 @@ describe('Accounts', () => {
           await Accounts.refreshTokens(accessToken, refreshToken);
           throw new Error();
         } catch (err) {
-          expect(err.serialize().message).toEqual('Session not found');
+          expect(err.message).toEqual('Session not found');
         }
       });
       it('throws error if session not valid', async () => {
@@ -272,7 +272,7 @@ describe('Accounts', () => {
           await Accounts.refreshTokens(accessToken, refreshToken);
           throw new Error();
         } catch (err) {
-          expect(err.serialize().message).toEqual('Session is no longer valid');
+          expect(err.message).toEqual('Session is no longer valid');
         }
       });
     });
@@ -306,7 +306,7 @@ describe('Accounts', () => {
           await Accounts.logout();
           throw new Error();
         } catch (err) {
-          expect(err.serialize().message).toEqual('An accessToken is required');
+          expect(err.message).toEqual('An accessToken is required');
         }
       });
       it('throws error if tokens are not valid', async () => {
@@ -315,7 +315,7 @@ describe('Accounts', () => {
           await Accounts.logout('bad access token');
           throw new Error();
         } catch (err) {
-          expect(err.serialize().message).toEqual('Tokens are not valid');
+          expect(err.message).toEqual('Tokens are not valid');
         }
       });
       it('throws error if session not found', async () => {
@@ -327,7 +327,7 @@ describe('Accounts', () => {
           await Accounts.logout(accessToken);
           throw new Error();
         } catch (err) {
-          expect(err.serialize().message).toEqual('Session not found');
+          expect(err.message).toEqual('Session not found');
         }
       });
       it('throws error if session not valid', async () => {
@@ -341,7 +341,7 @@ describe('Accounts', () => {
           await Accounts.logout(accessToken);
           throw new Error();
         } catch (err) {
-          expect(err.serialize().message).toEqual('Session is no longer valid');
+          expect(err.message).toEqual('Session is no longer valid');
         }
       });
     });
