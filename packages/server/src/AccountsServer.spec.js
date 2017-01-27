@@ -298,7 +298,8 @@ describe('Accounts', () => {
           '456',
         ]);
       });
-
+    });
+    describe('findSessionByAccessToken', () => {
       it('requires access token', async () => {
         Accounts.config({}, {});
         try {
@@ -342,6 +343,25 @@ describe('Accounts', () => {
         } catch (err) {
           expect(err.serialize().message).toEqual('Session is no longer valid');
         }
+      });
+    });
+    describe('resumeSession', () => {
+      it('return user', async () => {
+        const user = {
+          userId: '123',
+          username: 'username',
+        };
+        Accounts.config({}, {
+          findSessionById: () => Promise.resolve({
+            sessionId: '456',
+            valid: true,
+            userId: '123',
+          }),
+          findUserById: () => Promise.resolve(user),
+        });
+        const { accessToken } = Accounts.instance.createTokens('456');
+        const foundUser = await Accounts.resumeSession(accessToken);
+        expect(foundUser).toEqual(user);
       });
     });
   });
