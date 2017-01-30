@@ -330,7 +330,7 @@ const Accounts = {
   updateProfile(userId: string, profile: Object): Promise<Object> {
     return this.instance.updateProfile(userId, profile);
   },
-  user(): UserObjectType | null {
+  user(): Promise<?UserObjectType> {
     const userId = this.userId();
     return userId && this.findUserById(userId);
   },

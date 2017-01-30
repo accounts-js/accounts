@@ -410,5 +410,25 @@ describe('Accounts', () => {
         expect(res).toEqual(mergedProfile);
       });
     });
+    describe('user', () => {
+      it('calls findUserById if userId is set', async () => {
+        const user = {
+          id: '123',
+          username: 'username',
+        };
+        const findUserById = jest.fn(() => user);
+        Accounts.config({}, {
+          findUserById,
+        });
+        Accounts.userId = () => user.id;
+        const res = await Accounts.user();
+        expect(res).toEqual(user);
+        expect(findUserById.mock.calls.length > 0).toEqual(true);
+        Accounts.userId = () => null;
+      });
+      it('returns null if userId is not set', async () => {
+        expect(await Accounts.user()).toEqual(null);
+      });
+    });
   });
 });
