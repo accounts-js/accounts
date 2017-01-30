@@ -175,7 +175,6 @@ export class AccountsServer {
   }
   async logout(accessToken: string): Promise<void> {
     const session : SessionType = await this.findSessionByAccessToken(accessToken);
-
     if (session.valid) {
       const user = await this.db.findUserById(session.userId);
       if (!user) {
@@ -297,6 +296,7 @@ const Accounts = {
     return this.instance.refreshTokens(accessToken, refreshToken, ip, userAgent);
   },
   logout(accessToken: string): Promise<void> {
+    this.userId = () => null;
     return this.instance.logout(accessToken);
   },
   resumeSession(accessToken: string): Promise<UserObjectType> {
