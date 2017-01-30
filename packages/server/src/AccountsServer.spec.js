@@ -364,5 +364,51 @@ describe('Accounts', () => {
         expect(foundUser).toEqual(user);
       });
     });
+    describe('setProfile', () => {
+      it('calls set profile on db interface', async () => {
+        const user = {
+          userId: '123',
+          username: 'username',
+        };
+        const profile = {
+          bio: 'bio',
+        };
+        const setProfile = jest.fn();
+        Accounts.config({}, {
+          findUserById: () => Promise.resolve(user),
+          setProfile,
+        });
+        await Accounts.setProfile('123', profile);
+        expect(setProfile.mock.calls.length).toEqual(1);
+        expect(setProfile.mock.calls[0][0]).toEqual('123');
+        expect(setProfile.mock.calls[0][1]).toEqual(profile);
+      });
+      it('merges profile and calls set profile on db interface', async () => {
+        const user = {
+          userId: '123',
+          username: 'username',
+          profile: {
+            title: 'title',
+          },
+        };
+        const profile = {
+          bio: 'bio',
+        };
+        const mergedProfile = {
+          title: 'title',
+          bio: 'bio',
+        };
+        const setProfile = jest.fn(() => mergedProfile);
+        Accounts.config({}, {
+          findUserById: () => Promise.resolve(user),
+          setProfile,
+        });
+        const res = await Accounts.updateProfile('123', profile);
+        expect(setProfile.mock.calls.length).toEqual(1);
+        expect(setProfile.mock.calls[0][0]).toEqual('123');
+        expect(setProfile.mock.calls[0][1]).toEqual(mergedProfile);
+        expect(res).toEqual(mergedProfile);
+      });
+    });
   });
 });

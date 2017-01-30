@@ -248,6 +248,25 @@ export class AccountsServer {
   setPassword(userId: string, newPassword: string): Promise<void> {
     return this.db.setPasssword(userId, newPassword);
   }
+  async setProfile(userId: string, profile: Object): Promise<void> {
+    const user = await this.db.findUserById(userId);
+    if (!user) {
+      throw new AccountsError({
+        message: 'User not found',
+      });
+    }
+    await this.db.setProfile(userId, profile);
+  }
+  async updateProfile(userId: string, profile: Object): Promise<Object> {
+    const user = await this.db.findUserById(userId);
+    if (!user) {
+      throw new AccountsError({
+        message: 'User not found',
+      });
+    }
+    const res = await this.db.setProfile(userId, { ...user.profile, ...profile });
+    return res;
+  }
 }
 
 const Accounts = {
@@ -304,6 +323,16 @@ const Accounts = {
   },
   userId(): string | null {
     return null;
+  },
+  setProfile(userId: string, profile: Object): Promise<void> {
+    return this.instance.setProfile(userId, profile);
+  },
+  updateProfile(userId: string, profile: Object): Promise<Object> {
+    return this.instance.updateProfile(userId, profile);
+  },
+  user(): UserObjectType | null {
+    const userId = this.userId();
+    return userId && this.findUserById(userId);
   },
 };
 
