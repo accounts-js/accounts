@@ -302,6 +302,9 @@ const Accounts = {
   resumeSession(accessToken: string): Promise<UserObjectType> {
     return this.instance.resumeSession(accessToken);
   },
+  userId(): string | null {
+    return null;
+  },
 };
 
 export default Accounts;
