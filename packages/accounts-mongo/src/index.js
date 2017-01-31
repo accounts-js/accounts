@@ -149,6 +149,20 @@ class Mongo {
     }
   }
 
+  async setProfile(userId: string, profile: Object): Promise<Object> {
+    const ret = await this.collection.update({ _id: userId }, {
+      $set: {
+        profile,
+        [this.options.timestamps.updatedAt]: Date.now(),
+      },
+    });
+    if (ret.result.nModified === 0) {
+      throw new Error('User not found');
+    }
+    const user = await this.findUserById(userId);
+    return user && user.profile;
+  }
+
   async createSession(userId: string, ip: string, userAgent: string): Promise<string> {
     const ret = await this.sessionCollection.insertOne({
       userId,
