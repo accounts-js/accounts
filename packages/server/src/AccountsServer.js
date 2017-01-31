@@ -174,6 +174,35 @@ export class AccountsServer {
     return { accessToken, refreshToken };
   }
   async logout(accessToken: string): Promise<void> {
+    const session : SessionType = await this.findSessionByAccessToken(accessToken);
+    if (session.valid) {
+      const user = await this.db.findUserById(session.userId);
+      if (!user) {
+        throw new AccountsError({
+          message: 'User not found',
+        });
+      }
+      await this.db.invalidateSession(session.sessionId);
+    } else { // eslint-disable-line no-else-return
+      throw new AccountsError({
+        message: 'Session is no longer valid',
+      });
+    }
+  }
+  async resumeSession(accessToken: string): Promise<?UserObjectType> {
+    const session : SessionType = await this.findSessionByAccessToken(accessToken);
+    if (session.valid) {
+      const user = await this.db.findUserById(session.userId);
+      if (!user) {
+        throw new AccountsError({
+          message: 'User not found',
+        });
+      }
+      return user;
+    }
+    return null;
+  }
+  async findSessionByAccessToken(accessToken: string): Promise<SessionType> {
     if (!isString(accessToken)) {
       throw new AccountsError({
         message: 'An accessToken is required',
@@ -196,20 +225,7 @@ export class AccountsServer {
         message: 'Session not found',
       });
     }
-
-    if (session.valid) {
-      const user = await this.db.findUserById(session.userId);
-      if (!user) {
-        throw new AccountsError({
-          message: 'User not found',
-        });
-      }
-      await this.db.invalidateSession(sessionId);
-    } else { // eslint-disable-line no-else-return
-      throw new AccountsError({
-        message: 'Session is no longer valid',
-      });
-    }
+    return session;
   }
   findUserByEmail(email: string): Promise<?UserObjectType> {
     return this.db.findUserByEmail(email);
@@ -231,6 +247,25 @@ export class AccountsServer {
   }
   setPassword(userId: string, newPassword: string): Promise<void> {
     return this.db.setPasssword(userId, newPassword);
+  }
+  async setProfile(userId: string, profile: Object): Promise<void> {
+    const user = await this.db.findUserById(userId);
+    if (!user) {
+      throw new AccountsError({
+        message: 'User not found',
+      });
+    }
+    await this.db.setProfile(userId, profile);
+  }
+  async updateProfile(userId: string, profile: Object): Promise<Object> {
+    const user = await this.db.findUserById(userId);
+    if (!user) {
+      throw new AccountsError({
+        message: 'User not found',
+      });
+    }
+    const res = await this.db.setProfile(userId, { ...user.profile, ...profile });
+    return res;
   }
 }
 
@@ -281,6 +316,15 @@ const Accounts = {
   },
   logout(accessToken: string): Promise<void> {
     return this.instance.logout(accessToken);
+  },
+  resumeSession(accessToken: string): Promise<UserObjectType> {
+    return this.instance.resumeSession(accessToken);
+  },
+  setProfile(userId: string, profile: Object): Promise<void> {
+    return this.instance.setProfile(userId, profile);
+  },
+  updateProfile(userId: string, profile: Object): Promise<Object> {
+    return this.instance.updateProfile(userId, profile);
   },
 };
 

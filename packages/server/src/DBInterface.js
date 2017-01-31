@@ -20,5 +20,6 @@ export interface DBInterface {
   createSession(userId: string, ip: string, userAgent: string) : Promise<string>,
   updateSession(sessionId: string, ip: string, userAgent: string) : Promise<void>,
   invalidateSession(sessionId: string): Promise<void>,
-  findSessionById(sessionId: string) : Promise<?SessionType>
+  findSessionById(sessionId: string) : Promise<?SessionType>,
+  setProfile(userId: string, profile: Object) : Promise<Object>
 }

@@ -298,7 +298,8 @@ describe('Accounts', () => {
           '456',
         ]);
       });
-
+    });
+    describe('findSessionByAccessToken', () => {
       it('requires access token', async () => {
         Accounts.config({}, {});
         try {
@@ -342,6 +343,71 @@ describe('Accounts', () => {
         } catch (err) {
           expect(err.serialize().message).toEqual('Session is no longer valid');
         }
+      });
+    });
+    describe('resumeSession', () => {
+      it('return user', async () => {
+        const user = {
+          userId: '123',
+          username: 'username',
+        };
+        Accounts.config({}, {
+          findSessionById: () => Promise.resolve({
+            sessionId: '456',
+            valid: true,
+            userId: '123',
+          }),
+          findUserById: () => Promise.resolve(user),
+        });
+        const { accessToken } = Accounts.instance.createTokens('456');
+        const foundUser = await Accounts.resumeSession(accessToken);
+        expect(foundUser).toEqual(user);
+      });
+    });
+    describe('setProfile', () => {
+      it('calls set profile on db interface', async () => {
+        const user = {
+          userId: '123',
+          username: 'username',
+        };
+        const profile = {
+          bio: 'bio',
+        };
+        const setProfile = jest.fn();
+        Accounts.config({}, {
+          findUserById: () => Promise.resolve(user),
+          setProfile,
+        });
+        await Accounts.setProfile('123', profile);
+        expect(setProfile.mock.calls.length).toEqual(1);
+        expect(setProfile.mock.calls[0][0]).toEqual('123');
+        expect(setProfile.mock.calls[0][1]).toEqual(profile);
+      });
+      it('merges profile and calls set profile on db interface', async () => {
+        const user = {
+          userId: '123',
+          username: 'username',
+          profile: {
+            title: 'title',
+          },
+        };
+        const profile = {
+          bio: 'bio',
+        };
+        const mergedProfile = {
+          title: 'title',
+          bio: 'bio',
+        };
+        const setProfile = jest.fn(() => mergedProfile);
+        Accounts.config({}, {
+          findUserById: () => Promise.resolve(user),
+          setProfile,
+        });
+        const res = await Accounts.updateProfile('123', profile);
+        expect(setProfile.mock.calls.length).toEqual(1);
+        expect(setProfile.mock.calls[0][0]).toEqual('123');
+        expect(setProfile.mock.calls[0][1]).toEqual(mergedProfile);
+        expect(res).toEqual(mergedProfile);
       });
     });
   });
