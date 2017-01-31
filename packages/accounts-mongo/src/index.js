@@ -150,15 +150,12 @@ class Mongo {
   }
 
   async setProfile(userId: string, profile: Object): Promise<Object> {
-    const ret = await this.collection.update({ _id: userId }, {
+    await this.collection.update({ _id: userId }, {
       $set: {
         profile,
         [this.options.timestamps.updatedAt]: Date.now(),
       },
     });
-    if (ret.result.nModified === 0) {
-      throw new Error('User not found');
-    }
     const user = await this.findUserById(userId);
     return user && user.profile;
   }
