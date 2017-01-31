@@ -291,6 +291,24 @@ describe('Mongo', () => {
     });
   });
 
+  describe('setProfile', () => {
+    it('should throw if user is not found', async () => {
+      try {
+        await mongo.setProfile('unknowuser', {});
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('User not found');
+      }
+    });
+
+    it('should change profile', async () => {
+      const userId = await mongo.createUser(user);
+      await delay(10);
+      const retUser = await mongo.setProfile(userId, { username: 'toto' });
+      expect(retUser.username).toEqual('toto');
+    });
+  });
+
   describe('createSession', () => {
     it('should create session', async () => {
       const sessionId = await mongo.createSession(session.userId, session.ip, session.userAgent);
