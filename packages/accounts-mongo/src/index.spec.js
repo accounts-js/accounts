@@ -15,19 +15,22 @@ const session = {
   userAgent: 'user agent',
 };
 
+function dropDatabase(cb) {
+  db.dropDatabase((err) => {
+    if (err) return cb(err);
+    return cb();
+  });
+}
+
 function createConnection(cb) {
   const url = 'mongodb://localhost:27017/accounts-mongo-tests';
   mongodb.MongoClient.connect(url, (err, dbArg) => {
     db = dbArg;
     mongo = new Mongo(db);
-    cb(err);
-  });
-}
-
-function dropDatabase(cb) {
-  db.dropDatabase((err) => {
     if (err) return cb(err);
-    return cb();
+    return dropDatabase((error) => {
+      cb(error);
+    });
   });
 }
 
@@ -292,15 +295,6 @@ describe('Mongo', () => {
   });
 
   describe('setProfile', () => {
-    it('should throw if user is not found', async () => {
-      try {
-        await mongo.setProfile('unknowuser', {});
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('User not found');
-      }
-    });
-
     it('should change profile', async () => {
       const userId = await mongo.createUser(user);
       await delay(10);
