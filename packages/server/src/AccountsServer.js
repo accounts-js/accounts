@@ -189,8 +189,8 @@ export class AccountsServer {
       });
     }
   }
-  async resumeSession(accessToken: string): Promise<UserObjectType> {
-    const session : UserObjectType = await this.findSessionByAccessToken(accessToken);
+  async resumeSession(accessToken: string): Promise<?UserObjectType> {
+    const session : SessionType = await this.findSessionByAccessToken(accessToken);
     if (session.valid) {
       const user = await this.db.findUserById(session.userId);
       if (!user) {
@@ -315,24 +315,16 @@ const Accounts = {
     return this.instance.refreshTokens(accessToken, refreshToken, ip, userAgent);
   },
   logout(accessToken: string): Promise<void> {
-    this.userId = () => null;
     return this.instance.logout(accessToken);
   },
   resumeSession(accessToken: string): Promise<UserObjectType> {
     return this.instance.resumeSession(accessToken);
-  },
-  userId(): string | null {
-    return null;
   },
   setProfile(userId: string, profile: Object): Promise<void> {
     return this.instance.setProfile(userId, profile);
   },
   updateProfile(userId: string, profile: Object): Promise<Object> {
     return this.instance.updateProfile(userId, profile);
-  },
-  user(): Promise<?UserObjectType> {
-    const userId = this.userId();
-    return userId && this.findUserById(userId);
   },
 };
 
