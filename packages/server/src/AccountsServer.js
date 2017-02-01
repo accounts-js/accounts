@@ -250,7 +250,7 @@ export class AccountsServer {
       });
     }
     const tokenRecord = find(user.services.email.verificationTokens,
-      (t : Object) => t.token === token);
+                             (t: Object) => t.token === token);
     if (!tokenRecord) {
       throw new AccountsError({
         message: 'Verify email link expired',
