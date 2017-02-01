@@ -322,8 +322,8 @@ const Accounts = {
   removeEmail(userId: string, newEmail: string): Promise<void> {
     return this.instance.removeEmail(userId, newEmail);
   },
-  verifyEmail(userId: string, email: string): Promise<void> {
-    return this.instance.verifyEmail(userId, email);
+  verifyEmail(token: string): Promise<void> {
+    return this.instance.verifyEmail(token);
   },
   setPassword(userId: string, newPassword: string): Promise<void> {
     return this.instance.setPassword(userId, newPassword);
