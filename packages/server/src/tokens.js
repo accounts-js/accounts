@@ -1,5 +1,8 @@
 // @flow
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+
+export const generateToken = (length: Int = 43) => crypto.randomBytes(length).toString('hex');
 
 export const generateAccessToken = ({
   secret,
