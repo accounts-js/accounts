@@ -3,6 +3,8 @@ import { EMAIL_ONLY } from './passwordSignupFields';
 
 export default {
   sendVerificationEmail: false,
+  sendEnrollmentEmail: false,
+  sendWelcomeEmail: false,
   forbidClientAccountCreation: false,
   restrictCreationByEmailDomain: null,
   loginExpirationInDays: 90,
