@@ -1,6 +1,6 @@
 {
   "name": "@accounts/mongo",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "MongoDB adaptor for accounts",
   "main": "lib/index.js",
   "scripts": {
