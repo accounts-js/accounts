@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "publishConfig": {
@@ -58,7 +58,7 @@
     "webpack-node-externals": "^1.5.4"
   },
   "dependencies": {
-    "@accounts/common": "^0.0.2",
+    "@accounts/common": "^0.0.3",
     "apollo-errors": "^1.2.1",
     "immutable": "^3.8.1",
     "jwt-decode": "^2.1.0",

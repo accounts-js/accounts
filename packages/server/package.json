@@ -1,6 +1,6 @@
 {
   "name": "@accounts/server",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "publishConfig": {
@@ -38,7 +38,7 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "dependencies": {
-    "@accounts/common": "^0.0.2",
+    "@accounts/common": "^0.0.3",
     "apollo-errors": "^1.2.1",
     "bcryptjs": "^2.4.0",
     "jsonwebtoken": "^7.2.1",
