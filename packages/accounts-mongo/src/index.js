@@ -64,6 +64,7 @@ class Mongo {
   async createUser(options: CreateUserType): Promise<string> {
     const user: MongoUserObjectType = {
       services: {},
+      profile: {},
       [this.options.timestamps.createdAt]: Date.now(),
       [this.options.timestamps.updatedAt]: Date.now(),
     };
@@ -75,6 +76,9 @@ class Mongo {
     }
     if (options.email) {
       user.emails = [{ address: options.email.toLowerCase(), verified: false }];
+    }
+    if (options.profile) {
+      user.profile = options.profile;
     }
     const ret = await this.collection.insertOne(user);
     return ret.ops[0]._id;
