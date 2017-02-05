@@ -42,33 +42,26 @@ export class AccountsServer {
       throw new AccountsError('Match failed', user, 400);
     }
 
-    const { username, email, id } = isString(user)
-      ? toUsernameAndEmail({ user })
-      : toUsernameAndEmail({ ...user });
-
     let foundUser;
-    if (id) {
-      foundUser = await this.db.findUserById(id);
-    } else if (username) {
-      foundUser = await this.db.findUserByUsername(username);
-    } else if (email) {
-      foundUser = await this.db.findUserByEmail(email);
+
+    if (this.options.passwordAuthenticator) {
+      try {
+        foundUser = await this._externalPasswordAuthenticator(this.options.passwordAuthenticator, user, password);
+      }
+      catch (e) {
+        throw new AccountsError(e, user, 403);
+      }
     }
+    else {
+      foundUser = await this._defaultPasswordAuthenticator(user, password);
+    }
+
     if (!foundUser) {
       throw new AccountsError('User not found', user, 403);
     }
-    const hash = await this.db.findPasswordHash(foundUser.id);
-    if (!hash) {
-      throw new AccountsError('User has no password set', user, 403);
-    }
 
-    const isValidPassword = await verifyPassword(password, hash);
-    if (!isValidPassword) {
-      throw new AccountsError('Incorrect password', user, 403);
-    }
-
+    // $FlowFixMe
     const sessionId = await this.db.createSession(foundUser.id, ip, userAgent);
-
     const { accessToken, refreshToken } = this.createTokens(sessionId);
 
     return {
@@ -80,6 +73,43 @@ export class AccountsServer {
       },
     };
   }
+
+  async _externalPasswordAuthenticator(authFn, user: PasswordLoginUserType, password: string) {
+    return await authFn(user, password);
+  }
+
+  async _defaultPasswordAuthenticator(user: PasswordLoginUserType, password: string) {
+    const { username, email, id } = isString(user)
+      ? toUsernameAndEmail({ user })
+      : toUsernameAndEmail({ ...user });
+
+    let foundUser;
+
+    if (id) {
+      foundUser = await this.db.findUserById(id);
+    } else if (username) {
+      foundUser = await this.db.findUserByUsername(username);
+    } else if (email) {
+      foundUser = await this.db.findUserByEmail(email);
+    }
+
+    if (!foundUser) {
+      throw new AccountsError('User not found', user, 403);
+    }
+    const hash = await this.db.findPasswordHash(foundUser.id);
+    if (!hash) {
+      throw new AccountsError('User has no password set', user, 403);
+    }
+
+    const isPasswordValid = await verifyPassword(password, hash);
+
+    if (!isPasswordValid) {
+      throw new AccountsError('Incorrect password', user, 403);
+    }
+
+    return foundUser;
+  }
+
   async createUser(user: CreateUserType): Promise<string> {
     if (!validators.validateUsername(user.username) && !validators.validateEmail(user.email)) {
       throw new AccountsError(
