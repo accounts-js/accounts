@@ -1,14 +1,15 @@
 import jwtDecode from 'jwt-decode';
-import Accounts from './AccountsServer';
+import { AccountsServer } from './AccountsServer';
 import { hashPassword } from './encryption';
+
+let Accounts;
 
 describe('Accounts', () => {
   beforeEach(() => {
+    Accounts = new AccountsServer();
     Accounts.config({}, {});
   });
   describe('config', () => {
-    beforeEach(() => {
-    });
     it('requires a db driver', () => {
       try {
         Accounts.config();
@@ -20,7 +21,7 @@ describe('Accounts', () => {
     it('sets the db driver', () => {
       const db = {};
       Accounts.config({}, db);
-      expect(Accounts.instance.db).toEqual(db);
+      expect(Accounts.db).toEqual(db);
     });
   });
   const db = {
@@ -214,8 +215,8 @@ describe('Accounts', () => {
           findUserById: () => Promise.resolve(user),
           updateSession,
         });
-        const { accessToken, refreshToken } = Accounts.instance.createTokens('456');
-        Accounts.instance.createTokens = () => ({
+        const { accessToken, refreshToken } = Accounts.createTokens('456');
+        Accounts.createTokens = () => ({
           accessToken: 'newAccessToken',
           refreshToken: 'newRefreshToken',
         });
@@ -254,7 +255,7 @@ describe('Accounts', () => {
           findSessionById: () => Promise.resolve(null),
         });
         try {
-          const { accessToken, refreshToken } = Accounts.instance.createTokens();
+          const { accessToken, refreshToken } = Accounts.createTokens();
           await Accounts.refreshTokens(accessToken, refreshToken);
           throw new Error();
         } catch (err) {
@@ -268,7 +269,7 @@ describe('Accounts', () => {
           }),
         });
         try {
-          const { accessToken, refreshToken } = Accounts.instance.createTokens();
+          const { accessToken, refreshToken } = Accounts.createTokens();
           await Accounts.refreshTokens(accessToken, refreshToken);
           throw new Error();
         } catch (err) {
@@ -292,7 +293,7 @@ describe('Accounts', () => {
           findUserById: () => Promise.resolve(user),
           invalidateSession,
         });
-        const { accessToken } = Accounts.instance.createTokens('456');
+        const { accessToken } = Accounts.createTokens('456');
         await Accounts.logout(accessToken);
         expect(invalidateSession.mock.calls[0]).toEqual([
           '456',
@@ -323,7 +324,7 @@ describe('Accounts', () => {
           findSessionById: () => Promise.resolve(null),
         });
         try {
-          const { accessToken } = Accounts.instance.createTokens();
+          const { accessToken } = Accounts.createTokens();
           await Accounts.logout(accessToken);
           throw new Error();
         } catch (err) {
@@ -337,7 +338,7 @@ describe('Accounts', () => {
           }),
         });
         try {
-          const { accessToken } = Accounts.instance.createTokens();
+          const { accessToken } = Accounts.createTokens();
           await Accounts.logout(accessToken);
           throw new Error();
         } catch (err) {
@@ -359,7 +360,7 @@ describe('Accounts', () => {
           }),
           findUserById: () => Promise.resolve(user),
         });
-        const { accessToken } = Accounts.instance.createTokens('456');
+        const { accessToken } = Accounts.createTokens('456');
         const foundUser = await Accounts.resumeSession(accessToken);
         expect(foundUser).toEqual(user);
       });
