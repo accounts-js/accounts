@@ -12,6 +12,7 @@ export interface DBInterface {
   findUserByEmail(email: string) : Promise<?UserObjectType>,
   findUserByUsername(username: string) : Promise<?UserObjectType>,
   findUserById(userId: string) : Promise<?UserObjectType>,
+  findUserByEmailVerificationToken(token: string) : Promise<?UserObjectType>,
   setUsername(userId: string, newUsername: string) : Promise<void>,
   addEmail(userId: string, newEmail: string, verified: boolean) : Promise<void>,
   removeEmail(userId: string, email: string) : Promise<void>,

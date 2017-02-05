@@ -1,6 +1,6 @@
 // @flow
 
-import { isString, isPlainObject } from 'lodash';
+import { isString, isPlainObject, find } from 'lodash';
 import jwt from 'jsonwebtoken';
 import {
   AccountsError,
@@ -242,8 +242,27 @@ export class AccountsServer {
   removeEmail(userId: string, email: string): Promise<void> {
     return this.db.removeEmail(userId, email);
   }
-  verifyEmail(userId: string, email: string): Promise<void> {
-    return this.db.verifyEmail(userId, email);
+  async verifyEmail(token: string): Promise<void> {
+    const user = await this.db.findUserByEmailVerificationToken();
+    if (!user) {
+      throw new AccountsError({
+        message: 'Verify email link expired',
+      });
+    }
+    const tokenRecord = find(user.services.email.verificationTokens,
+                             (t: Object) => t.token === token);
+    if (!tokenRecord) {
+      throw new AccountsError({
+        message: 'Verify email link expired',
+      });
+    }
+    const emailRecord = find(user.emails, (e: Object) => e.address === tokenRecord.address);
+    if (!emailRecord) {
+      throw new AccountsError({
+        message: 'Verify email link is for unknown address',
+      });
+    }
+    await this.db.verifyEmail(user.id, emailRecord);
   }
   setPassword(userId: string, newPassword: string): Promise<void> {
     return this.db.setPasssword(userId, newPassword);
@@ -303,8 +322,8 @@ const Accounts = {
   removeEmail(userId: string, newEmail: string): Promise<void> {
     return this.instance.removeEmail(userId, newEmail);
   },
-  verifyEmail(userId: string, email: string): Promise<void> {
-    return this.instance.verifyEmail(userId, email);
+  verifyEmail(token: string): Promise<void> {
+    return this.instance.verifyEmail(token);
   },
   setPassword(userId: string, newPassword: string): Promise<void> {
     return this.instance.setPassword(userId, newPassword);

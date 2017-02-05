@@ -41,6 +41,7 @@
     "@accounts/common": "^0.0.3",
     "apollo-errors": "^1.2.1",
     "bcryptjs": "^2.4.0",
+    "crypto": "^0.0.3",
     "jsonwebtoken": "^7.2.1",
     "jwt-decode": "^2.1.0",
     "lodash": "^4.16.4"
