@@ -104,8 +104,9 @@ export class AccountsServer {
     const isPasswordValid = await verifyPassword(password, hash);
 
     if (!isPasswordValid) {
-      throw new AccountsError(Incorrect password, user, 403);
+      throw new AccountsError('Incorrect password', user, 403);
     }
+
     return foundUser;
   }
 
