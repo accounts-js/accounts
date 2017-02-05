@@ -26,26 +26,21 @@ describe('AccountsError class', () => {
     }
   });
 
+  it('should be able to serialize into a string', () => {
+    try {
+      throws();
+    } catch (e) {
+      expect(e.serialize()).toBe(
+        // eslint-disable-next-line prefer-template
+        '{"message":"Validation Error",' +
+        '"loginInfo":{"username":"user"},' +
+        '"errorCode":"ACCOUNTS:1",' +
+        '"epochTime":' + e.epochTime + '}',
+      );
+    }
+  });
 
-  // NB: For some reason it seems jest have different Error class
-  // it retain fields but our tests fail
-  // it('should be able to serialize into a string', () => {
-  //   try {
-  //     throws();
-  //   } catch (e) {
-  //     expect(e.serialize()).toBe(
-  //       '{"message": "Validation Error", ' +
-  //       '"loginInfo": { "username": "user" }, ' +
-  //       '"errorCode": "ACCOUNTS:1" }'
-  //     );
-  //   }
-  // });
-  //
-  // it('should be easily distinguished from other errors', () => {
-  //   try {
-  //     throws();
-  //   } catch (e) {
-  //     expect(e instanceof AccountsError).toBeTruthy();
-  //   }
-  // });
+  it('should be easily distinguished from other errors', () => {
+    expect(throws).toThrowError(AccountsError);
+  });
 });
