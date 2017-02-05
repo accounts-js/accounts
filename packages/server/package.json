@@ -1,6 +1,6 @@
 {
   "name": "@accounts/server",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "publishConfig": {
@@ -19,7 +19,9 @@
   "jest": {
     "testEnvironment": "node",
     "testRegex": "(/.*.(test|spec)).(js|jsx)$",
-    "testPathDirs": ["src"]
+    "testPathDirs": [
+      "src"
+    ]
   },
   "repository": {
     "type": "git",
@@ -38,7 +40,7 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "dependencies": {
-    "@accounts/common": "^0.0.3",
+    "@accounts/common": "^0.0.4",
     "bcryptjs": "^2.4.0",
     "crypto": "^0.0.3",
     "jsonwebtoken": "^7.2.1",

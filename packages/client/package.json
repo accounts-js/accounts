@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "publishConfig": {
@@ -19,7 +19,9 @@
   "jest": {
     "testEnvironment": "node",
     "testRegex": "(/.*.(test|spec)).(js|jsx)$",
-    "testPathDirs": ["src"]
+    "testPathDirs": [
+      "src"
+    ]
   },
   "repository": {
     "type": "git",
@@ -58,7 +60,7 @@
     "webpack-node-externals": "^1.5.4"
   },
   "dependencies": {
-    "@accounts/common": "^0.0.3",
+    "@accounts/common": "^0.0.4",
     "immutable": "^3.8.1",
     "jwt-decode": "^2.1.0",
     "lodash": "^4.16.4",
