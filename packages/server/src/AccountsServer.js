@@ -46,13 +46,14 @@ export class AccountsServer {
 
     if (this.options.passwordAuthenticator) {
       try {
-        foundUser = await this._externalPasswordAuthenticator(this.options.passwordAuthenticator, user, password);
-      }
-      catch (e) {
+        foundUser = await this._externalPasswordAuthenticator(
+          this.options.passwordAuthenticator,
+          user,
+          password);
+      } catch (e) {
         throw new AccountsError(e, user, 403);
       }
-    }
-    else {
+    } else {
       foundUser = await this._defaultPasswordAuthenticator(user, password);
     }
 
@@ -74,11 +75,12 @@ export class AccountsServer {
     };
   }
 
-  async _externalPasswordAuthenticator(authFn, user: PasswordLoginUserType, password: string) {
-    return await authFn(user, password);
+  // eslint-disable-next-line max-len
+  async _externalPasswordAuthenticator(authFn: Function, user: PasswordLoginUserType, password: string): Promise<any> {
+    return authFn(user, password);
   }
 
-  async _defaultPasswordAuthenticator(user: PasswordLoginUserType, password: string) {
+  async _defaultPasswordAuthenticator(user: PasswordLoginUserType, password: string): Promise<any> {
     const { username, email, id } = isString(user)
       ? toUsernameAndEmail({ user })
       : toUsernameAndEmail({ ...user });
@@ -209,6 +211,15 @@ export class AccountsServer {
       if (!user) {
         throw new AccountsError('User not found', { id: session.userId });
       }
+
+      if (this.options.resumeSessionValidator) {
+        try {
+          await this.options.resumeSessionValidator(user, session);
+        } catch (e) {
+          throw new AccountsError(e, { id: session.userId }, 403);
+        }
+      }
+
       return user;
     }
     return null;

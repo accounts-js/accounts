@@ -40,7 +40,7 @@ describe('Accounts', () => {
     findUserByUsername: () => Promise.resolve(),
     findUserByEmail: () => Promise.resolve(),
     createUser: () => Promise.resolve(),
-    createSession: () => Promise.resolve()
+    createSession: () => Promise.resolve(),
   };
   describe('createUser', () => {
     beforeEach(() => {
@@ -196,7 +196,7 @@ describe('Accounts', () => {
       };
       const authenticator = jest.fn(() => Promise.resolve(user));
 
-      Accounts.config({ passwordAuthenticator: authenticator}, db);
+      Accounts.config({ passwordAuthenticator: authenticator }, db);
 
       const result = await Accounts.loginWithPassword('username', '123456');
 
@@ -395,6 +395,53 @@ describe('Accounts', () => {
         const foundUser = await Accounts.resumeSession(accessToken);
         expect(foundUser).toEqual(user);
       });
+    });
+    it('return user with custom validation method', async () => {
+      const resumeSessionValidator = jest.fn(() => Promise.resolve({}));
+
+      const user = {
+        userId: '123',
+        username: 'username',
+      };
+      Accounts.config({ resumeSessionValidator }, {
+        findSessionById: () => Promise.resolve({
+          sessionId: '456',
+          valid: true,
+          userId: '123',
+        }),
+        findUserById: () => Promise.resolve(user),
+      });
+
+      const { accessToken } = Accounts.instance.createTokens('456');
+      await Accounts.resumeSession(accessToken);
+
+      expect(resumeSessionValidator.mock.calls.length).toBe(1);
+    });
+    it('throw when custom validation method rejects', async () => {
+      const resumeSessionValidator = jest.fn(() => Promise.reject('Custom session error'));
+
+      const user = {
+        userId: '123',
+        username: 'username',
+      };
+      Accounts.config({ resumeSessionValidator }, {
+        findSessionById: () => Promise.resolve({
+          sessionId: '456',
+          valid: true,
+          userId: '123',
+        }),
+        findUserById: () => Promise.resolve(user),
+      });
+
+      const { accessToken } = Accounts.instance.createTokens('456');
+
+      try {
+        await Accounts.resumeSession(accessToken);
+        throw new Error();
+      } catch (err) {
+        expect(resumeSessionValidator.mock.calls.length).toBe(1);
+        expect(err.message).toEqual('Custom session error');
+      }
     });
     describe('setProfile', () => {
       it('calls set profile on db interface', async () => {
