@@ -209,6 +209,16 @@ export class AccountsServer {
       if (!user) {
         throw new AccountsError('User not found', { id: session.userId });
       }
+
+      if (this.options.resumeSessionValidator) {
+        try {
+          await this.options.resumeSessionValidator(user, session);
+        }
+        catch (e) {
+          throw new AccountsError(e, { id: session.userId }, 403);
+        }
+      }
+
       return user;
     }
     return null;
