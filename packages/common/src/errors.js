@@ -9,7 +9,6 @@ export class AccountsError extends Error {
   epochTime: number;
 
   constructor(message: string, loginInfo?: PasswordLoginUserType, errorCode?: string | number) {
-    console.log(message);
     super(message);
     this.epochTime = Date.now();
 

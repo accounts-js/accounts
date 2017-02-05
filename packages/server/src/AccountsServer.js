@@ -166,7 +166,6 @@ export class AccountsServer {
       const user = await this.db.findUserById(session.userId);
       if (!user) {
         throw new AccountsError('User not found', { id: session.userId });
-
       }
       await this.db.invalidateSession(session.sessionId);
     } else { // eslint-disable-line no-else-return
