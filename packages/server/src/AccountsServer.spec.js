@@ -17,16 +17,30 @@ describe('Accounts', () => {
         expect(message).toEqual('A database driver is required');
       }
     });
+
     it('sets the db driver', () => {
       const db = {};
       Accounts.config({}, db);
       expect(Accounts.instance.db).toEqual(db);
+    });
+
+    it('set custom password authenticator', () => {
+      const db = {};
+      Accounts.config({ passwordAuthenticator: () => {} }, db);
+      expect(Accounts.instance.options.passwordAuthenticator).toBeDefined();
+    });
+
+    it('use default password authenticator', () => {
+      const db = {};
+      Accounts.config({}, db);
+      expect(Accounts.instance.options.passwordAuthenticator).toBeUndefined();
     });
   });
   const db = {
     findUserByUsername: () => Promise.resolve(),
     findUserByEmail: () => Promise.resolve(),
     createUser: () => Promise.resolve(),
+    createSession: () => Promise.resolve()
   };
   describe('createUser', () => {
     beforeEach(() => {
@@ -170,6 +184,24 @@ describe('Accounts', () => {
         const { message } = err.serialize();
         expect(message).toEqual('Incorrect password [403]');
       }
+    });
+    it('should use custom password authenticator when specified', async () => {
+      const user = {
+        id: '123',
+        username: 'username',
+        email: 'email@email.com',
+        profile: {
+          bio: 'bio',
+        },
+      };
+      const authenticator = jest.fn(() => Promise.resolve(user));
+
+      Accounts.config({ passwordAuthenticator: authenticator}, db);
+
+      const result = await Accounts.loginWithPassword('username', '123456');
+
+      expect(result).toBeDefined();
+      expect(authenticator.mock.calls.length).toEqual(1);
     });
     describe('loginWithUser', () => {
       it('login using id', async () => {

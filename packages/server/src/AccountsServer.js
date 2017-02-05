@@ -44,23 +44,18 @@ export class AccountsServer {
       throw new AccountsError({ message: 'Match failed [400]' });
     }
 
-    const { username, email, id } = isString(user)
-      ? toUsernameAndEmail({ user })
-      // $FlowFixMe
-      : toUsernameAndEmail({ ...user });
-
     let foundUser;
 
     if (this.options.passwordAuthenticator) {
       try {
-        foundUser = await this._externalPasswordAuthenticator(this.options.passwordAuthenticator, id, username, email, password);
+        foundUser = await this._externalPasswordAuthenticator(this.options.passwordAuthenticator, user, password);
       }
       catch (e) {
         throw new AccountsError({ message: e });
       }
     }
     else {
-      foundUser = await this._defaultPasswordAuthenticator(id, username, email, password);
+      foundUser = await this._defaultPasswordAuthenticator(user, password);
     }
 
     if (!foundUser) {
@@ -81,11 +76,16 @@ export class AccountsServer {
     };
   }
 
-  async _externalPasswordAuthenticator(authFn, id, username, email, password) {
-    return await authFn(id, username, email, password, password);
+  async _externalPasswordAuthenticator(authFn, user: PasswordLoginUserType, password: string) {
+    return await authFn(user, password);
   }
 
-  async _defaultPasswordAuthenticator(id, username, email, password) {
+  async _defaultPasswordAuthenticator(user: PasswordLoginUserType, password: string) {
+    const { username, email, id } = isString(user)
+      ? toUsernameAndEmail({ user })
+      // $FlowFixMe
+      : toUsernameAndEmail({ ...user });
+
     let foundUser;
 
     if (id) {
