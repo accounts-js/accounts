@@ -40,7 +40,7 @@ describe('Accounts', () => {
     findUserByUsername: () => Promise.resolve(),
     findUserByEmail: () => Promise.resolve(),
     createUser: () => Promise.resolve(),
-    createSession: () => Promise.resolve()
+    createSession: () => Promise.resolve(),
   };
   describe('createUser', () => {
     beforeEach(() => {
@@ -196,7 +196,7 @@ describe('Accounts', () => {
       };
       const authenticator = jest.fn(() => Promise.resolve(user));
 
-      Accounts.config({ passwordAuthenticator: authenticator}, db);
+      Accounts.config({ passwordAuthenticator: authenticator }, db);
 
       const result = await Accounts.loginWithPassword('username', '123456');
 
@@ -403,7 +403,7 @@ describe('Accounts', () => {
         userId: '123',
         username: 'username',
       };
-      Accounts.config({ resumeSessionValidator: resumeSessionValidator}, {
+      Accounts.config({ resumeSessionValidator }, {
         findSessionById: () => Promise.resolve({
           sessionId: '456',
           valid: true,
@@ -424,7 +424,7 @@ describe('Accounts', () => {
         userId: '123',
         username: 'username',
       };
-      Accounts.config({ resumeSessionValidator: resumeSessionValidator}, {
+      Accounts.config({ resumeSessionValidator }, {
         findSessionById: () => Promise.resolve({
           sessionId: '456',
           valid: true,
@@ -438,8 +438,7 @@ describe('Accounts', () => {
       try {
         await Accounts.resumeSession(accessToken);
         throw new Error();
-      }
-      catch (err) {
+      } catch (err) {
         expect(resumeSessionValidator.mock.calls.length).toBe(1);
         expect(err.message).toEqual('Custom session error');
       }
