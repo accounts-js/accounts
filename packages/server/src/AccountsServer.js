@@ -36,7 +36,7 @@ export class AccountsServer {
   }
 
   options(): Object {
-    return this.instance.options;
+    return this._options;
   }
 
   // eslint-disable-next-line max-len
