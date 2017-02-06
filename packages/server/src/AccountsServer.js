@@ -62,7 +62,7 @@ export class AccountsServer {
     }
 
     // $FlowFixMe
-    const sessionId = await this.db.createSession(foundUser.id, ip, userAgent);
+    const sessionId = await this.db.createSession(foundUser.id || foundUser._id, ip, userAgent);
     const { accessToken, refreshToken } = this.createTokens(sessionId);
 
     return {
