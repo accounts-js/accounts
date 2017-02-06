@@ -34,9 +34,7 @@ export class AccountsClient {
   constructor(options: Object, transport: TransportInterface) {
     this.options = options;
     if (!transport) {
-      throw new AccountsError({
-        message: 'A REST or GraphQL transport is required',
-      });
+      throw new AccountsError('A REST or GraphQL transport is required');
     }
 
     this.transport = transport;
@@ -101,7 +99,7 @@ export class AccountsClient {
       } catch (err) {
         this.clearTokens();
         this.clearUser();
-        throw new AccountsError({ message: 'falsy token provided' });
+        throw new AccountsError('falsy token provided');
       }
     } else {
       this.clearTokens();
@@ -110,15 +108,22 @@ export class AccountsClient {
   }
   async createUser(user: CreateUserType, callback: ?Function): Promise<void> {
     if (!user || user.password === undefined) {
-      throw new AccountsError({ message: 'Unrecognized options for create user request [400]' });
+      throw new AccountsError(
+        'Unrecognized options for create user request',
+        {
+          username: user && user.username,
+          email: user && user.email,
+        },
+        400,
+      );
     }
 
     if (!validators.validatePassword(user.password)) {
-      throw new AccountsError({ message: 'Password is required' });
+      throw new AccountsError('Password is required');
     }
 
     if (!validators.validateUsername(user.username) && !validators.validateEmail(user.email)) {
-      throw new AccountsError({ message: 'Username or Email is required' });
+      throw new AccountsError('Username or Email is required');
     }
 
     try {
@@ -131,7 +136,7 @@ export class AccountsClient {
       if (callback && isFunction(callback)) {
         callback(err);
       }
-      throw new AccountsError({ message: err.message });
+      throw new AccountsError(err.message);
     }
   }
 
@@ -139,10 +144,10 @@ export class AccountsClient {
                           password: string,
                           callback: ?Function): Promise<void> {
     if (!password || !user) {
-      throw new AccountsError({ message: 'Unrecognized options for login request [400]' });
+      throw new AccountsError('Unrecognized options for login request', user, 400);
     }
     if ((!isString(user) && !isValidUserObject(user)) || !isString(password)) {
-      throw new AccountsError({ message: 'Match failed [400]' });
+      throw new AccountsError('Match failed', user, 400);
     }
 
     this.store.dispatch(loggingIn(true));
@@ -159,9 +164,9 @@ export class AccountsClient {
       if (callback && isFunction(callback)) {
         callback(err);
       }
-      throw new AccountsError({ message: err.message });
+      throw new AccountsError(err.message);
     }
-    this.store.dispatch(loggingIn(false));
+    this.store.dispatch(loggingIn(false), user);
   }
   loggingIn(): boolean {
     return (this.getState().get('loggingIn'): boolean);
@@ -172,7 +177,6 @@ export class AccountsClient {
   async logout(callback: ?Function): Promise<void> {
     try {
       const { accessToken } = this.tokens();
-      // $FlowFixMe
       await this.transport.logout(accessToken);
       this.clearTokens();
       this.store.dispatch(clearUser());
@@ -184,7 +188,7 @@ export class AccountsClient {
       if (callback && isFunction(callback)) {
         callback(err);
       }
-      throw new AccountsError({ message: err.message });
+      throw new AccountsError(err.message);
     }
   }
 }
@@ -227,7 +231,6 @@ const Accounts = {
     return this.instance.tokens();
   },
   resumeSession(): Promise<void> {
-    // $FlowFixMe
     return this.instance.resumeSession();
   },
   refreshSession(): Promise<void> {

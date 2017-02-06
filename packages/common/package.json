@@ -1,6 +1,6 @@
 {
   "name": "@accounts/common",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "publishConfig": {
@@ -9,7 +9,6 @@
   "scripts": {
     "start": "webpack -p --config --progress --watch",
     "compile": "babel ./src --out-dir ./lib",
-    "flow:check": "flow check",
     "prepublish": "npm run compile",
     "test": "npm run testonly",
     "test-ci": "npm lint && npm coverage",
@@ -19,7 +18,10 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "testRegex": "(/.*.(test|spec)).(js|jsx)$"
+    "testRegex": "(/.*.(test|spec)).(js|jsx)$",
+    "testPathDirs": [
+      "src"
+    ]
   },
   "repository": {
     "type": "git",
@@ -43,6 +45,7 @@
     "babel-loader": "^6.2.7",
     "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-plugin-transform-async-to-generator": "^6.16.0",
+    "babel-plugin-transform-builtin-extend": "^1.1.0",
     "babel-plugin-transform-flow-strip-types": "^6.21.0",
     "babel-plugin-transform-object-rest-spread": "^6.16.0",
     "babel-plugin-transform-regenerator": "^6.16.1",
@@ -57,7 +60,6 @@
     "webpack-node-externals": "^1.5.4"
   },
   "dependencies": {
-    "apollo-errors": "^1.2.1",
     "lodash": "^4.16.4"
   }
 }

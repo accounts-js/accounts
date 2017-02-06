@@ -24,7 +24,7 @@ import {
 } from './tokens';
 
 export class AccountsServer {
-  options: Object
+  _options: Object
   db: DBInterface
 
   config(options: Object, db: DBInterface) {
@@ -32,11 +32,6 @@ export class AccountsServer {
       ...config,
       ...options,
     };
-    if (!db) {
-      throw new AccountsError({
-        message: 'A database driver is required',
-      });
-    }
     this.db = db;
   }
 
@@ -47,42 +42,33 @@ export class AccountsServer {
   // eslint-disable-next-line max-len
   async loginWithPassword(user: PasswordLoginUserType, password: string, ip: ?string, userAgent: ?string): Promise<LoginReturnType> {
     if (!user || !password) {
-      throw new AccountsError({ message: 'Unrecognized options for login request [400]' });
+      throw new AccountsError('Unrecognized options for login request', user, 400);
     }
     if ((!isString(user) && !isPlainObject(user)) || !isString(password)) {
-      throw new AccountsError({ message: 'Match failed [400]' });
+      throw new AccountsError('Match failed', user, 400);
     }
-
-    const { username, email, id } = isString(user)
-      ? toUsernameAndEmail({ user })
-      // $FlowFixMe
-      : toUsernameAndEmail({ ...user });
 
     let foundUser;
-    if (id) {
-      foundUser = await this.db.findUserById(id);
-    } else if (username) {
-      foundUser = await this.db.findUserByUsername(username);
-    } else if (email) {
-      foundUser = await this.db.findUserByEmail(email);
-    }
-    if (!foundUser) {
-      throw new AccountsError({ message: 'User not found [403]' });
-    }
-    // $FlowFixMe
-    const hash = await this.db.findPasswordHash(foundUser.id);
-    if (!hash) {
-      throw new AccountsError({ message: 'User has no password set [403]' });
+
+    if (this._options.passwordAuthenticator) {
+      try {
+        foundUser = await this._externalPasswordAuthenticator(
+          this._options.passwordAuthenticator,
+          user,
+          password);
+      } catch (e) {
+        throw new AccountsError(e, user, 403);
+      }
+    } else {
+      foundUser = await this._defaultPasswordAuthenticator(user, password);
     }
 
-    const isValidPassword = await verifyPassword(password, hash);
-    if (!isValidPassword) {
-      throw new AccountsError({ message: 'Incorrect password [403]' });
+    if (!foundUser) {
+      throw new AccountsError('User not found', user, 403);
     }
 
     // $FlowFixMe
     const sessionId = await this.db.createSession(foundUser.id, ip, userAgent);
-
     const { accessToken, refreshToken } = this.createTokens(sessionId);
 
     return {
@@ -94,19 +80,59 @@ export class AccountsServer {
       },
     };
   }
+
+  // eslint-disable-next-line max-len
+  async _externalPasswordAuthenticator(authFn: Function, user: PasswordLoginUserType, password: string): Promise<any> {
+    return authFn(user, password);
+  }
+
+  async _defaultPasswordAuthenticator(user: PasswordLoginUserType, password: string): Promise<any> {
+    const { username, email, id } = isString(user)
+      ? toUsernameAndEmail({ user })
+      : toUsernameAndEmail({ ...user });
+
+    let foundUser;
+
+    if (id) {
+      foundUser = await this.db.findUserById(id);
+    } else if (username) {
+      foundUser = await this.db.findUserByUsername(username);
+    } else if (email) {
+      foundUser = await this.db.findUserByEmail(email);
+    }
+
+    if (!foundUser) {
+      throw new AccountsError('User not found', user, 403);
+    }
+    const hash = await this.db.findPasswordHash(foundUser.id);
+    if (!hash) {
+      throw new AccountsError('User has no password set', user, 403);
+    }
+
+    const isPasswordValid = await verifyPassword(password, hash);
+
+    if (!isPasswordValid) {
+      throw new AccountsError('Incorrect password', user, 403);
+    }
+
+    return foundUser;
+  }
+
   async createUser(user: CreateUserType): Promise<string> {
     if (!validators.validateUsername(user.username) && !validators.validateEmail(user.email)) {
-      throw new AccountsError({ message: 'Username or Email is required' });
+      throw new AccountsError(
+        'Username or Email is required',
+        {
+          username: user && user.username,
+          email: user && user.email,
+        },
+      );
     }
     if (user.username && await this.db.findUserByUsername(user.username)) {
-      throw new AccountsError({
-        message: 'Username already exists',
-      });
+      throw new AccountsError('Username already exists', { username: user.username });
     }
     if (user.email && await this.db.findUserByEmail(user.email)) {
-      throw new AccountsError({
-        message: 'Email already exists',
-      });
+      throw new AccountsError('Email already exists', { email: user.email });
     }
 
     // TODO Accounts.onCreateUser
@@ -122,9 +148,7 @@ export class AccountsServer {
   // eslint-disable-next-line max-len
   async refreshTokens(accessToken: string, refreshToken: string, ip: string, userAgent: string): Promise<LoginReturnType> {
     if (!isString(accessToken) || !isString(refreshToken)) {
-      throw new AccountsError({
-        message: 'An accessToken and refreshToken are required',
-      });
+      throw new AccountsError('An accessToken and refreshToken are required');
     }
 
     let sessionId;
@@ -135,24 +159,18 @@ export class AccountsServer {
       });
       sessionId = decodedAccessToken.data.sessionId;
     } catch (err) {
-      throw new AccountsError({
-        message: 'Tokens are not valid',
-      });
+      throw new AccountsError('Tokens are not valid');
     }
 
     const session : SessionType = await this.db.findSessionById(sessionId);
     if (!session) {
-      throw new AccountsError({
-        message: 'Session not found',
-      });
+      throw new AccountsError('Session not found');
     }
 
     if (session.valid) {
       const user = await this.db.findUserById(session.userId);
       if (!user) {
-        throw new AccountsError({
-          message: 'User not found',
-        });
+        throw new AccountsError('User not found', { id: session.userId });
       }
       const tokens = this.createTokens(sessionId);
       await this.db.updateSession(sessionId, ip, userAgent);
@@ -162,9 +180,7 @@ export class AccountsServer {
         tokens,
       };
     } else { // eslint-disable-line no-else-return
-      throw new AccountsError({
-        message: 'Session is no longer valid',
-      });
+      throw new AccountsError('Session is no longer valid', { id: session.userId });
     }
   }
   createTokens(sessionId: string): TokensType {
@@ -187,15 +203,11 @@ export class AccountsServer {
     if (session.valid) {
       const user = await this.db.findUserById(session.userId);
       if (!user) {
-        throw new AccountsError({
-          message: 'User not found',
-        });
+        throw new AccountsError('User not found', { id: session.userId });
       }
       await this.db.invalidateSession(session.sessionId);
     } else { // eslint-disable-line no-else-return
-      throw new AccountsError({
-        message: 'Session is no longer valid',
-      });
+      throw new AccountsError('Session is no longer valid', { id: session.userId });
     }
   }
   async resumeSession(accessToken: string): Promise<?UserObjectType> {
@@ -203,19 +215,24 @@ export class AccountsServer {
     if (session.valid) {
       const user = await this.db.findUserById(session.userId);
       if (!user) {
-        throw new AccountsError({
-          message: 'User not found',
-        });
+        throw new AccountsError('User not found', { id: session.userId });
       }
+
+      if (this._options.resumeSessionValidator) {
+        try {
+          await this._options.resumeSessionValidator(user, session);
+        } catch (e) {
+          throw new AccountsError(e, { id: session.userId }, 403);
+        }
+      }
+
       return user;
     }
     return null;
   }
   async findSessionByAccessToken(accessToken: string): Promise<SessionType> {
     if (!isString(accessToken)) {
-      throw new AccountsError({
-        message: 'An accessToken is required',
-      });
+      throw new AccountsError('An accessToken is required');
     }
 
     let sessionId;
@@ -223,17 +240,14 @@ export class AccountsServer {
       const decodedAccessToken = jwt.verify(accessToken, this._options.tokenSecret);
       sessionId = decodedAccessToken.data.sessionId;
     } catch (err) {
-      throw new AccountsError({
-        message: 'Tokens are not valid',
-      });
+      throw new AccountsError('Tokens are not valid');
     }
 
     const session : SessionType = await this.db.findSessionById(sessionId);
     if (!session) {
-      throw new AccountsError({
-        message: 'Session not found',
-      });
+      throw new AccountsError('Session not found');
     }
+
     return session;
   }
   findUserByEmail(email: string): Promise<?UserObjectType> {
@@ -254,22 +268,16 @@ export class AccountsServer {
   async verifyEmail(token: string): Promise<void> {
     const user = await this.db.findUserByEmailVerificationToken();
     if (!user) {
-      throw new AccountsError({
-        message: 'Verify email link expired',
-      });
+      throw new AccountsError('Verify email link expired');
     }
     const tokenRecord = find(user.services.email.verificationTokens,
                              (t: Object) => t.token === token);
     if (!tokenRecord) {
-      throw new AccountsError({
-        message: 'Verify email link expired',
-      });
+      throw new AccountsError('Verify email link expired');
     }
     const emailRecord = find(user.emails, (e: Object) => e.address === tokenRecord.address);
     if (!emailRecord) {
-      throw new AccountsError({
-        message: 'Verify email link is for unknown address',
-      });
+      throw new AccountsError('Verify email link is for unknown address');
     }
     await this.db.verifyEmail(user.id, emailRecord);
   }
@@ -279,18 +287,14 @@ export class AccountsServer {
   async setProfile(userId: string, profile: Object): Promise<void> {
     const user = await this.db.findUserById(userId);
     if (!user) {
-      throw new AccountsError({
-        message: 'User not found',
-      });
+      throw new AccountsError('User not found', { id: userId });
     }
     await this.db.setProfile(userId, profile);
   }
   async updateProfile(userId: string, profile: Object): Promise<Object> {
     const user = await this.db.findUserById(userId);
     if (!user) {
-      throw new AccountsError({
-        message: 'User not found',
-      });
+      throw new AccountsError('User not found', { id: userId });
     }
     const res = await this.db.setProfile(userId, { ...user.profile, ...profile });
     return res;

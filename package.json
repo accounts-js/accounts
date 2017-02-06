@@ -5,6 +5,7 @@
     "link": "lerna exec -- npm link",
     "compile": "lerna run compile",
     "lint": "eslint packages/*/src",
+    "flow:check": "flow check",
     "prebootstrap": "npm install",
     "postinstall": "lerna bootstrap",
     "pretest": "npm run compile",
@@ -31,6 +32,6 @@
     "eslint-plugin-react": "^6.9.0",
     "eslint-plugin-require-jsdoc": "^1.0.4",
     "flow-bin": "^0.38.0",
-    "lerna": "2.0.0-beta.32"
+    "lerna": "2.0.0-beta.36"
   }
 }
