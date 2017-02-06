@@ -24,15 +24,21 @@ import {
 } from './tokens';
 
 export class AccountsServer {
-  options: Object;
-  db: DBInterface;
-  constructor(options: Object, db: DBInterface) {
-    this.options = options;
-    if (!db) {
-      throw new AccountsError('A database driver is required');
-    }
+  _options: Object
+  db: DBInterface
+
+  config(options: Object, db: DBInterface) {
+    this._options = {
+      ...config,
+      ...options,
+    };
     this.db = db;
   }
+
+  options(): Object {
+    return this._options;
+  }
+
   // eslint-disable-next-line max-len
   async loginWithPassword(user: PasswordLoginUserType, password: string, ip: ?string, userAgent: ?string): Promise<LoginReturnType> {
     if (!user || !password) {
@@ -44,10 +50,10 @@ export class AccountsServer {
 
     let foundUser;
 
-    if (this.options.passwordAuthenticator) {
+    if (this._options.passwordAuthenticator) {
       try {
         foundUser = await this._externalPasswordAuthenticator(
-          this.options.passwordAuthenticator,
+          this._options.passwordAuthenticator,
           user,
           password);
       } catch (e) {
@@ -147,8 +153,8 @@ export class AccountsServer {
 
     let sessionId;
     try {
-      jwt.verify(refreshToken, this.options.tokenSecret);
-      const decodedAccessToken = jwt.verify(accessToken, this.options.tokenSecret, {
+      jwt.verify(refreshToken, this._options.tokenSecret);
+      const decodedAccessToken = jwt.verify(accessToken, this._options.tokenSecret, {
         ignoreExpiration: true,
       });
       sessionId = decodedAccessToken.data.sessionId;
@@ -178,7 +184,7 @@ export class AccountsServer {
     }
   }
   createTokens(sessionId: string): TokensType {
-    const { tokenSecret, tokenConfigs } = this.options;
+    const { tokenSecret, tokenConfigs } = this._options;
     const accessToken = generateAccessToken({
       data: {
         sessionId,
@@ -212,9 +218,9 @@ export class AccountsServer {
         throw new AccountsError('User not found', { id: session.userId });
       }
 
-      if (this.options.resumeSessionValidator) {
+      if (this._options.resumeSessionValidator) {
         try {
-          await this.options.resumeSessionValidator(user, session);
+          await this._options.resumeSessionValidator(user, session);
         } catch (e) {
           throw new AccountsError(e, { id: session.userId }, 403);
         }
@@ -231,7 +237,7 @@ export class AccountsServer {
 
     let sessionId;
     try {
-      const decodedAccessToken = jwt.verify(accessToken, this.options.tokenSecret);
+      const decodedAccessToken = jwt.verify(accessToken, this._options.tokenSecret);
       sessionId = decodedAccessToken.data.sessionId;
     } catch (err) {
       throw new AccountsError('Tokens are not valid');
@@ -295,63 +301,4 @@ export class AccountsServer {
   }
 }
 
-const Accounts = {
-  instance: AccountsServer,
-  config(options: Object, db: DBInterface) {
-    this.instance = new AccountsServer({
-      ...config,
-      ...options,
-    }, db);
-  },
-  options(): Object {
-    return this.instance.options;
-  },
-  loginWithPassword(
-    user: string, password: string, ip: string, userAgent: string,
-  ): Promise<LoginReturnType> {
-    return this.instance.loginWithPassword(user, password, ip, userAgent);
-  },
-  createUser(user: CreateUserType): Promise<string> {
-    return this.instance.createUser(user);
-  },
-  findUserByEmail(email: string, onlyId: ?boolean): Promise<UserObjectType | string | null> {
-    return this.instance.findUserByEmail(email, onlyId);
-  },
-  findUserByUsername(username: string, onlyId: ?boolean): Promise<UserObjectType | string | null> {
-    return this.instance.findUserByUsername(username, onlyId);
-  },
-  findUserById(userId: string): Promise<?UserObjectType> {
-    return this.instance.findUserById(userId);
-  },
-  addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
-    return this.instance.addEmail(userId, newEmail, verified);
-  },
-  removeEmail(userId: string, newEmail: string): Promise<void> {
-    return this.instance.removeEmail(userId, newEmail);
-  },
-  verifyEmail(token: string): Promise<void> {
-    return this.instance.verifyEmail(token);
-  },
-  setPassword(userId: string, newPassword: string): Promise<void> {
-    return this.instance.setPassword(userId, newPassword);
-  },
-  refreshTokens(
-    accessToken: string, refreshToken: string, ip: string, userAgent: string,
-  ): Promise<LoginReturnType> {
-    return this.instance.refreshTokens(accessToken, refreshToken, ip, userAgent);
-  },
-  logout(accessToken: string): Promise<void> {
-    return this.instance.logout(accessToken);
-  },
-  resumeSession(accessToken: string): Promise<UserObjectType> {
-    return this.instance.resumeSession(accessToken);
-  },
-  setProfile(userId: string, profile: Object): Promise<void> {
-    return this.instance.setProfile(userId, profile);
-  },
-  updateProfile(userId: string, profile: Object): Promise<Object> {
-    return this.instance.updateProfile(userId, profile);
-  },
-};
-
-export default Accounts;
+export default new AccountsServer();
