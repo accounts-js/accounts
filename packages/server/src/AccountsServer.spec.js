@@ -37,6 +37,15 @@ describe('Accounts', () => {
       expect(Accounts._options.passwordAuthenticator).toBeUndefined();
     });
   });
+
+  describe('options', () => {
+    it('should return options', () => {
+      Accounts.config({ config: 'config' }, {});
+      const options = Accounts.options();
+      expect(options.config).toEqual('config');
+    });
+  });
+
   const db = {
     findUserByUsername: () => Promise.resolve(),
     findUserByEmail: () => Promise.resolve(),
@@ -310,6 +319,25 @@ describe('Accounts', () => {
       });
     });
     describe('logout', () => {
+      it('throws error if user is not found', async () => {
+        Accounts.config({}, {
+          findSessionById: () => Promise.resolve({
+            sessionId: '456',
+            valid: true,
+            userId: '123',
+          }),
+          findUserById: () => Promise.resolve(null),
+        });
+        try {
+          const { accessToken } = Accounts.createTokens('456');
+          await Accounts.logout(accessToken);
+          throw new Error();
+        } catch (err) {
+          const { message } = err;
+          expect(message).toEqual('User not found');
+        }
+      });
+
       it('invalidates session', async () => {
         const invalidateSession = jest.fn(() => Promise.resolve());
         const user = {
@@ -378,7 +406,93 @@ describe('Accounts', () => {
         }
       });
     });
+
+    describe('findUserByEmail', () => {
+      it('call this.db.findUserByEmail', async () => {
+        const findUserByEmail = jest.fn(() => Promise.resolve('user'));
+        Accounts.config({}, { findUserByEmail });
+        const user = await Accounts.findUserByEmail('email');
+        expect(findUserByEmail.mock.calls[0]).toEqual(['email']);
+        expect(user).toEqual('user');
+      });
+    });
+
+    describe('findUserByUsername', () => {
+      it('call this.db.findUserByUsername', async () => {
+        const findUserByUsername = jest.fn(() => Promise.resolve('user'));
+        Accounts.config({}, { findUserByUsername });
+        const user = await Accounts.findUserByUsername('username');
+        expect(findUserByUsername.mock.calls[0]).toEqual(['username']);
+        expect(user).toEqual('user');
+      });
+    });
+
+    describe('findUserById', () => {
+      it('call this.db.findUserById', async () => {
+        const findUserById = jest.fn(() => Promise.resolve('user'));
+        Accounts.config({}, { findUserById });
+        const user = await Accounts.findUserById('id');
+        expect(findUserById.mock.calls[0]).toEqual(['id']);
+        expect(user).toEqual('user');
+      });
+    });
+
+    describe('addEmail', () => {
+      it('call this.db.addEmail', async () => {
+        const addEmail = jest.fn(() => Promise.resolve());
+        Accounts.config({}, { addEmail });
+        await Accounts.addEmail('id', 'email', true);
+        expect(addEmail.mock.calls[0]).toEqual(['id', 'email', true]);
+      });
+    });
+
+    describe('removeEmail', () => {
+      it('call this.db.removeEmail', async () => {
+        const removeEmail = jest.fn(() => Promise.resolve());
+        Accounts.config({}, { removeEmail });
+        await Accounts.removeEmail('id', 'email');
+        expect(removeEmail.mock.calls[0]).toEqual(['id', 'email']);
+      });
+    });
+
     describe('resumeSession', () => {
+      it('throws error if user is not found', async () => {
+        Accounts.config({}, {
+          findSessionById: () => Promise.resolve({
+            sessionId: '456',
+            valid: true,
+            userId: '123',
+          }),
+          findUserById: () => Promise.resolve(null),
+        });
+        try {
+          const { accessToken } = Accounts.createTokens('456');
+          await Accounts.resumeSession(accessToken);
+          throw new Error();
+        } catch (err) {
+          const { message } = err;
+          expect(message).toEqual('User not found');
+        }
+      });
+
+      it('return false if session is not valid', async () => {
+        const user = {
+          userId: '123',
+          username: 'username',
+        };
+        Accounts.config({}, {
+          findSessionById: () => Promise.resolve({
+            sessionId: '456',
+            valid: false,
+            userId: '123',
+          }),
+          findUserById: () => Promise.resolve(user),
+        });
+        const { accessToken } = Accounts.createTokens('456');
+        const ret = await Accounts.resumeSession(accessToken);
+        expect(ret).not.toBeTruthy();
+      });
+
       it('return user', async () => {
         const user = {
           userId: '123',
@@ -397,6 +511,7 @@ describe('Accounts', () => {
         expect(foundUser).toEqual(user);
       });
     });
+
     it('return user with custom validation method', async () => {
       const resumeSessionValidator = jest.fn(() => Promise.resolve({}));
 
@@ -418,6 +533,7 @@ describe('Accounts', () => {
 
       expect(resumeSessionValidator.mock.calls.length).toBe(1);
     });
+
     it('throw when custom validation method rejects', async () => {
       const resumeSessionValidator = jest.fn(() => Promise.reject('Custom session error'));
 
@@ -444,7 +560,21 @@ describe('Accounts', () => {
         expect(err.message).toEqual('Custom session error');
       }
     });
+
     describe('setProfile', () => {
+      it('throws error if user is not found', async () => {
+        Accounts.config({}, {
+          findUserById: () => Promise.resolve(null),
+        });
+        try {
+          await Accounts.setProfile();
+          throw new Error();
+        } catch (err) {
+          const { message } = err;
+          expect(message).toEqual('User not found');
+        }
+      });
+
       it('calls set profile on db interface', async () => {
         const user = {
           userId: '123',
@@ -463,6 +593,7 @@ describe('Accounts', () => {
         expect(setProfile.mock.calls[0][0]).toEqual('123');
         expect(setProfile.mock.calls[0][1]).toEqual(profile);
       });
+
       it('merges profile and calls set profile on db interface', async () => {
         const user = {
           userId: '123',
