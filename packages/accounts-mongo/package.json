@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "start": "webpack -p --config --progress --watch",
-    "compile": "babel ./src --out-dir ./lib",
+    "compile": "babel ./src --out-dir ./lib --ignore *.spec.js",
     "flow": "flow; test $? -eq 0 -o $? -eq 2",
     "flow:check": "flow check",
     "prepare": "yarn compile",
