@@ -7,3 +7,27 @@
 ## Note
 
 This package is under active development.
+
+## Install
+```
+yarn add @accounts/mongo
+```
+
+## Usage
+
+```javascript
+import AccountsServer from '@accounts/server';
+import MongoDBInterface from '@accounts/mongo';
+
+// If you are using mongoose
+mongoose.connect(process.env.MONGO_URL);
+const db = mongoose.connection;
+
+// If you are using mongodb
+const db =  await mongodb.MongoClient.connect(process.env.MONGO_URL);
+
+AccountsServer.config({
+}, new MongoDBInterface(db));
+```
+
+The users will be saved under the `users` collection.
