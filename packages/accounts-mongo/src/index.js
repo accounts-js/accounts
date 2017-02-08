@@ -93,16 +93,28 @@ class Mongo {
     return ret.ops[0]._id;
   }
 
-  findUserById(userId: string): Promise<?UserObjectType> {
-    return this.collection.findOne({ _id: toMongoID(userId) });
+  async findUserById(userId: string): Promise<?UserObjectType> {
+    const user = await this.collection.findOne({ _id: toMongoID(userId) });
+    if (user) {
+      user.id = user._id;
+    }
+    return user;
   }
 
-  findUserByEmail(email: string): Promise<?UserObjectType> {
-    return this.collection.findOne({ 'emails.address': email.toLowerCase() });
+  async findUserByEmail(email: string): Promise<?UserObjectType> {
+    const user = await this.collection.findOne({ 'emails.address': email.toLowerCase() });
+    if (user) {
+      user.id = user._id;
+    }
+    return user;
   }
 
-  findUserByUsername(username: string): Promise<?UserObjectType> {
-    return this.collection.findOne({ username });
+  async findUserByUsername(username: string): Promise<?UserObjectType> {
+    const user = await this.collection.findOne({ username });
+    if (user) {
+      user.id = user._id;
+    }
+    return user;
   }
 
   async findPasswordHash(userId: string): Promise<?string> {
