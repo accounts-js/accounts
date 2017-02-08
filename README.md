@@ -28,7 +28,7 @@ Finally you'll need a data store adapter. We support the following data stores.
 
 - [x] [Mongo](https://github.com/js-accounts/mongo)
 - [x] [Redis](https://github.com/js-accounts/redis)
-- [ ] [MySQL](https://github.com/js-accounts/sql)
+- [ ] [SQL](https://github.com/js-accounts/sql) with [sequelize](http://docs.sequelizejs.com/en/v3/)
 
 ```
 npm i -S @accounts/mongo
