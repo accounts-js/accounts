@@ -15,22 +15,27 @@ This package, along with the rest of the packages under the `js-accounts` organi
 Install the core package.
 
 ```
-npm i -S @accounts/accounts
+npm i -S @accounts/server
 ```
 
-Next install the package based on the the type of transport you are using. We support GraphQL and REST.
+Next install the package based on the the type of transport and the web framework you are using. We support GraphQL and REST for the transport and Express.
 
 ```
-npm i -S @accounts/graphql
-npm i -S @accounts/rest
+npm i -S @accounts/rest-express
 ```
 
 Finally you'll need a data store adapter. We support the following data stores.
 
-- [ ] Mongo
-- [ ] MySQL
+- [x] [Mongo](https://github.com/js-accounts/mongo)
+- [x] [Redis](https://github.com/js-accounts/redis)
+- [ ] [MySQL](https://github.com/js-accounts/sql)
 
 ```
 npm i -S @accounts/mongo
+npm i -S @accounts/redis
 npm i -S @accounts/sql
 ```
+
+## Example
+
+You can find a working example [here](https://github.com/js-accounts/rest-example).
