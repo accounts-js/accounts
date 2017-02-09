@@ -32,6 +32,9 @@ export class AccountsServer {
       ...config,
       ...options,
     };
+    if (!db) {
+      throw new AccountsError('A database driver is required');
+    }
     this.db = db;
   }
 
