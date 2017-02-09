@@ -13,6 +13,7 @@ describe('Accounts', () => {
     it('requires a db driver', () => {
       try {
         Accounts.config();
+        throw new Error();
       } catch (err) {
         const { message } = err;
         expect(message).toEqual('A database driver is required');
