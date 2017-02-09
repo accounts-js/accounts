@@ -1,6 +1,5 @@
 // @flow
 
-import { get } from 'lodash';
 import { encryption } from '@accounts/server';
 import type {
   CreateUserType,
@@ -57,8 +56,8 @@ class Mongo {
       },
     };
     this.options = { ...defaultOptions, ...options };
-    if (get(db, 'constructor.define.name') !== 'Db') {
-      throw new Error('A valid database connection object is required');
+    if (!db) {
+      throw new Error('A database connection is required');
     }
     this.db = db;
     this.collection = this.db.collection(this.options.collectionName);
