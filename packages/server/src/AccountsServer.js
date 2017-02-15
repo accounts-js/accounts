@@ -21,7 +21,7 @@ import { verifyPassword } from './encryption';
 import {
   generateAccessToken,
   generateRefreshToken,
-  generateEmailToken,
+  generateRandomToken,
 } from './tokens';
 import Email from './email';
 import emailTemplates from './emailTemplates';
@@ -336,7 +336,7 @@ export class AccountsServer {
     if (!address || !includes(user.emails.map((email: string) => email.address), address)) {
       throw new AccountsError('No such email address for user');
     }
-    const token = generateEmailToken();
+    const token = generateRandomToken();
     await this.db.addEmailVerificationToken(userId, address, token);
     const verifyEmailUrl = `${this._options.siteUrl}/verify-email/${token}`;
     await this.email.sendMail({
@@ -345,6 +345,31 @@ export class AccountsServer {
       to: address,
       subject: this.emailTemplates.verifyEmail.subject(user),
       text: this.emailTemplates.verifyEmail.text(user, verifyEmailUrl),
+    });
+  }
+
+  async sendResetPasswordEmail(userId: string, address: string): Promise<void> {
+    const user = await this.db.findUserById(userId);
+    if (!user) {
+      throw new AccountsError('User not found', { id: userId });
+    }
+    // Pick the first email if we weren't passed an email
+    if (!address && user.emails && user.emails[0]) {
+      address = user.emails[0].address; // eslint-disable-line no-param-reassign
+    }
+    // Make sure the address is valid
+    if (!address || !includes(user.emails.map((email: string) => email.address), address)) {
+      throw new AccountsError('No such email address for user');
+    }
+    const token = generateRandomToken();
+    await this.db.addPasswordResetToken(userId, address, token);
+    const resetPasswordUrl = `${this._options.siteUrl}/reset-password/${token}`;
+    await this.email.sendMail({
+      from: this.emailTemplates.resetPassword.from ?
+        this.emailTemplates.resetPassword.from : this.emailTemplates.from,
+      to: address,
+      subject: this.emailTemplates.resetPassword.subject(user),
+      text: this.emailTemplates.resetPassword.text(user, resetPasswordUrl),
     });
   }
 }
