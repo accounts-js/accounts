@@ -720,7 +720,7 @@ describe('Accounts', () => {
         };
         Accounts.config({}, {
           findUserById: () => Promise.resolve(user),
-          addPasswordResetToken: () => Promise.resolve('token'),
+          addResetPasswordToken: () => Promise.resolve('token'),
         });
         Accounts.email = { sendMail: jest.fn() };
         await Accounts.sendResetPasswordEmail('userId');
@@ -737,7 +737,7 @@ describe('Accounts', () => {
         };
         Accounts.config({}, {
           findUserById: () => Promise.resolve(user),
-          addPasswordResetToken: () => Promise.resolve('token'),
+          addResetPasswordToken: () => Promise.resolve('token'),
         });
         Accounts.email = { sendMail: jest.fn() };
         await Accounts.sendResetPasswordEmail('userId', 'email');
