@@ -294,11 +294,32 @@ export class AccountsServer {
     if (!tokenRecord) {
       throw new AccountsError('Verify email link expired');
     }
+    // TODO check time for expiry date
     const emailRecord = find(user.emails, (e: Object) => e.address === tokenRecord.address);
     if (!emailRecord) {
       throw new AccountsError('Verify email link is for unknown address');
     }
     await this.db.verifyEmail(user.id, emailRecord);
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<void> {
+    const user = await this.db.findUserByResetPasswordToken(token);
+    if (!user) {
+      throw new AccountsError('Reset password link expired');
+    }
+    const resetTokenRecord = find(user.services.password.resetTokens,
+                                  (t: Object) => t.token === token);
+    if (!resetTokenRecord) {
+      throw new AccountsError('Reset password link expired');
+    }
+    // TODO check time for expiry date
+    if (!includes(user.emails.map((email: string) => email.address), resetTokenRecord.email)) {
+      throw new AccountsError('Token has invalid email address');
+    }
+    // Change the user password and remove the old token
+    await this.db.setResetPasssword(user.id, resetTokenRecord.email, newPassword, token);
+    // Changing the password should invalidate existing sessions
+    this.db.invalidateAllSessions(user.id);
   }
 
   setPassword(userId: string, newPassword: string): Promise<void> {
