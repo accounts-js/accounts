@@ -622,5 +622,51 @@ describe('Accounts', () => {
         expect(res).toEqual(mergedProfile);
       });
     });
+
+    describe('sendVerificationEmail', () => {
+      it('throws error if user is not found', async () => {
+        Accounts.config({}, {
+          findUserById: () => Promise.resolve(null),
+        });
+        try {
+          await Accounts.sendVerificationEmail();
+          throw new Error();
+        } catch (err) {
+          expect(err.message).toEqual('User not found');
+        }
+      });
+
+      it('throws when bad email address passed', async () => {
+        const user = {
+          emails: [{ address: 'email' }],
+        };
+        Accounts.config({}, {
+          findUserById: () => Promise.resolve(user),
+        });
+        try {
+          await Accounts.sendVerificationEmail('userId', 'toto');
+          throw new Error();
+        } catch (err) {
+          expect(err.message).toEqual('No such email address for user');
+        }
+      });
+
+      it('should send email', async () => {
+        const user = {
+          emails: [{ address: 'email' }],
+        };
+        Accounts.config({}, {
+          findUserById: () => Promise.resolve(user),
+          addEmailVerificationToken: () => Promise.resolve('token'),
+        });
+        Accounts.email = { sendMail: jest.fn() };
+        await Accounts.sendVerificationEmail('userId', 'email');
+        expect(Accounts.email.sendMail.mock.calls.length).toEqual(1);
+        expect(Accounts.email.sendMail.mock.calls[0][0].from).toBeTruthy();
+        expect(Accounts.email.sendMail.mock.calls[0][0].to).toEqual('email');
+        expect(Accounts.email.sendMail.mock.calls[0][0].subject).toBeTruthy();
+        expect(Accounts.email.sendMail.mock.calls[0][0].text).toBeTruthy();
+      });
+    });
   });
 });

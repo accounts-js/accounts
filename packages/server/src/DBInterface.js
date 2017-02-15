@@ -22,5 +22,6 @@ export interface DBInterface {
   updateSession(sessionId: string, ip: string, userAgent: string) : Promise<void>,
   invalidateSession(sessionId: string): Promise<void>,
   findSessionById(sessionId: string) : Promise<?SessionType>,
+  addEmailVerificationToken(userId: string, email: string) : Promise<string>,
   setProfile(userId: string, profile: Object) : Promise<Object>
 }
