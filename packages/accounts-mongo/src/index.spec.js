@@ -197,6 +197,39 @@ describe('Mongo', () => {
     });
   });
 
+  describe('findUserByEmailVerificationToken', () => {
+    it('should return null for not found user', async () => {
+      const ret = await mongo.findUserByEmailVerificationToken('token');
+      expect(ret).not.toBeTruthy();
+    });
+
+    it('should return user', async () => {
+      const userId = await mongo.createUser(user);
+      await mongo.addEmailVerificationToken(userId, 'john@doe.com', 'token');
+      const ret = await mongo.findUserByEmailVerificationToken('token');
+      expect(ret).toBeTruthy();
+      expect(ret._id).toBeTruthy();
+      expect(ret.id).toBeTruthy();
+    });
+  });
+
+  describe('findUserByResetPasswordToken', () => {
+    it('should return null for not found user', async () => {
+      const ret = await mongo.findUserByResetPasswordToken('token');
+      expect(ret).not.toBeTruthy();
+    });
+
+    it('should return user', async () => {
+      const userId = await mongo.createUser(user);
+      await mongo.addResetPasswordToken(userId, 'john@doe.com', 'token');
+      const ret = await mongo.findUserByResetPasswordToken('token');
+      await delay(10);
+      expect(ret).toBeTruthy();
+      expect(ret._id).toBeTruthy();
+      expect(ret.id).toBeTruthy();
+    });
+  });
+
   describe('findPasswordHash', () => {
     it('should return null on not found user', async () => {
       const ret = await mongo.findPasswordHash('589871d1c9393d445745a57c');
@@ -379,6 +412,45 @@ describe('Mongo', () => {
       const ret = await mongo.findSessionById(sessionId);
       expect(ret.valid).toEqual(false);
       expect(ret.createdAt).not.toEqual(ret.updatedAt);
+    });
+  });
+
+  describe('invalidateAllSessions', () => {
+    it('invalidates all sessions', async () => {
+      const sessionId1 = await mongo.createSession(session.userId, session.ip, session.userAgent);
+      const sessionId2 = await mongo.createSession(session.userId, session.ip, session.userAgent);
+      await delay(10);
+      await mongo.invalidateAllSessions(session.userId);
+      const session1 = await mongo.findSessionById(sessionId1);
+      const session2 = await mongo.findSessionById(sessionId2);
+      expect(session1.valid).toEqual(false);
+      expect(session1.createdAt).not.toEqual(session1.updatedAt);
+      expect(session2.valid).toEqual(false);
+      expect(session2.createdAt).not.toEqual(session2.updatedAt);
+    });
+  });
+
+  describe('addEmailVerificationToken', () => {
+    it('should add a token', async () => {
+      const userId = await mongo.createUser(user);
+      await mongo.addEmailVerificationToken(userId, 'john@doe.com', 'token');
+      const retUser = await mongo.findUserById(userId);
+      expect(retUser.services.email.verificationTokens.length).toEqual(1);
+      expect(retUser.services.email.verificationTokens[0].address).toEqual('john@doe.com');
+      expect(retUser.services.email.verificationTokens[0].token).toEqual('token');
+      expect(retUser.services.email.verificationTokens[0].when).toBeTruthy();
+    });
+  });
+
+  describe('addResetPasswordToken', () => {
+    it('should add a token', async () => {
+      const userId = await mongo.createUser(user);
+      await mongo.addResetPasswordToken(userId, 'john@doe.com', 'token');
+      const retUser = await mongo.findUserById(userId);
+      expect(retUser.services.password.reset.length).toEqual(1);
+      expect(retUser.services.password.reset[0].address).toEqual('john@doe.com');
+      expect(retUser.services.password.reset[0].token).toEqual('token');
+      expect(retUser.services.password.reset[0].when).toBeTruthy();
     });
   });
 

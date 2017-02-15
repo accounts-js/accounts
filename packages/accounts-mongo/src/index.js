@@ -116,6 +116,22 @@ class Mongo {
     return user;
   }
 
+  async findUserByEmailVerificationToken(token: string): Promise<?UserObjectType> {
+    const user = await this.collection.findOne({ 'services.email.verificationTokens.token': token });
+    if (user) {
+      user.id = user._id;
+    }
+    return user;
+  }
+
+  async findUserByResetPasswordToken(token: string): Promise<?UserObjectType> {
+    const user = await this.collection.findOne({ 'services.password.reset.token': token });
+    if (user) {
+      user.id = user._id;
+    }
+    return user;
+  }
+
   async findPasswordHash(userId: string): Promise<?string> {
     const user = await this.findUserById(toMongoID(userId));
     if (user) {
@@ -215,8 +231,41 @@ class Mongo {
     });
   }
 
+  async invalidateAllSessions(userId: string): Promise<void> {
+    await this.sessionCollection.updateMany({ userId }, {
+      $set: {
+        valid: false,
+        [this.options.timestamps.updatedAt]: Date.now(),
+      },
+    });
+  }
+
   findSessionById(sessionId: string): Promise<?SessionType> {
     return this.sessionCollection.findOne({ _id: toMongoID(sessionId) });
+  }
+
+  async addEmailVerificationToken(userId: string, email: string, token: string): Promise<void> {
+    await this.collection.update({ _id: userId }, {
+      $push: {
+        'services.email.verificationTokens': {
+          token,
+          address: email.toLowerCase(),
+          when: Date.now(),
+        },
+      },
+    });
+  }
+
+  async addResetPasswordToken(userId: string, email: string, token: string): Promise<void> {
+    await this.collection.update({ _id: userId }, {
+      $push: {
+        'services.password.reset': {
+          token,
+          address: email.toLowerCase(),
+          when: Date.now(),
+        },
+      },
+    });
   }
 }
 
