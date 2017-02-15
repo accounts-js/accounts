@@ -39,7 +39,11 @@ export class AccountsServer {
       throw new AccountsError('A database driver is required');
     }
     this.db = db;
-    this.email = new Email(config.email);
+    if (options.sendMail) {
+      this.email = { sendMail: options.sendMail };
+    } else {
+      this.email = new Email(config.email);
+    }
     this.emailTemplates = emailTemplates;
   }
 
