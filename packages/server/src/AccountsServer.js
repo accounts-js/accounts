@@ -21,6 +21,7 @@ import { verifyPassword } from './encryption';
 import {
   generateAccessToken,
   generateRefreshToken,
+  generateEmailToken,
 } from './tokens';
 import Email from './email';
 import emailTemplates from './emailTemplates';
@@ -335,14 +336,15 @@ export class AccountsServer {
     if (!address || !includes(user.emails.map((email: string) => email.address), address)) {
       throw new AccountsError('No such email address for user');
     }
-    const token = await this.db.addEmailVerificationToken(userId, address);
-    const resetPasswordUrl = `${this._options.siteUrl}/verify-email/${token}`;
+    const token = generateEmailToken();
+    await this.db.addEmailVerificationToken(userId, address, token);
+    const verifyEmailUrl = `${this._options.siteUrl}/verify-email/${token}`;
     await this.email.sendMail({
       from: this.emailTemplates.verifyEmail.from ?
         this.emailTemplates.verifyEmail.from : this.emailTemplates.from,
       to: address,
       subject: this.emailTemplates.verifyEmail.subject(user),
-      text: this.emailTemplates.verifyEmail.text(user, resetPasswordUrl),
+      text: this.emailTemplates.verifyEmail.text(user, verifyEmailUrl),
     });
   }
 }
