@@ -10,7 +10,7 @@ class Email {
 
   sendMail(mail: Object): Promise<Object> {
     return new Promise((resolve, reject) => { // eslint-disable-line flowtype/require-parameter-type
-      // If no configuration for email just warm the user
+      // If no configuration for email just warn the user
       if (!this.server) {
         console.log('No configuration for email, you must set an email configuration');
         resolve();

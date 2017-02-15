@@ -383,7 +383,7 @@ export class AccountsServer {
       throw new AccountsError('No such email address for user');
     }
     const token = generateRandomToken();
-    await this.db.addPasswordResetToken(userId, address, token);
+    await this.db.addResetPasswordToken(userId, address, token);
     const resetPasswordUrl = `${this._options.siteUrl}/reset-password/${token}`;
     await this.email.sendMail({
       from: this.emailTemplates.resetPassword.from ?
