@@ -48,6 +48,8 @@ AccountsServer.config({
  siteUrl: 'https://my-app.com',
  email: // a valid email config object passed to emailjs
  // https://github.com/eleith/emailjs#example-usage---text-only-emails
+ // You can handle the send of the emails by providing an optional sendMail function
+ // sendMail: ({ from, to, text, html }): Promise<void>
 });
 ```
 
