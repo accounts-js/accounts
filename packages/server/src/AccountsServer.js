@@ -284,7 +284,7 @@ export class AccountsServer {
   }
 
   async verifyEmail(token: string): Promise<void> {
-    const user = await this.db.findUserByEmailVerificationToken();
+    const user = await this.db.findUserByEmailVerificationToken(token);
     if (!user) {
       throw new AccountsError('Verify email link expired');
     }
@@ -336,7 +336,7 @@ export class AccountsServer {
       throw new AccountsError('No such email address for user');
     }
     const token = await this.db.addEmailVerificationToken(userId, address);
-    const resetPasswordUrl = `${this._options.siteUrl}/reset-password/${token}`;
+    const resetPasswordUrl = `${this._options.siteUrl}/verify-email/${token}`;
     await this.email.sendMail({
       from: this.emailTemplates.verifyEmail.from ?
         this.emailTemplates.verifyEmail.from : this.emailTemplates.from,
