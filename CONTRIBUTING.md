@@ -4,7 +4,7 @@
 
 The GraphQL Accounts project was intended - since it's inception - to be a community maintained project.  We'd love to see you get involved (especially long time contributors from the Meteor community who we've worked with before).
 
-## Getting started
+## Getting Started
 
 1. Fork the project on Github (top right on the project page)
 1. `git clone git@github.com:yourname/accounts`
@@ -22,7 +22,7 @@ Most packages in the project are self contained with their own tests.  But if yo
 
 For non-bug-fixes, please open an *issue* first and discuss your idea to make sure we're on the same page.  Alternatively, prepend your PR title with `[discuss]` to have a conversation around the code.
 
-All PRs:
+#### All PRs:
 
 1. must not break the **test suite** (`npm test`), nor reduce **test coverage** (`npm run coverage`).  If you're fixing a bug, include a test that would fail without your fix.
 
@@ -36,10 +36,10 @@ All PRs:
 
 ### Submission
 
-1. From "getting started", your work should ideally be in it's own feature branch.
+1. From [Getting Started](#getting-started), your work should ideally be in its own feature branch.
 1. `git push`, and click on the new "merge" button / row on the project page.  *Merge to **devel***.
 
-## Contributors with commit bit
+## Contributors with Commit Bit
 
 * Should still submit a PR for changes (i.e. no work should be done on `devel` directly; all work should be done in it's own separate feature branch), which should be okayed by one other team member before merging.
 

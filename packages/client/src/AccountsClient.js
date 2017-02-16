@@ -4,23 +4,19 @@ import { isFunction, isString, has } from 'lodash';
 import type { Map } from 'immutable';
 import type { Store } from 'redux';
 import jwtDecode from 'jwt-decode';
-import createStore from './createStore';
-import { defaultClientConfig } from '../common/defaultConfigs';
-import { AccountsError } from '../common/errors';
-import reducer, { loggingIn, setUser, clearUser } from './module';
 import {
-  validateEmail,
-  validatePassword,
-  validateUsername,
-} from '../common/validators';
-import type { TransportInterface } from './TransportInterface';
-import type {
+  AccountsError,
+  validators,
   CreateUserType,
   PasswordLoginUserType,
   LoginReturnType,
   UserObjectType,
   TokensType,
-} from '../common/types';
+} from '@accounts/common';
+import config from './config';
+import createStore from './createStore';
+import reducer, { loggingIn, setUser, clearUser } from './module';
+import type { TransportInterface } from './TransportInterface';
 
 const isValidUserObject = (user: PasswordLoginUserType) => has(user, 'user') || has(user, 'email') || has(user, 'id');
 
@@ -38,9 +34,7 @@ export class AccountsClient {
   constructor(options: Object, transport: TransportInterface) {
     this.options = options;
     if (!transport) {
-      throw new AccountsError({
-        message: 'A REST or GraphQL transport is required',
-      });
+      throw new AccountsError('A REST or GraphQL transport is required');
     }
 
     this.transport = transport;
@@ -95,19 +89,17 @@ export class AccountsClient {
             await this.transport.refreshTokens(accessToken, refreshToken);
           localStorage.setItem(
             getTokenKey(ACCESS_TOKEN, this.options),
-            // $FlowFixMe
             refreshedSession.tokens.accessToken,
           );
           localStorage.setItem(
             getTokenKey(REFRESH_TOKEN, this.options),
-            // $FlowFixMe
             refreshedSession.tokens.refreshToken);
           this.store.dispatch(setUser(refreshedSession.user));
         }
       } catch (err) {
         this.clearTokens();
         this.clearUser();
-        throw new AccountsError({ message: 'falsy token provided' });
+        throw new AccountsError('falsy token provided');
       }
     } else {
       this.clearTokens();
@@ -116,15 +108,22 @@ export class AccountsClient {
   }
   async createUser(user: CreateUserType, callback: ?Function): Promise<void> {
     if (!user || user.password === undefined) {
-      throw new AccountsError({ message: 'Unrecognized options for create user request [400]' });
+      throw new AccountsError(
+        'Unrecognized options for create user request',
+        {
+          username: user && user.username,
+          email: user && user.email,
+        },
+        400,
+      );
     }
 
-    if (!validatePassword(user.password)) {
-      throw new AccountsError({ message: 'Password is required' });
+    if (!validators.validatePassword(user.password)) {
+      throw new AccountsError('Password is required');
     }
 
-    if (!validateUsername(user.username) && !validateEmail(user.email)) {
-      throw new AccountsError({ message: 'Username or Email is required' });
+    if (!validators.validateUsername(user.username) && !validators.validateEmail(user.email)) {
+      throw new AccountsError('Username or Email is required');
     }
 
     try {
@@ -132,13 +131,12 @@ export class AccountsClient {
       if (callback && isFunction(callback)) {
         callback();
       }
-      // $FlowFixMe
       await this.loginWithPassword({ id: userId }, user.password);
     } catch (err) {
       if (callback && isFunction(callback)) {
         callback(err);
       }
-      throw new AccountsError({ message: err.message });
+      throw new AccountsError(err.message);
     }
   }
 
@@ -146,18 +144,16 @@ export class AccountsClient {
                           password: string,
                           callback: ?Function): Promise<void> {
     if (!password || !user) {
-      throw new AccountsError({ message: 'Unrecognized options for login request [400]' });
+      throw new AccountsError('Unrecognized options for login request', user, 400);
     }
     if ((!isString(user) && !isValidUserObject(user)) || !isString(password)) {
-      throw new AccountsError({ message: 'Match failed [400]' });
+      throw new AccountsError('Match failed', user, 400);
     }
 
     this.store.dispatch(loggingIn(true));
     try {
       const res : LoginReturnType = await this.transport.loginWithPassword(user, password);
-      // $FlowFixMe
       localStorage.setItem(getTokenKey(ACCESS_TOKEN, this.options), res.tokens.accessToken);
-      // $FlowFixMe
       localStorage.setItem(getTokenKey(REFRESH_TOKEN, this.options), res.tokens.refreshToken);
       this.store.dispatch(setUser(res.user));
       this.options.onSignedInHook();
@@ -168,9 +164,9 @@ export class AccountsClient {
       if (callback && isFunction(callback)) {
         callback(err);
       }
-      throw new AccountsError({ message: err.message });
+      throw new AccountsError(err.message);
     }
-    this.store.dispatch(loggingIn(false));
+    this.store.dispatch(loggingIn(false), user);
   }
   loggingIn(): boolean {
     return (this.getState().get('loggingIn'): boolean);
@@ -181,7 +177,6 @@ export class AccountsClient {
   async logout(callback: ?Function): Promise<void> {
     try {
       const { accessToken } = this.tokens();
-      // $FlowFixMe
       await this.transport.logout(accessToken);
       this.clearTokens();
       this.store.dispatch(clearUser());
@@ -193,7 +188,7 @@ export class AccountsClient {
       if (callback && isFunction(callback)) {
         callback(err);
       }
-      throw new AccountsError({ message: err.message });
+      throw new AccountsError(err.message);
     }
   }
 }
@@ -205,7 +200,7 @@ const Accounts = {
   },
   config(options: Object, transport: TransportInterface) {
     this.instance = new AccountsClient({
-      ...defaultClientConfig,
+      ...config,
       ...options,
     }, transport);
   },
@@ -236,7 +231,6 @@ const Accounts = {
     return this.instance.tokens();
   },
   resumeSession(): Promise<void> {
-    // $FlowFixMe
     return this.instance.resumeSession();
   },
   refreshSession(): Promise<void> {
@@ -247,10 +241,10 @@ const Accounts = {
 export default Accounts;
 
 // TODO Could this be handled better?
-if (typeof window !== 'undefined') {
-  window.onload = async () => {
-    if (Accounts.instance) {
-      await Accounts.resumeSession();
-    }
-  };
-}
+// if (typeof window !== 'undefined') {
+//   window.onload = async () => {
+//     if (Accounts.instance && Accounts.instance.resumeSession) {
+//       await Accounts.resumeSession();
+//     }
+//   };
+// }

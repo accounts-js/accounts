@@ -1,0 +1,70 @@
+{
+  "name": "@accounts/client",
+  "version": "0.0.4",
+  "description": "Fullstack authentication and accounts-management",
+  "main": "lib/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "start": "webpack -p --config --progress --watch",
+    "compile": "babel ./src --out-dir ./lib",
+    "prepublish": "npm run compile",
+    "test": "npm run testonly",
+    "test-ci": "npm lint && npm coverage",
+    "testonly": "jest",
+    "coverage": "npm run testonly -- --coverage",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testRegex": "(/.*.(test|spec)).(js|jsx)$",
+    "testPathDirs": [
+      "src"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/js-accounts/accounts/tree/master/packages/client"
+  },
+  "keywords": [
+    "rest",
+    "graphql",
+    "grant",
+    "auth",
+    "authentication",
+    "accounts",
+    "users",
+    "oauth"
+  ],
+  "author": "Tim Mikeladze",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.18.0",
+    "babel-loader": "^6.2.7",
+    "babel-plugin-syntax-async-functions": "^6.13.0",
+    "babel-plugin-transform-async-to-generator": "^6.16.0",
+    "babel-plugin-transform-flow-strip-types": "^6.21.0",
+    "babel-plugin-transform-object-rest-spread": "^6.16.0",
+    "babel-plugin-transform-regenerator": "^6.16.1",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-es2015-node4": "^2.1.0",
+    "coveralls": "^2.11.14",
+    "flow-bin": "^0.37.0",
+    "jest": "^18.0.0",
+    "lerna": "2.0.0-beta.32",
+    "localstorage-polyfill": "^1.0.1",
+    "regenerator-runtime": "^0.9.6",
+    "webpack": "^1.13.3",
+    "webpack-node-externals": "^1.5.4"
+  },
+  "dependencies": {
+    "@accounts/common": "^0.0.4",
+    "immutable": "^3.8.1",
+    "jwt-decode": "^2.1.0",
+    "lodash": "^4.16.4",
+    "redux": "^3.6.0",
+    "redux-immutable": "^3.0.8"
+  }
+}

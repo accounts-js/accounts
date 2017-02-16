@@ -4,7 +4,7 @@ import type {
   CreateUserType,
   PasswordLoginUserType,
   LoginReturnType,
-} from '../common/types';
+} from '@accounts/common';
 
 export interface TransportInterface {
   createUser(user: CreateUserType): string,

@@ -4,7 +4,8 @@ export type UserObjectType = {
   username: ?string,
   email: ?string,
   id: ?string,
-  profile: ?Object
+  profile: ?Object,
+  services: ?Object
 };
 
 export type CreateUserType = {
