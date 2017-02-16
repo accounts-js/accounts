@@ -30,6 +30,12 @@ export class AccountsServer {
   _options: Object
   db: DBInterface
 
+  /**
+   * @description Configure AccountsServer.
+   * @param {Object} options - Options for AccountsServer.
+   * @param {Object} db - DBInterface for AccountsServer.
+   * @returns {Object} - Return the options.
+   */
   config(options: Object, db: DBInterface) {
     this._options = {
       ...config,
@@ -47,10 +53,22 @@ export class AccountsServer {
     this.emailTemplates = emailTemplates;
   }
 
+  /**
+   * @description Return the AccountsServer options.
+   * @returns {Object} - Return the options.
+   */
   options(): Object {
     return this._options;
   }
 
+  /**
+   * @description Login the user with his password.
+   * @param {Object} user - User to login.
+   * @param {string} password - Password of user to login.
+   * @param {string} ip - User ip.
+   * @param {string} userAgent - User user agent.
+   * @returns {Promise<Object>} - LoginReturnType.
+   */
   // eslint-disable-next-line max-len
   async loginWithPassword(user: PasswordLoginUserType, password: string, ip: ?string, userAgent: ?string): Promise<LoginReturnType> {
     if (!user || !password) {
@@ -130,6 +148,11 @@ export class AccountsServer {
     return foundUser;
   }
 
+  /**
+   * @description Create a new user.
+   * @param {Object} user - The user object.
+   * @returns {Promise<string>} - Return the id of user created.
+   */
   async createUser(user: CreateUserType): Promise<string> {
     if (!validators.validateUsername(user.username) && !validators.validateEmail(user.email)) {
       throw new AccountsError(
@@ -158,6 +181,14 @@ export class AccountsServer {
     return userId;
   }
 
+  /**
+   * @description Refresh a user token.
+   * @param {string} accessToken - User access token.
+   * @param {string} refreshToken - User refresh token.
+   * @param {string} ip - User ip.
+   * @param {string} userAgent - User user agent.
+   * @returns {Promise<Object>} - LoginReturnType.
+   */
   // eslint-disable-next-line max-len
   async refreshTokens(accessToken: string, refreshToken: string, ip: string, userAgent: string): Promise<LoginReturnType> {
     if (!isString(accessToken) || !isString(refreshToken)) {
@@ -197,6 +228,11 @@ export class AccountsServer {
     }
   }
 
+  /**
+   * @description Refresh a user token.
+   * @param {string} sessionId - User session id.
+   * @returns {Promise<Object>} - Return a new accessToken and refreshToken.
+   */
   createTokens(sessionId: string): TokensType {
     const { tokenSecret, tokenConfigs } = this._options;
     const accessToken = generateAccessToken({
@@ -213,6 +249,11 @@ export class AccountsServer {
     return { accessToken, refreshToken };
   }
 
+  /**
+   * @description Logout a user and invalidate his session.
+   * @param {string} accessToken - User access token.
+   * @returns {Promise<void>} - Return a promise.
+   */
   async logout(accessToken: string): Promise<void> {
     const session : SessionType = await this.findSessionByAccessToken(accessToken);
     if (session.valid) {
@@ -268,26 +309,62 @@ export class AccountsServer {
     return session;
   }
 
+  /**
+   * @description Find a user by one of his emails.
+   * @param {string} email - User email.
+   * @returns {Promise<Object>} - Return a user or null if not found.
+   */
   findUserByEmail(email: string): Promise<?UserObjectType> {
     return this.db.findUserByEmail(email);
   }
 
+  /**
+   * @description Find a user by his username.
+   * @param {string} username - User username.
+   * @returns {Promise<Object>} - Return a user or null if not found.
+   */
   findUserByUsername(username: string): Promise<?UserObjectType> {
     return this.db.findUserByUsername(username);
   }
 
+  /**
+   * @description Find a user by his id.
+   * @param {string} userId - User id.
+   * @returns {Promise<Object>} - Return a user or null if not found.
+   */
   findUserById(userId: string): Promise<?UserObjectType> {
     return this.db.findUserById(userId);
   }
 
+  /**
+   * @description Add an email address for a user.
+   * Use this instead of directly updating the database.
+   * @param {string} userId - User id.
+   * @param {string} newEmail - A new email address for the user.
+   * @param {boolean} [verified] - Whether the new email address should be marked as verified.
+   * Defaults to false.
+   * @returns {Promise<void>} - Return a Promise.
+   */
   addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
     return this.db.addEmail(userId, newEmail, verified);
   }
 
+  /**
+   * @description Remove an email address for a user.
+   * Use this instead of directly updating the database.
+   * @param {string} userId - User id.
+   * @param {string} email - The email address to remove.
+   * @returns {Promise<void>} - Return a Promise.
+   */
   removeEmail(userId: string, email: string): Promise<void> {
     return this.db.removeEmail(userId, email);
   }
 
+  /**
+   * @description Marks the user's email address as verified.
+   * @param {string} token - The token retrieved from the verification URL.
+   * @returns {Promise<void>} - Return a Promise.
+   */
   async verifyEmail(token: string): Promise<void> {
     const user = await this.db.findUserByEmailVerificationToken(token);
     if (!user) {
@@ -306,6 +383,12 @@ export class AccountsServer {
     await this.db.verifyEmail(user.id, emailRecord);
   }
 
+  /**
+   * @description Reset the password for a user using a token received in email.
+   * @param {string} token - The token retrieved from the reset password URL.
+   * @param {string} newPassword - A new password for the user.
+   * @returns {Promise<void>} - Return a Promise.
+   */
   async resetPassword(token: string, newPassword: string): Promise<void> {
     const user = await this.db.findUserByResetPasswordToken(token);
     if (!user) {
@@ -326,10 +409,22 @@ export class AccountsServer {
     this.db.invalidateAllSessions(user.id);
   }
 
+  /**
+   * @description Change the password for a user.
+   * @param {string} userId - User id.
+   * @param {string} newPassword - A new password for the user.
+   * @returns {Promise<void>} - Return a Promise.
+   */
   setPassword(userId: string, newPassword: string): Promise<void> {
     return this.db.setPasssword(userId, newPassword);
   }
 
+  /**
+   * @description Change the profile for a user.
+   * @param {string} userId - User id.
+   * @param {Object} profile - The new user profile.
+   * @returns {Promise<void>} - Return a Promise.
+   */
   async setProfile(userId: string, profile: Object): Promise<void> {
     const user = await this.db.findUserById(userId);
     if (!user) {
@@ -338,6 +433,13 @@ export class AccountsServer {
     await this.db.setProfile(userId, profile);
   }
 
+  /**
+   * @description Update the profile for a user,
+   * the new profile will be added to the existing one.
+   * @param {string} userId - User id.
+   * @param {Object} profile - User profile to add.
+   * @returns {Promise<Object>} - Return a Promise.
+   */
   async updateProfile(userId: string, profile: Object): Promise<Object> {
     const user = await this.db.findUserById(userId);
     if (!user) {
@@ -347,6 +449,14 @@ export class AccountsServer {
     return res;
   }
 
+  /**
+   * @description Send an email with a link the user can use verify their email address.
+   * @param {string} userId - The id of the user to send email to.
+   * @param {string} [address] - Which address of the user's to send the email to.
+   * This address must be in the user's emails list.
+   * Defaults to the first unverified email in the list.
+   * @returns {Promise<void>} - Return a Promise.
+   */
   async sendVerificationEmail(userId: string, address: string): Promise<void> {
     const user = await this.db.findUserById(userId);
     if (!user) {
@@ -373,6 +483,14 @@ export class AccountsServer {
     });
   }
 
+  /**
+   * @description Send an email with a link the user can use to reset their password.
+   * @param {string} userId - The id of the user to send email to.
+   * @param {string} [address] - Which address of the user's to send the email to.
+   * This address must be in the user's emails list.
+   * Defaults to the first email in the list.
+   * @returns {Promise<void>} - Return a Promise.
+   */
   async sendResetPasswordEmail(userId: string, address: string): Promise<void> {
     const user = await this.db.findUserById(userId);
     if (!user) {
