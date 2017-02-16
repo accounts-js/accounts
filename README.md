@@ -39,3 +39,23 @@ npm i -S @accounts/sql
 ## Example
 
 You can find a working example [here](https://github.com/js-accounts/rest-example).
+
+## Emails
+
+Configuration:
+```javascript
+AccountsServer.config({
+ siteUrl: 'https://my-app.com',
+ email: // a valid email config object passed to emailjs
+ // https://github.com/eleith/emailjs#example-usage---text-only-emails
+ // You can handle the send of the emails by providing an optional sendMail function
+ // sendMail: ({ from, to, text, html }): Promise<void>
+});
+```
+
+To overwrite the email templates:
+```javascript
+AccountsServer.emailTemplates.from = 'my-app <no-reply@my-app.com>';
+AccountsServer.emailTemplates.verifyEmail.subject = (user) => `Verify your account email ${user.profile.lastname}`;
+AccountsServer.emailTemplates.verifyEmail.text = (user, url) => `To verify your account email please click on this link: ${url}`;
+```

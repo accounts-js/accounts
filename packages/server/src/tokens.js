@@ -2,7 +2,7 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 
-export const generateEmailToken = (length: Int = 43) => crypto.randomBytes(length).toString('hex');
+export const generateRandomToken = (length: Int = 43) => crypto.randomBytes(length).toString('hex');
 
 export const generateAccessToken = ({
   secret,

@@ -2,6 +2,7 @@ import { EMAIL_ONLY } from './passwordSignupFields';
 // eslint-disable-next-line import/no-named-as-default
 
 export default {
+  siteUrl: 'http://localhost:3000',
   sendVerificationEmail: false,
   sendEnrollmentEmail: false,
   sendWelcomeEmail: false,

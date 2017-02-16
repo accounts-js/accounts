@@ -1,6 +1,6 @@
 // @flow
 
-import { isString, isPlainObject, find } from 'lodash';
+import { isString, isPlainObject, find, includes } from 'lodash';
 import jwt from 'jsonwebtoken';
 import {
   AccountsError,
@@ -21,7 +21,10 @@ import { verifyPassword } from './encryption';
 import {
   generateAccessToken,
   generateRefreshToken,
+  generateRandomToken,
 } from './tokens';
+import Email from './email';
+import emailTemplates from './emailTemplates';
 
 export class AccountsServer {
   _options: Object
@@ -36,6 +39,12 @@ export class AccountsServer {
       throw new AccountsError('A database driver is required');
     }
     this.db = db;
+    if (options.sendMail) {
+      this.email = { sendMail: options.sendMail };
+    } else {
+      this.email = new Email(config.email);
+    }
+    this.emailTemplates = emailTemplates;
   }
 
   options(): Object {
@@ -148,6 +157,7 @@ export class AccountsServer {
 
     return userId;
   }
+
   // eslint-disable-next-line max-len
   async refreshTokens(accessToken: string, refreshToken: string, ip: string, userAgent: string): Promise<LoginReturnType> {
     if (!isString(accessToken) || !isString(refreshToken)) {
@@ -186,6 +196,7 @@ export class AccountsServer {
       throw new AccountsError('Session is no longer valid', { id: session.userId });
     }
   }
+
   createTokens(sessionId: string): TokensType {
     const { tokenSecret, tokenConfigs } = this._options;
     const accessToken = generateAccessToken({
@@ -201,6 +212,7 @@ export class AccountsServer {
     });
     return { accessToken, refreshToken };
   }
+
   async logout(accessToken: string): Promise<void> {
     const session : SessionType = await this.findSessionByAccessToken(accessToken);
     if (session.valid) {
@@ -213,6 +225,7 @@ export class AccountsServer {
       throw new AccountsError('Session is no longer valid', { id: session.userId });
     }
   }
+
   async resumeSession(accessToken: string): Promise<?UserObjectType> {
     const session : SessionType = await this.findSessionByAccessToken(accessToken);
     if (session.valid) {
@@ -233,6 +246,7 @@ export class AccountsServer {
     }
     return null;
   }
+
   async findSessionByAccessToken(accessToken: string): Promise<SessionType> {
     if (!isString(accessToken)) {
       throw new AccountsError('An accessToken is required');
@@ -253,23 +267,29 @@ export class AccountsServer {
 
     return session;
   }
+
   findUserByEmail(email: string): Promise<?UserObjectType> {
     return this.db.findUserByEmail(email);
   }
+
   findUserByUsername(username: string): Promise<?UserObjectType> {
     return this.db.findUserByUsername(username);
   }
+
   findUserById(userId: string): Promise<?UserObjectType> {
     return this.db.findUserById(userId);
   }
+
   addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
     return this.db.addEmail(userId, newEmail, verified);
   }
+
   removeEmail(userId: string, email: string): Promise<void> {
     return this.db.removeEmail(userId, email);
   }
+
   async verifyEmail(token: string): Promise<void> {
-    const user = await this.db.findUserByEmailVerificationToken();
+    const user = await this.db.findUserByEmailVerificationToken(token);
     if (!user) {
       throw new AccountsError('Verify email link expired');
     }
@@ -278,15 +298,38 @@ export class AccountsServer {
     if (!tokenRecord) {
       throw new AccountsError('Verify email link expired');
     }
+    // TODO check time for expiry date
     const emailRecord = find(user.emails, (e: Object) => e.address === tokenRecord.address);
     if (!emailRecord) {
       throw new AccountsError('Verify email link is for unknown address');
     }
     await this.db.verifyEmail(user.id, emailRecord);
   }
+
+  async resetPassword(token: string, newPassword: string): Promise<void> {
+    const user = await this.db.findUserByResetPasswordToken(token);
+    if (!user) {
+      throw new AccountsError('Reset password link expired');
+    }
+    const resetTokenRecord = find(user.services.password.resetTokens,
+                                  (t: Object) => t.token === token);
+    if (!resetTokenRecord) {
+      throw new AccountsError('Reset password link expired');
+    }
+    // TODO check time for expiry date
+    if (!includes(user.emails.map((email: string) => email.address), resetTokenRecord.email)) {
+      throw new AccountsError('Token has invalid email address');
+    }
+    // Change the user password and remove the old token
+    await this.db.setResetPasssword(user.id, resetTokenRecord.email, newPassword, token);
+    // Changing the password should invalidate existing sessions
+    this.db.invalidateAllSessions(user.id);
+  }
+
   setPassword(userId: string, newPassword: string): Promise<void> {
     return this.db.setPasssword(userId, newPassword);
   }
+
   async setProfile(userId: string, profile: Object): Promise<void> {
     const user = await this.db.findUserById(userId);
     if (!user) {
@@ -294,6 +337,7 @@ export class AccountsServer {
     }
     await this.db.setProfile(userId, profile);
   }
+
   async updateProfile(userId: string, profile: Object): Promise<Object> {
     const user = await this.db.findUserById(userId);
     if (!user) {
@@ -301,6 +345,57 @@ export class AccountsServer {
     }
     const res = await this.db.setProfile(userId, { ...user.profile, ...profile });
     return res;
+  }
+
+  async sendVerificationEmail(userId: string, address: string): Promise<void> {
+    const user = await this.db.findUserById(userId);
+    if (!user) {
+      throw new AccountsError('User not found', { id: userId });
+    }
+    // If no address provided find the first unverified email
+    if (!address) {
+      const email = find(user.emails, (e: string) => !e.verified);
+      address = email && email.address; // eslint-disable-line no-param-reassign
+    }
+    // Make sure the address is valid
+    if (!address || !includes(user.emails.map((email: string) => email.address), address)) {
+      throw new AccountsError('No such email address for user');
+    }
+    const token = generateRandomToken();
+    await this.db.addEmailVerificationToken(userId, address, token);
+    const verifyEmailUrl = `${this._options.siteUrl}/verify-email/${token}`;
+    await this.email.sendMail({
+      from: this.emailTemplates.verifyEmail.from ?
+        this.emailTemplates.verifyEmail.from : this.emailTemplates.from,
+      to: address,
+      subject: this.emailTemplates.verifyEmail.subject(user),
+      text: this.emailTemplates.verifyEmail.text(user, verifyEmailUrl),
+    });
+  }
+
+  async sendResetPasswordEmail(userId: string, address: string): Promise<void> {
+    const user = await this.db.findUserById(userId);
+    if (!user) {
+      throw new AccountsError('User not found', { id: userId });
+    }
+    // Pick the first email if we weren't passed an email
+    if (!address && user.emails && user.emails[0]) {
+      address = user.emails[0].address; // eslint-disable-line no-param-reassign
+    }
+    // Make sure the address is valid
+    if (!address || !includes(user.emails.map((email: string) => email.address), address)) {
+      throw new AccountsError('No such email address for user');
+    }
+    const token = generateRandomToken();
+    await this.db.addResetPasswordToken(userId, address, token);
+    const resetPasswordUrl = `${this._options.siteUrl}/reset-password/${token}`;
+    await this.email.sendMail({
+      from: this.emailTemplates.resetPassword.from ?
+        this.emailTemplates.resetPassword.from : this.emailTemplates.from,
+      to: address,
+      subject: this.emailTemplates.resetPassword.subject(user),
+      text: this.emailTemplates.resetPassword.text(user, resetPasswordUrl),
+    });
   }
 }
 
