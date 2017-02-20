@@ -27,9 +27,9 @@ const getTokenKey = (type: string, options: Object) =>
   (isString(options.localStoragePrefix) && options.localStoragePrefix.length > 0 ? `${options.localStoragePrefix}:${type}` : type);
 
 export class AccountsClient {
-  options: Object
-  transport: TransportInterface
-  store: Store<Map<string, any>>
+  options: Object;
+  transport: TransportInterface;
+  store: Store<Map<string, any>, Object>;
 
   constructor(options: Object, transport: TransportInterface) {
     this.options = options;
@@ -195,9 +195,7 @@ export class AccountsClient {
 
 const Accounts = {
   instance: AccountsClient,
-  ui: {
-
-  },
+  ui: {},
   config(options: Object, transport: TransportInterface) {
     this.instance = new AccountsClient({
       ...config,

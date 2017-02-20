@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable import/no-named-as-default */
 import * as PasswordSignupFields from './passwordSignupFields';
 import * as validators from './validators';

@@ -1,4 +1,6 @@
 [ignore]
+.*bower.json
+.*/packages/\(common\|client\|server\)/lib/.*
 
 [include]
 

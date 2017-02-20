@@ -9,7 +9,7 @@ export const isEmail = (email: ?string) => {
 };
 
 export const validateEmail = (email: ?string): boolean => {
-  const isValid = !isEmpty(trim(email));
+  const isValid = !isEmpty(trim(email || ''));
   return isValid;
 };
 
@@ -19,6 +19,6 @@ export const validatePassword = (password: ?string): boolean => {
 };
 
 export const validateUsername = (username: ?string): boolean => {
-  const isValid = !isEmpty(trim(username));
+  const isValid = !isEmpty(trim(username || ''));
   return isValid;
 };
