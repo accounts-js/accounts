@@ -9,7 +9,9 @@
   "scripts": {
     "start": "webpack -p --config --progress --watch",
     "compile": "babel ./src --out-dir ./lib",
+    "postcompile": "npm run flow:gen",
     "prepublish": "npm run compile",
+    "flow:gen": "flow gen-flow-files ./src/index.js > ./lib/index.js.flow",
     "test": "npm run testonly",
     "test-ci": "npm lint && npm coverage",
     "testonly": "jest",
