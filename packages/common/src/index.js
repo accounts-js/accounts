@@ -10,6 +10,7 @@ import type {
   UserObjectType,
   CreateUserType,
   PasswordLoginUserType,
+  PasswordLoginUserIdentityType,
   LoginReturnType,
   TokensType,
   SessionType,
@@ -18,6 +19,7 @@ import type {
 export type {
   UserObjectType,
   CreateUserType,
+  PasswordLoginUserIdentityType,
   PasswordLoginUserType,
   LoginReturnType,
   TokensType,

@@ -4,11 +4,11 @@ import { isFunction, isString, has } from 'lodash';
 import type { Map } from 'immutable';
 import type { Store } from 'redux';
 import jwtDecode from 'jwt-decode';
-import {
-  AccountsError,
-  validators,
+import { AccountsError, validators } from '@accounts/common';
+import type {
   CreateUserType,
   PasswordLoginUserType,
+  PasswordLoginUserIdentityType,
   LoginReturnType,
   UserObjectType,
   TokensType,
@@ -18,7 +18,7 @@ import createStore from './createStore';
 import reducer, { loggingIn, setUser, clearUser } from './module';
 import type { TransportInterface } from './TransportInterface';
 
-const isValidUserObject = (user: PasswordLoginUserType) => has(user, 'user') || has(user, 'email') || has(user, 'id');
+const isValidUserObject = (user: PasswordLoginUserIdentityType) => has(user, 'user') || has(user, 'email') || has(user, 'id');
 
 const ACCESS_TOKEN = 'accounts:accessToken';
 const REFRESH_TOKEN = 'accounts:refreshToken';
@@ -50,29 +50,48 @@ export class AccountsClient {
       middleware,
     });
   }
+
   getState(): Map<string, any> {
     return this.store.getState().get('accounts');
   }
+
   user(): UserObjectType {
     return this.getState().get('user').toJS();
   }
+
   tokens(): TokensType {
     return {
       accessToken: localStorage.getItem(getTokenKey(ACCESS_TOKEN, this.options)),
       refreshToken: localStorage.getItem(getTokenKey(REFRESH_TOKEN, this.options)),
     };
   }
+
   clearTokens() {
     localStorage.removeItem(getTokenKey(ACCESS_TOKEN, this.options));
     localStorage.removeItem(getTokenKey(REFRESH_TOKEN, this.options));
   }
+
+  storeTokens(loginResponse: LoginReturnType) {
+    const newAccessToken = loginResponse.tokens.accessToken;
+    if (newAccessToken) {
+      localStorage.setItem(getTokenKey(ACCESS_TOKEN, this.options), newAccessToken);
+    }
+
+    const newRefreshToken = loginResponse.tokens.refreshToken;
+    if (newRefreshToken) {
+      localStorage.setItem(getTokenKey(REFRESH_TOKEN, this.options), newRefreshToken);
+    }
+  }
+
   clearUser() {
     this.store.dispatch(clearUser());
   }
+
   resumeSession(): Promise<void> {
     // TODO Should there be any additional resume session logic here?
     return this.refreshSession();
   }
+
   async refreshSession(): Promise<void> {
     const { accessToken, refreshToken } = this.tokens();
     if (accessToken && refreshToken) {
@@ -87,13 +106,8 @@ export class AccountsClient {
           // Request a new token pair
           const refreshedSession : LoginReturnType =
             await this.transport.refreshTokens(accessToken, refreshToken);
-          localStorage.setItem(
-            getTokenKey(ACCESS_TOKEN, this.options),
-            refreshedSession.tokens.accessToken,
-          );
-          localStorage.setItem(
-            getTokenKey(REFRESH_TOKEN, this.options),
-            refreshedSession.tokens.refreshToken);
+
+          this.storeTokens(refreshedSession);
           this.store.dispatch(setUser(refreshedSession.user));
         }
       } catch (err) {
@@ -106,6 +120,7 @@ export class AccountsClient {
       this.clearUser();
     }
   }
+
   async createUser(user: CreateUserType, callback: ?Function): Promise<void> {
     if (!user || user.password === undefined) {
       throw new AccountsError(
@@ -141,7 +156,7 @@ export class AccountsClient {
   }
 
   async loginWithPassword(user: PasswordLoginUserType,
-                          password: string,
+                          password: ?string,
                           callback: ?Function): Promise<void> {
     if (!password || !user) {
       throw new AccountsError('Unrecognized options for login request', user, 400);
@@ -153,8 +168,7 @@ export class AccountsClient {
     this.store.dispatch(loggingIn(true));
     try {
       const res : LoginReturnType = await this.transport.loginWithPassword(user, password);
-      localStorage.setItem(getTokenKey(ACCESS_TOKEN, this.options), res.tokens.accessToken);
-      localStorage.setItem(getTokenKey(REFRESH_TOKEN, this.options), res.tokens.refreshToken);
+      this.storeTokens(res);
       this.store.dispatch(setUser(res.user));
       this.options.onSignedInHook();
       if (callback && isFunction(callback)) {
@@ -168,16 +182,23 @@ export class AccountsClient {
     }
     this.store.dispatch(loggingIn(false), user);
   }
+
   loggingIn(): boolean {
     return (this.getState().get('loggingIn'): boolean);
   }
+
   isLoading(): boolean {
     return (this.getState().get('isLoading'): boolean);
   }
+
   async logout(callback: ?Function): Promise<void> {
     try {
       const { accessToken } = this.tokens();
-      await this.transport.logout(accessToken);
+
+      if (accessToken) {
+        await this.transport.logout(accessToken);
+      }
+
       this.clearTokens();
       this.store.dispatch(clearUser());
       if (callback && isFunction(callback)) {

@@ -1,6 +1,6 @@
 // @flow
 
-import { isString, isPlainObject, find, includes } from 'lodash';
+import { isString, isPlainObject, find, includes, get } from 'lodash';
 import jwt from 'jsonwebtoken';
 import {
   AccountsError,
@@ -178,7 +178,7 @@ export class AccountsServer {
       throw new AccountsError('Tokens are not valid');
     }
 
-    const session: SessionType = await this.db.findSessionById(sessionId);
+    const session: ?SessionType = await this.db.findSessionById(sessionId);
     if (!session) {
       throw new AccountsError('Session not found');
     }
@@ -263,7 +263,7 @@ export class AccountsServer {
       throw new AccountsError('Tokens are not valid');
     }
 
-    const session: SessionType = await this.db.findSessionById(sessionId);
+    const session: ?SessionType = await this.db.findSessionById(sessionId);
     if (!session) {
       throw new AccountsError('Session not found');
     }
@@ -296,7 +296,9 @@ export class AccountsServer {
     if (!user) {
       throw new AccountsError('Verify email link expired');
     }
-    const tokenRecord = find(user.services.email.verificationTokens,
+
+    const verificationTokens = get(user, ['services', 'email', 'verificationTokens'], []);
+    const tokenRecord = find(verificationTokens,
                              (t: Object) => t.token === token);
     if (!tokenRecord) {
       throw new AccountsError('Verify email link expired');
@@ -306,7 +308,7 @@ export class AccountsServer {
     if (!emailRecord) {
       throw new AccountsError('Verify email link is for unknown address');
     }
-    await this.db.verifyEmail(user.id, emailRecord);
+    await this.db.verifyEmail(user.id, emailRecord.address);
   }
 
   async resetPassword(token: string, newPassword: string): Promise<void> {
@@ -314,13 +316,15 @@ export class AccountsServer {
     if (!user) {
       throw new AccountsError('Reset password link expired');
     }
-    const resetTokenRecord = find(user.services.password.resetTokens,
+    const resetTokens = get(user, ['services', 'password', 'resetTokens']);
+    const resetTokenRecord = find(resetTokens,
                                   (t: Object) => t.token === token);
     if (!resetTokenRecord) {
       throw new AccountsError('Reset password link expired');
     }
     // TODO check time for expiry date
-    if (!includes(user.emails.map((email: Object) => email.address), resetTokenRecord.email)) {
+    const emails = user.emails || [];
+    if (!includes(emails.map((email: Object) => email.address), resetTokenRecord.email)) {
       throw new AccountsError('Token has invalid email address');
     }
     // Change the user password and remove the old token
@@ -361,7 +365,8 @@ export class AccountsServer {
       address = email && email.address; // eslint-disable-line no-param-reassign
     }
     // Make sure the address is valid
-    if (!address || !includes(user.emails.map((email: Object) => email.address), address)) {
+    const emails = user.emails || [];
+    if (!address || !includes(emails.map((email: Object) => email.address), address)) {
       throw new AccountsError('No such email address for user');
     }
     const token = generateRandomToken();
@@ -386,7 +391,8 @@ export class AccountsServer {
       address = user.emails[0].address; // eslint-disable-line no-param-reassign
     }
     // Make sure the address is valid
-    if (!address || !includes(user.emails.map((email: Object) => email.address), address)) {
+    const emails = user.emails || [];
+    if (!address || !includes(emails.map((email: Object) => email.address), address)) {
       throw new AccountsError('No such email address for user');
     }
     const token = generateRandomToken();

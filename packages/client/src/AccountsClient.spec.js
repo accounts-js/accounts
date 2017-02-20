@@ -277,10 +277,12 @@ describe('Accounts', () => {
       await Accounts.logout();
       expect(onSignedOutHook.mock.calls.length).toEqual(1);
     });
+
     it('calls callback on failure with error message', async () => {
       const transport = {
         logout: () => Promise.reject({ message: 'error message' }),
       };
+      Accounts.instance.storeTokens({ tokens: { accessToken: '1' } });
       Accounts.config({ history }, transport);
       const callback = jest.fn();
       try {

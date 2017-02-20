@@ -3,23 +3,26 @@
 export type UserObjectType = {
   username: ?string,
   email: ?string,
-  id: ?string,
+  emails?: Object[],
+  id: string,
   profile: ?Object,
   services: ?Object
 };
 
 export type CreateUserType = {
-  username: ?string,
-  email: ?string,
-  password: ?string,
-  profile: ?Object
+  username?: string,
+  email?: string,
+  password?: string,
+  profile?: Object
 };
 
-export type PasswordLoginUserType = string | {
-  id: ?string,
-  username: ?string,
-  email: ?string
+export type PasswordLoginUserIdentityType = {
+  id?: string,
+  username?: string,
+  email?: string
 };
+
+export type PasswordLoginUserType = string | PasswordLoginUserIdentityType;
 
 export type TokensType = {
   accessToken: ?string,

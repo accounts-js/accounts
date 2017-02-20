@@ -1,6 +1,6 @@
 [ignore]
+<PROJECT_ROOT>/lib/.*
 .*bower.json
-.*/packages/\(common\|client\|server\)/lib/.*
 
 [include]
 

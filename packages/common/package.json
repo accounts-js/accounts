@@ -1,6 +1,6 @@
 {
   "name": "@accounts/common",
-  "version": "0.0.4",
+  "version": "0.0.4-alpha.6d363033",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "publishConfig": {
@@ -9,12 +9,14 @@
   "scripts": {
     "start": "webpack -p --config --progress --watch",
     "compile": "babel ./src --out-dir ./lib",
-    "postcompile": "npm run flow:gen",
+    "postcompile": "npm run flow:prepublish",
     "prepublish": "npm run compile",
-    "flow:gen": "flow gen-flow-files ./src/index.js > ./lib/index.js.flow",
     "test": "npm run testonly",
     "test-ci": "npm lint && npm coverage",
     "testonly": "jest",
+    "flow:check": "flow check",
+    "flow:gen": "flow gen-flow-files ./src/index.js > ./lib/index.js.flow",
+    "flow:prepublish": "for i in `ls ./src/*.js`; do cp $i `echo $i | sed \"s/src/lib/g\" | sed \"s/js/js\\.flow/g\"`; done",
     "coverage": "npm run testonly -- --coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
