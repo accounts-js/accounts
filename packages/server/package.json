@@ -1,6 +1,6 @@
 {
   "name": "@accounts/server",
-  "version": "0.0.4-alpha.6d363033",
+  "version": "0.0.4",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "publishConfig": {
@@ -43,7 +43,7 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "dependencies": {
-    "@accounts/common": "^0.0.4-alpha.6d363033",
+    "@accounts/common": "^0.0.4",
     "bcryptjs": "^2.4.0",
     "crypto": "^0.0.3",
     "emailjs": "^1.0.8",
