@@ -1,0 +1,25 @@
+{
+
+  "parser": "babel-eslint",
+
+  "env": {
+    "es6": true,
+    "mocha": true,
+    "node": true,
+    "browser": true
+  },
+
+  "rules": {
+    "strict": 0,
+    "import/no-extraneous-dependencies": 0,
+    "no-underscore-dangle": 0
+  },
+
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "experimentalObjectRestSpread": true,
+    "sourceType": "module"
+  },
+
+  "extends": "airbnb"
+}

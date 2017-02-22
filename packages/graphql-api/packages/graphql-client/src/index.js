@@ -3,12 +3,10 @@
 import gql from 'graphql-tag';
 import type { ExecutionResult } from 'graphql';
 import type { ApolloClient } from 'apollo-client';
-import type { LoginWithPassword } from 'LoginMutation';
-
-import loginMutation from './mutations/login.graphql';
 
 export default class Client {
-  
+  client: ApolloClient;
+
   constructor( apolloClient: ApolloClient ) {
     this.client = apolloClient;
   }
@@ -19,8 +17,9 @@ export default class Client {
       mutation: gql`${loginMutation}`,
       variables: { user: { email: user.email, password: user.password } },
     })
-    .then((res: ExecutionResult) => (res.data && res.data['loginWithPassword']: ?LoginWithPassword));
+    .then(() => {
+
+    });
   }
   
-  client: ApolloClient;
 }

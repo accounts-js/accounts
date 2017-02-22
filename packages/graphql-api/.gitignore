@@ -1,5 +1,2 @@
-lib/
-node_modules/
-coverage/
-npm-debug.log
+node_modules
 .idea
