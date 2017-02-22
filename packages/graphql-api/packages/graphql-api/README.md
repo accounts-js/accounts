@@ -1,14 +1,14 @@
 # @accounts/graphql-api
 
-*Server side GraphQL for accounts*
+*Schema, Resolvers and Utils for GraphQL server with JSAccounts*
 
 [![npm](https://img.shields.io/npm/v/@accounts/graphql-api.svg?maxAge=2592000)](https://www.npmjs.com/package/@accounts/graphql-api) [![Circle CI](https://circleci.com/gh/js-accounts/graphql-api.svg?style=shield)](https://circleci.com/gh/js-accounts/graphql-api) [![Coverage Status](https://coveralls.io/repos/github/js-accounts/graphql-api/badge.svg?branch=master)](https://coveralls.io/github/js-accounts/graphql-api?branch=master) ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 
+> This package does not requires any network interface / express in order to combine with your GraphQL - it's just a collection of GraphQL schema, resolvers and utils!
+
 ## Note
-This package is under active development and is just starting to form a structure.
-Currently the package holds it's own express server.
-After some work is done, it will require an express app to be supplied.
-Ideally, it would not matter weather it is express or other network transport altogether.
+
+> This package is under active development and is just starting to form a structure.
 
 ## Start dev server
 
@@ -20,6 +20,16 @@ yarn start
 ## How to use this package?
 
 This package exports GraphQL schema and GraphQL resolvers, which you can extend with your existing GraphQL schema server.
+
+Start by installing it from NPM / Yarn:
+
+```bash
+// Npm
+npm install --save @accounts/server @accounts/graphql-api
+
+// Yarn
+yarn add @accounts/server @accounts/graphql-api
+```
 
 > This package does not create a transport or anything else, only schema and string and resolvers as object.
 
