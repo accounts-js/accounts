@@ -1,7 +1,7 @@
 {
   "name": "@accounts/graphql",
-  "version": "0.1.0",
-  "description": "GraphQL transport for accounts",
+  "version": "0.0.1",
+  "description": "GraphQL client transport for accounts",
   "main": "lib/index.js",
   "scripts": {
     "start": "webpack -p --config --progress --watch",
