@@ -3,7 +3,7 @@ machine:
     version: 6.2.1
   environment:
     YARN_VERSION: 0.18.1
-    PATH: "${PATH}:${HOME}/.yarn/bin:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/graphql-api/.bin"
+    PATH: "${PATH}:${HOME}/.yarn/bin:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin:${HOME}/${CIRCLE_PROJECT_REPONAME}/packages/graphql-api/node_modules/.bin:${HOME}/${CIRCLE_PROJECT_REPONAME}/packages/graphql-client/node_modules/.bin"
 
 dependencies:
   pre:
@@ -15,13 +15,11 @@ dependencies:
         echo "The correct version of Yarn is already installed."
       fi
   override:
-    - yarn install
+    - yarn
   cache_directories:
     - ~/.yarn
     - ~/.cache/yarn
 
 test:
   override:
-    - yarn test-ci
-  post:
-    - yarn coveralls
+    - cd ./packages/graphql-api/ && yarn && yarn lint
