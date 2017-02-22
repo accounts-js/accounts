@@ -2,6 +2,7 @@
 import { loginToken } from './resolvers/login-token';
 import { newAccessToken } from './resolvers/new-access-token';
 import { me } from './resolvers/me';
+import { User } from './resolvers/user';
 
 export const queries = `
   me: User
@@ -63,12 +64,13 @@ export const createJSAccountsGraphQL = (Accounts: any, schemaOptions: SchemaGene
   `;
 
   const resolvers = {
+    User,
     [schemaOptions.rootMutationName]: {
       loginToken: loginToken(Accounts),
       newAccessToken: newAccessToken(Accounts),
     },
     [schemaOptions.rootQueryName]: {
-      me,
+      me: me(Accounts),
     },
   };
 
@@ -82,6 +84,9 @@ export const createJSAccountsGraphQL = (Accounts: any, schemaOptions: SchemaGene
       [schemaOptions.rootQueryName]: Object.assign(
         resolversObject[schemaOptions.rootQueryName],
         resolvers[schemaOptions.rootQueryName]),
+      User: Object.assign(
+        resolversObject.User || {},
+        resolvers.User),
     }),
   };
 };
