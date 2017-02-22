@@ -7,5 +7,5 @@ import { JSAccountsContext } from './utils/context-builder';
 export {
   createJSAccountsGraphQL,
   authenticated,
-  JSAccountsContext
+  JSAccountsContext,
 };

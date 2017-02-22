@@ -1,5 +1,3 @@
 import { authenticated } from '../utils/authenticated-resolver';
 
-export const me = (Accounts) => {
-  return authenticated(Accounts, (root, args, { user }) => user);
-};
+export const me = Accounts => authenticated(Accounts, (root, args, { user }) => user);
