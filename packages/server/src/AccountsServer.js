@@ -504,15 +504,7 @@ export class AccountsServer {
     if (!user) {
       throw new AccountsError('User not found', { id: userId });
     }
-    // Pick the first email if we weren't passed an email
-    if (!address && user.emails && user.emails[0]) {
-      address = user.emails[0].address; // eslint-disable-line no-param-reassign
-    }
-    // Make sure the address is valid
-    const emails = user.emails || [];
-    if (!address || !includes(emails.map((email: Object) => email.address), address)) {
-      throw new AccountsError('No such email address for user');
-    }
+    address = this._getFirstUserEmail(user, address); // eslint-disable-line no-param-reassign
     const token = generateRandomToken();
     await this.db.addResetPasswordToken(userId, address, token);
     const resetPasswordUrl = `${this._options.siteUrl}/reset-password/${token}`;
@@ -523,6 +515,45 @@ export class AccountsServer {
       subject: this.emailTemplates.resetPassword.subject(user),
       text: this.emailTemplates.resetPassword.text(user, resetPasswordUrl),
     });
+  }
+
+  /**
+   * @description Send an email with a link the user can use to set their initial password.
+   * @param {string} userId - The id of the user to send email to.
+   * @param {string} [address] - Which address of the user's to send the email to.
+   * This address must be in the user's emails list.
+   * Defaults to the first email in the list.
+   * @returns {Promise<void>} - Return a Promise.
+   */
+  async sendEnrollmentEmail(userId: string, address: string): Promise<void> {
+    const user = await this.db.findUserById(userId);
+    if (!user) {
+      throw new AccountsError('User not found', { id: userId });
+    }
+    address = this._getFirstUserEmail(user, address); // eslint-disable-line no-param-reassign
+    const token = generateRandomToken();
+    await this.db.addResetPasswordToken(userId, address, token, 'enroll');
+    const enrollAccountUrl = `${this._options.siteUrl}/enroll-account/${token}`;
+    await this.email.sendMail({
+      from: this.emailTemplates.enrollAccount.from ?
+        this.emailTemplates.enrollAccount.from : this.emailTemplates.from,
+      to: address,
+      subject: this.emailTemplates.enrollAccount.subject(user),
+      text: this.emailTemplates.enrollAccount.text(user, enrollAccountUrl),
+    });
+  }
+
+  _getFirstUserEmail(user: UserObjectType, address: string): string {
+    // Pick the first email if we weren't passed an email
+    if (!address && user.emails && user.emails[0]) {
+      address = user.emails[0].address; // eslint-disable-line no-param-reassign
+    }
+    // Make sure the address is valid
+    const emails = user.emails || [];
+    if (!address || !includes(emails.map((email: Object) => email.address), address)) {
+      throw new AccountsError('No such email address for user');
+    }
+    return address;
   }
 }
 

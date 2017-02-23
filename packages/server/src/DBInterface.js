@@ -25,7 +25,7 @@ export interface DBInterface {
   invalidateAllSessions(userId: string): Promise<void>,
   findSessionById(sessionId: string) : Promise<?SessionType>,
   addEmailVerificationToken(userId: string, email: string, token: string) : Promise<void>,
-  addResetPasswordToken(userId: string, email: string, token: string) : Promise<void>,
+  addResetPasswordToken(userId: string, email: string, token: string, reason?: string) : Promise<void>,
   setResetPasssword(userId: string, email: string, newPassword: string, token: string) : Promise<void>,
   setProfile(userId: string, profile: Object) : Promise<Object>
 }
