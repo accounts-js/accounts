@@ -7,6 +7,7 @@ export default {
   store: null,
   reduxLogger: null,
   reduxStoreKey: 'accounts',
+  tokenStorage: global.localStorage,
   server: '',
   localStoragePrefix: '',
   title: '',
