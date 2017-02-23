@@ -2,6 +2,7 @@
 import type { UserObjectType } from '@accounts/common';
 
 export type EmailTemplateType = {
+  from?: string,
   subject: (user?: UserObjectType) => string,
   text: (user: UserObjectType, url: string) => string
 };
