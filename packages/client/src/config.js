@@ -9,7 +9,7 @@ export default {
   reduxStoreKey: 'accounts',
   tokenStorage: global.localStorage,
   server: '',
-  localStoragePrefix: '',
+  tokenStoragePrefix: '',
   title: '',
   requestPermissions: [],
   requestOfflineToken: {},

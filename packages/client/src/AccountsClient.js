@@ -24,7 +24,7 @@ const ACCESS_TOKEN = 'accounts:accessToken';
 const REFRESH_TOKEN = 'accounts:refreshToken';
 
 const getTokenKey = (type: string, options: Object) =>
-  (isString(options.localStoragePrefix) && options.localStoragePrefix.length > 0 ? `${options.localStoragePrefix}:${type}` : type);
+  (isString(options.tokenStoragePrefix) && options.tokenStoragePrefix.length > 0 ? `${options.tokenStoragePrefix}:${type}` : type);
 
 export interface TokenStorage {
   getItem(key: string): Promise<string>,
