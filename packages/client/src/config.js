@@ -4,7 +4,9 @@ import redirect from './redirect';
 
 export default {
   ...sharedConfig,
+  store: null,
   reduxLogger: null,
+  reduxStoreKey: 'accounts',
   server: '',
   localStoragePrefix: '',
   title: '',

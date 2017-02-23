@@ -43,16 +43,22 @@ export class AccountsClient {
       options.reduxLogger,
     ] : [];
 
-    this.store = createStore({
+    this.store = options.store || createStore({
       reducers: {
-        accounts: reducer,
+        [options.reduxStoreKey]: reducer,
       },
       middleware,
     });
   }
 
   getState(): Map<string, any> {
-    return this.store.getState().get('accounts');
+    const state = this.store.getState();
+
+    if (typeof state.get === 'function') {
+      return state.get(this.options.reduxStoreKey);
+    }
+
+    return state[this.options.reduxStoreKey];
   }
 
   user(): UserObjectType {
