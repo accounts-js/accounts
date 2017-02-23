@@ -10,7 +10,8 @@ export type EmailTemplateType = {
 export type EmailTemplatesType = {
   from: string,
   verifyEmail: EmailTemplateType,
-  resetPassword: EmailTemplateType
+  resetPassword: EmailTemplateType,
+  enrollAccount: EmailTemplateType
 };
 
 export default {
@@ -24,5 +25,10 @@ export default {
   resetPassword: {
     subject: () => 'Reset your password',
     text: (user: UserObjectType, url: string) => `To reset your password please click on this link: ${url}`,
+  },
+
+  enrollAccount: {
+    subject: () => 'Set your password',
+    text: (user: UserObjectType, url: string) => `To set your password please click on this link: ${url}`,
   },
 };
