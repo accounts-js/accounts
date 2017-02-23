@@ -1,36 +1,12 @@
 // @flow
-import { loginToken } from './resolvers/login-token';
-import { newAccessToken } from './resolvers/new-access-token';
+import { loginWithPassword } from './resolvers/login-with-password';
+import { refreshTokens } from './resolvers/refresh-tokens';
 import { me } from './resolvers/me';
 import { User } from './resolvers/user';
-
-export const queries = `
-  me: User
-`;
-
-export const mutations = `
-  loginToken(user: UserPasswordInput!): LoginTokenResult
-  newAccessToken(refreshToken: String!, accessToken: String!): LoginTokenResult
-`;
-
-export const typeDefs = `
-  type LoginTokenResult {
-    refreshToken: String
-    accessToken: String
-  }
-
-  input UserPasswordInput {
-    email: String
-    username: String
-    password: String!
-  }
-
-  type User {
-    id: ID!
-    email: String
-    username: String
-  }
-`;
+import { mutations } from './graphql/mutations';
+import { typeDefs } from './graphql/types';
+import { queries } from './graphql/queries';
+import { logout } from './resolvers/logout';
 
 export type SchemaGenerationOptions = {
   rootQueryName: string;
@@ -66,8 +42,9 @@ export const createJSAccountsGraphQL = (Accounts: any, schemaOptions: SchemaGene
   const resolvers = {
     User,
     [schemaOptions.rootMutationName]: {
-      loginToken: loginToken(Accounts),
-      newAccessToken: newAccessToken(Accounts),
+      loginWithPassword: loginWithPassword(Accounts),
+      refreshTokens: refreshTokens(Accounts),
+      logout: logout(Accounts),
     },
     [schemaOptions.rootQueryName]: {
       me: me(Accounts),

@@ -1,6 +1,0 @@
-mutation newAccessToken($refreshToken: String!, $accessToken: String!) {
-    newAccessToken(refreshToken: $refreshToken, accessToken: $accessToken) {
-        refreshToken
-        accessToken
-    }
-}

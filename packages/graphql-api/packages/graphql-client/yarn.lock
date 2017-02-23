@@ -2,6 +2,23 @@
 # yarn lockfile v1
 
 
+"@accounts/client@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@accounts/client/-/client-0.0.4.tgz#f4f2bc47ad31dd4333abd7ec8283a4d3066aa6cc"
+  dependencies:
+    "@accounts/common" "^0.0.4"
+    immutable "^3.8.1"
+    jwt-decode "^2.1.0"
+    lodash "^4.16.4"
+    redux "^3.6.0"
+    redux-immutable "^3.0.8"
+
+"@accounts/common@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@accounts/common/-/common-0.0.4.tgz#c5a3ece1ca0462bdfc02ed495962de0619a24396"
+  dependencies:
+    lodash "^4.16.4"
+
 "@types/async@^2.0.31":
   version "2.0.36"
   resolved "https://registry.yarnpkg.com/@types/async/-/async-2.0.36.tgz#d3f393ea7dd413e1003ff49859fff41d8cca8f48"
@@ -2104,6 +2121,10 @@ ignore@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-3.2.0.tgz#8d88f03c3002a0ac52114db25d2c673b0bf1e435"
 
+immutable@^3.8.1:
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.1.tgz#200807f11ab0f72710ea485542de088075f68cd2"
+
 imurmurhash@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
@@ -2682,6 +2703,10 @@ jsx-ast-utils@^1.0.0, jsx-ast-utils@^1.3.4:
   dependencies:
     acorn-jsx "^3.0.1"
     object-assign "^4.1.0"
+
+jwt-decode@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-2.1.0.tgz#d3079cef1689d82d56bbb7aedcfea28b12f0e36a"
 
 kind-of@^3.0.2:
   version "3.1.0"
@@ -3537,7 +3562,13 @@ redeyed@~1.0.0:
   dependencies:
     esprima "~3.0.0"
 
-redux@^3.3.1:
+redux-immutable@^3.0.8:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/redux-immutable/-/redux-immutable-3.1.0.tgz#cafbd686e0711261119b9c28960935dc47a49d0a"
+  dependencies:
+    immutable "^3.8.1"
+
+redux@^3.3.1, redux@^3.6.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/redux/-/redux-3.6.0.tgz#887c2b3d0b9bd86eca2be70571c27654c19e188d"
   dependencies:

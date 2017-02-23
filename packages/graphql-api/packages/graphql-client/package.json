@@ -61,11 +61,7 @@
     "webpack-node-externals": "^1.5.4"
   },
   "dependencies": {
-    "apollo-client": "^0.5.20",
-    "graphql": "^0.8.2",
+    "@accounts/common": "^0.0.4",
     "graphql-tag": "^1.1.2"
-  },
-  "peerDependencies": {
-    "graphql": "^0.8.2"
   }
 }

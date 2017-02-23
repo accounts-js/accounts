@@ -10,6 +10,7 @@
   },
 
   "rules": {
+    "import/prefer-default-export": 0,
     "strict": 0,
     "import/no-extraneous-dependencies": 0,
     "no-underscore-dangle": 0
