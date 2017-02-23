@@ -1,5 +1,5 @@
 {
-  "name": "@accounts/graphql",
+  "name": "@accounts/graphql-client",
   "version": "0.0.1",
   "description": "GraphQL client transport for accounts",
   "main": "lib/index.js",
