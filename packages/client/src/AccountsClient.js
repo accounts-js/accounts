@@ -24,15 +24,23 @@ const ACCESS_TOKEN = 'accounts:accessToken';
 const REFRESH_TOKEN = 'accounts:refreshToken';
 
 const getTokenKey = (type: string, options: Object) =>
-  (isString(options.localStoragePrefix) && options.localStoragePrefix.length > 0 ? `${options.localStoragePrefix}:${type}` : type);
+  (isString(options.tokenStoragePrefix) && options.tokenStoragePrefix.length > 0 ? `${options.tokenStoragePrefix}:${type}` : type);
+
+export interface TokenStorage {
+  getItem(key: string): Promise<string>,
+  removeItem(key: string): Promise<string>,
+  setItem(key: string, value: string): Promise<string>
+}
 
 export class AccountsClient {
   options: Object;
   transport: TransportInterface;
   store: Store<Map<string, any>, Object>;
+  storage: TokenStorage;
 
   constructor(options: Object, transport: TransportInterface) {
     this.options = options;
+    this.storage = options.tokenStorage;
     if (!transport) {
       throw new AccountsError('A REST or GraphQL transport is required');
     }
@@ -67,25 +75,25 @@ export class AccountsClient {
 
   tokens(): TokensType {
     return {
-      accessToken: localStorage.getItem(getTokenKey(ACCESS_TOKEN, this.options)),
-      refreshToken: localStorage.getItem(getTokenKey(REFRESH_TOKEN, this.options)),
+      accessToken: this.storage.getItem(getTokenKey(ACCESS_TOKEN, this.options)),
+      refreshToken: this.storage.getItem(getTokenKey(REFRESH_TOKEN, this.options)),
     };
   }
 
   clearTokens() {
-    localStorage.removeItem(getTokenKey(ACCESS_TOKEN, this.options));
-    localStorage.removeItem(getTokenKey(REFRESH_TOKEN, this.options));
+    this.storage.removeItem(getTokenKey(ACCESS_TOKEN, this.options));
+    this.storage.removeItem(getTokenKey(REFRESH_TOKEN, this.options));
   }
 
   storeTokens(loginResponse: LoginReturnType) {
     const newAccessToken = loginResponse.tokens.accessToken;
     if (newAccessToken) {
-      localStorage.setItem(getTokenKey(ACCESS_TOKEN, this.options), newAccessToken);
+      this.storage.setItem(getTokenKey(ACCESS_TOKEN, this.options), newAccessToken);
     }
 
     const newRefreshToken = loginResponse.tokens.refreshToken;
     if (newRefreshToken) {
-      localStorage.setItem(getTokenKey(REFRESH_TOKEN, this.options), newRefreshToken);
+      this.storage.setItem(getTokenKey(REFRESH_TOKEN, this.options), newRefreshToken);
     }
   }
 
