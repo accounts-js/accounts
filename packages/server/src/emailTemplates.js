@@ -1,4 +1,17 @@
 // @flow
+import type { UserObjectType } from '@accounts/common';
+
+export type EmailTemplateType = {
+  from?: string,
+  subject: (user?: UserObjectType) => string,
+  text: (user: UserObjectType, url: string) => string
+};
+
+export type EmailTemplatesType = {
+  from: string,
+  verifyEmail: EmailTemplateType,
+  resetPassword: EmailTemplateType
+};
 
 export default {
   from: 'js-accounts <no-reply@js-accounts.com>',

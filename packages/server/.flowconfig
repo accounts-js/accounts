@@ -1,0 +1,9 @@
+[ignore]
+<PROJECT_ROOT>/lib/.*
+.*bower.json
+
+[include]
+
+[libs]
+
+[options]

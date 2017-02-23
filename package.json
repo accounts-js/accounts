@@ -5,9 +5,11 @@
     "link": "lerna exec -- npm link",
     "compile": "lerna run compile",
     "lint": "eslint packages/*/src",
-    "flow:check": "flow check",
+    "flow:check": "lerna run flow:check",
     "prebootstrap": "npm install",
     "postinstall": "lerna bootstrap",
+    "publish": "lerna publish",
+    "publish:canary": "npm run publish -- --canary",
     "pretest": "npm run compile",
     "test": "npm run testonly",
     "posttest": "npm run lint",
@@ -31,7 +33,7 @@
     "eslint-plugin-jsx-a11y": "^3.0.2",
     "eslint-plugin-react": "^6.9.0",
     "eslint-plugin-require-jsdoc": "^1.0.4",
-    "flow-bin": "^0.38.0",
+    "flow-bin": "0.39.0",
     "lerna": "2.0.0-beta.36"
   }
 }

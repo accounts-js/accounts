@@ -1,3 +1,5 @@
+// @flow
+
 import Accounts, { AccountsClient } from './AccountsClient';
 import type { TransportInterface } from './TransportInterface';
 import config from './config';

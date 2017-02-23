@@ -1,6 +1,6 @@
 // @flow
 
-import { isString, isPlainObject, find, includes } from 'lodash';
+import { isString, isPlainObject, find, includes, get } from 'lodash';
 import jwt from 'jsonwebtoken';
 import {
   AccountsError,
@@ -25,10 +25,14 @@ import {
 } from './tokens';
 import Email from './email';
 import emailTemplates from './emailTemplates';
+import type { EmailConnector } from './email';
+import type { EmailTemplatesType } from './emailTemplates';
 
 export class AccountsServer {
   _options: Object
   db: DBInterface
+  email: EmailConnector
+  emailTemplates: EmailTemplatesType
 
   /**
    * @description Configure AccountsServer.
@@ -97,7 +101,6 @@ export class AccountsServer {
       throw new AccountsError('User not found', user, 403);
     }
 
-    // $FlowFixMe
     const sessionId = await this.db.createSession(foundUser.id, ip, userAgent);
     const { accessToken, refreshToken } = this.createTokens(sessionId);
 
@@ -206,7 +209,7 @@ export class AccountsServer {
       throw new AccountsError('Tokens are not valid');
     }
 
-    const session : SessionType = await this.db.findSessionById(sessionId);
+    const session: ?SessionType = await this.db.findSessionById(sessionId);
     if (!session) {
       throw new AccountsError('Session not found');
     }
@@ -255,7 +258,7 @@ export class AccountsServer {
    * @returns {Promise<void>} - Return a promise.
    */
   async logout(accessToken: string): Promise<void> {
-    const session : SessionType = await this.findSessionByAccessToken(accessToken);
+    const session: SessionType = await this.findSessionByAccessToken(accessToken);
     if (session.valid) {
       const user = await this.db.findUserById(session.userId);
       if (!user) {
@@ -268,7 +271,7 @@ export class AccountsServer {
   }
 
   async resumeSession(accessToken: string): Promise<?UserObjectType> {
-    const session : SessionType = await this.findSessionByAccessToken(accessToken);
+    const session: SessionType = await this.findSessionByAccessToken(accessToken);
     if (session.valid) {
       const user = await this.db.findUserById(session.userId);
       if (!user) {
@@ -301,7 +304,7 @@ export class AccountsServer {
       throw new AccountsError('Tokens are not valid');
     }
 
-    const session : SessionType = await this.db.findSessionById(sessionId);
+    const session: ?SessionType = await this.db.findSessionById(sessionId);
     if (!session) {
       throw new AccountsError('Session not found');
     }
@@ -370,7 +373,9 @@ export class AccountsServer {
     if (!user) {
       throw new AccountsError('Verify email link expired');
     }
-    const tokenRecord = find(user.services.email.verificationTokens,
+
+    const verificationTokens = get(user, ['services', 'email', 'verificationTokens'], []);
+    const tokenRecord = find(verificationTokens,
                              (t: Object) => t.token === token);
     if (!tokenRecord) {
       throw new AccountsError('Verify email link expired');
@@ -380,7 +385,7 @@ export class AccountsServer {
     if (!emailRecord) {
       throw new AccountsError('Verify email link is for unknown address');
     }
-    await this.db.verifyEmail(user.id, emailRecord);
+    await this.db.verifyEmail(user.id, emailRecord.address);
   }
 
   /**
@@ -394,13 +399,15 @@ export class AccountsServer {
     if (!user) {
       throw new AccountsError('Reset password link expired');
     }
-    const resetTokenRecord = find(user.services.password.resetTokens,
+    const resetTokens = get(user, ['services', 'password', 'resetTokens']);
+    const resetTokenRecord = find(resetTokens,
                                   (t: Object) => t.token === token);
     if (!resetTokenRecord) {
       throw new AccountsError('Reset password link expired');
     }
     // TODO check time for expiry date
-    if (!includes(user.emails.map((email: string) => email.address), resetTokenRecord.email)) {
+    const emails = user.emails || [];
+    if (!includes(emails.map((email: Object) => email.address), resetTokenRecord.email)) {
       throw new AccountsError('Token has invalid email address');
     }
     // Change the user password and remove the old token
@@ -464,11 +471,12 @@ export class AccountsServer {
     }
     // If no address provided find the first unverified email
     if (!address) {
-      const email = find(user.emails, (e: string) => !e.verified);
+      const email = find(user.emails, (e: Object) => !e.verified);
       address = email && email.address; // eslint-disable-line no-param-reassign
     }
     // Make sure the address is valid
-    if (!address || !includes(user.emails.map((email: string) => email.address), address)) {
+    const emails = user.emails || [];
+    if (!address || !includes(emails.map((email: Object) => email.address), address)) {
       throw new AccountsError('No such email address for user');
     }
     const token = generateRandomToken();
@@ -501,7 +509,8 @@ export class AccountsServer {
       address = user.emails[0].address; // eslint-disable-line no-param-reassign
     }
     // Make sure the address is valid
-    if (!address || !includes(user.emails.map((email: string) => email.address), address)) {
+    const emails = user.emails || [];
+    if (!address || !includes(emails.map((email: Object) => email.address), address)) {
       throw new AccountsError('No such email address for user');
     }
     const token = generateRandomToken();
