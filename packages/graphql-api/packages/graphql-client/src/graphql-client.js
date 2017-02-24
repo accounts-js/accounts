@@ -11,16 +11,18 @@ import {
   logoutMutation,
   verifyEmailMutation,
   createUserMutation,
-  loginMutation,
+  createLoginMutation,
   refreshTokenMutation,
+  defaultUserFieldsFragment,
 } from './graphql';
 
 export type OptionsType = {
   graphQLClient: any,
+  userFieldsFragment: string
 };
 
 export class GraphQLClient {
-  constructor(options: OptionsType) {
+  constructor(options: OptionsType = {}) {
     this.options = options;
 
     if (!this.options.graphQLClient ||
@@ -42,6 +44,11 @@ export class GraphQLClient {
   }
 
   async loginWithPassword(user: string, password: string): Promise<LoginReturnType> {
+    const userFieldsFragment = this.options.userFieldsFragment ?
+      gql`${this.options.userFieldsFragment}` :
+      defaultUserFieldsFragment;
+    const loginMutation = createLoginMutation(userFieldsFragment);
+    console.log('Here!!!!!');
     return await this.mutate(loginMutation, 'loginWithPassword', { user, password });
   }
 
