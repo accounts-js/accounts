@@ -1,2 +1,7 @@
 src/
 coverage/
+.babelrc
+.eslintrc
+webpack.config.js
+yarn.lock
+wallaby.js
