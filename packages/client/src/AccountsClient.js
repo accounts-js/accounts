@@ -243,17 +243,17 @@ export class AccountsClient {
     }
   }
 
-  async requestPasswordReset(userId: string, email?: string): Promise<void> {
+  async requestPasswordReset(email?: string): Promise<void> {
     try {
-      await this.transport.sendResetPasswordEmail(userId, email);
+      await this.transport.sendResetPasswordEmail(email);
     } catch (err) {
       throw new AccountsError(err.message);
     }
   }
 
-  async requestVerificationEmail(userId: string, email?: string): Promise<void> {
+  async requestVerificationEmail(email?: string): Promise<void> {
     try {
-      await this.transport.sendVerificationEmail(userId, email);
+      await this.transport.sendVerificationEmail(email);
     } catch (err) {
       throw new AccountsError(err.message);
     }
@@ -307,11 +307,11 @@ const Accounts = {
   resetPassword(token: string, newPassword: string): Promise<void> {
     return this.instance.resetPassword(token, newPassword);
   },
-  requestPasswordReset(userId: string, email?: string): Promise<void> {
-    return this.instance.requestPasswordReset(userId, email);
+  requestPasswordReset(email?: string): Promise<void> {
+    return this.instance.requestPasswordReset(email);
   },
-  requestVerificationEmail(userId: string, email?: string): Promise<void> {
-    return this.instance.requestVerificationEmail(userId, email);
+  requestVerificationEmail(email?: string): Promise<void> {
+    return this.instance.requestVerificationEmail(email);
   },
 };
 
