@@ -451,6 +451,7 @@ describe('Mongo', () => {
       expect(retUser.services.password.reset[0].address).toEqual('john@doe.com');
       expect(retUser.services.password.reset[0].token).toEqual('token');
       expect(retUser.services.password.reset[0].when).toBeTruthy();
+      expect(retUser.services.password.reset[0].reason).toEqual('reset');
     });
   });
 

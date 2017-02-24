@@ -256,13 +256,14 @@ class Mongo {
     });
   }
 
-  async addResetPasswordToken(userId: string, email: string, token: string): Promise<void> {
+  async addResetPasswordToken(userId: string, email: string, token: string, reason: string = 'reset'): Promise<void> {
     await this.collection.update({ _id: userId }, {
       $push: {
         'services.password.reset': {
           token,
           address: email.toLowerCase(),
           when: Date.now(),
+          reason,
         },
       },
     });
