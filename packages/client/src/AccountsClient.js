@@ -132,6 +132,7 @@ export class AccountsClient {
     } else {
       this.clearTokens();
       this.clearUser();
+      throw new AccountsError('no tokens provided');
     }
   }
 
