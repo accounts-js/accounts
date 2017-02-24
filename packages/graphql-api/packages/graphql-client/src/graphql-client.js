@@ -48,7 +48,6 @@ export class GraphQLClient {
       gql`${this.options.userFieldsFragment}` :
       defaultUserFieldsFragment;
     const loginMutation = createLoginMutation(userFieldsFragment);
-    console.log('Here!!!!!');
     return await this.mutate(loginMutation, 'loginWithPassword', { user, password });
   }
 
