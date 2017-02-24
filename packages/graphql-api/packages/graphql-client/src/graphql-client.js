@@ -1,5 +1,6 @@
 // @flow
 
+import gql from 'graphql-tag';
 import type {
   CreateUserType,
   LoginReturnType,
@@ -15,6 +16,7 @@ import {
   refreshTokenMutation,
   defaultUserFieldsFragment,
 } from './graphql';
+
 
 export type OptionsType = {
   graphQLClient: any,
