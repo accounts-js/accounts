@@ -171,7 +171,7 @@ export class AccountsClient {
 
   async loginWithPassword(user: PasswordLoginUserType,
                           password: ?string,
-                          callback: ?Function): Promise<void> {
+                          callback?: Function): Promise<void> {
     if (!password || !user) {
       throw new AccountsError('Unrecognized options for login request', user, 400);
     }
@@ -248,7 +248,7 @@ const Accounts = {
   },
   loginWithPassword(user: PasswordLoginUserType,
                     password: string,
-                    callback: Function): Promise<void> {
+                    callback?: Function): Promise<void> {
     return this.instance.loginWithPassword(user, password, callback);
   },
   loggingIn(): boolean {
