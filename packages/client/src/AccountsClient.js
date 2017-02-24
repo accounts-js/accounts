@@ -226,6 +226,38 @@ export class AccountsClient {
       throw new AccountsError(err.message);
     }
   }
+
+  async verifyEmail(token: string): Promise<void> {
+    try {
+      await this.transport.verifyEmail(token);
+    } catch (err) {
+      throw new AccountsError(err.message);
+    }
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<void> {
+    try {
+      await this.transport.resetPassword(token, newPassword);
+    } catch (err) {
+      throw new AccountsError(err.message);
+    }
+  }
+
+  async requestPasswordReset(userId: string, email?: string): Promise<void> {
+    try {
+      await this.transport.sendResetPasswordEmail(userId, email);
+    } catch (err) {
+      throw new AccountsError(err.message);
+    }
+  }
+
+  async requestVerificationEmail(userId: string, email?: string): Promise<void> {
+    try {
+      await this.transport.sendVerificationEmail(userId, email);
+    } catch (err) {
+      throw new AccountsError(err.message);
+    }
+  }
 }
 
 const Accounts = {
@@ -268,6 +300,18 @@ const Accounts = {
   },
   refreshSession(): Promise<void> {
     return this.instance.refreshSession();
+  },
+  verifyEmail(token: string): Promise<void> {
+    return this.instance.verifyEmail(token);
+  },
+  resetPassword(token: string, newPassword: string): Promise<void> {
+    return this.instance.resetPassword(token, newPassword);
+  },
+  requestPasswordReset(userId: string, email?: string): Promise<void> {
+    return this.instance.requestPasswordReset(userId, email);
+  },
+  requestVerificationEmail(userId: string, email?: string): Promise<void> {
+    return this.instance.requestVerificationEmail(userId, email);
   },
 };
 
