@@ -1,4 +1,4 @@
-declare module 'temp-accounts-graphql-api' {
+declare module '@accounts/graphql-api' {
   export interface SchemaGenerationResult {
     schema: string;
     extendWithResolvers: (resolversObject: any) => any;
