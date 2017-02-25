@@ -77,7 +77,7 @@ export class AccountsClient {
     return Promise.resolve(this.storage.setItem(keyName, value));
   }
 
-  removeStorageData(keyName: string): Promise<string> {
+  async removeStorageData(keyName: string): Promise<string> {
     return Promise.resolve(this.storage.removeItem(keyName));
   }
 
