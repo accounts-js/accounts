@@ -7,6 +7,7 @@ export const createLoginMutation = userFieldsFragment => gql`
       sessionId
       ...LoginFields
       user {
+          id
           ...UserFields
       }
     }

@@ -6,6 +6,7 @@ export const createRefreshTokenMutation = userFieldsFragment => gql`
         refreshTokens(accessToken: $accessToken, refreshToken: $refreshToken) {
             ...LoginFields
             user {
+                id
                 ...UserFields
             }
         }
