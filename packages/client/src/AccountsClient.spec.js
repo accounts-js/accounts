@@ -247,6 +247,41 @@ describe('Accounts', () => {
       expect(localStorage.getItem('accounts:accessToken')).toEqual('accessToken');
       expect(localStorage.getItem('accounts:refreshToken')).toEqual('refreshToken');
     });
+
+    it('fetch tokens from storage when storage is async', async () => {
+      const transport = {
+        loginWithPassword: () => Promise.resolve(loggedInUser),
+      };
+
+      Accounts.config({
+        history,
+        tokenStorage: {
+          getItem: () => Promise.resolve('testValue'),
+        },
+      }, transport);
+
+      const tokens = await Accounts.tokens();
+      expect(tokens.accessToken).toBe('testValue');
+      expect(tokens.refreshToken).toBe('testValue');
+    });
+
+    it('fetch tokens from storage when storage is sync', async () => {
+      const transport = {
+        loginWithPassword: () => Promise.resolve(loggedInUser),
+      };
+
+      Accounts.config({
+        history,
+        tokenStorage: {
+          getItem: () => 'testValue',
+        },
+      }, transport);
+
+      const tokens = await Accounts.tokens();
+      expect(tokens.accessToken).toBe('testValue');
+      expect(tokens.refreshToken).toBe('testValue');
+    });
+
     it('stores user in redux', async () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(loggedInUser),
