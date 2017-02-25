@@ -1,6 +1,6 @@
 {
   "name": "@accounts/graphql-api",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "Server side GraphQL transport for accounts",
   "main": "lib/index.js",
   "scripts": {
