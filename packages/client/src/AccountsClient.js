@@ -73,11 +73,14 @@ export class AccountsClient {
     return this.getState().get('user').toJS();
   }
 
-  tokens(): TokensType {
-    return {
-      accessToken: this.storage.getItem(getTokenKey(ACCESS_TOKEN, this.options)),
-      refreshToken: this.storage.getItem(getTokenKey(REFRESH_TOKEN, this.options)),
-    };
+  async tokens(): Promise<TokensType> {
+    return Promise.all([
+      Promise.resolve(this.storage.getItem(getTokenKey(ACCESS_TOKEN, this.options))),
+      Promise.resolve(this.storage.getItem(getTokenKey(REFRESH_TOKEN, this.options))),
+    ]).then(([accessToken, refreshToken]) => ({
+      accessToken,
+      refreshToken
+    }));
   }
 
   clearTokens() {
@@ -107,7 +110,7 @@ export class AccountsClient {
   }
 
   async refreshSession(): Promise<void> {
-    const { accessToken, refreshToken } = this.tokens();
+    const { accessToken, refreshToken } = await this.tokens();
     if (accessToken && refreshToken) {
       try {
         const decodedRefreshToken = jwtDecode(refreshToken);
@@ -207,7 +210,7 @@ export class AccountsClient {
 
   async logout(callback: ?Function): Promise<void> {
     try {
-      const { accessToken } = this.tokens();
+      const { accessToken } = await this.tokens();
 
       if (accessToken) {
         await this.transport.logout(accessToken);
