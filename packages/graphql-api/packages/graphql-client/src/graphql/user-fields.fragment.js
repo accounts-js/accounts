@@ -1,6 +1,4 @@
-import gql from 'graphql-tag';
-
-export const defaultUserFieldsFragment = gql`
+export const defaultUserFieldsFragment = `
   fragment UserFields on User {
     email
     username
