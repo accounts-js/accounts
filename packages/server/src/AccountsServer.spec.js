@@ -97,7 +97,7 @@ describe('Accounts', () => {
         await Accounts.createUser({
           password: '123456',
           username: '',
-          email: 'email1',
+          email: 'email1@email.com',
         });
         throw new Error();
       } catch (err) {
