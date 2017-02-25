@@ -253,11 +253,12 @@ describe('Accounts', () => {
         loginWithPassword: () => Promise.resolve(loggedInUser),
       };
 
-      Accounts.config({ history, tokenStorage: {
-        getItem: () => {
-          return Promise.resolve('testValue');
+      Accounts.config({
+        history,
+        tokenStorage: {
+          getItem: () => Promise.resolve('testValue'),
         },
-      } }, transport);
+      }, transport);
 
       const tokens = await Accounts.tokens();
       expect(tokens.accessToken).toBe('testValue');
@@ -269,9 +270,12 @@ describe('Accounts', () => {
         loginWithPassword: () => Promise.resolve(loggedInUser),
       };
 
-      Accounts.config({ history, tokenStorage: {
-        getItem: () => 'testValue',
-      } }, transport);
+      Accounts.config({
+        history,
+        tokenStorage: {
+          getItem: () => 'testValue',
+        },
+      }, transport);
 
       const tokens = await Accounts.tokens();
       expect(tokens.accessToken).toBe('testValue');

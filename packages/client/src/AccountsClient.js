@@ -77,9 +77,9 @@ export class AccountsClient {
     return Promise.all([
       Promise.resolve(this.storage.getItem(getTokenKey(ACCESS_TOKEN, this.options))),
       Promise.resolve(this.storage.getItem(getTokenKey(REFRESH_TOKEN, this.options))),
-    ]).then(([accessToken, refreshToken]) => ({
+    ]).then(([accessToken, refreshToken]: [string, string]) => ({
       accessToken,
-      refreshToken
+      refreshToken,
     }));
   }
 
