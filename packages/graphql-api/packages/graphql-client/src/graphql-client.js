@@ -12,9 +12,9 @@ import {
   logoutMutation,
   verifyEmailMutation,
   createUserMutation,
-  createLoginMutation,
-  refreshTokenMutation,
   defaultUserFieldsFragment,
+  createLoginMutation,
+  createRefreshTokenMutation,
 } from './graphql';
 
 export type OptionsType = {
@@ -70,7 +70,8 @@ export class GraphQLClient {
   }
 
   async refreshTokens(accessToken: string, refreshToken: string): Promise<LoginReturnType> {
-    return await this.mutate(refreshTokenMutation, 'refreshTokens', { accessToken, refreshToken });
+    const mutation = createRefreshTokenMutation(this.options.userFieldsFragment);
+    return await this.mutate(mutation, 'refreshTokens', { accessToken, refreshToken });
   }
 
   async logout(accessToken: string): Promise<void> {
