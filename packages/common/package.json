@@ -1,6 +1,6 @@
 {
   "name": "@accounts/common",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "publishConfig": {
