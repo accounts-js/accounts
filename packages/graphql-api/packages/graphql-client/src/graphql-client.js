@@ -27,9 +27,6 @@ export class GraphQLClient {
     this.options = Object.assign({
       graphQLClient: null,
       userFieldsFragment: defaultUserFieldsFragment,
-      meQueryName: 'Me',
-      meWatchQuery: true,
-      setTokenHook: () => {},
     }, options);
 
     this.options.userFieldsFragment = gql`${this.options.userFieldsFragment}`;
