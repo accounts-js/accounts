@@ -81,8 +81,9 @@ export class AccountsClient {
     return Promise.resolve(this.storage.removeItem(keyName));
   }
 
-  user(): UserObjectType {
-    return this.getState().get('user').toJS();
+  user(): UserObjectType | null {
+    const user = this.getState().get('user');
+    return user ? user.toJS() : null;
   }
 
   async tokens(): Promise<TokensType> {
@@ -250,7 +251,7 @@ const Accounts = {
       ...options,
     }, transport);
   },
-  user(): UserObjectType {
+  user(): UserObjectType | null {
     return this.instance.user();
   },
   options(): Object {

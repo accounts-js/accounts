@@ -8,7 +8,7 @@ const LOGGING_IN = `${PATH}LOGGING_IN`;
 
 const initialState = Map({
   isLoading: false,
-  user: Map(),
+  user: null,
   loggingIn: false,
 });
 
@@ -23,7 +23,7 @@ const reducer = (state = initialState, action) => {
       return state.set('user', Map(user));
     }
     case CLEAR_USER: {
-      return state.set('user', Map());
+      return state.set('user', null);
     }
     case LOGGING_IN: {
       const { isLoggingIn } = action.payload;
