@@ -196,6 +196,7 @@ export class AccountsClient {
     this.store.dispatch(loggingIn(true));
     try {
       const res : LoginReturnType = await this.transport.loginWithPassword(user, password);
+      this.store.dispatch(loggingIn(false));
       await this.storeTokens(res);
       this.store.dispatch(setUser(res.user));
       this.options.onSignedInHook();
@@ -203,12 +204,12 @@ export class AccountsClient {
         callback();
       }
     } catch (err) {
+      this.store.dispatch(loggingIn(false));
       if (callback && isFunction(callback)) {
         callback(err);
       }
       throw new AccountsError(err.message);
     }
-    this.store.dispatch(loggingIn(false), user);
   }
 
   loggingIn(): boolean {
