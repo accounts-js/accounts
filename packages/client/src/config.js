@@ -21,6 +21,7 @@ export default {
   profilePath: '/',
   changePasswordPath: null,
   homePath: '/',
+  signOutPath: '/',
   // TODO enable all of these
   // onSubmitHook: () => {},
   // onPreSignUpHook: () => new Promise(resolve => resolve()),
@@ -29,6 +30,6 @@ export default {
   onResetPasswordHook: () => redirect(AccountsClient.options().loginPath),
   onVerifyEmailHook: () => redirect(AccountsClient.options().profilePath),
   onSignedInHook: () => redirect(AccountsClient.options().homePath),
-  onSignedOutHook: () => redirect(AccountsClient.options().homePath),
+  onSignedOutHook: () => redirect(AccountsClient.options().signOutPath),
   loginOnSignUp: true,
 };
