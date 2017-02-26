@@ -336,9 +336,13 @@ describe('Accounts', () => {
       Accounts.config({}, {});
       Accounts.instance.clearTokens = jest.fn(() => Accounts.instance.clearTokens);
       Accounts.instance.clearUser = jest.fn(() => Accounts.instance.clearUser);
-      await Accounts.refreshSession();
-      expect(Accounts.instance.clearTokens.mock.calls.length).toEqual(1);
-      expect(Accounts.instance.clearUser.mock.calls.length).toEqual(1);
+      try {
+        await Accounts.refreshSession();
+      } catch (err) {
+        expect(err.message).toEqual('no tokens provided');
+        expect(Accounts.instance.clearTokens.mock.calls.length).toEqual(1);
+        expect(Accounts.instance.clearUser.mock.calls.length).toEqual(1);
+      }
     });
     it('clears tokens, users and throws error if bad refresh token provided', async () => {
       Accounts.config({}, {});
