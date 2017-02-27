@@ -1,6 +1,6 @@
 // @flow
 
-import { isString, isPlainObject, find, includes, get } from 'lodash';
+import { isString, isPlainObject, isFunction, find, includes, get } from 'lodash';
 import jwt from 'jsonwebtoken';
 import {
   AccountsError,
@@ -180,6 +180,11 @@ export class AccountsServer {
       password: user.password,
       profile: user.profile,
     });
+
+    const { onUserCreated } = this.options();
+    if (isFunction(onUserCreated)) {
+      await onUserCreated(userId);
+    }
 
     return userId;
   }
