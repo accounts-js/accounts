@@ -64,7 +64,7 @@
     "webpack-node-externals": "^1.5.4"
   },
   "dependencies": {
-    "@accounts/common": "next",
+    "@accounts/common": "^0.0.6",
     "immutable": "^3.8.1",
     "jwt-decode": "^2.1.0",
     "lodash": "^4.16.4",
