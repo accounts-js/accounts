@@ -354,4 +354,89 @@ describe('Accounts', () => {
     //   });
     // });
   });
+
+  describe('verifyEmail', () => {
+    it('should return an AccountsError', async () => {
+      const error = 'something bad';
+      Accounts.config({}, { verifyEmail: () => Promise.reject({ message: error }) });
+      try {
+        await Accounts.verifyEmail();
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual(error);
+      }
+    });
+
+    it('should call transport.verifyEmail', async () => {
+      const mock = jest.fn(() => Promise.resolve());
+      Accounts.config({}, { verifyEmail: mock });
+      await Accounts.verifyEmail('token');
+      expect(mock.mock.calls.length).toEqual(1);
+      expect(mock.mock.calls[0][0]).toEqual('token');
+    });
+  });
+
+  describe('resetPassword', () => {
+    it('should return an AccountsError', async () => {
+      const error = 'something bad';
+      Accounts.config({}, { resetPassword: () => Promise.reject({ message: error }) });
+      try {
+        await Accounts.resetPassword();
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual(error);
+      }
+    });
+
+    it('should call transport.resetPassword', async () => {
+      const mock = jest.fn(() => Promise.resolve());
+      Accounts.config({}, { resetPassword: mock });
+      await Accounts.resetPassword('token', 'newPassword');
+      expect(mock.mock.calls.length).toEqual(1);
+      expect(mock.mock.calls[0][0]).toEqual('token');
+      expect(mock.mock.calls[0][1]).toEqual('newPassword');
+    });
+  });
+
+  describe('requestPasswordReset', () => {
+    it('should return an AccountsError', async () => {
+      const error = 'something bad';
+      Accounts.config({}, { sendResetPasswordEmail: () => Promise.reject({ message: error }) });
+      try {
+        await Accounts.requestPasswordReset();
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual(error);
+      }
+    });
+
+    it('should call transport.sendResetPasswordEmail', async () => {
+      const mock = jest.fn(() => Promise.resolve());
+      Accounts.config({}, { sendResetPasswordEmail: mock });
+      await Accounts.requestPasswordReset('email');
+      expect(mock.mock.calls.length).toEqual(1);
+      expect(mock.mock.calls[0][0]).toEqual('email');
+    });
+  });
+
+  describe('requestVerificationEmail', () => {
+    it('should return an AccountsError', async () => {
+      const error = 'something bad';
+      Accounts.config({}, { sendVerificationEmail: () => Promise.reject({ message: error }) });
+      try {
+        await Accounts.requestVerificationEmail();
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual(error);
+      }
+    });
+
+    it('should call transport.sendVerificationEmail', async () => {
+      const mock = jest.fn(() => Promise.resolve());
+      Accounts.config({}, { sendVerificationEmail: mock });
+      await Accounts.requestVerificationEmail('email');
+      expect(mock.mock.calls.length).toEqual(1);
+      expect(mock.mock.calls[0][0]).toEqual('email');
+    });
+  });
 });
