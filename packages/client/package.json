@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "publishConfig": {
