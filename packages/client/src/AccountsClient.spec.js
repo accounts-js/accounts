@@ -212,6 +212,7 @@ describe('Accounts', () => {
       const callback = jest.fn();
       await Accounts.loginWithPassword('username', 'password', callback);
       expect(callback.mock.calls.length).toEqual(1);
+      expect(Accounts.loggingIn()).toBe(false);
     });
     it('calls transport', async () => {
       const loginWithPassword = jest.fn(() => Promise.resolve(loggedInUser));
@@ -236,6 +237,18 @@ describe('Accounts', () => {
       } catch (err) {
         expect(callback.mock.calls.length).toEqual(1);
         expect(callback.mock.calls[0][0]).toEqual('error');
+      }
+    });
+    it('sets loggingIn flag to false on failed login', async () => {
+      const transport = {
+        loginWithPassword: () => Promise.reject('error'),
+      };
+      Accounts.config({ history }, transport);
+      try {
+        await Accounts.loginWithPassword('username', 'password');
+        throw new Error();
+      } catch (err) {
+        expect(Accounts.loggingIn()).toBe(false);
       }
     });
     it('stores tokens in local storage', async () => {
