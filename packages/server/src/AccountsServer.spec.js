@@ -748,5 +748,81 @@ describe('Accounts', () => {
         expect(Accounts.email.sendMail.mock.calls[0][0].text).toBeTruthy();
       });
     });
+
+    describe('sendEnrollmentEmail', () => {
+      it('throws error if user not found', async () => {
+        Accounts.config({}, {
+          findUserById: () => Promise.resolve(null),
+        });
+        try {
+          await Accounts.sendEnrollmentEmail('userId', 'email');
+          throw new Error();
+        } catch (err) {
+          expect(err.message).toEqual('User not found');
+        }
+      });
+      it('adds email verification token and sends mail', async () => {
+        const addResetPasswordToken = jest.fn();
+        const _getFirstUserEmail = jest.fn(() => 'user@user.com');
+        const sendMail = jest.fn();
+        Accounts.config({
+          siteUrl: 'siteUrl',
+        }, {
+          findUserById: () => Promise.resolve({
+            emails: [{
+              address: 'user@user.com',
+              verified: false,
+            }],
+          }),
+          addResetPasswordToken,
+        });
+        Accounts._getFirstUserEmail = _getFirstUserEmail;
+        Accounts.email.sendMail = sendMail;
+        await Accounts.sendEnrollmentEmail('userId');
+        expect(addResetPasswordToken.mock.calls[0][0]).toEqual('userId');
+        expect(addResetPasswordToken.mock.calls[0][1]).toEqual('user@user.com');
+        expect(addResetPasswordToken.mock.calls[0][3]).toEqual('enroll');
+        expect(sendMail.mock.calls.length).toEqual(1);
+      });
+    });
+    describe('_getFirstUserEmail', () => {
+      it('throws error if email does not exist', () => {
+        try {
+          Accounts._getFirstUserEmail({
+            emails: [{
+              address: '',
+              verified: false,
+            }],
+          });
+          throw new Error();
+        } catch (err) {
+          expect(err.message).toEqual('No such email address for user');
+        }
+        try {
+          Accounts._getFirstUserEmail({
+            emails: [{
+              address: 'wrongemail@email.com',
+              verified: false,
+            }],
+          }, 'email');
+          throw new Error();
+        } catch (err) {
+          expect(err.message).toEqual('No such email address for user');
+        }
+      });
+      it('returns first email', () => {
+        const email = Accounts._getFirstUserEmail({
+          emails: [{
+            address: 'email@email.com',
+            verified: false,
+          },
+          {
+            address: 'another@email.com',
+            verified: false,
+          }],
+        });
+        expect(email).toEqual('email@email.com');
+      });
+    });
   });
 });
