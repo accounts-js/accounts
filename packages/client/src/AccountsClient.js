@@ -15,7 +15,7 @@ import type {
 } from '@accounts/common';
 import config from './config';
 import createStore from './createStore';
-import reducer, { loggingIn, setUser, clearUser } from './module';
+import reducer, { loggingIn, setUser, clearUser, setTokens, clearTokens as clearStoreTokens } from './module';
 import type { TransportInterface } from './TransportInterface';
 
 const isValidUserObject = (user: PasswordLoginUserIdentityType) => has(user, 'user') || has(user, 'email') || has(user, 'id');
@@ -94,6 +94,7 @@ export class AccountsClient {
   }
 
   async clearTokens(): Promise<void> {
+    this.store.dispatch(clearStoreTokens());
     await this.removeStorageData(getTokenKey(ACCESS_TOKEN, this.options));
     await this.removeStorageData(getTokenKey(REFRESH_TOKEN, this.options));
   }
@@ -135,6 +136,7 @@ export class AccountsClient {
             await this.transport.refreshTokens(accessToken, refreshToken);
 
           await this.storeTokens(refreshedSession);
+          this.store.dispatch(setTokens(refreshedSession.tokens));
           this.store.dispatch(setUser(refreshedSession.user));
         }
       } catch (err) {
@@ -198,6 +200,7 @@ export class AccountsClient {
       const res : LoginReturnType = await this.transport.loginWithPassword(user, password);
       this.store.dispatch(loggingIn(false));
       await this.storeTokens(res);
+      this.store.dispatch(setTokens(res.tokens));
       this.store.dispatch(setUser(res.user));
       this.options.onSignedInHook();
       if (callback && isFunction(callback)) {

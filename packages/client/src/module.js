@@ -3,12 +3,15 @@ import { Map } from 'immutable';
 const PATH = 'js-accounts/';
 const LOGIN = `${PATH}LOGIN`;
 const SET_USER = `${PATH}SET_USER`;
+const SET_TOKENS = `${PATH}SET_TOKENS`;
+const CLEAR_TOKENS = `${PATH}CLEAR_TOKENS`;
 const CLEAR_USER = `${PATH}CLEAR_USER`;
 const LOGGING_IN = `${PATH}LOGGING_IN`;
 
 const initialState = Map({
   isLoading: false,
   user: null,
+  tokens: null,
   loggingIn: false,
 });
 
@@ -21,6 +24,13 @@ const reducer = (state = initialState, action) => {
     case SET_USER: {
       const { user } = action.payload;
       return state.set('user', Map(user));
+    }
+    case SET_TOKENS: {
+      const { tokens } = action.payload;
+      return state.set('tokens', Map(tokens));
+    }
+    case CLEAR_TOKENS: {
+      return state.set('tokens', null);
     }
     case CLEAR_USER: {
       return state.set('user', null);
@@ -49,6 +59,17 @@ export const setUser = user => ({
   payload: {
     user,
   },
+});
+
+export const setTokens = tokens => ({
+  type: SET_TOKENS,
+  payload: {
+    tokens,
+  },
+});
+
+export const clearTokens = () => ({
+  type: CLEAR_TOKENS,
 });
 
 export const clearUser = () => ({
