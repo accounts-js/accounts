@@ -305,6 +305,16 @@ describe('Accounts', () => {
         ...loggedInUser.user,
       }));
     });
+    it('stores tokens in redux', async () => {
+      const transport = {
+        loginWithPassword: () => Promise.resolve(loggedInUser),
+      };
+      Accounts.config({ history }, transport);
+      await Accounts.loginWithPassword('username', 'password');
+      expect(Accounts.instance.getState().get('tokens')).toEqual(Map({
+        ...loggedInUser.tokens,
+      }));
+    });
   });
   describe('logout', () => {
     it('calls callback on successful logout', async () => {
@@ -340,6 +350,35 @@ describe('Accounts', () => {
         expect(err.message).toEqual('error message');
         expect(callback.mock.calls.length).toEqual(1);
         expect(callback.mock.calls[0][0]).toEqual({ message: 'error message' });
+      }
+    });
+
+    it('clear tokens in redux', async () => {
+      const transport = {
+        logout: () => Promise.reject({ message: 'error message' }),
+      };
+      Accounts.instance.storeTokens({ tokens: { accessToken: '1' } });
+      Accounts.config({ history }, transport);
+      const callback = jest.fn();
+      try {
+        await Accounts.logout(callback);
+        throw new Error();
+      } catch (err) {
+        expect(Accounts.instance.getState().get('tokens')).toEqual(null);
+      }
+    });
+    it('clear user in redux', async () => {
+      const transport = {
+        logout: () => Promise.reject({ message: 'error message' }),
+      };
+      Accounts.instance.storeTokens({ tokens: { accessToken: '1' } });
+      Accounts.config({ history }, transport);
+      const callback = jest.fn();
+      try {
+        await Accounts.logout(callback);
+        throw new Error();
+      } catch (err) {
+        expect(Accounts.instance.getState().get('user')).toEqual(null);
       }
     });
   });
