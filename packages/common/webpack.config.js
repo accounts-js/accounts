@@ -21,6 +21,14 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel',
         exclude: /node_modules/,
+        query: {
+          babelrc: false,
+          presets: ['es2015', 'stage-0'],
+          plugins: [
+            'transform-flow-strip-types',
+            'transform-runtime',
+          ],
+        }
       },
     ],
   },

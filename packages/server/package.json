@@ -1,21 +1,24 @@
 {
   "name": "@accounts/server",
-  "version": "0.0.8",
+  "version": "0.0.8-alpha.840bab8d",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
+  "jsnext:main": "lib-es6/index.js",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "start": "webpack -p --config --progress --watch",
-    "compile": "babel ./src --out-dir ./lib",
+    "compile": "npm run compile:es6 && npm run compile:umd",
+    "compile:es6": "babel ./src --out-dir ./lib-es6",
+    "compile:umd": "webpack",
     "postcompile": "npm run flow:prepublish",
     "prepublish": "npm run compile",
     "test": "npm run testonly",
     "test-ci": "npm lint && npm coverage",
     "testonly": "jest",
     "flow:check": "flow check",
-    "flow:prepublish": "for i in `ls ./src/*.js`; do cp $i `echo $i | sed \"s/src/lib/g\" | sed \"s/js/js\\.flow/g\"`; done",
+    "flow:prepublish": "for i in `ls ./src/*.js`; do cp $i `echo $i | sed \"s/src/lib-es6/g\" | sed \"s/js/js\\.flow/g\"`; done",
     "coverage": "npm run testonly -- --coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
@@ -43,7 +46,8 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "dependencies": {
-    "@accounts/common": "^0.0.7",
+    "@accounts/common": "^0.0.8-alpha.840bab8d",
+    "babel-polyfill": "^6.23.0",
     "bcryptjs": "^2.4.0",
     "crypto": "^0.0.3",
     "emailjs": "^1.0.8",
@@ -60,8 +64,10 @@
     "babel-plugin-transform-flow-strip-types": "^6.21.0",
     "babel-plugin-transform-object-rest-spread": "^6.16.0",
     "babel-plugin-transform-regenerator": "^6.16.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-es2015-node4": "^2.1.0",
+    "babel-preset-stage-0": "^6.22.0",
     "coveralls": "^2.11.14",
     "flow-bin": "^0.39.0",
     "jest": "^18.0.0",
