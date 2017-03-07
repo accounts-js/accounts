@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client",
-  "version": "0.0.8-alpha.840bab8d",
+  "version": "0.0.9",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "jsnext:main": "lib-es6/index.js",
@@ -69,7 +69,7 @@
     "webpack-node-externals": "^1.5.4"
   },
   "dependencies": {
-    "@accounts/common": "^0.0.8-alpha.840bab8d",
+    "@accounts/common": "^0.0.9",
     "immutable": "^3.8.1",
     "jwt-decode": "^2.1.0",
     "lodash": "^4.16.4",
