@@ -204,12 +204,14 @@ export class AccountsClient {
       this.store.dispatch(setUser(res.user));
       this.options.onSignedInHook();
       if (callback && isFunction(callback)) {
-        callback();
+        callback(null, res);
       }
+
+      return res;
     } catch (err) {
       this.store.dispatch(loggingIn(false));
       if (callback && isFunction(callback)) {
-        callback(err);
+        callback(err, null);
       }
       throw new AccountsError(err.message);
     }
