@@ -36,7 +36,8 @@ export type AccountsClientConfiguration = AccountsCommonConfiguration & {
   onVerifyEmailHook?: Function,
   onSignedInHook?: Function,
   onSignedOutHook?: Function,
-  loginOnSignUp?: boolean
+  loginOnSignUp?: boolean,
+  history?: Object
 };
 
 export default {
@@ -63,10 +64,10 @@ export default {
   // onSubmitHook: () => {},
   // onPreSignUpHook: () => new Promise(resolve => resolve()),
   // onPostSignUpHook: () => {},
-  onEnrollAccountHook: () => redirect(AccountsClient.options().loginPath),
-  onResetPasswordHook: () => redirect(AccountsClient.options().loginPath),
-  onVerifyEmailHook: () => redirect(AccountsClient.options().profilePath),
-  onSignedInHook: () => redirect(AccountsClient.options().homePath),
-  onSignedOutHook: () => redirect(AccountsClient.options().signOutPath),
+  onEnrollAccountHook: () => redirect(AccountsClient.options().loginPath || '/'),
+  onResetPasswordHook: () => redirect(AccountsClient.options().loginPath || '/'),
+  onVerifyEmailHook: () => redirect(AccountsClient.options().profilePath || '/'),
+  onSignedInHook: () => redirect(AccountsClient.options().homePath || '/'),
+  onSignedOutHook: () => redirect(AccountsClient.options().signOutPath || '/'),
   loginOnSignUp: true,
 };

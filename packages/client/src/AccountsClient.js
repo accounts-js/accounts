@@ -291,7 +291,7 @@ export class AccountsClient {
 const Accounts = {
   instance: AccountsClient,
   ui: {},
-  config(options: Object, transport: TransportInterface) {
+  config(options: AccountsClientConfiguration, transport: TransportInterface) {
     this.instance = new AccountsClient({
       ...config,
       ...options,
@@ -300,7 +300,7 @@ const Accounts = {
   user(): UserObjectType | null {
     return this.instance.user();
   },
-  options(): Object {
+  options(): AccountsClientConfiguration {
     return this.instance.options;
   },
   createUser(user: CreateUserType, callback: ?Function): Promise<void> {
