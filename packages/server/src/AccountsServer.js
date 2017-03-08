@@ -27,9 +27,10 @@ import Email from './email';
 import emailTemplates from './emailTemplates';
 import type { EmailConnector } from './email';
 import type { EmailTemplatesType } from './emailTemplates';
+import type { AccountsServerConfiguration, PasswordAuthenticator } from './config';
 
 export class AccountsServer {
-  _options: Object
+  _options: AccountsServerConfiguration
   db: DBInterface
   email: EmailConnector
   emailTemplates: EmailTemplatesType
@@ -40,7 +41,7 @@ export class AccountsServer {
    * @param {Object} db - DBInterface for AccountsServer.
    * @returns {Object} - Return the options.
    */
-  config(options: Object, db: DBInterface) {
+  config(options: AccountsServerConfiguration, db: DBInterface) {
     this._options = {
       ...config,
       ...options,
@@ -49,10 +50,10 @@ export class AccountsServer {
       throw new AccountsError('A database driver is required');
     }
     this.db = db;
-    if (options.sendMail) {
-      this.email = { sendMail: options.sendMail };
+    if (this._options.sendMail) {
+      this.email = { sendMail: this._options.sendMail };
     } else {
-      this.email = new Email(config.email);
+      this.email = new Email(this._options.email);
     }
     this.emailTemplates = emailTemplates;
   }
@@ -115,7 +116,7 @@ export class AccountsServer {
   }
 
   // eslint-disable-next-line max-len
-  async _externalPasswordAuthenticator(authFn: Function, user: PasswordLoginUserType, password: string): Promise<any> {
+  async _externalPasswordAuthenticator(authFn: PasswordAuthenticator, user: PasswordLoginUserType, password: string): Promise<any> {
     return authFn(user, password);
   }
 
@@ -237,17 +238,17 @@ export class AccountsServer {
    * @returns {Promise<Object>} - Return a new accessToken and refreshToken.
    */
   createTokens(sessionId: string): TokensType {
-    const { tokenSecret, tokenConfigs } = this._options;
+    const { tokenSecret = config.tokenSecret, tokenConfigs = config.tokenConfigs } = this._options;
     const accessToken = generateAccessToken({
       data: {
         sessionId,
       },
       secret: tokenSecret,
-      config: tokenConfigs.accessToken,
+      config: tokenConfigs.accessToken || {},
     });
     const refreshToken = generateRefreshToken({
       secret: tokenSecret,
-      config: tokenConfigs.refreshToken,
+      config: tokenConfigs.refreshToken || {},
     });
     return { accessToken, refreshToken };
   }
@@ -481,7 +482,9 @@ export class AccountsServer {
     }
     const token = generateRandomToken();
     await this.db.addEmailVerificationToken(userId, address, token);
-    const verifyEmailUrl = `${this._options.siteUrl}/verify-email/${token}`;
+
+    const siteUrl = this._options.siteUrl || config.siteUrl;
+    const verifyEmailUrl = `${siteUrl}/verify-email/${token}`;
     await this.email.sendMail({
       from: this.emailTemplates.verifyEmail.from ?
         this.emailTemplates.verifyEmail.from : this.emailTemplates.from,
@@ -507,7 +510,9 @@ export class AccountsServer {
     address = this._getFirstUserEmail(user, address); // eslint-disable-line no-param-reassign
     const token = generateRandomToken();
     await this.db.addResetPasswordToken(userId, address, token);
-    const resetPasswordUrl = `${this._options.siteUrl}/reset-password/${token}`;
+
+    const siteUrl = this._options.siteUrl || config.siteUrl;
+    const resetPasswordUrl = `${siteUrl}/reset-password/${token}`;
     await this.email.sendMail({
       from: this.emailTemplates.resetPassword.from ?
         this.emailTemplates.resetPassword.from : this.emailTemplates.from,
@@ -533,7 +538,9 @@ export class AccountsServer {
     address = this._getFirstUserEmail(user, address); // eslint-disable-line no-param-reassign
     const token = generateRandomToken();
     await this.db.addResetPasswordToken(userId, address, token, 'enroll');
-    const enrollAccountUrl = `${this._options.siteUrl}/enroll-account/${token}`;
+
+    const siteUrl = this._options.siteUrl || config.siteUrl;
+    const enrollAccountUrl = `${siteUrl}/enroll-account/${token}`;
     await this.email.sendMail({
       from: this.emailTemplates.enrollAccount.from ?
         this.emailTemplates.enrollAccount.from : this.emailTemplates.from,

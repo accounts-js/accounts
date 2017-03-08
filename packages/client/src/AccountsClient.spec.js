@@ -494,7 +494,7 @@ describe('Accounts', () => {
       const error = 'something bad';
       Accounts.config({}, { sendResetPasswordEmail: () => Promise.reject({ message: error }) });
       try {
-        await Accounts.requestPasswordReset();
+        await Accounts.requestPasswordReset('email');
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual(error);
@@ -515,7 +515,7 @@ describe('Accounts', () => {
       const error = 'something bad';
       Accounts.config({}, { sendVerificationEmail: () => Promise.reject({ message: error }) });
       try {
-        await Accounts.requestVerificationEmail();
+        await Accounts.requestVerificationEmail('email');
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual(error);

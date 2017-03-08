@@ -1,8 +1,8 @@
 // @flow
+import type { TokenStorage } from './config';
+import type { TransportInterface } from './TransportInterface';
 
 import Accounts, { AccountsClient } from './AccountsClient';
-import type { TokenStorage } from './AccountsClient';
-import type { TransportInterface } from './TransportInterface';
 import config from './config';
 import reducer from './module';
 
