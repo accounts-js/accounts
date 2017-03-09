@@ -2,6 +2,9 @@
 import { EMAIL_ONLY } from './passwordSignupFields';
 import type { PasswordSignupFields } from './passwordSignupFields';
 
+export type HashAlgorithm =
+  'sha' | 'sha1' | 'sha224' | 'sha256' | 'sha384' | 'sha512' | 'md5' | 'ripemd160';
+
 export type AccountsCommonConfiguration = {
   siteUrl?: string,
   sendVerificationEmail?: boolean,
@@ -13,7 +16,8 @@ export type AccountsCommonConfiguration = {
   passwordEnrollTokenExpirationInDays?: number,
   passwordSignupFields?: PasswordSignupFields,
   minimumPasswordLength?: number,
-  path?: string
+  path?: string,
+  passwordHashAlgorithm?: HashAlgorithm
 };
 
 export default ({

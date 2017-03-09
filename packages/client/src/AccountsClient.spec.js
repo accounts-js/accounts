@@ -1,4 +1,5 @@
 import { Map } from 'immutable';
+import crypto from 'crypto';
 // import { generateAccessToken, generateRefreshToken } from '@accounts/server';
 import './mockLocalStorage';
 import Accounts from './AccountsClient';
@@ -314,6 +315,22 @@ describe('Accounts', () => {
       expect(Accounts.instance.getState().get('tokens')).toEqual(Map({
         ...loggedInUser.tokens,
       }));
+    });
+
+    it('can hash password with specified algorithm', async () => {
+      const loginWithPassword = jest.fn(() => Promise.resolve(loggedInUser));
+      const transport = {
+        loginWithPassword,
+      };
+      Accounts.config({
+        history,
+        passwordHashAlgorithm: 'sha256',
+      }, transport);
+      const hashDigest = crypto.createHash('sha256').update('password').digest('hex');
+      await Accounts.loginWithPassword('username', 'password');
+      expect(loginWithPassword.mock.calls[0][0]).toEqual('username');
+      expect(loginWithPassword.mock.calls[0][1]).toEqual(hashDigest);
+      expect(loginWithPassword.mock.calls.length).toEqual(1);
     });
   });
   describe('logout', () => {

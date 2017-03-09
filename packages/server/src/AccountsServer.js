@@ -17,7 +17,7 @@ import type {
 } from '@accounts/common';
 import config from './config';
 import type { DBInterface } from './DBInterface';
-import { verifyPassword } from './encryption';
+import { verifyPassword, hashPassword } from './encryption';
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -143,7 +143,9 @@ export class AccountsServer {
       throw new AccountsError('User has no password set', user, 403);
     }
 
-    const isPasswordValid = await verifyPassword(password, hash);
+    const hashAlgorithm = this._options.passwordHashAlgorithm;
+    const pass = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
+    const isPasswordValid = await verifyPassword(pass, hash);
 
     if (!isPasswordValid) {
       throw new AccountsError('Incorrect password', user, 403);

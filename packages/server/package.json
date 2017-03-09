@@ -18,7 +18,9 @@
     "test-ci": "npm lint && npm coverage",
     "testonly": "jest",
     "flow:check": "flow check",
-    "flow:prepublish": "for i in `ls ./src/*.js`; do cp $i `echo $i | sed \"s/src/lib-es6/g\" | sed \"s/js/js\\.flow/g\"`; done",
+    "flow:prepublish": "npm run flow:cplib && npm run flow:cplibes6",
+    "flow:cplib": "for i in `ls ./src/*.js`; do cp $i `echo $i | sed \"s/src/lib/g\" | sed \"s/js/js\\.flow/g\"`; done",
+    "flow:cplibes6": "for i in `ls ./src/*.js`; do cp $i `echo $i | sed \"s/src/lib-es6/g\" | sed \"s/js/js\\.flow/g\"`; done",
     "coverage": "npm run testonly -- --coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },

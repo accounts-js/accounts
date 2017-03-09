@@ -5,7 +5,7 @@ import * as validators from './validators';
 import { AccountsError } from './errors';
 import toUsernameAndEmail from './toUsernameAndEmail';
 import config from './config';
-import type { AccountsCommonConfiguration } from './config';
+import type { AccountsCommonConfiguration, HashAlgorithm } from './config';
 
 import type {
   UserObjectType,
@@ -26,6 +26,7 @@ export type {
   TokensType,
   SessionType,
   AccountsCommonConfiguration,
+  HashAlgorithm,
 };
 
 export {
