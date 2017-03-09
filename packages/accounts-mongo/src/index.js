@@ -14,7 +14,8 @@ export type MongoOptionsType = {
   timestamps: {
     createdAt: string,
     updatedAt: string,
-  }
+  },
+  convertUserIdToMongoObjectId: boolean
 };
 
 export type MongoUserObjectType = {
@@ -54,6 +55,7 @@ class Mongo {
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
       },
+      convertUserIdToMongoObjectId: true,
     };
     this.options = { ...defaultOptions, ...options };
     if (!db) {
@@ -93,7 +95,8 @@ class Mongo {
   }
 
   async findUserById(userId: string): Promise<?UserObjectType> {
-    const user = await this.collection.findOne({ _id: toMongoID(userId) });
+    const _id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
+    const user = await this.collection.findOne({ _id });
     if (user) {
       user.id = user._id;
     }
@@ -133,7 +136,8 @@ class Mongo {
   }
 
   async findPasswordHash(userId: string): Promise<?string> {
-    const user = await this.findUserById(toMongoID(userId));
+    const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
+    const user = await this.findUserById(id);
     if (user) {
       return user.services.password.bcrypt;
     }
@@ -141,7 +145,8 @@ class Mongo {
   }
 
   async addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
-    const ret = await this.collection.update({ _id: toMongoID(userId) }, {
+    const _id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
+    const ret = await this.collection.update({ _id }, {
       $addToSet: {
         emails: {
           address: newEmail.toLowerCase(),
@@ -156,7 +161,8 @@ class Mongo {
   }
 
   async removeEmail(userId: string, email: string): Promise<void> {
-    const ret = await this.collection.update({ _id: toMongoID(userId) }, {
+    const _id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
+    const ret = await this.collection.update({ _id }, {
       $pull: { emails: { address: email.toLowerCase() } },
       $set: { [this.options.timestamps.updatedAt]: Date.now() },
     });
@@ -166,7 +172,8 @@ class Mongo {
   }
 
   async setUsername(userId: string, newUsername: string): Promise<void> {
-    const ret = await this.collection.update({ _id: toMongoID(userId) }, {
+    const _id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
+    const ret = await this.collection.update({ _id }, {
       $set: {
         username: newUsername,
         [this.options.timestamps.updatedAt]: Date.now(),
@@ -178,7 +185,8 @@ class Mongo {
   }
 
   async setPasssword(userId: string, newPassword: string): Promise<void> {
-    const ret = await this.collection.update({ _id: toMongoID(userId) }, {
+    const _id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
+    const ret = await this.collection.update({ _id }, {
       $set: {
         'services.password.bcrypt': await encryption.hashPassword(newPassword),
         [this.options.timestamps.updatedAt]: Date.now(),
@@ -190,7 +198,8 @@ class Mongo {
   }
 
   async setProfile(userId: string, profile: Object): Promise<Object> {
-    await this.collection.update({ _id: toMongoID(userId) }, {
+    const _id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
+    await this.collection.update({ _id }, {
       $set: {
         profile,
         [this.options.timestamps.updatedAt]: Date.now(),

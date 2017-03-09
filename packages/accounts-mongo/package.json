@@ -12,7 +12,9 @@
     "flow": "flow; test $? -eq 0 -o $? -eq 2",
     "flow:check": "flow check",
     "prepare": "yarn compile",
-    "test": "yarn lint && yarn testonly",
+    "pretest": "yarn compile",
+    "test": "yarn testonly",
+    "posttest": "yarn lint",
     "test-ci": "yarn lint && yarn coverage",
     "testonly": "jest",
     "lint": "eslint src",
@@ -21,7 +23,10 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "testRegex": "(/.*.(test|spec)).(js|jsx)$"
+    "testRegex": "(/.*.(test|spec)).(js|jsx)$",
+    "testPathDirs": [
+      "src"
+    ]
   },
   "repository": {
     "type": "git",
