@@ -64,6 +64,15 @@ describe('Mongo', () => {
         expect(err.message).toEqual('Argument passed in must be a single String of 12 bytes or a string of 24 hex characters');
       }
     });
+
+    it('should not auto convert to mongo object id when users collection has string ids', async () => {
+      const mongoWithStringIds = new Mongo(db, { convertUserIdToMongoObjectId: false });
+      const mockFindOne = jest.fn();
+      mongoWithStringIds.collection.findOne = mockFindOne;
+      await mongoWithStringIds.findUserById('589871d1c9393d445745a57c');
+
+      expect(mockFindOne.mock.calls[0][0]).toHaveProperty('_id', '589871d1c9393d445745a57c');
+    });
   });
 
   describe('#constructor', () => {
