@@ -494,7 +494,7 @@ describe('Accounts', () => {
       const error = 'something bad';
       Accounts.config({}, { sendResetPasswordEmail: () => Promise.reject({ message: error }) });
       try {
-        await Accounts.requestPasswordReset();
+        await Accounts.requestPasswordReset('email@g.co');
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual(error);
@@ -504,9 +504,21 @@ describe('Accounts', () => {
     it('should call transport.sendResetPasswordEmail', async () => {
       const mock = jest.fn(() => Promise.resolve());
       Accounts.config({}, { sendResetPasswordEmail: mock });
-      await Accounts.requestPasswordReset('email');
+      await Accounts.requestPasswordReset('email@g.co');
       expect(mock.mock.calls.length).toEqual(1);
-      expect(mock.mock.calls[0][0]).toEqual('email');
+      expect(mock.mock.calls[0][0]).toEqual('email@g.co');
+    });
+
+    it('should throw if an invalid email is provided', async () => {
+      const mock = jest.fn();
+      Accounts.config({}, { sendResetPasswordEmail: mock });
+      try {
+        await Accounts.requestPasswordReset('email');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('Valid email must be provided');
+        expect(mock.mock.calls.length).toEqual(0);
+      }
     });
   });
 
@@ -515,7 +527,7 @@ describe('Accounts', () => {
       const error = 'something bad';
       Accounts.config({}, { sendVerificationEmail: () => Promise.reject({ message: error }) });
       try {
-        await Accounts.requestVerificationEmail();
+        await Accounts.requestVerificationEmail('email@g.co');
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual(error);
@@ -525,9 +537,21 @@ describe('Accounts', () => {
     it('should call transport.sendVerificationEmail', async () => {
       const mock = jest.fn(() => Promise.resolve());
       Accounts.config({}, { sendVerificationEmail: mock });
-      await Accounts.requestVerificationEmail('email');
+      await Accounts.requestVerificationEmail('email@g.co');
       expect(mock.mock.calls.length).toEqual(1);
-      expect(mock.mock.calls[0][0]).toEqual('email');
+      expect(mock.mock.calls[0][0]).toEqual('email@g.co');
+    });
+
+    it('should throw if an invalid email is provided', async () => {
+      const mock = jest.fn();
+      Accounts.config({}, { sendVerificationEmail: mock });
+      try {
+        await Accounts.requestVerificationEmail('email');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('Valid email must be provided');
+        expect(mock.mock.calls.length).toEqual(0);
+      }
     });
   });
 });

@@ -17,6 +17,7 @@ import config from './config';
 import createStore from './createStore';
 import reducer, { loggingIn, setUser, clearUser, setTokens, clearTokens as clearStoreTokens } from './module';
 import type { TransportInterface } from './TransportInterface';
+import type { TokenStorage, AccountsClientConfiguration } from './config';
 
 const isValidUserObject = (user: PasswordLoginUserIdentityType) => has(user, 'user') || has(user, 'email') || has(user, 'id');
 
@@ -26,21 +27,15 @@ const REFRESH_TOKEN = 'accounts:refreshToken';
 const getTokenKey = (type: string, options: Object) =>
   (isString(options.tokenStoragePrefix) && options.tokenStoragePrefix.length > 0 ? `${options.tokenStoragePrefix}:${type}` : type);
 
-export interface TokenStorage {
-  getItem(key: string): Promise<string>,
-  removeItem(key: string): Promise<string>,
-  setItem(key: string, value: string): Promise<string>
-}
-
 export class AccountsClient {
-  options: Object;
+  options: AccountsClientConfiguration;
   transport: TransportInterface;
-  store: Store<Map<string, any>, Object>;
+  store: Store<Object, Object>;
   storage: TokenStorage;
 
-  constructor(options: Object, transport: TransportInterface) {
+  constructor(options: AccountsClientConfiguration, transport: TransportInterface) {
     this.options = options;
-    this.storage = options.tokenStorage;
+    this.storage = options.tokenStorage || config.tokenStorage;
     if (!transport) {
       throw new AccountsError('A REST or GraphQL transport is required');
     }
@@ -51,9 +46,10 @@ export class AccountsClient {
       options.reduxLogger,
     ] : [];
 
+    const reduxStoreKey = options.reduxStoreKey || config.reduxStoreKey;
     this.store = options.store || createStore({
       reducers: {
-        [options.reduxStoreKey]: reducer,
+        [reduxStoreKey]: reducer,
       },
       middleware,
     });
@@ -124,6 +120,7 @@ export class AccountsClient {
     const { accessToken, refreshToken } = await this.tokens();
     if (accessToken && refreshToken) {
       try {
+        this.store.dispatch(loggingIn(true));
         const decodedRefreshToken = jwtDecode(refreshToken);
         const currentTime = Date.now() / 1000;
         // Refresh token is expired, user must sign back in
@@ -134,12 +131,14 @@ export class AccountsClient {
           // Request a new token pair
           const refreshedSession : LoginReturnType =
             await this.transport.refreshTokens(accessToken, refreshToken);
+          this.store.dispatch(loggingIn(false));
 
           await this.storeTokens(refreshedSession);
           this.store.dispatch(setTokens(refreshedSession.tokens));
           this.store.dispatch(setUser(refreshedSession.user));
         }
       } catch (err) {
+        this.store.dispatch(loggingIn(false));
         this.clearTokens();
         this.clearUser();
         throw new AccountsError('falsy token provided');
@@ -187,7 +186,7 @@ export class AccountsClient {
 
   async loginWithPassword(user: PasswordLoginUserType,
                           password: ?string,
-                          callback?: Function): Promise<void> {
+                          callback?: Function): Promise<LoginReturnType> {
     if (!password || !user) {
       throw new AccountsError('Unrecognized options for login request', user, 400);
     }
@@ -202,7 +201,11 @@ export class AccountsClient {
       await this.storeTokens(res);
       this.store.dispatch(setTokens(res.tokens));
       this.store.dispatch(setUser(res.user));
-      this.options.onSignedInHook();
+
+      if (this.options.onSignedInHook && isFunction(this.options.onSignedInHook)) {
+        this.options.onSignedInHook();
+      }
+
       if (callback && isFunction(callback)) {
         callback(null, res);
       }
@@ -238,7 +241,10 @@ export class AccountsClient {
       if (callback && isFunction(callback)) {
         callback();
       }
-      this.options.onSignedOutHook();
+
+      if (this.options.onSignedOutHook) {
+        this.options.onSignedOutHook();
+      }
     } catch (err) {
       if (callback && isFunction(callback)) {
         callback(err);
@@ -263,7 +269,8 @@ export class AccountsClient {
     }
   }
 
-  async requestPasswordReset(email?: string): Promise<void> {
+  async requestPasswordReset(email: string): Promise<void> {
+    if (!validators.validateEmail(email)) throw new AccountsError('Valid email must be provided');
     try {
       await this.transport.sendResetPasswordEmail(email);
     } catch (err) {
@@ -271,7 +278,8 @@ export class AccountsClient {
     }
   }
 
-  async requestVerificationEmail(email?: string): Promise<void> {
+  async requestVerificationEmail(email: string): Promise<void> {
+    if (!validators.validateEmail(email)) throw new AccountsError('Valid email must be provided');
     try {
       await this.transport.sendVerificationEmail(email);
     } catch (err) {
@@ -283,7 +291,7 @@ export class AccountsClient {
 const Accounts = {
   instance: AccountsClient,
   ui: {},
-  config(options: Object, transport: TransportInterface) {
+  config(options: AccountsClientConfiguration, transport: TransportInterface) {
     this.instance = new AccountsClient({
       ...config,
       ...options,
@@ -292,7 +300,7 @@ const Accounts = {
   user(): UserObjectType | null {
     return this.instance.user();
   },
-  options(): Object {
+  options(): AccountsClientConfiguration {
     return this.instance.options;
   },
   createUser(user: CreateUserType, callback: ?Function): Promise<void> {
