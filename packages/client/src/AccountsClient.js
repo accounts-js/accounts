@@ -202,7 +202,7 @@ export class AccountsClient {
       this.store.dispatch(setTokens(res.tokens));
       this.store.dispatch(setUser(res.user));
 
-      if (this.options.onSignedInHook) {
+      if (this.options.onSignedInHook && isFunction(this.options.onSignedInHook)) {
         this.options.onSignedInHook();
       }
 
