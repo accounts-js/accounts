@@ -269,8 +269,8 @@ export class AccountsClient {
     }
   }
 
-  async requestPasswordReset(email?: string): Promise<void> {
-    if (!email) throw new AccountsError('Email must be provided');
+  async requestPasswordReset(email: string): Promise<void> {
+    if (!validators.validateEmail(email)) throw new AccountsError('Valid email must be provided');
     try {
       await this.transport.sendResetPasswordEmail(email);
     } catch (err) {
@@ -278,8 +278,8 @@ export class AccountsClient {
     }
   }
 
-  async requestVerificationEmail(email?: string): Promise<void> {
-    if (!email) throw new AccountsError('Email must be provided');
+  async requestVerificationEmail(email: string): Promise<void> {
+    if (!validators.validateEmail(email)) throw new AccountsError('Valid email must be provided');
     try {
       await this.transport.sendVerificationEmail(email);
     } catch (err) {
