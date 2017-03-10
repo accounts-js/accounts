@@ -19,7 +19,9 @@
     "testonly": "jest",
     "flow:check": "flow check",
     "flow:gen": "flow gen-flow-files ./src/index.js > ./lib/index.js.flow",
-    "flow:prepublish": "for i in `ls ./src/*.js`; do cp $i `echo $i | sed \"s/src/lib-es6/g\" | sed \"s/js/js\\.flow/g\"`; done",
+    "flow:prepublish": "npm run flow:cplib && npm run flow:cplibes6",
+    "flow:cplib": "for i in `ls ./src/*.js`; do cp $i `echo $i | sed \"s/src/lib/g\" | sed \"s/js/js\\.flow/g\"`; done",
+    "flow:cplibes6": "for i in `ls ./src/*.js`; do cp $i `echo $i | sed \"s/src/lib-es6/g\" | sed \"s/js/js\\.flow/g\"`; done",
     "coverage": "npm run testonly -- --coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
@@ -70,6 +72,7 @@
   },
   "dependencies": {
     "@accounts/common": "^0.0.9",
+    "crypto-js": "^3.1.9-1",
     "immutable": "^3.8.1",
     "jwt-decode": "^2.1.0",
     "lodash": "^4.16.4",

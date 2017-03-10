@@ -16,6 +16,7 @@ import type {
 import config from './config';
 import createStore from './createStore';
 import reducer, { loggingIn, setUser, clearUser, setTokens, clearTokens as clearStoreTokens } from './module';
+import { hashPassword } from './encryption';
 import type { TransportInterface } from './TransportInterface';
 import type { TokenStorage, AccountsClientConfiguration } from './config';
 
@@ -196,7 +197,10 @@ export class AccountsClient {
 
     this.store.dispatch(loggingIn(true));
     try {
-      const res : LoginReturnType = await this.transport.loginWithPassword(user, password);
+      const hashAlgorithm = this.options.passwordHashAlgorithm;
+      const pass = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
+      const res : LoginReturnType = await this.transport.loginWithPassword(user, pass);
+
       this.store.dispatch(loggingIn(false));
       await this.storeTokens(res);
       this.store.dispatch(setTokens(res.tokens));
