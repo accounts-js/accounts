@@ -25,6 +25,7 @@ export type AccountsServerConfiguration = AccountsCommonConfiguration & {
   passwordAuthenticator?: PasswordAuthenticator,
   resumeSessionValidator?: ResumeSessionValidator,
   sendMail?: SendMailFunction,
+  // https://github.com/eleith/emailjs#emailserverconnectoptions
   email?: Object
 };
 
