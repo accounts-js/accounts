@@ -9,11 +9,11 @@ import {
 } from '@accounts/common';
 import type {
   UserObjectType,
-  CreateUserType,
-  PasswordLoginUserType,
-  LoginReturnType,
-  TokensType,
-  SessionType,
+    CreateUserType,
+    PasswordLoginUserType,
+    LoginReturnType,
+    TokensType,
+    SessionType,
 } from '@accounts/common';
 import config from './config';
 import type { DBInterface } from './DBInterface';
@@ -26,7 +26,7 @@ import {
 import Email from './email';
 import emailTemplates from './emailTemplates';
 import type { EmailConnector } from './email';
-import type { EmailTemplatesType } from './emailTemplates';
+import type { EmailTemplatesType, EmailTemplateType } from './emailTemplates';
 import type { AccountsServerConfiguration, PasswordAuthenticator } from './config';
 
 export class AccountsServer {
@@ -541,15 +541,39 @@ export class AccountsServer {
     const token = generateRandomToken();
     await this.db.addResetPasswordToken(userId, address, token, 'enroll');
 
+    const enrollmentMail = this._prepareMail(
+      address,
+      token,
+      user,
+      'enroll-account',
+      this.emailTemplates.enrollAccount,
+      this.emailTemplates.from,
+    );
+
+    await this.email.sendMail(enrollmentMail);
+  }
+
+  _prepareMail(...args: Array<any>): any {
+    if (this._options.prepareMail) {
+      return this._options.prepareMail(...args);
+    }
+    return this._defaultPrepareEmail(...args);
+  }
+
+  // eslint-disable-next-line max-len
+  _defaultPrepareEmail(to: string, token: string, user: UserObjectType, pathFragment: string, emailTemplate: EmailTemplateType, from: string): Object {
+    const tokenizedUrl = this._defaultCreateTokenizedUrl(pathFragment, token);
+    return {
+      from: emailTemplate.from || from,
+      to,
+      subject: emailTemplate.subject(user),
+      text: emailTemplate.text(user, tokenizedUrl),
+    };
+  }
+
+  _defaultCreateTokenizedUrl(pathFragment: string, token: string): string {
     const siteUrl = this._options.siteUrl || config.siteUrl;
-    const enrollAccountUrl = `${siteUrl}/enroll-account/${token}`;
-    await this.email.sendMail({
-      from: this.emailTemplates.enrollAccount.from ?
-        this.emailTemplates.enrollAccount.from : this.emailTemplates.from,
-      to: address,
-      subject: this.emailTemplates.enrollAccount.subject(user),
-      text: this.emailTemplates.enrollAccount.text(user, enrollAccountUrl),
-    });
+    return `${siteUrl}/${pathFragment}/${token}`;
   }
 
   _getFirstUserEmail(user: UserObjectType, address: string): string {
