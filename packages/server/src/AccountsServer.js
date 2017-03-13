@@ -42,10 +42,10 @@ export class AccountsServer {
    * @returns {Object} - Return the options.
    */
   config(options: AccountsServerConfiguration, db: DBInterface) {
-    this._options = {
+    this._options = ({
       ...config,
       ...options,
-    };
+    }: AccountsServerConfiguration);
     if (!db) {
       throw new AccountsError('A database driver is required');
     }

@@ -2,6 +2,7 @@
 
 import { config as sharedConfig } from '@accounts/common';
 import type { AccountsCommonConfiguration, PasswordLoginUserType, SessionType, UserObjectType } from '@accounts/common';
+import type { EmailTemplateType } from './emailTemplates';
 
 export type PasswordAuthenticator = (user: PasswordLoginUserType, password: string) => Promise<any>;
 export type ResumeSessionValidator = (user: UserObjectType, session: SessionType) => Promise<any>;
@@ -16,11 +17,16 @@ export type TokenConfig = {
   }
 };
 
+export type SendMailFunction = (emailConfig: EmailTemplateType & { to: string }) => Promise<void>;
+
 export type AccountsServerConfiguration = AccountsCommonConfiguration & {
   tokenSecret?: string,
   tokenConfigs?: TokenConfig,
   passwordAuthenticator?: PasswordAuthenticator,
-  resumeSessionValidator?: ResumeSessionValidator
+  resumeSessionValidator?: ResumeSessionValidator,
+  sendMail?: SendMailFunction,
+  // https://github.com/eleith/emailjs#emailserverconnectoptions
+  email?: Object
 };
 
 export default {
