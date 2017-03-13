@@ -78,15 +78,26 @@ export class AccountsClient {
     return Promise.resolve(this.storage.removeItem(keyName));
   }
 
+  async loadTokensFromStorage(): Promise<void> {
+    const tokens = {
+      accessToken: await this.getStorageData(getTokenKey(ACCESS_TOKEN, this.options)),
+      refreshToken: await this.getStorageData(getTokenKey(REFRESH_TOKEN, this.options)),
+    };
+    this.store.dispatch(setTokens(tokens));
+  }
+
   user(): UserObjectType | null {
     const user = this.getState().get('user');
+
     return user ? user.toJS() : null;
   }
 
-  async tokens(): Promise<TokensType> {
-    return {
-      accessToken: await this.getStorageData(getTokenKey(ACCESS_TOKEN, this.options)),
-      refreshToken: await this.getStorageData(getTokenKey(REFRESH_TOKEN, this.options)),
+  tokens(): TokensType {
+    const tokens = this.getState().get('tokens');
+
+    return tokens ? tokens.toJS() : {
+      accessToken: null,
+      refreshToken: null,
     };
   }
 
@@ -295,11 +306,13 @@ export class AccountsClient {
 const Accounts = {
   instance: AccountsClient,
   ui: {},
-  config(options: AccountsClientConfiguration, transport: TransportInterface) {
+  async config(options: AccountsClientConfiguration, transport: TransportInterface): Promise<any> {
     this.instance = new AccountsClient({
       ...config,
       ...options,
     }, transport);
+
+    return this.instance.loadTokensFromStorage().then(() => this.instance);
   },
   user(): UserObjectType | null {
     return this.instance.user();

@@ -35,9 +35,9 @@ describe('Accounts', () => {
     localStorage.clear();
   });
   describe('config', () => {
-    it('requires a transport', () => {
+    it('requires a transport', async () => {
       try {
-        Accounts.config({
+        await Accounts.config({
           history,
         });
         throw new Error();
@@ -45,6 +45,22 @@ describe('Accounts', () => {
         const { message } = err;
         expect(message).toEqual('A REST or GraphQL transport is required');
       }
+    });
+    it('should eagerly load tokens from storage after using config', async () => {
+      const transport = {
+        loginWithPassword: () => Promise.resolve(loggedInUser),
+      };
+
+      await Accounts.config({
+        history,
+        tokenStorage: {
+          getItem: () => Promise.resolve('testValue'),
+        },
+      }, transport);
+
+      const tokens = Accounts.tokens();
+      expect(tokens.accessToken).toBeDefined();
+      expect(tokens.refreshToken).toBeDefined();
     });
     it('sets the transport', () => {
       const transport = {};
@@ -107,7 +123,7 @@ describe('Accounts', () => {
         createUser: () => Promise.resolve(),
         loginWithPassword: () => Promise.resolve(loggedInUser),
       };
-      Accounts.config({ history }, transport);
+      await Accounts.config({ history }, transport);
       await Accounts.createUser({
         password: '123456',
         username: 'user',
@@ -120,8 +136,7 @@ describe('Accounts', () => {
         createUser: () => Promise.reject('error message'),
       };
 
-      Accounts.config({ history }, transport);
-
+      await Accounts.config({ history }, transport);
       const callback = jest.fn();
 
       try {
@@ -262,40 +277,22 @@ describe('Accounts', () => {
       expect(localStorage.getItem('accounts:refreshToken')).toEqual('refreshToken');
     });
 
-    it('fetch tokens from storage when storage is async', async () => {
+    it('should return tokens in a sync return value', async () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(loggedInUser),
       };
 
-      Accounts.config({
+      await Accounts.config({
         history,
         tokenStorage: {
           getItem: () => Promise.resolve('testValue'),
         },
       }, transport);
 
-      const tokens = await Accounts.tokens();
+      const tokens = Accounts.tokens();
       expect(tokens.accessToken).toBe('testValue');
       expect(tokens.refreshToken).toBe('testValue');
     });
-
-    it('fetch tokens from storage when storage is sync', async () => {
-      const transport = {
-        loginWithPassword: () => Promise.resolve(loggedInUser),
-      };
-
-      Accounts.config({
-        history,
-        tokenStorage: {
-          getItem: () => 'testValue',
-        },
-      }, transport);
-
-      const tokens = await Accounts.tokens();
-      expect(tokens.accessToken).toBe('testValue');
-      expect(tokens.refreshToken).toBe('testValue');
-    });
-
     it('stores user in redux', async () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(loggedInUser),
@@ -357,8 +354,8 @@ describe('Accounts', () => {
       const transport = {
         logout: () => Promise.reject({ message: 'error message' }),
       };
-      Accounts.instance.storeTokens({ tokens: { accessToken: '1' } });
-      Accounts.config({ history }, transport);
+      await Accounts.instance.storeTokens({ tokens: { accessToken: '1' } });
+      await Accounts.config({ history }, transport);
       const callback = jest.fn();
       try {
         await Accounts.logout(callback);
@@ -414,9 +411,9 @@ describe('Accounts', () => {
       }
     });
     it('clears tokens, users and throws error if bad refresh token provided', async () => {
-      Accounts.config({}, {});
       localStorage.setItem('accounts:refreshToken', 'bad token');
       localStorage.setItem('accounts:accessToken', 'bad token');
+      await Accounts.config({}, {});
       Accounts.instance.clearTokens = jest.fn(() => Accounts.instance.clearTokens);
       Accounts.instance.clearUser = jest.fn(() => Accounts.instance.clearUser);
       try {
