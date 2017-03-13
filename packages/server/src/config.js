@@ -17,7 +17,7 @@ export type TokenConfig = {
   }
 };
 
-export type SendMailFunction = (emailConfig: EmailTemplateType & { to: string }) => Promise<void>
+export type SendMailFunction = (emailConfig: EmailTemplateType & { to: string }) => Promise<void>;
 
 export type AccountsServerConfiguration = AccountsCommonConfiguration & {
   tokenSecret?: string,
