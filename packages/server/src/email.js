@@ -9,7 +9,7 @@ export interface EmailConnector {
 class Email {
   server: Client;
 
-  constructor(emailConfig: Object) {
+  constructor(emailConfig: ?Object) {
     if (emailConfig) {
       this.server = email.server.connect(emailConfig);
     }
