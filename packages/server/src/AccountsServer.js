@@ -1,6 +1,6 @@
 // @flow
 
-import { isString, isPlainObject, find, includes, get } from 'lodash';
+import { isString, isPlainObject, isFunction, find, includes, get } from 'lodash';
 import jwt from 'jsonwebtoken';
 import {
   AccountsError,
@@ -69,9 +69,9 @@ export class AccountsServer {
 
   /**
    * @description Return the AccountsServer options.
-   * @returns {Object} - Return the options.
+   * @returns {AccountsServerConfiguration} - Return the options.
    */
-  options(): Object {
+  options(): AccountsServerConfiguration {
     return this._options;
   }
 
@@ -192,12 +192,25 @@ export class AccountsServer {
       password = await this._hashAndBcryptPassword(user.password);
     }
     // TODO Accounts.onCreateUser
-    const userId: string = await this.db.createUser({
+    const { validateNewUser, onUserCreated } = this.options();
+
+    const proposedUserObject = {
       username: user.username,
       email: user.email && user.email.toLowerCase(),
       password,
       profile: user.profile,
-    });
+    };
+
+    if (isFunction(validateNewUser)) {
+      await validateNewUser(proposedUserObject);
+    }
+
+    const userId: string = await this.db.createUser(proposedUserObject);
+
+    if (isFunction(onUserCreated)) {
+      const createdUser = await this.findUserById(userId);
+      onUserCreated(createdUser);
+    }
 
     return userId;
   }

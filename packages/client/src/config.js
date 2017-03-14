@@ -36,6 +36,7 @@ export type AccountsClientConfiguration = AccountsCommonConfiguration & {
   onVerifyEmailHook?: Function,
   onSignedInHook?: Function,
   onSignedOutHook?: Function,
+  onUserCreated?: (user: ?Object) => Promise<any>,
   loginOnSignUp?: boolean,
   history?: Object
 };
