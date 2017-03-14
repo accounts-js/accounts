@@ -9,11 +9,11 @@ import {
 } from '@accounts/common';
 import type {
   UserObjectType,
-    CreateUserType,
-    PasswordLoginUserType,
-    LoginReturnType,
-    TokensType,
-    SessionType,
+  CreateUserType,
+  PasswordLoginUserType,
+  LoginReturnType,
+  TokensType,
+  SessionType,
 } from '@accounts/common';
 import config from './config';
 import type { DBInterface } from './DBInterface';
