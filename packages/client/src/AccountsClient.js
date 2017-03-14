@@ -306,7 +306,9 @@ export class AccountsClient {
 const Accounts = {
   instance: AccountsClient,
   ui: {},
-  async config(options: AccountsClientConfiguration, transport: TransportInterface): Promise<AccountsClient> {
+  async config(
+    options: AccountsClientConfiguration,
+    transport: TransportInterface): Promise<AccountsClient> {
     this.instance = new AccountsClient({
       ...config,
       ...options,
