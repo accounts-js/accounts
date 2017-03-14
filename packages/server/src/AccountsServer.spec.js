@@ -669,7 +669,7 @@ describe('Accounts', () => {
   describe('sendVerificationEmail', () => {
     it('throws error if user is not found', async () => {
       Accounts.config({}, {
-        findUserById: () => Promise.resolve(null),
+        findUserByEmail: () => Promise.resolve(null),
       });
       try {
         await Accounts.sendVerificationEmail();
@@ -684,10 +684,10 @@ describe('Accounts', () => {
         emails: [{ address: 'email' }],
       };
       Accounts.config({}, {
-        findUserById: () => Promise.resolve(user),
+        findUserByEmail: () => Promise.resolve(user),
       });
       try {
-        await Accounts.sendVerificationEmail('userId', 'toto');
+        await Accounts.sendVerificationEmail('toto');
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('No such email address for user');
@@ -699,11 +699,11 @@ describe('Accounts', () => {
         emails: [{ address: 'email' }],
       };
       Accounts.config({}, {
-        findUserById: () => Promise.resolve(user),
+        findUserByEmail: () => Promise.resolve(user),
         addEmailVerificationToken: () => Promise.resolve('token'),
       });
       Accounts.email = { sendMail: jest.fn() };
-      await Accounts.sendVerificationEmail('userId');
+      await Accounts.sendVerificationEmail('email');
       expect(Accounts.email.sendMail.mock.calls.length).toEqual(1);
       expect(Accounts.email.sendMail.mock.calls[0][0].from).toBeTruthy();
       expect(Accounts.email.sendMail.mock.calls[0][0].to).toEqual('email');
@@ -716,11 +716,11 @@ describe('Accounts', () => {
         emails: [{ address: 'email' }],
       };
       Accounts.config({}, {
-        findUserById: () => Promise.resolve(user),
+        findUserByEmail: () => Promise.resolve(user),
         addEmailVerificationToken: () => Promise.resolve('token'),
       });
       Accounts.email = { sendMail: jest.fn() };
-      await Accounts.sendVerificationEmail('userId', 'email');
+      await Accounts.sendVerificationEmail('email');
       expect(Accounts.email.sendMail.mock.calls.length).toEqual(1);
       expect(Accounts.email.sendMail.mock.calls[0][0].from).toBeTruthy();
       expect(Accounts.email.sendMail.mock.calls[0][0].to).toEqual('email');
@@ -732,7 +732,7 @@ describe('Accounts', () => {
   describe('sendResetPasswordEmail', () => {
     it('throws error if user is not found', async () => {
       Accounts.config({}, {
-        findUserById: () => Promise.resolve(null),
+        findUserByEmail: () => Promise.resolve(null),
       });
       try {
         await Accounts.sendResetPasswordEmail();
@@ -747,10 +747,10 @@ describe('Accounts', () => {
         emails: [{ address: 'email' }],
       };
       Accounts.config({}, {
-        findUserById: () => Promise.resolve(user),
+        findUserByEmail: () => Promise.resolve(user),
       });
       try {
-        await Accounts.sendResetPasswordEmail('userId', 'toto');
+        await Accounts.sendResetPasswordEmail('toto');
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('No such email address for user');
@@ -762,11 +762,11 @@ describe('Accounts', () => {
         emails: [{ address: 'email' }],
       };
       Accounts.config({}, {
-        findUserById: () => Promise.resolve(user),
+        findUserByEmail: () => Promise.resolve(user),
         addResetPasswordToken: () => Promise.resolve('token'),
       });
       Accounts.email = { sendMail: jest.fn() };
-      await Accounts.sendResetPasswordEmail('userId');
+      await Accounts.sendResetPasswordEmail('email');
       expect(Accounts.email.sendMail.mock.calls.length).toEqual(1);
       expect(Accounts.email.sendMail.mock.calls[0][0].from).toBeTruthy();
       expect(Accounts.email.sendMail.mock.calls[0][0].to).toEqual('email');
@@ -779,11 +779,11 @@ describe('Accounts', () => {
         emails: [{ address: 'email' }],
       };
       Accounts.config({}, {
-        findUserById: () => Promise.resolve(user),
+        findUserByEmail: () => Promise.resolve(user),
         addResetPasswordToken: () => Promise.resolve('token'),
       });
       Accounts.email = { sendMail: jest.fn() };
-      await Accounts.sendResetPasswordEmail('userId', 'email');
+      await Accounts.sendResetPasswordEmail('email');
       expect(Accounts.email.sendMail.mock.calls.length).toEqual(1);
       expect(Accounts.email.sendMail.mock.calls[0][0].from).toBeTruthy();
       expect(Accounts.email.sendMail.mock.calls[0][0].to).toEqual('email');
@@ -794,10 +794,10 @@ describe('Accounts', () => {
     describe('sendEnrollmentEmail', () => {
       it('throws error if user not found', async () => {
         Accounts.config({}, {
-          findUserById: () => Promise.resolve(null),
+          findUserByEmail: () => Promise.resolve(null),
         });
         try {
-          await Accounts.sendEnrollmentEmail('userId', 'email');
+          await Accounts.sendEnrollmentEmail('email');
           throw new Error();
         } catch (err) {
           expect(err.message).toEqual('User not found');
@@ -810,7 +810,8 @@ describe('Accounts', () => {
         Accounts.config({
           siteUrl: 'siteUrl',
         }, {
-          findUserById: () => Promise.resolve({
+          findUserByEmail: () => Promise.resolve({
+            id: 'userId',
             emails: [{
               address: 'user@user.com',
               verified: false,
@@ -820,7 +821,7 @@ describe('Accounts', () => {
         });
         Accounts._getFirstUserEmail = _getFirstUserEmail;
         Accounts.email.sendMail = sendMail;
-        await Accounts.sendEnrollmentEmail('userId');
+        await Accounts.sendEnrollmentEmail('user@user.com');
         expect(addResetPasswordToken.mock.calls[0][0]).toEqual('userId');
         expect(addResetPasswordToken.mock.calls[0][1]).toEqual('user@user.com');
         expect(addResetPasswordToken.mock.calls[0][3]).toEqual('enroll');
