@@ -30,7 +30,8 @@ export type AccountsServerConfiguration = AccountsCommonConfiguration & {
   prepareMail?: PrepareMailFunction,
   sendMail?: SendMailFunction,
   // https://github.com/eleith/emailjs#emailserverconnectoptions
-  email?: Object
+  email?: Object,
+  emailTokensExpiry?: number
 };
 
 export default {
@@ -44,6 +45,7 @@ export default {
       expiresIn: '1d',
     },
   },
+  emailTokensExpiry: 1000 * 3600, // 1 hour in milis
   // TODO Investigate oauthSecretKey
   // oauthSecretKey
 };

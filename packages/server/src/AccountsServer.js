@@ -29,6 +29,13 @@ import type { EmailConnector } from './email';
 import type { EmailTemplatesType, EmailTemplateType } from './emailTemplates';
 import type { AccountsServerConfiguration, PasswordAuthenticator } from './config';
 
+type TokenRecord = {
+  token: string,
+  address: string,
+  when: number,
+  reason: string
+};
+
 export class AccountsServer {
   _options: AccountsServerConfiguration
   db: DBInterface
@@ -402,21 +409,28 @@ export class AccountsServer {
     if (!user) {
       throw new AccountsError('Reset password link expired');
     }
-    const resetTokens = get(user, ['services', 'password', 'resetTokens']);
-    const resetTokenRecord = find(resetTokens,
-                                  (t: Object) => t.token === token);
-    if (!resetTokenRecord) {
+
+    // TODO move this getter into a password service module
+    const resetTokens = get(user, ['services', 'password', 'reset']);
+    const resetTokenRecord = find(resetTokens, (t: Object) => t.token === token);
+
+    if (this._isTokenExpired(token, resetTokenRecord)) {
       throw new AccountsError('Reset password link expired');
     }
-    // TODO check time for expiry date
+
     const emails = user.emails || [];
-    if (!includes(emails.map((email: Object) => email.address), resetTokenRecord.email)) {
+    if (!includes(emails.map((email: Object) => email.address), resetTokenRecord.address)) {
       throw new AccountsError('Token has invalid email address');
     }
     // Change the user password and remove the old token
-    await this.db.setResetPasssword(user.id, resetTokenRecord.email, newPassword, token);
+    await this.db.setResetPasssword(user.id, resetTokenRecord.address, newPassword, token);
     // Changing the password should invalidate existing sessions
     this.db.invalidateAllSessions(user.id);
+  }
+
+  _isTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
+    return !tokenRecord ||
+      Number(tokenRecord.when) + this._options.emailTokensExpiry < Date.now();
   }
 
   /**
