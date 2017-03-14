@@ -461,16 +461,15 @@ export class AccountsServer {
 
   /**
    * @description Send an email with a link the user can use verify their email address.
-   * @param {string} userId - The id of the user to send email to.
    * @param {string} [address] - Which address of the user's to send the email to.
    * This address must be in the user's emails list.
    * Defaults to the first unverified email in the list.
    * @returns {Promise<void>} - Return a Promise.
    */
-  async sendVerificationEmail(userId: string, address: string): Promise<void> {
-    const user = await this.db.findUserById(userId);
+  async sendVerificationEmail(address: string): Promise<void> {
+    const user = await this.db.findUserByEmail(address);
     if (!user) {
-      throw new AccountsError('User not found', { id: userId });
+      throw new AccountsError('User not found', { email: address });
     }
     // If no address provided find the first unverified email
     if (!address) {
@@ -483,63 +482,63 @@ export class AccountsServer {
       throw new AccountsError('No such email address for user');
     }
     const token = generateRandomToken();
-    await this.db.addEmailVerificationToken(userId, address, token);
+    await this.db.addEmailVerificationToken(user.id, address, token);
 
-    const siteUrl = this._options.siteUrl || config.siteUrl;
-    const verifyEmailUrl = `${siteUrl}/verify-email/${token}`;
-    await this.email.sendMail({
-      from: this.emailTemplates.verifyEmail.from ?
-        this.emailTemplates.verifyEmail.from : this.emailTemplates.from,
-      to: address,
-      subject: this.emailTemplates.verifyEmail.subject(user),
-      text: this.emailTemplates.verifyEmail.text(user, verifyEmailUrl),
-    });
+    const resetPasswordMail = this._prepareMail(
+      address,
+      token,
+      user,
+      'verify-email',
+      this.emailTemplates.verifyEmail,
+      this.emailTemplates.from,
+    );
+
+    await this.email.sendMail(resetPasswordMail);
   }
 
   /**
    * @description Send an email with a link the user can use to reset their password.
-   * @param {string} userId - The id of the user to send email to.
    * @param {string} [address] - Which address of the user's to send the email to.
    * This address must be in the user's emails list.
    * Defaults to the first email in the list.
    * @returns {Promise<void>} - Return a Promise.
    */
-  async sendResetPasswordEmail(userId: string, address: string): Promise<void> {
-    const user = await this.db.findUserById(userId);
+  async sendResetPasswordEmail(address: string): Promise<void> {
+    const user = await this.db.findUserByEmail(address);
     if (!user) {
-      throw new AccountsError('User not found', { id: userId });
+      throw new AccountsError('User not found', { email: address });
     }
     address = this._getFirstUserEmail(user, address); // eslint-disable-line no-param-reassign
     const token = generateRandomToken();
-    await this.db.addResetPasswordToken(userId, address, token);
+    await this.db.addResetPasswordToken(user.id, address, token);
 
-    const siteUrl = this._options.siteUrl || config.siteUrl;
-    const resetPasswordUrl = `${siteUrl}/reset-password/${token}`;
-    await this.email.sendMail({
-      from: this.emailTemplates.resetPassword.from ?
-        this.emailTemplates.resetPassword.from : this.emailTemplates.from,
-      to: address,
-      subject: this.emailTemplates.resetPassword.subject(user),
-      text: this.emailTemplates.resetPassword.text(user, resetPasswordUrl),
-    });
+    const resetPasswordMail = this._prepareMail(
+      address,
+      token,
+      user,
+      'reset-password',
+      this.emailTemplates.resetPassword,
+      this.emailTemplates.from,
+    );
+
+    await this.email.sendMail(resetPasswordMail);
   }
 
   /**
    * @description Send an email with a link the user can use to set their initial password.
-   * @param {string} userId - The id of the user to send email to.
    * @param {string} [address] - Which address of the user's to send the email to.
    * This address must be in the user's emails list.
    * Defaults to the first email in the list.
    * @returns {Promise<void>} - Return a Promise.
    */
-  async sendEnrollmentEmail(userId: string, address: string): Promise<void> {
-    const user = await this.db.findUserById(userId);
+  async sendEnrollmentEmail(address: string): Promise<void> {
+    const user = await this.db.findUserByEmail(address);
     if (!user) {
-      throw new AccountsError('User not found', { id: userId });
+      throw new AccountsError('User not found', { email: address });
     }
     address = this._getFirstUserEmail(user, address); // eslint-disable-line no-param-reassign
     const token = generateRandomToken();
-    await this.db.addResetPasswordToken(userId, address, token, 'enroll');
+    await this.db.addResetPasswordToken(user.id, address, token, 'enroll');
 
     const enrollmentMail = this._prepareMail(
       address,
