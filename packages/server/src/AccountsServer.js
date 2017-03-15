@@ -17,7 +17,7 @@ import type {
 } from '@accounts/common';
 import config from './config';
 import type { DBInterface } from './DBInterface';
-import { verifyPassword, hashPassword } from './encryption';
+import { verifyPassword, hashPassword, bcryptPassword } from './encryption';
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -97,7 +97,8 @@ export class AccountsServer {
         foundUser = await this._externalPasswordAuthenticator(
           this._options.passwordAuthenticator,
           user,
-          password);
+          password,
+        );
       } catch (e) {
         throw new AccountsError(e, user, 403);
       }
@@ -187,7 +188,7 @@ export class AccountsServer {
     const userId: string = await this.db.createUser({
       username: user.username,
       email: user.email && user.email.toLowerCase(),
-      password: user.password,
+      password: bcryptPassword(user.password),
       profile: user.profile,
     });
 
@@ -423,7 +424,8 @@ export class AccountsServer {
       throw new AccountsError('Token has invalid email address');
     }
     // Change the user password and remove the old token
-    await this.db.setResetPasssword(user.id, resetTokenRecord.address, newPassword, token);
+    // eslint-disable-next-line max-len
+    await this.db.setResetPasssword(user.id, resetTokenRecord.address, bcryptPassword(newPassword), token);
     // Changing the password should invalidate existing sessions
     this.db.invalidateAllSessions(user.id);
   }
@@ -440,7 +442,7 @@ export class AccountsServer {
    * @returns {Promise<void>} - Return a Promise.
    */
   setPassword(userId: string, newPassword: string): Promise<void> {
-    return this.db.setPasssword(userId, newPassword);
+    return this.db.setPasssword(userId, bcryptPassword(newPassword));
   }
 
   /**

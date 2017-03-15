@@ -817,7 +817,10 @@ describe('Accounts', () => {
       });
       await Accounts.resetPassword('token', 'password');
       expect(setResetPassswordMock.mock.calls.length).toEqual(1);
-      expect(setResetPassswordMock.mock.calls[0]).toEqual(['userId', 'email', 'password', 'token']);
+      expect(setResetPassswordMock.mock.calls[0][0]).toEqual('userId');
+      expect(setResetPassswordMock.mock.calls[0][1]).toEqual('email');
+      expect(setResetPassswordMock.mock.calls[0][2]).not.toEqual('password');
+      expect(setResetPassswordMock.mock.calls[0][3]).toEqual('token');
       expect(invalidateAllSessionsMock.mock.calls.length).toEqual(1);
       expect(invalidateAllSessionsMock.mock.calls[0]).toEqual(['userId']);
     });
