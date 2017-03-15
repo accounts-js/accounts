@@ -7,12 +7,15 @@ const SET_TOKENS = `${PATH}SET_TOKENS`;
 const CLEAR_TOKENS = `${PATH}CLEAR_TOKENS`;
 const CLEAR_USER = `${PATH}CLEAR_USER`;
 const LOGGING_IN = `${PATH}LOGGING_IN`;
+const TRYING_IMPERSONATE = `${PATH}TRY_IMPERSONATE`;
 
 const initialState = Map({
   isLoading: false,
   user: null,
   tokens: null,
   loggingIn: false,
+  tryingImpersonate: false,
+  impersonate: null
 });
 
 const reducer = (state = initialState, action) => {
@@ -38,6 +41,10 @@ const reducer = (state = initialState, action) => {
     case LOGGING_IN: {
       const { isLoggingIn } = action.payload;
       return state.set('loggingIn', isLoggingIn);
+    }
+    case TRYING_IMPERSONATE: {
+      const { tryingImpersonate } = action.payload;
+      return state.set('tryingImpersonate', tryingImpersonate);
     }
     default:
       break;
@@ -74,4 +81,11 @@ export const clearTokens = () => ({
 
 export const clearUser = () => ({
   type: CLEAR_USER,
+});
+
+export const tryingImpersonate = isTrying => ({
+  type: TRYING_IMPERSONATE,
+  payload :{
+    isTrying
+  },
 });

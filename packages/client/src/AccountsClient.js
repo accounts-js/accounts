@@ -92,6 +92,15 @@ export class AccountsClient {
     return user ? user.toJS() : null;
   }
 
+  impersonate(){
+    this.store
+
+  }
+
+  stopImpersonate(){
+
+  }
+
   tokens(): TokensType {
     const tokens = this.getState().get('tokens');
 
