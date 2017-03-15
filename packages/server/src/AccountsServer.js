@@ -30,10 +30,11 @@ import type { EmailTemplatesType } from './emailTemplates';
 import type { AccountsServerConfiguration, PasswordAuthenticator } from './config';
 
 export class AccountsServer {
-  _options: AccountsServerConfiguration
-  db: DBInterface
-  email: EmailConnector
-  emailTemplates: EmailTemplatesType
+  _options: AccountsServerConfiguration;
+  db: DBInterface;
+  email: EmailConnector;
+  emailTemplates: EmailTemplatesType;
+  impersonationRules: Map<any, Function>;
 
   /**
    * @description Configure AccountsServer.
@@ -56,6 +57,7 @@ export class AccountsServer {
       this.email = new Email(this._options.email);
     }
     this.emailTemplates = emailTemplates;
+    this.impersonationRules = new Map();
   }
 
   /**
@@ -185,6 +187,27 @@ export class AccountsServer {
     });
 
     return userId;
+  }
+
+  //TODO: add docs
+  setImpersonationRule(userObj, usersFilterFn: Function) {
+    this.impersonationRules.set(userObj, usersFilterFn);
+  }
+
+  //TODO: add docs
+  async impersonate(accessToken: string, username: string): Promise<any> {
+    if (!isString(accessToken)) {
+      throw new AccountsError('An accessToken is required');
+    }
+
+    const session: SessionType = await this.findSessionByAccessToken(accessToken);
+    if (session.valid) {
+      const user = await this.db.findUserById(session.userId);
+      const usersFilterFn = this.impersonationRules.get(user);
+      if(!usersFilterFn){
+        return {authorized: false};
+      }
+    }
   }
 
   /**
@@ -379,7 +402,7 @@ export class AccountsServer {
 
     const verificationTokens = get(user, ['services', 'email', 'verificationTokens'], []);
     const tokenRecord = find(verificationTokens,
-                             (t: Object) => t.token === token);
+      (t: Object) => t.token === token);
     if (!tokenRecord) {
       throw new AccountsError('Verify email link expired');
     }
@@ -404,7 +427,7 @@ export class AccountsServer {
     }
     const resetTokens = get(user, ['services', 'password', 'resetTokens']);
     const resetTokenRecord = find(resetTokens,
-                                  (t: Object) => t.token === token);
+      (t: Object) => t.token === token);
     if (!resetTokenRecord) {
       throw new AccountsError('Reset password link expired');
     }
