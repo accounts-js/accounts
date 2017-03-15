@@ -1,6 +1,6 @@
 import jwtDecode from 'jwt-decode';
 import { AccountsServer } from './AccountsServer';
-import { bcryptPassword, hashPassword } from './encryption';
+import { bcryptPassword, hashPassword, verifyPassword } from './encryption';
 
 let Accounts;
 
@@ -819,7 +819,8 @@ describe('Accounts', () => {
       expect(setResetPassswordMock.mock.calls.length).toEqual(1);
       expect(setResetPassswordMock.mock.calls[0][0]).toEqual('userId');
       expect(setResetPassswordMock.mock.calls[0][1]).toEqual('email');
-      expect(setResetPassswordMock.mock.calls[0][2]).not.toEqual('password');
+      const hashPass = setResetPassswordMock.mock.calls[0][2];
+      expect(await verifyPassword('password', hashPass)).toBeTruthy();
       expect(setResetPassswordMock.mock.calls[0][3]).toEqual('token');
       expect(invalidateAllSessionsMock.mock.calls.length).toEqual(1);
       expect(invalidateAllSessionsMock.mock.calls[0]).toEqual(['userId']);

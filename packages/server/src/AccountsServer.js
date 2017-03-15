@@ -184,11 +184,12 @@ export class AccountsServer {
       throw new AccountsError('Email already exists', { email: user.email });
     }
 
+    const password = await bcryptPassword(user.password);
     // TODO Accounts.onCreateUser
     const userId: string = await this.db.createUser({
       username: user.username,
       email: user.email && user.email.toLowerCase(),
-      password: bcryptPassword(user.password),
+      password,
       profile: user.profile,
     });
 
@@ -423,9 +424,9 @@ export class AccountsServer {
     if (!includes(emails.map((email: Object) => email.address), resetTokenRecord.address)) {
       throw new AccountsError('Token has invalid email address');
     }
+    const password = await bcryptPassword(newPassword);
     // Change the user password and remove the old token
-    // eslint-disable-next-line max-len
-    await this.db.setResetPasssword(user.id, resetTokenRecord.address, bcryptPassword(newPassword), token);
+    await this.db.setResetPasssword(user.id, resetTokenRecord.address, password, token);
     // Changing the password should invalidate existing sessions
     this.db.invalidateAllSessions(user.id);
   }
@@ -441,8 +442,9 @@ export class AccountsServer {
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
    */
-  setPassword(userId: string, newPassword: string): Promise<void> {
-    return this.db.setPasssword(userId, bcryptPassword(newPassword));
+  async setPassword(userId: string, newPassword: string): Promise<void> {
+    const password = await bcryptPassword(newPassword);
+    return this.db.setPasssword(userId, password);
   }
 
   /**
