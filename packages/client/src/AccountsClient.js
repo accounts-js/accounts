@@ -15,7 +15,7 @@ import type {
 } from '@accounts/common';
 import config from './config';
 import createStore from './createStore';
-import reducer, { loggingIn, setUser, clearUser, setTokens, clearTokens as clearStoreTokens } from './module';
+import reducer, { loggingIn, setUser, clearUser, setTokens, clearTokens as clearStoreTokens, tryingImpersonate, impersonating } from './module';
 import { hashPassword } from './encryption';
 import type { TransportInterface } from './TransportInterface';
 import type { TokenStorage, AccountsClientConfiguration } from './config';
@@ -87,18 +87,28 @@ export class AccountsClient {
   }
 
   user(): UserObjectType | null {
-    const user = this.getState().get('user');
+    const impersonatedUser = this.getState().get('impersonating');
+    const user = impersonatedUser !== null ? impersonatedUser : this.getState().get('user');
 
     return user ? user.toJS() : null;
   }
 
-  impersonate(){
-    this.store
+  async impersonate(username: string){
+    this.store.dispatch(tryingImpersonate(true));
+    const response = await this.transport.impersonate(accessToken, username);
+    this.store.dispatch(tryingImpersonate(false));
+    if(!response.authorized){
+      //TODO: inform unauthorized to impersonate ${username}
+      console.log(`user unauthorized to impersonate ${username}`);
 
+    }
+    else{
+      this.store.dispatch(impersonating(response.user));
+    }
   }
 
   stopImpersonate(){
-
+    this.store.dispatch(impersonating(null));
   }
 
   tokens(): TokensType {
@@ -286,8 +296,13 @@ export class AccountsClient {
   }
 
   async resetPassword(token: string, newPassword: string): Promise<void> {
+    const impersonatedUser = this.getState().get('impersonating');
     try {
-      await this.transport.resetPassword(token, newPassword);
+      const args = {};
+      if(impersonatedUser != null){
+        args.impersonate = impersonatedUser
+      }
+      await this.transport.resetPassword(token, newPassword, args);
     } catch (err) {
       throw new AccountsError(err.message);
     }
