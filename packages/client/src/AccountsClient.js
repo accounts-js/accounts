@@ -15,7 +15,7 @@ import type {
 } from '@accounts/common';
 import config from './config';
 import createStore from './createStore';
-import reducer, { loggingIn, setUser, clearUser, setTokens, clearTokens as clearStoreTokens, tryingImpersonate, impersonating } from './module';
+import reducer, { loggingIn, setUser, clearUser, setTokens, clearTokens as clearStoreTokens } from './module';
 import { hashPassword } from './encryption';
 import type { TransportInterface } from './TransportInterface';
 import type { TokenStorage, AccountsClientConfiguration } from './config';
@@ -94,21 +94,27 @@ export class AccountsClient {
   }
 
   async impersonate(username: string){
-    this.store.dispatch(tryingImpersonate(true));
+    if(!isString(username)){
+      throw new AccountsError('User name is required');
+    }
+    const { accessToken } = await this.tokens();
     const response = await this.transport.impersonate(accessToken, username);
-    this.store.dispatch(tryingImpersonate(false));
     if(!response.authorized){
-      //TODO: inform unauthorized to impersonate ${username}
-      console.log(`user unauthorized to impersonate ${username}`);
-
+      throw new AccountsError(`User unauthorized to impersonate ${username}`);
     }
     else{
-      this.store.dispatch(impersonating(response.user));
+      await this.storeTokens(response);
+      this.store.dispatch(setTokens(response.tokens));
+      return response;
     }
   }
 
-  stopImpersonate(){
-    this.store.dispatch(impersonating(null));
+  stopImpersonation(){
+
+  }
+
+  isImpersonated(): boolean{
+    return this.getState().get('impersonating') !== null;
   }
 
   tokens(): TokensType {
@@ -296,13 +302,8 @@ export class AccountsClient {
   }
 
   async resetPassword(token: string, newPassword: string): Promise<void> {
-    const impersonatedUser = this.getState().get('impersonating');
     try {
-      const args = {};
-      if(impersonatedUser != null){
-        args.impersonate = impersonatedUser
-      }
-      await this.transport.resetPassword(token, newPassword, args);
+      await this.transport.resetPassword(token, newPassword);
     } catch (err) {
       throw new AccountsError(err.message);
     }

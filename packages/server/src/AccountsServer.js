@@ -189,9 +189,14 @@ export class AccountsServer {
     return userId;
   }
 
-  //TODO: add docs
-  setImpersonationRule(userObj, usersFilterFn: Function) {
-    this.impersonationRules.set(userObj, usersFilterFn);
+  /**
+   * @description Sets an impersonation rule.
+   * @param {Object} user - User object.
+   * @param {Function<boolean>} usersFilterFn - function that receives an impersonation user
+   * Returns true if user can impersonate to impersonation user.
+   */
+  setImpersonationRule(user, usersFilterFn: Function<any, boolean>) {
+    this.impersonationRules.set(user, usersFilterFn);
   }
 
   //TODO: add docs
@@ -200,13 +205,45 @@ export class AccountsServer {
       throw new AccountsError('An accessToken is required');
     }
 
-    const session: SessionType = await this.findSessionByAccessToken(accessToken);
-    if (session.valid) {
-      const user = await this.db.findUserById(session.userId);
-      const usersFilterFn = this.impersonationRules.get(user);
-      if(!usersFilterFn){
-        return {authorized: false};
-      }
+    try {
+      jwt.verify(accessToken, this._options.tokenSecret, { ignoreExpiration: true });
+    } catch (err) {
+      throw new AccountsError('Tokens are not valid');
+    }
+
+    const session = await this.findSessionByAccessToken(accessToken);
+    if (!session.valid) {
+      throw new AccountsError('Session is not valid for user')
+    }
+
+    const user = await this.db.findUserById(session.userId);
+    if (!user) {
+      throw new AccountsError('User not found')
+    }
+
+    const impersonatedUser = await this.db.findUserByUsername(username);
+    if (!impersonatedUser) {
+      throw new AccountsError(`User ${username} not found`);
+    }
+
+    const usersFilterFn = this.impersonationRules.get(user);
+    if (!usersFilterFn || !usersFilterFn(impersonatedUser)) {
+      return { authorized: false };
+    }
+
+    const impersonatedUserSession = await this.db.findSessionByUserId(impersonatedUser.id);
+    if (!impersonatedUserSession) {
+      throw new AccountsError(`Session of user.id ${impersonatedUser.id} not found`);
+    }
+
+    else {
+      const impersonationTokens = this.createTokens(impersonatedUserSession.sessionId, true);
+      await this.db.updateSessionImpersonatedUserId(session.id, impersonatedUser.id);
+      return {
+        authorized: true,
+        tokens: impersonationTokens,
+        user: impersonatedUser
+      };
     }
   }
 
@@ -260,13 +297,15 @@ export class AccountsServer {
   /**
    * @description Refresh a user token.
    * @param {string} sessionId - User session id.
+   * @param {boolean} isImpersonated - Should be true if this token is an impersonation token.
    * @returns {Promise<Object>} - Return a new accessToken and refreshToken.
    */
-  createTokens(sessionId: string): TokensType {
+  createTokens(sessionId: string, isImpersonated: boolean = false): TokensType {
     const { tokenSecret = config.tokenSecret, tokenConfigs = config.tokenConfigs } = this._options;
     const accessToken = generateAccessToken({
       data: {
         sessionId,
+        isImpersonated
       },
       secret: tokenSecret,
       config: tokenConfigs.accessToken || {},
@@ -336,6 +375,15 @@ export class AccountsServer {
     }
 
     return session;
+  }
+
+  async isImpersonatedToken(accessToken: string): boolean {
+    try {
+      const decodedAccessToken = jwt.verify(accessToken, this._options.tokenSecret);
+      return decodedAccessToken.data.isImpersonated;
+    } catch (err) {
+      throw new AccountsError('Tokens are not valid');
+    }
   }
 
   /**

@@ -37,6 +37,7 @@ export type LoginReturnType = {
 
 export type SessionType = {
   sessionId: string,
+  impersonatedUserId: string,
   userId: string,
   valid: boolean,
   userAgent: ?string,
