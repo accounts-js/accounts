@@ -1,5 +1,12 @@
 // @flow
 
+import type { HashAlgorithm } from './config';
+
+export type PasswordType = string | {
+  digest: string,
+  algorithm: HashAlgorithm
+};
+
 export type UserObjectType = {
   username: ?string,
   email: ?string,
@@ -12,7 +19,7 @@ export type UserObjectType = {
 export type CreateUserType = {
   username?: string,
   email?: string,
-  password?: string,
+  password?: PasswordType,
   profile?: Object
 };
 
