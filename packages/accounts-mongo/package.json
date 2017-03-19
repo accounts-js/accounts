@@ -39,6 +39,8 @@
   },
   "homepage": "https://github.com/js-accounts/mongo",
   "devDependencies": {
+    "@accounts/common": "^0.0.10",
+    "@accounts/server": "^0.0.10",
     "babel-cli": "^6.22.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^7.0.0",
@@ -57,16 +59,14 @@
     "eslint-plugin-import": "^2.0.1",
     "eslint-plugin-jsx-a11y": "^3.0.2",
     "eslint-plugin-react": "^6.9.0",
-    "flow-bin": "^0.38.0",
+    "flow-bin": "^0.41.0",
     "jest": "^18.1.0",
     "webpack": "^1.14.0",
-    "webpack-node-externals": "^1.5.4",
-    "@accounts/common": "^0.0.9",
-    "@accounts/server": "^0.0.9"
+    "webpack-node-externals": "^1.5.4"
   },
   "peerDependencies": {
-    "@accounts/common": "^0.0.9",
-    "@accounts/server": "^0.0.9"
+    "@accounts/common": "^0.0.10",
+    "@accounts/server": "^0.0.10"
   },
   "dependencies": {
     "lodash": "^4.17.4",

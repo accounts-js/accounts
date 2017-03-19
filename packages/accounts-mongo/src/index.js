@@ -1,12 +1,13 @@
 // @flow
 
-import { encryption } from '@accounts/server';
+import type { DBInterface } from '@accounts/server';
 import type {
   CreateUserType,
   UserObjectType,
   SessionType,
 } from '@accounts/common';
 import { ObjectID } from 'mongodb';
+import get from 'lodash/get';
 
 export type MongoOptionsType = {
   collectionName: string,
@@ -48,6 +49,8 @@ class Mongo {
   sessionCollection: any;
 
   constructor(db: any, options: MongoOptionsType) {
+    // eslint-disable-next-line no-unused-expressions
+    (this: DBInterface);
     const defaultOptions = {
       collectionName: 'users',
       sessionCollectionName: 'sessions',
@@ -79,7 +82,7 @@ class Mongo {
       [this.options.timestamps.updatedAt]: Date.now(),
     };
     if (options.password) {
-      user.services.password = { bcrypt: await encryption.hashPassword(options.password) };
+      user.services.password = { bcrypt: options.password };
     }
     if (options.username) {
       user.username = options.username;
@@ -139,7 +142,7 @@ class Mongo {
     const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     const user = await this.findUserById(id);
     if (user) {
-      return user.services.password.bcrypt;
+      return get(user, 'services.password.bcrypt');
     }
     return null;
   }
@@ -188,8 +191,11 @@ class Mongo {
     const _id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     const ret = await this.collection.update({ _id }, {
       $set: {
-        'services.password.bcrypt': await encryption.hashPassword(newPassword),
+        'services.password.bcrypt': newPassword,
         [this.options.timestamps.updatedAt]: Date.now(),
+      },
+      $unset: {
+        'services.password.reset': '',
       },
     });
     if (ret.result.nModified === 0) {
@@ -205,8 +211,7 @@ class Mongo {
         [this.options.timestamps.updatedAt]: Date.now(),
       },
     });
-    const user = await this.findUserById(userId);
-    return user && user.profile;
+    return profile;
   }
 
   async createSession(userId: string, ip: string, userAgent: string): Promise<string> {
@@ -276,6 +281,11 @@ class Mongo {
         },
       },
     });
+  }
+
+  // eslint-disable-next-line max-len
+  async setResetPasssword(userId: string, email: string, newPassword: string): Promise<void> {
+    await this.setPasssword(userId, newPassword);
   }
 }
 
