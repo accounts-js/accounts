@@ -231,13 +231,13 @@ export class AccountsServer {
       return { authorized: false };
     }
 
-    const impersonatedUserSession = await this.db.findSessionByUserId(impersonatedUser.id);
+    const impersonatedUserSession = await this.db.findActiveSessionByUserId(impersonatedUser.id);
     if (!impersonatedUserSession) {
       throw new AccountsError(`Session of user.id ${impersonatedUser.id} not found`);
     }
 
     else {
-      const impersonationTokens = this.createTokens(impersonatedUserSession.sessionId, true);
+      const impersonationTokens = this.createTokens(session.sessionId, impersonatedUser.id);
       await this.db.updateSessionImpersonatedUserId(session.id, impersonatedUser.id);
       return {
         authorized: true,
@@ -297,19 +297,24 @@ export class AccountsServer {
   /**
    * @description Refresh a user token.
    * @param {string} sessionId - User session id.
-   * @param {boolean} isImpersonated - Should be true if this token is an impersonation token.
+   * @param {string} impersonatedUserId - The impersonated user id.
    * @returns {Promise<Object>} - Return a new accessToken and refreshToken.
    */
-  createTokens(sessionId: string, isImpersonated: boolean = false): TokensType {
+  createTokens(sessionId: string, impersonatedUserId: string): TokensType {
     const { tokenSecret = config.tokenSecret, tokenConfigs = config.tokenConfigs } = this._options;
-    const accessToken = generateAccessToken({
+    const accessTokenObject = {
       data: {
         sessionId,
-        isImpersonated
       },
       secret: tokenSecret,
       config: tokenConfigs.accessToken || {},
-    });
+    };
+
+    if(impersonatedUserId){
+      accessTokenObject.data.impersonatedUserId = impersonatedUserId;
+    }
+
+    const accessToken = generateAccessToken(accessTokenObject);
     const refreshToken = generateRefreshToken({
       secret: tokenSecret,
       config: tokenConfigs.refreshToken || {},
