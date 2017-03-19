@@ -355,7 +355,7 @@ describe('Mongo', () => {
       await mongo.setPasssword(userId, newPassword);
       const retUser = await mongo.findUserById(userId);
       expect(retUser.services.password.bcrypt).toBeTruthy();
-      expect(retUser.services.password.bcrypt).not.toEqual(newPassword);
+      expect(retUser.services.password.bcrypt).toEqual(newPassword);
       expect(retUser.createdAt).not.toEqual(retUser.updatedAt);
     });
   });
