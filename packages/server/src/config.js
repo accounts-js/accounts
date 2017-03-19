@@ -17,13 +17,17 @@ export type TokenConfig = {
   }
 };
 
-export type SendMailFunction = (emailConfig: EmailTemplateType & { to: string }) => Promise<void>;
+type EmailType = EmailTemplateType & { to: string };
+export type SendMailFunction = (emailConfig: EmailType | Object) => Promise<void>;
+// eslint-disable-next-line max-len
+export type PrepareMailFunction = (to: string, token: string, user: UserObjectType, pathFragment: string, emailTemplate: EmailTemplateType, from: string) => Object;
 
 export type AccountsServerConfiguration = AccountsCommonConfiguration & {
   tokenSecret?: string,
   tokenConfigs?: TokenConfig,
   passwordAuthenticator?: PasswordAuthenticator,
   resumeSessionValidator?: ResumeSessionValidator,
+  prepareMail?: PrepareMailFunction,
   sendMail?: SendMailFunction,
   // https://github.com/eleith/emailjs#emailserverconnectoptions
   email?: Object
