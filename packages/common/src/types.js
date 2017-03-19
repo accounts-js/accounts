@@ -35,9 +35,14 @@ export type LoginReturnType = {
   tokens: TokensType
 };
 
+export type ImpersonateReturnType = {
+  authorized: boolean,
+  tokens: ?TokensType,
+  user: ?UserObjectType
+};
+
 export type SessionType = {
   sessionId: string,
-  impersonatedUserId: string,
   userId: string,
   valid: boolean,
   userAgent: ?string,

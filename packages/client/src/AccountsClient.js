@@ -15,7 +15,7 @@ import type {
 } from '@accounts/common';
 import config from './config';
 import createStore from './createStore';
-import reducer, { loggingIn, setUser, clearUser, setTokens, clearTokens as clearStoreTokens } from './module';
+import reducer, { loggingIn, setUser, clearUser, setTokens, clearTokens as clearStoreTokens, setOriginalTokens, setImpersonating} from './module';
 import { hashPassword } from './encryption';
 import type { TransportInterface } from './TransportInterface';
 import type { TokenStorage, AccountsClientConfiguration } from './config';
@@ -87,34 +87,50 @@ export class AccountsClient {
   }
 
   user(): UserObjectType | null {
-    const impersonatedUser = this.getState().get('impersonating');
-    const user = impersonatedUser !== null ? impersonatedUser : this.getState().get('user');
+    const user = this.getState().get('user');
 
     return user ? user.toJS() : null;
   }
 
   async impersonate(username: string){
+    if(this.isImpersonated()){
+      throw new AccountsError('User already impersonating');
+    }
     if(!isString(username)){
       throw new AccountsError('User name is required');
     }
     const { accessToken } = await this.tokens();
-    const response = await this.transport.impersonate(accessToken, username);
-    if(!response.authorized){
+    const res = await this.transport.impersonate(accessToken, username);
+    if(!res.authorized){
       throw new AccountsError(`User unauthorized to impersonate ${username}`);
     }
     else{
-      await this.storeTokens(response);
-      this.store.dispatch(setTokens(response.tokens));
-      return response;
+      this.store.dispatch(setImpersonating(true));
+      this.store.dispatch(setOriginalTokens(this.getState().get('tokens')));
+      await this.storeTokens(res);
+      this.store.dispatch(setTokens(res.tokens));
+      this.store.dispatch(setUser(res.user));
+      return res;
     }
   }
 
-  stopImpersonation(){
+  async stopImpersonation(){
+    this.store.dispatch(setTokens(this.getState().get('originalTokens')));
+    await this.refreshSession();
+    this.store.dispatch(setImpersonating(false));
 
   }
 
   isImpersonated(): boolean{
-    return this.getState().get('impersonating') !== null;
+    return this.getState().get('isImpersonating');
+  }
+
+  getOriginalUser(){
+    const origUser = this.getState().get('originalUser');
+    if(origUser !== null){
+      return origUser;
+    }
+    return this.getState().get('user');
   }
 
   tokens(): TokensType {

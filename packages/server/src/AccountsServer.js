@@ -14,6 +14,7 @@ import type {
   LoginReturnType,
   TokensType,
   SessionType,
+  ImpersonateReturnType,
 } from '@accounts/common';
 import config from './config';
 import type { DBInterface } from './DBInterface';
@@ -193,14 +194,21 @@ export class AccountsServer {
    * @description Sets an impersonation rule.
    * @param {Object} user - User object.
    * @param {Function<boolean>} usersFilterFn - function that receives an impersonation user
-   * Returns true if user can impersonate to impersonation user.
+   * @returns true if user can impersonate to impersonation user.
    */
   setImpersonationRule(user, usersFilterFn: Function<any, boolean>) {
     this.impersonationRules.set(user, usersFilterFn);
   }
 
-  //TODO: add docs
-  async impersonate(accessToken: string, username: string): Promise<any> {
+  /**
+   * @description Impersonate to another user.
+   * @param {string} accessToken - User access token.
+   * @param {string} username - impersonated user username.
+   * @param {string} ip - The user ip.
+   * @param {string} userAgent - User user agent.
+   * @returns {Promise<Object>} - ImpersonateReturnType
+   */
+  async impersonate(accessToken: string, username: string, ip: ?string, userAgent: ?string): Promise<ImpersonateReturnType> {
     if (!isString(accessToken)) {
       throw new AccountsError('An accessToken is required');
     }
@@ -231,14 +239,9 @@ export class AccountsServer {
       return { authorized: false };
     }
 
-    const impersonatedUserSession = await this.db.findActiveSessionByUserId(impersonatedUser.id);
-    if (!impersonatedUserSession) {
-      throw new AccountsError(`Session of user.id ${impersonatedUser.id} not found`);
-    }
-
     else {
-      const impersonationTokens = this.createTokens(session.sessionId, impersonatedUser.id);
-      await this.db.updateSessionImpersonatedUserId(session.id, impersonatedUser.id);
+      let newSessionId = this.db.createSession(impersonatedUser.id, ip, userAgent);
+      const impersonationTokens = this.createTokens(newSessionId, true);
       return {
         authorized: true,
         tokens: impersonationTokens,
@@ -246,6 +249,32 @@ export class AccountsServer {
       };
     }
   }
+
+  // async stopImpersonate(accessToken: string, impersonatedAccessToken: string){
+  //   if (!isString(accessToken)) {
+  //     throw new AccountsError('An accessToken is required');
+  //   }
+  //
+  //   try {
+  //     jwt.verify(accessToken, this._options.tokenSecret, { ignoreExpiration: true });
+  //   } catch (err) {
+  //     throw new AccountsError('Tokens are not valid');
+  //   }
+  //
+  //   const session = await this.findSessionByAccessToken(accessToken);
+  //
+  //
+  //   //TODO
+  // }
+
+  // async isImpersonatedToken(accessToken: string): boolean {
+  //   try {
+  //     const decodedAccessToken = jwt.verify(accessToken, this._options.tokenSecret);
+  //     return decodedAccessToken.data.impersonatedUserId !== undefined;
+  //   } catch (err) {
+  //     throw new AccountsError('Tokens are not valid');
+  //   }
+  // }
 
   /**
    * @description Refresh a user token.
@@ -297,10 +326,10 @@ export class AccountsServer {
   /**
    * @description Refresh a user token.
    * @param {string} sessionId - User session id.
-   * @param {string} impersonatedUserId - The impersonated user id.
+   * @param {boolean} isImpersonated - Should be true if impersonating another user.
    * @returns {Promise<Object>} - Return a new accessToken and refreshToken.
    */
-  createTokens(sessionId: string, impersonatedUserId: string): TokensType {
+  createTokens(sessionId: string, isImpersonated: boolean): TokensType {
     const { tokenSecret = config.tokenSecret, tokenConfigs = config.tokenConfigs } = this._options;
     const accessTokenObject = {
       data: {
@@ -380,15 +409,6 @@ export class AccountsServer {
     }
 
     return session;
-  }
-
-  async isImpersonatedToken(accessToken: string): boolean {
-    try {
-      const decodedAccessToken = jwt.verify(accessToken, this._options.tokenSecret);
-      return decodedAccessToken.data.isImpersonated;
-    } catch (err) {
-      throw new AccountsError('Tokens are not valid');
-    }
   }
 
   /**
