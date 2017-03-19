@@ -250,32 +250,6 @@ export class AccountsServer {
     }
   }
 
-  // async stopImpersonate(accessToken: string, impersonatedAccessToken: string){
-  //   if (!isString(accessToken)) {
-  //     throw new AccountsError('An accessToken is required');
-  //   }
-  //
-  //   try {
-  //     jwt.verify(accessToken, this._options.tokenSecret, { ignoreExpiration: true });
-  //   } catch (err) {
-  //     throw new AccountsError('Tokens are not valid');
-  //   }
-  //
-  //   const session = await this.findSessionByAccessToken(accessToken);
-  //
-  //
-  //   //TODO
-  // }
-
-  // async isImpersonatedToken(accessToken: string): boolean {
-  //   try {
-  //     const decodedAccessToken = jwt.verify(accessToken, this._options.tokenSecret);
-  //     return decodedAccessToken.data.impersonatedUserId !== undefined;
-  //   } catch (err) {
-  //     throw new AccountsError('Tokens are not valid');
-  //   }
-  // }
-
   /**
    * @description Refresh a user token.
    * @param {string} accessToken - User access token.
