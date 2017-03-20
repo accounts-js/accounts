@@ -312,6 +312,8 @@ export class AccountsClient {
         this.options.onSignedOutHook();
       }
     } catch (err) {
+      this.clearTokens();
+      this.store.dispatch(clearUser());
       if (callback && isFunction(callback)) {
         callback(err);
       }

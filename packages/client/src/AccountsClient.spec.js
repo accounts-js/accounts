@@ -371,8 +371,9 @@ describe('Accounts', () => {
       const transport = {
         logout: () => Promise.reject({ message: 'error message' }),
       };
-      Accounts.instance.storeTokens({ tokens: { accessToken: '1' } });
       Accounts.config({ history }, transport);
+      await Accounts.instance.storeTokens({ tokens: { accessToken: '1' } });
+      await Accounts.instance.loadTokensFromStorage();
       const callback = jest.fn();
       try {
         await Accounts.logout(callback);
