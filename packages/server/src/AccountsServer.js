@@ -194,7 +194,7 @@ export class AccountsServer {
    * @description Sets an impersonation rule.
    * @param {string} userId - User id.
    * @param {Function<boolean>} usersFilterFn - impersonation predicate.
-   * @returns true if user can impersonate to impersonation user.
+   * @returns {boolean} - true if user can impersonate to impersonation user.
    */
   setImpersonationRule(userId: string, usersFilterFn: Function<any, boolean>) {
     this.impersonationRules.set(userId, usersFilterFn);
@@ -212,7 +212,7 @@ export class AccountsServer {
   /**
    * @description Sets an impersonation rule.
    * @param {string} userId - User id.
-   * @returns true if the rule was deleted.
+   * @returns {boolean} - true if the rule was deleted.
    */
   deleteImpersontionRule(userId: string): boolean {
     return this.impersonationRules.delete(userId);
@@ -226,6 +226,7 @@ export class AccountsServer {
    * @param {string} userAgent - User user agent.
    * @returns {Promise<Object>} - ImpersonateReturnType
    */
+  // eslint-disable-next-line max-len
   async impersonate(accessToken: string, username: string, ip: ?string, userAgent: ?string): Promise<ImpersonateReturnType> {
     if (!isString(accessToken)) {
       throw new AccountsError('An access token is required');
@@ -239,12 +240,12 @@ export class AccountsServer {
 
     const session = await this.findSessionByAccessToken(accessToken);
     if (!session.valid) {
-      throw new AccountsError('Session is not valid for user')
+      throw new AccountsError('Session is not valid for user');
     }
 
     const user = await this.db.findUserById(session.userId);
     if (!user) {
-      throw new AccountsError('User not found')
+      throw new AccountsError('User not found');
     }
 
     const impersonatedUser = await this.db.findUserByUsername(username);
@@ -257,15 +258,14 @@ export class AccountsServer {
       return { authorized: false };
     }
 
-    else {
-      let newSessionId = await this.db.createSession(impersonatedUser.id, ip, userAgent);
-      const impersonationTokens = this.createTokens(newSessionId, true);
-      return {
-        authorized: true,
-        tokens: impersonationTokens,
-        user: impersonatedUser
-      };
-    }
+
+    const newSessionId = await this.db.createSession(impersonatedUser.id, ip, userAgent);
+    const impersonationTokens = this.createTokens(newSessionId, true);
+    return {
+      authorized: true,
+      tokens: impersonationTokens,
+      user: impersonatedUser,
+    };
   }
 
   /**
@@ -326,7 +326,7 @@ export class AccountsServer {
     const accessToken = generateAccessToken({
       data: {
         sessionId,
-        isImpersonated
+        isImpersonated,
       },
       secret: tokenSecret,
       config: tokenConfigs.accessToken || {},
@@ -462,7 +462,7 @@ export class AccountsServer {
 
     const verificationTokens = get(user, ['services', 'email', 'verificationTokens'], []);
     const tokenRecord = find(verificationTokens,
-      (t: Object) => t.token === token);
+                             (t: Object) => t.token === token);
     if (!tokenRecord) {
       throw new AccountsError('Verify email link expired');
     }
@@ -487,7 +487,7 @@ export class AccountsServer {
     }
     const resetTokens = get(user, ['services', 'password', 'resetTokens']);
     const resetTokenRecord = find(resetTokens,
-      (t: Object) => t.token === token);
+                                  (t: Object) => t.token === token);
     if (!resetTokenRecord) {
       throw new AccountsError('Reset password link expired');
     }

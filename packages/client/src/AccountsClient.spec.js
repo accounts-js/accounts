@@ -35,7 +35,7 @@ describe('Accounts', () => {
     localStorage.clear();
   });
   describe('config', () => {
-    it('requires a transport', async() => {
+    it('requires a transport', async () => {
       try {
         await Accounts.config({
           history,
@@ -46,7 +46,7 @@ describe('Accounts', () => {
         expect(message).toEqual('A REST or GraphQL transport is required');
       }
     });
-    it('should eagerly load tokens from storage after using config', async() => {
+    it('should eagerly load tokens from storage after using config', async () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(loggedInUser),
       };
@@ -71,7 +71,7 @@ describe('Accounts', () => {
     });
   });
   describe('createUser', () => {
-    it('requires user object', async() => {
+    it('requires user object', async () => {
       Accounts.config({
         history,
       }, {
@@ -85,7 +85,7 @@ describe('Accounts', () => {
         expect(message).toEqual('Unrecognized options for create user request');
       }
     });
-    it('requires password', async() => {
+    it('requires password', async () => {
       Accounts.config({
         history,
       }, {
@@ -101,7 +101,7 @@ describe('Accounts', () => {
         expect(message).toEqual('Password is required');
       }
     });
-    it('requires username or an email', async() => {
+    it('requires username or an email', async () => {
       Accounts.config({ history }, {
         createUser: Promise.resolve(),
       });
@@ -117,7 +117,7 @@ describe('Accounts', () => {
         expect(message).toEqual('Username or Email is required');
       }
     });
-    it('calls callback on succesfull user creation', async() => {
+    it('calls callback on succesfull user creation', async () => {
       const callback = jest.fn();
       const transport = {
         createUser: () => Promise.resolve(),
@@ -131,7 +131,7 @@ describe('Accounts', () => {
 
       expect(callback.mock.calls.length).toEqual(1);
     });
-    it('calls callback on failure with error message', async() => {
+    it('calls callback on failure with error message', async () => {
       const transport = {
         createUser: () => Promise.reject('error message'),
       };
@@ -150,7 +150,7 @@ describe('Accounts', () => {
         expect(callback.mock.calls[0][0]).toEqual('error message');
       }
     });
-    it('calls login function with user id and password of created user', async() => {
+    it('calls login function with user id and password of created user', async () => {
       const transport = {
         createUser: () => Promise.resolve('123'),
       };
@@ -168,7 +168,7 @@ describe('Accounts', () => {
     });
   });
   describe('loginWithPassword', () => {
-    it('throws error if password is undefined', async() => {
+    it('throws error if password is undefined', async () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(),
       };
@@ -181,7 +181,7 @@ describe('Accounts', () => {
         expect(message).toEqual('Unrecognized options for login request');
       }
     });
-    it('throws error if user is undefined', async() => {
+    it('throws error if user is undefined', async () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(),
       };
@@ -194,7 +194,7 @@ describe('Accounts', () => {
         expect(message).toEqual('Unrecognized options for login request');
       }
     });
-    it('throws error user is not a string or is an empty object', async() => {
+    it('throws error user is not a string or is an empty object', async () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(),
       };
@@ -207,7 +207,7 @@ describe('Accounts', () => {
         expect(message).toEqual('Match failed');
       }
     });
-    it('throws error password is not a string', async() => {
+    it('throws error password is not a string', async () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(),
       };
@@ -220,7 +220,7 @@ describe('Accounts', () => {
         expect(message).toEqual('Match failed');
       }
     });
-    it('calls callback on successful login', async() => {
+    it('calls callback on successful login', async () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(loggedInUser),
       };
@@ -230,7 +230,7 @@ describe('Accounts', () => {
       expect(callback.mock.calls.length).toEqual(1);
       expect(Accounts.loggingIn()).toBe(false);
     });
-    it('calls transport', async() => {
+    it('calls transport', async () => {
       const loginWithPassword = jest.fn(() => Promise.resolve(loggedInUser));
       const transport = {
         loginWithPassword,
@@ -241,7 +241,7 @@ describe('Accounts', () => {
       expect(loginWithPassword.mock.calls[0][1]).toEqual('password');
       expect(loginWithPassword.mock.calls.length).toEqual(1);
     });
-    it('calls callback with error on failed login', async() => {
+    it('calls callback with error on failed login', async () => {
       const transport = {
         loginWithPassword: () => Promise.reject('error'),
       };
@@ -255,7 +255,7 @@ describe('Accounts', () => {
         expect(callback.mock.calls[0][0]).toEqual('error');
       }
     });
-    it('sets loggingIn flag to false on failed login', async() => {
+    it('sets loggingIn flag to false on failed login', async () => {
       const transport = {
         loginWithPassword: () => Promise.reject('error'),
       };
@@ -267,7 +267,7 @@ describe('Accounts', () => {
         expect(Accounts.loggingIn()).toBe(false);
       }
     });
-    it('stores tokens in local storage', async() => {
+    it('stores tokens in local storage', async () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(loggedInUser),
       };
@@ -277,7 +277,7 @@ describe('Accounts', () => {
       expect(localStorage.getItem('accounts:refreshToken')).toEqual('refreshToken');
     });
 
-    it('should return tokens in a sync return value', async() => {
+    it('should return tokens in a sync return value', async () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(loggedInUser),
       };
@@ -293,7 +293,7 @@ describe('Accounts', () => {
       expect(tokens.accessToken).toBe('testValue');
       expect(tokens.refreshToken).toBe('testValue');
     });
-    it('stores user in redux', async() => {
+    it('stores user in redux', async () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(loggedInUser),
       };
@@ -303,7 +303,7 @@ describe('Accounts', () => {
         ...loggedInUser.user,
       }));
     });
-    it('stores tokens in redux', async() => {
+    it('stores tokens in redux', async () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(loggedInUser),
       };
@@ -314,7 +314,7 @@ describe('Accounts', () => {
       }));
     });
 
-    it('can hash password with specified algorithm', async() => {
+    it('can hash password with specified algorithm', async () => {
       const loginWithPassword = jest.fn(() => Promise.resolve(loggedInUser));
       const transport = {
         loginWithPassword,
@@ -331,7 +331,7 @@ describe('Accounts', () => {
     });
   });
   describe('logout', () => {
-    it('calls callback on successful logout', async() => {
+    it('calls callback on successful logout', async () => {
       const transport = {
         logout: () => Promise.resolve(),
       };
@@ -340,7 +340,7 @@ describe('Accounts', () => {
       await Accounts.logout(callback);
       expect(callback.mock.calls.length).toEqual(1);
     });
-    it('calls onLogout on successful logout', async() => {
+    it('calls onLogout on successful logout', async () => {
       const onSignedOutHook = jest.fn();
       const transport = {
         logout: () => Promise.resolve(),
@@ -350,7 +350,7 @@ describe('Accounts', () => {
       expect(onSignedOutHook.mock.calls.length).toEqual(1);
     });
 
-    it('calls callback on failure with error message', async() => {
+    it('calls callback on failure with error message', async () => {
       const transport = {
         logout: () => Promise.reject({ message: 'error message' }),
       };
@@ -367,7 +367,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('clear tokens in redux', async() => {
+    it('clear tokens in redux', async () => {
       const transport = {
         logout: () => Promise.reject({ message: 'error message' }),
       };
@@ -382,7 +382,7 @@ describe('Accounts', () => {
         expect(Accounts.instance.getState().get('tokens')).toEqual(null);
       }
     });
-    it('clear user in redux', async() => {
+    it('clear user in redux', async () => {
       const transport = {
         logout: () => Promise.reject({ message: 'error message' }),
       };
@@ -397,9 +397,9 @@ describe('Accounts', () => {
       }
     });
   });
-  describe('refreshSession', async() => {
+  describe('refreshSession', async () => {
     // TODO test that user and tokens are cleared if refreshToken is expired
-    it('clears tokens and user if tokens are not set', async() => {
+    it('clears tokens and user if tokens are not set', async () => {
       Accounts.config({}, {});
       Accounts.instance.clearTokens = jest.fn(() => Accounts.instance.clearTokens);
       Accounts.instance.clearUser = jest.fn(() => Accounts.instance.clearUser);
@@ -411,7 +411,7 @@ describe('Accounts', () => {
         expect(Accounts.instance.clearUser.mock.calls.length).toEqual(1);
       }
     });
-    it('clears tokens, users and throws error if bad refresh token provided', async() => {
+    it('clears tokens, users and throws error if bad refresh token provided', async () => {
       localStorage.setItem('accounts:refreshToken', 'bad token');
       localStorage.setItem('accounts:accessToken', 'bad token');
       await Accounts.config({}, {});
@@ -462,7 +462,7 @@ describe('Accounts', () => {
   });
 
   describe('verifyEmail', () => {
-    it('should return an AccountsError', async() => {
+    it('should return an AccountsError', async () => {
       const error = 'something bad';
       Accounts.config({}, { verifyEmail: () => Promise.reject({ message: error }) });
       try {
@@ -473,7 +473,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('should call transport.verifyEmail', async() => {
+    it('should call transport.verifyEmail', async () => {
       const mock = jest.fn(() => Promise.resolve());
       Accounts.config({}, { verifyEmail: mock });
       await Accounts.verifyEmail('token');
@@ -483,7 +483,7 @@ describe('Accounts', () => {
   });
 
   describe('resetPassword', () => {
-    it('should return an AccountsError', async() => {
+    it('should return an AccountsError', async () => {
       const error = 'something bad';
       Accounts.config({}, { resetPassword: () => Promise.reject({ message: error }) });
       try {
@@ -494,7 +494,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('should call transport.resetPassword', async() => {
+    it('should call transport.resetPassword', async () => {
       const mock = jest.fn(() => Promise.resolve());
       Accounts.config({}, { resetPassword: mock });
       await Accounts.resetPassword('token', 'newPassword');
@@ -505,7 +505,7 @@ describe('Accounts', () => {
   });
 
   describe('requestPasswordReset', () => {
-    it('should return an AccountsError', async() => {
+    it('should return an AccountsError', async () => {
       const error = 'something bad';
       Accounts.config({}, { sendResetPasswordEmail: () => Promise.reject({ message: error }) });
       try {
@@ -516,7 +516,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('should call transport.sendResetPasswordEmail', async() => {
+    it('should call transport.sendResetPasswordEmail', async () => {
       const mock = jest.fn(() => Promise.resolve());
       Accounts.config({}, { sendResetPasswordEmail: mock });
       await Accounts.requestPasswordReset('email@g.co');
@@ -524,7 +524,7 @@ describe('Accounts', () => {
       expect(mock.mock.calls[0][0]).toEqual('email@g.co');
     });
 
-    it('should throw if an invalid email is provided', async() => {
+    it('should throw if an invalid email is provided', async () => {
       const mock = jest.fn();
       Accounts.config({}, { sendResetPasswordEmail: mock });
       try {
@@ -538,7 +538,7 @@ describe('Accounts', () => {
   });
 
   describe('requestVerificationEmail', () => {
-    it('should return an AccountsError', async() => {
+    it('should return an AccountsError', async () => {
       const error = 'something bad';
       Accounts.config({}, { sendVerificationEmail: () => Promise.reject({ message: error }) });
       try {
@@ -549,7 +549,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('should call transport.sendVerificationEmail', async() => {
+    it('should call transport.sendVerificationEmail', async () => {
       const mock = jest.fn(() => Promise.resolve());
       Accounts.config({}, { sendVerificationEmail: mock });
       await Accounts.requestVerificationEmail('email@g.co');
@@ -557,7 +557,7 @@ describe('Accounts', () => {
       expect(mock.mock.calls[0][0]).toEqual('email@g.co');
     });
 
-    it('should throw if an invalid email is provided', async() => {
+    it('should throw if an invalid email is provided', async () => {
       const mock = jest.fn();
       Accounts.config({}, { sendVerificationEmail: mock });
       try {
@@ -571,30 +571,28 @@ describe('Accounts', () => {
   });
 
   describe('impersonate', () => {
-    it('should throw error if username is not provided', async() => {
+    it('should throw error if username is not provided', async () => {
       await Accounts.config({ history }, {});
 
       try {
         await Accounts.impersonate();
-      }
-      catch (err) {
-        expect(err.message).toEqual('Username is required')
+      } catch (err) {
+        expect(err.message).toEqual('Username is required');
       }
     });
 
-    it('should throw error if already impersonating', async() => {
+    it('should throw error if already impersonating', async () => {
       await Accounts.config({ history }, {});
       Accounts.instance.isImpersonated = () => true;
 
       try {
         await Accounts.impersonate('user');
-      }
-      catch (err) {
-        expect(err.message).toEqual('User already impersonating')
+      } catch (err) {
+        expect(err.message).toEqual('User already impersonating');
       }
     });
 
-    it('should throw if server return unauthorized', async() => {
+    it('should throw if server return unauthorized', async () => {
       const transport = {
         impersonate: () => Promise.resolve({ authorized: false }),
       };
@@ -602,13 +600,12 @@ describe('Accounts', () => {
 
       try {
         await Accounts.impersonate('user');
-      }
-      catch (err) {
-        expect(err.message).toEqual('User unauthorized to impersonate user')
+      } catch (err) {
+        expect(err.message).toEqual('User unauthorized to impersonate user');
       }
     });
 
-    it('should set state correctly if impersonation was authorized', async() => {
+    it('should set state correctly if impersonation was authorized', async () => {
       const impersonatedUser = { id: 2, username: 'impUser' };
       const impersonateResult = {
         authorized: true,
@@ -636,12 +633,12 @@ describe('Accounts', () => {
         accessToken: 'accessToken',
         refreshToken: 'refreshToken',
       });
-      expect(result).toBe(impersonateResult)
+      expect(result).toBe(impersonateResult);
     });
   });
 
   describe('stopImpersonation', () => {
-    it('should not replace tokens if not impersonating', async() => {
+    it('should not replace tokens if not impersonating', async () => {
       const transport = {
         loginWithPassword: () => Promise.resolve(loggedInUser),
       };
@@ -649,14 +646,14 @@ describe('Accounts', () => {
 
       await Accounts.loginWithPassword('username', 'password');
 
-      expect(Accounts.originalTokens()).toEqual({"accessToken": null, "refreshToken": null});
+      expect(Accounts.originalTokens()).toEqual({ accessToken: null, refreshToken: null });
       expect(Accounts.tokens()).toEqual(loggedInUser.tokens);
       await Accounts.stopImpersonation();
-      expect(Accounts.originalTokens()).toEqual({"accessToken": null, "refreshToken": null});
+      expect(Accounts.originalTokens()).toEqual({ accessToken: null, refreshToken: null });
       expect(Accounts.tokens()).toEqual(loggedInUser.tokens);
     });
 
-    it('should set impersonated state to false', async() => {
+    it('should set impersonated state to false', async () => {
       const impersonateResult = {
         authorized: true,
         tokens: { accessToken: 'newAccessToken', refreshToken: 'newRefreshToken' },
@@ -675,7 +672,7 @@ describe('Accounts', () => {
       expect(Accounts.isImpersonated()).toBe(false);
     });
 
-    it('should set the original tokens as current tokens', async() => {
+    it('should set the original tokens as current tokens', async () => {
       const impersonateResult = {
         authorized: true,
         tokens: { accessToken: 'newAccessToken', refreshToken: 'newRefreshToken' },

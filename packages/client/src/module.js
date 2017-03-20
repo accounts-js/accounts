@@ -16,7 +16,7 @@ const initialState = Map({
   tokens: null,
   loggingIn: false,
   originalTokens: null,
-  isImpersonated: false
+  isImpersonated: false,
 });
 
 const reducer = (state = initialState, action) => {
@@ -96,7 +96,7 @@ export const clearUser = () => ({
 
 export const setOriginalTokens = tokens => ({
   type: SET_ORIGINAL_TOKENS,
-  payload :{
+  payload: {
     tokens,
   },
 });

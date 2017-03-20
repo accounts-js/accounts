@@ -22,7 +22,7 @@ import reducer, {
   setTokens,
   clearTokens as clearStoreTokens,
   setOriginalTokens,
-  setImpersonated
+  setImpersonated,
 } from './module';
 import { hashPassword } from './encryption';
 import type { TransportInterface } from './TransportInterface';
@@ -52,16 +52,16 @@ export class AccountsClient {
     this.transport = transport;
 
     const middleware = options.reduxLogger ? [
-        options.reduxLogger,
-      ] : [];
+      options.reduxLogger,
+    ] : [];
 
     const reduxStoreKey = options.reduxStoreKey || config.reduxStoreKey;
     this.store = options.store || createStore({
-        reducers: {
-          [reduxStoreKey]: reducer,
-        },
-        middleware,
-      });
+      reducers: {
+        [reduxStoreKey]: reducer,
+      },
+      middleware,
+    });
   }
 
   getState(): Map<string, any> {
@@ -100,7 +100,7 @@ export class AccountsClient {
     return user ? user.toJS() : null;
   }
 
-  async impersonate(username: string) {
+  async impersonate(username: string): Promise<void> {
     if (!isString(username)) {
       throw new AccountsError('Username is required');
     }
@@ -111,8 +111,7 @@ export class AccountsClient {
     const res = await this.transport.impersonate(accessToken, username);
     if (!res.authorized) {
       throw new AccountsError(`User unauthorized to impersonate ${username}`);
-    }
-    else {
+    } else {
       this.store.dispatch(setImpersonated(true));
       this.store.dispatch(setOriginalTokens({ accessToken, refreshToken }));
       await this.storeTokens(res);
@@ -122,8 +121,8 @@ export class AccountsClient {
     }
   }
 
-  async stopImpersonation() {
-    if(this.isImpersonated()) {
+  async stopImpersonation(): Promise<void> {
+    if (this.isImpersonated()) {
       this.store.dispatch(setTokens(this.originalTokens()));
       this.store.dispatch(setImpersonated(false));
       await this.refreshSession();
@@ -138,18 +137,18 @@ export class AccountsClient {
     const tokens = this.getState().get('originalTokens');
 
     return tokens ? tokens.toJS() : {
-        accessToken: null,
-        refreshToken: null,
-      };
+      accessToken: null,
+      refreshToken: null,
+    };
   }
 
   tokens(): TokensType {
     const tokens = this.getState().get('tokens');
 
     return tokens ? tokens.toJS() : {
-        accessToken: null,
-        refreshToken: null,
-      };
+      accessToken: null,
+      refreshToken: null,
+    };
   }
 
   async clearTokens(): Promise<void> {
@@ -413,15 +412,15 @@ const Accounts = {
     return this.instance.requestVerificationEmail(email);
   },
   impersonate(username: string): Promise<any> {
-    return this.instance.impersonate(username)
+    return this.instance.impersonate(username);
   },
   stopImpersonation(): Promise<void> {
-    return this.instance.stopImpersonation()
+    return this.instance.stopImpersonation();
   },
   isImpersonated(): boolean {
     return this.instance.isImpersonated();
   },
-  originalTokens(): TokensType{
+  originalTokens(): TokensType {
     return this.instance.originalTokens();
   },
 };
