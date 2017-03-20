@@ -571,10 +571,7 @@ describe('Accounts', () => {
 
   fdescribe('impersonate', () => {
     it('should throw error if username is not provided', async() => {
-      const transport = {
-        loginWithPassword: () => Promise.resolve(loggedInUser),
-      };
-      await Accounts.config({ history }, transport);
+      await Accounts.config({ history }, {});
 
       try {
         await Accounts.impersonate();
@@ -585,10 +582,7 @@ describe('Accounts', () => {
     });
 
     it('should throw error if already impersonating', async() => {
-      const transport = {
-        loginWithPassword: () => Promise.resolve(loggedInUser),
-      };
-      await Accounts.config({ history }, transport);
+      await Accounts.config({ history }, {});
       Accounts.instance.isImpersonated = () => true;
 
       try {
@@ -601,7 +595,6 @@ describe('Accounts', () => {
 
     it('should throw if server return unauthorized', async() => {
       const transport = {
-        loginWithPassword: () => Promise.resolve(loggedInUser),
         impersonate: () => Promise.resolve({ authorized: false }),
       };
       await Accounts.config({ history }, transport);
@@ -616,19 +609,25 @@ describe('Accounts', () => {
 
     it('should set state correctly if impersonation was authorized', async() => {
       const impersonatedUser = {id: 2, username: 'impUser'};
+      const impersonateReuslt = {
+        authorized: true,
+        tokens: { accessToken: 'newAccessToken', refreshToken: 'newRefreshToken' },
+        user: impersonatedUser,
+      };
+
       const transport = {
         loginWithPassword: () => Promise.resolve(loggedInUser),
-        impersonate: () => Promise.resolve({
-          authorized: true,
-          tokens: { accessToken: 'newAccessToken', refreshToken: 'newRefreshToken' },
-          user: impersonatedUser,
-        }),
+        impersonate: () => Promise.resolve(impersonateReuslt),
       };
       await Accounts.config({ history }, transport);
+      await Accounts.loginWithPassword('username', 'password');
 
-      await Accounts.impersonate('impUser');
+      const result = await Accounts.impersonate('impUser');
       const tokens = Accounts.tokens();
-      expect(tokens).toEqual({ accessToken: 'newAccessToken', refreshToken: 'newRefreshToken' });
+      expect(tokens).toEqual({
+        accessToken: 'newAccessToken',
+        refreshToken: 'newRefreshToken',
+      });
       expect(Accounts.user()).toEqual(impersonatedUser);
       expect(Accounts.isImpersonated()).toBeTruthy();
       expect(Accounts.tokens());
@@ -636,7 +635,7 @@ describe('Accounts', () => {
         accessToken: 'accessToken',
         refreshToken: 'refreshToken',
       });
-
+      expect(result).toBe(impersonateReuslt)
     });
   });
 });

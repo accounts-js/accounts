@@ -107,14 +107,14 @@ export class AccountsClient {
     if (this.isImpersonated()) {
       throw new AccountsError('User already impersonating');
     }
-    const { accessToken } = await this.tokens();
+    const { accessToken, refreshToken } = await this.tokens();
     const res = await this.transport.impersonate(accessToken, username);
     if (!res.authorized) {
       throw new AccountsError(`User unauthorized to impersonate ${username}`);
     }
     else {
       this.store.dispatch(setImpersonating(true));
-      this.store.dispatch(setOriginalTokens(this.tokens()));
+      this.store.dispatch(setOriginalTokens({ accessToken, refreshToken }));
       await this.storeTokens(res);
       this.store.dispatch(setTokens(res.tokens));
       this.store.dispatch(setUser(res.user));
