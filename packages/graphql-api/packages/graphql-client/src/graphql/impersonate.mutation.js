@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 import { loginFieldsFragment } from './login-fields.fragment';
 
 export const createImpersonateMutation = userFieldsFragment => gql`
-  mutation($accessToken: String! $user: String!) {
-    impersonate(accessToken: $accessToken, user: $user) {
+  mutation($accessToken: String! $username: String!) {
+    impersonate(accessToken: $accessToken, username: $username) {
       authorized
       ...LoginFields
       user {

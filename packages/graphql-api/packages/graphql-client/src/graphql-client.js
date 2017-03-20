@@ -68,9 +68,9 @@ export class GraphQLClient {
     return await this.mutate(loginMutation, 'loginWithPassword', { user, password });
   }
 
-  async impersonate(accessToken: string, user: string): Promise<ImpersonateReturnType> {
+  async impersonate(accessToken: string, username: string): Promise<ImpersonateReturnType> {
     const impersonateMutation = createImpersonateMutation(this.options.userFieldsFragment);
-    return await this.mutate(impersonateMutation, 'impersonate', { accessToken, user });
+    return await this.mutate(impersonateMutation, 'impersonate', { accessToken, username });
   }
 
   async createUser(user: CreateUserType): Promise<string> {

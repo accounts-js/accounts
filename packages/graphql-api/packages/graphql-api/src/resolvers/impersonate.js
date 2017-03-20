@@ -1,3 +1,3 @@
 export const impersonate = Accounts =>
-  (async (_, { accessToken, user }) =>
-    await Accounts.impersonate(accessToken, user));
+  (async (_, { accessToken, username }) =>
+    await Accounts.impersonate(accessToken, username));
