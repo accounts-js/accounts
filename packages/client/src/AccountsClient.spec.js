@@ -568,4 +568,6 @@ describe('Accounts', () => {
       }
     });
   });
+
+  describe('impersonate')
 });

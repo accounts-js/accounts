@@ -871,6 +871,32 @@ describe('Accounts', () => {
     });
   });
 
+  describe('setImpersonationRule', () => {
+    it('should add new record to impersonationRules', () => {
+      const func = () => 'test';
+      Accounts.setImpersonationRule(0, func);
+      expect(Accounts.impersonationRules.get(0)).toBe(func);
+    });
+  });
+
+  describe('getImpersonationRule', () => {
+    it('should get record from impersonationRules', () => {
+      const func = () => 'test';
+      Accounts.setImpersonationRule(0, func);
+      expect(Accounts.getImpersonationRule(0)).toBe(func);
+    });
+  });
+
+  describe('deleteImpersonationRule', () => {
+    it('should delete record from impersonationRules', () => {
+      const func = () => 'test';
+      Accounts.setImpersonationRule(0, func);
+      const res = Accounts.deleteImpersontionRule(0);
+      expect(res).toBeTruthy();
+      expect(Accounts.getImpersonationRule(0)).toBe(undefined);
+    });
+  });
+
   describe('impersonate', () => {
     const admin = { username: 'admin', id: 999 };
     const user = { username: 'myUser', id: 123 };
@@ -879,25 +905,6 @@ describe('Accounts', () => {
 
     beforeEach(() => {
       Accounts.config({}, db);
-    });
-
-    it('should add new record to impersonationRules', () => {
-      const func = () => 'test';
-      Accounts.setImpersonationRule(0, func);
-      expect(Accounts.impersonationRules.get(0)).toBe(func);
-    });
-
-    it('should get record from impersonationRules', () => {
-      const func = () => 'test';
-      Accounts.setImpersonationRule(0, func);
-      expect(Accounts.getImpersonationRule(0)).toBe(func);
-    });
-
-    it('should delete record from impersonationRules', () => {
-      const func = () => 'test';
-      Accounts.setImpersonationRule(0, func);
-      Accounts.deleteImpersontionRule(0);
-      expect(Accounts.getImpersonationRule(0)).toBe(undefined);
     });
 
     it('throws error if no access token is provided', async() => {
