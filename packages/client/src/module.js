@@ -34,8 +34,7 @@ const reducer = (state = initialState, action) => {
       return state.set('tokens', Map(tokens));
     }
     case CLEAR_TOKENS: {
-      const isImpersonated = state.get('isImpersonated');
-      if (!isImpersonated) {
+      if (!state.get('isImpersonated')) {
         state.set('originalTokens', null);
       }
       return state.set('tokens', null);
