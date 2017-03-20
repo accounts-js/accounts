@@ -8,7 +8,7 @@ const CLEAR_TOKENS = `${PATH}CLEAR_TOKENS`;
 const CLEAR_USER = `${PATH}CLEAR_USER`;
 const LOGGING_IN = `${PATH}LOGGING_IN`;
 const SET_ORIGINAL_TOKENS = `${PATH}SET_ORIGINAL_TOKENS`;
-const SET_IMPERSONATION = `${PATH}SET_IMPERSONATION`;
+const SET_IMPERSONATED = `${PATH}SET_IMPERSONATED`;
 
 const initialState = Map({
   isLoading: false,
@@ -16,7 +16,7 @@ const initialState = Map({
   tokens: null,
   loggingIn: false,
   originalTokens: null,
-  isImpersonating: false
+  isImpersonated: false
 });
 
 const reducer = (state = initialState, action) => {
@@ -34,8 +34,8 @@ const reducer = (state = initialState, action) => {
       return state.set('tokens', Map(tokens));
     }
     case CLEAR_TOKENS: {
-      const isImpersonating = state.get('isImpersonating');
-      if (!isImpersonating || !isImpersonating.toJS()) {
+      const isImpersonated = state.get('isImpersonated');
+      if (!isImpersonated) {
         state.set('originalTokens', null);
       }
       return state.set('tokens', null);
@@ -53,9 +53,9 @@ const reducer = (state = initialState, action) => {
       return state.set('originalTokens', Map(tokens));
     }
 
-    case SET_IMPERSONATION: {
-      const { impersonating } = action.payload;
-      return state.set('isImpersonating', Map(impersonating));
+    case SET_IMPERSONATED: {
+      const { isImpersonated } = action.payload;
+      return state.set('isImpersonated', isImpersonated);
     }
 
     default:
@@ -102,9 +102,9 @@ export const setOriginalTokens = tokens => ({
   },
 });
 
-export const setImpersonating = isImpersonating => ({
-  type: SET_IMPERSONATION,
+export const setImpersonated = isImpersonated => ({
+  type: SET_IMPERSONATED,
   payload: {
-    isImpersonating,
+    isImpersonated,
   },
 });

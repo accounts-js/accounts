@@ -934,14 +934,8 @@ describe('Accounts', () => {
       expect(impersonationRule({ username: 'otherUser', id: '098' })).toBeFalsy();
       expect(impersonationRule(impersonatedUser)).toBeTruthy();
 
-      let res;
-      try {
-        res = await Accounts.impersonate(accessToken, 'someUser');
-        expect(res.authorized).toEqual(false);
-      }
-      catch (err) {
-        expect(err).toBeUndefined();
-      }
+      const res = await Accounts.impersonate(accessToken, 'someUser');
+      expect(res.authorized).toEqual(false);
     });
 
     it('returns correct response if authorized', async() => {
@@ -959,18 +953,13 @@ describe('Accounts', () => {
       Accounts.setImpersonationRule(user.id, (impUser) => impUser === impersonatedUser);
       Accounts.createTokens = (sessionId, isImpersonated) => ({ sessionId, isImpersonated });
 
-      let res;
-      try {
-        res = await Accounts.impersonate(accessToken, 'impUser');
-        expect(res).toEqual({
-          authorized: true,
-          tokens: { sessionId: '001', isImpersonated: true },
-          user: impersonatedUser
-        });
-      }
-      catch (err) {
-        expect(err).toBeUndefined();
-      }
+      const res = await Accounts.impersonate(accessToken, 'impUser');
+      expect(res).toEqual({
+        authorized: true,
+        tokens: { sessionId: '001', isImpersonated: true },
+        user: impersonatedUser
+      });
+
     });
   });
 });

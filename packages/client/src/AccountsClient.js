@@ -22,7 +22,7 @@ import reducer, {
   setTokens,
   clearTokens as clearStoreTokens,
   setOriginalTokens,
-  setImpersonating
+  setImpersonated
 } from './module';
 import { hashPassword } from './encryption';
 import type { TransportInterface } from './TransportInterface';
@@ -113,7 +113,7 @@ export class AccountsClient {
       throw new AccountsError(`User unauthorized to impersonate ${username}`);
     }
     else {
-      this.store.dispatch(setImpersonating(true));
+      this.store.dispatch(setImpersonated(true));
       this.store.dispatch(setOriginalTokens({ accessToken, refreshToken }));
       await this.storeTokens(res);
       this.store.dispatch(setTokens(res.tokens));
@@ -123,15 +123,15 @@ export class AccountsClient {
   }
 
   async stopImpersonation() {
-    this.store.dispatch(setTokens(this.getState().get('originalTokens')));
-    await this.refreshSession();
-    this.store.dispatch(setImpersonating(false));
-
+    if(this.isImpersonated()) {
+      this.store.dispatch(setTokens(this.originalTokens()));
+      this.store.dispatch(setImpersonated(false));
+      await this.refreshSession();
+    }
   }
 
   isImpersonated(): boolean {
-    const isImpersonating = this.getState().get('isImpersonating');
-    return isImpersonating ? isImpersonating.toJS() : false;
+    return (this.getState().get('isImpersonated'): boolean);
   }
 
   originalTokens(): TokensType {
@@ -413,8 +413,8 @@ const Accounts = {
   impersonate(username: string): Promise<any> {
     return this.instance.impersonate(username)
   },
-  stopImpersonate(): Promise<void> {
-    return this.instance.stopImpersonate()
+  stopImpersonation(): Promise<void> {
+    return this.instance.stopImpersonation()
   },
   isImpersonated(): boolean {
     return this.instance.isImpersonated();
