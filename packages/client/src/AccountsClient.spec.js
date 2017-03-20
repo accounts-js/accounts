@@ -639,7 +639,7 @@ describe('Accounts', () => {
     });
   });
 
-  fdescribe('stopImpersonation', () => {
+  describe('stopImpersonation', () => {
     it('should not replace tokens if not impersonating', async() => {
       const transport = {
         loginWithPassword: () => Promise.resolve(loggedInUser),
@@ -697,6 +697,5 @@ describe('Accounts', () => {
       await Accounts.stopImpersonation();
       expect(Accounts.tokens()).toEqual(tokens);
     });
-  })
-
+  });
 });
