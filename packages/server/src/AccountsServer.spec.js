@@ -28,7 +28,10 @@ describe('Accounts', () => {
 
     it('set custom password authenticator', () => {
       const db = {};
-      Accounts.config({ passwordAuthenticator: () => { } }, db);
+      Accounts.config({
+        passwordAuthenticator: () => {
+        }
+      }, db);
       expect(Accounts._options.passwordAuthenticator).toBeDefined();
     });
 
@@ -57,7 +60,7 @@ describe('Accounts', () => {
     beforeEach(() => {
       Accounts.config({}, db);
     });
-    it('requires username or an email', async () => {
+    it('requires username or an email', async() => {
       Accounts.config({}, db);
       try {
         await Accounts.createUser({
@@ -71,7 +74,7 @@ describe('Accounts', () => {
         expect(message).toEqual('Username or Email is required');
       }
     });
-    it('throws error if username exists', async () => {
+    it('throws error if username exists', async() => {
       Accounts.config({}, {
         ...db,
         findUserByUsername: () => Promise.resolve('user'),
@@ -88,7 +91,7 @@ describe('Accounts', () => {
         expect(message).toEqual('Username already exists');
       }
     });
-    it('throws error if email exists', async () => {
+    it('throws error if email exists', async() => {
       Accounts.config({}, {
         ...db,
         findUserByEmail: () => Promise.resolve('user'),
@@ -105,7 +108,7 @@ describe('Accounts', () => {
         expect(message).toEqual('Email already exists');
       }
     });
-    it('succesfully create a user', async () => {
+    it('succesfully create a user', async() => {
       Accounts.config({}, {
         ...db,
         createUser: () => Promise.resolve('123'),
@@ -119,7 +122,7 @@ describe('Accounts', () => {
   });
 
   describe('loginWithPassword - errors', () => {
-    it('throws error if user is undefined', async () => {
+    it('throws error if user is undefined', async() => {
       try {
         await Accounts.loginWithPassword(null, '123456');
         throw new Error();
@@ -129,7 +132,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('throws error if password is undefined', async () => {
+    it('throws error if password is undefined', async() => {
       try {
         await Accounts.loginWithPassword('username', null);
         throw new Error();
@@ -139,7 +142,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('throws error if user is not a string or an object', async () => {
+    it('throws error if user is not a string or an object', async() => {
       try {
         await Accounts.loginWithPassword(1, '123456');
         throw new Error();
@@ -149,7 +152,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('throws error if password is not a string', async () => {
+    it('throws error if password is not a string', async() => {
       try {
         await Accounts.loginWithPassword('username', {});
         throw new Error();
@@ -159,7 +162,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('throws error if user is not found', async () => {
+    it('throws error if user is not found', async() => {
       Accounts.config({}, {
         findUserByUsername: () => Promise.resolve(null),
         findUserByEmail: () => Promise.resolve(null),
@@ -173,7 +176,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('throws error if password not set', async () => {
+    it('throws error if password not set', async() => {
       Accounts.config({}, {
         findUserByUsername: () => Promise.resolve('123'),
         findUserByEmail: () => Promise.resolve(null),
@@ -188,7 +191,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('throws error if password is incorrect', async () => {
+    it('throws error if password is incorrect', async() => {
       Accounts.config({}, {
         findUserByUsername: () => Promise.resolve('123'),
         findUserByEmail: () => Promise.resolve(null),
@@ -204,7 +207,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('should use custom password authenticator when specified', async () => {
+    it('should use custom password authenticator when specified', async() => {
       const user = {
         id: '123',
         username: 'username',
@@ -223,7 +226,7 @@ describe('Accounts', () => {
       expect(authenticator.mock.calls.length).toEqual(1);
     });
 
-    it('return user with custom validation method', async () => {
+    it('return user with custom validation method', async() => {
       const resumeSessionValidator = jest.fn(() => Promise.resolve({}));
 
       const user = {
@@ -245,7 +248,7 @@ describe('Accounts', () => {
       expect(resumeSessionValidator.mock.calls.length).toBe(1);
     });
 
-    it('throw when custom validation method rejects', async () => {
+    it('throw when custom validation method rejects', async() => {
       const resumeSessionValidator = jest.fn(() => Promise.reject('Custom session error'));
 
       const user = {
@@ -274,7 +277,7 @@ describe('Accounts', () => {
   });
 
   describe('loginWithUser', () => {
-    it('login using id', async () => {
+    it('login using id', async() => {
       const hash = bcryptPassword('1234567');
       const user = {
         id: '123',
@@ -300,7 +303,7 @@ describe('Accounts', () => {
       expect(refreshToken).toBeTruthy();
     });
 
-    it('supports hashed password from the client', async () => {
+    it('supports hashed password from the client', async() => {
       const hash = bcryptPassword(hashPassword('1234567', 'sha256'));
       const user = {
         id: '123',
@@ -332,7 +335,7 @@ describe('Accounts', () => {
   });
 
   describe('refreshTokens', () => {
-    it('updates session and returns new tokens and user', async () => {
+    it('updates session and returns new tokens and user', async() => {
       const updateSession = jest.fn(() => Promise.resolve());
       const user = {
         userId: '123',
@@ -364,7 +367,7 @@ describe('Accounts', () => {
       });
     });
 
-    it('requires access and refresh tokens', async () => {
+    it('requires access and refresh tokens', async() => {
       Accounts.config({}, {});
       try {
         await Accounts.refreshTokens();
@@ -373,7 +376,7 @@ describe('Accounts', () => {
         expect(err.message).toEqual('An accessToken and refreshToken are required');
       }
     });
-    it('throws error if tokens are not valid', async () => {
+    it('throws error if tokens are not valid', async() => {
       Accounts.config({}, {});
       try {
         await Accounts.refreshTokens('bad access token', 'bad refresh token');
@@ -382,7 +385,7 @@ describe('Accounts', () => {
         expect(err.message).toEqual('Tokens are not valid');
       }
     });
-    it('throws error if session not found', async () => {
+    it('throws error if session not found', async() => {
       Accounts.config({}, {
         findSessionById: () => Promise.resolve(null),
       });
@@ -394,7 +397,7 @@ describe('Accounts', () => {
         expect(err.message).toEqual('Session not found');
       }
     });
-    it('throws error if session not valid', async () => {
+    it('throws error if session not valid', async() => {
       Accounts.config({}, {
         findSessionById: () => Promise.resolve({
           valid: false,
@@ -411,7 +414,7 @@ describe('Accounts', () => {
   });
 
   describe('logout', () => {
-    it('throws error if user is not found', async () => {
+    it('throws error if user is not found', async() => {
       Accounts.config({}, {
         findSessionById: () => Promise.resolve({
           sessionId: '456',
@@ -430,7 +433,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('invalidates session', async () => {
+    it('invalidates session', async() => {
       const invalidateSession = jest.fn(() => Promise.resolve());
       const user = {
         userId: '123',
@@ -454,7 +457,7 @@ describe('Accounts', () => {
   });
 
   describe('findSessionByAccessToken', () => {
-    it('requires access token', async () => {
+    it('requires access token', async() => {
       Accounts.config({}, {});
       try {
         await Accounts.logout();
@@ -463,7 +466,7 @@ describe('Accounts', () => {
         expect(err.message).toEqual('An accessToken is required');
       }
     });
-    it('throws error if tokens are not valid', async () => {
+    it('throws error if tokens are not valid', async() => {
       Accounts.config({}, {});
       try {
         await Accounts.logout('bad access token');
@@ -472,7 +475,7 @@ describe('Accounts', () => {
         expect(err.message).toEqual('Tokens are not valid');
       }
     });
-    it('throws error if session not found', async () => {
+    it('throws error if session not found', async() => {
       Accounts.config({}, {
         findSessionById: () => Promise.resolve(null),
       });
@@ -484,7 +487,7 @@ describe('Accounts', () => {
         expect(err.message).toEqual('Session not found');
       }
     });
-    it('throws error if session not valid', async () => {
+    it('throws error if session not valid', async() => {
       Accounts.config({}, {
         findSessionById: () => Promise.resolve({
           valid: false,
@@ -501,7 +504,7 @@ describe('Accounts', () => {
   });
 
   describe('findUserByEmail', () => {
-    it('call this.db.findUserByEmail', async () => {
+    it('call this.db.findUserByEmail', async() => {
       const findUserByEmail = jest.fn(() => Promise.resolve('user'));
       Accounts.config({}, { findUserByEmail });
       const user = await Accounts.findUserByEmail('email');
@@ -511,7 +514,7 @@ describe('Accounts', () => {
   });
 
   describe('findUserByUsername', () => {
-    it('call this.db.findUserByUsername', async () => {
+    it('call this.db.findUserByUsername', async() => {
       const findUserByUsername = jest.fn(() => Promise.resolve('user'));
       Accounts.config({}, { findUserByUsername });
       const user = await Accounts.findUserByUsername('username');
@@ -521,7 +524,7 @@ describe('Accounts', () => {
   });
 
   describe('findUserById', () => {
-    it('call this.db.findUserById', async () => {
+    it('call this.db.findUserById', async() => {
       const findUserById = jest.fn(() => Promise.resolve('user'));
       Accounts.config({}, { findUserById });
       const user = await Accounts.findUserById('id');
@@ -531,7 +534,7 @@ describe('Accounts', () => {
   });
 
   describe('addEmail', () => {
-    it('call this.db.addEmail', async () => {
+    it('call this.db.addEmail', async() => {
       const addEmail = jest.fn(() => Promise.resolve());
       Accounts.config({}, { addEmail });
       await Accounts.addEmail('id', 'email', true);
@@ -540,7 +543,7 @@ describe('Accounts', () => {
   });
 
   describe('removeEmail', () => {
-    it('call this.db.removeEmail', async () => {
+    it('call this.db.removeEmail', async() => {
       const removeEmail = jest.fn(() => Promise.resolve());
       Accounts.config({}, { removeEmail });
       await Accounts.removeEmail('id', 'email');
@@ -549,7 +552,7 @@ describe('Accounts', () => {
   });
 
   describe('resumeSession', () => {
-    it('throws error if user is not found', async () => {
+    it('throws error if user is not found', async() => {
       Accounts.config({}, {
         findSessionById: () => Promise.resolve({
           sessionId: '456',
@@ -568,7 +571,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('return false if session is not valid', async () => {
+    it('return false if session is not valid', async() => {
       const user = {
         userId: '123',
         username: 'username',
@@ -586,7 +589,7 @@ describe('Accounts', () => {
       expect(ret).not.toBeTruthy();
     });
 
-    it('return user', async () => {
+    it('return user', async() => {
       const user = {
         userId: '123',
         username: 'username',
@@ -606,7 +609,7 @@ describe('Accounts', () => {
   });
 
   describe('setProfile', () => {
-    it('throws error if user is not found', async () => {
+    it('throws error if user is not found', async() => {
       Accounts.config({}, {
         findUserById: () => Promise.resolve(null),
       });
@@ -619,7 +622,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('calls set profile on db interface', async () => {
+    it('calls set profile on db interface', async() => {
       const user = {
         userId: '123',
         username: 'username',
@@ -638,7 +641,7 @@ describe('Accounts', () => {
       expect(setProfile.mock.calls[0][1]).toEqual(profile);
     });
 
-    it('merges profile and calls set profile on db interface', async () => {
+    it('merges profile and calls set profile on db interface', async() => {
       const user = {
         userId: '123',
         username: 'username',
@@ -667,7 +670,7 @@ describe('Accounts', () => {
   });
 
   describe('sendVerificationEmail', () => {
-    it('throws error if user is not found', async () => {
+    it('throws error if user is not found', async() => {
       Accounts.config({}, {
         findUserById: () => Promise.resolve(null),
       });
@@ -679,7 +682,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('throws when bad email address passed', async () => {
+    it('throws when bad email address passed', async() => {
       const user = {
         emails: [{ address: 'email' }],
       };
@@ -694,7 +697,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('should send to first unverified email', async () => {
+    it('should send to first unverified email', async() => {
       const user = {
         emails: [{ address: 'email' }],
       };
@@ -711,7 +714,7 @@ describe('Accounts', () => {
       expect(Accounts.email.sendMail.mock.calls[0][0].text).toBeTruthy();
     });
 
-    it('should send email', async () => {
+    it('should send email', async() => {
       const user = {
         emails: [{ address: 'email' }],
       };
@@ -730,7 +733,7 @@ describe('Accounts', () => {
   });
 
   describe('sendResetPasswordEmail', () => {
-    it('throws error if user is not found', async () => {
+    it('throws error if user is not found', async() => {
       Accounts.config({}, {
         findUserById: () => Promise.resolve(null),
       });
@@ -742,7 +745,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('throws when bad email address passed', async () => {
+    it('throws when bad email address passed', async() => {
       const user = {
         emails: [{ address: 'email' }],
       };
@@ -757,7 +760,7 @@ describe('Accounts', () => {
       }
     });
 
-    it('should send to first user email', async () => {
+    it('should send to first user email', async() => {
       const user = {
         emails: [{ address: 'email' }],
       };
@@ -774,7 +777,7 @@ describe('Accounts', () => {
       expect(Accounts.email.sendMail.mock.calls[0][0].text).toBeTruthy();
     });
 
-    it('should send email', async () => {
+    it('should send email', async() => {
       const user = {
         emails: [{ address: 'email' }],
       };
@@ -792,7 +795,7 @@ describe('Accounts', () => {
     });
 
     describe('sendEnrollmentEmail', () => {
-      it('throws error if user not found', async () => {
+      it('throws error if user not found', async() => {
         Accounts.config({}, {
           findUserById: () => Promise.resolve(null),
         });
@@ -803,7 +806,7 @@ describe('Accounts', () => {
           expect(err.message).toEqual('User not found');
         }
       });
-      it('adds email verification token and sends mail', async () => {
+      it('adds email verification token and sends mail', async() => {
         const addResetPasswordToken = jest.fn();
         const _getFirstUserEmail = jest.fn(() => 'user@user.com');
         const sendMail = jest.fn();
@@ -858,13 +861,101 @@ describe('Accounts', () => {
             address: 'email@email.com',
             verified: false,
           },
-          {
-            address: 'another@email.com',
-            verified: false,
-          }],
+            {
+              address: 'another@email.com',
+              verified: false,
+            }],
         });
         expect(email).toEqual('email@email.com');
       });
+    });
+  });
+  describe('impersonate', () => {
+    const admin = { username: 'admin', id: 999 };
+    const user = { username: 'myUser', id: 123 };
+    const impersonatedUser = {username: 'impUser' , id: 456};
+    const someUser = {username:'someUser', id:789};
+    beforeEach(() => {
+      Accounts.config({}, db);
+    });
+    it('should add new record to impersonationRules', () => {
+      const func = () => 'test';
+      Accounts.setImpersonationRule(0, func);
+      expect(Accounts.impersonationRules.get(0)).toBe(func);
+    });
+    it('should get record from impersonationRules', () => {
+      const func = () => 'test';
+      Accounts.setImpersonationRule(0, func);
+      expect(Accounts.getImpersonationRule(0)).toBe(func);
+    });
+    it('should delete record from impersonationRules', () => {
+      const func = () => 'test';
+      Accounts.setImpersonationRule(0, func);
+      Accounts.deleteImpersontionRule(0);
+      expect(Accounts.getImpersonationRule(0)).toBe(undefined);
+    });
+    it('throws error if no access token is provided', async() => {
+      try {
+        await Accounts.impersonate();
+        throw new Error();
+      }
+      catch (err) {
+        expect(err.message).toEqual('An access token is required');
+      }
+    });
+    it('returns not authorized if no relevant rule is found in impersonationRules', async() => {
+      const { accessToken } = Accounts.createTokens('555');
+      Accounts.config({}, {
+        findUserById: () => Promise.resolve(user),
+        findUserByUsername: () => Promise.resolve(someUser),
+      });
+
+      Accounts.findSessionByAccessToken = () => Promise.resolve({
+        valid: true,
+        userId: '123',
+      });
+      Accounts.setImpersonationRule(user.id, (impUser) => impUser === impersonatedUser);
+      let impersonationRule = Accounts.impersonationRules.get(user.id);
+      expect(impersonationRule).toBeDefined();
+      expect(impersonationRule({username:'otherUser', id:'098'})).toBeFalsy();
+      expect(impersonationRule(impersonatedUser)).toBeTruthy();
+
+      let res;
+      try {
+        res = await Accounts.impersonate(accessToken, 'someUser');
+        expect(res.authorized).toEqual(false);
+      }
+      catch (err) {
+        expect(err).toBeUndefined();
+      }
+    });
+    it('returns correct response if authorized', async() => {
+      const { accessToken } = Accounts.createTokens('555');
+      Accounts.config({}, {
+        findUserById: () => Promise.resolve(user),
+        findUserByUsername: () => Promise.resolve(impersonatedUser),
+        createSession: () => Promise.resolve('001'),
+      });
+
+      Accounts.findSessionByAccessToken = () => Promise.resolve({
+        valid: true,
+        userId: '123',
+      });
+      Accounts.setImpersonationRule(user.id, (impUser) => impUser === impersonatedUser);
+      Accounts.createTokens = (sessionId, isImpersonated) => ({sessionId, isImpersonated});
+
+      let res;
+      try {
+        res = await Accounts.impersonate(accessToken, 'impUser');
+        expect(res).toEqual({
+          authorized: true,
+          tokens: {sessionId: '001', isImpersonated: true},
+          user: impersonatedUser
+        });
+      }
+      catch (err) {
+        expect(err).toBeUndefined();
+      }
     });
   });
 });
