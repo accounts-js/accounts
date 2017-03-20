@@ -4,6 +4,7 @@ import gql from 'graphql-tag';
 import type {
   CreateUserType,
   LoginReturnType,
+  ImpersonateReturnType,
 } from '@accounts/common';
 import {
   sendResetPasswordEmailMutation,
@@ -15,7 +16,9 @@ import {
   defaultUserFieldsFragment,
   createLoginMutation,
   createRefreshTokenMutation,
+  createImpersonateMutation,
 } from './graphql';
+// import { createImpersonateMutation } from './graphql/impersonate.mutation';
 
 export type OptionsType = {
   graphQLClient: any,
@@ -63,6 +66,11 @@ export class GraphQLClient {
   async loginWithPassword(user: string, password: string): Promise<LoginReturnType> {
     const loginMutation = createLoginMutation(this.options.userFieldsFragment);
     return await this.mutate(loginMutation, 'loginWithPassword', { user, password });
+  }
+
+  async impersonate(accessToken: string, user: string): Promise<ImpersonateReturnType> {
+    const impersonateMutation = createImpersonateMutation(this.options.userFieldsFragment);
+    return await this.mutate(impersonateMutation, 'impersonate', { accessToken, user });
   }
 
   async createUser(user: CreateUserType): Promise<string> {

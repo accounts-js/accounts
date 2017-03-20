@@ -7,3 +7,4 @@ export * from './reset-password.mutation';
 export * from './send-verification-email.mutation';
 export * from './send-reset-password-email.mutation';
 export * from './user-fields.fragment';
+export * from './impersonate.mutation';

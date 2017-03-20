@@ -9,6 +9,12 @@ export const typeDefs = `
     user: User
     tokens: Tokens
   }
+  
+  type ImpersonateReturn {
+    authorized: Boolean
+    tokens: Tokens
+    user: User
+  }
 
   type User {
     id: ID!

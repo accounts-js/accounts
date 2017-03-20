@@ -1,6 +1,7 @@
 // @flow
 import { loginWithPassword } from './resolvers/login-with-password';
 import { refreshTokens } from './resolvers/refresh-tokens';
+import { impersonate } from './resolvers/impersonate';
 import { me } from './resolvers/me';
 import { User } from './resolvers/user';
 import { mutations } from './graphql/mutations';
@@ -45,6 +46,7 @@ export const createJSAccountsGraphQL = (Accounts: any, schemaOptions: SchemaGene
       loginWithPassword: loginWithPassword(Accounts),
       refreshTokens: refreshTokens(Accounts),
       logout: logout(Accounts),
+      impersonate: impersonate(Accounts),
     },
     [schemaOptions.rootQueryName]: {
       me: me(Accounts),
