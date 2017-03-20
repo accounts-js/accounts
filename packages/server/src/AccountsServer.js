@@ -234,7 +234,7 @@ export class AccountsServer {
     try {
       jwt.verify(accessToken, this._options.tokenSecret, { ignoreExpiration: true });
     } catch (err) {
-      throw new AccountsError('Tokens are not valid');
+      throw new AccountsError('Access token is not valid');
     }
 
     const session = await this.findSessionByAccessToken(accessToken);
