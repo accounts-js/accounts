@@ -870,30 +870,36 @@ describe('Accounts', () => {
       });
     });
   });
+
   describe('impersonate', () => {
     const admin = { username: 'admin', id: 999 };
     const user = { username: 'myUser', id: 123 };
-    const impersonatedUser = {username: 'impUser' , id: 456};
-    const someUser = {username:'someUser', id:789};
+    const impersonatedUser = { username: 'impUser', id: 456 };
+    const someUser = { username: 'someUser', id: 789 };
+
     beforeEach(() => {
       Accounts.config({}, db);
     });
+
     it('should add new record to impersonationRules', () => {
       const func = () => 'test';
       Accounts.setImpersonationRule(0, func);
       expect(Accounts.impersonationRules.get(0)).toBe(func);
     });
+
     it('should get record from impersonationRules', () => {
       const func = () => 'test';
       Accounts.setImpersonationRule(0, func);
       expect(Accounts.getImpersonationRule(0)).toBe(func);
     });
+
     it('should delete record from impersonationRules', () => {
       const func = () => 'test';
       Accounts.setImpersonationRule(0, func);
       Accounts.deleteImpersontionRule(0);
       expect(Accounts.getImpersonationRule(0)).toBe(undefined);
     });
+
     it('throws error if no access token is provided', async() => {
       try {
         await Accounts.impersonate();
@@ -903,6 +909,7 @@ describe('Accounts', () => {
         expect(err.message).toEqual('An access token is required');
       }
     });
+
     it('returns not authorized if no relevant rule is found in impersonationRules', async() => {
       const { accessToken } = Accounts.createTokens('555');
       Accounts.config({}, {
@@ -917,7 +924,7 @@ describe('Accounts', () => {
       Accounts.setImpersonationRule(user.id, (impUser) => impUser === impersonatedUser);
       let impersonationRule = Accounts.impersonationRules.get(user.id);
       expect(impersonationRule).toBeDefined();
-      expect(impersonationRule({username:'otherUser', id:'098'})).toBeFalsy();
+      expect(impersonationRule({ username: 'otherUser', id: '098' })).toBeFalsy();
       expect(impersonationRule(impersonatedUser)).toBeTruthy();
 
       let res;
@@ -929,6 +936,7 @@ describe('Accounts', () => {
         expect(err).toBeUndefined();
       }
     });
+
     it('returns correct response if authorized', async() => {
       const { accessToken } = Accounts.createTokens('555');
       Accounts.config({}, {
@@ -942,14 +950,14 @@ describe('Accounts', () => {
         userId: '123',
       });
       Accounts.setImpersonationRule(user.id, (impUser) => impUser === impersonatedUser);
-      Accounts.createTokens = (sessionId, isImpersonated) => ({sessionId, isImpersonated});
+      Accounts.createTokens = (sessionId, isImpersonated) => ({ sessionId, isImpersonated });
 
       let res;
       try {
         res = await Accounts.impersonate(accessToken, 'impUser');
         expect(res).toEqual({
           authorized: true,
-          tokens: {sessionId: '001', isImpersonated: true},
+          tokens: { sessionId: '001', isImpersonated: true },
           user: impersonatedUser
         });
       }
