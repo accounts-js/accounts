@@ -5,6 +5,13 @@ import { bcryptPassword, hashPassword } from './encryption';
 let Accounts;
 
 describe('Accounts', () => {
+  const db = {
+    findUserByUsername: () => Promise.resolve(),
+    findUserByEmail: () => Promise.resolve(),
+    createUser: () => Promise.resolve(),
+    createSession: () => Promise.resolve(),
+  };
+
   beforeEach(() => {
     Accounts = new AccountsServer();
     Accounts.config({}, {});
@@ -85,7 +92,6 @@ describe('Accounts', () => {
       Accounts.onCreateUserError(hookSpy);
 
       Accounts.config({}, {
-        ...db,
         createUser: () => Promise.reject('err'),
       });
 
@@ -192,8 +198,7 @@ describe('Accounts', () => {
 
       try {
         await Accounts.resumeSession(accessToken);
-      }
-      catch (e) {
+      } catch (e) {
         // nothing to do
       }
 
@@ -217,8 +222,7 @@ describe('Accounts', () => {
 
       try {
         await Accounts.resumeSession(accessToken);
-      }
-      catch (e) {
+      } catch (e) {
         // nothing to do
       }
 
@@ -272,7 +276,6 @@ describe('Accounts', () => {
 
       expect(hookSpy.mock.calls.length).toBe(1);
     });
-
   });
 
   describe('config', () => {
@@ -287,20 +290,20 @@ describe('Accounts', () => {
     });
 
     it('sets the db driver', () => {
-      const db = {};
-      Accounts.config({}, db);
-      expect(Accounts.db).toEqual(db);
+      const testDB = {};
+      Accounts.config({}, testDB);
+      expect(Accounts.db).toEqual(testDB);
     });
 
     it('set custom password authenticator', () => {
-      const db = {};
-      Accounts.config({ passwordAuthenticator: () => { } }, db);
+      const testDB = {};
+      Accounts.config({ passwordAuthenticator: () => { } }, testDB);
       expect(Accounts._options.passwordAuthenticator).toBeDefined();
     });
 
     it('use default password authenticator', () => {
-      const db = {};
-      Accounts.config({}, db);
+      const testDB = {};
+      Accounts.config({}, testDB);
       expect(Accounts._options.passwordAuthenticator).toBeUndefined();
     });
   });
@@ -313,12 +316,6 @@ describe('Accounts', () => {
     });
   });
 
-  const db = {
-    findUserByUsername: () => Promise.resolve(),
-    findUserByEmail: () => Promise.resolve(),
-    createUser: () => Promise.resolve(),
-    createSession: () => Promise.resolve(),
-  };
   describe('createUser', () => {
     beforeEach(() => {
       Accounts.config({}, db);

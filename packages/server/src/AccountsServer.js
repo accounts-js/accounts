@@ -31,24 +31,24 @@ import type { EmailTemplatesType, EmailTemplateType } from './emailTemplates';
 import type { AccountsServerConfiguration, PasswordAuthenticator } from './config';
 
 export const ServerHooks = {
-  LoginSuccess: "LoginSuccess",
-  LoginError: "LoginError",
-  LogoutSuccess: "LogoutSuccess",
-  LogoutError: "LogoutError",
-  CreateUserSuccess: "CreateUserSuccess",
-  CreateUserError: "CreateUserError",
-  ResumeSessionSuccess: "ResumeSessionSuccess",
-  ResumeSessionError: "ResumeSessionError",
-  RefreshTokensSuccess: "RefreshTokensSuccess",
-  RefreshTokensError: "RefreshTokensError",
+  LoginSuccess: 'LoginSuccess',
+  LoginError: 'LoginError',
+  LogoutSuccess: 'LogoutSuccess',
+  LogoutError: 'LogoutError',
+  CreateUserSuccess: 'CreateUserSuccess',
+  CreateUserError: 'CreateUserError',
+  ResumeSessionSuccess: 'ResumeSessionSuccess',
+  ResumeSessionError: 'ResumeSessionError',
+  RefreshTokensSuccess: 'RefreshTokensSuccess',
+  RefreshTokensError: 'RefreshTokensError',
 };
-    
+
 export class AccountsServer {
-  _options: AccountsServerConfiguration
-  db: DBInterface
-  email: EmailConnector
-  emailTemplates: EmailTemplatesType
-  hooks: EventEmitter
+  _options: AccountsServerConfiguration;
+  db: DBInterface;
+  email: EmailConnector;
+  emailTemplates: EmailTemplatesType;
+  hooks: EventEmitter;
 
   /**
    * @description Configure AccountsServer.
@@ -318,8 +318,7 @@ export class AccountsServer {
       } else { // eslint-disable-line no-else-return
         throw new AccountsError('Session is no longer valid', { id: session.userId });
       }
-    }
-    catch (err) {
+    } catch (err) {
       this.hooks.emit(ServerHooks.RefreshTokensError, err);
 
       throw err;
@@ -368,8 +367,7 @@ export class AccountsServer {
       } else { // eslint-disable-line no-else-return
         throw new AccountsError('Session is no longer valid', { id: session.userId });
       }
-    }
-    catch (error) {
+    } catch (error) {
       this.hooks.emit(ServerHooks.LogoutError, error);
 
       throw error;
