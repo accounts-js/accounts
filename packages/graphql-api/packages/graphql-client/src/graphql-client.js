@@ -18,7 +18,6 @@ import {
   createRefreshTokenMutation,
   createImpersonateMutation,
 } from './graphql';
-// import { createImpersonateMutation } from './graphql/impersonate.mutation';
 
 export type OptionsType = {
   graphQLClient: any,
