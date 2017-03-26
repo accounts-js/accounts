@@ -12,6 +12,7 @@ import type {
   LoginReturnType,
   UserObjectType,
   TokensType,
+  PasswordType,
 } from '@accounts/common';
 import config from './config';
 import createStore from './createStore';
@@ -224,7 +225,9 @@ export class AccountsClient {
       );
     }
 
-    if (!validators.validatePassword(user.password)) {
+    // In case where password is an object we assume it was prevalidated and hashed
+    if (!user.password ||
+        (isString(user.password) && !validators.validatePassword(user.password))) {
       throw new AccountsError('Password is required');
     }
 
@@ -232,11 +235,16 @@ export class AccountsClient {
       throw new AccountsError('Username or Email is required');
     }
 
+    const hashAlgorithm = this.options.passwordHashAlgorithm;
+    const password = (user.password && hashAlgorithm) ?
+      hashPassword(user.password, hashAlgorithm) : user.password;
+    const userToCreate = { ...user, password };
     try {
-      const userId = await this.transport.createUser(user);
+      const userId = await this.transport.createUser(userToCreate);
       if (callback && isFunction(callback)) {
         callback();
       }
+
       await this.loginWithPassword({ id: userId }, user.password);
     } catch (err) {
       if (callback && isFunction(callback)) {
@@ -247,7 +255,7 @@ export class AccountsClient {
   }
 
   async loginWithPassword(user: PasswordLoginUserType,
-                          password: ?string,
+                          password: ?PasswordType,
                           callback?: Function): Promise<LoginReturnType> {
     if (!password || !user) {
       throw new AccountsError('Unrecognized options for login request', user, 400);
@@ -329,8 +337,15 @@ export class AccountsClient {
   }
 
   async resetPassword(token: string, newPassword: string): Promise<void> {
+    if (!validators.validatePassword(newPassword)) {
+      throw new AccountsError('Password is invalid!');
+    }
+
+    const hashAlgorithm = this.options.passwordHashAlgorithm;
+    const password = hashAlgorithm ? hashPassword(newPassword, hashAlgorithm) : newPassword;
+
     try {
-      await this.transport.resetPassword(token, newPassword);
+      await this.transport.resetPassword(token, password);
     } catch (err) {
       throw new AccountsError(err.message);
     }

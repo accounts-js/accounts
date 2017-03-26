@@ -15,10 +15,11 @@ import type {
   TokensType,
   SessionType,
   ImpersonateReturnType,
+  PasswordType,
 } from '@accounts/common';
 import config from './config';
 import type { DBInterface } from './DBInterface';
-import { verifyPassword, hashPassword } from './encryption';
+import { verifyPassword, hashPassword, bcryptPassword } from './encryption';
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -27,8 +28,15 @@ import {
 import Email from './email';
 import emailTemplates from './emailTemplates';
 import type { EmailConnector } from './email';
-import type { EmailTemplatesType } from './emailTemplates';
+import type { EmailTemplatesType, EmailTemplateType } from './emailTemplates';
 import type { AccountsServerConfiguration, PasswordAuthenticator } from './config';
+
+type TokenRecord = {
+  token: string,
+  address: string,
+  when: number,
+  reason: string
+};
 
 export class AccountsServer {
   _options: AccountsServerConfiguration;
@@ -72,13 +80,13 @@ export class AccountsServer {
   /**
    * @description Login the user with his password.
    * @param {Object} user - User to login.
-   * @param {string} password - Password of user to login.
+   * @param {PasswordType} password - Password of user to login.
    * @param {string} ip - User ip.
    * @param {string} userAgent - User user agent.
    * @returns {Promise<Object>} - LoginReturnType.
    */
   // eslint-disable-next-line max-len
-  async loginWithPassword(user: PasswordLoginUserType, password: string, ip: ?string, userAgent: ?string): Promise<LoginReturnType> {
+  async loginWithPassword(user: PasswordLoginUserType, password: PasswordType, ip: ?string, userAgent: ?string): Promise<LoginReturnType> {
     if (!user || !password) {
       throw new AccountsError('Unrecognized options for login request', user, 400);
     }
@@ -93,7 +101,8 @@ export class AccountsServer {
         foundUser = await this._externalPasswordAuthenticator(
           this._options.passwordAuthenticator,
           user,
-          password);
+          password,
+        );
       } catch (e) {
         throw new AccountsError(e, user, 403);
       }
@@ -118,12 +127,16 @@ export class AccountsServer {
     };
   }
 
-  // eslint-disable-next-line max-len
-  async _externalPasswordAuthenticator(authFn: PasswordAuthenticator, user: PasswordLoginUserType, password: string): Promise<any> {
+  async _externalPasswordAuthenticator(
+    authFn: PasswordAuthenticator,
+    user: PasswordLoginUserType,
+    password: PasswordType,
+  ): Promise<any> {
     return authFn(user, password);
   }
 
-  async _defaultPasswordAuthenticator(user: PasswordLoginUserType, password: string): Promise<any> {
+  // eslint-disable-next-line max-len
+  async _defaultPasswordAuthenticator(user: PasswordLoginUserType, password: PasswordType): Promise<any> {
     const { username, email, id } = isString(user)
       ? toUsernameAndEmail({ user })
       : toUsernameAndEmail({ ...user });
@@ -179,11 +192,15 @@ export class AccountsServer {
       throw new AccountsError('Email already exists', { email: user.email });
     }
 
+    let password;
+    if (user.password) {
+      password = await this._hashAndBcryptPassword(user.password);
+    }
     // TODO Accounts.onCreateUser
     const userId: string = await this.db.createUser({
       username: user.username,
       email: user.email && user.email.toLowerCase(),
-      password: user.password,
+      password,
       profile: user.profile,
     });
 
@@ -480,26 +497,35 @@ export class AccountsServer {
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
    */
-  async resetPassword(token: string, newPassword: string): Promise<void> {
+  async resetPassword(token: string, newPassword: PasswordType): Promise<void> {
     const user = await this.db.findUserByResetPasswordToken(token);
     if (!user) {
       throw new AccountsError('Reset password link expired');
     }
-    const resetTokens = get(user, ['services', 'password', 'resetTokens']);
-    const resetTokenRecord = find(resetTokens,
-                                  (t: Object) => t.token === token);
-    if (!resetTokenRecord) {
+
+    // TODO move this getter into a password service module
+    const resetTokens = get(user, ['services', 'password', 'reset']);
+    const resetTokenRecord = find(resetTokens, (t: Object) => t.token === token);
+
+    if (this._isTokenExpired(token, resetTokenRecord)) {
       throw new AccountsError('Reset password link expired');
     }
-    // TODO check time for expiry date
+
     const emails = user.emails || [];
-    if (!includes(emails.map((email: Object) => email.address), resetTokenRecord.email)) {
+    if (!includes(emails.map((email: Object) => email.address), resetTokenRecord.address)) {
       throw new AccountsError('Token has invalid email address');
     }
+
+    const password = await this._hashAndBcryptPassword(newPassword);
     // Change the user password and remove the old token
-    await this.db.setResetPasssword(user.id, resetTokenRecord.email, newPassword, token);
+    await this.db.setResetPasssword(user.id, resetTokenRecord.address, password, token);
     // Changing the password should invalidate existing sessions
     this.db.invalidateAllSessions(user.id);
+  }
+
+  _isTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
+    return !tokenRecord ||
+      Number(tokenRecord.when) + this._options.emailTokensExpiry < Date.now();
   }
 
   /**
@@ -508,8 +534,9 @@ export class AccountsServer {
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
    */
-  setPassword(userId: string, newPassword: string): Promise<void> {
-    return this.db.setPasssword(userId, newPassword);
+  async setPassword(userId: string, newPassword: string): Promise<void> {
+    const password = await bcryptPassword(newPassword);
+    return this.db.setPasssword(userId, password);
   }
 
   /**
@@ -544,16 +571,15 @@ export class AccountsServer {
 
   /**
    * @description Send an email with a link the user can use verify their email address.
-   * @param {string} userId - The id of the user to send email to.
    * @param {string} [address] - Which address of the user's to send the email to.
    * This address must be in the user's emails list.
    * Defaults to the first unverified email in the list.
    * @returns {Promise<void>} - Return a Promise.
    */
-  async sendVerificationEmail(userId: string, address: string): Promise<void> {
-    const user = await this.db.findUserById(userId);
+  async sendVerificationEmail(address: string): Promise<void> {
+    const user = await this.db.findUserByEmail(address);
     if (!user) {
-      throw new AccountsError('User not found', { id: userId });
+      throw new AccountsError('User not found', { email: address });
     }
     // If no address provided find the first unverified email
     if (!address) {
@@ -566,73 +592,97 @@ export class AccountsServer {
       throw new AccountsError('No such email address for user');
     }
     const token = generateRandomToken();
-    await this.db.addEmailVerificationToken(userId, address, token);
+    await this.db.addEmailVerificationToken(user.id, address, token);
 
-    const siteUrl = this._options.siteUrl || config.siteUrl;
-    const verifyEmailUrl = `${siteUrl}/verify-email/${token}`;
-    await this.email.sendMail({
-      from: this.emailTemplates.verifyEmail.from ?
-        this.emailTemplates.verifyEmail.from : this.emailTemplates.from,
-      to: address,
-      subject: this.emailTemplates.verifyEmail.subject(user),
-      text: this.emailTemplates.verifyEmail.text(user, verifyEmailUrl),
-    });
+    const resetPasswordMail = this._prepareMail(
+      address,
+      token,
+      user,
+      'verify-email',
+      this.emailTemplates.verifyEmail,
+      this.emailTemplates.from,
+    );
+
+    await this.email.sendMail(resetPasswordMail);
   }
 
   /**
    * @description Send an email with a link the user can use to reset their password.
-   * @param {string} userId - The id of the user to send email to.
    * @param {string} [address] - Which address of the user's to send the email to.
    * This address must be in the user's emails list.
    * Defaults to the first email in the list.
    * @returns {Promise<void>} - Return a Promise.
    */
-  async sendResetPasswordEmail(userId: string, address: string): Promise<void> {
-    const user = await this.db.findUserById(userId);
+  async sendResetPasswordEmail(address: string): Promise<void> {
+    const user = await this.db.findUserByEmail(address);
     if (!user) {
-      throw new AccountsError('User not found', { id: userId });
+      throw new AccountsError('User not found', { email: address });
     }
     address = this._getFirstUserEmail(user, address); // eslint-disable-line no-param-reassign
     const token = generateRandomToken();
-    await this.db.addResetPasswordToken(userId, address, token);
+    await this.db.addResetPasswordToken(user.id, address, token);
 
-    const siteUrl = this._options.siteUrl || config.siteUrl;
-    const resetPasswordUrl = `${siteUrl}/reset-password/${token}`;
-    await this.email.sendMail({
-      from: this.emailTemplates.resetPassword.from ?
-        this.emailTemplates.resetPassword.from : this.emailTemplates.from,
-      to: address,
-      subject: this.emailTemplates.resetPassword.subject(user),
-      text: this.emailTemplates.resetPassword.text(user, resetPasswordUrl),
-    });
+    const resetPasswordMail = this._prepareMail(
+      address,
+      token,
+      user,
+      'reset-password',
+      this.emailTemplates.resetPassword,
+      this.emailTemplates.from,
+    );
+
+    await this.email.sendMail(resetPasswordMail);
   }
 
   /**
    * @description Send an email with a link the user can use to set their initial password.
-   * @param {string} userId - The id of the user to send email to.
    * @param {string} [address] - Which address of the user's to send the email to.
    * This address must be in the user's emails list.
    * Defaults to the first email in the list.
    * @returns {Promise<void>} - Return a Promise.
    */
-  async sendEnrollmentEmail(userId: string, address: string): Promise<void> {
-    const user = await this.db.findUserById(userId);
+  async sendEnrollmentEmail(address: string): Promise<void> {
+    const user = await this.db.findUserByEmail(address);
     if (!user) {
-      throw new AccountsError('User not found', { id: userId });
+      throw new AccountsError('User not found', { email: address });
     }
     address = this._getFirstUserEmail(user, address); // eslint-disable-line no-param-reassign
     const token = generateRandomToken();
-    await this.db.addResetPasswordToken(userId, address, token, 'enroll');
+    await this.db.addResetPasswordToken(user.id, address, token, 'enroll');
 
+    const enrollmentMail = this._prepareMail(
+      address,
+      token,
+      user,
+      'enroll-account',
+      this.emailTemplates.enrollAccount,
+      this.emailTemplates.from,
+    );
+
+    await this.email.sendMail(enrollmentMail);
+  }
+
+  _prepareMail(...args: Array<any>): any {
+    if (this._options.prepareMail) {
+      return this._options.prepareMail(...args);
+    }
+    return this._defaultPrepareEmail(...args);
+  }
+
+  // eslint-disable-next-line max-len
+  _defaultPrepareEmail(to: string, token: string, user: UserObjectType, pathFragment: string, emailTemplate: EmailTemplateType, from: string): Object {
+    const tokenizedUrl = this._defaultCreateTokenizedUrl(pathFragment, token);
+    return {
+      from: emailTemplate.from || from,
+      to,
+      subject: emailTemplate.subject(user),
+      text: emailTemplate.text(user, tokenizedUrl),
+    };
+  }
+
+  _defaultCreateTokenizedUrl(pathFragment: string, token: string): string {
     const siteUrl = this._options.siteUrl || config.siteUrl;
-    const enrollAccountUrl = `${siteUrl}/enroll-account/${token}`;
-    await this.email.sendMail({
-      from: this.emailTemplates.enrollAccount.from ?
-        this.emailTemplates.enrollAccount.from : this.emailTemplates.from,
-      to: address,
-      subject: this.emailTemplates.enrollAccount.subject(user),
-      text: this.emailTemplates.enrollAccount.text(user, enrollAccountUrl),
-    });
+    return `${siteUrl}/${pathFragment}/${token}`;
   }
 
   _getFirstUserEmail(user: UserObjectType, address: string): string {
@@ -646,6 +696,12 @@ export class AccountsServer {
       throw new AccountsError('No such email address for user');
     }
     return address;
+  }
+
+  async _hashAndBcryptPassword(password: PasswordType): Promise<string> {
+    const hashAlgorithm = this._options.passwordHashAlgorithm;
+    const hashedPassword = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
+    return bcryptPassword(hashedPassword);
   }
 }
 
