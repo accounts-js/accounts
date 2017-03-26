@@ -14,10 +14,11 @@ import type {
   LoginReturnType,
   TokensType,
   SessionType,
+  PasswordType,
 } from '@accounts/common';
 import config from './config';
 import type { DBInterface } from './DBInterface';
-import { verifyPassword, hashPassword } from './encryption';
+import { verifyPassword, hashPassword, bcryptPassword } from './encryption';
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -28,6 +29,13 @@ import emailTemplates from './emailTemplates';
 import type { EmailConnector } from './email';
 import type { EmailTemplatesType, EmailTemplateType } from './emailTemplates';
 import type { AccountsServerConfiguration, PasswordAuthenticator } from './config';
+
+type TokenRecord = {
+  token: string,
+  address: string,
+  when: number,
+  reason: string
+};
 
 export class AccountsServer {
   _options: AccountsServerConfiguration
@@ -69,13 +77,13 @@ export class AccountsServer {
   /**
    * @description Login the user with his password.
    * @param {Object} user - User to login.
-   * @param {string} password - Password of user to login.
+   * @param {PasswordType} password - Password of user to login.
    * @param {string} ip - User ip.
    * @param {string} userAgent - User user agent.
    * @returns {Promise<Object>} - LoginReturnType.
    */
   // eslint-disable-next-line max-len
-  async loginWithPassword(user: PasswordLoginUserType, password: string, ip: ?string, userAgent: ?string): Promise<LoginReturnType> {
+  async loginWithPassword(user: PasswordLoginUserType, password: PasswordType, ip: ?string, userAgent: ?string): Promise<LoginReturnType> {
     if (!user || !password) {
       throw new AccountsError('Unrecognized options for login request', user, 400);
     }
@@ -90,7 +98,8 @@ export class AccountsServer {
         foundUser = await this._externalPasswordAuthenticator(
           this._options.passwordAuthenticator,
           user,
-          password);
+          password,
+        );
       } catch (e) {
         throw new AccountsError(e, user, 403);
       }
@@ -115,12 +124,16 @@ export class AccountsServer {
     };
   }
 
-  // eslint-disable-next-line max-len
-  async _externalPasswordAuthenticator(authFn: PasswordAuthenticator, user: PasswordLoginUserType, password: string): Promise<any> {
+  async _externalPasswordAuthenticator(
+    authFn: PasswordAuthenticator,
+    user: PasswordLoginUserType,
+    password: PasswordType,
+  ): Promise<any> {
     return authFn(user, password);
   }
 
-  async _defaultPasswordAuthenticator(user: PasswordLoginUserType, password: string): Promise<any> {
+  // eslint-disable-next-line max-len
+  async _defaultPasswordAuthenticator(user: PasswordLoginUserType, password: PasswordType): Promise<any> {
     const { username, email, id } = isString(user)
       ? toUsernameAndEmail({ user })
       : toUsernameAndEmail({ ...user });
@@ -176,11 +189,15 @@ export class AccountsServer {
       throw new AccountsError('Email already exists', { email: user.email });
     }
 
+    let password;
+    if (user.password) {
+      password = await this._hashAndBcryptPassword(user.password);
+    }
     // TODO Accounts.onCreateUser
     const userId: string = await this.db.createUser({
       username: user.username,
       email: user.email && user.email.toLowerCase(),
-      password: user.password,
+      password,
       profile: user.profile,
     });
 
@@ -397,26 +414,35 @@ export class AccountsServer {
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
    */
-  async resetPassword(token: string, newPassword: string): Promise<void> {
+  async resetPassword(token: string, newPassword: PasswordType): Promise<void> {
     const user = await this.db.findUserByResetPasswordToken(token);
     if (!user) {
       throw new AccountsError('Reset password link expired');
     }
-    const resetTokens = get(user, ['services', 'password', 'resetTokens']);
-    const resetTokenRecord = find(resetTokens,
-                                  (t: Object) => t.token === token);
-    if (!resetTokenRecord) {
+
+    // TODO move this getter into a password service module
+    const resetTokens = get(user, ['services', 'password', 'reset']);
+    const resetTokenRecord = find(resetTokens, (t: Object) => t.token === token);
+
+    if (this._isTokenExpired(token, resetTokenRecord)) {
       throw new AccountsError('Reset password link expired');
     }
-    // TODO check time for expiry date
+
     const emails = user.emails || [];
-    if (!includes(emails.map((email: Object) => email.address), resetTokenRecord.email)) {
+    if (!includes(emails.map((email: Object) => email.address), resetTokenRecord.address)) {
       throw new AccountsError('Token has invalid email address');
     }
+
+    const password = await this._hashAndBcryptPassword(newPassword);
     // Change the user password and remove the old token
-    await this.db.setResetPasssword(user.id, resetTokenRecord.email, newPassword, token);
+    await this.db.setResetPasssword(user.id, resetTokenRecord.address, password, token);
     // Changing the password should invalidate existing sessions
     this.db.invalidateAllSessions(user.id);
+  }
+
+  _isTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
+    return !tokenRecord ||
+      Number(tokenRecord.when) + this._options.emailTokensExpiry < Date.now();
   }
 
   /**
@@ -425,8 +451,9 @@ export class AccountsServer {
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
    */
-  setPassword(userId: string, newPassword: string): Promise<void> {
-    return this.db.setPasssword(userId, newPassword);
+  async setPassword(userId: string, newPassword: string): Promise<void> {
+    const password = await bcryptPassword(newPassword);
+    return this.db.setPasssword(userId, password);
   }
 
   /**
@@ -586,6 +613,12 @@ export class AccountsServer {
       throw new AccountsError('No such email address for user');
     }
     return address;
+  }
+
+  async _hashAndBcryptPassword(password: PasswordType): Promise<string> {
+    const hashAlgorithm = this._options.passwordHashAlgorithm;
+    const hashedPassword = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
+    return bcryptPassword(hashedPassword);
   }
 }
 

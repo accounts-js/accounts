@@ -1,6 +1,6 @@
 import jwtDecode from 'jwt-decode';
 import { AccountsServer } from './AccountsServer';
-import { bcryptPassword, hashPassword } from './encryption';
+import { bcryptPassword, hashPassword, verifyPassword } from './encryption';
 
 let Accounts;
 
@@ -790,82 +790,203 @@ describe('Accounts', () => {
       expect(Accounts.email.sendMail.mock.calls[0][0].subject).toBeTruthy();
       expect(Accounts.email.sendMail.mock.calls[0][0].text).toBeTruthy();
     });
+  });
 
-    describe('sendEnrollmentEmail', () => {
-      it('throws error if user not found', async () => {
-        Accounts.config({}, {
-          findUserByEmail: () => Promise.resolve(null),
-        });
-        try {
-          await Accounts.sendEnrollmentEmail('email');
-          throw new Error();
-        } catch (err) {
-          expect(err.message).toEqual('User not found');
-        }
-      });
-      it('adds email verification token and sends mail', async () => {
-        const addResetPasswordToken = jest.fn();
-        const _getFirstUserEmail = jest.fn(() => 'user@user.com');
-        const sendMail = jest.fn();
-        Accounts.config({
-          siteUrl: 'siteUrl',
-        }, {
-          findUserByEmail: () => Promise.resolve({
-            id: 'userId',
-            emails: [{
-              address: 'user@user.com',
-              verified: false,
+  describe('resetPassword', () => {
+    it('should reset the password and invalidate all sessions', async () => {
+      const user = {
+        id: 'userId',
+        emails: [{ address: 'email' }],
+        services: {
+          password: {
+            reset: [{
+              token: 'token',
+              address: 'email',
+              when: Date.now(),
+              reason: 'reset',
             }],
-          }),
-          addResetPasswordToken,
-        });
-        Accounts._getFirstUserEmail = _getFirstUserEmail;
-        Accounts.email.sendMail = sendMail;
-        await Accounts.sendEnrollmentEmail('user@user.com');
-        expect(addResetPasswordToken.mock.calls[0][0]).toEqual('userId');
-        expect(addResetPasswordToken.mock.calls[0][1]).toEqual('user@user.com');
-        expect(addResetPasswordToken.mock.calls[0][3]).toEqual('enroll');
-        expect(sendMail.mock.calls.length).toEqual(1);
-      });
-    });
-    describe('_getFirstUserEmail', () => {
-      it('throws error if email does not exist', () => {
-        try {
-          Accounts._getFirstUserEmail({
-            emails: [{
-              address: '',
-              verified: false,
-            }],
-          });
-          throw new Error();
-        } catch (err) {
-          expect(err.message).toEqual('No such email address for user');
-        }
-        try {
-          Accounts._getFirstUserEmail({
-            emails: [{
-              address: 'wrongemail@email.com',
-              verified: false,
-            }],
-          }, 'email');
-          throw new Error();
-        } catch (err) {
-          expect(err.message).toEqual('No such email address for user');
-        }
-      });
-      it('returns first email', () => {
-        const email = Accounts._getFirstUserEmail({
-          emails: [{
-            address: 'email@email.com',
-            verified: false,
           },
-          {
-            address: 'another@email.com',
+        },
+      };
+      const setResetPassswordMock = jest.fn(() => Promise.resolve());
+      const invalidateAllSessionsMock = jest.fn();
+      Accounts.config({}, {
+        findUserByResetPasswordToken: () => Promise.resolve(user),
+        setResetPasssword: setResetPassswordMock,
+        invalidateAllSessions: invalidateAllSessionsMock,
+      });
+      await Accounts.resetPassword('token', 'password');
+      expect(setResetPassswordMock.mock.calls.length).toEqual(1);
+      expect(setResetPassswordMock.mock.calls[0][0]).toEqual('userId');
+      expect(setResetPassswordMock.mock.calls[0][1]).toEqual('email');
+      const hashPass = setResetPassswordMock.mock.calls[0][2];
+      expect(await verifyPassword('password', hashPass)).toBeTruthy();
+      expect(setResetPassswordMock.mock.calls[0][3]).toEqual('token');
+      expect(invalidateAllSessionsMock.mock.calls.length).toEqual(1);
+      expect(invalidateAllSessionsMock.mock.calls[0]).toEqual(['userId']);
+    });
+
+    it('throws when token was not found', async () => {
+      const setResetPassswordMock = jest.fn(() => Promise.resolve());
+      const invalidateAllSessionsMock = jest.fn();
+      Accounts.config({}, {
+        findUserByResetPasswordToken: () => Promise.resolve(null),
+        setResetPasssword: setResetPassswordMock,
+        invalidateAllSessions: invalidateAllSessionsMock,
+      });
+
+      try {
+        await Accounts.resetPassword('token', 'password');
+        throw new Error();
+      } catch (e) {
+        expect(e.message).toEqual('Reset password link expired');
+        expect(setResetPassswordMock.mock.calls.length).toEqual(0);
+        expect(invalidateAllSessionsMock.mock.calls.length).toEqual(0);
+      }
+    });
+
+    it('throws if token expired', async () => {
+      const user = {
+        id: 'userId',
+        emails: [{ address: 'email' }],
+        services: {
+          password: {
+            reset: [{
+              token: 'token',
+              address: 'email',
+              when: 0,
+              reason: 'reset',
+            }],
+          },
+        },
+      };
+      const setResetPassswordMock = jest.fn(() => Promise.resolve());
+      const invalidateAllSessionsMock = jest.fn();
+      Accounts.config({}, {
+        findUserByResetPasswordToken: () => Promise.resolve(user),
+        setResetPasssword: setResetPassswordMock,
+        invalidateAllSessions: invalidateAllSessionsMock,
+      });
+
+      try {
+        await Accounts.resetPassword('token', 'password');
+        throw new Error();
+      } catch (e) {
+        expect(e.message).toEqual('Reset password link expired');
+        expect(setResetPassswordMock.mock.calls.length).toEqual(0);
+        expect(invalidateAllSessionsMock.mock.calls.length).toEqual(0);
+      }
+    });
+
+    it('throws if emails mismatch for some reason', async () => {
+      const user = {
+        id: 'userId',
+        emails: [{ address: 'email' }],
+        services: {
+          password: {
+            reset: [{
+              token: 'token',
+              address: 'email2',
+              when: Date.now(),
+              reason: 'reset',
+            }],
+          },
+        },
+      };
+      const setResetPassswordMock = jest.fn(() => Promise.resolve());
+      const invalidateAllSessionsMock = jest.fn();
+      Accounts.config({}, {
+        findUserByResetPasswordToken: () => Promise.resolve(user),
+        setResetPasssword: setResetPassswordMock,
+        invalidateAllSessions: invalidateAllSessionsMock,
+      });
+
+      try {
+        await Accounts.resetPassword('token', 'password');
+        throw new Error();
+      } catch (e) {
+        expect(e.message).toEqual('Token has invalid email address');
+        expect(setResetPassswordMock.mock.calls.length).toEqual(0);
+        expect(invalidateAllSessionsMock.mock.calls.length).toEqual(0);
+      }
+    });
+  });
+
+  describe('sendEnrollmentEmail', () => {
+    it('throws error if user not found', async () => {
+      Accounts.config({}, {
+        findUserByEmail: () => Promise.resolve(null),
+      });
+      try {
+        await Accounts.sendEnrollmentEmail('email');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('User not found');
+      }
+    });
+    it('adds email verification token and sends mail', async () => {
+      const addResetPasswordToken = jest.fn();
+      const _getFirstUserEmail = jest.fn(() => 'user@user.com');
+      const sendMail = jest.fn();
+      Accounts.config({
+        siteUrl: 'siteUrl',
+      }, {
+        findUserByEmail: () => Promise.resolve({
+          id: 'userId',
+          emails: [{
+            address: 'user@user.com',
+            verified: false,
+          }],
+        }),
+        addResetPasswordToken,
+      });
+      Accounts._getFirstUserEmail = _getFirstUserEmail;
+      Accounts.email.sendMail = sendMail;
+      await Accounts.sendEnrollmentEmail('user@user.com');
+      expect(addResetPasswordToken.mock.calls[0][0]).toEqual('userId');
+      expect(addResetPasswordToken.mock.calls[0][1]).toEqual('user@user.com');
+      expect(addResetPasswordToken.mock.calls[0][3]).toEqual('enroll');
+      expect(sendMail.mock.calls.length).toEqual(1);
+    });
+  });
+
+  describe('_getFirstUserEmail', () => {
+    it('throws error if email does not exist', () => {
+      try {
+        Accounts._getFirstUserEmail({
+          emails: [{
+            address: '',
             verified: false,
           }],
         });
-        expect(email).toEqual('email@email.com');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('No such email address for user');
+      }
+      try {
+        Accounts._getFirstUserEmail({
+          emails: [{
+            address: 'wrongemail@email.com',
+            verified: false,
+          }],
+        }, 'email');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('No such email address for user');
+      }
+    });
+    it('returns first email', () => {
+      const email = Accounts._getFirstUserEmail({
+        emails: [{
+          address: 'email@email.com',
+          verified: false,
+        },
+        {
+          address: 'another@email.com',
+          verified: false,
+        }],
       });
+      expect(email).toEqual('email@email.com');
     });
   });
 });

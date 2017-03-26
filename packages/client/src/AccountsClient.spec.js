@@ -86,7 +86,7 @@ describe('Accounts', () => {
       }
     });
     it('requires password', async () => {
-      Accounts.config({
+      await Accounts.config({
         history,
       }, {
         createUser: Promise.resolve(),
@@ -323,10 +323,13 @@ describe('Accounts', () => {
         history,
         passwordHashAlgorithm: 'sha256',
       }, transport);
-      const hashDigest = crypto.createHash('sha256').update('password').digest('hex');
+      const hashed = {
+        digest: crypto.createHash('sha256').update('password').digest('hex'),
+        algorithm: 'sha256',
+      };
       await Accounts.loginWithPassword('username', 'password');
       expect(loginWithPassword.mock.calls[0][0]).toEqual('username');
-      expect(loginWithPassword.mock.calls[0][1]).toEqual(hashDigest);
+      expect(loginWithPassword.mock.calls[0][1]).toEqual(hashed);
       expect(loginWithPassword.mock.calls.length).toEqual(1);
     });
   });
@@ -484,12 +487,22 @@ describe('Accounts', () => {
   describe('resetPassword', () => {
     it('should return an AccountsError', async () => {
       const error = 'something bad';
-      Accounts.config({}, { resetPassword: () => Promise.reject({ message: error }) });
+      await Accounts.config({}, { resetPassword: () => Promise.reject({ message: error }) });
+      try {
+        await Accounts.resetPassword('badtoken', 'password');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual(error);
+      }
+    });
+
+    it('throws if password is invalid', async () => {
+      await Accounts.config({}, {});
       try {
         await Accounts.resetPassword();
         throw new Error();
       } catch (err) {
-        expect(err.message).toEqual(error);
+        expect(err.message).toEqual('Password is invalid!');
       }
     });
 

@@ -71,7 +71,7 @@
     "babel-preset-es2015-node4": "^2.1.0",
     "babel-preset-stage-0": "^6.22.0",
     "coveralls": "^2.11.14",
-    "flow-bin": "^0.39.0",
+    "flow-bin": "0.41.0",
     "jest": "^18.0.0",
     "localstorage-polyfill": "^1.0.1",
     "regenerator-runtime": "^0.9.6",
