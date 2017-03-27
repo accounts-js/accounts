@@ -32,7 +32,8 @@ export type AccountsServerConfiguration = AccountsCommonConfiguration & {
   sendMail?: SendMailFunction,
   // https://github.com/eleith/emailjs#emailserverconnectoptions
   email?: Object,
-  emailTokensExpiry?: number
+  emailTokensExpiry?: number,
+  impersonationAuthorize: (user: UserObjectType, impersonateToUser: UserObjectType) => Promise<any>
 };
 
 export default {

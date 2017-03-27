@@ -14,6 +14,7 @@ import type {
   LoginReturnType,
   TokensType,
   SessionType,
+  ImpersonateReturnType,
   PasswordType,
 } from '@accounts/common';
 import config from './config';
@@ -38,10 +39,10 @@ type TokenRecord = {
 };
 
 export class AccountsServer {
-  _options: AccountsServerConfiguration
-  db: DBInterface
-  email: EmailConnector
-  emailTemplates: EmailTemplatesType
+  _options: AccountsServerConfiguration;
+  db: DBInterface;
+  email: EmailConnector;
+  emailTemplates: EmailTemplatesType;
 
   /**
    * @description Configure AccountsServer.
@@ -124,11 +125,8 @@ export class AccountsServer {
     };
   }
 
-  async _externalPasswordAuthenticator(
-    authFn: PasswordAuthenticator,
-    user: PasswordLoginUserType,
-    password: PasswordType,
-  ): Promise<any> {
+  // eslint-disable-next-line max-len
+  async _externalPasswordAuthenticator(authFn: PasswordAuthenticator, user: PasswordLoginUserType, password: string): Promise<any> {
     return authFn(user, password);
   }
 
@@ -205,6 +203,60 @@ export class AccountsServer {
   }
 
   /**
+   * @description Impersonate to another user.
+   * @param {string} accessToken - User access token.
+   * @param {string} username - impersonated user username.
+   * @param {string} ip - The user ip.
+   * @param {string} userAgent - User user agent.
+   * @returns {Promise<Object>} - ImpersonateReturnType
+   */
+  // eslint-disable-next-line max-len
+  async impersonate(accessToken: string, username: string, ip: ?string, userAgent: ?string): Promise<ImpersonateReturnType> {
+    if (!isString(accessToken)) {
+      throw new AccountsError('An access token is required');
+    }
+
+    try {
+      jwt.verify(accessToken, this._options.tokenSecret, { ignoreExpiration: true });
+    } catch (err) {
+      throw new AccountsError('Access token is not valid');
+    }
+
+    const session = await this.findSessionByAccessToken(accessToken);
+    if (!session.valid) {
+      throw new AccountsError('Session is not valid for user');
+    }
+
+    const user = await this.db.findUserById(session.userId);
+    if (!user) {
+      throw new AccountsError('User not found');
+    }
+
+    const impersonatedUser = await this.db.findUserByUsername(username);
+    if (!impersonatedUser) {
+      throw new AccountsError(`User ${username} not found`);
+    }
+
+    if (!this._options.impersonationAuthorize) {
+      return { authorized: false };
+    }
+
+    const isAuthorized = await this._options.impersonationAuthorize(user, impersonatedUser);
+    if (!isAuthorized) {
+      return { authorized: false };
+    }
+
+
+    const newSessionId = await this.db.createSession(impersonatedUser.id, ip, userAgent);
+    const impersonationTokens = this.createTokens(newSessionId, true);
+    return {
+      authorized: true,
+      tokens: impersonationTokens,
+      user: impersonatedUser,
+    };
+  }
+
+  /**
    * @description Refresh a user token.
    * @param {string} accessToken - User access token.
    * @param {string} refreshToken - User refresh token.
@@ -254,13 +306,15 @@ export class AccountsServer {
   /**
    * @description Refresh a user token.
    * @param {string} sessionId - User session id.
+   * @param {boolean} isImpersonated - Should be true if impersonating another user.
    * @returns {Promise<Object>} - Return a new accessToken and refreshToken.
    */
-  createTokens(sessionId: string): TokensType {
+  createTokens(sessionId: string, isImpersonated: boolean = false): TokensType {
     const { tokenSecret = config.tokenSecret, tokenConfigs = config.tokenConfigs } = this._options;
     const accessToken = generateAccessToken({
       data: {
         sessionId,
+        isImpersonated,
       },
       secret: tokenSecret,
       config: tokenConfigs.accessToken || {},
@@ -395,8 +449,7 @@ export class AccountsServer {
     }
 
     const verificationTokens = get(user, ['services', 'email', 'verificationTokens'], []);
-    const tokenRecord = find(verificationTokens,
-                             (t: Object) => t.token === token);
+    const tokenRecord = find(verificationTokens, (t: Object) => t.token === token);
     if (!tokenRecord) {
       throw new AccountsError('Verify email link expired');
     }

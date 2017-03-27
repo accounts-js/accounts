@@ -16,7 +16,16 @@ import type {
 } from '@accounts/common';
 import config from './config';
 import createStore from './createStore';
-import reducer, { loggingIn, setUser, clearUser, setTokens, clearTokens as clearStoreTokens } from './module';
+import reducer, {
+  loggingIn,
+  setUser,
+  clearUser,
+  setTokens,
+  clearTokens as clearStoreTokens,
+  setOriginalTokens,
+  setImpersonated,
+  clearOriginalTokens,
+} from './module';
 import { hashPassword } from './encryption';
 import type { TransportInterface } from './TransportInterface';
 import type { TokenStorage, AccountsClientConfiguration } from './config';
@@ -93,6 +102,49 @@ export class AccountsClient {
     return user ? user.toJS() : null;
   }
 
+  async impersonate(username: string): Promise<void> {
+    if (!isString(username)) {
+      throw new AccountsError('Username is required');
+    }
+    if (this.isImpersonated()) {
+      throw new AccountsError('User already impersonating');
+    }
+    const { accessToken, refreshToken } = await this.tokens();
+    const res = await this.transport.impersonate(accessToken, username);
+    if (!res.authorized) {
+      throw new AccountsError(`User unauthorized to impersonate ${username}`);
+    } else {
+      this.store.dispatch(setImpersonated(true));
+      this.store.dispatch(setOriginalTokens({ accessToken, refreshToken }));
+      await this.storeTokens(res);
+      this.store.dispatch(setTokens(res.tokens));
+      this.store.dispatch(setUser(res.user));
+      return res;
+    }
+  }
+
+  async stopImpersonation(): Promise<void> {
+    if (this.isImpersonated()) {
+      this.store.dispatch(setTokens(this.originalTokens()));
+      this.store.dispatch(clearOriginalTokens());
+      this.store.dispatch(setImpersonated(false));
+      await this.refreshSession();
+    }
+  }
+
+  isImpersonated(): boolean {
+    return (this.getState().get('isImpersonated'): boolean);
+  }
+
+  originalTokens(): TokensType {
+    const tokens = this.getState().get('originalTokens');
+
+    return tokens ? tokens.toJS() : {
+      accessToken: null,
+      refreshToken: null,
+    };
+  }
+
   tokens(): TokensType {
     const tokens = this.getState().get('tokens');
 
@@ -142,7 +194,7 @@ export class AccountsClient {
           this.clearUser();
         } else {
           // Request a new token pair
-          const refreshedSession : LoginReturnType =
+          const refreshedSession: LoginReturnType =
             await this.transport.refreshTokens(accessToken, refreshToken);
           this.store.dispatch(loggingIn(false));
 
@@ -218,7 +270,7 @@ export class AccountsClient {
     try {
       const hashAlgorithm = this.options.passwordHashAlgorithm;
       const pass = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
-      const res : LoginReturnType = await this.transport.loginWithPassword(user, pass);
+      const res: LoginReturnType = await this.transport.loginWithPassword(user, pass);
 
       this.store.dispatch(loggingIn(false));
       await this.storeTokens(res);
@@ -269,6 +321,8 @@ export class AccountsClient {
         this.options.onSignedOutHook();
       }
     } catch (err) {
+      this.clearTokens();
+      this.store.dispatch(clearUser());
       if (callback && isFunction(callback)) {
         callback(err);
       }
@@ -321,9 +375,8 @@ export class AccountsClient {
 const Accounts = {
   instance: AccountsClient,
   ui: {},
-  async config(
-    options: AccountsClientConfiguration,
-    transport: TransportInterface): Promise<AccountsClient> {
+  async config(options: AccountsClientConfiguration,
+               transport: TransportInterface): Promise<AccountsClient> {
     this.instance = new AccountsClient({
       ...config,
       ...options,
@@ -374,6 +427,18 @@ const Accounts = {
   },
   requestVerificationEmail(email?: string): Promise<void> {
     return this.instance.requestVerificationEmail(email);
+  },
+  impersonate(username: string): Promise<any> {
+    return this.instance.impersonate(username);
+  },
+  stopImpersonation(): Promise<void> {
+    return this.instance.stopImpersonation();
+  },
+  isImpersonated(): boolean {
+    return this.instance.isImpersonated();
+  },
+  originalTokens(): TokensType {
+    return this.instance.originalTokens();
   },
 };
 

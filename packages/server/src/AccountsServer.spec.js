@@ -989,4 +989,77 @@ describe('Accounts', () => {
       expect(email).toEqual('email@email.com');
     });
   });
+
+  describe('impersonate', () => {
+    const user = { username: 'myUser', id: 123 };
+    const impersonatedUser = { username: 'impUser', id: 456 };
+    const someUser = { username: 'someUser', id: 789 };
+
+    it('throws error if no access token is provided', async () => {
+      Accounts.config({}, db);
+      try {
+        await Accounts.impersonate();
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('An access token is required');
+      }
+    });
+
+    it('returns not authorized if impersonationAuthorize function is not passed in config', async () => {
+      const { accessToken } = Accounts.createTokens('555');
+      Accounts.config(
+        {
+          //eslint-disable-next-line
+          impersonationAuthorize: async (userObject, impersonateToUser) => {
+            return userObject.id === user.id && impersonateToUser === impersonatedUser;
+          },
+        },
+        {
+          findUserById: () => Promise.resolve(user),
+          findUserByUsername: () => Promise.resolve(someUser),
+        },
+      );
+
+      Accounts.findSessionByAccessToken = () => Promise.resolve({
+        valid: true,
+        userId: '123',
+      });
+
+      const impersonationAuthorize = Accounts.options().impersonationAuthorize;
+      expect(impersonationAuthorize).toBeDefined();
+
+      const res = await Accounts.impersonate(accessToken, 'someUser');
+      expect(res.authorized).toEqual(false);
+    });
+
+    it('returns correct response if authorized', async () => {
+      const { accessToken } = Accounts.createTokens('555');
+      Accounts.config(
+        {
+          //eslint-disable-next-line
+          impersonationAuthorize: async (userObject, impersonateToUser) => {
+            return userObject.id === user.id && impersonateToUser === impersonatedUser;
+          },
+        },
+        {
+          findUserById: () => Promise.resolve(user),
+          findUserByUsername: () => Promise.resolve(impersonatedUser),
+          createSession: () => Promise.resolve('001'),
+        },
+      );
+
+      Accounts.findSessionByAccessToken = () => Promise.resolve({
+        valid: true,
+        userId: '123',
+      });
+      Accounts.createTokens = (sessionId, isImpersonated) => ({ sessionId, isImpersonated });
+
+      const res = await Accounts.impersonate(accessToken, 'impUser');
+      expect(res).toEqual({
+        authorized: true,
+        tokens: { sessionId: '001', isImpersonated: true },
+        user: impersonatedUser,
+      });
+    });
+  });
 });
