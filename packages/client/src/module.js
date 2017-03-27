@@ -8,6 +8,7 @@ const CLEAR_TOKENS = `${PATH}CLEAR_TOKENS`;
 const CLEAR_USER = `${PATH}CLEAR_USER`;
 const LOGGING_IN = `${PATH}LOGGING_IN`;
 const SET_ORIGINAL_TOKENS = `${PATH}SET_ORIGINAL_TOKENS`;
+const CLEAR_ORIGINAL_TOKENS = `${PATH}CLEAR_ORIGINAL_TOKENS`;
 const SET_IMPERSONATED = `${PATH}SET_IMPERSONATED`;
 
 const initialState = Map({
@@ -34,9 +35,7 @@ const reducer = (state = initialState, action) => {
       return state.set('tokens', Map(tokens));
     }
     case CLEAR_TOKENS: {
-      if (!state.get('isImpersonated')) {
-        state.set('originalTokens', null);
-      }
+      state.set('originalTokens', null);
       return state.set('tokens', null);
     }
     case CLEAR_USER: {
@@ -50,6 +49,10 @@ const reducer = (state = initialState, action) => {
     case SET_ORIGINAL_TOKENS: {
       const { tokens } = action.payload;
       return state.set('originalTokens', Map(tokens));
+    }
+
+    case CLEAR_ORIGINAL_TOKENS: {
+      return state.set('originalTokens', null);
     }
 
     case SET_IMPERSONATED: {
@@ -99,6 +102,10 @@ export const setOriginalTokens = tokens => ({
   payload: {
     tokens,
   },
+});
+
+export const clearOriginalTokens = () => ({
+  type: CLEAR_ORIGINAL_TOKENS,
 });
 
 export const setImpersonated = isImpersonated => ({

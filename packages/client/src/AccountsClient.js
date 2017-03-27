@@ -23,6 +23,7 @@ import reducer, {
   clearTokens as clearStoreTokens,
   setOriginalTokens,
   setImpersonated,
+  clearOriginalTokens,
 } from './module';
 import { hashPassword } from './encryption';
 import type { TransportInterface } from './TransportInterface';
@@ -124,6 +125,7 @@ export class AccountsClient {
   async stopImpersonation(): Promise<void> {
     if (this.isImpersonated()) {
       this.store.dispatch(setTokens(this.originalTokens()));
+      this.store.dispatch(clearOriginalTokens());
       this.store.dispatch(setImpersonated(false));
       await this.refreshSession();
     }

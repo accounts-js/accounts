@@ -672,7 +672,7 @@ describe('Accounts', () => {
       expect(Accounts.isImpersonated()).toBe(false);
     });
 
-    it('should set the original tokens as current tokens', async () => {
+    it('should set the original tokens as current tokens and delete original tokens', async () => {
       const impersonateResult = {
         authorized: true,
         tokens: { accessToken: 'newAccessToken', refreshToken: 'newRefreshToken' },
@@ -694,6 +694,7 @@ describe('Accounts', () => {
       expect(Accounts.tokens()).toEqual({ accessToken: 'newAccessToken', refreshToken: 'newRefreshToken' });
       await Accounts.stopImpersonation();
       expect(Accounts.tokens()).toEqual(tokens);
+      expect(Accounts.originalTokens()).toEqual({ accessToken: null, refreshToken: null });
     });
   });
 });
