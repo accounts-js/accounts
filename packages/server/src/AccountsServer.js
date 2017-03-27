@@ -43,7 +43,6 @@ export class AccountsServer {
   db: DBInterface;
   email: EmailConnector;
   emailTemplates: EmailTemplatesType;
-  impersonationRules: Map<any, Function>;
 
   /**
    * @description Configure AccountsServer.
@@ -66,7 +65,6 @@ export class AccountsServer {
       this.email = new Email(this._options.email);
     }
     this.emailTemplates = emailTemplates;
-    this.impersonationRules = new Map();
   }
 
   /**
@@ -127,11 +125,8 @@ export class AccountsServer {
     };
   }
 
-  async _externalPasswordAuthenticator(
-    authFn: PasswordAuthenticator,
-    user: PasswordLoginUserType,
-    password: PasswordType,
-  ): Promise<any> {
+  // eslint-disable-next-line max-len
+  async _externalPasswordAuthenticator(authFn: PasswordAuthenticator, user: PasswordLoginUserType, password: string): Promise<any> {
     return authFn(user, password);
   }
 
@@ -208,34 +203,6 @@ export class AccountsServer {
   }
 
   /**
-   * @description Sets an impersonation rule.
-   * @param {string} userId - User id.
-   * @param {Function<boolean>} usersFilterFn - impersonation predicate.
-   * @returns {boolean} - true if user can impersonate to impersonation user.
-   */
-  setImpersonationRule(userId: string, usersFilterFn: Function<any, boolean>) {
-    this.impersonationRules.set(userId, usersFilterFn);
-  }
-
-  /**
-   * @description Gets an impersonation rule.
-   * @param {string} userId - User id.
-   * @returns {Function<boolean>} - impersonation predicate.
-   */
-  getImpersonationRule(userId: string): Function<boolean> {
-    return this.impersonationRules.get(userId);
-  }
-
-  /**
-   * @description Sets an impersonation rule.
-   * @param {string} userId - User id.
-   * @returns {boolean} - true if the rule was deleted.
-   */
-  deleteImpersontionRule(userId: string): boolean {
-    return this.impersonationRules.delete(userId);
-  }
-
-  /**
    * @description Impersonate to another user.
    * @param {string} accessToken - User access token.
    * @param {string} username - impersonated user username.
@@ -270,8 +237,12 @@ export class AccountsServer {
       throw new AccountsError(`User ${username} not found`);
     }
 
-    const usersFilterFn = this.getImpersonationRule(user.id);
-    if (!usersFilterFn || !usersFilterFn(impersonatedUser)) {
+    if (!this._options.impersonationAuthorize) {
+      return { authorized: false };
+    }
+
+    const isAuthorized = await this._options.impersonationAuthorize(user, impersonatedUser);
+    if (!isAuthorized) {
       return { authorized: false };
     }
 
@@ -478,8 +449,7 @@ export class AccountsServer {
     }
 
     const verificationTokens = get(user, ['services', 'email', 'verificationTokens'], []);
-    const tokenRecord = find(verificationTokens,
-                             (t: Object) => t.token === token);
+    const tokenRecord = find(verificationTokens, (t: Object) => t.token === token);
     if (!tokenRecord) {
       throw new AccountsError('Verify email link expired');
     }

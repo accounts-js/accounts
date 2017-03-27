@@ -990,42 +990,13 @@ describe('Accounts', () => {
     });
   });
 
-  describe('setImpersonationRule', () => {
-    it('should add new record to impersonationRules', () => {
-      const func = () => 'test';
-      Accounts.setImpersonationRule(0, func);
-      expect(Accounts.impersonationRules.get(0)).toBe(func);
-    });
-  });
-
-  describe('getImpersonationRule', () => {
-    it('should get record from impersonationRules', () => {
-      const func = () => 'test';
-      Accounts.setImpersonationRule(0, func);
-      expect(Accounts.getImpersonationRule(0)).toBe(func);
-    });
-  });
-
-  describe('deleteImpersonationRule', () => {
-    it('should delete record from impersonationRules', () => {
-      const func = () => 'test';
-      Accounts.setImpersonationRule(0, func);
-      const res = Accounts.deleteImpersontionRule(0);
-      expect(res).toBeTruthy();
-      expect(Accounts.getImpersonationRule(0)).toBe(undefined);
-    });
-  });
-
   describe('impersonate', () => {
     const user = { username: 'myUser', id: 123 };
     const impersonatedUser = { username: 'impUser', id: 456 };
     const someUser = { username: 'someUser', id: 789 };
 
-    beforeEach(() => {
-      Accounts.config({}, db);
-    });
-
     it('throws error if no access token is provided', async () => {
+      Accounts.config({}, db);
       try {
         await Accounts.impersonate();
         throw new Error();
@@ -1034,22 +1005,28 @@ describe('Accounts', () => {
       }
     });
 
-    it('returns not authorized if no relevant rule is found in impersonationRules', async () => {
+    it('returns not authorized if impersonationAuthorize function is not passed in config', async () => {
       const { accessToken } = Accounts.createTokens('555');
-      Accounts.config({}, {
-        findUserById: () => Promise.resolve(user),
-        findUserByUsername: () => Promise.resolve(someUser),
-      });
+      Accounts.config(
+        {
+          //eslint-disable-next-line
+          impersonationAuthorize: async (userObject, impersonateToUser) => {
+            return userObject.id === user.id && impersonateToUser === impersonatedUser;
+          },
+        },
+        {
+          findUserById: () => Promise.resolve(user),
+          findUserByUsername: () => Promise.resolve(someUser),
+        },
+      );
 
       Accounts.findSessionByAccessToken = () => Promise.resolve({
         valid: true,
         userId: '123',
       });
-      Accounts.setImpersonationRule(user.id, impUser => impUser === impersonatedUser);
-      const impersonationRule = Accounts.impersonationRules.get(user.id);
-      expect(impersonationRule).toBeDefined();
-      expect(impersonationRule({ username: 'otherUser', id: '098' })).toBeFalsy();
-      expect(impersonationRule(impersonatedUser)).toBeTruthy();
+
+      const impersonationAuthorize = Accounts.options().impersonationAuthorize;
+      expect(impersonationAuthorize).toBeDefined();
 
       const res = await Accounts.impersonate(accessToken, 'someUser');
       expect(res.authorized).toEqual(false);
@@ -1057,17 +1034,24 @@ describe('Accounts', () => {
 
     it('returns correct response if authorized', async () => {
       const { accessToken } = Accounts.createTokens('555');
-      Accounts.config({}, {
-        findUserById: () => Promise.resolve(user),
-        findUserByUsername: () => Promise.resolve(impersonatedUser),
-        createSession: () => Promise.resolve('001'),
-      });
+      Accounts.config(
+        {
+          //eslint-disable-next-line
+          impersonationAuthorize: async (userObject, impersonateToUser) => {
+            return userObject.id === user.id && impersonateToUser === impersonatedUser;
+          },
+        },
+        {
+          findUserById: () => Promise.resolve(user),
+          findUserByUsername: () => Promise.resolve(impersonatedUser),
+          createSession: () => Promise.resolve('001'),
+        },
+      );
 
       Accounts.findSessionByAccessToken = () => Promise.resolve({
         valid: true,
         userId: '123',
       });
-      Accounts.setImpersonationRule(user.id, impUser => impUser === impersonatedUser);
       Accounts.createTokens = (sessionId, isImpersonated) => ({ sessionId, isImpersonated });
 
       const res = await Accounts.impersonate(accessToken, 'impUser');
