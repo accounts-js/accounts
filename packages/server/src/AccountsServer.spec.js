@@ -28,10 +28,7 @@ describe('Accounts', () => {
 
     it('set custom password authenticator', () => {
       const db = {};
-      Accounts.config({
-        passwordAuthenticator: () => {
-        },
-      }, db);
+      Accounts.config({ passwordAuthenticator: () => { } }, db);
       expect(Accounts._options.passwordAuthenticator).toBeDefined();
     });
 
