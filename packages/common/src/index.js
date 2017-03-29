@@ -16,6 +16,7 @@ import type {
   TokensType,
   SessionType,
   PasswordType,
+  ImpersonateReturnType,
 } from './types';
 
 export type {
@@ -29,6 +30,7 @@ export type {
   AccountsCommonConfiguration,
   HashAlgorithm,
   PasswordType,
+  ImpersonateReturnType,
 };
 
 export {
