@@ -116,6 +116,42 @@ describe('Accounts', () => {
       });
       expect(userId).toEqual('123');
     });
+    it('throws error if validateNewUser does not pass', async () => {
+      Accounts.config({
+        validateNewUser: () => Promise.reject('User did not pass validation'),
+      }, {
+        ...db,
+        createUser: () => Promise.resolve('123'),
+      });
+      try {
+        await Accounts.createUser({
+          password: '123456',
+          username: 'user1',
+        });
+        throw Error();
+      } catch (err) {
+        expect(err).toEqual('User did not pass validation');
+      }
+    });
+    it('calls onUserCreated after succesfull user creation', async () => {
+      const onUserCreated = jest.fn();
+      Accounts.config({
+        onUserCreated,
+      }, {
+        ...db,
+        createUser: () => Promise.resolve('123'),
+        findUserById: () => Promise.resolve({ username: 'user1', id: '123' }),
+      });
+      await Accounts.createUser({
+        password: '123456',
+        username: 'user1',
+      });
+      expect(onUserCreated.mock.calls.length).toEqual(1);
+      expect(onUserCreated.mock.calls[0][0]).toEqual({
+        username: 'user1',
+        id: '123',
+      });
+    });
   });
 
   describe('loginWithPassword - errors', () => {

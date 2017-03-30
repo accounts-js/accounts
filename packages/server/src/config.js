@@ -33,7 +33,9 @@ export type AccountsServerConfiguration = AccountsCommonConfiguration & {
   // https://github.com/eleith/emailjs#emailserverconnectoptions
   email?: Object,
   emailTokensExpiry?: number,
-  impersonationAuthorize: (user: UserObjectType, impersonateToUser: UserObjectType) => Promise<any>
+  impersonationAuthorize: (user: UserObjectType, impersonateToUser: UserObjectType) => Promise<any>,
+  validateNewUser?: (user: UserObjectType) => Promise<boolean>,
+  onUserCreated?: (user: ?Object) => Promise<any>
 };
 
 export default {
