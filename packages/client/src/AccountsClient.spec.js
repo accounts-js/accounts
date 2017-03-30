@@ -276,6 +276,15 @@ describe('Accounts', () => {
         expect(callback.mock.calls[0][0]).toEqual('error');
       }
     });
+    it('calls onSignedInHook on successful login', async () => {
+      const transport = {
+        loginWithPassword: () => Promise.resolve(loggedInUser),
+      };
+      const onSignedInHook = jest.fn();
+      Accounts.config({ history, onSignedInHook }, transport);
+      await Accounts.loginWithPassword('username', 'password');
+      expect(onSignedInHook.mock.calls.length).toEqual(1);
+    });
     it('sets loggingIn flag to false on failed login', async () => {
       const transport = {
         loginWithPassword: () => Promise.reject('error'),
