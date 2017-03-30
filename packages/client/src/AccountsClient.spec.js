@@ -285,6 +285,9 @@ describe('Accounts', () => {
       await Accounts.loginWithPassword('username', 'password');
       expect(onSignedInHook.mock.calls.length).toEqual(1);
     });
+    it('calls onResumeSessionHook on successful resume session', async () => {
+
+    });
     it('sets loggingIn flag to false on failed login', async () => {
       const transport = {
         loginWithPassword: () => Promise.reject('error'),

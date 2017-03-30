@@ -178,7 +178,13 @@ export class AccountsClient {
 
   resumeSession(): Promise<void> {
     // TODO Should there be any additional resume session logic here?
-    return this.refreshSession();
+    const session = this.refreshSession();
+    session.then(() => {
+      if (this.options.onResumedSessionHook && isFunction(this.options.onResumedSessionHook)) {
+        this.options.onResumedSessionHook();
+      }
+    });
+    return session;
   }
 
   async refreshSession(): Promise<void> {
