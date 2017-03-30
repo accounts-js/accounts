@@ -118,7 +118,7 @@ describe('Accounts', () => {
     });
     it('throws error if validateNewUser does not pass', async () => {
       Accounts.config({
-        validateNewUser: () => Promise.resolve(false),
+        validateNewUser: () => Promise.reject('User did not pass validation'),
       }, {
         ...db,
         createUser: () => Promise.resolve('123'),
@@ -130,8 +130,7 @@ describe('Accounts', () => {
         });
         throw Error();
       } catch (err) {
-        const { message } = err;
-        expect(message).toEqual('User did not pass validation');
+        expect(err).toEqual('User did not pass validation');
       }
     });
     it('calls onUserCreated after succesfull user creation', async () => {
