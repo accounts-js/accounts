@@ -176,14 +176,11 @@ export class AccountsClient {
     this.store.dispatch(clearUser());
   }
 
-  resumeSession(): Promise<void> {
-    const session = this.refreshSession();
-    session.then(() => {
-      if (this.options.onResumedSessionHook && isFunction(this.options.onResumedSessionHook)) {
-        this.options.onResumedSessionHook();
-      }
-    });
-    return session;
+  async resumeSession(): Promise<void>  {
+    const session = await this.refreshSession();
+    if (this.options.onResumedSessionHook && isFunction(this.options.onResumedSessionHook)) {
+      this.options.onResumedSessionHook();
+    }
   }
 
   async refreshSession(): Promise<void> {
