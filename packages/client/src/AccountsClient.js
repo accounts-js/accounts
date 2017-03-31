@@ -176,8 +176,8 @@ export class AccountsClient {
     this.store.dispatch(clearUser());
   }
 
-  async resumeSession(): Promise<void>  {
-    const session = await this.refreshSession();
+  async resumeSession(): Promise<void> {
+    await this.refreshSession();
     if (this.options.onResumedSessionHook && isFunction(this.options.onResumedSessionHook)) {
       this.options.onResumedSessionHook();
     }
