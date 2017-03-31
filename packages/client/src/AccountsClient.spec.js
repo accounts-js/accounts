@@ -117,7 +117,7 @@ describe('Accounts', () => {
         expect(message).toEqual('Username or Email is required');
       }
     });
-    it('calls callback on succesfull user creation', async () => {
+    it('calls callback on successful user creation', async () => {
       const callback = jest.fn();
       const transport = {
         createUser: () => Promise.resolve(),
@@ -166,7 +166,7 @@ describe('Accounts', () => {
       expect(Accounts.instance.loginWithPassword.mock.calls[0][0]).toEqual({ id: '123' });
       expect(Accounts.instance.loginWithPassword.mock.calls[0][1]).toEqual('123456');
     });
-    it('calls onUserCreated after succesfull user creation', async () => {
+    it('calls onUserCreated after successful user creation', async () => {
       const onUserCreated = jest.fn();
       const transport = {
         createUser: () => Promise.resolve('123'),
@@ -284,9 +284,6 @@ describe('Accounts', () => {
       Accounts.config({ history, onSignedInHook }, transport);
       await Accounts.loginWithPassword('username', 'password');
       expect(onSignedInHook.mock.calls.length).toEqual(1);
-    });
-    it('calls onResumeSessionHook on successful resume session', async () => {
-
     });
     it('sets loggingIn flag to false on failed login', async () => {
       const transport = {
