@@ -177,9 +177,13 @@ export class AccountsClient {
   }
 
   async resumeSession(): Promise<void> {
-    await this.refreshSession();
-    if (this.options.onResumedSessionHook && isFunction(this.options.onResumedSessionHook)) {
-      this.options.onResumedSessionHook();
+    try {
+      await this.refreshSession();
+      if (this.options.onResumedSessionHook && isFunction(this.options.onResumedSessionHook)) {
+        this.options.onResumedSessionHook();
+      }
+    } catch (err) {
+      throw (err);
     }
   }
 
