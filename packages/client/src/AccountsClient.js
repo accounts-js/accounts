@@ -176,9 +176,15 @@ export class AccountsClient {
     this.store.dispatch(clearUser());
   }
 
-  resumeSession(): Promise<void> {
-    // TODO Should there be any additional resume session logic here?
-    return this.refreshSession();
+  async resumeSession(): Promise<void> {
+    try {
+      await this.refreshSession();
+      if (this.options.onResumedSessionHook && isFunction(this.options.onResumedSessionHook)) {
+        this.options.onResumedSessionHook();
+      }
+    } catch (err) {
+      throw (err);
+    }
   }
 
   async refreshSession(): Promise<void> {
