@@ -178,7 +178,7 @@ export class AccountsClient {
 
   resumeSession(): Promise<void> {
     const session = this.refreshSession();
-  	session.then(() => {
+    session.then(() => {
       if (this.options.onResumedSessionHook && isFunction(this.options.onResumedSessionHook)) {
         this.options.onResumedSessionHook();
       }
