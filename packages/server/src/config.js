@@ -21,7 +21,7 @@ export type TokenConfig = {
 type EmailType = EmailTemplateType & { to: string };
 export type SendMailFunction = (emailConfig: EmailType | Object) => Promise<void>;
 export type UserObjectSanitizerFunction =
-  (userObject: UserObjectType, omitFunction: Function) => any;
+  (userObject: UserObjectType, omitFunction: Function, pickFunction: Function) => any;
 // eslint-disable-next-line max-len
 export type PrepareMailFunction = (to: string, token: string, user: UserObjectType, pathFragment: string, emailTemplate: EmailTemplateType, from: string) => Object;
 

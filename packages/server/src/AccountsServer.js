@@ -1,6 +1,6 @@
 // @flow
 
-import { omit, isString, isPlainObject, isFunction, find, includes, get } from 'lodash';
+import { pick, omit, isString, isPlainObject, isFunction, find, includes, get } from 'lodash';
 import EventEmitter from 'events';
 import jwt from 'jsonwebtoken';
 import {
@@ -780,7 +780,7 @@ export class AccountsServer {
   _sanitizeUser(user: UserObjectType): UserObjectType {
     const { userObjectSanitizer } = this.options();
 
-    return userObjectSanitizer(this._internalUserSanitizer(user), omit);
+    return userObjectSanitizer(this._internalUserSanitizer(user), omit, pick);
   }
 
   _prepareMail(...args: Array<any>): any {
