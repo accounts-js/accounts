@@ -276,6 +276,52 @@ describe('Accounts', () => {
 
       expect(hookSpy.mock.calls.length).toBe(1);
     });
+
+    it('onImpersonationError', async () => {
+      const hookSpy = jest.fn(() => null);
+      Accounts.onImpersonationError(hookSpy);
+
+      Accounts.config({}, db);
+      try {
+        await Accounts.impersonate();
+      } catch (err) {
+        // nothing to do
+      }
+
+      expect(hookSpy.mock.calls.length).toBe(1);
+    });
+
+    it('onImpersonationSuccess', async () => {
+      const user = { username: 'myUser', id: 123 };
+      const impersonatedUser = { username: 'impUser', id: 456 };
+      const { accessToken } = Accounts.createTokens('555');
+      const hookSpy = jest.fn(() => null);
+      Accounts.onImpersonationSuccess(hookSpy);
+
+      Accounts.config(
+        {
+          //eslint-disable-next-line
+          impersonationAuthorize: async (userObject, impersonateToUser) => {
+            return userObject.id === user.id && impersonateToUser === impersonatedUser;
+          },
+        },
+        {
+          findUserById: () => Promise.resolve(user),
+          findUserByUsername: () => Promise.resolve(impersonatedUser),
+          createSession: () => Promise.resolve('001'),
+        },
+      );
+
+      Accounts.findSessionByAccessToken = () => Promise.resolve({
+        valid: true,
+        userId: '123',
+      });
+      Accounts.createTokens = (sessionId, isImpersonated) => ({ sessionId, isImpersonated });
+
+      const res = await Accounts.impersonate(accessToken, 'impUser');
+
+      expect(hookSpy.mock.calls.length).toBe(1);
+    });
   });
 
   describe('config', () => {
@@ -395,25 +441,6 @@ describe('Accounts', () => {
       } catch (err) {
         expect(err).toEqual('User did not pass validation');
       }
-    });
-    it('calls onUserCreated after succesfull user creation', async () => {
-      const onUserCreated = jest.fn();
-      Accounts.config({
-        onUserCreated,
-      }, {
-        ...db,
-        createUser: () => Promise.resolve('123'),
-        findUserById: () => Promise.resolve({ username: 'user1', id: '123' }),
-      });
-      await Accounts.createUser({
-        password: '123456',
-        username: 'user1',
-      });
-      expect(onUserCreated.mock.calls.length).toEqual(1);
-      expect(onUserCreated.mock.calls[0][0]).toEqual({
-        username: 'user1',
-        id: '123',
-      });
     });
   });
 

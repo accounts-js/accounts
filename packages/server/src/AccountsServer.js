@@ -50,6 +50,8 @@ export const ServerHooks = {
   ResumeSessionError: 'ResumeSessionError',
   RefreshTokensSuccess: 'RefreshTokensSuccess',
   RefreshTokensError: 'RefreshTokensError',
+  ImpersonationSuccess: 'ImpersonationSuccess',
+  ImpersonationError: 'ImpersonationError',
 };
 
 export class AccountsServer {
@@ -132,6 +134,14 @@ export class AccountsServer {
 
   onRefreshTokensError(callback: Function): Function {
     return this._on(ServerHooks.RefreshTokensError, callback);
+  }
+
+  onImpersonationSuccess(callback: Function): Function {
+    return this._on(ServerHooks.ImpersonationSuccess, callback);
+  }
+
+  onImpersonationError(callback: Function): Function {
+    return this._on(ServerHooks.ImpersonationError, callback);
   }
 
   /**
@@ -254,27 +264,27 @@ export class AccountsServer {
         throw new AccountsError('Email already exists', { email: user.email });
       }
 
-    let password;
-    if (user.password) {
-      password = await this._hashAndBcryptPassword(user.password);
-    }
-    const { validateNewUser } = this.options();
+      let password;
+      if (user.password) {
+        password = await this._hashAndBcryptPassword(user.password);
+      }
+      const { validateNewUser } = this.options();
 
-    const proposedUserObject = {
-      username: user.username,
-      email: user.email && user.email.toLowerCase(),
-      password,
-      profile: user.profile,
-    };
+      const proposedUserObject = {
+        username: user.username,
+        email: user.email && user.email.toLowerCase(),
+        password,
+        profile: user.profile,
+      };
 
-    if (isFunction(validateNewUser)) {
-      await validateNewUser(proposedUserObject);
-    }
+      if (isFunction(validateNewUser)) {
+        await validateNewUser(proposedUserObject);
+      }
 
-    const userId: string = await this.db.createUser(proposedUserObject);
-      this.hooks.emit(ServerHooks.CreateUserSuccess, userId, userObject);
+      const userId: string = await this.db.createUser(proposedUserObject);
+      this.hooks.emit(ServerHooks.CreateUserSuccess, userId, proposedUserObject);
 
-    return userId;
+      return userId;
     } catch (error) {
       this.hooks.emit(ServerHooks.CreateUserError, error);
 
@@ -298,48 +308,60 @@ export class AccountsServer {
    */
   // eslint-disable-next-line max-len
   async impersonate(accessToken: string, username: string, ip: ?string, userAgent: ?string): Promise<ImpersonateReturnType> {
-    if (!isString(accessToken)) {
-      throw new AccountsError('An access token is required');
-    }
-
     try {
-      jwt.verify(accessToken, this._options.tokenSecret, { ignoreExpiration: true });
-    } catch (err) {
-      throw new AccountsError('Access token is not valid');
+      if (!isString(accessToken)) {
+        throw new AccountsError('An access token is required');
+      }
+
+      try {
+        jwt.verify(accessToken, this._options.tokenSecret, { ignoreExpiration: true });
+      } catch (err) {
+        throw new AccountsError('Access token is not valid');
+      }
+
+      const session = await this.findSessionByAccessToken(accessToken);
+
+      if (!session.valid) {
+        throw new AccountsError('Session is not valid for user');
+      }
+
+      const user = await this.db.findUserById(session.userId);
+
+      if (!user) {
+        throw new AccountsError('User not found');
+      }
+
+      const impersonatedUser = await this.db.findUserByUsername(username);
+      if (!impersonatedUser) {
+        throw new AccountsError(`User ${username} not found`);
+      }
+
+      if (!this._options.impersonationAuthorize) {
+        return { authorized: false };
+      }
+
+      const isAuthorized = await this._options.impersonationAuthorize(user, impersonatedUser);
+
+      if (!isAuthorized) {
+        return { authorized: false };
+      }
+
+      const newSessionId = await this.db.createSession(impersonatedUser.id, ip, userAgent);
+      const impersonationTokens = this.createTokens(newSessionId, true);
+      const impersonationResult = {
+        authorized: true,
+        tokens: impersonationTokens,
+        user: impersonatedUser,
+      };
+
+      this.hooks.emit(ServerHooks.ImpersonationSuccess, user, impersonationResult);
+
+      return impersonationResult;
+    } catch (e) {
+      this.hooks.emit(ServerHooks.ImpersonationError, e);
+
+      throw e;
     }
-
-    const session = await this.findSessionByAccessToken(accessToken);
-    if (!session.valid) {
-      throw new AccountsError('Session is not valid for user');
-    }
-
-    const user = await this.db.findUserById(session.userId);
-    if (!user) {
-      throw new AccountsError('User not found');
-    }
-
-    const impersonatedUser = await this.db.findUserByUsername(username);
-    if (!impersonatedUser) {
-      throw new AccountsError(`User ${username} not found`);
-    }
-
-    if (!this._options.impersonationAuthorize) {
-      return { authorized: false };
-    }
-
-    const isAuthorized = await this._options.impersonationAuthorize(user, impersonatedUser);
-    if (!isAuthorized) {
-      return { authorized: false };
-    }
-
-
-    const newSessionId = await this.db.createSession(impersonatedUser.id, ip, userAgent);
-    const impersonationTokens = this.createTokens(newSessionId, true);
-    return {
-      authorized: true,
-      tokens: impersonationTokens,
-      user: impersonatedUser,
-    };
   }
 
   /**
