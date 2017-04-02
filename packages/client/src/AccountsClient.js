@@ -120,9 +120,14 @@ export class AccountsClient {
     if (!res.authorized) {
       throw new AccountsError(`User unauthorized to impersonate ${username}`);
     } else {
+      const { persistImpersonation } = this.options;
       this.store.dispatch(setImpersonated(true));
       this.store.dispatch(setOriginalTokens({ accessToken, refreshToken }));
-      await this.storeTokens(res.tokens);
+
+      if (persistImpersonation) {
+        await this.storeTokens(res.tokens);
+      }
+
       this.store.dispatch(setTokens(res.tokens));
       this.store.dispatch(setUser(res.user));
       return res;
