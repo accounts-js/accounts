@@ -314,7 +314,7 @@ export class AccountsServer {
       }
 
       try {
-        jwt.verify(accessToken, this._options.tokenSecret, { ignoreExpiration: true });
+        jwt.verify(accessToken, this._options.tokenSecret);
       } catch (err) {
         throw new AccountsError('Access token is not valid');
       }
