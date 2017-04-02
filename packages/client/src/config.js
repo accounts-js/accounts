@@ -40,7 +40,7 @@ export type AccountsClientConfiguration = AccountsCommonConfiguration & {
   onUserCreated?: (user: ?Object) => Promise<any>,
   loginOnSignUp?: boolean,
   history?: Object,
-  persistImpersonation?: boolean,
+  persistImpersonation?: boolean
 };
 
 export default {
