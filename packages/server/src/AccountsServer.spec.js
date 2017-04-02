@@ -347,6 +347,13 @@ describe('Accounts', () => {
       expect(Accounts._options.passwordAuthenticator).toBeDefined();
     });
 
+    it('set custom userObjectSanitizer', () => {
+      const testDB = {};
+      const func = () => {};
+      Accounts.config({ userObjectSanitizer: func }, testDB);
+      expect(Accounts._options.userObjectSanitizer).toBe(func);
+    });
+
     it('use default password authenticator', () => {
       const testDB = {};
       Accounts.config({}, testDB);
@@ -1386,6 +1393,24 @@ describe('Accounts', () => {
         tokens: { sessionId: '001', isImpersonated: true },
         user: impersonatedUser,
       });
+    });
+  });
+
+  describe('user sanitizer', () => {
+    const userObject = { username: 'test', services: [], id: '123' };
+
+    it('internal sanitizer should clean services field from the user object', () => {
+      Accounts.config({}, db);
+      const modifiedUser = Accounts._sanitizeUser(userObject);
+      expect(modifiedUser.services).toBeUndefined();
+    });
+
+    it('should run external sanitizier when provided one', () => {
+      Accounts.config({
+        userObjectSanitizer: (user, omit) => omit(user, ['username']),
+      }, db);
+      const modifiedUser = Accounts._sanitizeUser(userObject);
+      expect(modifiedUser.username).toBeUndefined();
     });
   });
 });
