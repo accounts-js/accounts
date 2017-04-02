@@ -1,6 +1,7 @@
 // @flow
 
 import { isString, isPlainObject, isFunction, find, includes, get } from 'lodash';
+import EventEmitter from 'events';
 import jwt from 'jsonwebtoken';
 import {
   AccountsError,
@@ -38,11 +39,27 @@ type TokenRecord = {
   reason: string
 };
 
+export const ServerHooks = {
+  LoginSuccess: 'LoginSuccess',
+  LoginError: 'LoginError',
+  LogoutSuccess: 'LogoutSuccess',
+  LogoutError: 'LogoutError',
+  CreateUserSuccess: 'CreateUserSuccess',
+  CreateUserError: 'CreateUserError',
+  ResumeSessionSuccess: 'ResumeSessionSuccess',
+  ResumeSessionError: 'ResumeSessionError',
+  RefreshTokensSuccess: 'RefreshTokensSuccess',
+  RefreshTokensError: 'RefreshTokensError',
+  ImpersonationSuccess: 'ImpersonationSuccess',
+  ImpersonationError: 'ImpersonationError',
+};
+
 export class AccountsServer {
   _options: AccountsServerConfiguration;
   db: DBInterface;
   email: EmailConnector;
   emailTemplates: EmailTemplatesType;
+  hooks: EventEmitter;
 
   /**
    * @description Configure AccountsServer.
@@ -65,6 +82,10 @@ export class AccountsServer {
       this.email = new Email(this._options.email);
     }
     this.emailTemplates = emailTemplates;
+
+    if (!this.hooks) {
+      this.hooks = new EventEmitter();
+    }
   }
 
   /**
@@ -73,6 +94,54 @@ export class AccountsServer {
    */
   options(): AccountsServerConfiguration {
     return this._options;
+  }
+
+  onLoginSuccess(callback: Function): Function {
+    return this._on(ServerHooks.LoginSuccess, callback);
+  }
+
+  onLoginError(callback: Function): Function {
+    return this._on(ServerHooks.LoginError, callback);
+  }
+
+  onLogoutSuccess(callback: Function): Function {
+    return this._on(ServerHooks.LogoutSuccess, callback);
+  }
+
+  onLogoutError(callback: Function): Function {
+    return this._on(ServerHooks.LogoutError, callback);
+  }
+
+  onCreateUserSuccess(callback: Function): Function {
+    return this._on(ServerHooks.CreateUserSuccess, callback);
+  }
+
+  onCreateUserError(callback: Function): Function {
+    return this._on(ServerHooks.CreateUserError, callback);
+  }
+
+  onResumeSessionSuccess(callback: Function): Function {
+    return this._on(ServerHooks.ResumeSessionSuccess, callback);
+  }
+
+  onResumeSessionError(callback: Function): Function {
+    return this._on(ServerHooks.ResumeSessionError, callback);
+  }
+
+  onRefreshTokensSuccess(callback: Function): Function {
+    return this._on(ServerHooks.RefreshTokensSuccess, callback);
+  }
+
+  onRefreshTokensError(callback: Function): Function {
+    return this._on(ServerHooks.RefreshTokensError, callback);
+  }
+
+  onImpersonationSuccess(callback: Function): Function {
+    return this._on(ServerHooks.ImpersonationSuccess, callback);
+  }
+
+  onImpersonationError(callback: Function): Function {
+    return this._on(ServerHooks.ImpersonationError, callback);
   }
 
   /**
@@ -85,44 +154,49 @@ export class AccountsServer {
    */
   // eslint-disable-next-line max-len
   async loginWithPassword(user: PasswordLoginUserType, password: PasswordType, ip: ?string, userAgent: ?string): Promise<LoginReturnType> {
-    if (!user || !password) {
-      throw new AccountsError('Unrecognized options for login request', user, 400);
-    }
-    if ((!isString(user) && !isPlainObject(user)) || !isString(password)) {
-      throw new AccountsError('Match failed', user, 400);
-    }
+    try {
+      if (!user || !password) {
+        throw new AccountsError('Unrecognized options for login request', user, 400);
+      }
+      if ((!isString(user) && !isPlainObject(user)) || !isString(password)) {
+        throw new AccountsError('Match failed', user, 400);
+      }
 
-    let foundUser;
+      let foundUser;
 
-    if (this._options.passwordAuthenticator) {
-      try {
+      if (this._options.passwordAuthenticator) {
         foundUser = await this._externalPasswordAuthenticator(
           this._options.passwordAuthenticator,
           user,
           password,
         );
-      } catch (e) {
-        throw new AccountsError(e, user, 403);
+      } else {
+        foundUser = await this._defaultPasswordAuthenticator(user, password);
       }
-    } else {
-      foundUser = await this._defaultPasswordAuthenticator(user, password);
+
+      if (!foundUser) {
+        throw new AccountsError('User not found', user, 403);
+      }
+
+      const sessionId = await this.db.createSession(foundUser.id, ip, userAgent);
+      const { accessToken, refreshToken } = this.createTokens(sessionId);
+      const loginResult = {
+        sessionId,
+        user: foundUser,
+        tokens: {
+          refreshToken,
+          accessToken,
+        },
+      };
+
+      this.hooks.emit(ServerHooks.LoginSuccess, loginResult);
+
+      return loginResult;
+    } catch (error) {
+      this.hooks.emit(ServerHooks.LoginError, error);
+
+      throw error;
     }
-
-    if (!foundUser) {
-      throw new AccountsError('User not found', user, 403);
-    }
-
-    const sessionId = await this.db.createSession(foundUser.id, ip, userAgent);
-    const { accessToken, refreshToken } = this.createTokens(sessionId);
-
-    return {
-      sessionId,
-      user: foundUser,
-      tokens: {
-        refreshToken,
-        accessToken,
-      },
-    };
   }
 
   // eslint-disable-next-line max-len
@@ -171,48 +245,57 @@ export class AccountsServer {
    * @returns {Promise<string>} - Return the id of user created.
    */
   async createUser(user: CreateUserType): Promise<string> {
-    if (!validators.validateUsername(user.username) && !validators.validateEmail(user.email)) {
-      throw new AccountsError(
-        'Username or Email is required',
-        {
-          username: user && user.username,
-          email: user && user.email,
-        },
-      );
-    }
-    if (user.username && await this.db.findUserByUsername(user.username)) {
-      throw new AccountsError('Username already exists', { username: user.username });
-    }
-    if (user.email && await this.db.findUserByEmail(user.email)) {
-      throw new AccountsError('Email already exists', { email: user.email });
-    }
+    try {
+      if (!validators.validateUsername(user.username) && !validators.validateEmail(user.email)) {
+        throw new AccountsError(
+          'Username or Email is required',
+          {
+            username: user && user.username,
+            email: user && user.email,
+          },
+        );
+      }
 
-    let password;
-    if (user.password) {
-      password = await this._hashAndBcryptPassword(user.password);
+      if (user.username && await this.db.findUserByUsername(user.username)) {
+        throw new AccountsError('Username already exists', { username: user.username });
+      }
+
+      if (user.email && await this.db.findUserByEmail(user.email)) {
+        throw new AccountsError('Email already exists', { email: user.email });
+      }
+
+      let password;
+      if (user.password) {
+        password = await this._hashAndBcryptPassword(user.password);
+      }
+      const { validateNewUser } = this.options();
+
+      const proposedUserObject = {
+        username: user.username,
+        email: user.email && user.email.toLowerCase(),
+        password,
+        profile: user.profile,
+      };
+
+      if (isFunction(validateNewUser)) {
+        await validateNewUser(proposedUserObject);
+      }
+
+      const userId: string = await this.db.createUser(proposedUserObject);
+      this.hooks.emit(ServerHooks.CreateUserSuccess, userId, proposedUserObject);
+
+      return userId;
+    } catch (error) {
+      this.hooks.emit(ServerHooks.CreateUserError, error);
+
+      throw error;
     }
-    // TODO Accounts.onCreateUser
-    const { validateNewUser, onUserCreated } = this.options();
+  }
 
-    const proposedUserObject = {
-      username: user.username,
-      email: user.email && user.email.toLowerCase(),
-      password,
-      profile: user.profile,
-    };
+  _on(eventName: string, callback: Function): Function {
+    this.hooks.on(eventName, callback);
 
-    if (isFunction(validateNewUser)) {
-      await validateNewUser(proposedUserObject);
-    }
-
-    const userId: string = await this.db.createUser(proposedUserObject);
-
-    if (isFunction(onUserCreated)) {
-      const createdUser = await this.findUserById(userId);
-      onUserCreated(createdUser);
-    }
-
-    return userId;
+    return () => this.hooks.removeListener(eventName, callback);
   }
 
   /**
@@ -225,48 +308,60 @@ export class AccountsServer {
    */
   // eslint-disable-next-line max-len
   async impersonate(accessToken: string, username: string, ip: ?string, userAgent: ?string): Promise<ImpersonateReturnType> {
-    if (!isString(accessToken)) {
-      throw new AccountsError('An access token is required');
-    }
-
     try {
-      jwt.verify(accessToken, this._options.tokenSecret, { ignoreExpiration: true });
-    } catch (err) {
-      throw new AccountsError('Access token is not valid');
+      if (!isString(accessToken)) {
+        throw new AccountsError('An access token is required');
+      }
+
+      try {
+        jwt.verify(accessToken, this._options.tokenSecret, { ignoreExpiration: true });
+      } catch (err) {
+        throw new AccountsError('Access token is not valid');
+      }
+
+      const session = await this.findSessionByAccessToken(accessToken);
+
+      if (!session.valid) {
+        throw new AccountsError('Session is not valid for user');
+      }
+
+      const user = await this.db.findUserById(session.userId);
+
+      if (!user) {
+        throw new AccountsError('User not found');
+      }
+
+      const impersonatedUser = await this.db.findUserByUsername(username);
+      if (!impersonatedUser) {
+        throw new AccountsError(`User ${username} not found`);
+      }
+
+      if (!this._options.impersonationAuthorize) {
+        return { authorized: false };
+      }
+
+      const isAuthorized = await this._options.impersonationAuthorize(user, impersonatedUser);
+
+      if (!isAuthorized) {
+        return { authorized: false };
+      }
+
+      const newSessionId = await this.db.createSession(impersonatedUser.id, ip, userAgent);
+      const impersonationTokens = this.createTokens(newSessionId, true);
+      const impersonationResult = {
+        authorized: true,
+        tokens: impersonationTokens,
+        user: impersonatedUser,
+      };
+
+      this.hooks.emit(ServerHooks.ImpersonationSuccess, user, impersonationResult);
+
+      return impersonationResult;
+    } catch (e) {
+      this.hooks.emit(ServerHooks.ImpersonationError, e);
+
+      throw e;
     }
-
-    const session = await this.findSessionByAccessToken(accessToken);
-    if (!session.valid) {
-      throw new AccountsError('Session is not valid for user');
-    }
-
-    const user = await this.db.findUserById(session.userId);
-    if (!user) {
-      throw new AccountsError('User not found');
-    }
-
-    const impersonatedUser = await this.db.findUserByUsername(username);
-    if (!impersonatedUser) {
-      throw new AccountsError(`User ${username} not found`);
-    }
-
-    if (!this._options.impersonationAuthorize) {
-      return { authorized: false };
-    }
-
-    const isAuthorized = await this._options.impersonationAuthorize(user, impersonatedUser);
-    if (!isAuthorized) {
-      return { authorized: false };
-    }
-
-
-    const newSessionId = await this.db.createSession(impersonatedUser.id, ip, userAgent);
-    const impersonationTokens = this.createTokens(newSessionId, true);
-    return {
-      authorized: true,
-      tokens: impersonationTokens,
-      user: impersonatedUser,
-    };
   }
 
   /**
@@ -279,40 +374,51 @@ export class AccountsServer {
    */
   // eslint-disable-next-line max-len
   async refreshTokens(accessToken: string, refreshToken: string, ip: string, userAgent: string): Promise<LoginReturnType> {
-    if (!isString(accessToken) || !isString(refreshToken)) {
-      throw new AccountsError('An accessToken and refreshToken are required');
-    }
-
-    let sessionId;
     try {
-      jwt.verify(refreshToken, this._options.tokenSecret);
-      const decodedAccessToken = jwt.verify(accessToken, this._options.tokenSecret, {
-        ignoreExpiration: true,
-      });
-      sessionId = decodedAccessToken.data.sessionId;
-    } catch (err) {
-      throw new AccountsError('Tokens are not valid');
-    }
-
-    const session: ?SessionType = await this.db.findSessionById(sessionId);
-    if (!session) {
-      throw new AccountsError('Session not found');
-    }
-
-    if (session.valid) {
-      const user = await this.db.findUserById(session.userId);
-      if (!user) {
-        throw new AccountsError('User not found', { id: session.userId });
+      if (!isString(accessToken) || !isString(refreshToken)) {
+        throw new AccountsError('An accessToken and refreshToken are required');
       }
-      const tokens = this.createTokens(sessionId);
-      await this.db.updateSession(sessionId, ip, userAgent);
-      return {
-        sessionId,
-        user,
-        tokens,
-      };
-    } else { // eslint-disable-line no-else-return
-      throw new AccountsError('Session is no longer valid', { id: session.userId });
+
+      let sessionId;
+      try {
+        jwt.verify(refreshToken, this._options.tokenSecret);
+        const decodedAccessToken = jwt.verify(accessToken, this._options.tokenSecret, {
+          ignoreExpiration: true,
+        });
+        sessionId = decodedAccessToken.data.sessionId;
+      } catch (err) {
+        throw new AccountsError('Tokens are not valid');
+      }
+
+      const session: ?SessionType = await this.db.findSessionById(sessionId);
+      if (!session) {
+        throw new AccountsError('Session not found');
+      }
+
+      if (session.valid) {
+        const user = await this.db.findUserById(session.userId);
+        if (!user) {
+          throw new AccountsError('User not found', { id: session.userId });
+        }
+        const tokens = this.createTokens(sessionId);
+        await this.db.updateSession(sessionId, ip, userAgent);
+
+        const result = {
+          sessionId,
+          user,
+          tokens,
+        };
+
+        this.hooks.emit(ServerHooks.RefreshTokensSuccess, result);
+
+        return result;
+      } else { // eslint-disable-line no-else-return
+        throw new AccountsError('Session is no longer valid', { id: session.userId });
+      }
+    } catch (err) {
+      this.hooks.emit(ServerHooks.RefreshTokensError, err);
+
+      throw err;
     }
   }
 
@@ -345,37 +451,60 @@ export class AccountsServer {
    * @returns {Promise<void>} - Return a promise.
    */
   async logout(accessToken: string): Promise<void> {
-    const session: SessionType = await this.findSessionByAccessToken(accessToken);
-    if (session.valid) {
-      const user = await this.db.findUserById(session.userId);
-      if (!user) {
-        throw new AccountsError('User not found', { id: session.userId });
+    try {
+      const session: SessionType = await this.findSessionByAccessToken(accessToken);
+
+      if (session.valid) {
+        const user = await this.db.findUserById(session.userId);
+
+        if (!user) {
+          throw new AccountsError('User not found', { id: session.userId });
+        }
+
+        await this.db.invalidateSession(session.sessionId);
+        this.hooks.emit(ServerHooks.LogoutSuccess, user, session, accessToken);
+      } else { // eslint-disable-line no-else-return
+        throw new AccountsError('Session is no longer valid', { id: session.userId });
       }
-      await this.db.invalidateSession(session.sessionId);
-    } else { // eslint-disable-line no-else-return
-      throw new AccountsError('Session is no longer valid', { id: session.userId });
+    } catch (error) {
+      this.hooks.emit(ServerHooks.LogoutError, error);
+
+      throw error;
     }
   }
 
   async resumeSession(accessToken: string): Promise<?UserObjectType> {
-    const session: SessionType = await this.findSessionByAccessToken(accessToken);
-    if (session.valid) {
-      const user = await this.db.findUserById(session.userId);
-      if (!user) {
-        throw new AccountsError('User not found', { id: session.userId });
-      }
+    try {
+      const session: SessionType = await this.findSessionByAccessToken(accessToken);
 
-      if (this._options.resumeSessionValidator) {
-        try {
-          await this._options.resumeSessionValidator(user, session);
-        } catch (e) {
-          throw new AccountsError(e, { id: session.userId }, 403);
+      if (session.valid) {
+        const user = await this.db.findUserById(session.userId);
+
+        if (!user) {
+          throw new AccountsError('User not found', { id: session.userId });
         }
+
+        if (this._options.resumeSessionValidator) {
+          try {
+            await this._options.resumeSessionValidator(user, session);
+          } catch (e) {
+            throw new AccountsError(e, { id: session.userId }, 403);
+          }
+        }
+
+        this.hooks.emit(ServerHooks.ResumeSessionSuccess, user, accessToken);
+
+        return user;
       }
 
-      return user;
+      this.hooks.emit(ServerHooks.ResumeSessionError, new AccountsError('Invalid Session', { id: session.userId }));
+
+      return null;
+    } catch (e) {
+      this.hooks.emit(ServerHooks.ResumeSessionError, e);
+
+      throw e;
     }
-    return null;
   }
 
   async findSessionByAccessToken(accessToken: string): Promise<SessionType> {
@@ -689,3 +818,4 @@ export class AccountsServer {
 }
 
 export default new AccountsServer();
+

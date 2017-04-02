@@ -34,8 +34,7 @@ export type AccountsServerConfiguration = AccountsCommonConfiguration & {
   email?: Object,
   emailTokensExpiry?: number,
   impersonationAuthorize: (user: UserObjectType, impersonateToUser: UserObjectType) => Promise<any>,
-  validateNewUser?: (user: UserObjectType) => Promise<boolean>,
-  onUserCreated?: (user: ?Object) => Promise<any>
+  validateNewUser?: (user: UserObjectType) => Promise<boolean>
 };
 
 export default {
