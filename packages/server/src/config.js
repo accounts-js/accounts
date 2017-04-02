@@ -1,10 +1,11 @@
 // @flow
 
 import { config as sharedConfig } from '@accounts/common';
-import type { AccountsCommonConfiguration, PasswordLoginUserType, SessionType, UserObjectType } from '@accounts/common';
+import type { AccountsCommonConfiguration, PasswordLoginUserType, SessionType, UserObjectType, PasswordType } from '@accounts/common';
 import type { EmailTemplateType } from './emailTemplates';
 
-export type PasswordAuthenticator = (user: PasswordLoginUserType, password: string) => Promise<any>;
+// eslint-disable-next-line max-len
+export type PasswordAuthenticator = (user: PasswordLoginUserType, password: PasswordType) => Promise<any>;
 export type ResumeSessionValidator = (user: UserObjectType, session: SessionType) => Promise<any>;
 
 type TokenExpiration = string;
@@ -30,7 +31,11 @@ export type AccountsServerConfiguration = AccountsCommonConfiguration & {
   prepareMail?: PrepareMailFunction,
   sendMail?: SendMailFunction,
   // https://github.com/eleith/emailjs#emailserverconnectoptions
-  email?: Object
+  email?: Object,
+  emailTokensExpiry?: number,
+  impersonationAuthorize: (user: UserObjectType, impersonateToUser: UserObjectType) => Promise<any>,
+  validateNewUser?: (user: UserObjectType) => Promise<boolean>,
+  onUserCreated?: (user: ?Object) => Promise<any>
 };
 
 export default {
@@ -44,6 +49,7 @@ export default {
       expiresIn: '1d',
     },
   },
+  emailTokensExpiry: 1000 * 3600, // 1 hour in milis
   // TODO Investigate oauthSecretKey
   // oauthSecretKey
 };

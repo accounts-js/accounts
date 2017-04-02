@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "jsnext:main": "lib-es6/index.js",
@@ -62,7 +62,7 @@
     "babel-preset-es2015-node4": "^2.1.0",
     "babel-preset-stage-0": "^6.22.0",
     "coveralls": "^2.11.14",
-    "flow-bin": "^0.39.0",
+    "flow-bin": "0.41.0",
     "jest": "^18.0.0",
     "lerna": "2.0.0-beta.32",
     "localstorage-polyfill": "^1.0.1",
@@ -71,7 +71,7 @@
     "webpack-node-externals": "^1.5.4"
   },
   "dependencies": {
-    "@accounts/common": "^0.0.10",
+    "@accounts/common": "^0.0.11",
     "crypto-js": "^3.1.9-1",
     "immutable": "^3.8.1",
     "jwt-decode": "^2.1.0",

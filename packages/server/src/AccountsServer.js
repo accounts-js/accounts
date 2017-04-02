@@ -1,6 +1,6 @@
 // @flow
 
-import { isString, isPlainObject, find, includes, get } from 'lodash';
+import { isString, isPlainObject, isFunction, find, includes, get } from 'lodash';
 import EventEmitter from 'events';
 import jwt from 'jsonwebtoken';
 import {
@@ -15,10 +15,12 @@ import type {
   LoginReturnType,
   TokensType,
   SessionType,
+  ImpersonateReturnType,
+  PasswordType,
 } from '@accounts/common';
 import config from './config';
 import type { DBInterface } from './DBInterface';
-import { verifyPassword, hashPassword } from './encryption';
+import { verifyPassword, hashPassword, bcryptPassword } from './encryption';
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -29,6 +31,13 @@ import emailTemplates from './emailTemplates';
 import type { EmailConnector } from './email';
 import type { EmailTemplatesType, EmailTemplateType } from './emailTemplates';
 import type { AccountsServerConfiguration, PasswordAuthenticator } from './config';
+
+type TokenRecord = {
+  token: string,
+  address: string,
+  when: number,
+  reason: string
+};
 
 export const ServerHooks = {
   LoginSuccess: 'LoginSuccess',
@@ -79,9 +88,9 @@ export class AccountsServer {
 
   /**
    * @description Return the AccountsServer options.
-   * @returns {Object} - Return the options.
+   * @returns {AccountsServerConfiguration} - Return the options.
    */
-  options(): Object {
+  options(): AccountsServerConfiguration {
     return this._options;
   }
 
@@ -128,13 +137,13 @@ export class AccountsServer {
   /**
    * @description Login the user with his password.
    * @param {Object} user - User to login.
-   * @param {string} password - Password of user to login.
+   * @param {PasswordType} password - Password of user to login.
    * @param {string} ip - User ip.
    * @param {string} userAgent - User user agent.
    * @returns {Promise<Object>} - LoginReturnType.
    */
   // eslint-disable-next-line max-len
-  async loginWithPassword(user: PasswordLoginUserType, password: string, ip: ?string, userAgent: ?string): Promise<LoginReturnType> {
+  async loginWithPassword(user: PasswordLoginUserType, password: PasswordType, ip: ?string, userAgent: ?string): Promise<LoginReturnType> {
     try {
       if (!user || !password) {
         throw new AccountsError('Unrecognized options for login request', user, 400);
@@ -149,7 +158,8 @@ export class AccountsServer {
         foundUser = await this._externalPasswordAuthenticator(
           this._options.passwordAuthenticator,
           user,
-          password);
+          password,
+        );
       } else {
         foundUser = await this._defaultPasswordAuthenticator(user, password);
       }
@@ -184,7 +194,8 @@ export class AccountsServer {
     return authFn(user, password);
   }
 
-  async _defaultPasswordAuthenticator(user: PasswordLoginUserType, password: string): Promise<any> {
+  // eslint-disable-next-line max-len
+  async _defaultPasswordAuthenticator(user: PasswordLoginUserType, password: PasswordType): Promise<any> {
     const { username, email, id } = isString(user)
       ? toUsernameAndEmail({ user })
       : toUsernameAndEmail({ ...user });
@@ -243,17 +254,27 @@ export class AccountsServer {
         throw new AccountsError('Email already exists', { email: user.email });
       }
 
-      const userObject = {
-        username: user.username,
-        email: user.email && user.email.toLowerCase(),
-        password: user.password,
-        profile: user.profile,
-      };
+    let password;
+    if (user.password) {
+      password = await this._hashAndBcryptPassword(user.password);
+    }
+    const { validateNewUser } = this.options();
 
-      const userId: string = await this.db.createUser(userObject);
+    const proposedUserObject = {
+      username: user.username,
+      email: user.email && user.email.toLowerCase(),
+      password,
+      profile: user.profile,
+    };
+
+    if (isFunction(validateNewUser)) {
+      await validateNewUser(proposedUserObject);
+    }
+
+    const userId: string = await this.db.createUser(proposedUserObject);
       this.hooks.emit(ServerHooks.CreateUserSuccess, userId, userObject);
 
-      return userId;
+    return userId;
     } catch (error) {
       this.hooks.emit(ServerHooks.CreateUserError, error);
 
@@ -265,6 +286,60 @@ export class AccountsServer {
     this.hooks.on(eventName, callback);
 
     return () => this.hooks.removeListener(eventName, callback);
+  }
+
+  /**
+   * @description Impersonate to another user.
+   * @param {string} accessToken - User access token.
+   * @param {string} username - impersonated user username.
+   * @param {string} ip - The user ip.
+   * @param {string} userAgent - User user agent.
+   * @returns {Promise<Object>} - ImpersonateReturnType
+   */
+  // eslint-disable-next-line max-len
+  async impersonate(accessToken: string, username: string, ip: ?string, userAgent: ?string): Promise<ImpersonateReturnType> {
+    if (!isString(accessToken)) {
+      throw new AccountsError('An access token is required');
+    }
+
+    try {
+      jwt.verify(accessToken, this._options.tokenSecret, { ignoreExpiration: true });
+    } catch (err) {
+      throw new AccountsError('Access token is not valid');
+    }
+
+    const session = await this.findSessionByAccessToken(accessToken);
+    if (!session.valid) {
+      throw new AccountsError('Session is not valid for user');
+    }
+
+    const user = await this.db.findUserById(session.userId);
+    if (!user) {
+      throw new AccountsError('User not found');
+    }
+
+    const impersonatedUser = await this.db.findUserByUsername(username);
+    if (!impersonatedUser) {
+      throw new AccountsError(`User ${username} not found`);
+    }
+
+    if (!this._options.impersonationAuthorize) {
+      return { authorized: false };
+    }
+
+    const isAuthorized = await this._options.impersonationAuthorize(user, impersonatedUser);
+    if (!isAuthorized) {
+      return { authorized: false };
+    }
+
+
+    const newSessionId = await this.db.createSession(impersonatedUser.id, ip, userAgent);
+    const impersonationTokens = this.createTokens(newSessionId, true);
+    return {
+      authorized: true,
+      tokens: impersonationTokens,
+      user: impersonatedUser,
+    };
   }
 
   /**
@@ -328,13 +403,15 @@ export class AccountsServer {
   /**
    * @description Refresh a user token.
    * @param {string} sessionId - User session id.
+   * @param {boolean} isImpersonated - Should be true if impersonating another user.
    * @returns {Promise<Object>} - Return a new accessToken and refreshToken.
    */
-  createTokens(sessionId: string): TokensType {
+  createTokens(sessionId: string, isImpersonated: boolean = false): TokensType {
     const { tokenSecret = config.tokenSecret, tokenConfigs = config.tokenConfigs } = this._options;
     const accessToken = generateAccessToken({
       data: {
         sessionId,
+        isImpersonated,
       },
       secret: tokenSecret,
       config: tokenConfigs.accessToken || {},
@@ -492,8 +569,7 @@ export class AccountsServer {
     }
 
     const verificationTokens = get(user, ['services', 'email', 'verificationTokens'], []);
-    const tokenRecord = find(verificationTokens,
-                             (t: Object) => t.token === token);
+    const tokenRecord = find(verificationTokens, (t: Object) => t.token === token);
     if (!tokenRecord) {
       throw new AccountsError('Verify email link expired');
     }
@@ -511,26 +587,35 @@ export class AccountsServer {
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
    */
-  async resetPassword(token: string, newPassword: string): Promise<void> {
+  async resetPassword(token: string, newPassword: PasswordType): Promise<void> {
     const user = await this.db.findUserByResetPasswordToken(token);
     if (!user) {
       throw new AccountsError('Reset password link expired');
     }
-    const resetTokens = get(user, ['services', 'password', 'resetTokens']);
-    const resetTokenRecord = find(resetTokens,
-                                  (t: Object) => t.token === token);
-    if (!resetTokenRecord) {
+
+    // TODO move this getter into a password service module
+    const resetTokens = get(user, ['services', 'password', 'reset']);
+    const resetTokenRecord = find(resetTokens, (t: Object) => t.token === token);
+
+    if (this._isTokenExpired(token, resetTokenRecord)) {
       throw new AccountsError('Reset password link expired');
     }
-    // TODO check time for expiry date
+
     const emails = user.emails || [];
-    if (!includes(emails.map((email: Object) => email.address), resetTokenRecord.email)) {
+    if (!includes(emails.map((email: Object) => email.address), resetTokenRecord.address)) {
       throw new AccountsError('Token has invalid email address');
     }
+
+    const password = await this._hashAndBcryptPassword(newPassword);
     // Change the user password and remove the old token
-    await this.db.setResetPasssword(user.id, resetTokenRecord.email, newPassword, token);
+    await this.db.setResetPasssword(user.id, resetTokenRecord.address, password, token);
     // Changing the password should invalidate existing sessions
     this.db.invalidateAllSessions(user.id);
+  }
+
+  _isTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
+    return !tokenRecord ||
+      Number(tokenRecord.when) + this._options.emailTokensExpiry < Date.now();
   }
 
   /**
@@ -539,8 +624,9 @@ export class AccountsServer {
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
    */
-  setPassword(userId: string, newPassword: string): Promise<void> {
-    return this.db.setPasssword(userId, newPassword);
+  async setPassword(userId: string, newPassword: string): Promise<void> {
+    const password = await bcryptPassword(newPassword);
+    return this.db.setPasssword(userId, password);
   }
 
   /**
@@ -700,6 +786,12 @@ export class AccountsServer {
       throw new AccountsError('No such email address for user');
     }
     return address;
+  }
+
+  async _hashAndBcryptPassword(password: PasswordType): Promise<string> {
+    const hashAlgorithm = this._options.passwordHashAlgorithm;
+    const hashedPassword = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
+    return bcryptPassword(hashedPassword);
   }
 }
 

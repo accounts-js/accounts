@@ -12,10 +12,20 @@ import type {
   LoginReturnType,
   UserObjectType,
   TokensType,
+  PasswordType,
 } from '@accounts/common';
 import config from './config';
 import createStore from './createStore';
-import reducer, { loggingIn, setUser, clearUser, setTokens, clearTokens as clearStoreTokens } from './module';
+import reducer, {
+  loggingIn,
+  setUser,
+  clearUser,
+  setTokens,
+  clearTokens as clearStoreTokens,
+  setOriginalTokens,
+  setImpersonated,
+  clearOriginalTokens,
+} from './module';
 import { hashPassword } from './encryption';
 import type { TransportInterface } from './TransportInterface';
 import type { TokenStorage, AccountsClientConfiguration } from './config';
@@ -92,6 +102,49 @@ export class AccountsClient {
     return user ? user.toJS() : null;
   }
 
+  async impersonate(username: string): Promise<void> {
+    if (!isString(username)) {
+      throw new AccountsError('Username is required');
+    }
+    if (this.isImpersonated()) {
+      throw new AccountsError('User already impersonating');
+    }
+    const { accessToken, refreshToken } = await this.tokens();
+    const res = await this.transport.impersonate(accessToken, username);
+    if (!res.authorized) {
+      throw new AccountsError(`User unauthorized to impersonate ${username}`);
+    } else {
+      this.store.dispatch(setImpersonated(true));
+      this.store.dispatch(setOriginalTokens({ accessToken, refreshToken }));
+      await this.storeTokens(res);
+      this.store.dispatch(setTokens(res.tokens));
+      this.store.dispatch(setUser(res.user));
+      return res;
+    }
+  }
+
+  async stopImpersonation(): Promise<void> {
+    if (this.isImpersonated()) {
+      this.store.dispatch(setTokens(this.originalTokens()));
+      this.store.dispatch(clearOriginalTokens());
+      this.store.dispatch(setImpersonated(false));
+      await this.refreshSession();
+    }
+  }
+
+  isImpersonated(): boolean {
+    return (this.getState().get('isImpersonated'): boolean);
+  }
+
+  originalTokens(): TokensType {
+    const tokens = this.getState().get('originalTokens');
+
+    return tokens ? tokens.toJS() : {
+      accessToken: null,
+      refreshToken: null,
+    };
+  }
+
   tokens(): TokensType {
     const tokens = this.getState().get('tokens');
 
@@ -123,9 +176,15 @@ export class AccountsClient {
     this.store.dispatch(clearUser());
   }
 
-  resumeSession(): Promise<void> {
-    // TODO Should there be any additional resume session logic here?
-    return this.refreshSession();
+  async resumeSession(): Promise<void> {
+    try {
+      await this.refreshSession();
+      if (this.options.onResumedSessionHook && isFunction(this.options.onResumedSessionHook)) {
+        this.options.onResumedSessionHook();
+      }
+    } catch (err) {
+      throw (err);
+    }
   }
 
   async refreshSession(): Promise<void> {
@@ -141,7 +200,7 @@ export class AccountsClient {
           this.clearUser();
         } else {
           // Request a new token pair
-          const refreshedSession : LoginReturnType =
+          const refreshedSession: LoginReturnType =
             await this.transport.refreshTokens(accessToken, refreshToken);
           this.store.dispatch(loggingIn(false));
 
@@ -174,7 +233,9 @@ export class AccountsClient {
       );
     }
 
-    if (!validators.validatePassword(user.password)) {
+    // In case where password is an object we assume it was prevalidated and hashed
+    if (!user.password ||
+        (isString(user.password) && !validators.validatePassword(user.password))) {
       throw new AccountsError('Password is required');
     }
 
@@ -182,10 +243,22 @@ export class AccountsClient {
       throw new AccountsError('Username or Email is required');
     }
 
+    const hashAlgorithm = this.options.passwordHashAlgorithm;
+    const password = (user.password && hashAlgorithm) ?
+      hashPassword(user.password, hashAlgorithm) : user.password;
+    const userToCreate = { ...user, password };
     try {
-      const userId = await this.transport.createUser(user);
+      const userId = await this.transport.createUser(userToCreate);
+      const { onUserCreated } = this.options;
       if (callback && isFunction(callback)) {
         callback();
+      }
+      if (isFunction(onUserCreated)) {
+        try {
+          await onUserCreated({ id: userId });
+        } catch (err) {
+          console.log(err);
+        }
       }
       await this.loginWithPassword({ id: userId }, user.password);
     } catch (err) {
@@ -197,7 +270,7 @@ export class AccountsClient {
   }
 
   async loginWithPassword(user: PasswordLoginUserType,
-                          password: ?string,
+                          password: ?PasswordType,
                           callback?: Function): Promise<LoginReturnType> {
     if (!password || !user) {
       throw new AccountsError('Unrecognized options for login request', user, 400);
@@ -210,7 +283,7 @@ export class AccountsClient {
     try {
       const hashAlgorithm = this.options.passwordHashAlgorithm;
       const pass = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
-      const res : LoginReturnType = await this.transport.loginWithPassword(user, pass);
+      const res: LoginReturnType = await this.transport.loginWithPassword(user, pass);
 
       this.store.dispatch(loggingIn(false));
       await this.storeTokens(res);
@@ -261,6 +334,8 @@ export class AccountsClient {
         this.options.onSignedOutHook();
       }
     } catch (err) {
+      this.clearTokens();
+      this.store.dispatch(clearUser());
       if (callback && isFunction(callback)) {
         callback(err);
       }
@@ -277,8 +352,15 @@ export class AccountsClient {
   }
 
   async resetPassword(token: string, newPassword: string): Promise<void> {
+    if (!validators.validatePassword(newPassword)) {
+      throw new AccountsError('Password is invalid!');
+    }
+
+    const hashAlgorithm = this.options.passwordHashAlgorithm;
+    const password = hashAlgorithm ? hashPassword(newPassword, hashAlgorithm) : newPassword;
+
     try {
-      await this.transport.resetPassword(token, newPassword);
+      await this.transport.resetPassword(token, password);
     } catch (err) {
       throw new AccountsError(err.message);
     }
@@ -306,9 +388,8 @@ export class AccountsClient {
 const Accounts = {
   instance: AccountsClient,
   ui: {},
-  async config(
-    options: AccountsClientConfiguration,
-    transport: TransportInterface): Promise<AccountsClient> {
+  async config(options: AccountsClientConfiguration,
+               transport: TransportInterface): Promise<AccountsClient> {
     this.instance = new AccountsClient({
       ...config,
       ...options,
@@ -359,6 +440,18 @@ const Accounts = {
   },
   requestVerificationEmail(email?: string): Promise<void> {
     return this.instance.requestVerificationEmail(email);
+  },
+  impersonate(username: string): Promise<any> {
+    return this.instance.impersonate(username);
+  },
+  stopImpersonation(): Promise<void> {
+    return this.instance.stopImpersonation();
+  },
+  isImpersonated(): boolean {
+    return this.instance.isImpersonated();
+  },
+  originalTokens(): TokensType {
+    return this.instance.originalTokens();
   },
 };
 

@@ -15,6 +15,8 @@ import type {
   LoginReturnType,
   TokensType,
   SessionType,
+  PasswordType,
+  ImpersonateReturnType,
 } from './types';
 
 export type {
@@ -27,6 +29,8 @@ export type {
   SessionType,
   AccountsCommonConfiguration,
   HashAlgorithm,
+  PasswordType,
+  ImpersonateReturnType,
 };
 
 export {

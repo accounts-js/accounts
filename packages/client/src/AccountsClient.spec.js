@@ -86,7 +86,7 @@ describe('Accounts', () => {
       }
     });
     it('requires password', async () => {
-      Accounts.config({
+      await Accounts.config({
         history,
       }, {
         createUser: Promise.resolve(),
@@ -117,7 +117,7 @@ describe('Accounts', () => {
         expect(message).toEqual('Username or Email is required');
       }
     });
-    it('calls callback on succesfull user creation', async () => {
+    it('calls callback on successful user creation', async () => {
       const callback = jest.fn();
       const transport = {
         createUser: () => Promise.resolve(),
@@ -165,6 +165,27 @@ describe('Accounts', () => {
 
       expect(Accounts.instance.loginWithPassword.mock.calls[0][0]).toEqual({ id: '123' });
       expect(Accounts.instance.loginWithPassword.mock.calls[0][1]).toEqual('123456');
+    });
+    it('calls onUserCreated after successful user creation', async () => {
+      const onUserCreated = jest.fn();
+      const transport = {
+        createUser: () => Promise.resolve('123'),
+        loginWithPassword: () => Promise.resolve(loggedInUser),
+      };
+      Accounts.config({
+        history,
+        onUserCreated,
+      }, transport);
+
+      await Accounts.createUser({
+        password: '123456',
+        username: 'user',
+      });
+
+      expect(onUserCreated.mock.calls.length).toEqual(1);
+      expect(onUserCreated.mock.calls[0][0]).toEqual({
+        id: '123',
+      });
     });
   });
   describe('loginWithPassword', () => {
@@ -255,6 +276,15 @@ describe('Accounts', () => {
         expect(callback.mock.calls[0][0]).toEqual('error');
       }
     });
+    it('calls onSignedInHook on successful login', async () => {
+      const transport = {
+        loginWithPassword: () => Promise.resolve(loggedInUser),
+      };
+      const onSignedInHook = jest.fn();
+      Accounts.config({ history, onSignedInHook }, transport);
+      await Accounts.loginWithPassword('username', 'password');
+      expect(onSignedInHook.mock.calls.length).toEqual(1);
+    });
     it('sets loggingIn flag to false on failed login', async () => {
       const transport = {
         loginWithPassword: () => Promise.reject('error'),
@@ -323,10 +353,13 @@ describe('Accounts', () => {
         history,
         passwordHashAlgorithm: 'sha256',
       }, transport);
-      const hashDigest = crypto.createHash('sha256').update('password').digest('hex');
+      const hashed = {
+        digest: crypto.createHash('sha256').update('password').digest('hex'),
+        algorithm: 'sha256',
+      };
       await Accounts.loginWithPassword('username', 'password');
       expect(loginWithPassword.mock.calls[0][0]).toEqual('username');
-      expect(loginWithPassword.mock.calls[0][1]).toEqual(hashDigest);
+      expect(loginWithPassword.mock.calls[0][1]).toEqual(hashed);
       expect(loginWithPassword.mock.calls.length).toEqual(1);
     });
   });
@@ -371,8 +404,9 @@ describe('Accounts', () => {
       const transport = {
         logout: () => Promise.reject({ message: 'error message' }),
       };
-      Accounts.instance.storeTokens({ tokens: { accessToken: '1' } });
       Accounts.config({ history }, transport);
+      await Accounts.instance.storeTokens({ tokens: { accessToken: '1' } });
+      await Accounts.instance.loadTokensFromStorage();
       const callback = jest.fn();
       try {
         await Accounts.logout(callback);
@@ -484,12 +518,22 @@ describe('Accounts', () => {
   describe('resetPassword', () => {
     it('should return an AccountsError', async () => {
       const error = 'something bad';
-      Accounts.config({}, { resetPassword: () => Promise.reject({ message: error }) });
+      await Accounts.config({}, { resetPassword: () => Promise.reject({ message: error }) });
+      try {
+        await Accounts.resetPassword('badtoken', 'password');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual(error);
+      }
+    });
+
+    it('throws if password is invalid', async () => {
+      await Accounts.config({}, {});
       try {
         await Accounts.resetPassword();
         throw new Error();
       } catch (err) {
-        expect(err.message).toEqual(error);
+        expect(err.message).toEqual('Password is invalid!');
       }
     });
 
@@ -566,6 +610,134 @@ describe('Accounts', () => {
         expect(err.message).toEqual('Valid email must be provided');
         expect(mock.mock.calls.length).toEqual(0);
       }
+    });
+  });
+
+  describe('impersonate', () => {
+    it('should throw error if username is not provided', async () => {
+      await Accounts.config({ history }, {});
+
+      try {
+        await Accounts.impersonate();
+      } catch (err) {
+        expect(err.message).toEqual('Username is required');
+      }
+    });
+
+    it('should throw error if already impersonating', async () => {
+      await Accounts.config({ history }, {});
+      Accounts.instance.isImpersonated = () => true;
+
+      try {
+        await Accounts.impersonate('user');
+      } catch (err) {
+        expect(err.message).toEqual('User already impersonating');
+      }
+    });
+
+    it('should throw if server return unauthorized', async () => {
+      const transport = {
+        impersonate: () => Promise.resolve({ authorized: false }),
+      };
+      await Accounts.config({ history }, transport);
+
+      try {
+        await Accounts.impersonate('user');
+      } catch (err) {
+        expect(err.message).toEqual('User unauthorized to impersonate user');
+      }
+    });
+
+    it('should set state correctly if impersonation was authorized', async () => {
+      const impersonatedUser = { id: 2, username: 'impUser' };
+      const impersonateResult = {
+        authorized: true,
+        tokens: { accessToken: 'newAccessToken', refreshToken: 'newRefreshToken' },
+        user: impersonatedUser,
+      };
+
+      const transport = {
+        loginWithPassword: () => Promise.resolve(loggedInUser),
+        impersonate: () => Promise.resolve(impersonateResult),
+      };
+      await Accounts.config({ history }, transport);
+      await Accounts.loginWithPassword('username', 'password');
+
+      const result = await Accounts.impersonate('impUser');
+      const tokens = Accounts.tokens();
+      expect(tokens).toEqual({
+        accessToken: 'newAccessToken',
+        refreshToken: 'newRefreshToken',
+      });
+      expect(Accounts.user()).toEqual(impersonatedUser);
+      expect(Accounts.isImpersonated()).toBe(true);
+      expect(Accounts.tokens());
+      expect(Accounts.originalTokens()).toEqual({
+        accessToken: 'accessToken',
+        refreshToken: 'refreshToken',
+      });
+      expect(result).toBe(impersonateResult);
+    });
+  });
+
+  describe('stopImpersonation', () => {
+    it('should not replace tokens if not impersonating', async () => {
+      const transport = {
+        loginWithPassword: () => Promise.resolve(loggedInUser),
+      };
+      await Accounts.config({ history }, transport);
+
+      await Accounts.loginWithPassword('username', 'password');
+
+      expect(Accounts.originalTokens()).toEqual({ accessToken: null, refreshToken: null });
+      expect(Accounts.tokens()).toEqual(loggedInUser.tokens);
+      await Accounts.stopImpersonation();
+      expect(Accounts.originalTokens()).toEqual({ accessToken: null, refreshToken: null });
+      expect(Accounts.tokens()).toEqual(loggedInUser.tokens);
+    });
+
+    it('should set impersonated state to false', async () => {
+      const impersonateResult = {
+        authorized: true,
+        tokens: { accessToken: 'newAccessToken', refreshToken: 'newRefreshToken' },
+        user: { id: 2, username: 'impUser' },
+      };
+      const transport = {
+        impersonate: () => Promise.resolve(impersonateResult),
+      };
+
+      await Accounts.config({ history }, transport);
+      Accounts.instance.refreshSession = () => Promise.resolve();
+
+      await Accounts.impersonate('impUser');
+      expect(Accounts.isImpersonated()).toBe(true);
+      await Accounts.stopImpersonation();
+      expect(Accounts.isImpersonated()).toBe(false);
+    });
+
+    it('should set the original tokens as current tokens and delete original tokens', async () => {
+      const impersonateResult = {
+        authorized: true,
+        tokens: { accessToken: 'newAccessToken', refreshToken: 'newRefreshToken' },
+        user: { id: 2, username: 'impUser' },
+      };
+      const transport = {
+        loginWithPassword: () => Promise.resolve(loggedInUser),
+        impersonate: () => Promise.resolve(impersonateResult),
+      };
+
+      await Accounts.config({ history }, transport);
+      Accounts.instance.refreshSession = () => Promise.resolve();
+
+      await Accounts.loginWithPassword('username', 'password');
+      const tokens = Accounts.tokens();
+
+
+      await Accounts.impersonate('impUser');
+      expect(Accounts.tokens()).toEqual({ accessToken: 'newAccessToken', refreshToken: 'newRefreshToken' });
+      await Accounts.stopImpersonation();
+      expect(Accounts.tokens()).toEqual(tokens);
+      expect(Accounts.originalTokens()).toEqual({ accessToken: null, refreshToken: null });
     });
   });
 });
