@@ -13,6 +13,7 @@ import type {
   UserObjectType,
   TokensType,
   PasswordType,
+  ImpersonateReturnType,
 } from '@accounts/common';
 import config from './config';
 import createStore from './createStore';
@@ -102,7 +103,7 @@ export class AccountsClient {
     return user ? user.toJS() : null;
   }
 
-  async impersonate(username: string): Promise<void> {
+  async impersonate(username: string): Promise<ImpersonateReturnType> {
     if (!isString(username)) {
       throw new AccountsError('Username is required');
     }
@@ -110,13 +111,18 @@ export class AccountsClient {
       throw new AccountsError('User already impersonating');
     }
     const { accessToken, refreshToken } = await this.tokens();
+
+    if (!accessToken) {
+      throw new AccountsError('There is no access tokens available');
+    }
+
     const res = await this.transport.impersonate(accessToken, username);
     if (!res.authorized) {
       throw new AccountsError(`User unauthorized to impersonate ${username}`);
     } else {
       this.store.dispatch(setImpersonated(true));
       this.store.dispatch(setOriginalTokens({ accessToken, refreshToken }));
-      await this.storeTokens(res);
+      await this.storeTokens(res.tokens);
       this.store.dispatch(setTokens(res.tokens));
       this.store.dispatch(setUser(res.user));
       return res;
@@ -160,15 +166,17 @@ export class AccountsClient {
     await this.removeStorageData(getTokenKey(REFRESH_TOKEN, this.options));
   }
 
-  async storeTokens(loginResponse: LoginReturnType): Promise<void> {
-    const newAccessToken = loginResponse.tokens.accessToken;
-    if (newAccessToken) {
-      await this.setStorageData(getTokenKey(ACCESS_TOKEN, this.options), newAccessToken);
-    }
+  async storeTokens(tokens: ?TokensType): Promise<void> {
+    if (tokens) {
+      const newAccessToken = tokens.accessToken;
+      if (newAccessToken) {
+        await this.setStorageData(getTokenKey(ACCESS_TOKEN, this.options), newAccessToken);
+      }
 
-    const newRefreshToken = loginResponse.tokens.refreshToken;
-    if (newRefreshToken) {
-      await this.setStorageData(getTokenKey(REFRESH_TOKEN, this.options), newRefreshToken);
+      const newRefreshToken = tokens.refreshToken;
+      if (newRefreshToken) {
+        await this.setStorageData(getTokenKey(REFRESH_TOKEN, this.options), newRefreshToken);
+      }
     }
   }
 
@@ -204,7 +212,7 @@ export class AccountsClient {
             await this.transport.refreshTokens(accessToken, refreshToken);
           this.store.dispatch(loggingIn(false));
 
-          await this.storeTokens(refreshedSession);
+          await this.storeTokens(refreshedSession.tokens);
           this.store.dispatch(setTokens(refreshedSession.tokens));
           this.store.dispatch(setUser(refreshedSession.user));
         }
@@ -286,7 +294,7 @@ export class AccountsClient {
       const res: LoginReturnType = await this.transport.loginWithPassword(user, pass);
 
       this.store.dispatch(loggingIn(false));
-      await this.storeTokens(res);
+      await this.storeTokens(res.tokens);
       this.store.dispatch(setTokens(res.tokens));
       this.store.dispatch(setUser(res.user));
 

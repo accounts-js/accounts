@@ -387,7 +387,7 @@ describe('Accounts', () => {
       const transport = {
         logout: () => Promise.reject({ message: 'error message' }),
       };
-      await Accounts.instance.storeTokens({ tokens: { accessToken: '1' } });
+      await Accounts.instance.storeTokens({ accessToken: '1' });
       await Accounts.config({ history }, transport);
       const callback = jest.fn();
       try {
@@ -635,10 +635,25 @@ describe('Accounts', () => {
       }
     });
 
+    it('should throw if no access token is present', async () => {
+      const transport = {
+        impersonate: jest.fn(() => Promise.resolve({ authorized: false })),
+      };
+      await Accounts.config({ history }, transport);
+
+      try {
+        await Accounts.impersonate('user');
+      } catch (err) {
+        expect(err.message).toEqual('There is no access tokens available');
+        expect(transport.impersonate.mock.calls.length).toEqual(0);
+      }
+    });
+
     it('should throw if server return unauthorized', async () => {
       const transport = {
         impersonate: () => Promise.resolve({ authorized: false }),
       };
+      await Accounts.instance.storeTokens({ accessToken: '1' });
       await Accounts.config({ history }, transport);
 
       try {
@@ -706,6 +721,7 @@ describe('Accounts', () => {
         impersonate: () => Promise.resolve(impersonateResult),
       };
 
+      await Accounts.instance.storeTokens({ accessToken: '1' });
       await Accounts.config({ history }, transport);
       Accounts.instance.refreshSession = () => Promise.resolve();
 

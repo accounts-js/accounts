@@ -5,6 +5,7 @@ import type {
   PasswordLoginUserType,
   LoginReturnType,
   PasswordType,
+  ImpersonateReturnType,
 } from '@accounts/common';
 
 export interface TransportInterface {
@@ -16,5 +17,5 @@ export interface TransportInterface {
   resetPassword(token: string, newPassword: PasswordType): Promise<void>,
   sendResetPasswordEmail(email: string): Promise<void>,
   sendVerificationEmail(email: string): Promise<void>,
-  impersonate(token: string, username: string): Promise<void>
+  impersonate(token: string, username: string): Promise<ImpersonateReturnType>
 }
