@@ -101,8 +101,10 @@ export class AccountsClient {
 
   async loadOriginalTokensFromStorage(): Promise<void> {
     const tokens = {
-      accessToken: await this.getStorageData(getTokenKey(ORIGINAL_ACCESS_TOKEN, this.options)) || null,
-      refreshToken: await this.getStorageData(getTokenKey(ORIGINAL_REFRESH_TOKEN, this.options)) || null,
+      accessToken: await this.getStorageData(
+        getTokenKey(ORIGINAL_ACCESS_TOKEN, this.options)) || null,
+      refreshToken: await this.getStorageData(
+        getTokenKey(ORIGINAL_REFRESH_TOKEN, this.options)) || null,
     };
     this.store.dispatch(setOriginalTokens(tokens));
   }
@@ -199,12 +201,14 @@ export class AccountsClient {
     if (tokens) {
       const originalAccessToken = tokens.accessToken;
       if (originalAccessToken) {
-        await this.setStorageData(getTokenKey(ORIGINAL_ACCESS_TOKEN, this.options), originalAccessToken);
+        await this.setStorageData(
+          getTokenKey(ORIGINAL_ACCESS_TOKEN, this.options), originalAccessToken);
       }
 
       const originalRefreshToken = tokens.refreshToken;
       if (originalRefreshToken) {
-        await this.setStorageData(getTokenKey(ORIGINAL_REFRESH_TOKEN, this.options), originalRefreshToken);
+        await this.setStorageData(
+          getTokenKey(ORIGINAL_REFRESH_TOKEN, this.options), originalRefreshToken);
       }
     }
   }
