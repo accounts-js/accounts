@@ -318,7 +318,7 @@ describe('Accounts', () => {
       });
       Accounts.createTokens = (sessionId, isImpersonated) => ({ sessionId, isImpersonated });
 
-      const res = await Accounts.impersonate(accessToken, 'impUser');
+      await Accounts.impersonate(accessToken, 'impUser');
 
       expect(hookSpy.mock.calls.length).toBe(1);
     });
