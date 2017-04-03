@@ -178,16 +178,7 @@ export class AccountsServer {
         throw new AccountsError('User not found', user, 403);
       }
 
-      const sessionId = await this.db.createSession(foundUser.id, ip, userAgent);
-      const { accessToken, refreshToken } = this.createTokens(sessionId);
-      const loginResult = {
-        sessionId,
-        user: foundUser,
-        tokens: {
-          refreshToken,
-          accessToken,
-        },
-      };
+      const loginResult = await this.loginWithUser(foundUser, ip, userAgent);
 
       this.hooks.emit(ServerHooks.LoginSuccess, loginResult);
 
@@ -237,6 +228,32 @@ export class AccountsServer {
     }
 
     return foundUser;
+  }
+
+  /**
+   * @description Server use only. This method creates a session
+   *              without authenticating any user identity.
+   *              Any authentication should happen before calling this function.
+   * @param {UserObjectType} userId - The user object.
+   * @param {string} ip - User's ip.
+   * @param {string} userAgent - User's client agent.
+   * @returns {Promise<LoginReturnType>} - Session tokens and user object.
+   */
+  // eslint-disable-next-line max-len
+  async loginWithUser(user: UserObjectType, ip?: ?string, userAgent?: ?string): Promise<LoginReturnType> {
+    const sessionId = await this.db.createSession(user.id, ip, userAgent);
+    const { accessToken, refreshToken } = this.createTokens(sessionId);
+
+    const loginResult = {
+      sessionId,
+      user,
+      tokens: {
+        refreshToken,
+        accessToken,
+      },
+    };
+
+    return loginResult;
   }
 
   /**
