@@ -1,6 +1,6 @@
 {
   "name": "@accounts/common",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "jsnext:main": "lib-es6/index.js",
