@@ -693,6 +693,44 @@ describe('Accounts', () => {
       });
       expect(result).toBe(impersonateResult);
     });
+
+    it('should save impersonation state and persist it in the storage', async () => {
+      const impersonatedUser = { id: 2, username: 'impUser' };
+      const impersonateResult = {
+        authorized: true,
+        tokens: { accessToken: 'newAccessToken', refreshToken: 'newRefreshToken' },
+        user: impersonatedUser,
+      };
+
+      const transport = {
+        loginWithPassword: () => Promise.resolve(loggedInUser),
+        impersonate: () => Promise.resolve(impersonateResult),
+      };
+      await Accounts.config({ history }, transport);
+      await Accounts.loginWithPassword('username', 'password');
+      Accounts.instance.storeTokens = jest.fn();
+      await Accounts.impersonate('impUser');
+      expect(Accounts.instance.storeTokens.mock.calls.length).toBe(1);
+    });
+
+    it('should not save persist impersonation when persistImpersonation=false', async () => {
+      const impersonatedUser = { id: 2, username: 'impUser' };
+      const impersonateResult = {
+        authorized: true,
+        tokens: { accessToken: 'newAccessToken', refreshToken: 'newRefreshToken' },
+        user: impersonatedUser,
+      };
+
+      const transport = {
+        loginWithPassword: () => Promise.resolve(loggedInUser),
+        impersonate: () => Promise.resolve(impersonateResult),
+      };
+      await Accounts.config({ history, persistImpersonation: false }, transport);
+      await Accounts.loginWithPassword('username', 'password');
+      Accounts.instance.storeTokens = jest.fn();
+      await Accounts.impersonate('impUser');
+      expect(Accounts.instance.storeTokens.mock.calls.length).toBe(0);
+    });
   });
 
   describe('stopImpersonation', () => {

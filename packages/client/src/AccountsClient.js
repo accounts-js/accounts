@@ -35,6 +35,8 @@ const isValidUserObject = (user: PasswordLoginUserIdentityType) => has(user, 'us
 
 const ACCESS_TOKEN = 'accounts:accessToken';
 const REFRESH_TOKEN = 'accounts:refreshToken';
+const ORIGINAL_ACCESS_TOKEN = 'accounts:originalAccessToken';
+const ORIGINAL_REFRESH_TOKEN = 'accounts:originalRefreshToken';
 
 const getTokenKey = (type: string, options: Object) =>
   (isString(options.tokenStoragePrefix) && options.tokenStoragePrefix.length > 0 ? `${options.tokenStoragePrefix}:${type}` : type);
@@ -91,10 +93,20 @@ export class AccountsClient {
 
   async loadTokensFromStorage(): Promise<void> {
     const tokens = {
-      accessToken: await this.getStorageData(getTokenKey(ACCESS_TOKEN, this.options)),
-      refreshToken: await this.getStorageData(getTokenKey(REFRESH_TOKEN, this.options)),
+      accessToken: await this.getStorageData(getTokenKey(ACCESS_TOKEN, this.options)) || null,
+      refreshToken: await this.getStorageData(getTokenKey(REFRESH_TOKEN, this.options)) || null,
     };
     this.store.dispatch(setTokens(tokens));
+  }
+
+  async loadOriginalTokensFromStorage(): Promise<void> {
+    const tokens = {
+      accessToken: await this.getStorageData(
+        getTokenKey(ORIGINAL_ACCESS_TOKEN, this.options)) || null,
+      refreshToken: await this.getStorageData(
+        getTokenKey(ORIGINAL_REFRESH_TOKEN, this.options)) || null,
+    };
+    this.store.dispatch(setOriginalTokens(tokens));
   }
 
   user(): UserObjectType | null {
@@ -120,9 +132,15 @@ export class AccountsClient {
     if (!res.authorized) {
       throw new AccountsError(`User unauthorized to impersonate ${username}`);
     } else {
+      const { persistImpersonation } = this.options;
       this.store.dispatch(setImpersonated(true));
       this.store.dispatch(setOriginalTokens({ accessToken, refreshToken }));
-      await this.storeTokens(res.tokens);
+
+      if (persistImpersonation) {
+        await this.storeOriginalTokens({ accessToken, refreshToken });
+        await this.storeTokens(res.tokens);
+      }
+
       this.store.dispatch(setTokens(res.tokens));
       this.store.dispatch(setUser(res.user));
       return res;
@@ -176,6 +194,21 @@ export class AccountsClient {
       const newRefreshToken = tokens.refreshToken;
       if (newRefreshToken) {
         await this.setStorageData(getTokenKey(REFRESH_TOKEN, this.options), newRefreshToken);
+      }
+    }
+  }
+  async storeOriginalTokens(tokens: ?TokensType): Promise<void> {
+    if (tokens) {
+      const originalAccessToken = tokens.accessToken;
+      if (originalAccessToken) {
+        await this.setStorageData(
+          getTokenKey(ORIGINAL_ACCESS_TOKEN, this.options), originalAccessToken);
+      }
+
+      const originalRefreshToken = tokens.refreshToken;
+      if (originalRefreshToken) {
+        await this.setStorageData(
+          getTokenKey(ORIGINAL_REFRESH_TOKEN, this.options), originalRefreshToken);
       }
     }
   }
@@ -403,7 +436,10 @@ const Accounts = {
       ...options,
     }, transport);
 
-    return this.instance.loadTokensFromStorage().then(() => this.instance);
+    await this.instance.loadTokensFromStorage();
+    await this.instance.loadOriginalTokensFromStorage();
+
+    return this.instance;
   },
   user(): UserObjectType | null {
     return this.instance.user();

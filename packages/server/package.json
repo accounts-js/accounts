@@ -1,6 +1,6 @@
 {
   "name": "@accounts/server",
-  "version": "0.0.11",
+  "version": "0.0.15",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "jsnext:main": "lib-es6/index.js",
@@ -48,7 +48,7 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "dependencies": {
-    "@accounts/common": "^0.0.11",
+    "@accounts/common": "^0.0.15",
     "babel-polyfill": "^6.23.0",
     "bcryptjs": "^2.4.0",
     "crypto": "^0.0.3",

@@ -39,7 +39,8 @@ export type AccountsClientConfiguration = AccountsCommonConfiguration & {
   onResumedSessionHook?: Function,
   onUserCreated?: (user: ?Object) => Promise<any>,
   loginOnSignUp?: boolean,
-  history?: Object
+  history?: Object,
+  persistImpersonation?: boolean
 };
 
 export default {
@@ -72,4 +73,5 @@ export default {
   onSignedInHook: () => redirect(AccountsClient.options().homePath || '/'),
   onSignedOutHook: () => redirect(AccountsClient.options().signOutPath || '/'),
   loginOnSignUp: true,
+  persistImpersonation: true,
 };
