@@ -20,6 +20,8 @@ export type TokenConfig = {
 
 type EmailType = EmailTemplateType & { to: string };
 export type SendMailFunction = (emailConfig: EmailType | Object) => Promise<void>;
+export type UserObjectSanitizerFunction =
+  (userObject: UserObjectType, omitFunction: Function, pickFunction: Function) => any;
 // eslint-disable-next-line max-len
 export type PrepareMailFunction = (to: string, token: string, user: UserObjectType, pathFragment: string, emailTemplate: EmailTemplateType, from: string) => Object;
 
@@ -34,7 +36,8 @@ export type AccountsServerConfiguration = AccountsCommonConfiguration & {
   email?: Object,
   emailTokensExpiry?: number,
   impersonationAuthorize: (user: UserObjectType, impersonateToUser: UserObjectType) => Promise<any>,
-  validateNewUser?: (user: UserObjectType) => Promise<boolean>
+  validateNewUser?: (user: UserObjectType) => Promise<boolean>,
+  userObjectSanitizer?: UserObjectSanitizerFunction
 };
 
 export default {
@@ -48,6 +51,7 @@ export default {
       expiresIn: '1d',
     },
   },
+  userObjectSanitizer: (user: UserObjectType) => user,
   emailTokensExpiry: 1000 * 3600, // 1 hour in milis
   // TODO Investigate oauthSecretKey
   // oauthSecretKey

@@ -1,6 +1,6 @@
 // @flow
 
-import { isString, isPlainObject, isFunction, find, includes, get } from 'lodash';
+import { pick, omit, isString, isPlainObject, isFunction, find, includes, get } from 'lodash';
 import EventEmitter from 'events';
 import jwt from 'jsonwebtoken';
 import {
@@ -246,7 +246,7 @@ export class AccountsServer {
 
     const loginResult = {
       sessionId,
-      user,
+      user: this._sanitizeUser(user),
       tokens: {
         refreshToken,
         accessToken,
@@ -368,7 +368,7 @@ export class AccountsServer {
       const impersonationResult = {
         authorized: true,
         tokens: impersonationTokens,
-        user: impersonatedUser,
+        user: this._sanitizeUser(impersonatedUser),
       };
 
       this.hooks.emit(ServerHooks.ImpersonationSuccess, user, impersonationResult);
@@ -422,7 +422,7 @@ export class AccountsServer {
 
         const result = {
           sessionId,
-          user,
+          user: this._sanitizeUser(user),
           tokens,
         };
 
@@ -479,7 +479,7 @@ export class AccountsServer {
         }
 
         await this.db.invalidateSession(session.sessionId);
-        this.hooks.emit(ServerHooks.LogoutSuccess, user, session, accessToken);
+        this.hooks.emit(ServerHooks.LogoutSuccess, this._sanitizeUser(user), session, accessToken);
       } else { // eslint-disable-line no-else-return
         throw new AccountsError('Session is no longer valid', { id: session.userId });
       }
@@ -511,7 +511,7 @@ export class AccountsServer {
 
         this.hooks.emit(ServerHooks.ResumeSessionSuccess, user, accessToken);
 
-        return user;
+        return this._sanitizeUser(user);
       }
 
       this.hooks.emit(ServerHooks.ResumeSessionError, new AccountsError('Invalid Session', { id: session.userId }));
@@ -694,8 +694,7 @@ export class AccountsServer {
     if (!user) {
       throw new AccountsError('User not found', { id: userId });
     }
-    const res = await this.db.setProfile(userId, { ...user.profile, ...profile });
-    return res;
+    return this.db.setProfile(userId, { ...user.profile, ...profile });
   }
 
   /**
@@ -726,7 +725,7 @@ export class AccountsServer {
     const resetPasswordMail = this._prepareMail(
       address,
       token,
-      user,
+      this._sanitizeUser(user),
       'verify-email',
       this.emailTemplates.verifyEmail,
       this.emailTemplates.from,
@@ -754,7 +753,7 @@ export class AccountsServer {
     const resetPasswordMail = this._prepareMail(
       address,
       token,
-      user,
+      this._sanitizeUser(user),
       'reset-password',
       this.emailTemplates.resetPassword,
       this.emailTemplates.from,
@@ -782,13 +781,23 @@ export class AccountsServer {
     const enrollmentMail = this._prepareMail(
       address,
       token,
-      user,
+      this._sanitizeUser(user),
       'enroll-account',
       this.emailTemplates.enrollAccount,
       this.emailTemplates.from,
     );
 
     await this.email.sendMail(enrollmentMail);
+  }
+
+  _internalUserSanitizer(user: UserObjectType): UserObjectType {
+    return omit(user, ['services']);
+  }
+
+  _sanitizeUser(user: UserObjectType): UserObjectType {
+    const { userObjectSanitizer } = this.options();
+
+    return userObjectSanitizer(this._internalUserSanitizer(user), omit, pick);
   }
 
   _prepareMail(...args: Array<any>): any {
