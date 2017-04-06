@@ -9,6 +9,8 @@
   },
   "scripts": {
     "start": "webpack -p --config --progress --watch",
+    "clean": "rimraf lib lib-es6",
+    "precompile": "npm run clean",
     "compile": "npm run compile:es6 && npm run compile:umd",
     "compile:es6": "babel ./src --out-dir ./lib-es6",
     "compile:umd": "webpack",
@@ -75,6 +77,7 @@
     "jest": "^18.0.0",
     "localstorage-polyfill": "^1.0.1",
     "regenerator-runtime": "^0.9.6",
+    "rimraf": "^2.6.1",
     "webpack": "^1.13.3",
     "webpack-node-externals": "^1.5.4"
   }

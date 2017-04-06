@@ -3,6 +3,7 @@
   "scripts": {
     "start": "lerna exec -- npm start",
     "link": "lerna exec -- npm link",
+    "clean": "lerna run clean",
     "compile": "lerna run compile",
     "lint": "eslint packages/*/src",
     "flow:check": "lerna run flow:check",
