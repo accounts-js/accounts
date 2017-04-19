@@ -195,7 +195,7 @@ export class AccountsServer {
     return authFn(user, password);
   }
 
-  _validateLoginWithField(fieldName: string, user: PasswordLoginUserType): void {
+  _validateLoginWithField(fieldName: string, user: PasswordLoginUserType) {
     const allowedFields = this._options.allowedLoginFields || [];
     const isAllowed = allowedFields.includes(fieldName);
 

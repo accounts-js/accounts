@@ -362,7 +362,7 @@ describe('Accounts', () => {
 
     it('override allowedLoginFields values', () => {
       const testDB = {};
-      Accounts.config({ allowedLoginFields: ['id']}, testDB);
+      Accounts.config({ allowedLoginFields: ['id'] }, testDB);
       expect(Accounts._options.allowedLoginFields).toEqual(['id']);
     });
 
