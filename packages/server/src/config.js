@@ -37,7 +37,8 @@ export type AccountsServerConfiguration = AccountsCommonConfiguration & {
   emailTokensExpiry?: number,
   impersonationAuthorize: (user: UserObjectType, impersonateToUser: UserObjectType) => Promise<any>,
   validateNewUser?: (user: UserObjectType) => Promise<boolean>,
-  userObjectSanitizer?: UserObjectSanitizerFunction
+  userObjectSanitizer?: UserObjectSanitizerFunction,
+  allowedLoginFields?: string[]
 };
 
 export default {
@@ -52,6 +53,7 @@ export default {
     },
   },
   userObjectSanitizer: (user: UserObjectType) => user,
+  allowedLoginFields: ['id', 'email', 'username'],
   emailTokensExpiry: 1000 * 3600, // 1 hour in milis
   // TODO Investigate oauthSecretKey
   // oauthSecretKey

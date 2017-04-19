@@ -359,6 +359,18 @@ describe('Accounts', () => {
       Accounts.config({}, testDB);
       expect(Accounts._options.passwordAuthenticator).toBeUndefined();
     });
+
+    it('override allowedLoginFields values', () => {
+      const testDB = {};
+      Accounts.config({ allowedLoginFields: ['id']}, testDB);
+      expect(Accounts._options.allowedLoginFields).toEqual(['id']);
+    });
+
+    it('default allowedLoginFields values', () => {
+      const testDB = {};
+      Accounts.config({}, testDB);
+      expect(Accounts._options.allowedLoginFields).toEqual(['id', 'email', 'username']);
+    });
   });
 
   describe('options', () => {
@@ -631,6 +643,56 @@ describe('Accounts', () => {
       expect(decodedAccessToken.data.sessionId).toEqual('sessionId');
       expect(accessToken).toBeTruthy();
       expect(refreshToken).toBeTruthy();
+    });
+
+    it('try to login using id and password when id login is not allowed', async () => {
+      const hash = bcryptPassword('1234567');
+      const user = {
+        id: '123',
+        username: 'username',
+        email: 'email@email.com',
+        profile: {
+          bio: 'bio',
+        },
+      };
+      const findUserById = jest.fn(() => Promise.resolve(user));
+      Accounts.config({
+        allowedLoginFields: ['email'],
+      }, {
+        findUserById,
+        findPasswordHash: () => Promise.resolve(hash),
+        createSession: () => Promise.resolve('sessionId'),
+      });
+
+      try {
+        await Accounts.loginWithPassword({ id: '123' }, '1234567');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('Login with id is not allowed!');
+      }
+    });
+
+    it('try to login using id and password when id login only is allowed ', async () => {
+      const hash = bcryptPassword('1234567');
+      const user = {
+        id: '123',
+        username: 'username',
+        email: 'email@email.com',
+        profile: {
+          bio: 'bio',
+        },
+      };
+      const findUserById = jest.fn(() => Promise.resolve(user));
+      Accounts.config({
+        allowedLoginFields: ['id'],
+      }, {
+        findUserById,
+        findPasswordHash: () => Promise.resolve(hash),
+        createSession: () => Promise.resolve('sessionId'),
+      });
+
+      const res = await Accounts.loginWithPassword({ id: '123' }, '1234567');
+      expect(res).toBeDefined();
     });
 
     it('supports hashed password from the client', async () => {
