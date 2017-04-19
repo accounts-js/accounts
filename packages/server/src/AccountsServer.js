@@ -195,6 +195,15 @@ export class AccountsServer {
     return authFn(user, password);
   }
 
+  _validateLoginWithField(fieldName: string, user: PasswordLoginUserType) {
+    const allowedFields = this._options.allowedLoginFields || [];
+    const isAllowed = allowedFields.includes(fieldName);
+
+    if (!isAllowed) {
+      throw new AccountsError(`Login with ${fieldName} is not allowed!`, user);
+    }
+  }
+
   // eslint-disable-next-line max-len
   async _defaultPasswordAuthenticator(user: PasswordLoginUserType, password: PasswordType): Promise<any> {
     const { username, email, id } = isString(user)
@@ -204,10 +213,13 @@ export class AccountsServer {
     let foundUser;
 
     if (id) {
+      this._validateLoginWithField('id', user);
       foundUser = await this.db.findUserById(id);
     } else if (username) {
+      this._validateLoginWithField('username', user);
       foundUser = await this.db.findUserByUsername(username);
     } else if (email) {
+      this._validateLoginWithField('email', user);
       foundUser = await this.db.findUserByEmail(email);
     }
 
