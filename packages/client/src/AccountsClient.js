@@ -19,6 +19,7 @@ import config from './config';
 import createStore from './createStore';
 import reducer, {
   loggingIn,
+  setLoading,
   setUser,
   clearUser,
   setTokens,
@@ -48,7 +49,7 @@ export class AccountsClient {
   storage: TokenStorage;
 
   constructor(options: AccountsClientConfiguration, transport: TransportInterface) {
-    this.options = options;
+    this.options = { ...config, ...options };
     this.storage = options.tokenStorage || config.tokenStorage;
     if (!transport) {
       throw new AccountsError('A REST or GraphQL transport is required');
@@ -67,6 +68,19 @@ export class AccountsClient {
       },
       middleware,
     });
+
+    this.setup();
+  }
+
+  async setup(): void {
+    this.store.dispatch(setLoading(true));
+    await this.loadTokensFromStorage();
+    await this.loadOriginalTokensFromStorage();
+    const { accessToken, refreshToken } = await this.tokens();
+    if (accessToken && refreshToken) {
+      await this.resumeSession();
+    }
+    this.store.dispatch(setLoading(false));
   }
 
   getState(): Map<string, any> {
@@ -424,88 +438,8 @@ export class AccountsClient {
       throw new AccountsError(err.message);
     }
   }
+
+  changeRoute(path: string) {
+    this.options.changeRoute(path);
+  }
 }
-
-const Accounts = {
-  instance: AccountsClient,
-  ui: {},
-  async config(options: AccountsClientConfiguration,
-               transport: TransportInterface): Promise<AccountsClient> {
-    this.instance = new AccountsClient({
-      ...config,
-      ...options,
-    }, transport);
-
-    await this.instance.loadTokensFromStorage();
-    await this.instance.loadOriginalTokensFromStorage();
-
-    return this.instance;
-  },
-  user(): UserObjectType | null {
-    return this.instance.user();
-  },
-  options(): AccountsClientConfiguration {
-    return this.instance.options;
-  },
-  createUser(user: CreateUserType, callback: ?Function): Promise<void> {
-    return this.instance.createUser(user, callback);
-  },
-  loginWithPassword(user: PasswordLoginUserType,
-                    password: string,
-                    callback?: Function): Promise<void> {
-    return this.instance.loginWithPassword(user, password, callback);
-  },
-  loggingIn(): boolean {
-    return this.instance.loggingIn();
-  },
-  isLoading(): boolean {
-    return this.instance.isLoading();
-  },
-  logout(callback: ?Function): Promise<void> {
-    return this.instance.logout(callback);
-  },
-  tokens(): TokensType {
-    return this.instance.tokens();
-  },
-  resumeSession(): Promise<void> {
-    return this.instance.resumeSession();
-  },
-  refreshSession(): Promise<void> {
-    return this.instance.refreshSession();
-  },
-  verifyEmail(token: string): Promise<void> {
-    return this.instance.verifyEmail(token);
-  },
-  resetPassword(token: string, newPassword: string): Promise<void> {
-    return this.instance.resetPassword(token, newPassword);
-  },
-  requestPasswordReset(email?: string): Promise<void> {
-    return this.instance.requestPasswordReset(email);
-  },
-  requestVerificationEmail(email?: string): Promise<void> {
-    return this.instance.requestVerificationEmail(email);
-  },
-  impersonate(username: string): Promise<any> {
-    return this.instance.impersonate(username);
-  },
-  stopImpersonation(): Promise<void> {
-    return this.instance.stopImpersonation();
-  },
-  isImpersonated(): boolean {
-    return this.instance.isImpersonated();
-  },
-  originalTokens(): TokensType {
-    return this.instance.originalTokens();
-  },
-};
-
-export default Accounts;
-
-// TODO Could this be handled better?
-// if (typeof window !== 'undefined') {
-//   window.onload = async () => {
-//     if (Accounts.instance && Accounts.instance.resumeSession) {
-//       await Accounts.resumeSession();
-//     }
-//   };
-// }
