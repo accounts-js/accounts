@@ -16,7 +16,8 @@ export type MongoOptionsType = {
     createdAt: string,
     updatedAt: string,
   },
-  convertUserIdToMongoObjectId: boolean
+  convertUserIdToMongoObjectId: boolean,
+  caseSensitiveUserName: boolean
 };
 
 export type MongoUserObjectType = {
@@ -59,6 +60,7 @@ class Mongo {
         updatedAt: 'updatedAt',
       },
       convertUserIdToMongoObjectId: true,
+      caseSensitiveUserName: true,
     };
     this.options = { ...defaultOptions, ...options };
     if (!db) {
@@ -115,7 +117,8 @@ class Mongo {
   }
 
   async findUserByUsername(username: string): Promise<?UserObjectType> {
-    const user = await this.collection.findOne({ username });
+    const filter = this.options.caseSensitiveUserName ? { username } : { username: { $regex: new RegExp(username, 'i') } };
+    const user = await this.collection.findOne(filter);
     if (user) {
       user.id = user._id;
     }
