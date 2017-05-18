@@ -197,6 +197,15 @@ describe('Mongo', () => {
       expect(ret).not.toBeTruthy();
     });
 
+    it('should return username for case insensitive query', async () => {
+      const mongoWithOptions = new Mongo(db, { caseSensitiveUserName: false });
+      const ret = await mongoWithOptions.findUserByUsername(user.username.toUpperCase());
+      await delay(10);
+      expect(ret).toBeTruthy();
+      expect(ret._id).toBeTruthy();
+      expect(ret.id).toBeTruthy();
+    });
+
     it('should return user', async () => {
       const ret = await mongo.findUserByUsername(user.username);
       await delay(10);
