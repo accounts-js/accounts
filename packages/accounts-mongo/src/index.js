@@ -117,7 +117,9 @@ class Mongo {
   }
 
   async findUserByUsername(username: string): Promise<?UserObjectType> {
-    const filter = this.options.caseSensitiveUserName ? { username } : { username: { $regex: new RegExp(username, 'i') } };
+    const filter = this.options.caseSensitiveUserName ?
+      { username } :
+      { $where: `obj.username && (obj.username.toLowerCase() === "${username.toLowerCase()}")` };
     const user = await this.collection.findOne(filter);
     if (user) {
       user.id = user._id;
