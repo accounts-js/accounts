@@ -206,6 +206,20 @@ describe('Mongo', () => {
       expect(ret.id).toBeTruthy();
     });
 
+    it('should return null for incomplete matching user when using insensitive', async () => {
+      const mongoWithOptions = new Mongo(db, { caseSensitiveUserName: false });
+      const ret = await mongoWithOptions.findUserByUsername('john');
+      await delay(10);
+      expect(ret).not.toBeTruthy();
+    });
+
+    it('should return null when using regex wildcards when using insensitive', async () => {
+      const mongoWithOptions = new Mongo(db, { caseSensitiveUserName: false });
+      const ret = await mongoWithOptions.findUserByUsername('*');
+      await delay(10);
+      expect(ret).not.toBeTruthy();
+    });
+
     it('should return user', async () => {
       const ret = await mongo.findUserByUsername(user.username);
       await delay(10);
