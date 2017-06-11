@@ -58,10 +58,10 @@ export const createJSAccountsGraphQL = (Accounts: any, schemaOptions: SchemaGene
     extendWithResolvers: resolversObject => ({
       ...resolversObject,
       [schemaOptions.rootMutationName]: Object.assign(
-        resolversObject[schemaOptions.rootMutationName],
+        resolversObject[schemaOptions.rootMutationName] || {},
         resolvers[schemaOptions.rootMutationName]),
       [schemaOptions.rootQueryName]: Object.assign(
-        resolversObject[schemaOptions.rootQueryName],
+        resolversObject[schemaOptions.rootQueryName] || {},
         resolvers[schemaOptions.rootQueryName]),
       User: Object.assign(
         resolversObject.User || {},
