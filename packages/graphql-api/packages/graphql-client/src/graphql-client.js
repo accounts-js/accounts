@@ -64,6 +64,7 @@ export class GraphQLClient {
       });
   }
 
+  // eslint-disable-next-line max-len
   async loginWithPassword(user: PasswordLoginUserIdentityType, password: string): Promise<LoginReturnType> {
     const loginMutation = createLoginMutation(this.options.userFieldsFragment);
     return await this.mutate(loginMutation, 'loginWithPassword', { user, password });
