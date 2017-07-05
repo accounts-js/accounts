@@ -32,6 +32,7 @@ export const typeDefs = `
     username: String
     email: String
     password: PasswordInput
+    profile: CreateUserProfileInput
   }
   
   type PasswordType {
@@ -42,5 +43,11 @@ export const typeDefs = `
   input PasswordInput {
     digest: String
     algorithm: String
+  }
+  
+  input CreateUserProfileInput {
+    name: String
+    firstName: String
+    lastName: String
   }
 `;
