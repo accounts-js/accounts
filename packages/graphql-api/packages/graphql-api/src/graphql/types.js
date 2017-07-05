@@ -31,7 +31,7 @@ export const typeDefs = `
   input CreateUserInput {
     username: String
     email: String
-    password: PasswordType
+    password: PasswordInput
   }
   
   type PasswordType {
@@ -40,7 +40,7 @@ export const typeDefs = `
   }
   
   input PasswordInput {
-    digest: String!
+    digest: String
     algorithm: String
   }
 `;

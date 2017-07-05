@@ -5,6 +5,8 @@ import type {
   CreateUserType,
   LoginReturnType,
   ImpersonateReturnType,
+  PasswordLoginUserIdentityType,
+  PasswordType,
 } from '@accounts/common';
 import {
   sendResetPasswordEmailMutation,
@@ -62,7 +64,7 @@ export class GraphQLClient {
       });
   }
 
-  async loginWithPassword(user: string, password: string): Promise<LoginReturnType> {
+  async loginWithPassword(user: PasswordLoginUserIdentityType, password: string): Promise<LoginReturnType> {
     const loginMutation = createLoginMutation(this.options.userFieldsFragment);
     return await this.mutate(loginMutation, 'loginWithPassword', { user, password });
   }
@@ -89,7 +91,7 @@ export class GraphQLClient {
     return await this.mutate(verifyEmailMutation, 'verifyEmail', { token });
   }
 
-  async resetPassword(token: string, newPassword: any): Promise<void> {
+  async resetPassword(token: string, newPassword: PasswordType): Promise<void> {
     return await this.mutate(resetPasswordMutation, 'resetPassword', { token, newPassword });
   }
 
