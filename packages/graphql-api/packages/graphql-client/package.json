@@ -1,6 +1,6 @@
 {
   "name": "@accounts/graphql-client",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "GraphQL client transport for accounts",
   "main": "lib/index.js",
   "scripts": {
@@ -62,7 +62,7 @@
   },
   "dependencies": {
     "@accounts/common": "^0.0.4",
-    "graphql-tag": "^1.1.2",
-    "babel-polyfill": "^6.23.0"
+    "babel-polyfill": "^6.23.0",
+    "graphql-tag": "^1.1.2"
   }
 }
