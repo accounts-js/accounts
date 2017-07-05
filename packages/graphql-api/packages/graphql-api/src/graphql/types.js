@@ -31,7 +31,7 @@ export const typeDefs = `
   input CreateUserInput {
     username: String
     email: String
-    password: PasswordInput
+    password: String
     profile: CreateUserProfileInput
   }
   
