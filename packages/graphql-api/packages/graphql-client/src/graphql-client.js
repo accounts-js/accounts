@@ -94,11 +94,11 @@ export class GraphQLClient {
   }
 
   async sendVerificationEmail(email: string): Promise<void> {
-    return await this.mutate(sendVerificationEmailMutation, 'sendVerificationEmail', { userId, email });
+    return await this.mutate(sendVerificationEmailMutation, 'sendVerificationEmail', { email });
   }
 
   async sendResetPasswordEmail(email: string): Promise<void> {
-    return await this.mutate(sendResetPasswordEmailMutation, 'sendResetPasswordEmail', { userId, email });
+    return await this.mutate(sendResetPasswordEmailMutation, 'sendResetPasswordEmail', { email });
   }
 
   options: OptionsType;
