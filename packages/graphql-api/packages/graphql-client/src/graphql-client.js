@@ -89,15 +89,15 @@ export class GraphQLClient {
     return await this.mutate(verifyEmailMutation, 'verifyEmail', { token });
   }
 
-  async resetPassword(token: string, newPassword: string): Promise<void> {
+  async resetPassword(token: string, newPassword: any): Promise<void> {
     return await this.mutate(resetPasswordMutation, 'resetPassword', { token, newPassword });
   }
 
-  async sendVerificationEmail(userId: string, email: string): Promise<void> {
+  async sendVerificationEmail(email: string): Promise<void> {
     return await this.mutate(sendVerificationEmailMutation, 'sendVerificationEmail', { userId, email });
   }
 
-  async sendResetPasswordEmail(userId: string, email: string): Promise<void> {
+  async sendResetPasswordEmail(email: string): Promise<void> {
     return await this.mutate(sendResetPasswordEmailMutation, 'sendResetPasswordEmail', { userId, email });
   }
 

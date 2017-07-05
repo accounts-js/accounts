@@ -8,6 +8,11 @@ import { mutations } from './graphql/mutations';
 import { typeDefs } from './graphql/types';
 import { queries } from './graphql/queries';
 import { logout } from './resolvers/logout';
+import { createUser } from './resolvers/create-user';
+import { resetPassword } from './resolvers/reset-password';
+import { sendResetPasswordEmail } from './resolvers/send-reset-password-email';
+import { sendVerificationEmail } from './resolvers/send-verification-email';
+import { verifyEmail } from './resolvers/verify-email';
 
 export type SchemaGenerationOptions = {
   rootQueryName: string;
@@ -47,6 +52,11 @@ export const createJSAccountsGraphQL = (Accounts: any, schemaOptions: SchemaGene
       refreshTokens: refreshTokens(Accounts),
       logout: logout(Accounts),
       impersonate: impersonate(Accounts),
+      createUser: createUser(Accounts),
+      resetPassword: resetPassword(Accounts),
+      sendResetPasswordEmail: sendResetPasswordEmail(Accounts),
+      sendVerificationEmail: sendVerificationEmail(Accounts),
+      verifyEmail: verifyEmail(Accounts),
     },
     [schemaOptions.rootQueryName]: {
       me: me(Accounts),
