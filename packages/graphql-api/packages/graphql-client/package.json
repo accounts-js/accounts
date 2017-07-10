@@ -1,6 +1,6 @@
 {
   "name": "@accounts/graphql-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "GraphQL client transport for accounts",
   "main": "lib/index.js",
   "scripts": {
