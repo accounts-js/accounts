@@ -33,14 +33,16 @@
     "babel-cli": "^6.16.0",
     "babel-core": "^6.17.0",
     "babel-eslint": "^7.0.0",
-    "babel-loader": "^6.2.5",
+    "babel-loader": "^7.1.1",
     "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-plugin-transform-async-to-generator": "^6.16.0",
     "babel-plugin-transform-flow-strip-types": "^6.18.0",
     "babel-plugin-transform-object-rest-spread": "^6.16.0",
     "babel-plugin-transform-regenerator": "^6.16.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.16.0",
     "babel-preset-es2015-node4": "^2.1.0",
+    "babel-preset-stage-0": "^6.24.1",
     "concurrently": "^3.1.0",
     "coveralls": "^2.11.14",
     "eslint": "^3.7.1",
@@ -59,6 +61,7 @@
     "webpack-node-externals": "^1.5.4"
   },
   "dependencies": {
-    "@accounts/server": "^0.0.4"
+    "@accounts/server": "^0.0.4",
+    "babel-runtime": "^6.23.0"
   }
 }
