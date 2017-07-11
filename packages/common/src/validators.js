@@ -1,6 +1,7 @@
 // @flow
 
-import { trim, isEmpty } from 'lodash';
+import trim from 'lodash/trim';
+import isEmpty from 'lodash/isEmpty';
 
 export const isEmail = (email: ?string) => {
   // eslint-disable-next-line
