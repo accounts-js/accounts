@@ -1,4 +1,4 @@
-import toUsernameAndEmail from './toUsernameAndEmail';
+import toUsernameAndEmail from '../src/toUsernameAndEmail';
 
 describe('toUsernameAndEmail', () => {
   it('username', () => {
@@ -14,9 +14,13 @@ describe('toUsernameAndEmail', () => {
     });
   });
   it('username and email', () => {
-    expect(toUsernameAndEmail({
-      user: null, username: 'UserA', email: 'UserA@users.com',
-    })).toEqual({
+    expect(
+      toUsernameAndEmail({
+        user: null,
+        username: 'UserA',
+        email: 'UserA@users.com',
+      })
+    ).toEqual({
       username: 'UserA',
       email: 'UserA@users.com',
     });

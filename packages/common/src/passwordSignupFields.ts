@@ -1,0 +1,8 @@
+export enum PasswordSignupFields {
+  EMAIL_ONLY = 'EMAIL_ONLY',
+  USERNAME_AND_EMAIL = 'USERNAME_AND_EMAIL',
+  USERNAME_AND_OPTIONAL_EMAIL = 'USERNAME_AND_OPTIONAL_EMAIL',
+  USERNAME_ONLY = 'USERNAME_ONLY',
+}
+
+export default PasswordSignupFields;

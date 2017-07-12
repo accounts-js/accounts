@@ -4,35 +4,38 @@
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "jsnext:main": "lib-es6/index.js",
+  "typings": "lib/index.d.ts",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "start": "webpack -p --config --progress --watch",
+    "start": "tsc --watch",
     "clean": "rimraf lib lib-es6",
     "precompile": "npm run clean",
     "compile": "npm run compile:es6 && npm run compile:umd",
-    "compile:es6": "babel ./src --out-dir ./lib-es6",
-    "compile:umd": "webpack",
-    "postcompile": "npm run flow:prepublish",
+    "compile:es6": "tsc",
+    "compile:umd": "tsc",
     "prepublish": "npm run compile",
     "test": "npm run testonly",
     "test-ci": "npm lint && npm coverage",
     "testonly": "jest",
-    "flow:check": "flow check",
-    "flow:gen": "flow gen-flow-files ./src/index.js > ./lib/index.js.flow",
-    "flow:prepublish": "npm run flow:cplib && npm run flow:cplibes6",
-    "flow:cplib": "for i in `ls ./src/*.js`; do cp $i `echo $i | sed \"s/src/lib/g\" | sed \"s/js/js\\.flow/g\"`; done",
-    "flow:cplibes6": "for i in `ls ./src/*.js`; do cp $i `echo $i | sed \"s/src/lib-es6/g\" | sed \"s/js/js\\.flow/g\"`; done",
     "coverage": "npm run testonly -- --coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
-  "jest": {
-    "testEnvironment": "node",
-    "testRegex": "(/.*.(test|spec)).(js|jsx)$",
-    "testPathDirs": [
-      "src"
-    ]
+  "files": [
+    "lib",
+    "lib-es6"
+  ],
+   "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "mapCoverage": true
   },
   "repository": {
     "type": "git",
@@ -51,27 +54,10 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-core": "^6.18.0",
-    "babel-loader": "^6.2.7",
-    "babel-plugin-syntax-async-functions": "^6.13.0",
-    "babel-plugin-transform-async-to-generator": "^6.16.0",
-    "babel-plugin-transform-builtin-extend": "^1.1.0",
-    "babel-plugin-transform-flow-strip-types": "^6.21.0",
-    "babel-plugin-transform-object-rest-spread": "^6.16.0",
-    "babel-plugin-transform-regenerator": "^6.16.1",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-es2015": "^6.18.0",
-    "babel-preset-es2015-node4": "^2.1.0",
-    "babel-preset-stage-0": "^6.22.0",
     "coveralls": "^2.11.14",
-    "flow-bin": "0.41.0",
-    "jest": "^18.0.0",
     "localstorage-polyfill": "^1.0.1",
     "regenerator-runtime": "^0.9.6",
-    "rimraf": "^2.6.1",
-    "webpack": "^1.13.3",
-    "webpack-node-externals": "^1.5.4"
+    "rimraf": "^2.6.1"
   },
   "dependencies": {
     "lodash": "^4.16.4"

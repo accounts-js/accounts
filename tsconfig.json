@@ -1,0 +1,15 @@
+{
+   "compilerOptions": {
+     "target": "es5",
+     "module": "commonjs",
+     "moduleResolution": "node",
+     "sourceMap": true,
+     "declaration": true,
+     "pretty": true,
+     "removeComments": true,
+     "lib": ["es6"],
+     "types": [
+       "@types/node"
+     ]
+   }
+ }

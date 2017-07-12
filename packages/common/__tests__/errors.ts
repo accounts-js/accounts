@@ -1,11 +1,11 @@
-import { AccountsError } from './errors';
+import { AccountsError } from '../src/errors';
 
 const error = new AccountsError(
   'Validation Error',
   {
     username: 'user',
   },
-  'ACCOUNTS:1',
+  'ACCOUNTS:1'
 );
 
 const throws = () => {
@@ -31,11 +31,12 @@ describe('AccountsError class', () => {
       throws();
     } catch (e) {
       expect(e.serialize()).toBe(
-        // eslint-disable-next-line prefer-template
         '{"message":"Validation Error",' +
-        '"loginInfo":{"username":"user"},' +
-        '"errorCode":"ACCOUNTS:1",' +
-        '"epochTime":' + e.epochTime + '}',
+          '"loginInfo":{"username":"user"},' +
+          '"errorCode":"ACCOUNTS:1",' +
+          '"epochTime":' +
+          e.epochTime +
+          '}'
       );
     }
   });

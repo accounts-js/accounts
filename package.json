@@ -6,6 +6,7 @@
     "clean": "lerna run clean",
     "compile": "lerna run compile",
     "lint": "eslint packages/*/src",
+    "lint:tslint": "tslint packages/*/{src,__tests__}/**/*.ts",
     "flow:check": "lerna run flow:check",
     "prebootstrap": "npm install",
     "postinstall": "lerna bootstrap",
@@ -15,6 +16,7 @@
     "test": "npm run testonly",
     "posttest": "npm run lint",
     "testonly": "lerna run testonly",
+    "format": "prettier --single-quote --trailing-comma es5 --parser typescript --write \"packages/*/{src,__tests__}/**/*.ts\"",
     "coverage": "lerna run coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
@@ -24,6 +26,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^8.0.10",
     "babel-eslint": "^7.1.1",
     "eslint": "^3.15.0",
     "eslint-config-airbnb": "^14.1.0",
@@ -34,7 +37,15 @@
     "eslint-plugin-jsx-a11y": "^3.0.2",
     "eslint-plugin-react": "^6.9.0",
     "eslint-plugin-require-jsdoc": "^1.0.4",
-    "lerna": "2.0.0-beta.38",
-    "flow-bin": "0.41.0"
+    "flow-bin": "0.41.0",
+    "jest": "^20.0.4",
+    "lerna": "^2.0.0",
+    "ts-jest": "^20.0.7",
+    "tslint": "^5.5.0",
+    "tslint-config-accounts": "^0.0.3",
+    "typescript": "^2.4.1"
+  },
+  "dependencies": {
+    "prettier": "^1.5.2"
   }
 }
