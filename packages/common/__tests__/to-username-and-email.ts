@@ -1,4 +1,4 @@
-import toUsernameAndEmail from '../src/toUsernameAndEmail';
+import toUsernameAndEmail from '../src/to-username-and-email';
 
 describe('toUsernameAndEmail', () => {
   it('username', () => {

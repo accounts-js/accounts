@@ -1,5 +1,5 @@
 // @flow
-import { PasswordSignupFields } from './passwordSignupFields';
+import { PasswordSignupFields } from './password-signup-fields';
 
 export type HashAlgorithm =
   | 'sha'
