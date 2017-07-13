@@ -11,6 +11,8 @@ export class AccountsError extends Error {
     errorCode?: string | number
   ) {
     super(message);
+    Object.setPrototypeOf(this, AccountsError.prototype);
+
     this.epochTime = Date.now();
 
     if (loginInfo) {
