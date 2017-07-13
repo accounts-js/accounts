@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import { randomBytes } from 'crypto';
 
 export const generateRandomToken = (length: number = 43) => randomBytes(length).toString('hex');

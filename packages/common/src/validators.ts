@@ -1,4 +1,5 @@
-import { trim, isEmpty } from 'lodash';
+import * as isEmpty from 'lodash/isEmpty';
+import * as trim from 'lodash/trim';
 
 export const isEmail = (email?: string) => {
   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

@@ -1,6 +1,6 @@
-import jwtDecode from 'jwt-decode';
-import { AccountsServer } from './AccountsServer';
-import { bcryptPassword, hashPassword, verifyPassword } from './encryption';
+import * as jwtDecode from 'jwt-decode';
+import { AccountsServer } from '../src/accounts-server';
+import { bcryptPassword, hashPassword, verifyPassword } from '../src/encryption';
 
 let Accounts;
 

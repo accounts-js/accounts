@@ -1,8 +1,15 @@
 // @flow
 
-import { pick, omit, isString, isPlainObject, isFunction, find, includes, get } from 'lodash';
+import * as pick from 'lodash/pick';
+import * as omit from 'lodash/omit';
+import * as isString from 'lodash/isString';
+import * as isPlainObject from 'lodash/isPlainObject';
+import * as isFunction from 'lodash/isFunction';
+import * as find from 'lodash/find';
+import * as includes from 'lodash/includes';
+import * as get from 'lodash/get';
 import { EventEmitter } from 'events';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import {
   AccountsError,
   toUsernameAndEmail,
