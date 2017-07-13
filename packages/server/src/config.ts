@@ -1,15 +1,21 @@
-// @flow
 
-import { config as sharedConfig } from '@accounts/common';
-import type { AccountsCommonConfiguration, PasswordLoginUserType, SessionType, UserObjectType, PasswordType } from '@accounts/common';
-import type { EmailTemplateType } from './emailTemplates';
+import { 
+  AccountsCommonConfiguration, 
+  PasswordLoginUserType, 
+  SessionType, 
+  UserObjectType, 
+  PasswordType,
+  CreateUserType,
+  config as sharedConfig,
+  PasswordSignupFields,
+} from '@accounts/common';
+import { EmailTemplateType } from './email-templates';
 
-// eslint-disable-next-line max-len
 export type PasswordAuthenticator = (user: PasswordLoginUserType, password: PasswordType) => Promise<any>;
 export type ResumeSessionValidator = (user: UserObjectType, session: SessionType) => Promise<any>;
 
-type TokenExpiration = string;
-export type TokenConfig = {
+export type TokenExpiration = string;
+export interface TokenConfig {
   accessToken?: {
     expiresIn?: TokenExpiration
   },
@@ -18,12 +24,24 @@ export type TokenConfig = {
   }
 };
 
-type EmailType = EmailTemplateType & { to: string };
-export type SendMailFunction = (emailConfig: EmailType | Object) => Promise<void>;
-export type UserObjectSanitizerFunction =
-  (userObject: UserObjectType, omitFunction: Function, pickFunction: Function) => any;
-// eslint-disable-next-line max-len
-export type PrepareMailFunction = (to: string, token: string, user: UserObjectType, pathFragment: string, emailTemplate: EmailTemplateType, from: string) => Object;
+export type EmailType = EmailTemplateType & { to: string };
+
+export type SendMailFunction = (emailConfig: EmailType | object) => Promise<object>;
+
+export type UserObjectSanitizerFunction = (
+  userObject: UserObjectType,
+  omitFunction: (userDoc: object) => UserObjectType,
+  pickFunction: (userDoc: object) => UserObjectType
+) => any;
+
+export type PrepareMailFunction = (
+  to: string,
+  token: string,
+  user: UserObjectType,
+  pathFragment: string,
+  emailTemplate: EmailTemplateType,
+  from: string
+) => object;
 
 export type AccountsServerConfiguration = AccountsCommonConfiguration & {
   tokenSecret?: string,
@@ -33,10 +51,10 @@ export type AccountsServerConfiguration = AccountsCommonConfiguration & {
   prepareMail?: PrepareMailFunction,
   sendMail?: SendMailFunction,
   // https://github.com/eleith/emailjs#emailserverconnectoptions
-  email?: Object,
+  email?: object,
   emailTokensExpiry?: number,
   impersonationAuthorize: (user: UserObjectType, impersonateToUser: UserObjectType) => Promise<any>,
-  validateNewUser?: (user: UserObjectType) => Promise<boolean>,
+  validateNewUser?: (user: CreateUserType) => Promise<boolean>,
   userObjectSanitizer?: UserObjectSanitizerFunction,
   allowedLoginFields?: string[]
 };
@@ -55,6 +73,4 @@ export default {
   userObjectSanitizer: (user: UserObjectType) => user,
   allowedLoginFields: ['id', 'email', 'username'],
   emailTokensExpiry: 1000 * 3600, // 1 hour in milis
-  // TODO Investigate oauthSecretKey
-  // oauthSecretKey
 };

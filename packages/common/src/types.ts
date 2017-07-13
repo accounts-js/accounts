@@ -7,10 +7,14 @@ export type PasswordType =
       algorithm: HashAlgorithm;
     };
 
+export interface EmailRecord {
+  address: string
+}
+
 export interface UserObjectType {
   username?: string;
   email?: string;
-  emails?: object[];
+  emails?: EmailRecord[];
   id: string;
   profile?: object;
   services?: object;

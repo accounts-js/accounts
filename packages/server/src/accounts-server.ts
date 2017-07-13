@@ -1,14 +1,12 @@
 // @flow
 
 import { pick, omit, isString, isPlainObject, isFunction, find, includes, get } from 'lodash';
-import EventEmitter from 'events';
+import { EventEmitter } from 'events';
 import jwt from 'jsonwebtoken';
 import {
   AccountsError,
   toUsernameAndEmail,
   validators,
-} from '@accounts/common';
-import type {
   UserObjectType,
   CreateUserType,
   PasswordLoginUserType,
@@ -17,27 +15,24 @@ import type {
   SessionType,
   ImpersonateReturnType,
   PasswordType,
+  EmailRecord,
 } from '@accounts/common';
-import config from './config';
-import type { DBInterface } from './DBInterface';
+import config, { AccountsServerConfiguration, PasswordAuthenticator } from './config';
+import { DBInterface } from './db-interface';
 import { verifyPassword, hashPassword, bcryptPassword } from './encryption';
-import {
-  generateAccessToken,
-  generateRefreshToken,
-  generateRandomToken,
-} from './tokens';
-import Email from './email';
-import emailTemplates from './emailTemplates';
-import type { EmailConnector } from './email';
-import type { EmailTemplatesType, EmailTemplateType } from './emailTemplates';
-import type { AccountsServerConfiguration, PasswordAuthenticator } from './config';
+import { generateAccessToken, generateRefreshToken, generateRandomToken } from './tokens';
+import Email, { EmailConnector } from './email';
+import emailTemplates, { EmailTemplatesType, EmailTemplateType } from './email-templates';
 
-type TokenRecord = {
+export interface TokenRecord {
   token: string,
   address: string,
   when: number,
   reason: string
 };
+
+export type HookListener = (event: object) => void;
+export type RemoveListnerHandle = () => EventEmitter;
 
 export const ServerHooks = {
   LoginSuccess: 'LoginSuccess',
@@ -55,11 +50,12 @@ export const ServerHooks = {
 };
 
 export class AccountsServer {
-  _options: AccountsServerConfiguration;
-  db: DBInterface;
-  email: EmailConnector;
-  emailTemplates: EmailTemplatesType;
-  hooks: EventEmitter;
+  // tslint:disable-next-line variable-name
+  private _options: AccountsServerConfiguration;
+  private db: DBInterface;
+  private email: EmailConnector;
+  private emailTemplates: EmailTemplatesType;
+  private hooks: EventEmitter;
 
   /**
    * @description Configure AccountsServer.
@@ -67,20 +63,19 @@ export class AccountsServer {
    * @param {Object} db - DBInterface for AccountsServer.
    * @returns {Object} - Return the options.
    */
-  config(options: AccountsServerConfiguration, db: DBInterface) {
-    this._options = ({
+  public config(options: AccountsServerConfiguration, db: DBInterface) {
+    this._options = {
       ...config,
       ...options,
-    }: AccountsServerConfiguration);
+    };
     if (!db) {
       throw new AccountsError('A database driver is required');
     }
+
     this.db = db;
-    if (this._options.sendMail) {
-      this.email = { sendMail: this._options.sendMail };
-    } else {
-      this.email = new Email(this._options.email);
-    }
+    this.email = this._options.sendMail ?
+      { sendMail: this._options.sendMail } :
+      new Email(this._options.email);
     this.emailTemplates = emailTemplates;
 
     if (!this.hooks) {
@@ -92,55 +87,55 @@ export class AccountsServer {
    * @description Return the AccountsServer options.
    * @returns {AccountsServerConfiguration} - Return the options.
    */
-  options(): AccountsServerConfiguration {
+  public options(): AccountsServerConfiguration {
     return this._options;
   }
 
-  onLoginSuccess(callback: Function): Function {
+  public onLoginSuccess(callback: HookListener): RemoveListnerHandle {
     return this._on(ServerHooks.LoginSuccess, callback);
   }
 
-  onLoginError(callback: Function): Function {
+  public onLoginError(callback: HookListener): RemoveListnerHandle {
     return this._on(ServerHooks.LoginError, callback);
   }
 
-  onLogoutSuccess(callback: Function): Function {
+  public onLogoutSuccess(callback: HookListener): RemoveListnerHandle {
     return this._on(ServerHooks.LogoutSuccess, callback);
   }
 
-  onLogoutError(callback: Function): Function {
+  public onLogoutError(callback: HookListener): RemoveListnerHandle {
     return this._on(ServerHooks.LogoutError, callback);
   }
 
-  onCreateUserSuccess(callback: Function): Function {
+  public onCreateUserSuccess(callback: HookListener): RemoveListnerHandle {
     return this._on(ServerHooks.CreateUserSuccess, callback);
   }
 
-  onCreateUserError(callback: Function): Function {
+  public onCreateUserError(callback: HookListener): RemoveListnerHandle {
     return this._on(ServerHooks.CreateUserError, callback);
   }
 
-  onResumeSessionSuccess(callback: Function): Function {
+  public onResumeSessionSuccess(callback: HookListener): RemoveListnerHandle {
     return this._on(ServerHooks.ResumeSessionSuccess, callback);
   }
 
-  onResumeSessionError(callback: Function): Function {
+  public onResumeSessionError(callback: HookListener): RemoveListnerHandle {
     return this._on(ServerHooks.ResumeSessionError, callback);
   }
 
-  onRefreshTokensSuccess(callback: Function): Function {
+  public onRefreshTokensSuccess(callback: HookListener): RemoveListnerHandle {
     return this._on(ServerHooks.RefreshTokensSuccess, callback);
   }
 
-  onRefreshTokensError(callback: Function): Function {
+  public onRefreshTokensError(callback: HookListener): RemoveListnerHandle {
     return this._on(ServerHooks.RefreshTokensError, callback);
   }
 
-  onImpersonationSuccess(callback: Function): Function {
+  public onImpersonationSuccess(callback: HookListener): RemoveListnerHandle {
     return this._on(ServerHooks.ImpersonationSuccess, callback);
   }
 
-  onImpersonationError(callback: Function): Function {
+  public onImpersonationError(callback: HookListener): RemoveListnerHandle {
     return this._on(ServerHooks.ImpersonationError, callback);
   }
 
@@ -152,8 +147,12 @@ export class AccountsServer {
    * @param {string} userAgent - User user agent.
    * @returns {Promise<Object>} - LoginReturnType.
    */
-  // eslint-disable-next-line max-len
-  async loginWithPassword(user: PasswordLoginUserType, password: PasswordType, ip: ?string, userAgent: ?string): Promise<LoginReturnType> {
+  public async loginWithPassword(
+    user: PasswordLoginUserType,
+    password: PasswordType,
+    ip: string,
+    userAgent: string
+  ): Promise<LoginReturnType> {
     try {
       if (!user || !password) {
         throw new AccountsError('Unrecognized options for login request', user, 400);
@@ -190,56 +189,12 @@ export class AccountsServer {
     }
   }
 
-  // eslint-disable-next-line max-len
-  async _externalPasswordAuthenticator(authFn: PasswordAuthenticator, user: PasswordLoginUserType, password: string): Promise<any> {
+  public async _externalPasswordAuthenticator(
+    authFn: PasswordAuthenticator, 
+    user: PasswordLoginUserType, 
+    password: PasswordType
+  ): Promise<any> {
     return authFn(user, password);
-  }
-
-  _validateLoginWithField(fieldName: string, user: PasswordLoginUserType) {
-    const allowedFields = this._options.allowedLoginFields || [];
-    const isAllowed = allowedFields.includes(fieldName);
-
-    if (!isAllowed) {
-      throw new AccountsError(`Login with ${fieldName} is not allowed!`, user);
-    }
-  }
-
-  // eslint-disable-next-line max-len
-  async _defaultPasswordAuthenticator(user: PasswordLoginUserType, password: PasswordType): Promise<any> {
-    const { username, email, id } = isString(user)
-      ? toUsernameAndEmail({ user })
-      : toUsernameAndEmail({ ...user });
-
-    let foundUser;
-
-    if (id) {
-      this._validateLoginWithField('id', user);
-      foundUser = await this.db.findUserById(id);
-    } else if (username) {
-      this._validateLoginWithField('username', user);
-      foundUser = await this.db.findUserByUsername(username);
-    } else if (email) {
-      this._validateLoginWithField('email', user);
-      foundUser = await this.db.findUserByEmail(email);
-    }
-
-    if (!foundUser) {
-      throw new AccountsError('User not found', user, 403);
-    }
-    const hash = await this.db.findPasswordHash(foundUser.id);
-    if (!hash) {
-      throw new AccountsError('User has no password set', user, 403);
-    }
-
-    const hashAlgorithm = this._options.passwordHashAlgorithm;
-    const pass = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
-    const isPasswordValid = await verifyPassword(pass, hash);
-
-    if (!isPasswordValid) {
-      throw new AccountsError('Incorrect password', user, 403);
-    }
-
-    return foundUser;
   }
 
   /**
@@ -252,7 +207,7 @@ export class AccountsServer {
    * @returns {Promise<LoginReturnType>} - Session tokens and user object.
    */
   // eslint-disable-next-line max-len
-  async loginWithUser(user: UserObjectType, ip?: ?string, userAgent?: ?string): Promise<LoginReturnType> {
+  public async loginWithUser(user: UserObjectType, ip?: string, userAgent?: string): Promise<LoginReturnType> {
     const sessionId = await this.db.createSession(user.id, ip, userAgent);
     const { accessToken, refreshToken } = this.createTokens(sessionId);
 
@@ -273,7 +228,7 @@ export class AccountsServer {
    * @param {Object} user - The user object.
    * @returns {Promise<string>} - Return the id of user created.
    */
-  async createUser(user: CreateUserType): Promise<string> {
+  public async createUser(user: CreateUserType): Promise<string> {
     try {
       if (!validators.validateUsername(user.username) && !validators.validateEmail(user.email)) {
         throw new AccountsError(
@@ -321,12 +276,6 @@ export class AccountsServer {
     }
   }
 
-  _on(eventName: string, callback: Function): Function {
-    this.hooks.on(eventName, callback);
-
-    return () => this.hooks.removeListener(eventName, callback);
-  }
-
   /**
    * @description Impersonate to another user.
    * @param {string} accessToken - User access token.
@@ -335,8 +284,12 @@ export class AccountsServer {
    * @param {string} userAgent - User user agent.
    * @returns {Promise<Object>} - ImpersonateReturnType
    */
-  // eslint-disable-next-line max-len
-  async impersonate(accessToken: string, username: string, ip: ?string, userAgent: ?string): Promise<ImpersonateReturnType> {
+  public async impersonate(
+    accessToken: string,
+    username: string,
+    ip: string,
+    userAgent: string
+  ): Promise<ImpersonateReturnType> {
     try {
       if (!isString(accessToken)) {
         throw new AccountsError('An access token is required');
@@ -404,8 +357,12 @@ export class AccountsServer {
    * @param {string} userAgent - User user agent.
    * @returns {Promise<Object>} - LoginReturnType.
    */
-  // eslint-disable-next-line max-len
-  async refreshTokens(accessToken: string, refreshToken: string, ip: string, userAgent: string): Promise<LoginReturnType> {
+  public async refreshTokens(
+    accessToken: string,
+    refreshToken: string,
+    ip: string,
+    userAgent: string
+  ): Promise<LoginReturnType> {
     try {
       if (!isString(accessToken) || !isString(refreshToken)) {
         throw new AccountsError('An accessToken and refreshToken are required');
@@ -422,7 +379,7 @@ export class AccountsServer {
         throw new AccountsError('Tokens are not valid');
       }
 
-      const session: ?SessionType = await this.db.findSessionById(sessionId);
+      const session: SessionType = await this.db.findSessionById(sessionId);
       if (!session) {
         throw new AccountsError('Session not found');
       }
@@ -460,7 +417,7 @@ export class AccountsServer {
    * @param {boolean} isImpersonated - Should be true if impersonating another user.
    * @returns {Promise<Object>} - Return a new accessToken and refreshToken.
    */
-  createTokens(sessionId: string, isImpersonated: boolean = false): TokensType {
+  public createTokens(sessionId: string, isImpersonated: boolean = false): TokensType {
     const { tokenSecret = config.tokenSecret, tokenConfigs = config.tokenConfigs } = this._options;
     const accessToken = generateAccessToken({
       data: {
@@ -482,7 +439,7 @@ export class AccountsServer {
    * @param {string} accessToken - User access token.
    * @returns {Promise<void>} - Return a promise.
    */
-  async logout(accessToken: string): Promise<void> {
+  public async logout(accessToken: string): Promise<void> {
     try {
       const session: SessionType = await this.findSessionByAccessToken(accessToken);
 
@@ -505,7 +462,7 @@ export class AccountsServer {
     }
   }
 
-  async resumeSession(accessToken: string): Promise<?UserObjectType> {
+  public async resumeSession(accessToken: string): Promise<UserObjectType> {
     try {
       const session: SessionType = await this.findSessionByAccessToken(accessToken);
 
@@ -539,7 +496,7 @@ export class AccountsServer {
     }
   }
 
-  async findSessionByAccessToken(accessToken: string): Promise<SessionType> {
+  public async findSessionByAccessToken(accessToken: string): Promise<SessionType> {
     if (!isString(accessToken)) {
       throw new AccountsError('An accessToken is required');
     }
@@ -552,7 +509,7 @@ export class AccountsServer {
       throw new AccountsError('Tokens are not valid');
     }
 
-    const session: ?SessionType = await this.db.findSessionById(sessionId);
+    const session: SessionType = await this.db.findSessionById(sessionId);
     if (!session) {
       throw new AccountsError('Session not found');
     }
@@ -565,7 +522,7 @@ export class AccountsServer {
    * @param {string} email - User email.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  findUserByEmail(email: string): Promise<?UserObjectType> {
+  public findUserByEmail(email: string): Promise<UserObjectType> {
     return this.db.findUserByEmail(email);
   }
 
@@ -574,7 +531,7 @@ export class AccountsServer {
    * @param {string} username - User username.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  findUserByUsername(username: string): Promise<?UserObjectType> {
+  public findUserByUsername(username: string): Promise<UserObjectType> {
     return this.db.findUserByUsername(username);
   }
 
@@ -583,7 +540,7 @@ export class AccountsServer {
    * @param {string} userId - User id.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  findUserById(userId: string): Promise<?UserObjectType> {
+  public findUserById(userId: string): Promise<UserObjectType> {
     return this.db.findUserById(userId);
   }
 
@@ -596,7 +553,7 @@ export class AccountsServer {
    * Defaults to false.
    * @returns {Promise<void>} - Return a Promise.
    */
-  addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
+  public addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
     return this.db.addEmail(userId, newEmail, verified);
   }
 
@@ -607,7 +564,7 @@ export class AccountsServer {
    * @param {string} email - The email address to remove.
    * @returns {Promise<void>} - Return a Promise.
    */
-  removeEmail(userId: string, email: string): Promise<void> {
+  public removeEmail(userId: string, email: string): Promise<void> {
     return this.db.removeEmail(userId, email);
   }
 
@@ -616,19 +573,19 @@ export class AccountsServer {
    * @param {string} token - The token retrieved from the verification URL.
    * @returns {Promise<void>} - Return a Promise.
    */
-  async verifyEmail(token: string): Promise<void> {
+  public async verifyEmail(token: string): Promise<void> {
     const user = await this.db.findUserByEmailVerificationToken(token);
     if (!user) {
       throw new AccountsError('Verify email link expired');
     }
 
-    const verificationTokens = get(user, ['services', 'email', 'verificationTokens'], []);
-    const tokenRecord = find(verificationTokens, (t: Object) => t.token === token);
+    const verificationTokens: TokenRecord[] = get(user, ['services', 'email', 'verificationTokens'], []);
+    const tokenRecord = find(verificationTokens, (t: TokenRecord) => t.token === token);
     if (!tokenRecord) {
       throw new AccountsError('Verify email link expired');
     }
     // TODO check time for expiry date
-    const emailRecord = find(user.emails, (e: Object) => e.address === tokenRecord.address);
+    const emailRecord = find(user.emails, (e: EmailRecord) => e.address === tokenRecord.address);
     if (!emailRecord) {
       throw new AccountsError('Verify email link is for unknown address');
     }
@@ -641,7 +598,7 @@ export class AccountsServer {
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
    */
-  async resetPassword(token: string, newPassword: PasswordType): Promise<void> {
+  public async resetPassword(token: string, newPassword: PasswordType): Promise<void> {
     const user = await this.db.findUserByResetPasswordToken(token);
     if (!user) {
       throw new AccountsError('Reset password link expired');
@@ -649,14 +606,14 @@ export class AccountsServer {
 
     // TODO move this getter into a password service module
     const resetTokens = get(user, ['services', 'password', 'reset']);
-    const resetTokenRecord = find(resetTokens, (t: Object) => t.token === token);
+    const resetTokenRecord = find(resetTokens, t => t.token === token);
 
     if (this._isTokenExpired(token, resetTokenRecord)) {
       throw new AccountsError('Reset password link expired');
     }
 
     const emails = user.emails || [];
-    if (!includes(emails.map((email: Object) => email.address), resetTokenRecord.address)) {
+    if (!includes(emails.map((email: EmailRecord) => email.address), resetTokenRecord.address)) {
       throw new AccountsError('Token has invalid email address');
     }
 
@@ -667,18 +624,13 @@ export class AccountsServer {
     this.db.invalidateAllSessions(user.id);
   }
 
-  _isTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
-    return !tokenRecord ||
-      Number(tokenRecord.when) + this._options.emailTokensExpiry < Date.now();
-  }
-
   /**
    * @description Change the password for a user.
    * @param {string} userId - User id.
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
    */
-  async setPassword(userId: string, newPassword: string): Promise<void> {
+  public async setPassword(userId: string, newPassword: string): Promise<void> {
     const password = await bcryptPassword(newPassword);
     return this.db.setPasssword(userId, password);
   }
@@ -689,7 +641,7 @@ export class AccountsServer {
    * @param {Object} profile - The new user profile.
    * @returns {Promise<void>} - Return a Promise.
    */
-  async setProfile(userId: string, profile: Object): Promise<void> {
+  public async setProfile(userId: string, profile: object): Promise<void> {
     const user = await this.db.findUserById(userId);
     if (!user) {
       throw new AccountsError('User not found', { id: userId });
@@ -704,7 +656,7 @@ export class AccountsServer {
    * @param {Object} profile - User profile to add.
    * @returns {Promise<Object>} - Return a Promise.
    */
-  async updateProfile(userId: string, profile: Object): Promise<Object> {
+  public async updateProfile(userId: string, profile: object): Promise<object> {
     const user = await this.db.findUserById(userId);
     if (!user) {
       throw new AccountsError('User not found', { id: userId });
@@ -719,19 +671,19 @@ export class AccountsServer {
    * Defaults to the first unverified email in the list.
    * @returns {Promise<void>} - Return a Promise.
    */
-  async sendVerificationEmail(address: string): Promise<void> {
+  public async sendVerificationEmail(address: string): Promise<void> {
     const user = await this.db.findUserByEmail(address);
     if (!user) {
       throw new AccountsError('User not found', { email: address });
     }
     // If no address provided find the first unverified email
     if (!address) {
-      const email = find(user.emails, (e: Object) => !e.verified);
-      address = email && email.address; // eslint-disable-line no-param-reassign
+      const email = find(user.emails, e => !e.verified);
+      address = email && email.address;
     }
     // Make sure the address is valid
     const emails = user.emails || [];
-    if (!address || !includes(emails.map((email: Object) => email.address), address)) {
+    if (!address || !includes(emails.map(email => email.address), address)) {
       throw new AccountsError('No such email address for user');
     }
     const token = generateRandomToken();
@@ -756,7 +708,7 @@ export class AccountsServer {
    * Defaults to the first email in the list.
    * @returns {Promise<void>} - Return a Promise.
    */
-  async sendResetPasswordEmail(address: string): Promise<void> {
+  public async sendResetPasswordEmail(address: string): Promise<void> {
     const user = await this.db.findUserByEmail(address);
     if (!user) {
       throw new AccountsError('User not found', { email: address });
@@ -784,7 +736,7 @@ export class AccountsServer {
    * Defaults to the first email in the list.
    * @returns {Promise<void>} - Return a Promise.
    */
-  async sendEnrollmentEmail(address: string): Promise<void> {
+  public async sendEnrollmentEmail(address: string): Promise<void> {
     const user = await this.db.findUserByEmail(address);
     if (!user) {
       throw new AccountsError('User not found', { email: address });
@@ -805,25 +757,63 @@ export class AccountsServer {
     await this.email.sendMail(enrollmentMail);
   }
 
-  _internalUserSanitizer(user: UserObjectType): UserObjectType {
+  private _on(eventName: string, callback: HookListener): RemoveListnerHandle {
+    this.hooks.on(eventName, callback);
+
+    return () => this.hooks.removeListener(eventName, callback);
+  }
+
+  private _isTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
+    return !tokenRecord ||
+      Number(tokenRecord.when) + this._options.emailTokensExpiry < Date.now();
+  }
+
+  private _internalUserSanitizer(user: UserObjectType): UserObjectType {
     return omit(user, ['services']);
   }
 
-  _sanitizeUser(user: UserObjectType): UserObjectType {
+  private _sanitizeUser(user: UserObjectType): UserObjectType {
     const { userObjectSanitizer } = this.options();
 
     return userObjectSanitizer(this._internalUserSanitizer(user), omit, pick);
   }
 
-  _prepareMail(...args: Array<any>): any {
+  private _prepareMail(
+    to: string,
+    token: string,
+    user: UserObjectType,
+    pathFragment: string,
+    emailTemplate: EmailTemplateType,
+    from: string,
+  ): any {
     if (this._options.prepareMail) {
-      return this._options.prepareMail(...args);
+      return this._options.prepareMail(
+        to,
+        token,
+        user,
+        pathFragment,
+        emailTemplate,
+        from,
+      );
     }
-    return this._defaultPrepareEmail(...args);
+    return this._defaultPrepareEmail(
+      to,
+      token,
+      user,
+      pathFragment,
+      emailTemplate,
+      from,
+    );
   }
 
-  // eslint-disable-next-line max-len
-  _defaultPrepareEmail(to: string, token: string, user: UserObjectType, pathFragment: string, emailTemplate: EmailTemplateType, from: string): Object {
+  private _defaultPrepareEmail(
+    to: string, 
+    token: string,
+    user: UserObjectType, 
+    pathFragment: string,
+    emailTemplate: EmailTemplateType,
+    from: string
+  ): object {
     const tokenizedUrl = this._defaultCreateTokenizedUrl(pathFragment, token);
     return {
       from: emailTemplate.from || from,
@@ -833,28 +823,74 @@ export class AccountsServer {
     };
   }
 
-  _defaultCreateTokenizedUrl(pathFragment: string, token: string): string {
+  private _defaultCreateTokenizedUrl(pathFragment: string, token: string): string {
     const siteUrl = this._options.siteUrl || config.siteUrl;
     return `${siteUrl}/${pathFragment}/${token}`;
   }
 
-  _getFirstUserEmail(user: UserObjectType, address: string): string {
+  private _getFirstUserEmail(user: UserObjectType, address: string): string {
     // Pick the first email if we weren't passed an email
     if (!address && user.emails && user.emails[0]) {
       address = user.emails[0].address; // eslint-disable-line no-param-reassign
     }
     // Make sure the address is valid
     const emails = user.emails || [];
-    if (!address || !includes(emails.map((email: Object) => email.address), address)) {
+    if (!address || !includes(emails.map((email: EmailRecord) => email.address), address)) {
       throw new AccountsError('No such email address for user');
     }
     return address;
   }
 
-  async _hashAndBcryptPassword(password: PasswordType): Promise<string> {
+  private async _hashAndBcryptPassword(password: PasswordType): Promise<string> {
     const hashAlgorithm = this._options.passwordHashAlgorithm;
     const hashedPassword = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
     return bcryptPassword(hashedPassword);
+  }
+
+  private _validateLoginWithField(fieldName: string, user: PasswordLoginUserType) {
+    const allowedFields = this._options.allowedLoginFields || [];
+    const isAllowed = allowedFields.includes(fieldName);
+
+    if (!isAllowed) {
+      throw new AccountsError(`Login with ${fieldName} is not allowed!`, user);
+    }
+  }
+
+  private async _defaultPasswordAuthenticator(user: PasswordLoginUserType, password: PasswordType): Promise<any> {
+    const { username, email, id } = isString(user)
+      ? toUsernameAndEmail({ user: user as string })
+      : toUsernameAndEmail({ ...(user as object) });
+
+    let foundUser;
+
+    if (id) {
+      this._validateLoginWithField('id', user);
+      foundUser = await this.db.findUserById(id);
+    } else if (username) {
+      this._validateLoginWithField('username', user);
+      foundUser = await this.db.findUserByUsername(username);
+    } else if (email) {
+      this._validateLoginWithField('email', user);
+      foundUser = await this.db.findUserByEmail(email);
+    }
+
+    if (!foundUser) {
+      throw new AccountsError('User not found', user, 403);
+    }
+    const hash = await this.db.findPasswordHash(foundUser.id);
+    if (!hash) {
+      throw new AccountsError('User has no password set', user, 403);
+    }
+
+    const hashAlgorithm = this._options.passwordHashAlgorithm;
+    const pass = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
+    const isPasswordValid = await verifyPassword(pass, hash);
+
+    if (!isPasswordValid) {
+      throw new AccountsError('Incorrect password', user, 403);
+    }
+
+    return foundUser;
   }
 }
 

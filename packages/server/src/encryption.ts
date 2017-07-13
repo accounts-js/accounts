@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
+import { createHash } from 'crypto';
 import isString from 'lodash/isString';
 
 const bcryptPassword = async (password) => {
@@ -10,7 +10,7 @@ const bcryptPassword = async (password) => {
 
 const hashPassword = (password, algorithm) => {
   if (isString(password)) {
-    const hash = crypto.createHash(algorithm);
+    const hash = createHash(algorithm);
     hash.update(password);
     return hash.digest('hex');
   }

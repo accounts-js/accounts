@@ -1,13 +1,12 @@
-// @flow
-import type { UserObjectType } from '@accounts/common';
+import { UserObjectType } from '@accounts/common';
 
-export type EmailTemplateType = {
+export interface EmailTemplateType {
   from?: string,
   subject: (user?: UserObjectType) => string,
   text: (user: UserObjectType, url: string) => string
 };
 
-export type EmailTemplatesType = {
+export interface EmailTemplatesType {
   from: string,
   verifyEmail: EmailTemplateType,
   resetPassword: EmailTemplateType,

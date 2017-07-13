@@ -1,8 +1,7 @@
-// @flow
 import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
+import { randomBytes } from 'crypto';
 
-export const generateRandomToken = (length: number = 43) => crypto.randomBytes(length).toString('hex');
+export const generateRandomToken = (length: number = 43) => randomBytes(length).toString('hex');
 
 export const generateAccessToken = ({
   secret,
@@ -10,8 +9,8 @@ export const generateAccessToken = ({
   config,
 }: {
   secret: string,
-  data?: mixed,
-  config: Object
+  data?: any,
+  config: object
 }) => jwt.sign({
   data,
 }, secret, config);
@@ -22,8 +21,8 @@ export const generateRefreshToken = ({
   config,
 }: {
   secret: string,
-  data?: mixed,
-  config: Object
+  data?: any,
+  config: object
 }) => jwt.sign({
   data,
 }, secret, config);

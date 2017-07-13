@@ -1,9 +1,9 @@
-import * as PasswordSignupFields from './passwordSignupFields';
 import * as validators from './validators';
 import { AccountsError } from './errors';
 import toUsernameAndEmail from './toUsernameAndEmail';
 import config from './config';
 
+export { PasswordSignupFields } from './passwordSignupFields';
 export { AccountsCommonConfiguration, HashAlgorithm } from './config';
 export {
   UserObjectType,
@@ -15,10 +15,10 @@ export {
   SessionType,
   PasswordType,
   ImpersonateReturnType,
+  EmailRecord,
 } from './types';
 
 export {
-  PasswordSignupFields,
   validators,
   AccountsError,
   toUsernameAndEmail,
