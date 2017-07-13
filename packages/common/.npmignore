@@ -1,0 +1,5 @@
+__tests__
+src/
+coverage/
+node_modules
+tsconfig.json

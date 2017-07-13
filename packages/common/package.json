@@ -3,14 +3,13 @@
   "version": "0.0.18",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
-  "jsnext:main": "lib-es6/index.js",
   "typings": "lib/index.d.ts",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "start": "tsc --watch",
-    "clean": "rimraf lib lib-es6",
+    "clean": "rimraf lib",
     "precompile": "npm run clean",
     "compile": "tsc",
     "prepublish": "npm run compile",
@@ -21,10 +20,9 @@
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "files": [
-    "lib",
-    "lib-es6"
+    "lib"
   ],
-   "jest": {
+  "jest": {
     "transform": {
       ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
     },

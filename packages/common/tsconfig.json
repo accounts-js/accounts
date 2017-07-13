@@ -10,7 +10,6 @@
   "exclude": [
     "node_modules",
     "__tests__",
-    "lib",
-    "lib-es6"
+    "lib"
   ]
 }
