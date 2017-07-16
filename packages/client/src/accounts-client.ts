@@ -1,11 +1,10 @@
-// @flow
-
 import { isFunction, isString, has } from 'lodash';
-import type { Map } from 'immutable';
-import type { Store } from 'redux';
-import jwtDecode from 'jwt-decode';
-import { AccountsError, validators } from '@accounts/common';
-import type {
+import { Map } from 'immutable';
+import { Store, Middleware } from 'redux';
+import * as jwtDecode from 'jwt-decode';
+import {
+  AccountsError,
+  validators,
   CreateUserType,
   PasswordLoginUserType,
   PasswordLoginUserIdentityType,
@@ -15,8 +14,9 @@ import type {
   PasswordType,
   ImpersonateReturnType,
 } from '@accounts/common';
-import config from './config';
-import createStore from './createStore';
+
+import config, { TokenStorage, AccountsClientConfiguration } from './config';
+import createStore from './create-store';
 import reducer, {
   loggingIn,
   setUser,
@@ -28,26 +28,31 @@ import reducer, {
   clearOriginalTokens,
 } from './module';
 import { hashPassword } from './encryption';
-import type { TransportInterface } from './TransportInterface';
-import type { TokenStorage, AccountsClientConfiguration } from './config';
+import { TransportInterface } from './transport-interface';
 
-const isValidUserObject = (user: PasswordLoginUserIdentityType) => has(user, 'username') || has(user, 'email') || has(user, 'id');
+const isValidUserObject = (user: PasswordLoginUserIdentityType) =>
+  has(user, 'user') || has(user, 'email') || has(user, 'id');
 
 const ACCESS_TOKEN = 'accounts:accessToken';
 const REFRESH_TOKEN = 'accounts:refreshToken';
 const ORIGINAL_ACCESS_TOKEN = 'accounts:originalAccessToken';
 const ORIGINAL_REFRESH_TOKEN = 'accounts:originalRefreshToken';
 
-const getTokenKey = (type: string, options: Object) =>
-  (isString(options.tokenStoragePrefix) && options.tokenStoragePrefix.length > 0 ? `${options.tokenStoragePrefix}:${type}` : type);
+const getTokenKey = (type: string, options: AccountsClientConfiguration) =>
+  isString(options.tokenStoragePrefix) && options.tokenStoragePrefix.length > 0
+    ? `${options.tokenStoragePrefix}:${type}`
+    : type;
 
 export class AccountsClient {
-  options: AccountsClientConfiguration;
-  transport: TransportInterface;
-  store: Store<Object, Object>;
-  storage: TokenStorage;
+  private options: AccountsClientConfiguration;
+  private transport: TransportInterface;
+  private store: Store<object>;
+  private storage: TokenStorage;
 
-  constructor(options: AccountsClientConfiguration, transport: TransportInterface) {
+  constructor(
+    options: AccountsClientConfiguration,
+    transport: TransportInterface
+  ) {
     this.options = options;
     this.storage = options.tokenStorage || config.tokenStorage;
     if (!transport) {
@@ -56,66 +61,76 @@ export class AccountsClient {
 
     this.transport = transport;
 
-    const middleware = options.reduxLogger ? [
-      options.reduxLogger,
-    ] : [];
+    const middleware: Middleware[] = options.reduxLogger
+      ? [options.reduxLogger]
+      : [];
 
     const reduxStoreKey = options.reduxStoreKey || config.reduxStoreKey;
-    this.store = options.store || createStore({
-      reducers: {
-        [reduxStoreKey]: reducer,
-      },
-      middleware,
-    });
+    this.store =
+      options.store ||
+      createStore({
+        reducers: {
+          [reduxStoreKey]: reducer,
+        },
+        middleware,
+      });
   }
 
-  getState(): Map<string, any> {
-    const state = this.store.getState();
+  public getState(): Map<string, any> {
+    const state: object | Map<string, any> = this.store.getState();
 
-    if (typeof state.get === 'function') {
-      return state.get(this.options.reduxStoreKey);
+    if (typeof (state as Map<string, any>).get === 'function') {
+      return (state as Map<string, any>).get(this.options.reduxStoreKey);
     }
 
     return state[this.options.reduxStoreKey];
   }
 
-  async getStorageData(keyName: string): Promise<string> {
+  public async getStorageData(keyName: string): Promise<string> {
     return Promise.resolve(this.storage.getItem(keyName));
   }
 
-  async setStorageData(keyName: string, value: any): Promise<string> {
+  public async setStorageData(keyName: string, value: any): Promise<string> {
     return Promise.resolve(this.storage.setItem(keyName, value));
   }
 
-  async removeStorageData(keyName: string): Promise<string> {
+  public async removeStorageData(keyName: string): Promise<string> {
     return Promise.resolve(this.storage.removeItem(keyName));
   }
 
-  async loadTokensFromStorage(): Promise<void> {
+  public async loadTokensFromStorage(): Promise<void> {
     const tokens = {
-      accessToken: await this.getStorageData(getTokenKey(ACCESS_TOKEN, this.options)) || null,
-      refreshToken: await this.getStorageData(getTokenKey(REFRESH_TOKEN, this.options)) || null,
+      accessToken:
+        (await this.getStorageData(getTokenKey(ACCESS_TOKEN, this.options))) ||
+        null,
+      refreshToken:
+        (await this.getStorageData(getTokenKey(REFRESH_TOKEN, this.options))) ||
+        null,
     };
     this.store.dispatch(setTokens(tokens));
   }
 
-  async loadOriginalTokensFromStorage(): Promise<void> {
+  public async loadOriginalTokensFromStorage(): Promise<void> {
     const tokens = {
-      accessToken: await this.getStorageData(
-        getTokenKey(ORIGINAL_ACCESS_TOKEN, this.options)) || null,
-      refreshToken: await this.getStorageData(
-        getTokenKey(ORIGINAL_REFRESH_TOKEN, this.options)) || null,
+      accessToken:
+        (await this.getStorageData(
+          getTokenKey(ORIGINAL_ACCESS_TOKEN, this.options)
+        )) || null,
+      refreshToken:
+        (await this.getStorageData(
+          getTokenKey(ORIGINAL_REFRESH_TOKEN, this.options)
+        )) || null,
     };
     this.store.dispatch(setOriginalTokens(tokens));
   }
 
-  user(): UserObjectType | null {
+  public user(): UserObjectType {
     const user = this.getState().get('user');
 
     return user ? user.toJS() : null;
   }
 
-  async impersonate(username: string): Promise<ImpersonateReturnType> {
+  public async impersonate(username: string): Promise<ImpersonateReturnType> {
     if (!isString(username)) {
       throw new AccountsError('Username is required');
     }
@@ -147,7 +162,7 @@ export class AccountsClient {
     }
   }
 
-  async stopImpersonation(): Promise<void> {
+  public async stopImpersonation(): Promise<void> {
     if (this.isImpersonated()) {
       this.store.dispatch(setTokens(this.originalTokens()));
       this.store.dispatch(clearOriginalTokens());
@@ -156,79 +171,96 @@ export class AccountsClient {
     }
   }
 
-  isImpersonated(): boolean {
-    return (this.getState().get('isImpersonated'): boolean);
+  public isImpersonated(): boolean {
+    return this.getState().get('isImpersonated');
   }
 
-  originalTokens(): TokensType {
+  public originalTokens(): TokensType {
     const tokens = this.getState().get('originalTokens');
 
-    return tokens ? tokens.toJS() : {
-      accessToken: null,
-      refreshToken: null,
-    };
+    return tokens
+      ? tokens.toJS()
+      : {
+          accessToken: null,
+          refreshToken: null,
+        };
   }
 
-  tokens(): TokensType {
+  public tokens(): TokensType {
     const tokens = this.getState().get('tokens');
 
-    return tokens ? tokens.toJS() : {
-      accessToken: null,
-      refreshToken: null,
-    };
+    return tokens
+      ? tokens.toJS()
+      : {
+          accessToken: null,
+          refreshToken: null,
+        };
   }
 
-  async clearTokens(): Promise<void> {
+  public async clearTokens(): Promise<void> {
     this.store.dispatch(clearStoreTokens());
     await this.removeStorageData(getTokenKey(ACCESS_TOKEN, this.options));
     await this.removeStorageData(getTokenKey(REFRESH_TOKEN, this.options));
   }
 
-  async storeTokens(tokens: ?TokensType): Promise<void> {
+  public async storeTokens(tokens: TokensType): Promise<void> {
     if (tokens) {
       const newAccessToken = tokens.accessToken;
       if (newAccessToken) {
-        await this.setStorageData(getTokenKey(ACCESS_TOKEN, this.options), newAccessToken);
+        await this.setStorageData(
+          getTokenKey(ACCESS_TOKEN, this.options),
+          newAccessToken
+        );
       }
 
       const newRefreshToken = tokens.refreshToken;
       if (newRefreshToken) {
-        await this.setStorageData(getTokenKey(REFRESH_TOKEN, this.options), newRefreshToken);
+        await this.setStorageData(
+          getTokenKey(REFRESH_TOKEN, this.options),
+          newRefreshToken
+        );
       }
     }
   }
-  async storeOriginalTokens(tokens: ?TokensType): Promise<void> {
+  public async storeOriginalTokens(tokens: TokensType): Promise<void> {
     if (tokens) {
       const originalAccessToken = tokens.accessToken;
       if (originalAccessToken) {
         await this.setStorageData(
-          getTokenKey(ORIGINAL_ACCESS_TOKEN, this.options), originalAccessToken);
+          getTokenKey(ORIGINAL_ACCESS_TOKEN, this.options),
+          originalAccessToken
+        );
       }
 
       const originalRefreshToken = tokens.refreshToken;
       if (originalRefreshToken) {
         await this.setStorageData(
-          getTokenKey(ORIGINAL_REFRESH_TOKEN, this.options), originalRefreshToken);
+          getTokenKey(ORIGINAL_REFRESH_TOKEN, this.options),
+          originalRefreshToken
+        );
       }
     }
   }
 
-  clearUser() {
+  public clearUser() {
     this.store.dispatch(clearUser());
   }
 
-  async resumeSession(): Promise<void> {
+  public async resumeSession(): Promise<void> {
     try {
       await this.refreshSession();
-      if (this.options.onResumedSessionHook && isFunction(this.options.onResumedSessionHook)) {
+      if (
+        this.options.onResumedSessionHook &&
+        isFunction(this.options.onResumedSessionHook)
+      ) {
         this.options.onResumedSessionHook();
       }
     } catch (err) {
-      throw (err);
+      throw err;
     }
   }
 
-  async refreshSession(): Promise<void> {
+  public async refreshSession(): Promise<void> {
     const { accessToken, refreshToken } = await this.tokens();
     if (accessToken && refreshToken) {
       try {
@@ -241,8 +273,10 @@ export class AccountsClient {
           this.clearUser();
         } else {
           // Request a new token pair
-          const refreshedSession: LoginReturnType =
-            await this.transport.refreshTokens(accessToken, refreshToken);
+          const refreshedSession: LoginReturnType = await this.transport.refreshTokens(
+            accessToken,
+            refreshToken
+          );
           this.store.dispatch(loggingIn(false));
 
           await this.storeTokens(refreshedSession.tokens);
@@ -262,7 +296,10 @@ export class AccountsClient {
     }
   }
 
-  async createUser(user: CreateUserType, callback: ?Function): Promise<void> {
+  public async createUser(
+    user: CreateUserType,
+    callback?: (err?: Error) => void
+  ): Promise<void> {
     if (!user || user.password === undefined) {
       throw new AccountsError(
         'Unrecognized options for create user request',
@@ -270,23 +307,31 @@ export class AccountsClient {
           username: user && user.username,
           email: user && user.email,
         },
-        400,
+        400
       );
     }
 
     // In case where password is an object we assume it was prevalidated and hashed
-    if (!user.password ||
-        (isString(user.password) && !validators.validatePassword(user.password))) {
+    if (
+      !user.password ||
+      (isString(user.password) &&
+        !validators.validatePassword(user.password as string))
+    ) {
       throw new AccountsError('Password is required');
     }
 
-    if (!validators.validateUsername(user.username) && !validators.validateEmail(user.email)) {
+    if (
+      !validators.validateUsername(user.username) &&
+      !validators.validateEmail(user.email)
+    ) {
       throw new AccountsError('Username or Email is required');
     }
 
     const hashAlgorithm = this.options.passwordHashAlgorithm;
-    const password = (user.password && hashAlgorithm) ?
-      hashPassword(user.password, hashAlgorithm) : user.password;
+    const password =
+      user.password && hashAlgorithm
+        ? hashPassword(user.password, hashAlgorithm)
+        : user.password;
     const userToCreate = { ...user, password };
     try {
       const userId = await this.transport.createUser(userToCreate);
@@ -298,7 +343,8 @@ export class AccountsClient {
         try {
           await onUserCreated({ id: userId });
         } catch (err) {
-          console.log(err);
+          // tslint:disable-next-line no-console
+          console.error(err);
         }
       }
       await this.loginWithPassword({ id: userId }, user.password);
@@ -310,28 +356,46 @@ export class AccountsClient {
     }
   }
 
-  async loginWithPassword(user: PasswordLoginUserType,
-                          password: ?PasswordType,
-                          callback?: Function): Promise<LoginReturnType> {
+  public async loginWithPassword(
+    user: PasswordLoginUserType,
+    password: PasswordType,
+    callback?: (err?: Error, res?: LoginReturnType) => void
+  ): Promise<LoginReturnType> {
     if (!password || !user) {
-      throw new AccountsError('Unrecognized options for login request', user, 400);
+      throw new AccountsError(
+        'Unrecognized options for login request',
+        user,
+        400
+      );
     }
-    if ((!isString(user) && !isValidUserObject(user)) || !isString(password)) {
+    if (
+      (!isString(user) &&
+        !isValidUserObject(user as PasswordLoginUserIdentityType)) ||
+      !isString(password)
+    ) {
       throw new AccountsError('Match failed', user, 400);
     }
 
     this.store.dispatch(loggingIn(true));
     try {
       const hashAlgorithm = this.options.passwordHashAlgorithm;
-      const pass = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
-      const res: LoginReturnType = await this.transport.loginWithPassword(user, pass);
+      const pass = hashAlgorithm
+        ? hashPassword(password, hashAlgorithm)
+        : password;
+      const res: LoginReturnType = await this.transport.loginWithPassword(
+        user,
+        pass
+      );
 
       this.store.dispatch(loggingIn(false));
       await this.storeTokens(res.tokens);
       this.store.dispatch(setTokens(res.tokens));
       this.store.dispatch(setUser(res.user));
 
-      if (this.options.onSignedInHook && isFunction(this.options.onSignedInHook)) {
+      if (
+        this.options.onSignedInHook &&
+        isFunction(this.options.onSignedInHook)
+      ) {
         this.options.onSignedInHook();
       }
 
@@ -349,15 +413,15 @@ export class AccountsClient {
     }
   }
 
-  loggingIn(): boolean {
-    return (this.getState().get('loggingIn'): boolean);
+  public loggingIn(): boolean {
+    return this.getState().get('loggingIn');
   }
 
-  isLoading(): boolean {
-    return (this.getState().get('isLoading'): boolean);
+  public isLoading(): boolean {
+    return this.getState().get('isLoading');
   }
 
-  async logout(callback: ?Function): Promise<void> {
+  public async logout(callback: (err?: Error) => void): Promise<void> {
     try {
       const { accessToken } = await this.tokens();
 
@@ -384,7 +448,7 @@ export class AccountsClient {
     }
   }
 
-  async verifyEmail(token: string): Promise<void> {
+  public async verifyEmail(token: string): Promise<void> {
     try {
       await this.transport.verifyEmail(token);
     } catch (err) {
@@ -392,13 +456,18 @@ export class AccountsClient {
     }
   }
 
-  async resetPassword(token: string, newPassword: string): Promise<void> {
+  public async resetPassword(
+    token: string,
+    newPassword: string
+  ): Promise<void> {
     if (!validators.validatePassword(newPassword)) {
       throw new AccountsError('Password is invalid!');
     }
 
     const hashAlgorithm = this.options.passwordHashAlgorithm;
-    const password = hashAlgorithm ? hashPassword(newPassword, hashAlgorithm) : newPassword;
+    const password = hashAlgorithm
+      ? hashPassword(newPassword, hashAlgorithm)
+      : newPassword;
 
     try {
       await this.transport.resetPassword(token, password);
@@ -407,8 +476,10 @@ export class AccountsClient {
     }
   }
 
-  async requestPasswordReset(email: string): Promise<void> {
-    if (!validators.validateEmail(email)) throw new AccountsError('Valid email must be provided');
+  public async requestPasswordReset(email: string): Promise<void> {
+    if (!validators.validateEmail(email)) {
+      throw new AccountsError('Valid email must be provided');
+    }
     try {
       await this.transport.sendResetPasswordEmail(email);
     } catch (err) {
@@ -416,8 +487,10 @@ export class AccountsClient {
     }
   }
 
-  async requestVerificationEmail(email: string): Promise<void> {
-    if (!validators.validateEmail(email)) throw new AccountsError('Valid email must be provided');
+  public async requestVerificationEmail(email: string): Promise<void> {
+    if (!validators.validateEmail(email)) {
+      throw new AccountsError('Valid email must be provided');
+    }
     try {
       await this.transport.sendVerificationEmail(email);
     } catch (err) {
@@ -427,14 +500,20 @@ export class AccountsClient {
 }
 
 const Accounts = {
-  instance: AccountsClient,
+  // tslint:disable-next-line no-object-literal-type-assertion
+  instance: {} as AccountsClient,
   ui: {},
-  async config(options: AccountsClientConfiguration,
-               transport: TransportInterface): Promise<AccountsClient> {
-    this.instance = new AccountsClient({
-      ...config,
-      ...options,
-    }, transport);
+  async config(
+    options: AccountsClientConfiguration,
+    transport: TransportInterface
+  ): Promise<AccountsClient> {
+    this.instance = new AccountsClient(
+      {
+        ...config,
+        ...options,
+      },
+      transport
+    );
 
     await this.instance.loadTokensFromStorage();
     await this.instance.loadOriginalTokensFromStorage();
@@ -447,12 +526,17 @@ const Accounts = {
   options(): AccountsClientConfiguration {
     return this.instance.options;
   },
-  createUser(user: CreateUserType, callback: ?Function): Promise<void> {
+  createUser(
+    user: CreateUserType,
+    callback?: (err?: Error) => void
+  ): Promise<void> {
     return this.instance.createUser(user, callback);
   },
-  loginWithPassword(user: PasswordLoginUserType,
-                    password: string,
-                    callback?: Function): Promise<void> {
+  loginWithPassword(
+    user: PasswordLoginUserType,
+    password: string,
+    callback?: (err?: Error, res?: LoginReturnType) => void
+  ): Promise<void> {
     return this.instance.loginWithPassword(user, password, callback);
   },
   loggingIn(): boolean {
@@ -461,7 +545,7 @@ const Accounts = {
   isLoading(): boolean {
     return this.instance.isLoading();
   },
-  logout(callback: ?Function): Promise<void> {
+  logout(callback: (err?: Error) => void): Promise<void> {
     return this.instance.logout(callback);
   },
   tokens(): TokensType {

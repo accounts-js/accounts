@@ -8,7 +8,7 @@ export type PasswordType =
     };
 
 export interface EmailRecord {
-  address: string
+  address: string;
 }
 
 export interface UserObjectType {
@@ -60,3 +60,5 @@ export interface SessionType {
   createdAt: string;
   updatedAt: string;
 }
+
+export type HookListener = (event?: object) => void;

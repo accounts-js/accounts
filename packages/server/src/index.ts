@@ -5,9 +5,4 @@ import config from './config';
 
 export default Accounts;
 
-export {
-  AccountsServer,
-  encryption,
-  config,
-  DBInterface,
-};
+export { AccountsServer, encryption, config, DBInterface };

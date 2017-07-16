@@ -1,9 +1,8 @@
-
-import { 
-  AccountsCommonConfiguration, 
-  PasswordLoginUserType, 
-  SessionType, 
-  UserObjectType, 
+import {
+  AccountsCommonConfiguration,
+  PasswordLoginUserType,
+  SessionType,
+  UserObjectType,
   PasswordType,
   CreateUserType,
   config as sharedConfig,
@@ -11,22 +10,30 @@ import {
 } from '@accounts/common';
 import { EmailTemplateType } from './email-templates';
 
-export type PasswordAuthenticator = (user: PasswordLoginUserType, password: PasswordType) => Promise<any>;
-export type ResumeSessionValidator = (user: UserObjectType, session: SessionType) => Promise<any>;
+export type PasswordAuthenticator = (
+  user: PasswordLoginUserType,
+  password: PasswordType
+) => Promise<any>;
+export type ResumeSessionValidator = (
+  user: UserObjectType,
+  session: SessionType
+) => Promise<any>;
 
 export type TokenExpiration = string;
 export interface TokenConfig {
   accessToken?: {
-    expiresIn?: TokenExpiration
-  },
+    expiresIn?: TokenExpiration;
+  };
   refreshToken?: {
-    expiresIn?: TokenExpiration
-  }
-};
+    expiresIn?: TokenExpiration;
+  };
+}
 
 export type EmailType = EmailTemplateType & { to: string };
 
-export type SendMailFunction = (emailConfig: EmailType | object) => Promise<object>;
+export type SendMailFunction = (
+  emailConfig: EmailType | object
+) => Promise<object>;
 
 export type UserObjectSanitizerFunction = (
   userObject: UserObjectType,
@@ -44,19 +51,22 @@ export type PrepareMailFunction = (
 ) => object;
 
 export type AccountsServerConfiguration = AccountsCommonConfiguration & {
-  tokenSecret?: string,
-  tokenConfigs?: TokenConfig,
-  passwordAuthenticator?: PasswordAuthenticator,
-  resumeSessionValidator?: ResumeSessionValidator,
-  prepareMail?: PrepareMailFunction,
-  sendMail?: SendMailFunction,
+  tokenSecret?: string;
+  tokenConfigs?: TokenConfig;
+  passwordAuthenticator?: PasswordAuthenticator;
+  resumeSessionValidator?: ResumeSessionValidator;
+  prepareMail?: PrepareMailFunction;
+  sendMail?: SendMailFunction;
   // https://github.com/eleith/emailjs#emailserverconnectoptions
-  email?: object,
-  emailTokensExpiry?: number,
-  impersonationAuthorize: (user: UserObjectType, impersonateToUser: UserObjectType) => Promise<any>,
-  validateNewUser?: (user: CreateUserType) => Promise<boolean>,
-  userObjectSanitizer?: UserObjectSanitizerFunction,
-  allowedLoginFields?: string[]
+  email?: object;
+  emailTokensExpiry?: number;
+  impersonationAuthorize: (
+    user: UserObjectType,
+    impersonateToUser: UserObjectType
+  ) => Promise<any>;
+  validateNewUser?: (user: CreateUserType) => Promise<boolean>;
+  userObjectSanitizer?: UserObjectSanitizerFunction;
+  allowedLoginFields?: string[];
 };
 
 export default {

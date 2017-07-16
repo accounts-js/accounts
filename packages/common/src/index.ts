@@ -5,22 +5,6 @@ import config from './config';
 
 export { PasswordSignupFields } from './password-signup-fields';
 export { AccountsCommonConfiguration, HashAlgorithm } from './config';
-export {
-  UserObjectType,
-  CreateUserType,
-  PasswordLoginUserType,
-  PasswordLoginUserIdentityType,
-  LoginReturnType,
-  TokensType,
-  SessionType,
-  PasswordType,
-  ImpersonateReturnType,
-  EmailRecord,
-} from './types';
+export * from './types';
 
-export {
-  validators,
-  AccountsError,
-  toUsernameAndEmail,
-  config,
-};
+export { validators, AccountsError, toUsernameAndEmail, config };

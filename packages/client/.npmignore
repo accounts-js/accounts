@@ -1,7 +1,5 @@
 src/
 coverage/
 wallaby.js
-webpack.config.js
-.babelrc
 .eslintrc
 .flowconfig

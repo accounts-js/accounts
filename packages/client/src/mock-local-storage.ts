@@ -1,25 +1,27 @@
 class LocalStorageMock {
+  private store: object;
   constructor() {
     this.store = {};
   }
 
-  clear() {
+  public clear() {
     this.store = {};
   }
 
-  getItem(key) {
+  public getItem(key) {
     return this.store[key];
   }
 
-  setItem(key, value) {
+  public setItem(key, value) {
     this.store[key] = value.toString();
   }
 
-  removeItem(key) {
+  public removeItem(key) {
     if (this.store[key]) {
       delete this.store[key];
     }
   }
 }
 
-global.localStorage = new LocalStorageMock();
+// tslint:disable-next-line no-string-literal
+global['localStorage'] = new LocalStorageMock();

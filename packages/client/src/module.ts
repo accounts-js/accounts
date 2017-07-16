@@ -11,7 +11,7 @@ const SET_ORIGINAL_TOKENS = `${PATH}SET_ORIGINAL_TOKENS`;
 const CLEAR_ORIGINAL_TOKENS = `${PATH}CLEAR_ORIGINAL_TOKENS`;
 const SET_IMPERSONATED = `${PATH}SET_IMPERSONATED`;
 
-const initialState = Map({
+const initialState = Map<string, any>({
   isLoading: false,
   user: null,
   tokens: null,

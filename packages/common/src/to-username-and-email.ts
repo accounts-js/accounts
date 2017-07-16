@@ -10,13 +10,13 @@ const toUsernameAndEmail = ({
   user,
   username,
   email,
-  id
+  id,
 }: {
-    user?: string,
-    username?: string,
-    email?: string,
-    id?: string,
-  }) => {
+  user?: string;
+  username?: string;
+  email?: string;
+  id?: string;
+}) => {
   if (user && !username && !email) {
     if (isEmail(user)) {
       email = user;

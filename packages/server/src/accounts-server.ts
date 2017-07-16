@@ -23,22 +23,32 @@ import {
   ImpersonateReturnType,
   PasswordType,
   EmailRecord,
+  HookListener,
 } from '@accounts/common';
-import config, { AccountsServerConfiguration, PasswordAuthenticator } from './config';
+import config, {
+  AccountsServerConfiguration,
+  PasswordAuthenticator,
+} from './config';
 import { DBInterface } from './db-interface';
 import { verifyPassword, hashPassword, bcryptPassword } from './encryption';
-import { generateAccessToken, generateRefreshToken, generateRandomToken } from './tokens';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  generateRandomToken,
+} from './tokens';
 import Email, { EmailConnector } from './email';
-import emailTemplates, { EmailTemplatesType, EmailTemplateType } from './email-templates';
+import emailTemplates, {
+  EmailTemplatesType,
+  EmailTemplateType,
+} from './email-templates';
 
 export interface TokenRecord {
-  token: string,
-  address: string,
-  when: number,
-  reason: string
-};
+  token: string;
+  address: string;
+  when: number;
+  reason: string;
+}
 
-export type HookListener = (event: object) => void;
 export type RemoveListnerHandle = () => EventEmitter;
 
 export const ServerHooks = {
@@ -80,9 +90,9 @@ export class AccountsServer {
     }
 
     this.db = db;
-    this.email = this._options.sendMail ?
-      { sendMail: this._options.sendMail } :
-      new Email(this._options.email);
+    this.email = this._options.sendMail
+      ? { sendMail: this._options.sendMail }
+      : new Email(this._options.email);
     this.emailTemplates = emailTemplates;
 
     if (!this.hooks) {
@@ -162,7 +172,11 @@ export class AccountsServer {
   ): Promise<LoginReturnType> {
     try {
       if (!user || !password) {
-        throw new AccountsError('Unrecognized options for login request', user, 400);
+        throw new AccountsError(
+          'Unrecognized options for login request',
+          user,
+          400
+        );
       }
       if ((!isString(user) && !isPlainObject(user)) || !isString(password)) {
         throw new AccountsError('Match failed', user, 400);
@@ -174,7 +188,7 @@ export class AccountsServer {
         foundUser = await this._externalPasswordAuthenticator(
           this._options.passwordAuthenticator,
           user,
-          password,
+          password
         );
       } else {
         foundUser = await this._defaultPasswordAuthenticator(user, password);
@@ -197,8 +211,8 @@ export class AccountsServer {
   }
 
   public async _externalPasswordAuthenticator(
-    authFn: PasswordAuthenticator, 
-    user: PasswordLoginUserType, 
+    authFn: PasswordAuthenticator,
+    user: PasswordLoginUserType,
     password: PasswordType
   ): Promise<any> {
     return authFn(user, password);
@@ -214,7 +228,11 @@ export class AccountsServer {
    * @returns {Promise<LoginReturnType>} - Session tokens and user object.
    */
   // eslint-disable-next-line max-len
-  public async loginWithUser(user: UserObjectType, ip?: string, userAgent?: string): Promise<LoginReturnType> {
+  public async loginWithUser(
+    user: UserObjectType,
+    ip?: string,
+    userAgent?: string
+  ): Promise<LoginReturnType> {
     const sessionId = await this.db.createSession(user.id, ip, userAgent);
     const { accessToken, refreshToken } = this.createTokens(sessionId);
 
@@ -237,21 +255,23 @@ export class AccountsServer {
    */
   public async createUser(user: CreateUserType): Promise<string> {
     try {
-      if (!validators.validateUsername(user.username) && !validators.validateEmail(user.email)) {
-        throw new AccountsError(
-          'Username or Email is required',
-          {
-            username: user && user.username,
-            email: user && user.email,
-          },
-        );
+      if (
+        !validators.validateUsername(user.username) &&
+        !validators.validateEmail(user.email)
+      ) {
+        throw new AccountsError('Username or Email is required', {
+          username: user && user.username,
+          email: user && user.email,
+        });
       }
 
-      if (user.username && await this.db.findUserByUsername(user.username)) {
-        throw new AccountsError('Username already exists', { username: user.username });
+      if (user.username && (await this.db.findUserByUsername(user.username))) {
+        throw new AccountsError('Username already exists', {
+          username: user.username,
+        });
       }
 
-      if (user.email && await this.db.findUserByEmail(user.email)) {
+      if (user.email && (await this.db.findUserByEmail(user.email))) {
         throw new AccountsError('Email already exists', { email: user.email });
       }
 
@@ -273,7 +293,11 @@ export class AccountsServer {
       }
 
       const userId: string = await this.db.createUser(proposedUserObject);
-      this.hooks.emit(ServerHooks.CreateUserSuccess, userId, proposedUserObject);
+      this.hooks.emit(
+        ServerHooks.CreateUserSuccess,
+        userId,
+        proposedUserObject
+      );
 
       return userId;
     } catch (error) {
@@ -329,16 +353,20 @@ export class AccountsServer {
         return { authorized: false };
       }
 
-      const isAuthorized = await this._options.impersonationAuthorize(user, impersonatedUser);
+      const isAuthorized = await this._options.impersonationAuthorize(
+        user,
+        impersonatedUser
+      );
 
       if (!isAuthorized) {
         return { authorized: false };
       }
 
-      const newSessionId = await this.db.createSession(impersonatedUser.id,
-                                                       ip,
-                                                       userAgent,
-                                                       { impersonatorUserId: user.id });
+      const newSessionId = await this.db.createSession(
+        impersonatedUser.id,
+        ip,
+        userAgent
+      );
       const impersonationTokens = this.createTokens(newSessionId, true);
       const impersonationResult = {
         authorized: true,
@@ -346,7 +374,11 @@ export class AccountsServer {
         user: this._sanitizeUser(impersonatedUser),
       };
 
-      this.hooks.emit(ServerHooks.ImpersonationSuccess, user, impersonationResult);
+      this.hooks.emit(
+        ServerHooks.ImpersonationSuccess,
+        user,
+        impersonationResult
+      );
 
       return impersonationResult;
     } catch (e) {
@@ -378,9 +410,13 @@ export class AccountsServer {
       let sessionId;
       try {
         jwt.verify(refreshToken, this._options.tokenSecret);
-        const decodedAccessToken = jwt.verify(accessToken, this._options.tokenSecret, {
-          ignoreExpiration: true,
-        });
+        const decodedAccessToken = jwt.verify(
+          accessToken,
+          this._options.tokenSecret,
+          {
+            ignoreExpiration: true,
+          }
+        );
         sessionId = decodedAccessToken.data.sessionId;
       } catch (err) {
         throw new AccountsError('Tokens are not valid');
@@ -408,8 +444,11 @@ export class AccountsServer {
         this.hooks.emit(ServerHooks.RefreshTokensSuccess, result);
 
         return result;
-      } else { // eslint-disable-line no-else-return
-        throw new AccountsError('Session is no longer valid', { id: session.userId });
+      } else {
+        // eslint-disable-line no-else-return
+        throw new AccountsError('Session is no longer valid', {
+          id: session.userId,
+        });
       }
     } catch (err) {
       this.hooks.emit(ServerHooks.RefreshTokensError, err);
@@ -424,8 +463,14 @@ export class AccountsServer {
    * @param {boolean} isImpersonated - Should be true if impersonating another user.
    * @returns {Promise<Object>} - Return a new accessToken and refreshToken.
    */
-  public createTokens(sessionId: string, isImpersonated: boolean = false): TokensType {
-    const { tokenSecret = config.tokenSecret, tokenConfigs = config.tokenConfigs } = this._options;
+  public createTokens(
+    sessionId: string,
+    isImpersonated: boolean = false
+  ): TokensType {
+    const {
+      tokenSecret = config.tokenSecret,
+      tokenConfigs = config.tokenConfigs,
+    } = this._options;
     const accessToken = generateAccessToken({
       data: {
         sessionId,
@@ -448,7 +493,9 @@ export class AccountsServer {
    */
   public async logout(accessToken: string): Promise<void> {
     try {
-      const session: SessionType = await this.findSessionByAccessToken(accessToken);
+      const session: SessionType = await this.findSessionByAccessToken(
+        accessToken
+      );
 
       if (session.valid) {
         const user = await this.db.findUserById(session.userId);
@@ -458,9 +505,17 @@ export class AccountsServer {
         }
 
         await this.db.invalidateSession(session.sessionId);
-        this.hooks.emit(ServerHooks.LogoutSuccess, this._sanitizeUser(user), session, accessToken);
-      } else { // eslint-disable-line no-else-return
-        throw new AccountsError('Session is no longer valid', { id: session.userId });
+        this.hooks.emit(
+          ServerHooks.LogoutSuccess,
+          this._sanitizeUser(user),
+          session,
+          accessToken
+        );
+      } else {
+        // eslint-disable-line no-else-return
+        throw new AccountsError('Session is no longer valid', {
+          id: session.userId,
+        });
       }
     } catch (error) {
       this.hooks.emit(ServerHooks.LogoutError, error);
@@ -471,7 +526,9 @@ export class AccountsServer {
 
   public async resumeSession(accessToken: string): Promise<UserObjectType> {
     try {
-      const session: SessionType = await this.findSessionByAccessToken(accessToken);
+      const session: SessionType = await this.findSessionByAccessToken(
+        accessToken
+      );
 
       if (session.valid) {
         const user = await this.db.findUserById(session.userId);
@@ -493,7 +550,10 @@ export class AccountsServer {
         return this._sanitizeUser(user);
       }
 
-      this.hooks.emit(ServerHooks.ResumeSessionError, new AccountsError('Invalid Session', { id: session.userId }));
+      this.hooks.emit(
+        ServerHooks.ResumeSessionError,
+        new AccountsError('Invalid Session', { id: session.userId })
+      );
 
       return null;
     } catch (e) {
@@ -503,14 +563,19 @@ export class AccountsServer {
     }
   }
 
-  public async findSessionByAccessToken(accessToken: string): Promise<SessionType> {
+  public async findSessionByAccessToken(
+    accessToken: string
+  ): Promise<SessionType> {
     if (!isString(accessToken)) {
       throw new AccountsError('An accessToken is required');
     }
 
     let sessionId;
     try {
-      const decodedAccessToken = jwt.verify(accessToken, this._options.tokenSecret);
+      const decodedAccessToken = jwt.verify(
+        accessToken,
+        this._options.tokenSecret
+      );
       sessionId = decodedAccessToken.data.sessionId;
     } catch (err) {
       throw new AccountsError('Tokens are not valid');
@@ -560,7 +625,11 @@ export class AccountsServer {
    * Defaults to false.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
+  public addEmail(
+    userId: string,
+    newEmail: string,
+    verified: boolean
+  ): Promise<void> {
     return this.db.addEmail(userId, newEmail, verified);
   }
 
@@ -586,13 +655,23 @@ export class AccountsServer {
       throw new AccountsError('Verify email link expired');
     }
 
-    const verificationTokens: TokenRecord[] = get(user, ['services', 'email', 'verificationTokens'], []);
-    const tokenRecord = find(verificationTokens, (t: TokenRecord) => t.token === token);
+    const verificationTokens: TokenRecord[] = get(
+      user,
+      ['services', 'email', 'verificationTokens'],
+      []
+    );
+    const tokenRecord = find(
+      verificationTokens,
+      (t: TokenRecord) => t.token === token
+    );
     if (!tokenRecord) {
       throw new AccountsError('Verify email link expired');
     }
     // TODO check time for expiry date
-    const emailRecord = find(user.emails, (e: EmailRecord) => e.address === tokenRecord.address);
+    const emailRecord = find(
+      user.emails,
+      (e: EmailRecord) => e.address === tokenRecord.address
+    );
     if (!emailRecord) {
       throw new AccountsError('Verify email link is for unknown address');
     }
@@ -605,7 +684,10 @@ export class AccountsServer {
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public async resetPassword(token: string, newPassword: PasswordType): Promise<void> {
+  public async resetPassword(
+    token: string,
+    newPassword: PasswordType
+  ): Promise<void> {
     const user = await this.db.findUserByResetPasswordToken(token);
     if (!user) {
       throw new AccountsError('Reset password link expired');
@@ -620,13 +702,23 @@ export class AccountsServer {
     }
 
     const emails = user.emails || [];
-    if (!includes(emails.map((email: EmailRecord) => email.address), resetTokenRecord.address)) {
+    if (
+      !includes(
+        emails.map((email: EmailRecord) => email.address),
+        resetTokenRecord.address
+      )
+    ) {
       throw new AccountsError('Token has invalid email address');
     }
 
     const password = await this._hashAndBcryptPassword(newPassword);
     // Change the user password and remove the old token
-    await this.db.setResetPasssword(user.id, resetTokenRecord.address, password, token);
+    await this.db.setResetPasssword(
+      user.id,
+      resetTokenRecord.address,
+      password,
+      token
+    );
     // Changing the password should invalidate existing sessions
     this.db.invalidateAllSessions(user.id);
   }
@@ -702,7 +794,7 @@ export class AccountsServer {
       this._sanitizeUser(user),
       'verify-email',
       this.emailTemplates.verifyEmail,
-      this.emailTemplates.from,
+      this.emailTemplates.from
     );
 
     await this.email.sendMail(resetPasswordMail);
@@ -730,7 +822,7 @@ export class AccountsServer {
       this._sanitizeUser(user),
       'reset-password',
       this.emailTemplates.resetPassword,
-      this.emailTemplates.from,
+      this.emailTemplates.from
     );
 
     await this.email.sendMail(resetPasswordMail);
@@ -758,7 +850,7 @@ export class AccountsServer {
       this._sanitizeUser(user),
       'enroll-account',
       this.emailTemplates.enrollAccount,
-      this.emailTemplates.from,
+      this.emailTemplates.from
     );
 
     await this.email.sendMail(enrollmentMail);
@@ -771,8 +863,10 @@ export class AccountsServer {
   }
 
   private _isTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
-    return !tokenRecord ||
-      Number(tokenRecord.when) + this._options.emailTokensExpiry < Date.now();
+    return (
+      !tokenRecord ||
+      Number(tokenRecord.when) + this._options.emailTokensExpiry < Date.now()
+    );
   }
 
   private _internalUserSanitizer(user: UserObjectType): UserObjectType {
@@ -791,7 +885,7 @@ export class AccountsServer {
     user: UserObjectType,
     pathFragment: string,
     emailTemplate: EmailTemplateType,
-    from: string,
+    from: string
   ): any {
     if (this._options.prepareMail) {
       return this._options.prepareMail(
@@ -800,7 +894,7 @@ export class AccountsServer {
         user,
         pathFragment,
         emailTemplate,
-        from,
+        from
       );
     }
     return this._defaultPrepareEmail(
@@ -809,14 +903,14 @@ export class AccountsServer {
       user,
       pathFragment,
       emailTemplate,
-      from,
+      from
     );
   }
 
   private _defaultPrepareEmail(
-    to: string, 
+    to: string,
     token: string,
-    user: UserObjectType, 
+    user: UserObjectType,
     pathFragment: string,
     emailTemplate: EmailTemplateType,
     from: string
@@ -830,7 +924,10 @@ export class AccountsServer {
     };
   }
 
-  private _defaultCreateTokenizedUrl(pathFragment: string, token: string): string {
+  private _defaultCreateTokenizedUrl(
+    pathFragment: string,
+    token: string
+  ): string {
     const siteUrl = this._options.siteUrl || config.siteUrl;
     return `${siteUrl}/${pathFragment}/${token}`;
   }
@@ -842,19 +939,29 @@ export class AccountsServer {
     }
     // Make sure the address is valid
     const emails = user.emails || [];
-    if (!address || !includes(emails.map((email: EmailRecord) => email.address), address)) {
+    if (
+      !address ||
+      !includes(emails.map((email: EmailRecord) => email.address), address)
+    ) {
       throw new AccountsError('No such email address for user');
     }
     return address;
   }
 
-  private async _hashAndBcryptPassword(password: PasswordType): Promise<string> {
+  private async _hashAndBcryptPassword(
+    password: PasswordType
+  ): Promise<string> {
     const hashAlgorithm = this._options.passwordHashAlgorithm;
-    const hashedPassword = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
+    const hashedPassword = hashAlgorithm
+      ? hashPassword(password, hashAlgorithm)
+      : password;
     return bcryptPassword(hashedPassword);
   }
 
-  private _validateLoginWithField(fieldName: string, user: PasswordLoginUserType) {
+  private _validateLoginWithField(
+    fieldName: string,
+    user: PasswordLoginUserType
+  ) {
     const allowedFields = this._options.allowedLoginFields || [];
     const isAllowed = allowedFields.includes(fieldName);
 
@@ -863,10 +970,13 @@ export class AccountsServer {
     }
   }
 
-  private async _defaultPasswordAuthenticator(user: PasswordLoginUserType, password: PasswordType): Promise<any> {
+  private async _defaultPasswordAuthenticator(
+    user: PasswordLoginUserType,
+    password: PasswordType
+  ): Promise<any> {
     const { username, email, id } = isString(user)
       ? toUsernameAndEmail({ user: user as string })
-      : toUsernameAndEmail({ ...(user as object) });
+      : toUsernameAndEmail({ ...user as object });
 
     let foundUser;
 
@@ -890,7 +1000,9 @@ export class AccountsServer {
     }
 
     const hashAlgorithm = this._options.passwordHashAlgorithm;
-    const pass = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
+    const pass = hashAlgorithm
+      ? hashPassword(password, hashAlgorithm)
+      : password;
     const isPasswordValid = await verifyPassword(pass, hash);
 
     if (!isPasswordValid) {
@@ -902,4 +1014,3 @@ export class AccountsServer {
 }
 
 export default new AccountsServer();
-

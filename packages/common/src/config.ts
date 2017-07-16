@@ -1,4 +1,3 @@
-// @flow
 import { PasswordSignupFields } from './password-signup-fields';
 
 export type HashAlgorithm =
