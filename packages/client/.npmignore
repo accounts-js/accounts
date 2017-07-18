@@ -3,3 +3,5 @@ src/
 coverage/
 node_modules
 tsconfig.json
+.npmignore
+yarn.lock
