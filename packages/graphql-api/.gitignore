@@ -1,2 +1,7 @@
-node_modules
+lib/
+node_modules/
+coverage/
+npm-debug.log
 .idea
+lerna-debug.log
+.vscode

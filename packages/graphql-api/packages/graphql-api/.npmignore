@@ -1,7 +1,6 @@
 src/
 coverage/
-.babelrc
-.eslintrc
-webpack.config.js
+node_modules
 yarn.lock
-wallaby.js
+tsconfig.json
+.npmignore

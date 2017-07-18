@@ -4,11 +4,9 @@
     "start": "lerna exec -- npm start",
     "link": "lerna exec -- npm link @accounts/client; lerna exec -- npm link @accounts/server; lerna exec -- npm link @accounts/common; lerna exec -- npm link",
     "compile": "lerna run compile",
-    "flow:check": "flow check",
-    "lint": "eslint packages/*/src",
+    "lint": "tslint packages/*/src",
     "prebootstrap": "npm install",
     "postinstall": "lerna bootstrap",
-    "pretest": "npm run compile",
     "test": "npm run testonly",
     "posttest": "npm run lint",
     "testonly": "lerna run testonly",
@@ -21,17 +19,13 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "lerna": "2.0.0-beta.37",
-    "flow-bin": "^0.37.4",
-    "eslint": "^3.7.1",
-    "babel-eslint": "^7.0.0",
-    "eslint-config-airbnb": "^12.0.0",
-    "eslint-config-airbnb-base": "^9.0.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.3.0",
-    "eslint-plugin-jsdoc": "^2.4.0",
-    "eslint-plugin-require-jsdoc": "^1.0.4",
-    "eslint-plugin-flowtype": "^2.29.1"
+    "@types/jest": "^20.0.2",
+    "@types/node": "^8.0.13",
+    "lerna": "^2.0.0",
+    "prettier": "^1.5.3",
+    "ts-jest": "^20.0.7",
+    "tslint": "^5.5.0",
+    "tslint-config-accounts": "^0.0.3",
+    "typescript": "^2.4.1"
   }
 }

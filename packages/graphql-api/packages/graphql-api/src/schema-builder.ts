@@ -1,4 +1,3 @@
-// @flow
 import { loginWithPassword } from './resolvers/login-with-password';
 import { refreshTokens } from './resolvers/refresh-tokens';
 import { impersonate } from './resolvers/impersonate';
@@ -14,7 +13,7 @@ import { sendResetPasswordEmail } from './resolvers/send-reset-password-email';
 import { sendVerificationEmail } from './resolvers/send-verification-email';
 import { verifyEmail } from './resolvers/verify-email';
 
-export type SchemaGenerationOptions = {
+export interface SchemaGenerationOptions {
   rootQueryName: string;
   rootMutationName: string;
   extend: boolean;
@@ -67,15 +66,18 @@ export const createJSAccountsGraphQL = (Accounts: any, schemaOptions: SchemaGene
     schema,
     extendWithResolvers: resolversObject => ({
       ...resolversObject,
-      [schemaOptions.rootMutationName]: Object.assign(
-        resolversObject[schemaOptions.rootMutationName] || {},
-        resolvers[schemaOptions.rootMutationName]),
-      [schemaOptions.rootQueryName]: Object.assign(
-        resolversObject[schemaOptions.rootQueryName] || {},
-        resolvers[schemaOptions.rootQueryName]),
-      User: Object.assign(
-        resolversObject.User || {},
-        resolvers.User),
+      [schemaOptions.rootMutationName]: {
+        ...(resolversObject[schemaOptions.rootMutationName] || {}),
+        ...resolvers[schemaOptions.rootMutationName],
+      },
+      [schemaOptions.rootQueryName]: {
+        ...(resolversObject[schemaOptions.rootQueryName] || {}),
+        ...resolvers[schemaOptions.rootQueryName],
+      },
+      User: {
+        ...(resolversObject.User || {}),
+        ...resolvers.User
+      },
     }),
   };
 };
