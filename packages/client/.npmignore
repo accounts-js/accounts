@@ -1,5 +1,5 @@
+__tests__
 src/
 coverage/
-wallaby.js
-.eslintrc
-.flowconfig
+node_modules
+tsconfig.json
