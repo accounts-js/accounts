@@ -375,7 +375,10 @@ export class AccountsServer {
         return { authorized: false };
       }
 
-      const newSessionId = await this.db.createSession(impersonatedUser.id, ip, userAgent);
+      const newSessionId = await this.db.createSession(impersonatedUser.id,
+                                                       ip,
+                                                       userAgent,
+                                                       { impersonatorUserId: user.id });
       const impersonationTokens = this.createTokens(newSessionId, true);
       const impersonationResult = {
         authorized: true,

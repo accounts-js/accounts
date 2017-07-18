@@ -33,7 +33,7 @@ export interface DBInterface {
 
   // Session related operations
   findSessionById(sessionId: string) : Promise<?SessionType>,
-  createSession(userId: string, ip: ?string, userAgent: ?string) : Promise<string>,
+  createSession(userId: string, ip: ?string, userAgent: ?string, extraData: ?Object) : Promise<string>,
   updateSession(sessionId: string, ip: string, userAgent: string) : Promise<void>,
   invalidateSession(sessionId: string): Promise<void>,
   invalidateAllSessions(userId: string): Promise<void>
