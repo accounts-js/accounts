@@ -17,7 +17,10 @@ export type MongoOptionsType = {
     updatedAt: string,
   },
   convertUserIdToMongoObjectId: boolean,
-  caseSensitiveUserName: boolean
+  convertSessionIdToMongoObjectId: boolean,
+  caseSensitiveUserName: boolean,
+  idProvider: ?(() => string | Object),
+  dateProvider: (date?: Date) => any,
 };
 
 export type MongoUserObjectType = {
@@ -61,6 +64,9 @@ class Mongo {
       },
       convertUserIdToMongoObjectId: true,
       caseSensitiveUserName: true,
+      convertSessionIdToMongoObjectId: true,
+      idProvider: null,
+      dateProvider: ((date?: Date) => (date ? date.getTime() : Date.now())),
     };
     this.options = { ...defaultOptions, ...options };
     if (!db) {
@@ -77,7 +83,7 @@ class Mongo {
   }
 
   async createUser(options: CreateUserType): Promise<string> {
-    const user: MongoUserObjectType = {
+    let user: MongoUserObjectType = {
       services: {},
       profile: {},
       [this.options.timestamps.createdAt]: Date.now(),
@@ -94,6 +100,12 @@ class Mongo {
     }
     if (options.profile) {
       user.profile = options.profile;
+    }
+    if (options.idProvider) {
+      user = {
+        ...user,
+        _id: options.idProvider(),
+      };
     }
     const ret = await this.collection.insertOne(user);
     return ret.ops[0]._id;
@@ -219,33 +231,44 @@ class Mongo {
     return profile;
   }
 
-  async createSession(userId: string, ip: string, userAgent: string): Promise<string> {
-    const ret = await this.sessionCollection.insertOne({
+  async createSession(userId: string, ip: string, userAgent: string,
+    extraData: ?Object): Promise<string> {
+    let session = {
       userId,
       userAgent,
       ip,
+      extraData,
       valid: true,
-      [this.options.timestamps.createdAt]: Date.now(),
-      [this.options.timestamps.updatedAt]: Date.now(),
-    });
+      [this.options.timestamps.createdAt]: this.options.dateProvider(),
+      [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+    };
+    if (this.options.idProvider) {
+      session = {
+        ...session,
+        _id: this.options.idProvider(),
+      };
+    }
+    const ret = await this.sessionCollection.insertOne(session);
     return ret.ops[0]._id;
   }
 
   async updateSession(sessionId: string, ip: string, userAgent: string): Promise<void> {
-    await this.sessionCollection.update({ _id: toMongoID(sessionId) }, {
+    const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
+    await this.sessionCollection.update({ _id }, {
       $set: {
         ip,
         userAgent,
-        [this.options.timestamps.updatedAt]: Date.now(),
+        [this.options.timestamps.updatedAt]: this.options.dateProvider(),
       },
     });
   }
 
   async invalidateSession(sessionId: string): Promise<void> {
-    await this.sessionCollection.update({ _id: toMongoID(sessionId) }, {
+    const id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
+    await this.sessionCollection.update({ _id: id }, {
       $set: {
         valid: false,
-        [this.options.timestamps.updatedAt]: Date.now(),
+        [this.options.timestamps.updatedAt]: this.options.dateProvider(),
       },
     });
   }
@@ -254,13 +277,14 @@ class Mongo {
     await this.sessionCollection.updateMany({ userId }, {
       $set: {
         valid: false,
-        [this.options.timestamps.updatedAt]: Date.now(),
+        [this.options.timestamps.updatedAt]: this.options.dateProvider(),
       },
     });
   }
 
   findSessionById(sessionId: string): Promise<?SessionType> {
-    return this.sessionCollection.findOne({ _id: toMongoID(sessionId) });
+    const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
+    return this.sessionCollection.findOne({ _id });
   }
 
   async addEmailVerificationToken(userId: string, email: string, token: string): Promise<void> {
