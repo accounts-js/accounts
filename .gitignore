@@ -1,5 +1,4 @@
 lib/
-lib-es6/
 node_modules/
 coverage/
 npm-debug.log
