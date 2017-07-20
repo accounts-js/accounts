@@ -1,6 +1,6 @@
 {
   "name": "@accounts/mongo",
-  "version": "0.0.12-0",
+  "version": "0.0.12",
   "description": "MongoDB adaptor for accounts",
   "main": "lib/index.js",
   "jsnext:main": "lib-es6/index.js",
