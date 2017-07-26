@@ -9,8 +9,8 @@
     "compile": "tsc",
     "compile:watch": "tsc --watch",
     "prepare": "npm run compile",
-    "test": "yarn lint && yarn testonly",
-    "test-ci": "yarn lint && yarn coverage",
+    "test": "yarn testonly",
+    "test-ci": "yarn coverage",
     "testonly": "jest",
     "coverage": "yarn testonly -- --coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
