@@ -22,5 +22,4 @@ dependencies:
 
 test:
   override:
-    - cd ./packages/graphql-api/ && yarn && yarn lint && yarn compile
-    - cd ./packages/graphql-client/ && yarn && yarn lint && yarn compile
+    - yarn && yarn lint && yarn compile
