@@ -1,6 +1,8 @@
 // @flow
 
-import { isFunction, isString, has } from 'lodash';
+import isFunction from 'lodash/isFunction';
+import isString from 'lodash/isString';
+import has from 'lodash/has';
 import type { Map } from 'immutable';
 import type { Store } from 'redux';
 import jwtDecode from 'jwt-decode';
