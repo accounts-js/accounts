@@ -71,12 +71,12 @@ export class AccountsClient {
 
   getState(): Map<string, any> {
     const state = this.store.getState();
-
+    const storeKey = this.options.reduxStoreKey || config.reduxStoreKey;
     if (typeof state.get === 'function') {
-      return state.get(this.options.reduxStoreKey);
+      return state.get(storeKey);
     }
 
-    return state[this.options.reduxStoreKey];
+    return state[storeKey];
   }
 
   async getStorageData(keyName: string): Promise<string> {
