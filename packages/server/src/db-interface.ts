@@ -44,7 +44,8 @@ export interface DBInterface {
   createSession(
     userId: string,
     ip?: string,
-    userAgent?: string
+    userAgent?: string,
+    extraData?: object
   ): Promise<string>;
   updateSession(
     sessionId: string,

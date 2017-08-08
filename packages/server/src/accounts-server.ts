@@ -365,7 +365,8 @@ export class AccountsServer {
       const newSessionId = await this.db.createSession(
         impersonatedUser.id,
         ip,
-        userAgent
+        userAgent,
+        { impersonatorUserId: user.id }
       );
       const impersonationTokens = this.createTokens(newSessionId, true);
       const impersonationResult = {

@@ -1643,6 +1643,7 @@ describe('Accounts', () => {
 
     it('returns correct response if authorized', async () => {
       const { accessToken } = Accounts.createTokens('555');
+      const createSession = jest.fn(() => Promise.resolve('001'));
       Accounts.config(
         {
           impersonationAuthorize: async (userObject, impersonateToUser) => {
@@ -1655,7 +1656,7 @@ describe('Accounts', () => {
         {
           findUserById: () => Promise.resolve(user),
           findUserByUsername: () => Promise.resolve(impersonatedUser),
-          createSession: () => Promise.resolve('001'),
+          createSession,
         }
       );
 
@@ -1674,6 +1675,11 @@ describe('Accounts', () => {
         authorized: true,
         tokens: { sessionId: '001', isImpersonated: true },
         user: impersonatedUser,
+      });
+      expect(
+        createSession
+      ).toHaveBeenCalledWith(impersonatedUser.id, undefined, undefined, {
+        impersonatorUserId: user.id,
       });
     });
   });
