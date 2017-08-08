@@ -1,5 +1,4 @@
-import email from 'emailjs';
-import { Client } from 'emailjs';
+import email, { Client } from 'emailjs';
 
 export interface EmailConnector {
   sendMail(mail: object): Promise<object>;
