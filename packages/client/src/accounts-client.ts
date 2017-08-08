@@ -31,7 +31,7 @@ import { hashPassword } from './encryption';
 import { TransportInterface } from './transport-interface';
 
 const isValidUserObject = (user: PasswordLoginUserIdentityType) =>
-  has(user, 'user') || has(user, 'email') || has(user, 'id');
+  has(user, 'username') || has(user, 'email') || has(user, 'id');
 
 const ACCESS_TOKEN = 'accounts:accessToken';
 const REFRESH_TOKEN = 'accounts:refreshToken';
