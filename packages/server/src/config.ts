@@ -1,19 +1,17 @@
 import {
   AccountsCommonConfiguration,
-  PasswordLoginUserType,
   SessionType,
   UserObjectType,
-  PasswordType,
   CreateUserType,
   config as sharedConfig,
   PasswordSignupFields,
 } from '@accounts/common';
 import { EmailTemplateType } from './email-templates';
 
-export type PasswordAuthenticator = (
-  user: PasswordLoginUserType,
-  password: PasswordType
-) => Promise<any>;
+// export type PasswordAuthenticator = (
+//   user: PasswordLoginUserType,
+//   password: PasswordType
+// ) => Promise<any>;
 export type ResumeSessionValidator = (
   user: UserObjectType,
   session: SessionType
@@ -53,7 +51,7 @@ export type PrepareMailFunction = (
 export type AccountsServerConfiguration = AccountsCommonConfiguration & {
   tokenSecret?: string;
   tokenConfigs?: TokenConfig;
-  passwordAuthenticator?: PasswordAuthenticator;
+  // passwordAuthenticator?: PasswordAuthenticator;
   resumeSessionValidator?: ResumeSessionValidator;
   prepareMail?: PrepareMailFunction;
   sendMail?: SendMailFunction;
