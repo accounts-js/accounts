@@ -1,4 +1,4 @@
-import { HashAlgorithm, PasswordType } from '@accounts/common';
+import { HashAlgorithm } from '@accounts/common';
 import * as isString from 'lodash/isString';
 import * as CryptoJS from 'crypto-js';
 
@@ -13,19 +13,19 @@ const mapHashConstant = {
   ripemd160: 'RIPEMD160',
 };
 
-export const hashPassword = (
-  password: PasswordType,
-  algorithm: HashAlgorithm
-) => {
-  if (isString(password)) {
-    const cryptoAlgoKey = mapHashConstant[algorithm];
-    const cryptoFunction = CryptoJS[cryptoAlgoKey];
-    return {
-      digest: cryptoFunction(password).toString(),
-      algorithm,
-    };
-  }
+// export const hashPassword = (
+//   password: PasswordType,
+//   algorithm: HashAlgorithm
+// ) => {
+//   if (isString(password)) {
+//     const cryptoAlgoKey = mapHashConstant[algorithm];
+//     const cryptoFunction = CryptoJS[cryptoAlgoKey];
+//     return {
+//       digest: cryptoFunction(password).toString(),
+//       algorithm,
+//     };
+//   }
 
-  // Prehashed password object
-  return password;
-};
+//   // Prehashed password object
+//   return password;
+// };

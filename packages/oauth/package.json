@@ -1,0 +1,15 @@
+{
+  "name": "@accounts/oauth",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "scripts": {
+    "start": "tsc --watch",
+    "compile": "tsc",
+    "testonly": "jest",
+    "coverage": "jest --coverage"
+  },
+  "dependencies": {
+    "request-promise": "^4.2.1"
+  }
+}

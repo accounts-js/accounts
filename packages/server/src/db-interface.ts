@@ -11,22 +11,26 @@ export interface DBInterface {
   setUsername(userId: string, newUsername: string): Promise<void>;
   setProfile(userId: string, profile: object): Promise<object>;
 
-  // Password related operation
-  findPasswordHash(userId: string): Promise<string>;
-  findUserByResetPasswordToken(token: string): Promise<UserObjectType>;
-  setPasssword(userId: string, newPassword: string): Promise<void>;
-  addResetPasswordToken(
-    userId: string,
-    email: string,
-    token: string,
-    reason?: string
-  ): Promise<void>;
-  setResetPasssword(
-    userId: string,
-    email: string,
-    newPassword: string,
-    token: string
-  ): Promise<void>;
+  // Auth services related operations
+  findByService(serviceName: string, pickBy: object): Promise<UserObjectType>;
+  setServiceData(serviceName: string, data: object): Promise<void>;
+
+  // // Password related operation
+  // findPasswordHash(userId: string): Promise<string>;
+  // findUserByResetPasswordToken(token: string): Promise<UserObjectType>;
+  // setPasssword(userId: string, newPassword: string): Promise<void>;
+  // addResetPasswordToken(
+  //   userId: string,
+  //   email: string,
+  //   token: string,
+  //   reason?: string
+  // ): Promise<void>;
+  // setResetPasssword(
+  //   userId: string,
+  //   email: string,
+  //   newPassword: string,
+  //   token: string
+  // ): Promise<void>;
 
   // Email related operations
   findUserByEmailVerificationToken(token: string): Promise<UserObjectType>;

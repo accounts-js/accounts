@@ -6,12 +6,10 @@ import {
   AccountsError,
   validators,
   CreateUserType,
-  PasswordLoginUserType,
-  PasswordLoginUserIdentityType,
+  LoginUserIdentityType,
   LoginReturnType,
   UserObjectType,
   TokensType,
-  PasswordType,
   ImpersonateReturnType,
 } from '@accounts/common';
 
@@ -27,10 +25,9 @@ import reducer, {
   setImpersonated,
   clearOriginalTokens,
 } from './module';
-import { hashPassword } from './encryption';
 import { TransportInterface } from './transport-interface';
 
-const isValidUserObject = (user: PasswordLoginUserIdentityType) =>
+const isValidUserObject = (user: LoginUserIdentityType) =>
   has(user, 'username') || has(user, 'email') || has(user, 'id');
 
 const ACCESS_TOKEN = 'accounts:accessToken';
@@ -300,7 +297,7 @@ export class AccountsClient {
     user: CreateUserType,
     callback?: (err?: Error) => void
   ): Promise<void> {
-    if (!user || user.password === undefined) {
+    if (!user) {
       throw new AccountsError(
         'Unrecognized options for create user request',
         {
@@ -312,13 +309,13 @@ export class AccountsClient {
     }
 
     // In case where password is an object we assume it was prevalidated and hashed
-    if (
-      !user.password ||
-      (isString(user.password) &&
-        !validators.validatePassword(user.password as string))
-    ) {
-      throw new AccountsError('Password is required');
-    }
+    // if (
+    //   !user.password ||
+    //   (isString(user.password) &&
+    //     !validators.validatePassword(user.password as string))
+    // ) {
+    //   throw new AccountsError('Password is required');
+    // }
 
     if (
       !validators.validateUsername(user.username) &&
@@ -328,11 +325,14 @@ export class AccountsClient {
     }
 
     const hashAlgorithm = this.options.passwordHashAlgorithm;
-    const password =
-      user.password && hashAlgorithm
-        ? hashPassword(user.password, hashAlgorithm)
-        : user.password;
-    const userToCreate = { ...user, password };
+    // const password =
+    //   user.password && hashAlgorithm
+    //     ? hashPassword(user.password, hashAlgorithm)
+    //     : user.password;
+    const userToCreate = { 
+      ...user, 
+      // password 
+    };
     try {
       const userId = await this.transport.createUser(userToCreate);
       const { onUserCreated } = this.options;
@@ -347,7 +347,7 @@ export class AccountsClient {
           console.error(err);
         }
       }
-      await this.loginWithPassword({ id: userId }, user.password);
+      // await this.loginWithPassword({ id: userId }, user.password);
     } catch (err) {
       if (callback && isFunction(callback)) {
         callback(err);
@@ -356,62 +356,62 @@ export class AccountsClient {
     }
   }
 
-  public async loginWithPassword(
-    user: PasswordLoginUserType,
-    password: PasswordType,
-    callback?: (err?: Error, res?: LoginReturnType) => void
-  ): Promise<LoginReturnType> {
-    if (!password || !user) {
-      throw new AccountsError(
-        'Unrecognized options for login request',
-        user,
-        400
-      );
-    }
-    if (
-      (!isString(user) &&
-        !isValidUserObject(user as PasswordLoginUserIdentityType)) ||
-      !isString(password)
-    ) {
-      throw new AccountsError('Match failed', user, 400);
-    }
+  // public async loginWithPassword(
+  //   user: PasswordLoginUserType,
+  //   password: PasswordType,
+  //   callback?: (err?: Error, res?: LoginReturnType) => void
+  // ): Promise<LoginReturnType> {
+  //   if (!password || !user) {
+  //     throw new AccountsError(
+  //       'Unrecognized options for login request',
+  //       user,
+  //       400
+  //     );
+  //   }
+  //   if (
+  //     (!isString(user) &&
+  //       !isValidUserObject(user as PasswordLoginUserIdentityType)) ||
+  //     !isString(password)
+  //   ) {
+  //     throw new AccountsError('Match failed', user, 400);
+  //   }
 
-    this.store.dispatch(loggingIn(true));
-    try {
-      const hashAlgorithm = this.options.passwordHashAlgorithm;
-      const pass = hashAlgorithm
-        ? hashPassword(password, hashAlgorithm)
-        : password;
-      const res: LoginReturnType = await this.transport.loginWithPassword(
-        user,
-        pass
-      );
+  //   this.store.dispatch(loggingIn(true));
+  //   try {
+  //     const hashAlgorithm = this.options.passwordHashAlgorithm;
+  //     const pass = hashAlgorithm
+  //       ? hashPassword(password, hashAlgorithm)
+  //       : password;
+  //     const res: LoginReturnType = await this.transport.loginWithPassword(
+  //       user,
+  //       pass
+  //     );
 
-      this.store.dispatch(loggingIn(false));
-      await this.storeTokens(res.tokens);
-      this.store.dispatch(setTokens(res.tokens));
-      this.store.dispatch(setUser(res.user));
+  //     this.store.dispatch(loggingIn(false));
+  //     await this.storeTokens(res.tokens);
+  //     this.store.dispatch(setTokens(res.tokens));
+  //     this.store.dispatch(setUser(res.user));
 
-      if (
-        this.options.onSignedInHook &&
-        isFunction(this.options.onSignedInHook)
-      ) {
-        this.options.onSignedInHook();
-      }
+  //     if (
+  //       this.options.onSignedInHook &&
+  //       isFunction(this.options.onSignedInHook)
+  //     ) {
+  //       this.options.onSignedInHook();
+  //     }
 
-      if (callback && isFunction(callback)) {
-        callback(null, res);
-      }
+  //     if (callback && isFunction(callback)) {
+  //       callback(null, res);
+  //     }
 
-      return res;
-    } catch (err) {
-      this.store.dispatch(loggingIn(false));
-      if (callback && isFunction(callback)) {
-        callback(err, null);
-      }
-      throw new AccountsError(err.message);
-    }
-  }
+  //     return res;
+  //   } catch (err) {
+  //     this.store.dispatch(loggingIn(false));
+  //     if (callback && isFunction(callback)) {
+  //       callback(err, null);
+  //     }
+  //     throw new AccountsError(err.message);
+  //   }
+  // }
 
   public loggingIn(): boolean {
     return this.getState().get('loggingIn');
@@ -456,47 +456,47 @@ export class AccountsClient {
     }
   }
 
-  public async resetPassword(
-    token: string,
-    newPassword: string
-  ): Promise<void> {
-    if (!validators.validatePassword(newPassword)) {
-      throw new AccountsError('Password is invalid!');
-    }
+//   public async resetPassword(
+//     token: string,
+//     newPassword: string
+//   ): Promise<void> {
+//     if (!validators.validatePassword(newPassword)) {
+//       throw new AccountsError('Password is invalid!');
+//     }
 
-    const hashAlgorithm = this.options.passwordHashAlgorithm;
-    const password = hashAlgorithm
-      ? hashPassword(newPassword, hashAlgorithm)
-      : newPassword;
+//     const hashAlgorithm = this.options.passwordHashAlgorithm;
+//     const password = hashAlgorithm
+//       ? hashPassword(newPassword, hashAlgorithm)
+//       : newPassword;
 
-    try {
-      await this.transport.resetPassword(token, password);
-    } catch (err) {
-      throw new AccountsError(err.message);
-    }
-  }
+//     try {
+//       await this.transport.resetPassword(token, password);
+//     } catch (err) {
+//       throw new AccountsError(err.message);
+//     }
+//   }
 
-  public async requestPasswordReset(email: string): Promise<void> {
-    if (!validators.validateEmail(email)) {
-      throw new AccountsError('Valid email must be provided');
-    }
-    try {
-      await this.transport.sendResetPasswordEmail(email);
-    } catch (err) {
-      throw new AccountsError(err.message);
-    }
-  }
+//   public async requestPasswordReset(email: string): Promise<void> {
+//     if (!validators.validateEmail(email)) {
+//       throw new AccountsError('Valid email must be provided');
+//     }
+//     try {
+//       await this.transport.sendResetPasswordEmail(email);
+//     } catch (err) {
+//       throw new AccountsError(err.message);
+//     }
+//   }
 
-  public async requestVerificationEmail(email: string): Promise<void> {
-    if (!validators.validateEmail(email)) {
-      throw new AccountsError('Valid email must be provided');
-    }
-    try {
-      await this.transport.sendVerificationEmail(email);
-    } catch (err) {
-      throw new AccountsError(err.message);
-    }
-  }
+//   public async requestVerificationEmail(email: string): Promise<void> {
+//     if (!validators.validateEmail(email)) {
+//       throw new AccountsError('Valid email must be provided');
+//     }
+//     try {
+//       await this.transport.sendVerificationEmail(email);
+//     } catch (err) {
+//       throw new AccountsError(err.message);
+//     }
+//   }
 }
 
 const Accounts = {
@@ -533,7 +533,7 @@ const Accounts = {
     return this.instance.createUser(user, callback);
   },
   loginWithPassword(
-    user: PasswordLoginUserType,
+    user: LoginUserIdentityType,
     password: string,
     callback?: (err?: Error, res?: LoginReturnType) => void
   ): Promise<void> {
@@ -560,12 +560,12 @@ const Accounts = {
   verifyEmail(token: string): Promise<void> {
     return this.instance.verifyEmail(token);
   },
-  resetPassword(token: string, newPassword: string): Promise<void> {
-    return this.instance.resetPassword(token, newPassword);
-  },
-  requestPasswordReset(email?: string): Promise<void> {
-    return this.instance.requestPasswordReset(email);
-  },
+  // resetPassword(token: string, newPassword: string): Promise<void> {
+  //   return this.instance.resetPassword(token, newPassword);
+  // },
+  // requestPasswordReset(email?: string): Promise<void> {
+  //   return this.instance.requestPasswordReset(email);
+  // },
   requestVerificationEmail(email?: string): Promise<void> {
     return this.instance.requestVerificationEmail(email);
   },
