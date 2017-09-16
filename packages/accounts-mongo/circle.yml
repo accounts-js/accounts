@@ -22,6 +22,6 @@ dependencies:
 
 test:
   override:
-    - yarn test-ci
+    - yarn test
   post:
     - yarn coveralls
