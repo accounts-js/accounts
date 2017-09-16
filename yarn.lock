@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@accounts/tslint-config-accounts@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@accounts/tslint-config-accounts/-/tslint-config-accounts-0.0.5.tgz#d9dfccbc4482a3bc19537891369c6e623b4690b4"
+  dependencies:
+    tslint-config-prettier "^1.1.0"
+    tslint-eslint-rules "^4.1.1"
+
 "@types/babel-core@^6.7.14":
   version "6.7.14"
   resolved "https://registry.yarnpkg.com/@types/babel-core/-/babel-core-6.7.14.tgz#a08c900a98e8987c1a98d2ea4fa0a1805a7d131f"
