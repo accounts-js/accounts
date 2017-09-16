@@ -1,32 +1,33 @@
 {
   "name": "@accounts/mongo",
-  "version": "0.0.12",
+  "version": "0.1.0",
   "description": "MongoDB adaptor for accounts",
   "main": "lib/index.js",
   "jsnext:main": "lib-es6/index.js",
   "scripts": {
-    "start": "webpack -p --config --progress --watch",
+    "start": "tsc --watch",
     "compile": "npm run compile:es6 && npm run compile:umd",
-    "compile:es6": "babel ./src --out-dir ./lib-es6 --ignore *.spec.js",
-    "compile:umd": "webpack",
-    "flow": "flow; test $? -eq 0 -o $? -eq 2",
-    "flow:check": "flow check",
-    "prepare": "yarn compile",
-    "pretest": "yarn compile",
-    "test": "yarn testonly",
-    "posttest": "yarn lint",
-    "test-ci": "yarn lint && yarn coverage",
+    "compile:es6": "tsc",
+    "compile:umd": "tsc",
+    "test": "yarn lint && yarn coverage && yarn prettier-diff",
     "testonly": "jest",
-    "lint": "eslint src",
+    "lint": "tslint -c tslint.json '{src,__tests__}/**/*.ts'",
+    "prettier": "prettier --single-quote --trailing-comma es5 --parser typescript '{src,__tests__}/**/*.ts'",
+    "prettier-diff": "yarn prettier -- --list-different",
+    "format": "yarn prettier -- --write",
     "coverage": "yarn testonly -- --coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "jest": {
-    "testEnvironment": "node",
-    "testRegex": "(/.*.(test|spec)).(js|jsx)$",
-    "testPathDirs": [
-      "src"
-    ]
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "./__tests__/.*.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "mapCoverage": true
   },
   "repository": {
     "type": "git",
@@ -39,37 +40,23 @@
   },
   "homepage": "https://github.com/js-accounts/mongo",
   "devDependencies": {
-    "@accounts/common": "^0.0.10",
-    "@accounts/server": "^0.0.10",
-    "babel-cli": "^6.22.2",
-    "babel-core": "^6.22.1",
-    "babel-eslint": "^7.0.0",
-    "babel-loader": "^6.2.5",
-    "babel-plugin-transform-async-to-generator": "^6.22.0",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "^6.22.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-es2015": "^6.22.0",
-    "babel-preset-stage-0": "^6.22.0",
-    "coveralls": "^2.11.14",
-    "eslint": "^3.14.1",
-    "eslint-config-airbnb": "^14.0.0",
-    "eslint-config-airbnb-base": "^11.0.1",
-    "eslint-plugin-flowtype": "^2.33.0",
-    "eslint-plugin-import": "^2.0.1",
-    "eslint-plugin-jsx-a11y": "^3.0.2",
-    "eslint-plugin-react": "^6.9.0",
-    "flow-bin": "^0.41.0",
-    "jest": "^18.1.0",
-    "webpack": "^1.14.0",
-    "webpack-node-externals": "^1.5.4"
+    "@accounts/server": "^0.0.17",
+    "@accounts/tslint-config-accounts": "^0.0.4",
+    "@types/jest": "^20.0.2",
+    "@types/mongodb": "^2.2.7",
+    "@types/node": "^8.0.10",
+    "coveralls": "^2.13.1",
+    "jest": "^20.0.4",
+    "prettier": "^1.5.2",
+    "ts-jest": "^20.0.7",
+    "tslint": "^5.5.0",
+    "typescript": "^2.4.1"
   },
   "peerDependencies": {
-    "@accounts/common": "^0.0.10",
     "@accounts/server": "^0.0.10"
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "mongodb": "^2.2.22"
+    "mongodb": "^2.2.30"
   }
 }
