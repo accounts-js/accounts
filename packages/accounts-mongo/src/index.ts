@@ -240,10 +240,7 @@ export default class Mongo {
     }
   }
 
-  public async setPasssword(
-    userId: string,
-    newPassword: string
-  ): Promise<void> {
+  public async setPassword(userId: string, newPassword: string): Promise<void> {
     const id = this.options.convertUserIdToMongoObjectId
       ? toMongoID(userId)
       : userId;
@@ -401,11 +398,11 @@ export default class Mongo {
     );
   }
 
-  public async setResetPasssword(
+  public async setResetPassword(
     userId: string,
     email: string,
     newPassword: string
   ): Promise<void> {
-    await this.setPasssword(userId, newPassword);
+    await this.setPassword(userId, newPassword);
   }
 }
