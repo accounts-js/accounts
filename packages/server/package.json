@@ -1,6 +1,6 @@
 {
   "name": "@accounts/server",
-  "version": "0.0.21",
+  "version": "0.1.0",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -8,8 +8,8 @@
     "access": "public"
   },
   "scripts": {
-    "start": "webpack -p --config --progress --watch",
     "clean": "rimraf lib",
+    "start": "tsc --watch",
     "precompile": "npm run clean",
     "compile": "tsc",
     "prepublish": "npm run compile",
@@ -47,7 +47,7 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "dependencies": {
-    "@accounts/common": "^0.0.21",
+    "@accounts/common": "^0.0.18",
     "babel-polyfill": "^6.23.0",
     "bcryptjs": "^2.4.0",
     "crypto": "^0.0.3",
@@ -59,7 +59,6 @@
   "devDependencies": {
     "coveralls": "^2.11.14",
     "jest": "^18.0.0",
-    "localstorage-polyfill": "^1.0.1",
-    "rimraf": "^2.6.1"
+    "localstorage-polyfill": "^1.0.1"
   }
 }
