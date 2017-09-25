@@ -1,5 +1,8 @@
 {
    "extends": [
      "tslint-config-accounts"
-   ]
+   ],
+   "rules": {
+      "no-submodule-imports": [true, "lodash"]
+   }
  }

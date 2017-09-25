@@ -1,5 +1,3 @@
-// @flow
-
 import * as pick from 'lodash/pick';
 import * as omit from 'lodash/omit';
 import * as isString from 'lodash/isString';
