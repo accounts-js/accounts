@@ -1,7 +1,7 @@
 import { AccountsOauth } from '../src';
 
 describe('AccountsOauth', () => {
-  describe('AccountsOauth', () => {
+  describe('authenticate', () => {
     const config = {};
 
     it('should throw invalid provider', async () => {
