@@ -9,6 +9,17 @@
     "testonly": "jest",
     "coverage": "jest --coverage"
   },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "mapCoverage": true
+  },
   "dependencies": {
     "request-promise": "^4.2.1"
   }
