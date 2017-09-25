@@ -1,6 +1,7 @@
 import * as requestPromise from 'request-promise';
 
 export class AccountsOauth {
+  // TODO change any types
   private options: any;
   private db: any;
   private accountsServer: any;
@@ -10,11 +11,9 @@ export class AccountsOauth {
   }
 
   public async authenticate(params: any): Promise<any> {
-    const { userProvider = this[params.provider] } = this.options[
-      params.provider
-    ];
+    const userProvider = this[params.provider];
 
-    if (!params.provider || !userProvider) {
+    if (!params.provider || !this.options[params.provider] || !userProvider) {
       throw new Error('Invalid provider');
     }
 
