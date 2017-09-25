@@ -380,7 +380,10 @@ describe('Accounts', () => {
         mockTransport
       );
       const hashed = {
-        digest: crypto.createHash('sha256').update('password').digest('hex'),
+        digest: crypto
+          .createHash('sha256')
+          .update('password')
+          .digest('hex'),
         algorithm: 'sha256',
       };
       await Accounts.loginWithPassword('username', 'password');
