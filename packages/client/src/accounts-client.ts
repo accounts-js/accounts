@@ -329,9 +329,9 @@ export class AccountsClient {
     //   user.password && hashAlgorithm
     //     ? hashPassword(user.password, hashAlgorithm)
     //     : user.password;
-    const userToCreate = { 
-      ...user, 
-      // password 
+    const userToCreate = {
+      ...user,
+      // password
     };
     try {
       const userId = await this.transport.createUser(userToCreate);
@@ -456,47 +456,47 @@ export class AccountsClient {
     }
   }
 
-//   public async resetPassword(
-//     token: string,
-//     newPassword: string
-//   ): Promise<void> {
-//     if (!validators.validatePassword(newPassword)) {
-//       throw new AccountsError('Password is invalid!');
-//     }
+  //   public async resetPassword(
+  //     token: string,
+  //     newPassword: string
+  //   ): Promise<void> {
+  //     if (!validators.validatePassword(newPassword)) {
+  //       throw new AccountsError('Password is invalid!');
+  //     }
 
-//     const hashAlgorithm = this.options.passwordHashAlgorithm;
-//     const password = hashAlgorithm
-//       ? hashPassword(newPassword, hashAlgorithm)
-//       : newPassword;
+  //     const hashAlgorithm = this.options.passwordHashAlgorithm;
+  //     const password = hashAlgorithm
+  //       ? hashPassword(newPassword, hashAlgorithm)
+  //       : newPassword;
 
-//     try {
-//       await this.transport.resetPassword(token, password);
-//     } catch (err) {
-//       throw new AccountsError(err.message);
-//     }
-//   }
+  //     try {
+  //       await this.transport.resetPassword(token, password);
+  //     } catch (err) {
+  //       throw new AccountsError(err.message);
+  //     }
+  //   }
 
-//   public async requestPasswordReset(email: string): Promise<void> {
-//     if (!validators.validateEmail(email)) {
-//       throw new AccountsError('Valid email must be provided');
-//     }
-//     try {
-//       await this.transport.sendResetPasswordEmail(email);
-//     } catch (err) {
-//       throw new AccountsError(err.message);
-//     }
-//   }
+  //   public async requestPasswordReset(email: string): Promise<void> {
+  //     if (!validators.validateEmail(email)) {
+  //       throw new AccountsError('Valid email must be provided');
+  //     }
+  //     try {
+  //       await this.transport.sendResetPasswordEmail(email);
+  //     } catch (err) {
+  //       throw new AccountsError(err.message);
+  //     }
+  //   }
 
-//   public async requestVerificationEmail(email: string): Promise<void> {
-//     if (!validators.validateEmail(email)) {
-//       throw new AccountsError('Valid email must be provided');
-//     }
-//     try {
-//       await this.transport.sendVerificationEmail(email);
-//     } catch (err) {
-//       throw new AccountsError(err.message);
-//     }
-//   }
+  //   public async requestVerificationEmail(email: string): Promise<void> {
+  //     if (!validators.validateEmail(email)) {
+  //       throw new AccountsError('Valid email must be provided');
+  //     }
+  //     try {
+  //       await this.transport.sendVerificationEmail(email);
+  //     } catch (err) {
+  //       throw new AccountsError(err.message);
+  //     }
+  //   }
 }
 
 const Accounts = {

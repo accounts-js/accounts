@@ -7,7 +7,11 @@ import {
 } from '@accounts/common';
 import { DBInterface } from '@accounts/server';
 import { hashPassword, bcryptPassword, verifyPassword } from './encryption';
-import { PasswordCreateUserType, PasswordLoginType, PasswordType } from './types';
+import {
+  PasswordCreateUserType,
+  PasswordLoginType,
+  PasswordType,
+} from './types';
 
 export const isEmail = (email?: string) => {
   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

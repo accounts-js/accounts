@@ -23,9 +23,7 @@ import {
   EmailRecord,
   HookListener,
 } from '@accounts/common';
-import config, {
-  AccountsServerConfiguration,
-} from './config';
+import config, { AccountsServerConfiguration } from './config';
 import { DBInterface } from './db-interface';
 import { verifyPassword, hashPassword, bcryptPassword } from './encryption';
 import {
