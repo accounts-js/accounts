@@ -52,8 +52,7 @@
   "devDependencies": {
     "coveralls": "^2.11.14",
     "localstorage-polyfill": "^1.0.1",
-    "regenerator-runtime": "^0.9.6",
-    "rimraf": "^2.6.1"
+    "regenerator-runtime": "^0.9.6"
   },
   "dependencies": {
     "lodash": "^4.16.4"

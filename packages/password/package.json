@@ -4,8 +4,11 @@
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": {
+    "clean": "rimraf lib",
     "start": "tsc --watch",
+    "precompile": "npm run clean",
     "compile": "tsc",
+    "prepublish": "npm run compile",
     "testonly": "jest",
     "coverage": "jest --coverage"
   },
