@@ -1,5 +1,5 @@
 export const mutations = `
-  loginWithPassword(user: UserInput!, password: String!): LoginReturn
+  loginWithPassword(user: String, userFields: UserInput, password: String!): LoginReturn
   refreshTokens(accessToken: String!, refreshToken: String!): LoginReturn
   logout(accessToken: String!): Boolean
   impersonate(accessToken: String! username: String!): ImpersonateReturn

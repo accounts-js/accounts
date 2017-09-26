@@ -1,4 +1,8 @@
 export const authenticated = (Accounts, func) => (async (root, args, context, info) => {
+  if (context && context.skipJSAccountsVerification === true) {
+    return await func(root, args, context, info);
+  }
+
   const authToken = context.authToken;
 
   if (!authToken || authToken === '' || authToken === null) {
