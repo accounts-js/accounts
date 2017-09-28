@@ -1,5 +1,5 @@
 export const loginWithPassword = Accounts =>
-  (async (_, { user, userFields, password }) => {
+  (async (_, { user, userFields, password }, context) => {
     let loginFields = userFields;
 
     if (user && user !== '') {
@@ -8,6 +8,12 @@ export const loginWithPassword = Accounts =>
       };
     }
 
-    return await Accounts.loginWithPassword(loginFields, password);
+    const loginResult = await Accounts.loginWithPassword(loginFields, password);
+
+    if (loginResult && loginResult.user) {
+      context.user = loginResult.user;
+    }
+
+    return loginResult;
   });
 
