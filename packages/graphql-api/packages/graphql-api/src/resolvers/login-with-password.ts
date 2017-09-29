@@ -12,6 +12,7 @@ export const loginWithPassword = Accounts =>
 
     if (loginResult && loginResult.user) {
       context.user = loginResult.user;
+      context.authToken = loginResult.tokens.accessToken;
     }
 
     return loginResult;

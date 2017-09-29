@@ -4,6 +4,7 @@ export const impersonate = Accounts =>
 
     if (result && result.user) {
       context.user = result.user;
+      context.authToken = result.tokens.accessToken;
     }
 
     return result;
