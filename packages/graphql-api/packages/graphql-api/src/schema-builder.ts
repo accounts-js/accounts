@@ -12,6 +12,7 @@ import { resetPassword } from './resolvers/reset-password';
 import { sendResetPasswordEmail } from './resolvers/send-reset-password-email';
 import { sendVerificationEmail } from './resolvers/send-verification-email';
 import { verifyEmail } from './resolvers/verify-email';
+import * as merge from 'deepmerge';
 
 export interface SchemaGenerationOptions {
   rootQueryName: string;
@@ -64,20 +65,6 @@ export const createJSAccountsGraphQL = (Accounts: any, schemaOptions: SchemaGene
 
   return {
     schema,
-    extendWithResolvers: resolversObject => ({
-      ...resolversObject,
-      [schemaOptions.rootMutationName]: {
-        ...(resolversObject[schemaOptions.rootMutationName] || {}),
-        ...resolvers[schemaOptions.rootMutationName],
-      },
-      [schemaOptions.rootQueryName]: {
-        ...(resolversObject[schemaOptions.rootQueryName] || {}),
-        ...resolvers[schemaOptions.rootQueryName],
-      },
-      User: {
-        ...(resolversObject.User || {}),
-        ...resolvers.User
-      },
-    }),
+    extendWithResolvers: resolversObject => merge(resolversObject, resolvers),
   };
 };
