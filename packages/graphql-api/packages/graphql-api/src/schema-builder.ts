@@ -65,6 +65,6 @@ export const createJSAccountsGraphQL = (Accounts: any, schemaOptions: SchemaGene
 
   return {
     schema,
-    extendWithResolvers: resolversObject => merge(resolversObject, resolvers),
+    extendWithResolvers: resolversObject => merge(resolvers, resolversObject),
   };
 };
