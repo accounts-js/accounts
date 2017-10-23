@@ -470,8 +470,8 @@ describe('AccountsPassword', () => {
 
     it('throws if validateNewUser does not pass', async () => {
       const tmpAccountsPassword = new AccountsPassword({
-        validateNewUser: () => Promise.resolve(false)
-      })
+        validateNewUser: () => Promise.resolve(false),
+      });
       const findUserByEmail = jest.fn(() => Promise.resolve());
       tmpAccountsPassword.db = { findUserByEmail } as any;
       try {
