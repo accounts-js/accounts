@@ -32,16 +32,70 @@ describe('AccountsPassword', () => {
     it('throws when user not found', async () => {
       const user = 'user';
       const tmpAccountsPassword = new AccountsPassword({});
-      tmpAccountsPassword.passwordAuthenticator = jest.fn(() => Promise.resolve(user));
-      const ret = await tmpAccountsPassword.authenticate({ user: 'toto', password: 'toto' } as any);
+      tmpAccountsPassword.passwordAuthenticator = jest.fn(() =>
+        Promise.resolve(user)
+      );
+      const ret = await tmpAccountsPassword.authenticate({
+        user: 'toto',
+        password: 'toto',
+      } as any);
       expect(ret).toEqual(user);
     });
 
     it('return user', async () => {
       try {
         const tmpAccountsPassword = new AccountsPassword({});
-        tmpAccountsPassword.passwordAuthenticator = jest.fn(() => Promise.resolve());
-        await tmpAccountsPassword.authenticate({ user: 'toto', password: 'toto' } as any);
+        tmpAccountsPassword.passwordAuthenticator = jest.fn(() =>
+          Promise.resolve()
+        );
+        await tmpAccountsPassword.authenticate({
+          user: 'toto',
+          password: 'toto',
+        } as any);
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('throws when user not found', async () => {
+      const findUserByEmail = jest.fn(() => Promise.resolve());
+      password.db = { findUserByEmail } as any;
+      try {
+        await password.authenticate({
+          user: 'toto@toto.com',
+          password: 'toto',
+        } as any);
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('throws when hash not found', async () => {
+      const findUserByEmail = jest.fn(() => Promise.resolve({ id: 'id' }));
+      const findPasswordHash = jest.fn(() => Promise.resolve());
+      password.db = { findUserByEmail, findPasswordHash } as any;
+      try {
+        await password.authenticate({
+          user: 'toto@toto.com',
+          password: 'toto',
+        } as any);
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('throws on incorrect password', async () => {
+      const findUserByEmail = jest.fn(() => Promise.resolve({ id: 'id' }));
+      const findPasswordHash = jest.fn(() => Promise.resolve('hash'));
+      password.db = { findUserByEmail, findPasswordHash } as any;
+      try {
+        await password.authenticate({
+          user: 'toto@toto.com',
+          password: 'toto',
+        } as any);
         throw new Error();
       } catch (err) {
         expect(err.message).toMatchSnapshot();
@@ -266,8 +320,12 @@ describe('AccountsPassword', () => {
       const sanitizeUser = jest.fn(() => Promise.resolve());
       const sendMail = jest.fn(() => Promise.resolve());
       password.db = { findUserByEmail, addEmailVerificationToken } as any;
-      password.server = { prepareMail, email: { sendMail }, sanitizeUser } as any;
-      set(password.server, 'options.emailTemplates', {})
+      password.server = {
+        prepareMail,
+        email: { sendMail },
+        sanitizeUser,
+      } as any;
+      set(password.server, 'options.emailTemplates', {});
       await password.sendVerificationEmail();
       expect(addEmailVerificationToken.mock.calls[0].length).toBe(3);
       expect(prepareMail.mock.calls[0].length).toBe(6);
@@ -281,8 +339,12 @@ describe('AccountsPassword', () => {
       const sanitizeUser = jest.fn(() => Promise.resolve());
       const sendMail = jest.fn(() => Promise.resolve());
       password.db = { findUserByEmail, addEmailVerificationToken } as any;
-      password.server = { prepareMail, email: { sendMail }, sanitizeUser } as any;
-      set(password.server, 'options.emailTemplates', {})
+      password.server = {
+        prepareMail,
+        email: { sendMail },
+        sanitizeUser,
+      } as any;
+      set(password.server, 'options.emailTemplates', {});
       await password.sendVerificationEmail(email);
       expect(addEmailVerificationToken.mock.calls[0].length).toBe(3);
       expect(prepareMail.mock.calls[0].length).toBe(6);
@@ -313,8 +375,13 @@ describe('AccountsPassword', () => {
       const sendMail = jest.fn(() => Promise.resolve());
       const getFirstUserEmail = jest.fn(() => Promise.resolve(email));
       password.db = { findUserByEmail, addResetPasswordToken } as any;
-      password.server = { prepareMail, email: { sendMail }, sanitizeUser, getFirstUserEmail } as any;
-      set(password.server, 'options.emailTemplates', {})
+      password.server = {
+        prepareMail,
+        email: { sendMail },
+        sanitizeUser,
+        getFirstUserEmail,
+      } as any;
+      set(password.server, 'options.emailTemplates', {});
       await password.sendResetPasswordEmail(email);
       expect(addResetPasswordToken.mock.calls[0].length).toBe(3);
       expect(prepareMail.mock.calls[0].length).toBe(6);
@@ -345,12 +412,89 @@ describe('AccountsPassword', () => {
       const sendMail = jest.fn(() => Promise.resolve());
       const getFirstUserEmail = jest.fn(() => Promise.resolve(email));
       password.db = { findUserByEmail, addResetPasswordToken } as any;
-      password.server = { prepareMail, email: { sendMail }, sanitizeUser, getFirstUserEmail } as any;
-      set(password.server, 'options.emailTemplates', {})
+      password.server = {
+        prepareMail,
+        email: { sendMail },
+        sanitizeUser,
+        getFirstUserEmail,
+      } as any;
+      set(password.server, 'options.emailTemplates', {});
       await password.sendEnrollmentEmail(email);
       expect(addResetPasswordToken.mock.calls[0].length).toBe(4);
       expect(prepareMail.mock.calls[0].length).toBe(6);
       expect(sendMail.mock.calls[0].length).toBe(1);
+    });
+  });
+
+  describe('createUser', async () => {
+    it('throws on required fields', async () => {
+      try {
+        await password.createUser({
+          password: '123456',
+          username: '',
+          email: '',
+        });
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('throws when username already exists', async () => {
+      const findUserByUsername = jest.fn(() => Promise.resolve('user'));
+      password.db = { findUserByUsername } as any;
+      try {
+        await password.createUser({
+          password: '123456',
+          username: 'user1',
+        });
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('throws when email already exists', async () => {
+      const findUserByEmail = jest.fn(() => Promise.resolve('user'));
+      password.db = { findUserByEmail } as any;
+      try {
+        await password.createUser({
+          password: '123456',
+          email: 'email1@email.com',
+        });
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('throws if validateNewUser does not pass', async () => {
+      const tmpAccountsPassword = new AccountsPassword({
+        validateNewUser: () => Promise.resolve(false)
+      })
+      const findUserByEmail = jest.fn(() => Promise.resolve());
+      tmpAccountsPassword.db = { findUserByEmail } as any;
+      try {
+        await tmpAccountsPassword.createUser({
+          password: '123456',
+          email: 'email1@email.com',
+        });
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('create user', async () => {
+      const findUserByEmail = jest.fn(() => Promise.resolve());
+      const createUser = jest.fn(() => Promise.resolve());
+      password.db = { findUserByEmail, createUser } as any;
+      await password.createUser({
+        password: '123456',
+        email: 'email1@email.com',
+      });
+      expect(findUserByEmail.mock.calls.length).toBe(1);
+      expect(createUser.mock.calls.length).toBe(1);
     });
   });
 });
