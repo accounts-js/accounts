@@ -57,8 +57,8 @@
     "lodash": "^4.16.4"
   },
   "devDependencies": {
-    "coveralls": "^2.11.14",
-    "jest": "^18.0.0",
-    "localstorage-polyfill": "^1.0.1"
+    "@types/jsonwebtoken": "^7.2.3",
+    "@types/jwt-decode": "^2.2.1",
+    "coveralls": "^2.11.14"
   }
 }

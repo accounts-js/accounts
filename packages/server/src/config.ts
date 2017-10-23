@@ -6,7 +6,7 @@ import {
   config as sharedConfig,
   PasswordSignupFields,
 } from '@accounts/common';
-import { EmailTemplateType } from './email-templates';
+import { EmailTemplateType } from './email';
 
 // export type PasswordAuthenticator = (
 //   user: PasswordLoginUserType,
