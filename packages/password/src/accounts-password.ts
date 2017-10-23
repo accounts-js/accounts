@@ -400,7 +400,7 @@ export default class AccountsPassword {
       throw new Error('User not found');
     }
 
-    const hash = foundUser.service[this.serviceName].bcrypt;
+    const hash = await this.db.findPasswordHash(foundUser.id);
     if (!hash) {
       throw new Error('User has no password set');
     }
