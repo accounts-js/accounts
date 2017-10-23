@@ -1,11 +1,26 @@
-import { trim, isEmpty, isFunction, isString, isPlainObject } from 'lodash';
+import {
+  trim,
+  isEmpty,
+  isFunction,
+  isString,
+  isPlainObject,
+  get,
+  find,
+  includes,
+} from 'lodash';
 import {
   CreateUserType,
   UserObjectType,
   HashAlgorithm,
   LoginUserIdentityType,
+  EmailRecord,
+  TokenRecord,
 } from '@accounts/common';
-import { DBInterface } from '@accounts/server';
+import {
+  DBInterface,
+  AccountsServer,
+  generateRandomToken,
+} from '@accounts/server';
 import { hashPassword, bcryptPassword, verifyPassword } from './encryption';
 import {
   PasswordCreateUserType,
@@ -53,6 +68,7 @@ export default class AccountsPassword {
   private serviceName: string;
   private options: AccountsPasswordOptions;
   private db: DBInterface;
+  private server: AccountsServer;
 
   constructor(options: AccountsPasswordOptions) {
     this.options = { ...defaultOptions, ...options };
@@ -84,6 +100,235 @@ export default class AccountsPassword {
     }
 
     return foundUser;
+  }
+
+  /**
+   * @description Find a user by one of his emails.
+   * @param {string} email - User email.
+   * @returns {Promise<Object>} - Return a user or null if not found.
+   */
+  public findUserByEmail(email: string): Promise<UserObjectType> {
+    return this.db.findUserByEmail(email);
+  }
+
+  /**
+   * @description Find a user by his username.
+   * @param {string} username - User username.
+   * @returns {Promise<Object>} - Return a user or null if not found.
+   */
+  public findUserByUsername(username: string): Promise<UserObjectType> {
+    return this.db.findUserByUsername(username);
+  }
+
+  /**
+   * @description Add an email address for a user.
+   * Use this instead of directly updating the database.
+   * @param {string} userId - User id.
+   * @param {string} newEmail - A new email address for the user.
+   * @param {boolean} [verified] - Whether the new email address should be marked as verified.
+   * Defaults to false.
+   * @returns {Promise<void>} - Return a Promise.
+   */
+  public addEmail(
+    userId: string,
+    newEmail: string,
+    verified: boolean
+  ): Promise<void> {
+    return this.db.addEmail(userId, newEmail, verified);
+  }
+
+  /**
+   * @description Remove an email address for a user.
+   * Use this instead of directly updating the database.
+   * @param {string} userId - User id.
+   * @param {string} email - The email address to remove.
+   * @returns {Promise<void>} - Return a Promise.
+   */
+  public removeEmail(userId: string, email: string): Promise<void> {
+    return this.db.removeEmail(userId, email);
+  }
+
+  /**
+   * @description Marks the user's email address as verified.
+   * @param {string} token - The token retrieved from the verification URL.
+   * @returns {Promise<void>} - Return a Promise.
+   */
+  public async verifyEmail(token: string): Promise<void> {
+    const user = await this.db.findUserByEmailVerificationToken(token);
+    if (!user) {
+      throw new Error('Verify email link expired');
+    }
+
+    const verificationTokens: TokenRecord[] = get(
+      user,
+      ['services', 'email', 'verificationTokens'],
+      []
+    );
+    const tokenRecord = find(
+      verificationTokens,
+      (t: TokenRecord) => t.token === token
+    );
+    if (!tokenRecord) {
+      throw new Error('Verify email link expired');
+    }
+    // TODO check time for expiry date
+    const emailRecord = find(
+      user.emails,
+      (e: EmailRecord) => e.address === tokenRecord.address
+    );
+    if (!emailRecord) {
+      throw new Error('Verify email link is for unknown address');
+    }
+    await this.db.verifyEmail(user.id, emailRecord.address);
+  }
+
+  /**
+   * @description Reset the password for a user using a token received in email.
+   * @param {string} token - The token retrieved from the reset password URL.
+   * @param {string} newPassword - A new password for the user.
+   * @returns {Promise<void>} - Return a Promise.
+   */
+  public async resetPassword(
+    token: string,
+    newPassword: PasswordType
+  ): Promise<void> {
+    const user = await this.db.findUserByResetPasswordToken(token);
+    if (!user) {
+      throw new Error('Reset password link expired');
+    }
+
+    // TODO move this getter into a password service module
+    const resetTokens = get(user, ['services', 'password', 'reset']);
+    const resetTokenRecord = find(resetTokens, t => t.token === token);
+
+    if (this.server.isTokenExpired(token, resetTokenRecord)) {
+      throw new Error('Reset password link expired');
+    }
+
+    const emails = user.emails || [];
+    if (
+      !includes(
+        emails.map((email: EmailRecord) => email.address),
+        resetTokenRecord.address
+      )
+    ) {
+      throw new Error('Token has invalid email address');
+    }
+
+    const password = await this.hashAndBcryptPassword(newPassword);
+    // Change the user password and remove the old token
+    await this.db.setResetPasssword(
+      user.id,
+      resetTokenRecord.address,
+      password,
+      token
+    );
+    // Changing the password should invalidate existing sessions
+    this.db.invalidateAllSessions(user.id);
+  }
+
+  /**
+   * @description Change the password for a user.
+   * @param {string} userId - User id.
+   * @param {string} newPassword - A new password for the user.
+   * @returns {Promise<void>} - Return a Promise.
+   */
+  public async setPassword(userId: string, newPassword: string): Promise<void> {
+    const password = await bcryptPassword(newPassword);
+    return this.db.setPassword(userId, password);
+  }
+
+  /**
+   * @description Send an email with a link the user can use verify their email address.
+   * @param {string} [address] - Which address of the user's to send the email to.
+   * This address must be in the user's emails list.
+   * Defaults to the first unverified email in the list.
+   * @returns {Promise<void>} - Return a Promise.
+   */
+  public async sendVerificationEmail(address?: string): Promise<void> {
+    const user = await this.db.findUserByEmail(address);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    // If no address provided find the first unverified email
+    if (!address) {
+      const email = find(user.emails, e => !e.verified);
+      address = email && email.address;
+    }
+    // Make sure the address is valid
+    const emails = user.emails || [];
+    if (!address || !includes(emails.map(email => email.address), address)) {
+      throw new Error('No such email address for user');
+    }
+    const token = generateRandomToken();
+    await this.db.addEmailVerificationToken(user.id, address, token);
+
+    const resetPasswordMail = this.server.prepareMail(
+      address,
+      token,
+      this.server.sanitizeUser(user),
+      'verify-email',
+      this.server.options.emailTemplates.verifyEmail,
+      this.server.options.emailTemplates.from
+    );
+
+    await this.server.email.sendMail(resetPasswordMail);
+  }
+
+  /**
+   * @description Send an email with a link the user can use to reset their password.
+   * @param {string} [address] - Which address of the user's to send the email to.
+   * This address must be in the user's emails list.
+   * Defaults to the first email in the list.
+   * @returns {Promise<void>} - Return a Promise.
+   */
+  public async sendResetPasswordEmail(address: string): Promise<void> {
+    const user = await this.db.findUserByEmail(address);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    address = this.server.getFirstUserEmail(user, address);
+    const token = generateRandomToken();
+    await this.db.addResetPasswordToken(user.id, address, token);
+
+    const resetPasswordMail = this.server.prepareMail(
+      address,
+      token,
+      this.server.sanitizeUser(user),
+      'reset-password',
+      this.server.options.emailTemplates.resetPassword,
+      this.server.options.emailTemplates.from
+    );
+
+    await this.server.email.sendMail(resetPasswordMail);
+  }
+
+  /**
+   * @description Send an email with a link the user can use to set their initial password.
+   * @param {string} [address] - Which address of the user's to send the email to.
+   * This address must be in the user's emails list.
+   * Defaults to the first email in the list.
+   * @returns {Promise<void>} - Return a Promise.
+   */
+  public async sendEnrollmentEmail(address: string): Promise<void> {
+    const user = await this.db.findUserByEmail(address);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    address = this.server.getFirstUserEmail(user, address);
+    const token = generateRandomToken();
+    await this.db.addResetPasswordToken(user.id, address, token, 'enroll');
+
+    const enrollmentMail = this.server.prepareMail(
+      address,
+      token,
+      this.server.sanitizeUser(user),
+      'enroll-account',
+      this.server.options.emailTemplates.enrollAccount,
+      this.server.options.emailTemplates.from
+    );
+
+    await this.server.email.sendMail(enrollmentMail);
   }
 
   /**

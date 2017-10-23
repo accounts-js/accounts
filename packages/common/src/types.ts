@@ -1,5 +1,12 @@
 import { HashAlgorithm } from './config';
 
+export interface TokenRecord {
+  token: string;
+  address: string;
+  when: number;
+  reason: string;
+}
+
 export interface EmailRecord {
   address: string;
 }
