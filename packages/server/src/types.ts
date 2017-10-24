@@ -75,14 +75,14 @@ export interface DBInterface {
   // Password related operation
   findPasswordHash(userId: string): Promise<string>;
   findUserByResetPasswordToken(token: string): Promise<UserObjectType>;
-  setPasssword(userId: string, newPassword: string): Promise<void>;
+  setPassword(userId: string, newPassword: string): Promise<void>;
   addResetPasswordToken(
     userId: string,
     email: string,
     token: string,
     reason?: string
   ): Promise<void>;
-  setResetPasssword(
+  setResetPassword(
     userId: string,
     email: string,
     newPassword: string,

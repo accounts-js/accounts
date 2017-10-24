@@ -9,6 +9,7 @@ export interface TokenRecord {
 
 export interface EmailRecord {
   address: string;
+  verified: boolean;
 }
 
 export interface UserObjectType {

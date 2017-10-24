@@ -21,6 +21,7 @@ import {
   AccountsServer,
   generateRandomToken,
 } from '@accounts/server';
+import { getFirstUserEmail } from '@accounts/server/lib/utils';
 import { hashPassword, bcryptPassword, verifyPassword } from './encryption';
 import {
   PasswordCreateUserType,
@@ -217,7 +218,7 @@ export default class AccountsPassword {
 
     const password = await this.hashAndBcryptPassword(newPassword);
     // Change the user password and remove the old token
-    await this.db.setResetPasssword(
+    await this.db.setResetPassword(
       user.id,
       resetTokenRecord.address,
       password,
@@ -287,7 +288,7 @@ export default class AccountsPassword {
     if (!user) {
       throw new Error('User not found');
     }
-    address = this.server.getFirstUserEmail(user, address);
+    address = getFirstUserEmail(user, address);
     const token = generateRandomToken();
     await this.db.addResetPasswordToken(user.id, address, token);
 
@@ -315,7 +316,7 @@ export default class AccountsPassword {
     if (!user) {
       throw new Error('User not found');
     }
-    address = this.server.getFirstUserEmail(user, address);
+    address = getFirstUserEmail(user, address);
     const token = generateRandomToken();
     await this.db.addResetPasswordToken(user.id, address, token, 'enroll');
 

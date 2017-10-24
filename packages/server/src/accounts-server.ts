@@ -81,10 +81,10 @@ export const ServerHooks = {
 
 export class AccountsServer {
   // TODO private services: AuthService[];
+  public options: AccountsServerOptions;
+  public email: EmailConnector;
   private services: any;
-  private options: AccountsServerOptions;
   private db: DBInterface;
-  private email: EmailConnector;
   private hooks: EventEmitter;
 
   constructor(options: AccountsServerOptions, services: any) {
@@ -530,30 +530,20 @@ export class AccountsServer {
     return this.db.setProfile(userId, { ...user.profile, ...profile });
   }
 
-  private on(eventName: string, callback: HookListener): RemoveListnerHandle {
+  public on(eventName: string, callback: HookListener): RemoveListnerHandle {
     this.hooks.on(eventName, callback);
 
     return () => this.hooks.removeListener(eventName, callback);
   }
 
-  private isTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
+  public isTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
     return (
       !tokenRecord ||
       Number(tokenRecord.when) + this.options.emailTokensExpiry < Date.now()
     );
   }
 
-  private internalUserSanitizer(user: UserObjectType): UserObjectType {
-    return omit(user, ['services']);
-  }
-
-  private sanitizeUser(user: UserObjectType): UserObjectType {
-    const { userObjectSanitizer } = this.options;
-
-    return userObjectSanitizer(this.internalUserSanitizer(user), omit, pick);
-  }
-
-  private prepareMail(
+  public prepareMail(
     to: string,
     token: string,
     user: UserObjectType,
@@ -581,6 +571,16 @@ export class AccountsServer {
     );
   }
 
+  public sanitizeUser(user: UserObjectType): UserObjectType {
+    const { userObjectSanitizer } = this.options;
+
+    return userObjectSanitizer(this.internalUserSanitizer(user), omit, pick);
+  }
+
+  private internalUserSanitizer(user: UserObjectType): UserObjectType {
+    return omit(user, ['services']);
+  }
+
   private defaultPrepareEmail(
     to: string,
     token: string,
@@ -604,22 +604,6 @@ export class AccountsServer {
   ): string {
     const siteUrl = this.options.siteUrl || config.siteUrl;
     return `${siteUrl}/${pathFragment}/${token}`;
-  }
-
-  private getFirstUserEmail(user: UserObjectType, address: string): string {
-    // Pick the first email if we weren't passed an email
-    if (!address && user.emails && user.emails[0]) {
-      address = user.emails[0].address;
-    }
-    // Make sure the address is valid
-    const emails = user.emails || [];
-    if (
-      !address ||
-      !includes(emails.map((email: EmailRecord) => email.address), address)
-    ) {
-      throw new AccountsError('No such email address for user');
-    }
-    return address;
   }
 }
 
