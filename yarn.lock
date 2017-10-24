@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@accounts/tslint-config-accounts@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@accounts/tslint-config-accounts/-/tslint-config-accounts-0.0.5.tgz#d9dfccbc4482a3bc19537891369c6e623b4690b4"
+  dependencies:
+    tslint-config-prettier "^1.1.0"
+    tslint-eslint-rules "^4.1.1"
+
 "@types/jest@^21.1.4":
   version "21.1.4"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-21.1.4.tgz#83c5c474dd6dee5bef9d014ff36787edfd4ab5a7"
@@ -3117,13 +3124,6 @@ ts-jest@^21.1.3:
 tslib@^1.0.0, tslib@^1.7.1:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.7.1.tgz#bc8004164691923a79fe8378bbeb3da2017538ec"
-
-tslint-config-accounts@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/tslint-config-accounts/-/tslint-config-accounts-0.0.3.tgz#68b33fedfcbc74f9926e94aa908bd86940243fd1"
-  dependencies:
-    tslint-config-prettier "^1.1.0"
-    tslint-eslint-rules "^4.1.1"
 
 tslint-config-prettier@^1.1.0:
   version "1.1.0"
