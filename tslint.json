@@ -1,6 +1,6 @@
 {
    "extends": [
-     "tslint-config-accounts"
+     "@accounts/tslint-config-accounts"
    ],
    "rules": {
       "no-submodule-imports": [true, "lodash", "@accounts/server"]
