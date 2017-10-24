@@ -58,6 +58,7 @@ const defaultOptions = {
     },
   },
   emailTemplates,
+  userObjectSanitizer: (user: UserObjectType) => user,
 };
 
 export type RemoveListnerHandle = () => EventEmitter;
