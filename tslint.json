@@ -3,6 +3,6 @@
      "tslint-config-accounts"
    ],
    "rules": {
-      "no-submodule-imports": [true, "lodash"]
+      "no-submodule-imports": [true, "lodash", "@accounts/server"]
    }
  }
