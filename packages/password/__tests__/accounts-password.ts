@@ -258,16 +258,16 @@ describe('AccountsPassword', () => {
         Promise.resolve(validUser)
       );
       const isTokenExpired = jest.fn(() => false);
-      const setResetPasssword = jest.fn(() => Promise.resolve());
+      const setResetPassword = jest.fn(() => Promise.resolve());
       const invalidateAllSessions = jest.fn(() => Promise.resolve());
       password.db = {
         findUserByResetPasswordToken,
-        setResetPasssword,
+        setResetPassword,
         invalidateAllSessions,
       } as any;
       password.server = { isTokenExpired } as any;
       await password.resetPassword(token, newPassword);
-      expect(setResetPasssword.mock.calls.length).toBe(1);
+      expect(setResetPassword.mock.calls.length).toBe(1);
       expect(invalidateAllSessions.mock.calls[0]).toMatchSnapshot();
     });
   });
