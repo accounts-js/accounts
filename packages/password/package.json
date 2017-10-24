@@ -28,13 +28,13 @@
     "lodash": "^4.17.4"
   },
   "devDependencies": {
-    "@accounts/common": "^0.0.18",
-    "@accounts/server": "^0.0.18",
+    "@accounts/common": "^0.1.0",
+    "@accounts/server": "^0.1.0",
     "@types/bcryptjs": "^2.4.0",
     "@types/lodash": "^4.14.66"
   },
   "peerDependencies": {
-    "@accounts/common": "^0.0.18",
-    "@accounts/server": "^0.0.18"
+    "@accounts/common": "^0.1.0",
+    "@accounts/server": "^0.1.0"
   }
 }
