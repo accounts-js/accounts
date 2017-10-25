@@ -43,7 +43,7 @@ export interface AccountsServerOptions {
   emailTokensExpiry?: number;
   emailTemplates?: EmailTemplatesType;
   userObjectSanitizer?: UserObjectSanitizerFunction;
-  impersonationAuthorize: (
+  impersonationAuthorize?: (
     user: UserObjectType,
     impersonateToUser: UserObjectType
   ) => Promise<any>;
