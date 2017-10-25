@@ -79,7 +79,7 @@ export const ServerHooks = {
 };
 
 export class AccountsServer {
-  // TODO private services: AuthService[];
+  // TODO private services: { [string] : AuthService };
   public options: AccountsServerOptions;
   public email: EmailConnector;
   private services: any;
@@ -110,6 +110,14 @@ export class AccountsServer {
 
     // Initialize hooks
     this.hooks = new EventEmitter();
+  }
+
+  public getServices(): any {
+    return this.services;
+  }
+
+  public getOptions(): AccountsServerOptions {
+    return this.options;
   }
 
   public onLoginSuccess(callback: HookListener): RemoveListnerHandle {
