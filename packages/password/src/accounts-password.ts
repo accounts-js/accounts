@@ -282,6 +282,9 @@ export default class AccountsPassword {
    * @returns {Promise<void>} - Return a Promise.
    */
   public async sendResetPasswordEmail(address: string): Promise<void> {
+    if (!address) {
+      throw new Error('Invalid email');
+    }
     const user = await this.db.findUserByEmail(address);
     if (!user) {
       throw new Error('User not found');
