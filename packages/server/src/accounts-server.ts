@@ -79,9 +79,9 @@ export const ServerHooks = {
 };
 
 export class AccountsServer {
-  // TODO private services: { [string] : AuthService };
   public options: AccountsServerOptions;
   public email: EmailConnector;
+  // TODO private services: { [key: string] : AuthService };
   private services: any;
   private db: DBInterface;
   private hooks: EventEmitter;
