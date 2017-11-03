@@ -246,15 +246,13 @@ export default class AccountsPassword {
    * Defaults to the first unverified email in the list.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public async sendVerificationEmail(address?: string): Promise<void> {
+  public async sendVerificationEmail(address: string): Promise<void> {
+    if (!address) {
+      throw new Error('Invalid email');
+    }
     const user = await this.db.findUserByEmail(address);
     if (!user) {
       throw new Error('User not found');
-    }
-    // If no address provided find the first unverified email
-    if (!address) {
-      const email = find(user.emails, e => !e.verified);
-      address = email && email.address;
     }
     // Make sure the address is valid
     const emails = user.emails || [];

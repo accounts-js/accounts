@@ -38,7 +38,7 @@ export class AccountsOauth {
       uri: 'https://graph.facebook.com/v2.9/me',
       qs: { access_token: params.access_token },
     });
-    // get user email
+    // TODO get user email and save it
     return {
       id: user.id,
       name: user.name,
