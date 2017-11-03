@@ -57,6 +57,8 @@ class Email {
         console.warn(
           'No configuration for email, you must set an email configuration'
         );
+        // tslint:disable-next-line no-console
+        console.log(mail);
         resolve();
         return;
       }
