@@ -105,9 +105,9 @@ export class AccountsServer {
     }
 
     // Initialize emails
-    // this.email = this.options.sendMail
-    //   ? { sendMail: this.options.sendMail }
-    //   : new Email(this.options.email);
+    this.email = this.options.sendMail
+      ? { sendMail: this.options.sendMail }
+      : new Email(this.options.email);
 
     // Initialize hooks
     this.hooks = new EventEmitter();
