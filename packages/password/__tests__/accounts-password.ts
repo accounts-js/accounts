@@ -286,8 +286,9 @@ describe('AccountsPassword', () => {
 
   describe('sendVerificationEmail', () => {
     const email = 'john.doe@gmail.com';
+    const verifiedEmail = 'john.doe2@gmail.com';
     const validUser = {
-      emails: [{ address: email }],
+      emails: [{ address: email }, {address: verifiedEmail, verified: true}],
     };
     const invalidUser = {};
 
@@ -326,7 +327,7 @@ describe('AccountsPassword', () => {
         sanitizeUser,
       } as any;
       set(password.server, 'options.emailTemplates', {});
-      await password.sendVerificationEmail();
+      await password.sendVerificationEmail(verifiedEmail);
       expect(addEmailVerificationToken.mock.calls[0].length).toBe(3);
       expect(prepareMail.mock.calls[0].length).toBe(6);
       expect(sendMail.mock.calls[0].length).toBe(1);
