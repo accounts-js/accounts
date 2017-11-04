@@ -11,18 +11,33 @@ export class AccountsOauth {
   }
 
   public async authenticate(params: any): Promise<any> {
-    const userProvider = this[params.provider];
-
-    if (!params.provider || !this.options[params.provider] || !userProvider) {
+    if (!params.provider || !this.options[params.provider]) {
       throw new Error('Invalid provider');
     }
+    
+    const { userProvider = this[params.provider] } = this.options[params.provider];
 
+    if (!userProvider) {
+      throw new Error('Invalid provider');
+    }
+    
     const oauthUser = await userProvider(params);
     let user = await this.db.findUserByServiceId(params.provider, oauthUser.id);
+    
+    if (!user && oauthUser.email) {
+      user = await this.db.findUserByEmail(oauthUser.email);
+    }
+
     if (!user) {
-      // TODO check email doesn't exist in db
-      const userId = await this.db.createUser({});
+      const userId = await this.db.createUser({
+        email: oauthUser.email,
+        profile: oauthUser.profile,
+      });
+
       user = await this.db.findUserById(userId);
+    } else {
+      // If user exist, attmpt to update profile
+      this.db.setProfile(user._id, oauthUser.profile);
     }
     await this.db.setService(user.id, params.provider, oauthUser);
     return user;
