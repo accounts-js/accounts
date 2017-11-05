@@ -8,7 +8,6 @@
     "prebootstrap": "npm install",
     "postinstall": "lerna bootstrap",
     "test": "npm run lint && npm run testonly",
-    "posttest": "npm run lint",
     "testonly": "lerna run testonly",
     "coverage": "lerna run coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
