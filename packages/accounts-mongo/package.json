@@ -13,9 +13,9 @@
     "testonly": "jest",
     "lint": "tslint -c tslint.json '{src,__tests__}/**/*.ts'",
     "prettier": "prettier --single-quote --trailing-comma es5 --parser typescript '{src,__tests__}/**/*.ts'",
-    "prettier-diff": "yarn prettier -- --list-different",
-    "format": "yarn prettier -- --write",
-    "coverage": "yarn testonly -- --coverage",
+    "prettier-diff": "yarn prettier --list-different",
+    "format": "yarn prettier --write",
+    "coverage": "yarn testonly --coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "jest": {
