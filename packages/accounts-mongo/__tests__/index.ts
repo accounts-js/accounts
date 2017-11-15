@@ -1,4 +1,5 @@
 import * as mongodb from 'mongodb';
+// tslint:disable-next-line
 import { ObjectID } from 'mongodb';
 import Mongo from '../src';
 
@@ -356,6 +357,32 @@ describe('Mongo', () => {
       const retUser = await mongo.findUserById(userId);
       expect(retUser.emails.length).toEqual(1);
       expect(retUser.emails[0].address).toEqual(email);
+    });
+  });
+
+  describe('verifyEmail', () => {
+    it('should throw if user is not found', async () => {
+      try {
+        await mongo.verifyEmail('589871d1c9393d445745a57c', 'unknowemail');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('User not found');
+      }
+    });
+
+    it('should verify email', async () => {
+      const userId = await mongo.createUser(user);
+      await delay(10);
+      let retUser = await mongo.findUserById(userId);
+      expect(retUser.emails.length).toEqual(1);
+      expect(retUser.emails[0].address).toBe(user.email);
+      expect(retUser.emails[0].verified).toBe(false);
+      await mongo.verifyEmail(userId, user.email);
+      retUser = await mongo.findUserById(userId);
+      expect(retUser.emails.length).toEqual(1);
+      expect(retUser.emails[0].address).toBe(user.email);
+      expect(retUser.emails[0].verified).toBe(true);
+      expect(retUser.createdAt).not.toEqual(retUser.updatedAt);
     });
   });
 

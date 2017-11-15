@@ -222,6 +222,25 @@ export default class Mongo {
     }
   }
 
+  public async verifyEmail(userId: string, email: string): Promise<void> {
+    const id = this.options.convertUserIdToMongoObjectId
+      ? toMongoID(userId)
+      : userId;
+    const ret = await this.collection.update(
+      { _id: id, 'emails.address': email },
+      {
+        $set: {
+          'emails.$.verified': true,
+          [this.options.timestamps.updatedAt]: Date.now(),
+        },
+        $pull: { 'services.email.verificationTokens': { address: email } },
+      }
+    );
+    if (ret.result.nModified === 0) {
+      throw new Error('User not found');
+    }
+  }
+
   public async setUsername(userId: string, newUsername: string): Promise<void> {
     const id = this.options.convertUserIdToMongoObjectId
       ? toMongoID(userId)
