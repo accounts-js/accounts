@@ -42,21 +42,21 @@
   "devDependencies": {
     "@accounts/server": "^0.0.17",
     "@accounts/tslint-config-accounts": "^0.0.4",
-    "@types/jest": "^20.0.2",
-    "@types/mongodb": "^2.2.7",
-    "@types/node": "^8.0.10",
-    "coveralls": "^2.13.1",
-    "jest": "^20.0.4",
-    "prettier": "^1.5.2",
-    "ts-jest": "^20.0.7",
-    "tslint": "^5.5.0",
-    "typescript": "^2.4.1"
+    "@types/jest": "^21.1.5",
+    "@types/mongodb": "^2.2.15",
+    "@types/node": "^8.0.47",
+    "coveralls": "^3.0.0",
+    "jest": "^21.2.1",
+    "prettier": "^1.7.4",
+    "ts-jest": "^21.1.4",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.1"
   },
   "peerDependencies": {
     "@accounts/server": "^0.0.10"
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "mongodb": "^2.2.30"
+    "mongodb": "^2.2.33"
   }
 }
