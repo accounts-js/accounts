@@ -12,7 +12,7 @@
     "test": "yarn lint && yarn coverage && yarn prettier-diff",
     "testonly": "jest",
     "lint": "tslint -c tslint.json '{src,__tests__}/**/*.ts'",
-    "prettier": "prettier --single-quote --trailing-comma es5 --parser typescript '{src,__tests__}/**/*.ts'",
+    "prettier": "prettier --single-quote --trailing-comma es5 '{src,__tests__}/**/*.ts' 'README.md'",
     "prettier-diff": "yarn prettier --list-different",
     "format": "yarn prettier --write",
     "coverage": "yarn testonly --coverage",
@@ -51,7 +51,7 @@
     "@types/node": "^8.0.47",
     "coveralls": "^3.0.0",
     "jest": "^21.2.1",
-    "prettier": "^1.7.4",
+    "prettier": "^1.8.2",
     "ts-jest": "^21.1.4",
     "tslint": "^5.8.0",
     "typescript": "^2.6.1"
