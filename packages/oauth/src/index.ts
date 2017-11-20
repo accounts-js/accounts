@@ -1,10 +1,11 @@
+import { AccountsServer, DBInterface } from '@accounts/server';
 import * as requestPromise from 'request-promise';
 
 export class AccountsOauth {
   // TODO change any types
   private options: any;
-  private db: any;
-  private accountsServer: any;
+  private db: DBInterface;
+  private accountsServer: AccountsServer;
 
   constructor(options) {
     this.options = options;

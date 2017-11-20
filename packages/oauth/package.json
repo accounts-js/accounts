@@ -23,5 +23,11 @@
   },
   "dependencies": {
     "request-promise": "^4.2.1"
+  },
+  "devDependencies": {
+    "@accounts/server": "^0.1.0"
+  },
+  "peerDependencies": {
+    "@accounts/server": "^0.1.0"
   }
 }
