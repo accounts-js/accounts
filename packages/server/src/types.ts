@@ -6,7 +6,7 @@ export interface AuthService {
   db: DBInterface;
   server: AccountsServer;
   serviceName: string;
-  authenticate(params: any): UserObjectType;
+  authenticate(params: any): Promise<UserObjectType | null>;
 }
 
 export type UserObjectSanitizerFunction = (
@@ -78,7 +78,10 @@ export interface DBInterface {
   setProfile(userId: string, profile: object): Promise<object>;
 
   // Auth services related operations
-  findUserByServiceId(serviceName: string, pickBy: object): Promise<UserObjectType>;
+  findUserByServiceId(
+    serviceName: string,
+    pickBy: object
+  ): Promise<UserObjectType>;
   setService(userId: string, serviceName: string, data: object): Promise<void>;
 
   // Password related operation

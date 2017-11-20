@@ -20,6 +20,7 @@ import {
   DBInterface,
   AccountsServer,
   generateRandomToken,
+  AuthService,
 } from '@accounts/server';
 import { getFirstUserEmail } from '@accounts/server/lib/utils';
 import { hashPassword, bcryptPassword, verifyPassword } from './encryption';
@@ -65,12 +66,12 @@ const defaultOptions = {
   },
 };
 
-export default class AccountsPassword {
-  private serviceName: string;
+export default class AccountsPassword implements AuthService {
+  public serviceName = 'password';
+  public db: DBInterface;
+  public server: AccountsServer;
   private options: AccountsPasswordOptions;
-  private db: DBInterface;
-  private server: AccountsServer;
-
+  
   constructor(options: AccountsPasswordOptions) {
     this.options = { ...defaultOptions, ...options };
   }

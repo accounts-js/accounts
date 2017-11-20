@@ -1,16 +1,18 @@
-import { AccountsServer, DBInterface } from '@accounts/server';
+import { UserObjectType } from '@accounts/common';
+import { AccountsServer, DBInterface, AuthService } from '@accounts/server';
 import * as requestPromise from 'request-promise';
 
-export class AccountsOauth {
+export class AccountsOauth implements AuthService {
+  public db: DBInterface;
+  public server: AccountsServer;
+  public serviceName = 'oauth';
   private options: any;
-  private db: DBInterface;
-  private accountsServer: AccountsServer;
-
+  
   constructor(options) {
     this.options = options;
   }
 
-  public async authenticate(params: any): Promise<any> {
+  public async authenticate(params: any): Promise<UserObjectType | null> {
     if (!params.provider || !this.options[params.provider]) {
       throw new Error('Invalid provider');
     }
