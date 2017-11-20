@@ -7,7 +7,7 @@ export class AccountsOauth implements AuthService {
   public server: AccountsServer;
   public serviceName = 'oauth';
   private options: any;
-  
+
   constructor(options) {
     this.options = options;
   }

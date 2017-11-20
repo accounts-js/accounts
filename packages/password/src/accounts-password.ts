@@ -71,7 +71,7 @@ export default class AccountsPassword implements AuthService {
   public db: DBInterface;
   public server: AccountsServer;
   private options: AccountsPasswordOptions;
-  
+
   constructor(options: AccountsPasswordOptions) {
     this.options = { ...defaultOptions, ...options };
   }
