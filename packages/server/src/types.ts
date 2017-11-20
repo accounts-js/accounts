@@ -80,7 +80,7 @@ export interface DBInterface {
   // Auth services related operations
   findUserByServiceId(
     serviceName: string,
-    pickBy: object
+    serviceId: string
   ): Promise<UserObjectType | null>;
   setService(userId: string, serviceName: string, data: object): Promise<void>;
 
@@ -102,7 +102,9 @@ export interface DBInterface {
   ): Promise<void>;
 
   // Email related operations
-  findUserByEmailVerificationToken(token: string): Promise<UserObjectType | null>;
+  findUserByEmailVerificationToken(
+    token: string
+  ): Promise<UserObjectType | null>;
   addEmail(userId: string, newEmail: string, verified: boolean): Promise<void>;
   removeEmail(userId: string, email: string): Promise<void>;
   verifyEmail(userId: string, email: string): Promise<void>;
