@@ -23,7 +23,6 @@ import {
   HookListener,
 } from '@accounts/common';
 import config, { AccountsServerConfiguration } from './config';
-import { DBInterface } from './db-interface';
 import { verifyPassword, hashPassword, bcryptPassword } from './encryption';
 import {
   generateAccessToken,
@@ -39,6 +38,7 @@ import {
   AccountsServerOptions,
   ConnectionInformationsType,
   AuthService,
+  DBInterface,
 } from './types';
 
 export interface TokenRecord {
