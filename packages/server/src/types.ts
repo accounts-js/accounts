@@ -68,9 +68,9 @@ export interface ConnectionInformationsType {
 
 export interface DBInterface {
   // Find user by identity fields
-  findUserByEmail(email: string): Promise<UserObjectType>;
-  findUserByUsername(username: string): Promise<UserObjectType>;
-  findUserById(userId: string): Promise<UserObjectType>;
+  findUserByEmail(email: string): Promise<UserObjectType | null>;
+  findUserByUsername(username: string): Promise<UserObjectType | null>;
+  findUserById(userId: string): Promise<UserObjectType | null>;
 
   // Create and update users
   createUser(user: CreateUserType): Promise<string>;
@@ -81,12 +81,12 @@ export interface DBInterface {
   findUserByServiceId(
     serviceName: string,
     pickBy: object
-  ): Promise<UserObjectType>;
+  ): Promise<UserObjectType | null>;
   setService(userId: string, serviceName: string, data: object): Promise<void>;
 
   // Password related operation
   findPasswordHash(userId: string): Promise<string>;
-  findUserByResetPasswordToken(token: string): Promise<UserObjectType>;
+  findUserByResetPasswordToken(token: string): Promise<UserObjectType | null>;
   setPassword(userId: string, newPassword: string): Promise<void>;
   addResetPasswordToken(
     userId: string,
@@ -102,7 +102,7 @@ export interface DBInterface {
   ): Promise<void>;
 
   // Email related operations
-  findUserByEmailVerificationToken(token: string): Promise<UserObjectType>;
+  findUserByEmailVerificationToken(token: string): Promise<UserObjectType | null>;
   addEmail(userId: string, newEmail: string, verified: boolean): Promise<void>;
   removeEmail(userId: string, email: string): Promise<void>;
   verifyEmail(userId: string, email: string): Promise<void>;
