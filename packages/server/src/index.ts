@@ -4,6 +4,7 @@ import config from './config';
 import { generateRandomToken } from './tokens';
 import { AuthService, DBInterface } from './types';
 
+export default AccountsServer;
 export {
   AccountsServer,
   AuthService,

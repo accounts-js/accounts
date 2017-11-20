@@ -2,7 +2,7 @@ import { UserObjectType } from '@accounts/common';
 import { AccountsServer, DBInterface, AuthService } from '@accounts/server';
 import * as requestPromise from 'request-promise';
 
-export class AccountsOauth implements AuthService {
+class AccountsOauth implements AuthService {
   public db: DBInterface;
   public server: AccountsServer;
   public serviceName = 'oauth';
@@ -64,3 +64,6 @@ export class AccountsOauth implements AuthService {
     };
   }
 }
+
+export default AccountsOauth;
+export { AccountsOauth };
