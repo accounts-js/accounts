@@ -288,7 +288,7 @@ describe('AccountsPassword', () => {
     const email = 'john.doe@gmail.com';
     const verifiedEmail = 'john.doe2@gmail.com';
     const validUser = {
-      emails: [{ address: email }, {address: verifiedEmail, verified: true}],
+      emails: [{ address: email }, { address: verifiedEmail, verified: true }],
     };
     const invalidUser = {};
 
