@@ -25,9 +25,11 @@
     "request-promise": "^4.2.1"
   },
   "devDependencies": {
+    "@accounts/common": "^0.1.0",
     "@accounts/server": "^0.1.0"
   },
   "peerDependencies": {
+    "@accounts/common": "^0.1.0",
     "@accounts/server": "^0.1.0"
   }
 }

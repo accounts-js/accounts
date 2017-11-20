@@ -2,6 +2,13 @@ import { AccountsServer } from './accounts-server';
 import * as encryption from './encryption';
 import config from './config';
 import { generateRandomToken } from './tokens';
-import { DBInterface } from './types';
+import { AuthService, DBInterface } from './types';
 
-export { AccountsServer, encryption, config, DBInterface, generateRandomToken };
+export {
+  AccountsServer,
+  AuthService,
+  encryption,
+  config,
+  DBInterface,
+  generateRandomToken,
+};
