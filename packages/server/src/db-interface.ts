@@ -11,10 +11,6 @@ export interface DBInterface {
   setUsername(userId: string, newUsername: string): Promise<void>;
   setProfile(userId: string, profile: object): Promise<object>;
 
-  // Auth services related operations
-  findByService(serviceName: string, pickBy: object): Promise<UserObjectType>;
-  setServiceData(serviceName: string, data: object): Promise<void>;
-
   // // Password related operation
   // findPasswordHash(userId: string): Promise<string>;
   // findUserByResetPasswordToken(token: string): Promise<UserObjectType>;

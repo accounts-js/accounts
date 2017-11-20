@@ -78,8 +78,8 @@ export interface DBInterface {
   setProfile(userId: string, profile: object): Promise<object>;
 
   // Auth services related operations
-  findByService(serviceName: string, pickBy: object): Promise<UserObjectType>;
-  setServiceData(serviceName: string, data: object): Promise<void>;
+  findUserByServiceId(serviceName: string, pickBy: object): Promise<UserObjectType>;
+  setService(userId: string, serviceName: string, data: object): Promise<void>;
 
   // Password related operation
   findPasswordHash(userId: string): Promise<string>;
