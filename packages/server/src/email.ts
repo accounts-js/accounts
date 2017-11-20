@@ -1,4 +1,5 @@
-import email, { Client } from 'emailjs';
+import * as email from 'emailjs';
+import { Client } from 'emailjs'; // tslint:disable-line no-duplicate-imports
 import { UserObjectType } from '@accounts/common';
 
 export interface EmailTemplateType {
