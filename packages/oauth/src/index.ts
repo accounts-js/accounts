@@ -15,16 +15,18 @@ export class AccountsOauth {
     if (!params.provider || !this.options[params.provider]) {
       throw new Error('Invalid provider');
     }
-    
-    const { userProvider = this[params.provider] } = this.options[params.provider];
+
+    const { userProvider = this[params.provider] } = this.options[
+      params.provider
+    ];
 
     if (!userProvider) {
       throw new Error('Invalid provider');
     }
-    
+
     const oauthUser = await userProvider(params);
     let user = await this.db.findUserByServiceId(params.provider, oauthUser.id);
-    
+
     if (!user && oauthUser.email) {
       user = await this.db.findUserByEmail(oauthUser.email);
     }

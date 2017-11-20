@@ -37,10 +37,10 @@ describe('AccountsServer', () => {
     });
 
     it('throws when user not found', async () => {
-      const authenticate = jest.fn(() => Promise.resolve())
+      const authenticate = jest.fn(() => Promise.resolve());
       try {
         const accountServer = new AccountsServer({ db: {} } as any, {
-          facebook: { authenticate }
+          facebook: { authenticate },
         });
         await accountServer.loginWithService('facebook', {}, {});
         throw new Error();
@@ -50,10 +50,10 @@ describe('AccountsServer', () => {
     });
 
     it('should return tokens', async () => {
-      const authenticate = jest.fn(() => Promise.resolve({ id: 'userId' }))
-      const createSession = jest.fn(() => Promise.resolve('sessionId'))
+      const authenticate = jest.fn(() => Promise.resolve({ id: 'userId' }));
+      const createSession = jest.fn(() => Promise.resolve('sessionId'));
       const accountServer = new AccountsServer({ db: {} } as any, {
-        facebook: { authenticate }
+        facebook: { authenticate },
       });
       accountServer.db = { createSession } as any;
       const res = await accountServer.loginWithService('facebook', {}, {});
@@ -488,7 +488,6 @@ describe('AccountsServer', () => {
   //     expect(options.config).toEqual('config');
   //   });
   // });
-
 
   // describe('loginWithUser', () => {
   //   it('login using id', async () => {
