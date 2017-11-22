@@ -696,7 +696,7 @@ export class AccountsServer {
     }
 
     // TODO move this getter into a password service module
-    const resetTokens = get(user, ['services', 'password', 'reset']) || [];
+    const resetTokens = get(user, ['services', 'password', 'reset'], []);
     const asArray = isArray(resetTokens) ? resetTokens : [resetTokens];
     const resetTokenRecord = find(asArray, t => t.token === token);
 
