@@ -705,10 +705,12 @@ export class AccountsServer {
     }
 
     const emails = user.emails || [];
+    const tokenAddress = resetTokenRecord.email || resetTokenRecord.address;
+
     if (
       !includes(
         emails.map((email: EmailRecord) => email.address),
-        resetTokenRecord.address
+        tokenAddress
       )
     ) {
       throw new AccountsError('Token has invalid email address');
