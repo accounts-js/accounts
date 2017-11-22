@@ -30,7 +30,9 @@ export class GraphQLClient {
   constructor(options: OptionsType = {}) {
     this.options = {
       graphQLClient: null,
-      userFieldsFragment: defaultUserFieldsFragment, ...options};
+      userFieldsFragment: defaultUserFieldsFragment,
+      ...options
+    };
 
     this.options.userFieldsFragment = gql`${this.options.userFieldsFragment}`;
 
@@ -43,7 +45,16 @@ export class GraphQLClient {
 
   public async loginWithPassword(user: PasswordLoginUserIdentityType, password: string): Promise<LoginReturnType> {
     const loginMutation = createLoginMutation(this.options.userFieldsFragment);
-    return await this.mutate(loginMutation, 'loginWithPassword', { user, password });
+
+    const loginFields: any = { password };
+
+    if (typeof user === 'string') {
+      loginFields.user = user;
+    } else {
+      loginFields.userFields = user;
+    }
+
+    return await this.mutate(loginMutation, 'loginWithPassword', loginFields);
   }
 
   public async impersonate(accessToken: string, username: string): Promise<ImpersonateReturnType> {
