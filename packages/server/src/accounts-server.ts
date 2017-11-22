@@ -5,6 +5,7 @@ import * as omit from 'lodash/omit';
 import * as isString from 'lodash/isString';
 import * as isPlainObject from 'lodash/isPlainObject';
 import * as isFunction from 'lodash/isFunction';
+import * as isArray from 'lodash/isArray';
 import * as find from 'lodash/find';
 import * as includes from 'lodash/includes';
 import * as get from 'lodash/get';
@@ -695,18 +696,21 @@ export class AccountsServer {
     }
 
     // TODO move this getter into a password service module
-    const resetTokens = get(user, ['services', 'password', 'reset']);
-    const resetTokenRecord = find(resetTokens, t => t.token === token);
+    const resetTokens = get(user, ['services', 'password', 'reset'], []);
+    const asArray = isArray(resetTokens) ? resetTokens : [resetTokens];
+    const resetTokenRecord = find(asArray, t => t.token === token);
 
     if (this._isTokenExpired(token, resetTokenRecord)) {
       throw new AccountsError('Reset password link expired');
     }
 
     const emails = user.emails || [];
+    const tokenAddress = resetTokenRecord.email || resetTokenRecord.address;
+
     if (
       !includes(
         emails.map((email: EmailRecord) => email.address),
-        resetTokenRecord.address
+        tokenAddress
       )
     ) {
       throw new AccountsError('Token has invalid email address');
