@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const resetPasswordMutation = gql`
-    mutation($token: String!, $newPassword: PasswordInput!) {
-        resetPassword(token: $token, newPassword: $password)
+    mutation($token: String!, $newPassword: String!) {
+        resetPassword(token: $token, newPassword: $newPassword)
     }
 `;

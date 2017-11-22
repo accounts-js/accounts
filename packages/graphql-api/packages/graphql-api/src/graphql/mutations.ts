@@ -5,7 +5,7 @@ export const mutations = `
   impersonate(accessToken: String! username: String!): ImpersonateReturn
   createUser(user: CreateUserInput!): Boolean
   verifyEmail(token: String!): Boolean
-  resetPassword(token: String!, newPassword: PasswordInput!): Boolean
+  resetPassword(token: String!, newPassword: String!): Boolean
   sendVerificationEmail(email: String!): Boolean
   sendResetPasswordEmail(email: String!): Boolean
 `;
