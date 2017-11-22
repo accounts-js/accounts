@@ -697,7 +697,8 @@ export class AccountsServer {
 
     // TODO move this getter into a password service module
     const resetTokens = get(user, ['services', 'password', 'reset']) || [];
-    const resetTokenRecord = (isArray(resetTokens) ? resetTokens : [resetTokens]).find(resetTokens, t => t.token === token);
+    const asArray = isArray(resetTokens) ? resetTokens : [resetTokens];
+    const resetTokenRecord = find(asArray, t => t.token === token);
 
     if (this._isTokenExpired(token, resetTokenRecord)) {
       throw new AccountsError('Reset password link expired');
