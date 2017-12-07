@@ -7,13 +7,11 @@ export interface AccountsOauthTwitterOptions {
 
 class AccountsOauthTwitter {
   private options: AccountsOauthTwitterOptions;
+  private oauth: any;
 
   constructor(options: AccountsOauthTwitterOptions) {
     this.options = options;
-  }
-
-  public authenticate(params) {
-    const oa = new oauth.OAuth(
+    this.oauth = new oauth.OAuth(
       'https://twitter.com/oauth/request_token',
       'https://twitter.com/oauth/access_token',
       this.options.key,
@@ -22,8 +20,11 @@ class AccountsOauthTwitter {
       null,
       'HMAC-SHA1',
     );
+  }
+
+  public authenticate(params) {
     return new Promise((resolve, reject) => {
-      oa.get(
+      this.oauth.get(
         'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true',
         params.access_token,
         params.access_token_secret,
