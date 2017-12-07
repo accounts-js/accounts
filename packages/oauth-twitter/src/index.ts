@@ -5,7 +5,7 @@ export interface AccountsOauthTwitterOptions {
   secret: string;
 }
 
-class AccountsOauthTwitter {
+class AccountsOAuthTwitter {
   private options: AccountsOauthTwitterOptions;
   private oauth: any;
 
@@ -50,4 +50,4 @@ class AccountsOauthTwitter {
   }
 }
 
-export default AccountsOauthTwitter;
+export default AccountsOAuthTwitter;
