@@ -9,7 +9,7 @@ Copyright (c) 2016 by Gadi Cohen & Tim Mikeladze.  Released under the MIT licens
 ## Community
 
 - Slack - accounts-js.slack.com
-- [Meeting notes](https://github.com/accounts-js/accounts/blob/master/README.md)
+- [Meeting notes](https://github.com/accounts-js/accounts/blob/master/MEETINGS.md)
 
 ## Note
 
