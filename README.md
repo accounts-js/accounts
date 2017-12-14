@@ -2,7 +2,7 @@
 
 *Fullstack authentication and accounts-management for GraphQL and REST*
 
-[![npm](https://img.shields.io/npm/v/@accounts/accounts.svg?maxAge=2592000)](https://www.npmjs.com/package/@accounts/accounts) [![Circle CI](https://circleci.com/gh/accounts-js/accounts.svg?style=shield)](https://circleci.com/gh/accounts-js/accounts) [![Coverage Status](https://coveralls.io/repos/github/accounts-js/accounts/badge.svg?branch=master)](https://coveralls.io/github/accounts-js/accounts?branch=master) ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
+[![npm](https://img.shields.io/npm/v/@accounts/server.svg?maxAge=2592000)](https://www.npmjs.com/package/@accounts/accounts) [![CircleCI](https://circleci.com/gh/accounts-js/accounts.svg?style=svg)](https://circleci.com/gh/accounts-js/accounts) [![Coverage Status](https://coveralls.io/repos/github/accounts-js/accounts/badge.svg?branch=master)](https://coveralls.io/github/accounts-js/accounts?branch=master) ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 Copyright (c) 2016 by Gadi Cohen & Tim Mikeladze.  Released under the MIT license.
 
