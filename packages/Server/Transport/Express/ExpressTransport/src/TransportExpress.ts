@@ -138,7 +138,10 @@ export default class TransportExpress {
     const connectionInfo: ConnectionInformations = getConnectionInfo(req)
 
     const { tokens, ...response } : any = await this.accountsServer.useService(target, params, connectionInfo)
-      .catch(err => this.send(res, {error: err.message}));
+      .catch(err => {
+        this.send(res, {error: err.message});
+        throw err
+      });
 
     if(tokens) this.tokenTransport.setTokens(tokens, { req, res });
 

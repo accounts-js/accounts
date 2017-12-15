@@ -13,11 +13,12 @@ export default class EmailServiceDebug implements NotificationService {
   private notificationPlugins: NotificationPlugins;
   
   constructor( config: Configuration ){
-
+    console.log(this)
     this.notificationPlugins = config.notificationPlugins.reduce(
-      ( a: NotificationPlugins , notificationPlugin: NotificationPlugin ) => a[notificationPlugin.name] = notificationPlugin
+      ( a: NotificationPlugins , notificationPlugin: NotificationPlugin ) =>
+        ({...a, [notificationPlugin.name]:notificationPlugin })
     ,{})
-
+    console.log(this)
   }
 
   public send = ( mail: object ) : void => {

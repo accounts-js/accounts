@@ -24,11 +24,11 @@ export default class PasswordEmailPlugin implements NotificationPlugin {
   }
 
 
-  public enroll = ( send: Function ) => ( { address, user, token }: { address: string, user: User, token: string } ) => {
+  public enroll = ( send: Function ) => ( { email, user, token }: { email: string, user: User, token: string } ) => {
 
     const mail = {
       from : this.from,
-      to: address,
+      to: email,
 
       subject: 'Set your password',
       text: `To set your password please click on this link: ${token}`
@@ -38,11 +38,11 @@ export default class PasswordEmailPlugin implements NotificationPlugin {
 
   }
 
-  public resetPassword = ( send: Function ) => ( { address, user, token }: { address: string, user: User, token: string } ) => {
+  public resetPassword = ( send: Function ) => ( { email, user, token }: { email: string, user: User, token: string } ) => {
 
     const mail = {
       from : this.from,
-      to: address,
+      to: email,
 
       subject: 'Reset your password',
       text: `To reset your password please click on this link: ${token}`
@@ -52,11 +52,11 @@ export default class PasswordEmailPlugin implements NotificationPlugin {
 
   }
 
-  public verification = ( send: Function ) => ( { address, user, token }: { address: string, user: User, token: string } ) => {
+  public verification = ( send: Function ) => ( { email, user, token }: { email: string, user: User, token: string } ) => {
 
     const mail = {
       from : this.from,
-      to: address,
+      to: email,
 
       subject: 'Verify your account email',
       text: `To verify your account email please click on this link: ${token}`

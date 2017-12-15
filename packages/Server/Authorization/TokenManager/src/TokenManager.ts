@@ -37,7 +37,7 @@ export default class TokenManager implements TokenManagerInterface {
 
     constructor( config: Configuration ){
         this.secret = config.secret;
-        this.emailTokensExpiration = config.emailTokensExpiration || 1000;
+        this.emailTokensExpiration = config.emailTokensExpiration || (1000*60);
         this.accessTokenConfig = { ...defaultTokenConfig, ...defaultAccessTokenConfig, ...config.access };
         this.refreshTokenConfig = { ...defaultTokenConfig, ...defaultRefreshTokenConfig, ...config.refresh };
     }
@@ -50,6 +50,8 @@ export default class TokenManager implements TokenManagerInterface {
 
     public isTokenExpired = ( token: string, tokenRecord?: TokenRecord ): boolean => 
         !tokenRecord || Number(tokenRecord.when) + this.emailTokensExpiration < Date.now()
+
+        
 
     public decode = async ( token: string, ignoreExpiration: boolean = false ) : Promise <TokenPayload> =>
         jwt.verify(token, this.secret, { ignoreExpiration } )

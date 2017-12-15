@@ -163,12 +163,12 @@ export default class PasswordService implements AuthenticationService {
 
 
 
-  public resetPassword = async ({ token, newPassword } : { token: string, newPassword: string }) : Promise <Message> => {
+  public resetPassword = async ({ token, password } : { token: string, password: string }) : Promise <Message> => {
 
     const dbUser: User = await this.databaseInterface.findUserByResetPasswordToken(token);
 
     if (!dbUser) 
-        throw new Error('[ Accounts - Password ] resetPassword : Reset password link expired');
+        throw new Error('[ Accounts - Password ] resetPassword : Token does not belong to any user');
 
     // TODO move this getter into a password service module
 
@@ -176,7 +176,7 @@ export default class PasswordService implements AuthenticationService {
 
     const resetTokenRecord: TokenRecord = resetTokens.find(( t: TokenRecord ) => t.token === token )
 
-    if (this.accountsServer.tokenManager.isTokenExpired(token, resetTokenRecord))
+    if (this.tokenManager.isTokenExpired(token, resetTokenRecord))
         throw new Error('[ Accounts - Password ] resetPassword : Reset password link expired');
 
     const emails: EmailRecord[] = dbUser.emails || [];
@@ -184,10 +184,10 @@ export default class PasswordService implements AuthenticationService {
     if(!emails.find( e => e.address === resetTokenRecord.address )) 
         throw new Error('[ Accounts - Password ] resetPassword : Token has invalid email address')
     
-    const password: string = await this.hashAndBcryptPassword(newPassword);
+    const safeToStorePassword: string = await this.hashAndBcryptPassword(password);
 
     // Change the user password and remove the old token
-    await this.databaseInterface.setResetPassword(dbUser.id, resetTokenRecord.address, password);
+    await this.databaseInterface.setResetPassword(dbUser.id, resetTokenRecord.address, safeToStorePassword);
 
     // Changing the password should invalidate existing sessions
     await this.databaseInterface.invalidateAllSessions(dbUser.id);
@@ -200,26 +200,26 @@ export default class PasswordService implements AuthenticationService {
 
 
 
-  public sendVerificationEmail = async ({ address }: { address: string }) : Promise <Message> => {
-
-    if(!address) 
+  public sendVerificationEmail = async ({ email }: { email: string }) : Promise <Message> => {
+    
+    if(!email) 
         throw new Error('[ Accounts - Password ] sendVerificationEmail : Invalid email');
 
-    const dbUser: User = await this.databaseInterface.findUserByEmail(address);
+    const dbUser: User = await this.databaseInterface.findUserByEmail(email);
 
     if (!dbUser) 
         throw new Error('[ Accounts - Password ] sendVerificationEmail : User not found');
 
     const emails: EmailRecord[] = dbUser.emails || [];
 
-    if (!emails.find( ( e: EmailRecord ) => e.address === address )) 
+    if (!emails.find( ( e: EmailRecord ) => e.address === email )) 
         throw new Error('[ Accounts - Password ] sendVerificationEmail : No such email address for user');
 
     const token: string = this.tokenManager.generateRandom();
 
-    await this.databaseInterface.addEmailVerificationToken(dbUser.id, address, token);
+    await this.databaseInterface.addEmailVerificationToken(dbUser.id, email, token);
 
-    await this.accountsServer.useNotificationService('email').notify( 'password', 'verification', { address, user: dbUser, token })
+    await this.accountsServer.useNotificationService('email').notify( 'password', 'verification', { email, user: dbUser, token })
 
     const message: Message = { message: 'Email Sent' }
     
@@ -229,23 +229,23 @@ export default class PasswordService implements AuthenticationService {
 
 
 
-  public sendResetPasswordEmail = async ({ address }: { address: string }) : Promise <Message> => {
+  public sendResetPasswordEmail = async ({ email }: { email: string }) : Promise <Message> => {
 
-    if(!address) 
+    if(!email) 
         throw new Error('[ Accounts - Password ] sendResetPasswordEmail : Invalid email');
 
-    const dbUser: User = await this.databaseInterface.findUserByEmail(address);
+    const dbUser: User = await this.databaseInterface.findUserByEmail(email);
     
     if (!dbUser) 
         throw new Error('[ Accounts - Password ] sendResetPasswordEmail : User not found');
 
-    const email = getFirstUserEmail(dbUser, address);
+    const trustedEmail = getFirstUserEmail(dbUser, email);
 
     const token: string = this.tokenManager.generateRandom();
 
-    await this.databaseInterface.addResetPasswordToken(dbUser.id, address, token);
+    await this.databaseInterface.addResetPasswordToken(dbUser.id, trustedEmail, token);
 
-    await this.accountsServer.useNotificationService('email').notify( 'password', 'resetPassword', { address, user: dbUser, token })
+    await this.accountsServer.useNotificationService('email').notify( 'password', 'resetPassword', { email: trustedEmail, user: dbUser, token })
 
     const message: Message = { message: 'Email Sent' }
     
