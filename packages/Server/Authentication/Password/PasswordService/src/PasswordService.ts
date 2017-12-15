@@ -41,7 +41,7 @@ const defaultConfiguration: Configuration = {
 }
 
 
-export default class AuthenticationServicePassword implements AuthenticationService {
+export default class PasswordService implements AuthenticationService {
 
   public name: string = 'password';
 

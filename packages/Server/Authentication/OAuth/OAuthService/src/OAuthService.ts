@@ -14,7 +14,7 @@ import { Configuration } from "./types/Configuration";
 
 import { forEach } from 'lodash';
 
-export default class AuthenticationServiceOAuth implements AuthenticationService {
+export default class OAuthService implements AuthenticationService {
   
   public name: string = 'oauth';
 

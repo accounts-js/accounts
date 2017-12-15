@@ -4,7 +4,7 @@ import { Configuration } from './types/Configuration';
 
 import mailgun from 'mailgun-js';
 
-export default class NotificationServiceMailgun implements NotificationService {
+export default class EmailServiceMailgun implements NotificationService {
 
   public name: string = 'email';
 
