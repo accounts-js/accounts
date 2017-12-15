@@ -1,1 +1,1 @@
-export { default } from './NotificationPluginEmailPassword';
+export { default } from './PasswordEmailPlugin';

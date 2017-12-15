@@ -1,1 +1,1 @@
-export { default } from './NotificationServiceMailgun';
+export { default } from './EmailServiceMailgun';

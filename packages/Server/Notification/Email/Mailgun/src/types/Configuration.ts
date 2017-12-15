@@ -1,6 +1,6 @@
 import { NotificationPlugin } from 'accounts';
 
-export interface NotificationServiceMailgunConfiguration {
+export interface Configuration {
   
   from?: string;
 

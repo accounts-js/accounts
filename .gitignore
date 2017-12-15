@@ -1,8 +1,9 @@
-lib/
+
 node_modules/
-coverage/
-npm-debug.log
-.idea
+lib/
+
+package-lock.json
+
 lerna-debug.log
-.vscode
-packages/*/package-lock.json
+
+yarn.lock

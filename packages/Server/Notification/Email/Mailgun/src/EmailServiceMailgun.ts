@@ -1,7 +1,8 @@
-import mailgun from 'mailgun-js';
-import { NotificationService, NotificationPlugin, NotificationPlugins } from 'accounts';
+import { NotificationPlugin, NotificationPlugins, NotificationService } from 'accounts';
 
-import { NotificationServiceMailgunConfiguration } from './types/NotificationServiceMailgunConfiguration';
+import { Configuration } from './types/Configuration';
+
+import mailgun from 'mailgun-js';
 
 export default class NotificationServiceMailgun implements NotificationService {
 
@@ -15,7 +16,7 @@ export default class NotificationServiceMailgun implements NotificationService {
   private mailgun: any;
 
   
-  constructor( config: NotificationServiceMailgunConfiguration ){
+  constructor( config: Configuration ){
 
     this.from = config.from || 'Accounts.JS <no-reply@accounts-js.com>';
 
@@ -27,11 +28,11 @@ export default class NotificationServiceMailgun implements NotificationService {
 
   }
 
-  send = ( mail: object ) : void => {
+  public send = ( mail: object ) : void => {
     this.mailgun.messages().send(mail)
   }
 
-  notify = ( notificationPluginName: string, actionName: string, params: object ) : void => 
+  public notify = ( notificationPluginName: string, actionName: string, params: object ) : void => 
     this.notificationPlugins[notificationPluginName][actionName](this.send)(params)
 
 }
