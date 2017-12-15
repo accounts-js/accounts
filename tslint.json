@@ -1,8 +1,12 @@
-{
-   "extends": [
-     "@accounts/tslint-config-accounts"
-   ],
-   "rules": {
-      "no-submodule-imports": [true, "lodash", "@accounts/server"]
-   }
- }
+{ 
+  "extends": [ 
+    "tslint:latest", 
+    "tslint-config-prettier", 
+    "tslint-eslint-rules" 
+  ],
+  "rules":{
+    "interface-name": false,
+    "member-ordering": false,
+    "curly":[true,"as-needed"]
+  }
+}
