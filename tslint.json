@@ -1,5 +1,12 @@
-{
-   "extends": [
-     "tslint-config-accounts"
-   ]
- }
+{ 
+  "extends": [ 
+    "tslint:latest", 
+    "tslint-config-prettier", 
+    "tslint-eslint-rules" 
+  ],
+  "rules":{
+    "interface-name": false,
+    "member-ordering": false,
+    "curly":[true,"as-needed"]
+  }
+}
