@@ -1,0 +1,25 @@
+{
+  "name": "@accounts/oauth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "start": "tsc --watch",
+    "clean": "rimraf lib",
+    "clean_": "rimraf node_modules",
+    "precompile": "yarn run clean",
+    "compile": "tsc",
+    "prepublish": "yarn run compile"
+  },
+  "author": "Elies Lou",
+  "license": "MIT",
+  "devDependencies": {
+    "@accounts/server": "^1.0.0",
+    "@types/accounts": "^1.0.0",
+    "@types/node": "^8.0.54"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
+}

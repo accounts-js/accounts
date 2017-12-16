@@ -1,37 +1,27 @@
 {
-  "private": true,
-  "scripts": {
-    "start": "lerna exec -- yarn start",
-    "link": "lerna exec -- yarn link",
-    "clean": "lerna run clean",
-    "compile": "lerna run compile",
-    "lint": "tslint packages/*/{src,__tests__}/**/*.ts",
-    "prebootstrap": "yarn install",
-    "postinstall": "lerna bootstrap",
-    "publish": "lerna publish",
-    "publish:canary": "yarn publish -- --canary",
-    "test": "yarn lint && yarn testonly && yarn compile",
-    "testonly": "lerna run testonly",
-    "format": "prettier --single-quote --trailing-comma es5 --parser typescript --write \"packages/*/{src,__tests__}/**/*.ts\"",
-    "coverage": "lerna run coverage",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/js-accounts/accounts"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "@accounts/tslint-config-accounts": "^0.0.5",
-    "@types/jest": "^21.1.5",
-    "@types/node": "^8.0.47",
-    "flow-bin": "0.41.0",
-    "jest": "^21.2.1",
-    "lerna": "^2.5.1",
-    "prettier": "^1.7.4",
-    "rimraf": "^2.6.2",
-    "ts-jest": "^21.1.4",
-    "tslint": "^5.8.0",
-    "typescript": "^2.4.1"
-  }
+	"private": true,
+	"name": "@accounts/workbench",
+	"scripts": {
+		"initial": "yarn install && lerna bootstrap",
+		"start": "lerna exec --parallel -- yarn start",
+		"clean": "lerna exec -- yarn clean",
+		"clean_": "lerna exec -- yarn clean_",
+		"link_global": "lerna exec -- yarn link",
+		"unlink_global": "lerna exec -- yarn unlink",
+		"compile": "lerna exec -- yarn run compile",
+		"lint": "tslint packages/*/{src,__tests__}/**/*.ts"
+	},
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "^8.0.54",
+		"lerna": "^2.5.1",
+		"tslint": "^5.8.0",
+		"tslint-config-prettier": "^1.6.0",
+		"tslint-eslint-rules": "^4.1.1",
+		"typescript": "^2.6.2",
+		"yarn": "^1.3.2"
+	},
+	"dependencies": {
+		"rimraf": "^2.6.2"
+	}
 }
