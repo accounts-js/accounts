@@ -2,16 +2,22 @@ import { Tokens } from "./Tokens";
 
 export interface TokenTransport {
 
-  setAccessToken( accessToken: string, transportContainer: object ) : void;
+	setAccessToken( accessToken: string, transportContainer: object ) : void;
 
-  getAccessToken( transportContainer: any ) : string;
-  
-  setRefreshToken( refreshToken: string, transportContainer: object ) : void;
+	setRefreshToken( refreshToken: string, transportContainer: object ) : void;
+	
+	setTokens( tokens: Tokens, transportContainer: object ) : void;
+	
+	getAccessToken( transportContainer: any ) : string;
+	
+	getRefreshToken( transportContainer: object ) : string;
+	
+	getTokens( transportContainer: object ) : Tokens;
 
-  getRefreshToken( transportContainer: object ) : string;
+	removeAccessToken( transportContainer: object ) : void
 
-  setTokens( tokens: Tokens, transportContainer: object ) : void;
-  
-  getTokens( transportContainer: object ) : Tokens;
+	removeRefreshToken( transportContainer: object ) : void
+
+	removeTokens( transportContainer: object ) : void
 
 }

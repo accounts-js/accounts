@@ -1,6 +1,6 @@
 import { 
-  Tokens, 
-  TokenTransport
+	Tokens, 
+	TokenTransport
 } from 'accounts';
 
 import { merge } from 'lodash';
@@ -10,67 +10,75 @@ import { TokenConfiguration } from "./types/TokenConfiguration";
 
 
 const defaultConfig = {
-  access: {
-    canStore: () => true,
-    name: 'accessToken',
-  },
-  refresh: {
-    canStore: () => true,
-    name: 'refreshToken',
-  }
+	access: {
+		canStore: () => true,
+		name: 'accessToken',
+	},
+	refresh: {
+		canStore: () => true,
+		name: 'refreshToken',
+	}
 }
 
 
 export default class TokenTransportExpressHeaders implements TokenTransport {
 
-  public accessConfig: TokenConfiguration;
-  public refreshConfig: TokenConfiguration;
+	public accessConfig: TokenConfiguration;
+	public refreshConfig: TokenConfiguration;
 
-  constructor( config?: Configuration ) {
-    
-    const access = config && config.access || {}
-    const refresh = config && config.refresh || {}
+	constructor( config?: Configuration ) {
 
-    this.accessConfig = merge({},defaultConfig.access, access)
-    this.refreshConfig = merge({},defaultConfig.refresh, refresh)
+		const access = config && config.access || {}
+		const refresh = config && config.refresh || {}
 
-  }
+		this.accessConfig = merge({},defaultConfig.access, access)
+		this.refreshConfig = merge({},defaultConfig.refresh, refresh)
 
-  public setAccessToken = ( accessToken: string, { req, res } : any ) : void => {
+	}
 
-    const canStore: boolean = this.accessConfig.canStore(req);
+	public setAccessToken = ( accessToken: string, { req, res } : any ) : void => {
 
-    if(!canStore) return;
+		const canStore: boolean = this.accessConfig.canStore(req);
 
-    res.set(this.accessConfig.name, accessToken)
+		if(!canStore) return;
 
-  }
+		res.set(this.accessConfig.name, accessToken)
 
-  public setRefreshToken = ( refreshToken: string, { req, res } : any ) : void => {
+	}
 
-    const canStore: boolean = this.refreshConfig.canStore(req);
+	public setRefreshToken = ( refreshToken: string, { req, res } : any ) : void => {
 
-    if(!canStore) return;
+		const canStore: boolean = this.refreshConfig.canStore(req);
 
-    res.set(this.refreshConfig.name, refreshToken)
+		if(!canStore) return;
 
-  }
+		res.set(this.refreshConfig.name, refreshToken)
 
-  public setTokens = ({ accessToken, refreshToken } : Tokens, tokenContainer: any ) : void => {
+	}
 
-    this.setAccessToken(accessToken, tokenContainer);
+	public setTokens = ({ accessToken, refreshToken } : Tokens, tokenContainer: any ) : void => {
 
-    this.setRefreshToken(refreshToken, tokenContainer);
+		this.setAccessToken(accessToken, tokenContainer);
 
-  }
+		this.setRefreshToken(refreshToken, tokenContainer);
 
-  public getAccessToken = ( req: any ) : string | undefined => req.get(this.accessConfig.name)
+	}
 
-  public getRefreshToken = ( req: any ) : string | undefined => req.get(this.refreshConfig.name)
 
-  public getTokens = ( req: any ): Tokens => ({
-    accessToken: this.getAccessToken(req),
-    refreshToken: this.getRefreshToken(req)
-  })
+	public getAccessToken = ( req: any ) : string | undefined => req.get(this.accessConfig.name)
+	
+	public getRefreshToken = ( req: any ) : string | undefined => req.get(this.refreshConfig.name)
+	
+	public getTokens = ( req: any ): Tokens => ({
+		accessToken: this.getAccessToken(req),
+		refreshToken: this.getRefreshToken(req)
+	})
+
+
+	public removeAccessToken = () : void => {}
+
+	public removeRefreshToken = () : void => {}
+
+	public removeTokens = () : void => {}
 
 }

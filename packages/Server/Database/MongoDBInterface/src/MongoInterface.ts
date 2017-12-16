@@ -140,7 +140,7 @@ export default class MongoInterface implements DatabaseInterface {
 
   public findUserByResetPasswordToken = async ( token: string ): Promise <User | null> => {
 
-    const filter = { 'services.email.reset.token': token }
+    const filter = { 'services.password.reset.token': token }
 
     const user = await this.userCollection.findOne(filter);
     
