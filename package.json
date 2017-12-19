@@ -22,7 +22,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@accounts/tslint-config-accounts": "^0.0.5",
+    "@accounts/tslint-config-accounts": "^0.0.6",
     "@types/jest": "^21.1.5",
     "@types/node": "^8.0.47",
     "flow-bin": "0.41.0",
