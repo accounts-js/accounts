@@ -8,6 +8,7 @@
     "start": "tsc --watch",
     "compile": "tsc",
     "testonly": "jest",
+    "test:watch": "jest --watch",
     "coverage": "jest --coverage"
   },
   "jest": {
@@ -22,10 +23,10 @@
     "mapCoverage": true
   },
   "dependencies": {
-    "request-promise": "^4.2.1"
+    "request-promise": "^4.2.1",
+    "@accounts/common": "^0.1.0"
   },
   "devDependencies": {
-    "@accounts/common": "^0.1.0",
     "@accounts/server": "^0.1.0"
   },
   "peerDependencies": {
