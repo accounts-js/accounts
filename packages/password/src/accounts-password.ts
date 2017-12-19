@@ -68,12 +68,16 @@ const defaultOptions = {
 
 export default class AccountsPassword implements AuthService {
   public serviceName = 'password';
-  public db: DBInterface;
   public server: AccountsServer;
   private options: AccountsPasswordOptions;
-
+  private db: DBInterface;
+  
   constructor(options: AccountsPasswordOptions) {
     this.options = { ...defaultOptions, ...options };
+  }
+
+  public setStore(store: DBInterface) {
+    this.db = store;
   }
 
   public async authenticate(

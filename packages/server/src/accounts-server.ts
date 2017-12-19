@@ -99,7 +99,7 @@ export class AccountsServer {
     // Set the db to all services
     // tslint:disable-next-line
     for (const service in this.services) {
-      this.services[service].db = this.db;
+      this.services[service].setStore(this.db);
       this.services[service].server = this;
     }
 

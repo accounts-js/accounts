@@ -3,16 +3,16 @@ import { EmailTemplatesType, EmailTemplateType } from './email';
 import { AccountsServer } from './accounts-server';
 
 export interface AuthService {
-  db: DBInterface;
   server: AccountsServer;
   serviceName: string;
+  setStore(store: DBInterface): void;
   authenticate(params: any): Promise<UserObjectType | null>;
 }
 
 export type UserObjectSanitizerFunction = (
   userObject: UserObjectType,
-  omitFunction: (userDoc: object) => UserObjectType,
-  pickFunction: (userDoc: object) => UserObjectType
+  omitFunction: (userDoc: object, fields: string[]) => UserObjectType,
+  pickFunction: (userDoc: object, fields: string[]) => UserObjectType
 ) => any;
 
 export type ResumeSessionValidator = (

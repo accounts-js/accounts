@@ -3,13 +3,17 @@ import { AccountsServer, DBInterface, AuthService } from '@accounts/server';
 import * as requestPromise from 'request-promise';
 
 export class AccountsOauth implements AuthService {
-  public db: DBInterface;
   public server: AccountsServer;
   public serviceName = 'oauth';
+  private db: DBInterface;
   private options: any;
 
   constructor(options) {
     this.options = options;
+  }
+  
+  public setStore(store: DBInterface) {
+    this.db = store;
   }
 
   public async authenticate(params: any): Promise<UserObjectType | null> {
@@ -18,8 +22,8 @@ export class AccountsOauth implements AuthService {
     }
 
     const userProvider = this.options[params.provider];
-
-    if (!userProvider) {
+ 
+    if (typeof userProvider.authenticate !== 'function') {
       throw new Error('Invalid provider');
     }
 
