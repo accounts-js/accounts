@@ -49,18 +49,12 @@ export class AccountsOauth implements AuthService {
     return user;
   }
 
-  public async unlink(userId, params) {
-    if (!params.provider || !this.options[params.provider]) {
+  public async unlink(userId, provider) {
+    if (!provider || !this.options[provider]) {
       throw new Error('Invalid provider');
     }
 
-    const userProvider = this.options[params.provider];
-
-    if (!userProvider) {
-      throw new Error('Invalid provider');
-    }
-
-    await this.db.setService(userId, params.provider, null);
+    await this.db.setService(userId, provider, null);
   }
 
 }
