@@ -467,301 +467,368 @@ describe('AccountsServer', () => {
   //   });
   // });
 
-  // describe('refreshTokens', () => {
-  //   it('updates session and returns new tokens and user', async () => {
-  //     const updateSession = jest.fn(() => Promise.resolve());
-  //     const user = {
-  //       userId: '123',
-  //       username: 'username',
-  //     };
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         findSessionById: () =>
-  //           Promise.resolve({
-  //             sessionId: '456',
-  //             valid: true,
-  //             userId: '123',
-  //           }),
-  //         findUserById: () => Promise.resolve(user),
-  //         updateSession,
-  //       }
-  //     );
-  //     const { accessToken, refreshToken } = Accounts.createTokens('456');
-  //     Accounts.createTokens = () => ({
-  //       accessToken: 'newAccessToken',
-  //       refreshToken: 'newRefreshToken',
-  //     });
-  //     const res = await Accounts.refreshTokens(
-  //       accessToken,
-  //       refreshToken,
-  //       'ip',
-  //       'user agent'
-  //     );
-  //     expect(updateSession.mock.calls[0]).toEqual(['456', 'ip', 'user agent']);
-  //     expect(res.user).toEqual({
-  //       userId: '123',
-  //       username: 'username',
-  //     });
-  //   });
+  describe('refreshTokens', () => {
+    it('updates session and returns new tokens and user', async () => {
+      const updateSession = jest.fn(() => Promise.resolve());
+      const user = {
+        userId: '123',
+        username: 'username',
+      };
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionById: () =>
+              Promise.resolve({
+                sessionId: '456',
+                valid: true,
+                userId: '123',
+              }),
+            findUserById: () => Promise.resolve(user),
+            updateSession,
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      const { accessToken, refreshToken } = accountsServer.createTokens('456');
+      accountsServer.createTokens = () => ({
+        accessToken: 'newAccessToken',
+        refreshToken: 'newRefreshToken',
+      });
+      const res = await accountsServer.refreshTokens(
+        accessToken,
+        refreshToken,
+        'ip',
+        'user agent'
+      );
+      expect(updateSession.mock.calls[0]).toEqual(['456', 'ip', 'user agent']);
+      expect(res.user).toEqual({
+        userId: '123',
+        username: 'username',
+      });
+    });
 
-  //   it('requires access and refresh tokens', async () => {
-  //     Accounts.config({}, {});
-  //     try {
-  //       await Accounts.refreshTokens();
-  //       throw new Error();
-  //     } catch (err) {
-  //       expect(err.message).toEqual(
-  //         'An accessToken and refreshToken are required'
-  //       );
-  //     }
-  //   });
-  //   it('throws error if tokens are not valid', async () => {
-  //     Accounts.config({}, {});
-  //     try {
-  //       await Accounts.refreshTokens('bad access token', 'bad refresh token');
-  //       throw new Error();
-  //     } catch (err) {
-  //       expect(err.message).toEqual('Tokens are not valid');
-  //     }
-  //   });
-  //   it('throws error if session not found', async () => {
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         findSessionById: () => Promise.resolve(null),
-  //       }
-  //     );
-  //     try {
-  //       const { accessToken, refreshToken } = Accounts.createTokens();
-  //       await Accounts.refreshTokens(accessToken, refreshToken);
-  //       throw new Error();
-  //     } catch (err) {
-  //       expect(err.message).toEqual('Session not found');
-  //     }
-  //   });
-  //   it('throws error if session not valid', async () => {
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         findSessionById: () =>
-  //           Promise.resolve({
-  //             valid: false,
-  //           }),
-  //       }
-  //     );
-  //     try {
-  //       const { accessToken, refreshToken } = Accounts.createTokens();
-  //       await Accounts.refreshTokens(accessToken, refreshToken);
-  //       throw new Error();
-  //     } catch (err) {
-  //       expect(err.message).toEqual('Session is no longer valid');
-  //     }
-  //   });
-  // });
+    it('requires access and refresh tokens', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {} as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      try {
+        await accountsServer.refreshTokens(null, null, null, null);
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual(
+          'An accessToken and refreshToken are required'
+        );
+      }
+    });
+    it('throws error if tokens are not valid', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {} as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      try {
+        await accountsServer.refreshTokens('bad access token', 'bad refresh token', null, null);
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('Tokens are not valid');
+      }
+    });
+    it('throws error if session not found', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionById: () => Promise.resolve(null),
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      try {
+        const { accessToken, refreshToken } = accountsServer.createTokens(null);
+        await accountsServer.refreshTokens(accessToken, refreshToken, null, null);
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('Session not found');
+      }
+    });
+    it('throws error if session not valid', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionById: () =>
+            Promise.resolve({
+              valid: false,
+            }),
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      try {
+        const { accessToken, refreshToken } = accountsServer.createTokens(null);
+        await accountsServer.refreshTokens(accessToken, refreshToken, null, null);
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('Session is no longer valid');
+      }
+    });
+  });
 
-  // describe('findSessionByAccessToken', () => {
-  //   it('requires access token', async () => {
-  //     Accounts.config({}, {});
-  //     try {
-  //       await Accounts.logout();
-  //       throw new Error();
-  //     } catch (err) {
-  //       expect(err.message).toEqual('An accessToken is required');
-  //     }
-  //   });
-  //   it('throws error if tokens are not valid', async () => {
-  //     Accounts.config({}, {});
-  //     try {
-  //       await Accounts.logout('bad access token');
-  //       throw new Error();
-  //     } catch (err) {
-  //       expect(err.message).toEqual('Tokens are not valid');
-  //     }
-  //   });
-  //   it('throws error if session not found', async () => {
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         findSessionById: () => Promise.resolve(null),
-  //       }
-  //     );
-  //     try {
-  //       const { accessToken } = Accounts.createTokens();
-  //       await Accounts.logout(accessToken);
-  //       throw new Error();
-  //     } catch (err) {
-  //       expect(err.message).toEqual('Session not found');
-  //     }
-  //   });
-  //   it('throws error if session not valid', async () => {
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         findSessionById: () =>
-  //           Promise.resolve({
-  //             valid: false,
-  //           }),
-  //       }
-  //     );
-  //     try {
-  //       const { accessToken } = Accounts.createTokens();
-  //       await Accounts.logout(accessToken);
-  //       throw new Error();
-  //     } catch (err) {
-  //       expect(err.message).toEqual('Session is no longer valid');
-  //     }
-  //   });
-  // });
+  describe('findSessionByAccessToken', () => {
+    it('requires access token', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {} as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      try {
+        await accountsServer.logout(null);
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('An accessToken is required');
+      }
+    });
+    it('throws error if tokens are not valid', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {} as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      try {
+        await accountsServer.logout('bad access token');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('Tokens are not valid');
+      }
+    });
+    it('throws error if session not found', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionById: () => Promise.resolve(null),
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      try {
+        const { accessToken } = accountsServer.createTokens(null);
+        await accountsServer.logout(accessToken);
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('Session not found');
+      }
+    });
+    it('throws error if session not valid', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionById: () =>
+              Promise.resolve({
+                valid: false,
+              }),
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      try {
+        const { accessToken } = accountsServer.createTokens(null);
+        await accountsServer.logout(accessToken);
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('Session is no longer valid');
+      }
+    });
+  });
 
-  // describe('findUserById', () => {
-  //   it('call this.db.findUserById', async () => {
-  //     const findUserById = jest.fn(() => Promise.resolve('user'));
-  //     Accounts.config({}, { findUserById });
-  //     const user = await Accounts.findUserById('id');
-  //     expect(findUserById.mock.calls[0]).toEqual(['id']);
-  //     expect(user).toEqual('user');
-  //   });
-  // });
+  describe('findUserById', () => {
+    it('call this.db.findUserById', async () => {
+      const findUserById = jest.fn(() => Promise.resolve('user'));
+      const accountsServer = new AccountsServer(
+        {
+          db: { findUserById } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      const user = await accountsServer.findUserById('id');
+      expect(findUserById.mock.calls[0]).toEqual(['id']);
+      expect(user).toEqual('user');
+    });
+  });
 
-  // describe('resumeSession', () => {
-  //   it('throws error if user is not found', async () => {
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         findSessionById: () =>
-  //           Promise.resolve({
-  //             sessionId: '456',
-  //             valid: true,
-  //             userId: '123',
-  //           }),
-  //         findUserById: () => Promise.resolve(null),
-  //       }
-  //     );
-  //     try {
-  //       const { accessToken } = Accounts.createTokens('456');
-  //       await Accounts.resumeSession(accessToken);
-  //       throw new Error();
-  //     } catch (err) {
-  //       const { message } = err;
-  //       expect(message).toEqual('User not found');
-  //     }
-  //   });
+  describe('resumeSession', () => {
+    it('throws error if user is not found', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionById: () =>
+              Promise.resolve({
+                sessionId: '456',
+                valid: true,
+                userId: '123',
+              }),
+            findUserById: () => Promise.resolve(null),
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
 
-  //   it('return false if session is not valid', async () => {
-  //     const user = {
-  //       userId: '123',
-  //       username: 'username',
-  //     };
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         findSessionById: () =>
-  //           Promise.resolve({
-  //             sessionId: '456',
-  //             valid: false,
-  //             userId: '123',
-  //           }),
-  //         findUserById: () => Promise.resolve(user),
-  //       }
-  //     );
-  //     const { accessToken } = Accounts.createTokens('456');
-  //     const ret = await Accounts.resumeSession(accessToken);
-  //     expect(ret).not.toBeTruthy();
-  //   });
+      try {
+        const { accessToken } = accountsServer.createTokens('456');
+        await accountsServer.resumeSession(accessToken);
+        throw new Error();
+      } catch (err) {
+        const { message } = err;
+        expect(message).toEqual('User not found');
+      }
+    });
 
-  //   it('return user', async () => {
-  //     const user = {
-  //       userId: '123',
-  //       username: 'username',
-  //     };
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         findSessionById: () =>
-  //           Promise.resolve({
-  //             sessionId: '456',
-  //             valid: true,
-  //             userId: '123',
-  //           }),
-  //         findUserById: () => Promise.resolve(user),
-  //       }
-  //     );
-  //     const { accessToken } = Accounts.createTokens('456');
-  //     const foundUser = await Accounts.resumeSession(accessToken);
-  //     expect(foundUser).toEqual(user);
-  //   });
-  // });
+    it('return false if session is not valid', async () => {
+      const user = {
+        userId: '123',
+        username: 'username',
+      };
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionById: () =>
+              Promise.resolve({
+                sessionId: '456',
+                valid: false,
+                userId: '123',
+              }),
+            findUserById: () => Promise.resolve(user),
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      const { accessToken } = accountsServer.createTokens('456');
+      const ret = await accountsServer.resumeSession(accessToken);
+      expect(ret).not.toBeTruthy();
+    });
 
-  // describe('setProfile', () => {
-  //   it('throws error if user is not found', async () => {
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         findUserById: () => Promise.resolve(null),
-  //       }
-  //     );
-  //     try {
-  //       await Accounts.setProfile();
-  //       throw new Error();
-  //     } catch (err) {
-  //       const { message } = err;
-  //       expect(message).toEqual('User not found');
-  //     }
-  //   });
+    it('return user', async () => {
+      const user = {
+        userId: '123',
+        username: 'username',
+      };
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionById: () =>
+              Promise.resolve({
+                sessionId: '456',
+                valid: true,
+                userId: '123',
+              }),
+            findUserById: () => Promise.resolve(user),
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
 
-  //   it('calls set profile on db interface', async () => {
-  //     const user = {
-  //       userId: '123',
-  //       username: 'username',
-  //     };
-  //     const profile = {
-  //       bio: 'bio',
-  //     };
-  //     const setProfile = jest.fn();
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         findUserById: () => Promise.resolve(user),
-  //         setProfile,
-  //       }
-  //     );
-  //     await Accounts.setProfile('123', profile);
-  //     expect(setProfile.mock.calls.length).toEqual(1);
-  //     expect(setProfile.mock.calls[0][0]).toEqual('123');
-  //     expect(setProfile.mock.calls[0][1]).toEqual(profile);
-  //   });
+      const { accessToken } = accountsServer.createTokens('456');
+      const foundUser = await accountsServer.resumeSession(accessToken);
+      expect(foundUser).toEqual(user);
+    });
+  });
 
-  //   it('merges profile and calls set profile on db interface', async () => {
-  //     const user = {
-  //       userId: '123',
-  //       username: 'username',
-  //       profile: {
-  //         title: 'title',
-  //       },
-  //     };
-  //     const profile = {
-  //       bio: 'bio',
-  //     };
-  //     const mergedProfile = {
-  //       title: 'title',
-  //       bio: 'bio',
-  //     };
-  //     const setProfile = jest.fn(() => mergedProfile);
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         findUserById: () => Promise.resolve(user),
-  //         setProfile,
-  //       }
-  //     );
-  //     const res = await Accounts.updateProfile('123', profile);
-  //     expect(setProfile.mock.calls.length).toEqual(1);
-  //     expect(setProfile.mock.calls[0][0]).toEqual('123');
-  //     expect(setProfile.mock.calls[0][1]).toEqual(mergedProfile);
-  //     expect(res).toEqual(mergedProfile);
-  //   });
-  // });
+  describe('setProfile', () => {
+    it('throws error if user is not found', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findUserById: () => Promise.resolve(null),
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      try {
+        await accountsServer.setProfile(null, null);
+        throw new Error();
+      } catch (err) {
+        const { message } = err;
+        expect(message).toEqual('User not found');
+      }
+    });
+
+    it('calls set profile on db interface', async () => {
+      const user = {
+        userId: '123',
+        username: 'username',
+      };
+      const profile = {
+        bio: 'bio',
+      };
+      const setProfile = jest.fn();
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findUserById: () => Promise.resolve(user),
+            setProfile,
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      
+      await accountsServer.setProfile('123', profile);
+      expect(setProfile.mock.calls.length).toEqual(1);
+      expect(setProfile.mock.calls[0][0]).toEqual('123');
+      expect(setProfile.mock.calls[0][1]).toEqual(profile);
+    });
+
+    it('merges profile and calls set profile on db interface', async () => {
+      const user = {
+        userId: '123',
+        username: 'username',
+        profile: {
+          title: 'title',
+        },
+      };
+      const profile = {
+        bio: 'bio',
+      };
+      const mergedProfile = {
+        title: 'title',
+        bio: 'bio',
+      };
+      const setProfile = jest.fn(() => mergedProfile);
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findUserById: () => Promise.resolve(user),
+            setProfile,
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+
+      const res = await accountsServer.updateProfile('123', profile);
+      expect(setProfile.mock.calls.length).toEqual(1);
+      expect(setProfile.mock.calls[0][0]).toEqual('123');
+      expect(setProfile.mock.calls[0][1]).toEqual(mergedProfile);
+      expect(res).toEqual(mergedProfile);
+    });
+  });
 
   describe('impersonate', () => {
     const user = { username: 'myUser', id: '123' };
