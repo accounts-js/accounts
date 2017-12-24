@@ -52,10 +52,12 @@ describe('AccountsServer', () => {
     it('should return tokens', async () => {
       const authenticate = jest.fn(() => Promise.resolve({ id: 'userId' }));
       const createSession = jest.fn(() => Promise.resolve('sessionId'));
-      const accountServer = new AccountsServer({ db: {} } as any, {
+      const accountServer = new AccountsServer({ 
+        db: { createSession} as any,
+        tokenSecret: 'secret',
+      }, {
         facebook: { authenticate, setStore: jest.fn() },
       });
-      accountServer.db = { createSession } as any;
       const res = await accountServer.loginWithService('facebook', {}, {});
       expect(res.tokens).toBeTruthy();
     });
@@ -85,7 +87,7 @@ describe('AccountsServer', () => {
       const res = await accountsServer.loginWithUser(user, {});
       expect(res.user).toEqual(user);
       const { accessToken, refreshToken } = res.tokens;
-      const decodedAccessToken = jwtDecode(accessToken);
+      const decodedAccessToken: any = jwtDecode(accessToken);
       expect(decodedAccessToken.data.sessionId).toEqual('sessionId');
       expect(accessToken).toBeTruthy();
       expect(refreshToken).toBeTruthy();
@@ -870,11 +872,12 @@ describe('AccountsServer', () => {
       );
       const { accessToken } = accountsServer.createTokens('555');
 
+      
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
           valid: true,
           userId: '123',
-        });
+        } as any);
 
       const impersonationAuthorize =
         accountsServer.getOptions().impersonationAuthorize;
@@ -915,11 +918,11 @@ describe('AccountsServer', () => {
         Promise.resolve({
           valid: true,
           userId: '123',
-        });
+        } as any);
       accountsServer.createTokens = (sessionId, isImpersonated) => ({
         sessionId,
         isImpersonated,
-      });
+      } as any);
 
       const res = await accountsServer.impersonate(accessToken, 'impUser', null, null);
       expect(res).toEqual({
