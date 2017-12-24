@@ -877,7 +877,7 @@ describe('AccountsServer', () => {
         });
 
       const impersonationAuthorize =
-        accountsServer.options.impersonationAuthorize;
+        accountsServer.getOptions().impersonationAuthorize;
       expect(impersonationAuthorize).toBeDefined();
 
       const res = await accountsServer.impersonate(
