@@ -169,12 +169,14 @@ describe('AccountsServer', () => {
       expect(hookSpy).toBeCalled();
     });
 
-    it('onLoginError with custom authenticator', async () => {
+    it('onLoginError', async () => {
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
         {
           db: {
-            createSession: () => '123',
+            createSession: () => { 
+              throw new Error('Could not create session');
+            },
           } as any,
           tokenSecret: 'secret',
         },

@@ -203,19 +203,26 @@ export class AccountsServer {
     infos: ConnectionInformationsType
   ): Promise<LoginReturnType> {
     const { ip, userAgent } = infos;
-    const sessionId = await this.db.createSession(user.id, ip, userAgent);
-    const { accessToken, refreshToken } = this.createTokens(sessionId);
-
-    const loginResult = {
-      sessionId,
-      user: this.sanitizeUser(user),
-      tokens: {
-        refreshToken,
-        accessToken,
-      },
-    };
-
-    return loginResult;
+    
+    try {
+      const sessionId = await this.db.createSession(user.id, ip, userAgent);
+      const { accessToken, refreshToken } = this.createTokens(sessionId);
+      
+      const loginResult = {
+        sessionId,
+        user: this.sanitizeUser(user),
+        tokens: {
+          refreshToken,
+          accessToken,
+        },
+      };
+      
+      this.hooks.emit(ServerHooks.LoginSuccess, user);
+      return loginResult;
+    } catch(e) {
+      this.hooks.emit(ServerHooks.LoginError, e);
+      throw e;
+    }
   }
 
   /**
