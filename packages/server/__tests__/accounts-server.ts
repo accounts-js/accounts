@@ -147,327 +147,329 @@ describe('AccountsServer', () => {
 
       const { accessToken } = accountsServer.createTokens('456');
       await accountsServer.logout(accessToken);
-      expect(invalidateSession.mock.calls[0]).toEqual(['456']);
+      expect(invalidateSession).toBeCalledWith('456');
     });
   });
 
-  // describe('hooks', () => {
-  //   it('onLoginSuccess', async () => {
-  //     const hookSpy = jest.fn(() => null);
-  //     const account = new AccountsServer();
-  //     account.onLoginSuccess(hookSpy);
+  describe('hooks', () => {
+    it('onLoginSuccess', async () => {
+      const hookSpy = jest.fn(() => null);
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            createSession: () => '123',
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      accountsServer.onLoginSuccess(hookSpy);
 
-  //     account.config(
-  //       {
-  //         passwordAuthenticator: () => ({}),
-  //       },
-  //       {
-  //         createSession: () => '123',
-  //       }
-  //     );
+      await accountsServer.loginWithUser({} as any, {});
+      expect(hookSpy).toBeCalled();
+    });
 
-  //     await account.loginWithPassword('username', '123456');
-  //     expect(hookSpy.mock.calls.length).toBe(1);
-  //   });
-  // });
+    it('onLoginError with custom authenticator', async () => {
+      const hookSpy = jest.fn(() => null);
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            createSession: () => '123',
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      accountsServer.onLoginError(hookSpy);
 
-  //   it('onLoginError with custom authenticator', async () => {
-  //     const hookSpy = jest.fn(() => null);
-  //     Accounts.onLoginError(hookSpy);
+      try {
+        await accountsServer.loginWithUser({} as any, {});
+      } catch (e) {
+        // nothing to do
+      }
+      expect(hookSpy).toBeCalled();
+    });
 
-  //     Accounts.config(
-  //       {
-  //         passwordAuthenticator: () => Promise.reject('error'),
-  //       },
-  //       {
-  //         createSession: () => '123',
-  //       }
-  //     );
+    it('onLogoutSuccess', async () => {
+      const user = {
+        userId: '123',
+        username: 'username',
+      };
+      
+      const hookSpy = jest.fn(() => null);
+      const invalidateSession = jest.fn(() => Promise.resolve());
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionById: () =>
+              Promise.resolve({
+                sessionId: '456',
+                valid: true,
+                userId: '123',
+              }),
+            findUserById: () => Promise.resolve(user),
+            invalidateSession,
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      accountsServer.onLogoutSuccess(hookSpy);
 
-  //     try {
-  //       await Accounts.loginWithPassword('username', '123456');
-  //     } catch (e) {
-  //       // nothing to do
-  //     }
-  //     expect(hookSpy.mock.calls.length).toBe(1);
-  //   });
+      const { accessToken } = accountsServer.createTokens('456');
+      await accountsServer.logout(accessToken);
+      expect(hookSpy).toBeCalled();
+    });
 
-  //   it('onLoginError with default authenticator', async () => {
-  //     const hookSpy = jest.fn(() => null);
-  //     Accounts.onLoginError(hookSpy);
+    it('onLogoutError', async () => {
+      const hookSpy = jest.fn(() => null);
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionById: () =>
+            Promise.resolve({
+              sessionId: '456',
+              valid: true,
+              userId: '123',
+            }),
+            findUserById: () => Promise.resolve(null),
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      accountsServer.onLogoutError(hookSpy);
 
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         findUserByUsername: () => Promise.resolve('123'),
-  //         findUserByEmail: () => Promise.resolve(null),
-  //         findPasswordHash: () => Promise.resolve('hash'),
-  //         verifyPassword: () => Promise.resolve(false),
-  //       }
-  //     );
+      try {
+        const { accessToken } = accountsServer.createTokens('456');
+        await accountsServer.logout(accessToken);
+      } catch (err) {
+        // nothing to do
+      }
 
-  //     try {
-  //       await Accounts.loginWithPassword('username', '123456');
-  //     } catch (e) {
-  //       // Nothing to do
-  //     }
-  //     expect(hookSpy.mock.calls.length).toBe(1);
-  //   });
+      expect(hookSpy).toBeCalled();
+    });
 
-  //   it('onLogoutSuccess', async () => {
-  //     const hookSpy = jest.fn(() => null);
-  //     Accounts.onLogoutSuccess(hookSpy);
+    it('onResumeSessionSuccess', async () => {
+      const user = {
+        userId: '123',
+        username: 'username',
+      };
+      const hookSpy = jest.fn(() => null);
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionById: () =>
+              Promise.resolve({
+                sessionId: '456',
+                valid: true,
+                userId: '123',
+              }),
+            findUserById: () => Promise.resolve(user),
+            resumeSessionValidator: () => Promise.resolve(user),
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      accountsServer.onResumeSessionSuccess(hookSpy);
 
-  //     const invalidateSession = jest.fn(() => Promise.resolve());
-  //     const user = {
-  //       userId: '123',
-  //       username: 'username',
-  //     };
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         findSessionById: () =>
-  //           Promise.resolve({
-  //             sessionId: '456',
-  //             valid: true,
-  //             userId: '123',
-  //           }),
-  //         findUserById: () => Promise.resolve(user),
-  //         invalidateSession,
-  //       }
-  //     );
+      const { accessToken } = accountsServer.createTokens('456');
+      await accountsServer.resumeSession(accessToken);
 
-  //     const { accessToken } = Accounts.createTokens('456');
-  //     await Accounts.logout(accessToken);
-  //     expect(hookSpy.mock.calls.length).toBe(1);
-  //   });
+      expect(hookSpy).toBeCalled();
+    });
 
-  //   it('onLogoutError', async () => {
-  //     const hookSpy = jest.fn(() => null);
-  //     Accounts.onLogoutError(hookSpy);
+    it('onResumeSessionError with invalid session', async () => {
+      const user = {
+        userId: '123',
+        username: 'username',
+      };
+      const hookSpy = jest.fn(() => null);
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionById: () =>
+            Promise.resolve({
+              sessionId: '456',
+              valid: false,
+              userId: '123',
+            }),
+            findUserById: () => Promise.resolve(user),
+          } as any,
+          tokenSecret: 'secret',
+          resumeSessionValidator: () => Promise.resolve(user),
+        },
+        {}
+      );
+      accountsServer.onResumeSessionError(hookSpy);
 
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         findSessionById: () =>
-  //           Promise.resolve({
-  //             sessionId: '456',
-  //             valid: true,
-  //             userId: '123',
-  //           }),
-  //         findUserById: () => Promise.resolve(null),
-  //       }
-  //     );
+      const { accessToken } = accountsServer.createTokens('456');
 
-  //     try {
-  //       const { accessToken } = Accounts.createTokens('456');
-  //       await Accounts.logout(accessToken);
-  //     } catch (err) {
-  //       // nothing to do
-  //     }
+      try {
+        await accountsServer.resumeSession(accessToken);
+      } catch (e) {
+        // nothing to do
+      }
 
-  //     expect(hookSpy.mock.calls.length).toBe(1);
-  //   });
+      expect(hookSpy).toBeCalled();
+    });
 
-  //   it('onResumeSessionSuccess', async () => {
-  //     const hookSpy = jest.fn(() => null);
-  //     Accounts.onResumeSessionSuccess(hookSpy);
+    it('onResumeSessionError with invalid errored session', async () => {
+      const user = {
+        userId: '123',
+        username: 'username',
+      };
+      const hookSpy = jest.fn(() => null);
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionById: () => Promise.reject(''),
+            findUserById: () => Promise.resolve(user),
+          } as any,
+          tokenSecret: 'secret',
+          resumeSessionValidator: () => Promise.resolve(user) 
+        },
+        {}
+      );
+      accountsServer.onResumeSessionError(hookSpy);
 
-  //     const user = {
-  //       userId: '123',
-  //       username: 'username',
-  //     };
-  //     Accounts.config(
-  //       { resumeSessionValidator: () => Promise.resolve(user) },
-  //       {
-  //         findSessionById: () =>
-  //           Promise.resolve({
-  //             sessionId: '456',
-  //             valid: true,
-  //             userId: '123',
-  //           }),
-  //         findUserById: () => Promise.resolve(user),
-  //       }
-  //     );
+      const { accessToken } = accountsServer.createTokens('456');
 
-  //     const { accessToken } = Accounts.createTokens('456');
-  //     await Accounts.resumeSession(accessToken);
+      try {
+        await accountsServer.resumeSession(accessToken);
+      } catch (e) {
+        // nothing to do
+      }
 
-  //     expect(hookSpy.mock.calls.length).toBe(1);
-  //   });
+      expect(hookSpy).toBeCalled();
+    });
 
-  //   it('onResumeSessionError with invalid session', async () => {
-  //     const hookSpy = jest.fn(() => null);
-  //     Accounts.onResumeSessionError(hookSpy);
+    it('onRefreshTokenError', async () => {
+      const hookSpy = jest.fn(() => null);
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionById: () =>
+              Promise.resolve({
+                valid: false,
+              }),
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      accountsServer.onRefreshTokensError(hookSpy);
 
-  //     const user = {
-  //       userId: '123',
-  //       username: 'username',
-  //     };
-  //     Accounts.config(
-  //       { resumeSessionValidator: () => Promise.resolve(user) },
-  //       {
-  //         findSessionById: () =>
-  //           Promise.resolve({
-  //             sessionId: '456',
-  //             valid: false,
-  //             userId: '123',
-  //           }),
-  //         findUserById: () => Promise.resolve(user),
-  //       }
-  //     );
+      try {
+        const { accessToken, refreshToken } = accountsServer.createTokens(null);
+        await accountsServer.refreshTokens(accessToken, refreshToken, null, null);
+      } catch (err) {
+        // nothing to do
+      }
 
-  //     const { accessToken } = Accounts.createTokens('456');
+      expect(hookSpy).toBeCalled();
+    });
 
-  //     try {
-  //       await Accounts.resumeSession(accessToken);
-  //     } catch (e) {
-  //       // nothing to do
-  //     }
+    it('onRefreshTokenSuccess', async () => {
+      const user = {
+        userId: '123',
+        username: 'username',
+      };
+      const hookSpy = jest.fn(() => null);
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionById: () =>
+              Promise.resolve({
+                sessionId: '456',
+                valid: true,
+                userId: '123',
+              }),
+            findUserById: () => Promise.resolve(user),
+            updateSession: () => Promise.resolve(),
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      accountsServer.onRefreshTokensSuccess(hookSpy);
 
-  //     expect(hookSpy.mock.calls.length).toBe(1);
-  //   });
+      const { accessToken, refreshToken } = accountsServer.createTokens('456');
+      accountsServer.createTokens = () => ({
+        accessToken: 'newAccessToken',
+        refreshToken: 'newRefreshToken',
+      });
 
-  //   it('onResumeSessionError with invalid errored session', async () => {
-  //     const hookSpy = jest.fn(() => null);
-  //     Accounts.onResumeSessionError(hookSpy);
+      await accountsServer.refreshTokens(
+        accessToken,
+        refreshToken,
+        'ip',
+        'user agent'
+      );
 
-  //     const user = {
-  //       userId: '123',
-  //       username: 'username',
-  //     };
-  //     Accounts.config(
-  //       { resumeSessionValidator: () => Promise.resolve(user) },
-  //       {
-  //         findSessionById: () => Promise.reject(''),
-  //         findUserById: () => Promise.resolve(user),
-  //       }
-  //     );
+      expect(hookSpy).toBeCalled();
+    });
 
-  //     const { accessToken } = Accounts.createTokens('456');
+    it('onImpersonationError', async () => {
+      const hookSpy = jest.fn(() => null);
+      const accountsServer = new AccountsServer(
+        {
+          db: db as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      accountsServer.onImpersonationError(hookSpy);
 
-  //     try {
-  //       await Accounts.resumeSession(accessToken);
-  //     } catch (e) {
-  //       // nothing to do
-  //     }
+      try {
+        await accountsServer.impersonate(null, null, null, null);
+      } catch (err) {
+        // nothing to do
+      }
 
-  //     expect(hookSpy.mock.calls.length).toBe(1);
-  //   });
+      expect(hookSpy).toBeCalled();
+    });
 
-  //   it('onRefreshTokenError', async () => {
-  //     const hookSpy = jest.fn(() => null);
-  //     Accounts.onRefreshTokensError(hookSpy);
+    it('onImpersonationSuccess', async () => {
+      const user = { username: 'myUser', id: '123' };
+      const impersonatedUser = { username: 'impUser', id: '456' };
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findUserById: () => Promise.resolve(user),
+            findUserByUsername: () => Promise.resolve(impersonatedUser),
+            createSession: () => Promise.resolve('001'),
+          } as any,
+          tokenSecret: 'secret',
+          impersonationAuthorize: async (userObject, impersonateToUser) => {
+            return (
+              userObject.id === user.id &&
+              impersonateToUser === impersonatedUser
+            );
+          },
+        },
+        {}
+      );
+      const { accessToken } = accountsServer.createTokens('555');
+      const hookSpy = jest.fn(() => null);
+      accountsServer.onImpersonationSuccess(hookSpy);
 
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         findSessionById: () =>
-  //           Promise.resolve({
-  //             valid: false,
-  //           }),
-  //       }
-  //     );
-  //     try {
-  //       const { accessToken, refreshToken } = Accounts.createTokens();
-  //       await Accounts.refreshTokens(accessToken, refreshToken);
-  //     } catch (err) {
-  //       // nothing to do
-  //     }
+      accountsServer.findSessionByAccessToken = () =>
+        Promise.resolve({
+          valid: true,
+          userId: '123',
+        } as any);
+      accountsServer.createTokens = (sessionId, isImpersonated) => ({
+        sessionId,
+        isImpersonated,
+      } as any);
 
-  //     expect(hookSpy.mock.calls.length).toBe(1);
-  //   });
+      await accountsServer.impersonate(accessToken, 'impUser', null, null);
 
-  //   it('onRefreshTokenSuccess', async () => {
-  //     const hookSpy = jest.fn(() => null);
-  //     Accounts.onRefreshTokensSuccess(hookSpy);
-
-  //     const updateSession = () => Promise.resolve();
-  //     const user = {
-  //       userId: '123',
-  //       username: 'username',
-  //     };
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         findSessionById: () =>
-  //           Promise.resolve({
-  //             sessionId: '456',
-  //             valid: true,
-  //             userId: '123',
-  //           }),
-  //         findUserById: () => Promise.resolve(user),
-  //         updateSession,
-  //       }
-  //     );
-  //     const { accessToken, refreshToken } = Accounts.createTokens('456');
-  //     Accounts.createTokens = () => ({
-  //       accessToken: 'newAccessToken',
-  //       refreshToken: 'newRefreshToken',
-  //     });
-
-  //     await Accounts.refreshTokens(
-  //       accessToken,
-  //       refreshToken,
-  //       'ip',
-  //       'user agent'
-  //     );
-
-  //     expect(hookSpy.mock.calls.length).toBe(1);
-  //   });
-
-  //   it('onImpersonationError', async () => {
-  //     const hookSpy = jest.fn(() => null);
-  //     Accounts.onImpersonationError(hookSpy);
-
-  //     Accounts.config({}, db);
-  //     try {
-  //       await Accounts.impersonate();
-  //     } catch (err) {
-  //       // nothing to do
-  //     }
-
-  //     expect(hookSpy.mock.calls.length).toBe(1);
-  //   });
-
-  //   it('onImpersonationSuccess', async () => {
-  //     const user = { username: 'myUser', id: 123 };
-  //     const impersonatedUser = { username: 'impUser', id: 456 };
-  //     const { accessToken } = Accounts.createTokens('555');
-  //     const hookSpy = jest.fn(() => null);
-  //     Accounts.onImpersonationSuccess(hookSpy);
-
-  //     Accounts.config(
-  //       {
-  //         impersonationAuthorize: async (userObject, impersonateToUser) => {
-  //           return (
-  //             userObject.id === user.id &&
-  //             impersonateToUser === impersonatedUser
-  //           );
-  //         },
-  //       },
-  //       {
-  //         findUserById: () => Promise.resolve(user),
-  //         findUserByUsername: () => Promise.resolve(impersonatedUser),
-  //         createSession: () => Promise.resolve('001'),
-  //       }
-  //     );
-
-  //     Accounts.findSessionByAccessToken = () =>
-  //       Promise.resolve({
-  //         valid: true,
-  //         userId: '123',
-  //       });
-  //     Accounts.createTokens = (sessionId, isImpersonated) => ({
-  //       sessionId,
-  //       isImpersonated,
-  //     });
-
-  //     await Accounts.impersonate(accessToken, 'impUser');
-
-  //     expect(hookSpy.mock.calls.length).toBe(1);
-  //   });
-  // });
+      expect(hookSpy).toBeCalled();
+    });
+  });
 
   describe('refreshTokens', () => {
     it('updates session and returns new tokens and user', async () => {
