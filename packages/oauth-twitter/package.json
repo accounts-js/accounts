@@ -7,6 +7,7 @@
   "scripts": {
     "start": "tsc --watch",
     "compile": "tsc",
+    "prepublishOnly": "yarn compile",
     "testonly": "jest",
     "coverage": "jest --coverage"
   },

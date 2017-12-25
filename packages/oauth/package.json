@@ -9,7 +9,8 @@
     "compile": "tsc",
     "testonly": "jest",
     "test:watch": "jest --watch",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "prepublishOnly": "yarn compile"
   },
   "jest": {
     "transform": {
@@ -23,8 +24,8 @@
     "mapCoverage": true
   },
   "dependencies": {
-    "request-promise": "^4.2.1",
-    "@accounts/common": "^0.1.0"
+    "@accounts/common": "^0.1.0",
+    "request-promise": "^4.2.1"
   },
   "devDependencies": {
     "@accounts/server": "^0.1.0"

@@ -12,7 +12,7 @@
     "start": "tsc --watch",
     "precompile": "npm run clean",
     "compile": "tsc",
-    "prepublish": "npm run compile",
+    "prepublishOnly": "npm run compile",
     "test": "npm run testonly",
     "test-ci": "npm lint && npm coverage",
     "testonly": "jest",
