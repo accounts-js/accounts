@@ -32,7 +32,8 @@
     "@accounts/common": "^0.1.0",
     "@accounts/server": "^0.1.0",
     "@types/bcryptjs": "^2.4.0",
-    "@types/lodash": "^4.14.81"
+    "@types/lodash": "^4.14.81",
+    "rimraf": "^2.6.1"
   },
   "peerDependencies": {
     "@accounts/common": "^0.1.0",

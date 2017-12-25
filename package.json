@@ -9,7 +9,7 @@
     "prebootstrap": "yarn install",
     "postinstall": "lerna bootstrap",
     "publish": "lerna publish",
-    "publish:canary": "yarn publish -- --canary",
+    "publish:canary": "yarn run publish -- --canary",
     "test": "yarn lint && yarn testonly && yarn compile",
     "testonly": "lerna run testonly",
     "format": "prettier --single-quote --trailing-comma es5 --parser typescript --write \"packages/*/{src,__tests__}/**/*.ts\"",

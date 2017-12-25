@@ -51,7 +51,6 @@
   "devDependencies": {
     "@types/jest": "^20.0.2",
     "coveralls": "^2.11.14",
-    "flow-bin": "0.41.0",
     "jest": "^20.0.4",
     "jsonwebtoken": "^7.4.1",
     "lerna": "2.0.0-beta.32",
