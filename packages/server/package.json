@@ -60,6 +60,7 @@
   "devDependencies": {
     "@types/jsonwebtoken": "^7.2.3",
     "@types/jwt-decode": "^2.2.1",
-    "coveralls": "^2.11.14"
+    "coveralls": "^2.11.14",
+    "rimraf": "^2.6.2"
   }
 }
