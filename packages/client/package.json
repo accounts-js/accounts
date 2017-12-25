@@ -16,6 +16,7 @@
     "test": "npm run testonly",
     "test-ci": "npm lint && npm coverage",
     "testonly": "jest",
+    "test:watch": "jest --watch",
     "coverage": "npm run testonly -- --coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
