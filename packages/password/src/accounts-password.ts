@@ -72,7 +72,7 @@ export default class AccountsPassword implements AuthService {
   private options: AccountsPasswordOptions;
   private db: DBInterface;
   
-  constructor(options: AccountsPasswordOptions) {
+  constructor(options: AccountsPasswordOptions = {}) {
     this.options = { ...defaultOptions, ...options };
   }
 
