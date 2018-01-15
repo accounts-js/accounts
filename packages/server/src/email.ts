@@ -1,4 +1,4 @@
-import email, { Client } from 'emailjs';
+import { Client, server as emailServer } from 'emailjs';
 
 export interface EmailConnector {
   sendMail(mail: object): Promise<object>;
@@ -9,7 +9,7 @@ class Email {
 
   constructor(emailConfig: object) {
     if (emailConfig) {
-      this.server = email.server.connect(emailConfig);
+      this.server = emailServer.connect(emailConfig);
     }
   }
 
