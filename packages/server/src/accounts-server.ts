@@ -412,7 +412,7 @@ export class AccountsServer {
       let sessionId;
       try {
         jwt.verify(refreshToken, this._options.tokenSecret);
-        const decodedAccessToken = jwt.verify(
+        const decodedAccessToken: any = jwt.verify(
           accessToken,
           this._options.tokenSecret,
           {
@@ -574,7 +574,7 @@ export class AccountsServer {
 
     let sessionId;
     try {
-      const decodedAccessToken = jwt.verify(
+      const decodedAccessToken: any = jwt.verify(
         accessToken,
         this._options.tokenSecret
       );
