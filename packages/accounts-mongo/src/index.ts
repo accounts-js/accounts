@@ -96,8 +96,8 @@ export default class Mongo {
     const user: MongoUserObjectType = {
       services: {},
       profile: {},
-      [this.options.timestamps.createdAt]: Date.now(),
-      [this.options.timestamps.updatedAt]: Date.now(),
+      [this.options.timestamps.createdAt]: this.options.dateProvider(),
+      [this.options.timestamps.updatedAt]: this.options.dateProvider(),
     };
     if (options.password) {
       user.services.password = { bcrypt: options.password };
@@ -111,8 +111,8 @@ export default class Mongo {
     if (options.profile) {
       user.profile = options.profile;
     }
-    if (options.idProvider) {
-      user._id = options.idProvider();
+    if (this.options.idProvider) {
+      user._id = this.options.idProvider();
     }
     const ret = await this.collection.insertOne(user);
     return ret.ops[0]._id;
@@ -206,7 +206,9 @@ export default class Mongo {
             verified,
           },
         },
-        $set: { [this.options.timestamps.updatedAt]: Date.now() },
+        $set: {
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+        },
       }
     );
     if (ret.result.nModified === 0) {
@@ -222,7 +224,9 @@ export default class Mongo {
       { _id: id },
       {
         $pull: { emails: { address: email.toLowerCase() } },
-        $set: { [this.options.timestamps.updatedAt]: Date.now() },
+        $set: {
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+        },
       }
     );
     if (ret.result.nModified === 0) {
@@ -239,7 +243,7 @@ export default class Mongo {
       {
         $set: {
           'emails.$.verified': true,
-          [this.options.timestamps.updatedAt]: Date.now(),
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
         },
         $pull: { 'services.email.verificationTokens': { address: email } },
       }
@@ -258,7 +262,7 @@ export default class Mongo {
       {
         $set: {
           username: newUsername,
-          [this.options.timestamps.updatedAt]: Date.now(),
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
         },
       }
     );
@@ -276,7 +280,7 @@ export default class Mongo {
       {
         $set: {
           'services.password.bcrypt': newPassword,
-          [this.options.timestamps.updatedAt]: Date.now(),
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
         },
         $unset: {
           'services.password.reset': '',
@@ -297,7 +301,7 @@ export default class Mongo {
       {
         $set: {
           profile,
-          [this.options.timestamps.updatedAt]: Date.now(),
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
         },
       }
     );
@@ -397,7 +401,7 @@ export default class Mongo {
           'services.email.verificationTokens': {
             token,
             address: email.toLowerCase(),
-            when: Date.now(),
+            when: this.options.dateProvider(),
           },
         },
       }
@@ -417,7 +421,7 @@ export default class Mongo {
           'services.password.reset': {
             token,
             address: email.toLowerCase(),
-            when: Date.now(),
+            when: this.options.dateProvider(),
             reason,
           },
         },

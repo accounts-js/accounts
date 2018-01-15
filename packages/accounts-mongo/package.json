@@ -12,25 +12,24 @@
     "test": "yarn lint && yarn coverage && yarn prettier-diff",
     "testonly": "jest",
     "lint": "tslint -c tslint.json '{src,__tests__}/**/*.ts'",
-    "prettier": "prettier --single-quote --trailing-comma es5 '{src,__tests__}/**/*.ts' 'README.md'",
+    "prettier": "prettier '{src,__tests__}/**/*.ts' 'README.md'",
     "prettier-diff": "yarn prettier --list-different",
     "format": "yarn prettier --write",
     "coverage": "yarn testonly --coverage",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "codecov": "codecov",
+    "precommit": "pretty-quick --staged"
   },
-  "files": [
-    "src",
-    "lib"
-  ],
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "files": ["src", "lib"],
   "jest": {
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "./__tests__/.*.ts$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
+    "moduleFileExtensions": ["ts", "js"],
     "mapCoverage": true
   },
   "repository": {
@@ -49,9 +48,12 @@
     "@types/jest": "^21.1.5",
     "@types/mongodb": "^2.2.15",
     "@types/node": "^8.0.47",
+    "codecov": "^3.0.0",
     "coveralls": "^3.0.0",
+    "husky": "^0.14.3",
     "jest": "^21.2.1",
     "prettier": "^1.8.2",
+    "pretty-quick": "^1.2.0",
     "ts-jest": "^21.1.4",
     "tslint": "^5.8.0",
     "typescript": "^2.6.1"

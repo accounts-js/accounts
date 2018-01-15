@@ -9,4 +9,4 @@ jobs:
       - checkout
       - run: yarn install --frozen-lockfile
       - run: yarn test
-      - run: yarn coveralls
+      - run: yarn codecov
