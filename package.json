@@ -10,11 +10,11 @@
     "postinstall": "lerna bootstrap",
     "publish": "lerna publish",
     "publish:canary": "yarn run publish -- --canary",
-    "test": "yarn lint && yarn testonly && yarn compile",
+    "test": "yarn lint && yarn coverage && yarn compile",
     "testonly": "lerna run testonly",
     "format": "prettier --single-quote --trailing-comma es5 --parser typescript --write \"packages/*/{src,__tests__}/**/*.ts\"",
     "coverage": "lerna run coverage",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "codecov": "codecov"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
     "@accounts/tslint-config-accounts": "^0.0.6",
     "@types/jest": "^21.1.5",
     "@types/node": "^8.0.47",
+    "codecov": "^3.0.0",
     "flow-bin": "0.41.0",
     "jest": "^21.2.1",
     "lerna": "^2.5.1",
