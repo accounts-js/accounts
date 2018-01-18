@@ -36,10 +36,10 @@ const mockTokenStorage = {
 
 const mockTransport: TransportInterface = {
   createUser: jest.fn(() => Promise.resolve(loggedInUser.user.id)),
-  loginWithPassword: jest.fn(() => Promise.resolve(loggedInUser)),
+  // loginWithPassword: jest.fn(() => Promise.resolve(loggedInUser)),
   logout: jest.fn(() => Promise.resolve()),
   refreshTokens: jest.fn(() => Promise.resolve(loggedInUser)),
-  resetPassword: jest.fn(() => Promise.resolve()),
+  // resetPassword: jest.fn(() => Promise.resolve()),
   sendResetPasswordEmail: jest.fn(() => Promise.resolve()),
   verifyEmail: jest.fn(() => Promise.resolve()),
   sendVerificationEmail: jest.fn(() => Promise.resolve()),
