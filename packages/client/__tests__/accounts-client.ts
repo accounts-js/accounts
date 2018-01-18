@@ -1,5 +1,6 @@
 import { Map } from 'immutable';
 import * as crypto from 'crypto';
+// tslint:disable-next-line
 import * as jwt from 'jsonwebtoken';
 import '../src/mock-local-storage.ts';
 import Accounts, { TransportInterface } from '../src';
