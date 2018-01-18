@@ -345,7 +345,7 @@ export class AccountsServer {
         throw new AccountsError('User not found');
       }
 
-      const impersonatedUser = await this.db.findUserByUsername(username);
+      const impersonatedUser = await this.findUserByUsername(username);
       if (!impersonatedUser) {
         throw new AccountsError(`User ${username} not found`);
       }
@@ -776,7 +776,7 @@ export class AccountsServer {
    * @returns {Promise<void>} - Return a Promise.
    */
   public async sendVerificationEmail(address: string): Promise<void> {
-    const user = await this.db.findUserByEmail(address);
+    const user = await this.findUserByEmail(address);
     if (!user) {
       throw new AccountsError('User not found', { email: address });
     }
@@ -813,7 +813,7 @@ export class AccountsServer {
    * @returns {Promise<void>} - Return a Promise.
    */
   public async sendResetPasswordEmail(address: string): Promise<void> {
-    const user = await this.db.findUserByEmail(address);
+    const user = await this.findUserByEmail(address);
     if (!user) {
       throw new AccountsError('User not found', { email: address });
     }
@@ -841,7 +841,7 @@ export class AccountsServer {
    * @returns {Promise<void>} - Return a Promise.
    */
   public async sendEnrollmentEmail(address: string): Promise<void> {
-    const user = await this.db.findUserByEmail(address);
+    const user = await this.findUserByEmail(address);
     if (!user) {
       throw new AccountsError('User not found', { email: address });
     }
