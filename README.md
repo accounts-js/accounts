@@ -41,7 +41,7 @@ npm i -S @accounts/sql
 
 ## Example
 
-You can find a working example [here](https://github.com/accounts-js/rest-example).
+You can find a working example [here](https://github.com/accounts-js/examples).
 
 ## Emails
 

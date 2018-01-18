@@ -46,7 +46,7 @@ class Email {
 
   constructor(emailConfig: object) {
     if (emailConfig) {
-      this.server = email.server.connect(emailConfig);
+      this.server = emailServer.connect(emailConfig);
     }
   }
 
