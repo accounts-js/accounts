@@ -60,7 +60,7 @@ describe('AccountsPassword', () => {
 
     it('throws when user not found', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
-      password.db = { findUserByEmail } as any;
+      password.setStore({ findUserByEmail } as any);
       try {
         await password.authenticate({
           user: 'toto@toto.com',
@@ -75,7 +75,7 @@ describe('AccountsPassword', () => {
     it('throws when hash not found', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve({ id: 'id' }));
       const findPasswordHash = jest.fn(() => Promise.resolve());
-      password.db = { findUserByEmail, findPasswordHash } as any;
+      password.setStore({ findUserByEmail, findPasswordHash } as any);
       try {
         await password.authenticate({
           user: 'toto@toto.com',
@@ -90,7 +90,7 @@ describe('AccountsPassword', () => {
     it('throws on incorrect password', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve({ id: 'id' }));
       const findPasswordHash = jest.fn(() => Promise.resolve('hash'));
-      password.db = { findUserByEmail, findPasswordHash } as any;
+      password.setStore({ findUserByEmail, findPasswordHash } as any);
       try {
         await password.authenticate({
           user: 'toto@toto.com',
@@ -106,7 +106,7 @@ describe('AccountsPassword', () => {
   describe('findUserByEmail', () => {
     it('call this.db.findUserByEmail', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve('user'));
-      password.db = { findUserByEmail } as any;
+      password.setStore({ findUserByEmail } as any);
       const user = await password.findUserByEmail('email');
       expect(findUserByEmail.mock.calls[0]).toMatchSnapshot();
       expect(user).toEqual('user');
@@ -116,7 +116,7 @@ describe('AccountsPassword', () => {
   describe('findUserByUsername', () => {
     it('call this.db.findUserByUsername', async () => {
       const findUserByUsername = jest.fn(() => Promise.resolve('user'));
-      password.db = { findUserByUsername } as any;
+      password.setStore({ findUserByUsername } as any);
       const user = await password.findUserByUsername('email');
       expect(findUserByUsername.mock.calls[0]).toMatchSnapshot();
       expect(user).toEqual('user');
@@ -126,7 +126,7 @@ describe('AccountsPassword', () => {
   describe('addEmail', () => {
     it('call this.db.addEmail', async () => {
       const addEmail = jest.fn(() => Promise.resolve());
-      password.db = { addEmail } as any;
+      password.setStore({ addEmail } as any);
       await password.addEmail('id', 'email', true);
       expect(addEmail.mock.calls[0]).toMatchSnapshot();
     });
@@ -135,7 +135,7 @@ describe('AccountsPassword', () => {
   describe('removeEmail', () => {
     it('call this.db.removeEmail', async () => {
       const removeEmail = jest.fn(() => Promise.resolve());
-      password.db = { removeEmail } as any;
+      password.setStore({ removeEmail } as any);
       await password.removeEmail('id', 'email');
       expect(removeEmail.mock.calls[0]).toMatchSnapshot();
     });
@@ -154,7 +154,7 @@ describe('AccountsPassword', () => {
 
     it('throws when no user is found', async () => {
       const findUserByEmailVerificationToken = jest.fn(() => Promise.resolve());
-      password.db = { findUserByEmailVerificationToken } as any;
+      password.setStore({ findUserByEmailVerificationToken } as any);
       try {
         await password.verifyEmail(token);
         throw new Error();
@@ -167,7 +167,7 @@ describe('AccountsPassword', () => {
       const findUserByEmailVerificationToken = jest.fn(() =>
         Promise.resolve({})
       );
-      password.db = { findUserByEmailVerificationToken } as any;
+      password.setStore({ findUserByEmailVerificationToken } as any);
       try {
         await password.verifyEmail(token);
         throw new Error();
@@ -180,7 +180,7 @@ describe('AccountsPassword', () => {
       const findUserByEmailVerificationToken = jest.fn(() =>
         Promise.resolve(invalidUser)
       );
-      password.db = { findUserByEmailVerificationToken } as any;
+      password.setStore({ findUserByEmailVerificationToken } as any);
       try {
         await password.verifyEmail(token);
         throw new Error();
@@ -194,7 +194,7 @@ describe('AccountsPassword', () => {
         Promise.resolve(validUser)
       );
       const verifyEmail = jest.fn(() => Promise.resolve());
-      password.db = { findUserByEmailVerificationToken, verifyEmail } as any;
+      password.setStore({ findUserByEmailVerificationToken, verifyEmail } as any);
       await password.verifyEmail(token);
       expect(verifyEmail.mock.calls[0]).toMatchSnapshot();
     });
@@ -214,7 +214,7 @@ describe('AccountsPassword', () => {
 
     it('throws when token not found', async () => {
       const findUserByResetPasswordToken = jest.fn(() => Promise.resolve());
-      password.db = { findUserByResetPasswordToken } as any;
+      password.setStore({ findUserByResetPasswordToken } as any);
       try {
         await password.resetPassword(token, newPassword);
         throw new Error();
@@ -228,7 +228,7 @@ describe('AccountsPassword', () => {
         Promise.resolve(invalidUser)
       );
       const isTokenExpired = jest.fn(() => true);
-      password.db = { findUserByResetPasswordToken } as any;
+      password.setStore({ findUserByResetPasswordToken } as any);
       password.server = { isTokenExpired } as any;
       try {
         await password.resetPassword(token, newPassword);
@@ -243,7 +243,7 @@ describe('AccountsPassword', () => {
         Promise.resolve(invalidUser)
       );
       const isTokenExpired = jest.fn(() => false);
-      password.db = { findUserByResetPasswordToken } as any;
+      password.setStore({ findUserByResetPasswordToken } as any);
       password.server = { isTokenExpired } as any;
       try {
         await password.resetPassword(token, newPassword);
@@ -260,11 +260,11 @@ describe('AccountsPassword', () => {
       const isTokenExpired = jest.fn(() => false);
       const setResetPassword = jest.fn(() => Promise.resolve());
       const invalidateAllSessions = jest.fn(() => Promise.resolve());
-      password.db = {
+      password.setStore({
         findUserByResetPasswordToken,
         setResetPassword,
         invalidateAllSessions,
-      } as any;
+      } as any);
       password.server = { isTokenExpired } as any;
       await password.resetPassword(token, newPassword);
       expect(setResetPassword.mock.calls.length).toBe(1);
@@ -276,7 +276,7 @@ describe('AccountsPassword', () => {
     it('call this.db.setPassword', async () => {
       const userId = 'id';
       const setPassword = jest.fn(() => Promise.resolve('user'));
-      password.db = { setPassword } as any;
+      password.setStore({ setPassword } as any);
       const user = await password.setPassword(userId, 'new-password');
       expect(setPassword.mock.calls[0][0]).toEqual(userId);
       expect(setPassword.mock.calls[0][1]).toBeTruthy();
@@ -294,7 +294,7 @@ describe('AccountsPassword', () => {
 
     it('throws if user is not found', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
-      password.db = { findUserByEmail } as any;
+      password.setStore({ findUserByEmail } as any);
       try {
         await password.sendVerificationEmail(email);
         throw new Error();
@@ -305,7 +305,7 @@ describe('AccountsPassword', () => {
 
     it('throws when invalid address', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve(invalidUser));
-      password.db = { findUserByEmail } as any;
+      password.setStore({ findUserByEmail } as any);
       try {
         await password.sendVerificationEmail(email);
         throw new Error();
@@ -320,7 +320,7 @@ describe('AccountsPassword', () => {
       const prepareMail = jest.fn(() => Promise.resolve());
       const sanitizeUser = jest.fn(() => Promise.resolve());
       const sendMail = jest.fn(() => Promise.resolve());
-      password.db = { findUserByEmail, addEmailVerificationToken } as any;
+      password.setStore({ findUserByEmail, addEmailVerificationToken } as any);
       password.server = {
         prepareMail,
         email: { sendMail },
@@ -339,7 +339,7 @@ describe('AccountsPassword', () => {
       const prepareMail = jest.fn(() => Promise.resolve());
       const sanitizeUser = jest.fn(() => Promise.resolve());
       const sendMail = jest.fn(() => Promise.resolve());
-      password.db = { findUserByEmail, addEmailVerificationToken } as any;
+      password.setStore({ findUserByEmail, addEmailVerificationToken } as any);
       password.server = {
         prepareMail,
         email: { sendMail },
@@ -359,7 +359,7 @@ describe('AccountsPassword', () => {
 
     it('throws if user is not found', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
-      password.db = { findUserByEmail } as any;
+      password.setStore({ findUserByEmail } as any);
       try {
         await password.sendResetPasswordEmail(email);
         throw new Error();
@@ -375,7 +375,7 @@ describe('AccountsPassword', () => {
       const sanitizeUser = jest.fn(() => Promise.resolve());
       const sendMail = jest.fn(() => Promise.resolve());
       const getFirstUserEmail = jest.fn(() => Promise.resolve(email));
-      password.db = { findUserByEmail, addResetPasswordToken } as any;
+      password.setStore({ findUserByEmail, addResetPasswordToken } as any);
       password.server = {
         prepareMail,
         email: { sendMail },
@@ -396,7 +396,7 @@ describe('AccountsPassword', () => {
 
     it('throws if user is not found', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
-      password.db = { findUserByEmail } as any;
+      password.setStore({ findUserByEmail } as any);
       try {
         await password.sendEnrollmentEmail(email);
         throw new Error();
@@ -412,7 +412,7 @@ describe('AccountsPassword', () => {
       const sanitizeUser = jest.fn(() => Promise.resolve());
       const sendMail = jest.fn(() => Promise.resolve());
       const getFirstUserEmail = jest.fn(() => Promise.resolve(email));
-      password.db = { findUserByEmail, addResetPasswordToken } as any;
+      password.setStore({ findUserByEmail, addResetPasswordToken } as any);
       password.server = {
         prepareMail,
         email: { sendMail },
@@ -443,7 +443,7 @@ describe('AccountsPassword', () => {
 
     it('throws when username already exists', async () => {
       const findUserByUsername = jest.fn(() => Promise.resolve('user'));
-      password.db = { findUserByUsername } as any;
+      password.setStore({ findUserByUsername } as any);
       try {
         await password.createUser({
           password: '123456',
@@ -457,7 +457,7 @@ describe('AccountsPassword', () => {
 
     it('throws when email already exists', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve('user'));
-      password.db = { findUserByEmail } as any;
+      password.setStore({ findUserByEmail } as any);
       try {
         await password.createUser({
           password: '123456',
@@ -474,7 +474,7 @@ describe('AccountsPassword', () => {
         validateNewUser: () => Promise.resolve(false),
       });
       const findUserByEmail = jest.fn(() => Promise.resolve());
-      tmpAccountsPassword.db = { findUserByEmail } as any;
+      tmpAccountsPassword.setStore({ findUserByEmail } as any);
       try {
         await tmpAccountsPassword.createUser({
           password: '123456',
@@ -489,7 +489,7 @@ describe('AccountsPassword', () => {
     it('create user', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
       const createUser = jest.fn(() => Promise.resolve());
-      password.db = { findUserByEmail, createUser } as any;
+      password.setStore({ findUserByEmail, createUser } as any);
       await password.createUser({
         password: '123456',
         email: 'email1@email.com',

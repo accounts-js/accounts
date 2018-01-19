@@ -42,8 +42,8 @@ export interface AccountsPasswordOptions {
   minimumPasswordLength?: number;
   validateNewUser?: (user: CreateUserType) => Promise<boolean>;
   validateEmail?(email?: string): boolean;
-  validatePassword?(email?: string): boolean;
-  validateUsername?(email?: string): boolean;
+  validatePassword?(password?: PasswordType): boolean;
+  validateUsername?(username?: string): boolean;
 }
 
 const defaultOptions = {
@@ -54,7 +54,7 @@ const defaultOptions = {
     const isValid = !isEmpty(trim(email || '')) && isEmail(email);
     return Boolean(isValid);
   },
-  validatePassword(password?: string): boolean {
+  validatePassword(password?: PasswordType): boolean {
     const isValid = !isEmpty(password);
     return isValid;
   },
@@ -361,6 +361,9 @@ export default class AccountsPassword implements AuthService {
 
     let password;
     if (user.password) {
+      if (!this.options.validatePassword(user.password)) {
+        throw new Error('Invalid password');
+      }
       password = await this.hashAndBcryptPassword(user.password);
     }
 
