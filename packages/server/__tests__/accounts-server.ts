@@ -556,6 +556,7 @@ describe('AccountsServer', () => {
         expect(err.message).toEqual('Tokens are not valid');
       }
     });
+
     it('throws error if session not found', async () => {
       const accountsServer = new AccountsServer(
         {
@@ -574,6 +575,7 @@ describe('AccountsServer', () => {
         expect(err.message).toEqual('Session not found');
       }
     });
+  
     it('throws error if session not valid', async () => {
       const accountsServer = new AccountsServer(
         {
@@ -593,6 +595,31 @@ describe('AccountsServer', () => {
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('Session is no longer valid');
+      }
+    });
+
+    it('throws error if user not found', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionById: () =>
+              Promise.resolve({
+                sessionId: '456',
+                valid: true,
+                userId: '123',
+              }),
+            findUserById: () => Promise.resolve(null),
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      try {
+        const { accessToken, refreshToken } = accountsServer.createTokens(null);
+        await accountsServer.refreshTokens(accessToken, refreshToken, null, null);
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('User not found');
       }
     });
   });
