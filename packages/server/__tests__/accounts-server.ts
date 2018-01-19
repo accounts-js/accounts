@@ -867,7 +867,155 @@ describe('AccountsServer', () => {
       }
     });
 
+    it('throws error if access token is not valid', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+
+      try {
+        const res = await accountsServer.impersonate(
+          'invalidToken',
+          'someUser',
+          null,
+          null
+        );
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('Access token is not valid');
+      }
+    });
+
+    it('throws error if session is not valid', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      const { accessToken } = accountsServer.createTokens('555');
+
+      
+      accountsServer.findSessionByAccessToken = () =>
+        Promise.resolve({
+          valid: false,
+          userId: '123',
+        } as any);
+
+      try {
+        const res = await accountsServer.impersonate(
+          accessToken,
+          'someUser',
+          null,
+          null
+        );
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('Session is not valid for user');
+      }
+    });
+
+    it('throws error if user is not found', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findUserById: () => Promise.resolve(null),
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      const { accessToken } = accountsServer.createTokens('555');
+
+      
+      accountsServer.findSessionByAccessToken = () =>
+        Promise.resolve({
+          valid: true,
+          userId: '123',
+        } as any);
+
+      try {
+        const res = await accountsServer.impersonate(
+          accessToken,
+          'someUser',
+          null,
+          null
+        );
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('User not found');
+      }
+    });
+
+    it('throws error if impersonated user is not found', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findUserById: () => Promise.resolve(user),
+            findUserByUsername: () => Promise.resolve(null),
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      const { accessToken } = accountsServer.createTokens('555');
+
+      
+      accountsServer.findSessionByAccessToken = () =>
+        Promise.resolve({
+          valid: true,
+          userId: '123',
+        } as any);
+
+      try {
+        const res = await accountsServer.impersonate(
+          accessToken,
+          'someUser',
+          null,
+          null
+        );
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toEqual('User someUser not found');
+      }
+    });
+
     it('returns not authorized if impersonationAuthorize function is not passed in config', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findUserById: () => Promise.resolve(user),
+            findUserByUsername: () => Promise.resolve(someUser),
+          } as any,
+          tokenSecret: 'secret',
+        },
+        {}
+      );
+      const { accessToken } = accountsServer.createTokens('555');
+
+      
+      accountsServer.findSessionByAccessToken = () =>
+        Promise.resolve({
+          valid: true,
+          userId: '123',
+        } as any);
+
+      const res = await accountsServer.impersonate(
+        accessToken,
+        'someUser',
+        null,
+        null
+      );
+      expect(res.authorized).toEqual(false);
+    });
+
+    it('returns not authorized if impersonationAuthorize return false', async () => {
       const accountsServer = new AccountsServer(
         {
           db: {
