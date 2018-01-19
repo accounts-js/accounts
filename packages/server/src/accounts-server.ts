@@ -112,7 +112,7 @@ export class AccountsServer {
     this.hooks = new EventEmitter();
   }
 
-  public getServices(): any {
+  public getServices(): { [key: string]: AuthService } {
     return this.services;
   }
 

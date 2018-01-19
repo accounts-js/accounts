@@ -25,6 +25,16 @@ describe('AccountsServer', () => {
     });
   });
 
+  describe('getServices', () => {
+    it('should return instance services', async () => {
+      const services: any = { password: {
+        setStore: () => null
+      } };
+      const account = new AccountsServer({ db: {}} as any, services);
+      expect(account.getServices()).toEqual(services)
+    });
+  });
+
   describe('loginWithService', () => {
     it('throws on invalid service', async () => {
       try {
