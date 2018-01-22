@@ -94,7 +94,8 @@ export class AccountsServer {
     this.email = this._options.sendMail
       ? { sendMail: this._options.sendMail }
       : new Email(this._options.email);
-    this.emailTemplates = emailTemplates;
+
+    this.emailTemplates = this._options.emailTemplates;
 
     if (!this.hooks) {
       this.hooks = new EventEmitter();
@@ -299,6 +300,8 @@ export class AccountsServer {
         userId,
         proposedUserObject
       );
+
+      // TODO: Send enrollment email if flag is on
 
       return userId;
     } catch (error) {
