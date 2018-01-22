@@ -8,7 +8,7 @@ import {
   config as sharedConfig,
   PasswordSignupFields,
 } from '@accounts/common';
-import { EmailTemplateType } from './email-templates';
+import emailTemplates, { EmailTemplateType, EmailTemplatesType } from './email-templates';
 
 export type PasswordAuthenticator = (
   user: PasswordLoginUserType,
@@ -55,6 +55,7 @@ export type AccountsServerConfiguration = AccountsCommonConfiguration & {
   tokenConfigs?: TokenConfig;
   passwordAuthenticator?: PasswordAuthenticator;
   resumeSessionValidator?: ResumeSessionValidator;
+  emailTemplates?: EmailTemplatesType;
   prepareMail?: PrepareMailFunction;
   sendMail?: SendMailFunction;
   // https://github.com/eleith/emailjs#emailserverconnectoptions
@@ -83,4 +84,5 @@ export default {
   userObjectSanitizer: (user: UserObjectType) => user,
   allowedLoginFields: ['id', 'email', 'username'],
   emailTokensExpiry: 1000 * 3600, // 1 hour in milis
+  emailTemplates
 };
