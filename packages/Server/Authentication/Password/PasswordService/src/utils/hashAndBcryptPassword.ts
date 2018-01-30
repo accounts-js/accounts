@@ -6,8 +6,8 @@ import { bcryptPassword } from "./bcryptPassword";
 
 export const getHashAndBcryptPassword = ( hashPasswordWithAlgorithm: Function ) => ( password: Password ) : Promise <string> => {
 
-    const hashedPassword: string = hashPasswordWithAlgorithm( password );
+		const hashedPassword: string = hashPasswordWithAlgorithm( password );
 
-    return bcryptPassword( hashedPassword )
+		return bcryptPassword( hashedPassword )
 
 }

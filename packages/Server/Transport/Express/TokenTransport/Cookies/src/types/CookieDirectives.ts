@@ -1,18 +1,18 @@
 
 export interface CookieDirectives {
 
-  secure?: boolean,
+	secure?: boolean,
 
-  httpOnly?: boolean,
+	httpOnly?: boolean,
 
-  expires?: Date,
+	expires?: Date,
 
-  maxAge?: number,
+	maxAge?: number,
 
-  domain?: boolean | string,
+	domain?: boolean | string,
 
-  path?: string,
+	path?: string,
 
-  sameSite?: string
-  
+	sameSite?: string
+	
 }

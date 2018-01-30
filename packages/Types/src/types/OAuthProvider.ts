@@ -1,13 +1,13 @@
 export interface OAuthProvider {
 
-  name: string;
+	name: string;
 
-  authenticate( params ) : any
+	authenticate( params ) : any
 
 }
 
 export interface OAuthProviders {
 
-  [ providerName: string ] : OAuthProvider;
+	[ providerName: string ] : OAuthProvider;
 
 }

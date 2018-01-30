@@ -1,35 +1,35 @@
 
 export interface TimeStamps {
 
-  createdAt: string;
+	createdAt: string;
 
-  updatedAt: string;
+	updatedAt: string;
 
 }
 
 export interface UseMongoId {
 
-  user: boolean;
+	user: boolean;
 
-  session: boolean;
+	session: boolean;
 
 }
 
 
 export interface Configuration {
 
-  userCollectionName?: string;
+	userCollectionName?: string;
 
-  sessionCollectionName?: string;
+	sessionCollectionName?: string;
 
-  idProvider?: () => string | object;
+	idProvider?: () => string | object;
 
-  dateProvider?: (date?: Date) => any;
+	dateProvider?: (date?: Date) => any;
 
-  caseSensitiveUserName?: boolean;
+	caseSensitiveUserName?: boolean;
 
-  timestamps?: TimeStamps;
+	timestamps?: TimeStamps;
 
-  useMongoId?: UseMongoId;
-  
+	useMongoId?: UseMongoId;
+	
 }

@@ -2,12 +2,12 @@ import { EmailRecord } from "./EmailRecord";
 
 export interface User {
 
-  username?: string;
+	username?: string;
 
-  emails?: EmailRecord[];
+	emails?: EmailRecord[];
 
-  id: string;
+	id: string;
 
-  services?: object;
-  
+	services?: object;
+	
 }

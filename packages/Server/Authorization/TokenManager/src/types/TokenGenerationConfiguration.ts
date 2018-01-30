@@ -1,14 +1,14 @@
 export interface TokenGenerationConfiguration {
-  
-  algorithm?: string;
+	
+	algorithm?: string;
 
-  expiresIn?: string;
+	expiresIn?: string;
 
-  notBefore?: string;
+	notBefore?: string;
 
-  audience?: string | string[] | RegExp | RegExp[];
+	audience?: string | string[] | RegExp | RegExp[];
 
-  /*
+	/*
 
   To complete
   

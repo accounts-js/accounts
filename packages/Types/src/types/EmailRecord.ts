@@ -1,7 +1,7 @@
 export interface EmailRecord {
 
-  address: string;
+	address: string;
 
-  verified: boolean;
-  
+	verified: boolean;
+	
 }

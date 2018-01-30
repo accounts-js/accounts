@@ -1,13 +1,13 @@
 import { TokenGenerationConfiguration } from "./TokenGenerationConfiguration";
 
 export interface Configuration {
-  
-  secret: string;
+	
+	secret: string;
 
-  emailTokensExpiration?: number;
+	emailTokensExpiration?: number;
 
-  access?: TokenGenerationConfiguration;
+	access?: TokenGenerationConfiguration;
 
-  refresh?: TokenGenerationConfiguration
+	refresh?: TokenGenerationConfiguration
 
 }

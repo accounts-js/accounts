@@ -2,10 +2,10 @@ import { EmailRecord } from "./EmailRecord";
 
 export interface UserSafe {
 
-  username?: string;
+	username?: string;
 
-  emails?: EmailRecord[];
+	emails?: EmailRecord[];
 
-  id: string;
-  
+	id: string;
+	
 }

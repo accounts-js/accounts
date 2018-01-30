@@ -58,15 +58,16 @@ export default class TransportExpress {
 		const accessToken: string | null = this.tokenTransport.getAccessToken(req);
 		
 		if(!accessToken) return next() // If no accessToken from client => do nothing
-		
-		// If there is an accessToken provided by client => try to resume session
-		const user: UserSafe = await this.accountsServer.resumeSession(accessToken);
+		try {
+			// If there is an accessToken provided by client => try to resume session
+			const user: UserSafe = await this.accountsServer.resumeSession(accessToken);
 
-		// Assign result of session resuming to request object 
-		req.user = user;
-		req.userId = user.id;
-
-		next();
+			// Assign result of session resuming to request object 
+			req.user = user;
+			req.userId = user.id;
+		} finally {
+			next();
+		}
 		
 	}
 
@@ -80,7 +81,7 @@ export default class TransportExpress {
 
 
 	private impersonate = async ( req: any, res: any ) : Promise <void> => {
-			
+
 			const username: string = req.body.username;
 
 			const accessToken: string | null = this.tokenTransport.getAccessToken(req);
@@ -93,8 +94,8 @@ export default class TransportExpress {
 
 			this.send(res, { authorized, user })
 
-	} 
-		
+	}
+
 	private user = async ( req: any, res: any ) : Promise <void> => {
 
 			const accessToken: string | null = this.tokenTransport.getAccessToken(req);
@@ -120,13 +121,13 @@ export default class TransportExpress {
 	private logout = async ( req: any, res: any ) : Promise <void> => {
 
 			const accessToken: string | null = this.tokenTransport.getAccessToken(req);
-
-			await this.accountsServer.logout(accessToken);
 			
+			await this.accountsServer.logout(accessToken);
+
 			this.tokenTransport.removeTokens(res);
 
 			this.send(res, { message: 'Logged out' })
-			
+
 	}
 
 	private useService = async ( req: any, res: any ) : Promise <void> => {
@@ -135,19 +136,17 @@ export default class TransportExpress {
 
 		// Extract the action parameters
 		const params: any = req.body;
-		
+
 		// Extract the connection informations from the request
 		const connectionInfo: ConnectionInformations = getConnectionInfo(req)
 
-		const { tokens, ...response } : any = await this.accountsServer.useService(target, params, connectionInfo)
-			.catch(err => {
-				this.send(res, {error: err.message});
-				throw err
-			});
-
-		if(tokens) this.tokenTransport.setTokens(tokens, { req, res });
-
-		this.send(res, response);
+		try {
+			const { tokens, ...response } : any = await this.accountsServer.useService(target, params, connectionInfo)
+			if(tokens) this.tokenTransport.setTokens(tokens, { req, res });
+			this.send(res, response);
+		} catch (err) {
+			this.send(res, {error: err.message});
+		}
 	}
 
 }

@@ -1,7 +1,7 @@
 export interface TokenConfiguration {
 
-  canStore( req: any ) : boolean; 
-  
-  name: string;
+	canStore( req: any ) : boolean; 
+	
+	name: string;
 
 }

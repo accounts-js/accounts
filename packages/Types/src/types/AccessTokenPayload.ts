@@ -1,7 +1,7 @@
 export interface AccessTokenPayload {
-  
-    sessionId: string;
-  
-    isImpersonated?: boolean;
-  
+	
+		sessionId: string;
+	
+		isImpersonated?: boolean;
+	
 }

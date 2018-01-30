@@ -7,7 +7,7 @@
   "scripts": {
     "start": "tsc --watch",
     "clean": "rimraf lib",
-    "clean_": "rimraf node_modules",
+    "clean:nm": "rimraf node_modules",
     "precompile": "yarn run clean",
     "compile": "tsc",
     "prepublish": "yarn run compile"

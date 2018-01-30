@@ -3,16 +3,16 @@ import { ConnectionInformations } from "./ConnectionInformations";
 
 export interface AuthenticationService {
 
-  name: string;
+	name: string;
 
-  useService( target: any, params: any, connectionInfos: ConnectionInformations) : any
+	useService( target: any, params: any, connectionInfos: ConnectionInformations) : any
 
-  link( accountServer:any ):any
+	link( accountServer:any ):any
 
 }
 
 export interface AuthenticationServices {
 
-  [ serviceName: string ]: AuthenticationService
+	[ serviceName: string ]: AuthenticationService
 
 }

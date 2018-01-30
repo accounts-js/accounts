@@ -4,11 +4,11 @@ import { TokenTransport } from 'accounts';
 
 
 export interface Configuration {
-  
-  tokenTransport: TokenTransport;
+	
+	tokenTransport: TokenTransport;
 
-  accountsServer?: AccountsServer;
+	accountsServer?: AccountsServer;
 
-  path?: string;
+	path?: string;
 
 }

@@ -3,15 +3,15 @@ import { ConnectionInformations } from "./ConnectionInformations";
 
 export interface Session {
 
-  sessionId: string;
+	sessionId: string;
 
-  userId: string;
+	userId: string;
 
-  valid: boolean;
+	valid: boolean;
 
-  connectionInfos: ConnectionInformations;
+	connectionInfos: ConnectionInformations;
 
-  createdAt: string;
-  
-  updatedAt: string;
+	createdAt: string;
+	
+	updatedAt: string;
 }

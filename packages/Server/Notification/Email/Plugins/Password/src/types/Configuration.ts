@@ -1,5 +1,5 @@
 export interface Configuration {
 
-  from?: string;
+	from?: string;
 
 }

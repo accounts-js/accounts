@@ -1,15 +1,15 @@
 import { NotificationPlugin } from 'accounts';
 
 export interface Configuration {
-  
-  from?: string;
+	
+	from?: string;
 
-  mailgun?: any;
+	mailgun?: any;
 
-  apiKey?: string;
+	apiKey?: string;
 
-  domain?: string;
+	domain?: string;
 
-  notificationPlugins: NotificationPlugin[];
+	notificationPlugins: NotificationPlugin[];
 
 }

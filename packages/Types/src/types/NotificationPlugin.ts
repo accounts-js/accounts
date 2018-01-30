@@ -1,11 +1,11 @@
 export interface NotificationPlugin {
-  
-    name: string;
-  
-  }
-  
+	
+		name: string;
+	
+	}
+	
 export interface NotificationPlugins {
-  
-    [ notificationPluginName: string ]: NotificationPlugin
-  
+	
+		[ notificationPluginName: string ]: NotificationPlugin
+	
 }

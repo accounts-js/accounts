@@ -15,7 +15,7 @@ import {
 	UserSafe,
 } from 'accounts';
 
-import { AccountsServerConfiguration, ImpersonationAuthorize, ResumeSessionValidator } from "./types/AccountsServerConfiguration";
+import { Configuration, ImpersonationAuthorize, ResumeSessionValidator } from "./types/Configuration";
 
 
 import { omit } from 'lodash';
@@ -40,7 +40,7 @@ export default class AccountsServer {
 	private resumeSessionValidator?: ResumeSessionValidator;
 	
 	
-	constructor( config: AccountsServerConfiguration ){
+	constructor( config: Configuration ){
 		// Check configuration for errors
 		this.checkconfig(config);
 		
@@ -71,7 +71,7 @@ export default class AccountsServer {
 	}
 	
 	// => Check the configuration object passed to AccountsServer for Errors
-	private checkconfig = ( config: AccountsServerConfiguration ) : void => {
+	private checkconfig = ( config: Configuration ) : void => {
 
 		if( !config.databaseInterface ) 
 			throw new Error('[ Accounts - Server ] Init : A database interface is required');
@@ -80,7 +80,6 @@ export default class AccountsServer {
 			throw new Error('[ Accounts - Server ] Init : At least one Authentication Service is required');
 		
 	}
-
 
 	// => Retrieve the specified NotificationService
 	public useNotificationService = ( notificationServiceName: string ) => {
@@ -183,7 +182,7 @@ export default class AccountsServer {
 		return tokens
 
 	}
-	
+
 	public refreshTokens = async ( tokens: Tokens, connectionInfo: ConnectionInformations ) : Promise <LoginResult> => {
 
 		const { accessToken, refreshToken } = tokens;
@@ -238,8 +237,8 @@ export default class AccountsServer {
 		await this.databaseInterface.invalidateSession(session.sessionId);
 
 	}
-	
-	
+
+
 	public resumeSession = async ( accessToken: string ) : Promise <UserSafe> => {
 
 		const session: Session = await this.findSessionByAccessToken(accessToken);
@@ -258,8 +257,8 @@ export default class AccountsServer {
 
 		return user;
 	}
-	
-	
+
+
 	public findSessionByAccessToken = async ( accessToken: string ) : Promise <Session> =>  {
 
 		if (typeof accessToken !== 'string' ) 
@@ -279,10 +278,11 @@ export default class AccountsServer {
 	}
 
 	public sanitizeUser = ( user: User ) : UserSafe => {
+
 		const { services, ...usersafe } = user;
+
 		return usersafe
+
 	}
-	
-			
-	
+
 }

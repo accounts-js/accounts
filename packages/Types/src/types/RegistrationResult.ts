@@ -1,5 +1,5 @@
 export interface RegistrationResult {
 
-  userId: string
+	userId: string
 
 }

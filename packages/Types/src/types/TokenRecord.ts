@@ -1,11 +1,11 @@
 export interface TokenRecord {
 
-  token: string;
+	token: string;
 
-  address: string;
+	address: string;
 
-  when: number;
-  
-  reason: string;
+	when: number;
+	
+	reason: string;
 
 }

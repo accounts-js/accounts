@@ -2,11 +2,11 @@ import { Tokens } from "./Tokens";
 import { UserSafe } from "./UserSafe";
 
 export interface ImpersonationResult {
-  
-  authorized: boolean;
+	
+	authorized: boolean;
 
-  tokens?: Tokens;
+	tokens?: Tokens;
 
-  user?: UserSafe;
+	user?: UserSafe;
 
 }

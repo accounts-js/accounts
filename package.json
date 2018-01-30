@@ -1,15 +1,15 @@
 {
 	"private": true,
-	"name": "@accounts/workbench",
 	"scripts": {
 		"initial": "yarn install && lerna bootstrap",
 		"start": "lerna exec --parallel -- yarn start",
 		"clean": "lerna exec -- yarn clean",
-		"clean_": "lerna exec -- yarn clean_",
-		"link_global": "lerna exec -- yarn link",
-		"unlink_global": "lerna exec -- yarn unlink",
+		"clean:nm": "lerna exec -- yarn clean:nm",
+		"link:global": "lerna exec -- yarn link",
+		"unlink:global": "lerna exec -- yarn unlink",
 		"compile": "lerna exec -- yarn run compile",
-		"lint": "tslint packages/*/{src,__tests__}/**/*.ts"
+		"lint": "tslint 'packages/**/{src,__tests__}/**/*.ts'",
+		"lint:fix": "tslint --fix 'packages/**/{src,__tests__}/**/*.ts'"
 	},
 	"license": "MIT",
 	"devDependencies": {

@@ -1,7 +1,7 @@
 export interface TokenPayload {
-  
-    sessionId?: string;
-  
-    isImpersonated?: boolean;
-  
+	
+		sessionId?: string;
+	
+		isImpersonated?: boolean;
+	
 }

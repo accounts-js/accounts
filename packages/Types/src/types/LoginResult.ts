@@ -2,10 +2,10 @@ import { Tokens } from "./Tokens";
 import { UserSafe } from "./UserSafe";
 
 export interface LoginResult {
-  
-  sessionId: string;
+	
+	sessionId: string;
 
-  user: UserSafe;
+	user: UserSafe;
 
-  tokens: Tokens;
+	tokens: Tokens;
 }
