@@ -1,3 +1,5 @@
+declare var window: Window;
+
 export default class CTSLocalStorage {
 	public setAccessToken = accessToken => 
 		window.localStorage.setItem('accessToken', accessToken);
