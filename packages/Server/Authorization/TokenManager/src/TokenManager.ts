@@ -44,16 +44,17 @@ export default class TokenManager implements TokenManagerInterface {
 
 		public generateRandom = ( length: number | undefined = 43 ) => randomBytes(length).toString('hex');
 
-		public generateAccess = ( data: TokenPayload ) => jwt.sign({ data }, this.secret, this.accessTokenConfig);
+		public generateAccess = ( data: TokenPayload ) => jwt.sign(data, this.secret, this.accessTokenConfig);
 
-		public generateRefresh = ( data: TokenPayload = {} ) => jwt.sign({ data }, this.secret, this.refreshTokenConfig);
+		public generateRefresh = ( data: TokenPayload = {} ) => jwt.sign(data, this.secret, this.refreshTokenConfig);
 
 		public isTokenExpired = ( token: string, tokenRecord?: TokenRecord ): boolean => 
 				!tokenRecord || Number(tokenRecord.when) + this.emailTokensExpiration < Date.now()
 
 				
 
-		public decode = async ( token: string, ignoreExpiration: boolean = false ) : Promise <TokenPayload> =>
-				jwt.verify(token, this.secret, { ignoreExpiration } )
+		public decode = async ( token: string, ignoreExpiration: boolean = false ) : Promise <any> => 
+				jwt.verify(token, this.secret, { ignoreExpiration } );
+				
 		// .catch( ( err: Error ) => { throw new Error(' [ Accounts - TokenManager ] Token is invalid ') } )
 }

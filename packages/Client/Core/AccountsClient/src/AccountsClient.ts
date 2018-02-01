@@ -21,6 +21,11 @@ export default class AccountsClient {
 	}
 
 	public use = (strategyName) => this.strategies[strategyName];
+	
+	public refreshTokens = async () => {
+		const response = await this.fetch(['refreshTokens'],{})
+		return this.handleResponse(response)
+	}
 
 	public fetch = (target, data) => {
 		const tokens = this.tokenStorage.getTokens()
@@ -28,10 +33,11 @@ export default class AccountsClient {
 	}
 
 	public handleResponse = async (response) => {
-		const { error, user } = await response.json();
+		const { error, user, accessToken, refreshToken } = await response.json();
 		if(error) return error;
 		if(user){ 
-			this.userStorage.setUser(user)
+			this.userStorage.setUser(user);
+			console.log(user)
 			return user
 		}
 		return null

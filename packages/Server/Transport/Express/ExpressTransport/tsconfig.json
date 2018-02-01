@@ -9,15 +9,12 @@
     "removeComments": true,
     "strict": false,
     "moduleResolution": "node",
-    "types": [
-      "@types/node"
-    ],
-
     // Specific to this package
     "outDir": "./lib",
     "rootDir": "./src",
     "typeRoots": [
-      "node_modules/@types"
+      "node_modules/@types",
+      "node_modules/@accounts",
     ],
   },
   "exclude": [

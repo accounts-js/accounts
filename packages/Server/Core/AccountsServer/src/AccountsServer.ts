@@ -192,7 +192,7 @@ export default class AccountsServer {
 		
 		await this.tokenManager.decode(refreshToken);
 
-		const { sessionId } : TokenPayload = await this.tokenManager.decode(accessToken);
+		const { sessionId }: TokenPayload = await this.tokenManager.decode(accessToken);
 
 		const session: Session = await this.databaseInterface.findSessionById(sessionId);
 
@@ -264,9 +264,7 @@ export default class AccountsServer {
 		if (typeof accessToken !== 'string' ) 
 			throw new Error('[ Accounts - Server ] findSessionByAccessToken : An accessToken is required');
 
-		const decodedAccessToken: any = await this.tokenManager.decode(accessToken);
-
-		const sessionId: string = decodedAccessToken.data.sessionId;
+		const { sessionId } : TokenPayload = await this.tokenManager.decode(accessToken);
 
 		const session: Session = await this.databaseInterface.findSessionById(sessionId);
 
