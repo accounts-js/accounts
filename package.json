@@ -7,7 +7,7 @@
     "compile": "lerna run compile",
     "lint": "tslint packages/*/{src,__tests__}/**/*.ts",
     "prebootstrap": "npm install",
-    "postinstall": "lerna bootstrap",
+    "postinstall": "lerna bootstrap && opencollective postinstall",
     "publish": "lerna publish",
     "publish:canary": "npm run publish -- --canary",
     "test": "npm run testonly",
@@ -34,5 +34,13 @@
     "tslint": "^5.6.0",
     "tslint-config-accounts": "^0.0.3",
     "typescript": "^2.4.1"
+  },
+  "dependencies": {
+    "opencollective": "^1.0.3"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/accounts-js",
+    "logo": "https://opencollective.com/accounts-js/logo.txt"
   }
 }
