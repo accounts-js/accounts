@@ -2,11 +2,11 @@ declare var window: Window;
 
 export default class CTSLocalStorage {
 	public setAccessToken = accessToken => 
-		window.localStorage.setItem('accessToken', accessToken);
+		accessToken && window.localStorage.setItem('accessToken', accessToken);
 		
 
 	public setRefreshToken = refreshToken =>
-		window.localStorage.setItem('refreshToken', refreshToken);
+		refreshToken &&window.localStorage.setItem('refreshToken', refreshToken);
 
 	public setTokens = ({ accessToken, refreshToken }) => {
 		this.setAccessToken(accessToken);

@@ -27,6 +27,13 @@ export default class AccountsClient {
 		return this.handleResponse(response)
 	}
 
+	public resumeSession = async () => {
+		const accessToken = this.tokenStorage.getAccessToken();
+		if(!accessToken) return false;
+		const response = await this.fetch(['resumeSession'],{})
+		return this.handleResponse(response)
+	}
+
 	public fetch = (target, data) => {
 		const tokens = this.tokenStorage.getTokens()
 		return this.transport.fetch(target, data, tokens)
