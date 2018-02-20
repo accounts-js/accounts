@@ -53,7 +53,7 @@ export class AccountsClient {
     options: AccountsClientConfiguration,
     transport: TransportInterface
   ) {
-    this.options = options;
+    this.options = { ...config, ...options };
     this.storage = options.tokenStorage || config.tokenStorage;
     if (!transport) {
       throw new AccountsError('A REST or GraphQL transport is required');
