@@ -119,29 +119,10 @@ describe('Accounts', () => {
       }
     });
 
-    it('requires password', async () => {
-      await Accounts.config(
-        {
-          history,
-        },
-        mockTransport
-      );
-      try {
-        await Accounts.createUser({
-          password: null,
-        });
-        throw new Error();
-      } catch (err) {
-        const { message } = err;
-        expect(message).toEqual('Password is required');
-      }
-    });
-
     it('requires username or an email', async () => {
       Accounts.config({ history }, mockTransport);
       try {
         await Accounts.createUser({
-          password: '123456',
           username: '',
           email: '',
         });
@@ -157,7 +138,6 @@ describe('Accounts', () => {
       await Accounts.config({ history }, mockTransport);
       await Accounts.createUser(
         {
-          password: '123456',
           username: 'user',
         },
         callback
@@ -177,7 +157,6 @@ describe('Accounts', () => {
       try {
         await Accounts.createUser(
           {
-            password: '123456',
             username: 'user',
           },
           callback
@@ -187,24 +166,6 @@ describe('Accounts', () => {
         expect(callback).toHaveBeenCalledTimes(1);
         expect(callback).toBeCalledWith('error message');
       }
-    });
-
-    it('calls login function with user id and password of created user', async () => {
-      Accounts.config({ history }, mockTransport);
-
-      Accounts.instance.loginWithPassword = jest.fn(
-        () => Accounts.instance.loginWithPassword
-      );
-
-      await Accounts.createUser({
-        password: '123456',
-        username: 'user',
-      });
-
-      expect(Accounts.instance.loginWithPassword).toHaveBeenCalledWith(
-        { id: '123' },
-        '123456'
-      );
     });
 
     it('calls onUserCreated after successful user creation', async () => {
@@ -218,7 +179,6 @@ describe('Accounts', () => {
       );
 
       await Accounts.createUser({
-        password: '123456',
         username: 'user',
       });
 
@@ -227,7 +187,7 @@ describe('Accounts', () => {
     });
   });
 
-  describe('loginWithPassword', () => {
+  describe('login', () => {
     it('throws error if password is undefined', async () => {
       Accounts.config({ history }, mockTransport);
       try {
@@ -541,84 +501,6 @@ describe('Accounts', () => {
       await Accounts.verifyEmail('token');
       expect(mockTransport.verifyEmail).toHaveBeenCalledTimes(1);
       expect(mockTransport.verifyEmail).toHaveBeenCalledWith('token');
-    });
-  });
-
-  describe('resetPassword', () => {
-    it('should return an AccountsError', async () => {
-      const error = 'something bad';
-      await Accounts.config(
-        {},
-        {
-          ...mockTransport,
-          resetPassword: () => Promise.reject({ message: error }),
-        }
-      );
-      try {
-        await Accounts.resetPassword('badtoken', 'password');
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual(error);
-      }
-    });
-
-    it('throws if password is invalid', async () => {
-      await Accounts.config({}, mockTransport);
-      try {
-        await Accounts.resetPassword(undefined, undefined);
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('Password is invalid!');
-      }
-    });
-
-    it('should call transport.resetPassword', async () => {
-      Accounts.config({}, mockTransport);
-      await Accounts.resetPassword('token', 'newPassword');
-      expect(mockTransport.resetPassword).toHaveBeenCalledTimes(1);
-      expect(mockTransport.resetPassword).toHaveBeenCalledWith(
-        'token',
-        'newPassword'
-      );
-    });
-  });
-
-  describe('requestPasswordReset', () => {
-    it('should return an AccountsError', async () => {
-      const error = 'something bad';
-      Accounts.config(
-        {},
-        {
-          ...mockTransport,
-          sendResetPasswordEmail: () => Promise.reject({ message: error }),
-        }
-      );
-      try {
-        await Accounts.requestPasswordReset('email@g.co');
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual(error);
-      }
-    });
-
-    it('should call transport.sendResetPasswordEmail', async () => {
-      Accounts.config({}, mockTransport);
-      await Accounts.requestPasswordReset('email@g.co');
-      expect(mockTransport.sendResetPasswordEmail).toHaveBeenCalledTimes(1);
-      expect(mockTransport.sendResetPasswordEmail).toHaveBeenCalledWith(
-        'email@g.co'
-      );
-    });
-
-    it('should throw if an invalid email is provided', async () => {
-      Accounts.config({}, mockTransport);
-      try {
-        await Accounts.requestPasswordReset('email');
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('Valid email must be provided');
-        expect(mockTransport.sendResetPasswordEmail).not.toHaveBeenCalled();
-      }
     });
   });
 
