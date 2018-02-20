@@ -323,9 +323,7 @@ export class AccountsClient {
     try {
       const userId = await this.transport.createUser(userToCreate);
       const { onUserCreated } = this.options;
-      if (callback && isFunction(callback)) {
-        callback();
-      }
+
       if (isFunction(onUserCreated)) {
         try {
           await onUserCreated({ id: userId });
@@ -335,9 +333,27 @@ export class AccountsClient {
         }
       }
     } catch (err) {
-      if (callback && isFunction(callback)) {
-        callback(err);
+      throw new AccountsError(err.message);
+    }
+  }
+
+  public async loginWithService(service: string, credentials: {[key: string]: string | object}) {
+    try {
+      const response = await this.transport.loginWithService(service, credentials);
+      
+      const { onSignedInHook } = this.options;
+
+      if (isFunction(onSignedInHook)) {
+        try {
+          await onSignedInHook(response);
+        } catch (err) {
+          // tslint:disable-next-line no-console
+          console.error(err);
+        }
       }
+    } catch(err) {
+      this.clearTokens();
+      this.store.dispatch(clearUser());
       throw new AccountsError(err.message);
     }
   }
@@ -418,13 +434,6 @@ const Accounts = {
     callback?: (err?: Error) => void
   ): Promise<void> {
     return this.instance.createUser(user, callback);
-  },
-  loginWithPassword(
-    user: LoginUserIdentityType,
-    password: string,
-    callback?: (err?: Error, res?: LoginReturnType) => void
-  ): Promise<void> {
-    return this.instance.loginWithPassword(user, password, callback);
   },
   loggingIn(): boolean {
     return this.instance.loggingIn();

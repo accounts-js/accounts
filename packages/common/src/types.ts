@@ -37,8 +37,7 @@ export interface TokensType {
 }
 
 export interface LoginReturnType {
-  sessionId: string;
-  user: UserObjectType;
+  sessionId: string; 
   tokens: TokensType;
 }
 
