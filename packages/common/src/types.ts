@@ -1,5 +1,3 @@
-import { HashAlgorithm } from './config';
-
 export interface TokenRecord {
   token: string;
   address: string;

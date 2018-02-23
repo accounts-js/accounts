@@ -1,33 +1,21 @@
 import * as pick from 'lodash/pick';
 import * as omit from 'lodash/omit';
 import * as isString from 'lodash/isString';
-import * as isPlainObject from 'lodash/isPlainObject';
-import * as isFunction from 'lodash/isFunction';
-import * as isArray from 'lodash/isArray';
-import * as find from 'lodash/find';
-import * as includes from 'lodash/includes';
-import * as get from 'lodash/get';
 import { EventEmitter } from 'events';
 import * as jwt from 'jsonwebtoken';
 import {
   AccountsError,
-  toUsernameAndEmail,
-  validators,
   UserObjectType,
-  CreateUserType,
   LoginReturnType,
   TokensType,
   SessionType,
   ImpersonateReturnType,
-  EmailRecord,
   HookListener,
 } from '@accounts/common';
-import config, { AccountsServerConfiguration } from './config';
-import { verifyPassword, hashPassword, bcryptPassword } from './encryption';
+import config from './config';
 import {
   generateAccessToken,
   generateRefreshToken,
-  generateRandomToken,
 } from './tokens';
 import Email, {
   emailTemplates,
