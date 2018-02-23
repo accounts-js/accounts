@@ -24,7 +24,7 @@
   "devDependencies": {
     "@accounts/tslint-config-accounts": "^0.0.6",
     "@types/jest": "^21.1.5",
-    "@types/node": "^8.0.47",
+    "@types/node": "8.0.47",
     "codecov": "^3.0.0",
     "flow-bin": "0.41.0",
     "jest": "^21.2.1",
