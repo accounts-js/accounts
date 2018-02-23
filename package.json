@@ -6,7 +6,7 @@
     "clean": "lerna run clean",
     "compile": "lerna run compile",
     "lint": "tslint packages/*/{src,__tests__}/**/*.ts",
-    "prebootstrap": "npm install",
+    "prebootstrap": "yarn install",
     "postinstall": "lerna bootstrap && opencollective postinstall",
     "publish": "lerna publish",
     "publish:canary": "yarn run publish -- --canary",
