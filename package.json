@@ -29,14 +29,12 @@
     "flow-bin": "0.41.0",
     "jest": "^21.2.1",
     "lerna": "^2.5.1",
+    "opencollective": "^1.0.3",
     "prettier": "^1.7.4",
     "rimraf": "^2.6.2",
     "ts-jest": "^21.1.4",
     "tslint": "^5.8.0",
     "typescript": "^2.4.1"
-  },
-  "dependencies": {
-    "opencollective": "^1.0.3"
   },
   "collective": {
     "type": "opencollective",
