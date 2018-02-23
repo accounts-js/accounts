@@ -17,10 +17,10 @@ import {
   generateAccessToken,
   generateRefreshToken,
 } from './tokens';
-import Email, {
+import {
   emailTemplates,
-  EmailConnector,
   EmailTemplateType,
+  sendMail,
 } from './email';
 import {
   AccountsServerOptions,
@@ -48,6 +48,7 @@ const defaultOptions = {
   },
   emailTemplates,
   userObjectSanitizer: (user: UserObjectType) => user,
+  sendMail,
 };
 
 export type RemoveListnerHandle = () => EventEmitter;
@@ -69,7 +70,6 @@ export const ServerHooks = {
 
 export class AccountsServer {
   public options: AccountsServerOptions;
-  public email: EmailConnector;
   private services: { [key: string]: AuthService };
   private db: DBInterface;
   private hooks: EventEmitter;
@@ -90,11 +90,6 @@ export class AccountsServer {
       this.services[service].setStore(this.db);
       this.services[service].server = this;
     }
-
-    // Initialize emails
-    this.email = this.options.sendMail
-      ? { sendMail: this.options.sendMail }
-      : new Email(this.options.email);
 
     // Initialize hooks
     this.hooks = new EventEmitter();

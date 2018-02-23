@@ -276,7 +276,7 @@ export default class AccountsPassword implements AuthService {
       this.server.options.emailTemplates.from
     );
 
-    await this.server.email.sendMail(resetPasswordMail);
+    await this.server.options.sendMail(resetPasswordMail);
   }
 
   /**
@@ -307,7 +307,7 @@ export default class AccountsPassword implements AuthService {
       this.server.options.emailTemplates.from
     );
 
-    await this.server.email.sendMail(resetPasswordMail);
+    await this.server.options.sendMail(resetPasswordMail);
   }
 
   /**
@@ -335,7 +335,7 @@ export default class AccountsPassword implements AuthService {
       this.server.options.emailTemplates.from
     );
 
-    await this.server.email.sendMail(enrollmentMail);
+    await this.server.options.sendMail(enrollmentMail);
   }
 
   /**
