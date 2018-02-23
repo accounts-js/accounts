@@ -6,7 +6,7 @@ import {
   config as sharedConfig,
   PasswordSignupFields,
 } from '@accounts/common';
-import { EmailTemplateType } from './email';
+import { EmailTemplatesType, EmailTemplateType } from './email';
 
 // export type PasswordAuthenticator = (
 //   user: PasswordLoginUserType,
@@ -53,6 +53,7 @@ export type AccountsServerConfiguration = AccountsCommonConfiguration & {
   tokenConfigs?: TokenConfig;
   // passwordAuthenticator?: PasswordAuthenticator;
   resumeSessionValidator?: ResumeSessionValidator;
+  emailTemplates?: EmailTemplatesType;
   prepareMail?: PrepareMailFunction;
   sendMail?: SendMailFunction;
   // https://github.com/eleith/emailjs#emailserverconnectoptions
