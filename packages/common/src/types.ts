@@ -23,6 +23,7 @@ export interface CreateUserType {
   username?: string;
   email?: string;
   profile?: object;
+  [additionalKey: string]: any;
 }
 
 export interface LoginUserIdentityType {

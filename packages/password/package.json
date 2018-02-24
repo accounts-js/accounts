@@ -10,6 +10,7 @@
     "precompile": "npm run clean",
     "compile": "tsc",
     "prepublishOnly": "npm run compile",
+    "test": "npm run test",
     "testonly": "jest --coverage",
     "coverage": "jest --coverage"
   },
