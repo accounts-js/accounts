@@ -10,8 +10,8 @@ export interface OauthUser {
 
 export interface OauthOptions {
   [provider: string]: {
-    authenticate: (params: any) => Promise<OauthUser>
-  }
+    authenticate: (params: any) => Promise<OauthUser>;
+  };
 }
 
 export class AccountsOauth implements AuthService {
@@ -23,7 +23,7 @@ export class AccountsOauth implements AuthService {
   constructor(options) {
     this.options = options;
   }
-  
+
   public setStore(store: DBInterface) {
     this.db = store;
   }
@@ -34,7 +34,7 @@ export class AccountsOauth implements AuthService {
     }
 
     const userProvider = this.options[params.provider];
- 
+
     if (typeof userProvider.authenticate !== 'function') {
       throw new Error('Invalid provider');
     }
@@ -68,5 +68,4 @@ export class AccountsOauth implements AuthService {
 
     await this.db.setService(userId, provider, null);
   }
-
 }

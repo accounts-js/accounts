@@ -194,7 +194,10 @@ describe('AccountsPassword', () => {
         Promise.resolve(validUser)
       );
       const verifyEmail = jest.fn(() => Promise.resolve());
-      password.setStore({ findUserByEmailVerificationToken, verifyEmail } as any);
+      password.setStore({
+        findUserByEmailVerificationToken,
+        verifyEmail,
+      } as any);
       await password.verifyEmail(token);
       expect(verifyEmail.mock.calls[0]).toMatchSnapshot();
     });

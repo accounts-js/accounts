@@ -9,7 +9,7 @@ export interface TransportInterface {
   loginWithService(
     service: string,
     authenticateParams: {
-      [key: string]: string | object
+      [key: string]: string | object;
     }
   ): Promise<LoginReturnType>;
   logout(accessToken: string): Promise<void>;

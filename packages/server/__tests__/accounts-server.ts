@@ -27,11 +27,13 @@ describe('AccountsServer', () => {
 
   describe('getServices', () => {
     it('should return instance services', async () => {
-      const services: any = { password: {
-        setStore: () => null
-      } };
-      const account = new AccountsServer({ db: {}} as any, services);
-      expect(account.getServices()).toEqual(services)
+      const services: any = {
+        password: {
+          setStore: () => null,
+        },
+      };
+      const account = new AccountsServer({ db: {} } as any, services);
+      expect(account.getServices()).toEqual(services);
     });
   });
 
@@ -62,12 +64,15 @@ describe('AccountsServer', () => {
     it('should return tokens', async () => {
       const authenticate = jest.fn(() => Promise.resolve({ id: 'userId' }));
       const createSession = jest.fn(() => Promise.resolve('sessionId'));
-      const accountServer = new AccountsServer({ 
-        db: { createSession} as any,
-        tokenSecret: 'secret',
-      }, {
-        facebook: { authenticate, setStore: jest.fn() },
-      });
+      const accountServer = new AccountsServer(
+        {
+          db: { createSession } as any,
+          tokenSecret: 'secret',
+        },
+        {
+          facebook: { authenticate, setStore: jest.fn() },
+        }
+      );
       const res = await accountServer.loginWithService('facebook', {}, {});
       expect(res.tokens).toBeTruthy();
     });
@@ -184,7 +189,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            createSession: () => { 
+            createSession: () => {
               throw new Error('Could not create session');
             },
           } as any,
@@ -207,7 +212,7 @@ describe('AccountsServer', () => {
         userId: '123',
         username: 'username',
       };
-      
+
       const hookSpy = jest.fn(() => null);
       const invalidateSession = jest.fn(() => Promise.resolve());
       const accountsServer = new AccountsServer(
@@ -239,11 +244,11 @@ describe('AccountsServer', () => {
         {
           db: {
             findSessionById: () =>
-            Promise.resolve({
-              sessionId: '456',
-              valid: true,
-              userId: '123',
-            }),
+              Promise.resolve({
+                sessionId: '456',
+                valid: true,
+                userId: '123',
+              }),
             findUserById: () => Promise.resolve(null),
           } as any,
           tokenSecret: 'secret',
@@ -302,11 +307,11 @@ describe('AccountsServer', () => {
         {
           db: {
             findSessionById: () =>
-            Promise.resolve({
-              sessionId: '456',
-              valid: false,
-              userId: '123',
-            }),
+              Promise.resolve({
+                sessionId: '456',
+                valid: false,
+                userId: '123',
+              }),
             findUserById: () => Promise.resolve(user),
           } as any,
           tokenSecret: 'secret',
@@ -340,7 +345,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
           } as any,
           tokenSecret: 'secret',
-          resumeSessionValidator: () => Promise.resolve(user) 
+          resumeSessionValidator: () => Promise.resolve(user),
         },
         {}
       );
@@ -375,7 +380,12 @@ describe('AccountsServer', () => {
 
       try {
         const { accessToken, refreshToken } = accountsServer.createTokens(null);
-        await accountsServer.refreshTokens(accessToken, refreshToken, null, null);
+        await accountsServer.refreshTokens(
+          accessToken,
+          refreshToken,
+          null,
+          null
+        );
       } catch (err) {
         // nothing to do
       }
@@ -472,10 +482,11 @@ describe('AccountsServer', () => {
           valid: true,
           userId: '123',
         } as any);
-      accountsServer.createTokens = (sessionId, isImpersonated) => ({
-        sessionId,
-        isImpersonated,
-      } as any);
+      accountsServer.createTokens = (sessionId, isImpersonated) =>
+        ({
+          sessionId,
+          isImpersonated,
+        } as any);
 
       await accountsServer.impersonate(accessToken, 'impUser', null, null);
 
@@ -550,7 +561,12 @@ describe('AccountsServer', () => {
         {}
       );
       try {
-        await accountsServer.refreshTokens('bad access token', 'bad refresh token', null, null);
+        await accountsServer.refreshTokens(
+          'bad access token',
+          'bad refresh token',
+          null,
+          null
+        );
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('Tokens are not valid');
@@ -569,21 +585,26 @@ describe('AccountsServer', () => {
       );
       try {
         const { accessToken, refreshToken } = accountsServer.createTokens(null);
-        await accountsServer.refreshTokens(accessToken, refreshToken, null, null);
+        await accountsServer.refreshTokens(
+          accessToken,
+          refreshToken,
+          null,
+          null
+        );
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('Session not found');
       }
     });
-  
+
     it('throws error if session not valid', async () => {
       const accountsServer = new AccountsServer(
         {
           db: {
             findSessionById: () =>
-            Promise.resolve({
-              valid: false,
-            }),
+              Promise.resolve({
+                valid: false,
+              }),
           } as any,
           tokenSecret: 'secret',
         },
@@ -591,7 +612,12 @@ describe('AccountsServer', () => {
       );
       try {
         const { accessToken, refreshToken } = accountsServer.createTokens(null);
-        await accountsServer.refreshTokens(accessToken, refreshToken, null, null);
+        await accountsServer.refreshTokens(
+          accessToken,
+          refreshToken,
+          null,
+          null
+        );
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('Session is no longer valid');
@@ -616,7 +642,12 @@ describe('AccountsServer', () => {
       );
       try {
         const { accessToken, refreshToken } = accountsServer.createTokens(null);
-        await accountsServer.refreshTokens(accessToken, refreshToken, null, null);
+        await accountsServer.refreshTokens(
+          accessToken,
+          refreshToken,
+          null,
+          null
+        );
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('User not found');
@@ -831,7 +862,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      
+
       await accountsServer.setProfile('123', profile);
       expect(setProfile.mock.calls.length).toEqual(1);
       expect(setProfile.mock.calls[0][0]).toEqual('123');
@@ -897,8 +928,7 @@ describe('AccountsServer', () => {
     it('throws error if access token is not valid', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {
-          } as any,
+          db: {} as any,
           tokenSecret: 'secret',
         },
         {}
@@ -920,15 +950,13 @@ describe('AccountsServer', () => {
     it('throws error if session is not valid', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {
-          } as any,
+          db: {} as any,
           tokenSecret: 'secret',
         },
         {}
       );
       const { accessToken } = accountsServer.createTokens('555');
 
-      
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
           valid: false,
@@ -960,7 +988,6 @@ describe('AccountsServer', () => {
       );
       const { accessToken } = accountsServer.createTokens('555');
 
-      
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
           valid: true,
@@ -993,7 +1020,6 @@ describe('AccountsServer', () => {
       );
       const { accessToken } = accountsServer.createTokens('555');
 
-      
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
           valid: true,
@@ -1026,7 +1052,6 @@ describe('AccountsServer', () => {
       );
       const { accessToken } = accountsServer.createTokens('555');
 
-      
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
           valid: true,
@@ -1061,15 +1086,14 @@ describe('AccountsServer', () => {
       );
       const { accessToken } = accountsServer.createTokens('555');
 
-      
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
           valid: true,
           userId: '123',
         } as any);
 
-      const impersonationAuthorize =
-        accountsServer.getOptions().impersonationAuthorize;
+      const impersonationAuthorize = accountsServer.getOptions()
+        .impersonationAuthorize;
       expect(impersonationAuthorize).toBeDefined();
 
       const res = await accountsServer.impersonate(
@@ -1101,19 +1125,24 @@ describe('AccountsServer', () => {
         {}
       );
       const { accessToken } = accountsServer.createTokens('555');
-      
 
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
           valid: true,
           userId: '123',
         } as any);
-      accountsServer.createTokens = (sessionId, isImpersonated) => ({
-        sessionId,
-        isImpersonated,
-      } as any);
+      accountsServer.createTokens = (sessionId, isImpersonated) =>
+        ({
+          sessionId,
+          isImpersonated,
+        } as any);
 
-      const res = await accountsServer.impersonate(accessToken, 'impUser', null, null);
+      const res = await accountsServer.impersonate(
+        accessToken,
+        'impUser',
+        null,
+        null
+      );
       expect(res).toEqual({
         authorized: true,
         tokens: { sessionId: '001', isImpersonated: true },

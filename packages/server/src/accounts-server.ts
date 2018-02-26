@@ -13,10 +13,7 @@ import {
   HookListener,
 } from '@accounts/common';
 import config from './config';
-import {
-  generateAccessToken,
-  generateRefreshToken,
-} from './tokens';
+import { generateAccessToken, generateRefreshToken } from './tokens';
 import Email, {
   emailTemplates,
   EmailConnector,
@@ -191,11 +188,11 @@ export class AccountsServer {
     infos: ConnectionInformationsType
   ): Promise<LoginReturnType> {
     const { ip, userAgent } = infos;
-    
+
     try {
       const sessionId = await this.db.createSession(user.id, ip, userAgent);
       const { accessToken, refreshToken } = this.createTokens(sessionId);
-      
+
       const loginResult = {
         sessionId,
         user: this.sanitizeUser(user),
@@ -204,10 +201,10 @@ export class AccountsServer {
           accessToken,
         },
       };
-      
+
       this.hooks.emit(ServerHooks.LoginSuccess, user);
       return loginResult;
-    } catch(e) {
+    } catch (e) {
       this.hooks.emit(ServerHooks.LoginError, e);
       throw e;
     }
