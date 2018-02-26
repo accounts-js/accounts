@@ -36,10 +36,9 @@ const mockTokenStorage = {
 
 const mockTransport: TransportInterface = {
   createUser: jest.fn(() => Promise.resolve(loggedInUser.user.id)),
-  // loginWithPassword: jest.fn(() => Promise.resolve(loggedInUser)),
+  loginWithService: jest.fn(() => Promise.resolve(loggedInUser)),
   logout: jest.fn(() => Promise.resolve()),
   refreshTokens: jest.fn(() => Promise.resolve(loggedInUser)),
-  // resetPassword: jest.fn(() => Promise.resolve()),
   sendResetPasswordEmail: jest.fn(() => Promise.resolve()),
   verifyEmail: jest.fn(() => Promise.resolve()),
   sendVerificationEmail: jest.fn(() => Promise.resolve()),
@@ -133,41 +132,6 @@ describe('Accounts', () => {
       }
     });
 
-    it('calls callback on successful user creation', async () => {
-      const callback = jest.fn();
-      await Accounts.config({ history }, mockTransport);
-      await Accounts.createUser(
-        {
-          username: 'user',
-        },
-        callback
-      );
-
-      expect(callback.mock.calls.length).toEqual(1);
-    });
-    it('calls callback on failure with error message', async () => {
-      const transport = {
-        ...mockTransport,
-        createUser: () => Promise.reject('error message'),
-      };
-
-      await Accounts.config({ history }, transport);
-      const callback = jest.fn();
-
-      try {
-        await Accounts.createUser(
-          {
-            username: 'user',
-          },
-          callback
-        );
-        throw new Error();
-      } catch (err) {
-        expect(callback).toHaveBeenCalledTimes(1);
-        expect(callback).toBeCalledWith('error message');
-      }
-    });
-
     it('calls onUserCreated after successful user creation', async () => {
       const onUserCreated = jest.fn();
       Accounts.config(
@@ -188,10 +152,10 @@ describe('Accounts', () => {
   });
 
   describe('login', () => {
-    it('throws error if password is undefined', async () => {
+    it('throws error if service is undefined', async () => {
       Accounts.config({ history }, mockTransport);
       try {
-        await Accounts.loginWithPassword(undefined, undefined);
+        await Accounts.loginWithService(undefined, {});
         throw new Error();
       } catch (err) {
         const { message } = err;
@@ -199,88 +163,45 @@ describe('Accounts', () => {
       }
     });
 
-    it('throws error if user is undefined', async () => {
+    it('throws error if service is not a string or is an empty object', async () => {
       Accounts.config({ history }, mockTransport);
       try {
-        await Accounts.loginWithPassword(undefined, undefined);
+        await Accounts.loginWithService({}, { password: 'password' });
         throw new Error();
       } catch (err) {
         const { message } = err;
         expect(message).toEqual('Unrecognized options for login request');
       }
-    });
-
-    it('throws error user is not a string or is an empty object', async () => {
-      Accounts.config({ history }, mockTransport);
-      try {
-        await Accounts.loginWithPassword({}, 'password');
-        throw new Error();
-      } catch (err) {
-        const { message } = err;
-        expect(message).toEqual('Match failed');
-      }
-    });
-
-    it('throws error password is not a string', async () => {
-      Accounts.config({ history }, mockTransport);
-      try {
-        await Accounts.loginWithPassword({ username: 'username' }, {});
-        throw new Error();
-      } catch (err) {
-        const { message } = err;
-        expect(message).toEqual('Match failed');
-      }
-    });
-
-    it('calls callback on successful login', async () => {
-      Accounts.config({ history }, mockTransport);
-      const callback = jest.fn();
-      await Accounts.loginWithPassword('username', 'password', callback);
-      expect(callback.mock.calls.length).toEqual(1);
-      expect(Accounts.loggingIn()).toBe(false);
     });
 
     it('calls transport', async () => {
       Accounts.config({ history }, mockTransport);
-      await Accounts.loginWithPassword('username', 'password');
-      expect(mockTransport.loginWithPassword).toHaveBeenCalledTimes(1);
-      expect(mockTransport.loginWithPassword).toHaveBeenCalledWith(
-        'username',
-        'password'
+      await Accounts.loginWithService('password', { username: 'user', password: 'password' });
+      expect(mockTransport.loginWithService).toHaveBeenCalledTimes(1);
+      expect(mockTransport.loginWithService).toHaveBeenCalledWith(
+        'password',
+        {
+          username: 'user',
+          password: 'password'
+        },
       );
-    });
-
-    it('calls callback with error on failed login', async () => {
-      const transport = {
-        ...mockTransport,
-        loginWithPassword: () => Promise.reject('error'),
-      };
-      Accounts.config({ history }, transport);
-      const callback = jest.fn();
-      try {
-        await Accounts.loginWithPassword('username', 'password', callback);
-        throw new Error();
-      } catch (err) {
-        expect(callback).toHaveBeenCalledTimes(1);
-        expect(callback).toHaveBeenCalledWith('error', null);
-      }
     });
 
     it('calls onSignedInHook on successful login', async () => {
       const onSignedInHook = jest.fn();
       Accounts.config({ history, onSignedInHook }, mockTransport);
-      await Accounts.loginWithPassword('username', 'password');
+      await Accounts.loginWithService('password', { username: 'user', password: 'password' });
       expect(onSignedInHook).toHaveBeenCalledTimes(1);
     });
 
     it('sets loggingIn flag to false on failed login', async () => {
       const transport = {
         ...mockTransport,
-        loginWithPassword: () => Promise.reject('error'),
+        loginWithService: () => Promise.reject('error'),
       };
       Accounts.config({ history }, transport);
       try {
-        await Accounts.loginWithPassword('username', 'password');
+        await Accounts.loginWithService('password', { username: 'user', password: 'password' });
         throw new Error();
       } catch (err) {
         expect(Accounts.loggingIn()).toBe(false);
@@ -289,7 +210,7 @@ describe('Accounts', () => {
 
     it('stores tokens in local storage', async () => {
       Accounts.config({ history }, mockTransport);
-      await Accounts.loginWithPassword('username', 'password');
+      await Accounts.loginWithService('username', 'password');
       expect(localStorage.getItem('accounts:accessToken')).toEqual(
         'accessToken'
       );
@@ -314,7 +235,7 @@ describe('Accounts', () => {
 
     it('stores user in redux', async () => {
       Accounts.config({ history }, mockTransport);
-      await Accounts.loginWithPassword('username', 'password');
+      await Accounts.loginWithService('username', 'password');
       expect(Accounts.instance.getState().get('user')).toEqual(
         Map({
           ...loggedInUser.user,
@@ -324,7 +245,7 @@ describe('Accounts', () => {
 
     it('stores tokens in redux', async () => {
       Accounts.config({ history }, mockTransport);
-      await Accounts.loginWithPassword('username', 'password');
+      await Accounts.loginWithService('username', 'password');
       expect(Accounts.instance.getState().get('tokens')).toEqual(
         Map({
           ...loggedInUser.tokens,
@@ -347,9 +268,9 @@ describe('Accounts', () => {
           .digest('hex'),
         algorithm: 'sha256',
       };
-      await Accounts.loginWithPassword('username', 'password');
-      expect(mockTransport.loginWithPassword).toHaveBeenCalledTimes(1);
-      expect(mockTransport.loginWithPassword).toBeCalledWith(
+      await Accounts.loginWithService('username', 'password');
+      expect(mockTransport.loginWithService).toHaveBeenCalledTimes(1);
+      expect(mockTransport.loginWithService).toBeCalledWith(
         'username',
         hashed
       );

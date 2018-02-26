@@ -46,10 +46,7 @@ export class AccountsClient {
   private store: Store<object>;
   private storage: TokenStorage;
 
-  constructor(
-    options: AccountsClientConfiguration,
-    transport: TransportInterface
-  ) {
+  constructor(options: AccountsClientConfiguration, transport: TransportInterface) {
     this.options = { ...config, ...options };
     this.storage = options.tokenStorage || config.tokenStorage;
     if (!transport) {
@@ -58,9 +55,7 @@ export class AccountsClient {
 
     this.transport = transport;
 
-    const middleware: Middleware[] = options.reduxLogger
-      ? [options.reduxLogger]
-      : [];
+    const middleware: Middleware[] = options.reduxLogger ? [options.reduxLogger] : [];
 
     const reduxStoreKey = options.reduxStoreKey || config.reduxStoreKey;
     this.store =
@@ -97,26 +92,16 @@ export class AccountsClient {
 
   public async loadTokensFromStorage(): Promise<void> {
     const tokens = {
-      accessToken:
-        (await this.getStorageData(getTokenKey(ACCESS_TOKEN, this.options))) ||
-        null,
-      refreshToken:
-        (await this.getStorageData(getTokenKey(REFRESH_TOKEN, this.options))) ||
-        null,
+      accessToken: (await this.getStorageData(getTokenKey(ACCESS_TOKEN, this.options))) || null,
+      refreshToken: (await this.getStorageData(getTokenKey(REFRESH_TOKEN, this.options))) || null,
     };
     this.store.dispatch(setTokens(tokens));
   }
 
   public async loadOriginalTokensFromStorage(): Promise<void> {
     const tokens = {
-      accessToken:
-        (await this.getStorageData(
-          getTokenKey(ORIGINAL_ACCESS_TOKEN, this.options)
-        )) || null,
-      refreshToken:
-        (await this.getStorageData(
-          getTokenKey(ORIGINAL_REFRESH_TOKEN, this.options)
-        )) || null,
+      accessToken: (await this.getStorageData(getTokenKey(ORIGINAL_ACCESS_TOKEN, this.options))) || null,
+      refreshToken: (await this.getStorageData(getTokenKey(ORIGINAL_REFRESH_TOKEN, this.options))) || null,
     };
     this.store.dispatch(setOriginalTokens(tokens));
   }
@@ -204,18 +189,12 @@ export class AccountsClient {
     if (tokens) {
       const newAccessToken = tokens.accessToken;
       if (newAccessToken) {
-        await this.setStorageData(
-          getTokenKey(ACCESS_TOKEN, this.options),
-          newAccessToken
-        );
+        await this.setStorageData(getTokenKey(ACCESS_TOKEN, this.options), newAccessToken);
       }
 
       const newRefreshToken = tokens.refreshToken;
       if (newRefreshToken) {
-        await this.setStorageData(
-          getTokenKey(REFRESH_TOKEN, this.options),
-          newRefreshToken
-        );
+        await this.setStorageData(getTokenKey(REFRESH_TOKEN, this.options), newRefreshToken);
       }
     }
   }
@@ -223,18 +202,12 @@ export class AccountsClient {
     if (tokens) {
       const originalAccessToken = tokens.accessToken;
       if (originalAccessToken) {
-        await this.setStorageData(
-          getTokenKey(ORIGINAL_ACCESS_TOKEN, this.options),
-          originalAccessToken
-        );
+        await this.setStorageData(getTokenKey(ORIGINAL_ACCESS_TOKEN, this.options), originalAccessToken);
       }
 
       const originalRefreshToken = tokens.refreshToken;
       if (originalRefreshToken) {
-        await this.setStorageData(
-          getTokenKey(ORIGINAL_REFRESH_TOKEN, this.options),
-          originalRefreshToken
-        );
+        await this.setStorageData(getTokenKey(ORIGINAL_REFRESH_TOKEN, this.options), originalRefreshToken);
       }
     }
   }
@@ -246,10 +219,7 @@ export class AccountsClient {
   public async resumeSession(): Promise<void> {
     try {
       await this.refreshSession();
-      if (
-        this.options.onResumedSessionHook &&
-        isFunction(this.options.onResumedSessionHook)
-      ) {
+      if (this.options.onResumedSessionHook && isFunction(this.options.onResumedSessionHook)) {
         this.options.onResumedSessionHook();
       }
     } catch (err) {
@@ -270,10 +240,7 @@ export class AccountsClient {
           this.clearUser();
         } else {
           // Request a new token pair
-          const refreshedSession: LoginReturnType = await this.transport.refreshTokens(
-            accessToken,
-            refreshToken
-          );
+          const refreshedSession: LoginReturnType = await this.transport.refreshTokens(accessToken, refreshToken);
           this.store.dispatch(loggingIn(false));
 
           await this.storeTokens(refreshedSession.tokens);
@@ -292,10 +259,7 @@ export class AccountsClient {
     }
   }
 
-  public async createUser(
-    user: CreateUserType,
-    callback?: (err?: Error) => void
-  ): Promise<void> {
+  public async createUser(user: CreateUserType): Promise<void> {
     if (!user) {
       throw new AccountsError(
         'Unrecognized options for create user request',
@@ -303,14 +267,11 @@ export class AccountsClient {
           username: user && user.username,
           email: user && user.email,
         },
-        400
+        400,
       );
     }
 
-    if (
-      !validators.validateUsername(user.username) &&
-      !validators.validateEmail(user.email)
-    ) {
+    if (!validators.validateUsername(user.username) && !validators.validateEmail(user.email)) {
       throw new AccountsError('Username or Email is required');
     }
 
@@ -336,10 +297,14 @@ export class AccountsClient {
     }
   }
 
-  public async loginWithService(service: string, credentials: {[key: string]: string | object}) {
+  public async loginWithService(service: string, credentials: { [key: string]: string | object }) {
+    if (!isString(service)) {
+      throw new AccountsError('Unrecognized options for login request');
+    }
+    
     try {
       const response = await this.transport.loginWithService(service, credentials);
-      
+
       const { onSignedInHook } = this.options;
 
       if (isFunction(onSignedInHook)) {
@@ -350,7 +315,7 @@ export class AccountsClient {
           console.error(err);
         }
       }
-    } catch(err) {
+    } catch (err) {
       this.clearTokens();
       this.store.dispatch(clearUser());
       throw new AccountsError(err.message);
@@ -405,16 +370,13 @@ const Accounts = {
   // tslint:disable-next-line no-object-literal-type-assertion
   instance: {} as AccountsClient,
   ui: {},
-  async config(
-    options: AccountsClientConfiguration,
-    transport: TransportInterface
-  ): Promise<AccountsClient> {
+  async config(options: AccountsClientConfiguration, transport: TransportInterface): Promise<AccountsClient> {
     this.instance = new AccountsClient(
       {
         ...config,
         ...options,
       },
-      transport
+      transport,
     );
 
     await this.instance.loadTokensFromStorage();
@@ -428,11 +390,11 @@ const Accounts = {
   options(): AccountsClientConfiguration {
     return this.instance.options;
   },
-  createUser(
-    user: CreateUserType,
-    callback?: (err?: Error) => void
-  ): Promise<void> {
+  createUser(user: CreateUserType, callback?: (err?: Error) => void): Promise<void> {
     return this.instance.createUser(user, callback);
+  },
+  loginWithService(service: string, credentials: { [key: string]: string | object }): Promise<LoginReturnType> {
+    return this.instance.loginWithService(service, credentials);
   },
   loggingIn(): boolean {
     return this.instance.loggingIn();
