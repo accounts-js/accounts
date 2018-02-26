@@ -383,7 +383,7 @@ export class AccountsClient {
     return this.getState().get('isLoading');
   }
 
-  public async logout(callback: (err?: Error) => void): Promise<void> {
+  public async logout(callback?: (err?: Error) => void): Promise<void> {
     try {
       const { accessToken } = await this.tokens();
 
