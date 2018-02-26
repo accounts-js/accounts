@@ -278,6 +278,7 @@ export class AccountsClient {
 
           await this.storeTokens(refreshedSession.tokens);
           this.store.dispatch(setTokens(refreshedSession.tokens));
+          this.store.dispatch(setUser(refreshedSession.user));
         }
       } catch (err) {
         this.store.dispatch(loggingIn(false));
