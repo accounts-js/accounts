@@ -17,7 +17,6 @@ import config, { TokenStorage, AccountsClientConfiguration } from './config';
 import createStore from './create-store';
 import reducer, {
   loggingIn,
-  setUser,
   clearUser,
   setTokens,
   clearTokens as clearStoreTokens,
@@ -154,7 +153,6 @@ export class AccountsClient {
       }
 
       this.store.dispatch(setTokens(res.tokens));
-      this.store.dispatch(setUser(res.user));
       return res;
     }
   }
@@ -278,7 +276,6 @@ export class AccountsClient {
 
           await this.storeTokens(refreshedSession.tokens);
           this.store.dispatch(setTokens(refreshedSession.tokens));
-          this.store.dispatch(setUser(refreshedSession.user));
         }
       } catch (err) {
         this.store.dispatch(loggingIn(false));
@@ -293,10 +290,7 @@ export class AccountsClient {
     }
   }
 
-  public async createUser(
-    user: CreateUserType,
-    callback?: (err?: Error) => void
-  ): Promise<void> {
+  public async createUser(user: CreateUserType): Promise<void> {
     if (!user) {
       throw new AccountsError(
         'Unrecognized options for create user request',
@@ -323,9 +317,7 @@ export class AccountsClient {
     try {
       const userId = await this.transport.createUser(userToCreate);
       const { onUserCreated } = this.options;
-      if (callback && isFunction(callback)) {
-        callback();
-      }
+
       if (isFunction(onUserCreated)) {
         try {
           await onUserCreated({ id: userId });
@@ -335,9 +327,45 @@ export class AccountsClient {
         }
       }
     } catch (err) {
-      if (callback && isFunction(callback)) {
-        callback(err);
+      throw new AccountsError(err.message);
+    }
+  }
+
+  public async loginWithService(
+    service: string,
+    credentials: { [key: string]: string | object }
+  ): Promise<LoginReturnType> {
+    if (!isString(service)) {
+      throw new AccountsError('Unrecognized options for login request');
+    }
+
+    try {
+      this.store.dispatch(loggingIn(true));
+
+      const response = await this.transport.loginWithService(
+        service,
+        credentials
+      );
+
+      this.store.dispatch(loggingIn(false));
+      await this.storeTokens(response.tokens);
+      this.store.dispatch(setTokens(response.tokens));
+
+      const { onSignedInHook } = this.options;
+
+      if (isFunction(onSignedInHook)) {
+        try {
+          await onSignedInHook(response);
+        } catch (err) {
+          // tslint:disable-next-line no-console
+          console.error(err);
+        }
       }
+      return response;
+    } catch (err) {
+      this.clearTokens();
+      this.store.dispatch(clearUser());
+      this.store.dispatch(loggingIn(false));
       throw new AccountsError(err.message);
     }
   }
@@ -419,12 +447,11 @@ const Accounts = {
   ): Promise<void> {
     return this.instance.createUser(user, callback);
   },
-  loginWithPassword(
-    user: LoginUserIdentityType,
-    password: string,
-    callback?: (err?: Error, res?: LoginReturnType) => void
-  ): Promise<void> {
-    return this.instance.loginWithPassword(user, password, callback);
+  loginWithService(
+    service: string,
+    credentials: { [key: string]: string | object }
+  ): Promise<LoginReturnType> {
+    return this.instance.loginWithService(service, credentials);
   },
   loggingIn(): boolean {
     return this.instance.loggingIn();
