@@ -52,7 +52,6 @@
     "babel-polyfill": "^6.23.0",
     "bcryptjs": "^2.4.0",
     "crypto": "^0.0.3",
-    "emailjs": "^1.0.8",
     "jsonwebtoken": "^7.2.1",
     "jwt-decode": "^2.1.0",
     "lodash": "^4.16.4"

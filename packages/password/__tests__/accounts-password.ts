@@ -335,7 +335,7 @@ describe('AccountsPassword', () => {
       password.setStore({ findUserByEmail, addEmailVerificationToken } as any);
       password.server = {
         prepareMail,
-        email: { sendMail },
+        options: { sendMail },
         sanitizeUser,
       } as any;
       set(password.server, 'options.emailTemplates', {});
@@ -354,7 +354,7 @@ describe('AccountsPassword', () => {
       password.setStore({ findUserByEmail, addEmailVerificationToken } as any);
       password.server = {
         prepareMail,
-        email: { sendMail },
+        options: { sendMail },
         sanitizeUser,
       } as any;
       set(password.server, 'options.emailTemplates', {});
@@ -399,7 +399,7 @@ describe('AccountsPassword', () => {
       password.setStore({ findUserByEmail, addResetPasswordToken } as any);
       password.server = {
         prepareMail,
-        email: { sendMail },
+        options: { sendMail },
         sanitizeUser,
         getFirstUserEmail,
       } as any;
@@ -436,7 +436,7 @@ describe('AccountsPassword', () => {
       password.setStore({ findUserByEmail, addResetPasswordToken } as any);
       password.server = {
         prepareMail,
-        email: { sendMail },
+        options: { sendMail },
         sanitizeUser,
         getFirstUserEmail,
       } as any;

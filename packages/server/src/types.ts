@@ -1,5 +1,5 @@
 import { UserObjectType, CreateUserType, SessionType } from '@accounts/common';
-import { EmailTemplatesType, EmailTemplateType } from './email';
+import { EmailTemplatesType, EmailTemplateType, SendMailType } from './email';
 import { AccountsServer } from './accounts-server';
 
 export interface AuthService {
@@ -31,10 +31,6 @@ export type PrepareMailFunction = (
 
 export type EmailType = EmailTemplateType & { to: string };
 
-export type SendMailFunction = (
-  emailConfig: EmailType | object
-) => Promise<object>;
-
 export interface AccountsServerOptions {
   db: DBInterface;
   tokenSecret: string;
@@ -56,7 +52,7 @@ export interface AccountsServerOptions {
   resumeSessionValidator?: ResumeSessionValidator;
   siteUrl?: string;
   prepareMail?: PrepareMailFunction;
-  sendMail?: SendMailFunction;
+  sendMail?: SendMailType;
   // https://github.com/eleith/emailjs#emailserverconnectoptions
   email?: object;
 }
