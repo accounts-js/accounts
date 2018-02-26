@@ -72,6 +72,11 @@ export class AccountsClient {
       });
   }
 
+  public async config(): Promise<void> {
+    await this.loadTokensFromStorage();
+    await this.loadOriginalTokensFromStorage();
+  }
+
   public getState(): Map<string, any> {
     const state: object | Map<string, any> = this.store.getState();
 
