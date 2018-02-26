@@ -2,16 +2,28 @@ import { UserObjectType } from '@accounts/common';
 import { AccountsServer, DBInterface, AuthService } from '@accounts/server';
 import * as requestPromise from 'request-promise';
 
+export interface OauthUser {
+  id: string;
+  email?: string;
+  profile?: object;
+}
+
+export interface OauthOptions {
+  [provider: string]: {
+    authenticate: (params: any) => Promise<OauthUser>;
+  };
+}
+
 export class AccountsOauth implements AuthService {
   public server: AccountsServer;
   public serviceName = 'oauth';
   private db: DBInterface;
-  private options: any;
+  private options: OauthOptions;
 
   constructor(options) {
     this.options = options;
   }
-  
+
   public setStore(store: DBInterface) {
     this.db = store;
   }
@@ -22,7 +34,7 @@ export class AccountsOauth implements AuthService {
     }
 
     const userProvider = this.options[params.provider];
- 
+
     if (typeof userProvider.authenticate !== 'function') {
       throw new Error('Invalid provider');
     }
@@ -56,5 +68,4 @@ export class AccountsOauth implements AuthService {
 
     await this.db.setService(userId, provider, null);
   }
-
 }

@@ -23,6 +23,7 @@ export interface CreateUserType {
   username?: string;
   email?: string;
   profile?: object;
+  [additionalKey: string]: any;
 }
 
 export interface LoginUserIdentityType {
@@ -38,7 +39,6 @@ export interface TokensType {
 
 export interface LoginReturnType {
   sessionId: string;
-  user: UserObjectType;
   tokens: TokensType;
 }
 

@@ -18,7 +18,7 @@ export class AccountsOAuthTwitter {
       this.options.secret,
       '1.0A',
       null,
-      'HMAC-SHA1',
+      'HMAC-SHA1'
     );
   }
 
@@ -43,9 +43,8 @@ export class AccountsOAuthTwitter {
             };
             resolve(user);
           }
-        },
+        }
       );
     });
-
   }
 }
