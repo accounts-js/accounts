@@ -256,26 +256,6 @@ describe('Accounts', () => {
         })
       );
     });
-
-    // it('can hash password with specified algorithm', async () => {
-    //   Accounts.config(
-    //     {
-    //       history,
-    //       passwordHashAlgorithm: 'sha256',
-    //     },
-    //     mockTransport
-    //   );
-    //   const hashed = {
-    //     digest: crypto
-    //       .createHash('sha256')
-    //       .update('password')
-    //       .digest('hex'),
-    //     algorithm: 'sha256',
-    //   };
-    //   await Accounts.loginWithService('username', 'password');
-    //   expect(mockTransport.loginWithService).toHaveBeenCalledTimes(1);
-    //   expect(mockTransport.loginWithService).toBeCalledWith('username', hashed);
-    // });
   });
 
   describe('logout', () => {
@@ -424,45 +404,6 @@ describe('Accounts', () => {
       expect(mockTransport.verifyEmail).toHaveBeenCalledWith('token');
     });
   });
-
-  // describe('requestVerificationEmail', () => {
-  //   it('should return an AccountsError', async () => {
-  //     const error = 'something bad';
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         ...mockTransport,
-  //         sendVerificationEmail: () => Promise.reject({ message: error }),
-  //       }
-  //     );
-  //     try {
-  //       await Accounts.requestVerificationEmail('email@g.co');
-  //       throw new Error();
-  //     } catch (err) {
-  //       expect(err.message).toEqual(error);
-  //     }
-  //   });
-
-  //   it('should call transport.sendVerificationEmail', async () => {
-  //     Accounts.config({}, mockTransport);
-  //     await Accounts.requestVerificationEmail('email@g.co');
-  //     expect(mockTransport.sendVerificationEmail).toHaveBeenCalledTimes(1);
-  //     expect(mockTransport.sendVerificationEmail).toHaveBeenCalledWith(
-  //       'email@g.co'
-  //     );
-  //   });
-
-  //   it('should throw if an invalid email is provided', async () => {
-  //     Accounts.config({}, mockTransport);
-  //     try {
-  //       await Accounts.requestVerificationEmail('email');
-  //       throw new Error();
-  //     } catch (err) {
-  //       expect(err.message).toEqual('Valid email must be provided');
-  //       expect(mockTransport.sendVerificationEmail).not.toHaveBeenCalled();
-  //     }
-  //   });
-  // });
 
   describe('impersonate', () => {
     it('should throw error if username is not provided', async () => {
