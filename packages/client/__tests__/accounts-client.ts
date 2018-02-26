@@ -176,21 +176,24 @@ describe('Accounts', () => {
 
     it('calls transport', async () => {
       Accounts.config({ history }, mockTransport);
-      await Accounts.loginWithService('password', { username: 'user', password: 'password' });
+      await Accounts.loginWithService('password', {
+        username: 'user',
+        password: 'password',
+      });
       expect(mockTransport.loginWithService).toHaveBeenCalledTimes(1);
-      expect(mockTransport.loginWithService).toHaveBeenCalledWith(
-        'password',
-        {
-          username: 'user',
-          password: 'password'
-        },
-      );
+      expect(mockTransport.loginWithService).toHaveBeenCalledWith('password', {
+        username: 'user',
+        password: 'password',
+      });
     });
 
     it('calls onSignedInHook on successful login', async () => {
       const onSignedInHook = jest.fn();
       Accounts.config({ history, onSignedInHook }, mockTransport);
-      await Accounts.loginWithService('password', { username: 'user', password: 'password' });
+      await Accounts.loginWithService('password', {
+        username: 'user',
+        password: 'password',
+      });
       expect(onSignedInHook).toHaveBeenCalledTimes(1);
     });
 
@@ -201,7 +204,10 @@ describe('Accounts', () => {
       };
       Accounts.config({ history }, transport);
       try {
-        await Accounts.loginWithService('password', { username: 'user', password: 'password' });
+        await Accounts.loginWithService('password', {
+          username: 'user',
+          password: 'password',
+        });
         throw new Error();
       } catch (err) {
         expect(Accounts.loggingIn()).toBe(false);
@@ -210,7 +216,10 @@ describe('Accounts', () => {
 
     it('stores tokens in local storage', async () => {
       Accounts.config({ history }, mockTransport);
-      await Accounts.loginWithService('username', 'password');
+      await Accounts.loginWithService('password', {
+        username: 'user',
+        password: 'password',
+      });
       expect(localStorage.getItem('accounts:accessToken')).toEqual(
         'accessToken'
       );
@@ -270,10 +279,7 @@ describe('Accounts', () => {
       };
       await Accounts.loginWithService('username', 'password');
       expect(mockTransport.loginWithService).toHaveBeenCalledTimes(1);
-      expect(mockTransport.loginWithService).toBeCalledWith(
-        'username',
-        hashed
-      );
+      expect(mockTransport.loginWithService).toBeCalledWith('username', hashed);
     });
   });
 
@@ -518,7 +524,10 @@ describe('Accounts', () => {
 
     it('should set state correctly if impersonation was authorized', async () => {
       await Accounts.config({ history }, mockTransport);
-      await Accounts.loginWithPassword('username', 'password');
+      await Accounts.loginWithService('password', {
+        username: 'user',
+        password: 'password',
+      });
 
       const result = await Accounts.impersonate('impUser');
       const tokens = Accounts.tokens();
@@ -538,7 +547,10 @@ describe('Accounts', () => {
 
     it('should save impersonation state and persist it in the storage', async () => {
       await Accounts.config({ history }, mockTransport);
-      await Accounts.loginWithPassword('username', 'password');
+      await Accounts.loginWithService('password', {
+        username: 'user',
+        password: 'password',
+      });
       Accounts.instance.storeTokens = jest.fn();
       await Accounts.impersonate('impUser');
       expect(Accounts.instance.storeTokens).toHaveBeenCalledTimes(1);
@@ -549,7 +561,10 @@ describe('Accounts', () => {
         { history, persistImpersonation: false },
         mockTransport
       );
-      await Accounts.loginWithPassword('username', 'password');
+      await Accounts.loginWithService('password', {
+        username: 'user',
+        password: 'password',
+      });
       Accounts.instance.storeTokens = jest.fn();
       await Accounts.impersonate('impUser');
       expect(Accounts.instance.storeTokens).not.toHaveBeenCalled();
@@ -560,7 +575,10 @@ describe('Accounts', () => {
     it('should not replace tokens if not impersonating', async () => {
       await Accounts.config({ history }, mockTransport);
 
-      await Accounts.loginWithPassword('username', 'password');
+      await Accounts.loginWithService('password', {
+        username: 'user',
+        password: 'password',
+      });
 
       expect(Accounts.originalTokens()).toEqual({
         accessToken: null,
@@ -590,7 +608,10 @@ describe('Accounts', () => {
       await Accounts.config({ history }, mockTransport);
       Accounts.instance.refreshSession = () => Promise.resolve();
 
-      await Accounts.loginWithPassword('username', 'password');
+      await Accounts.loginWithService('password', {
+        username: 'user',
+        password: 'password',
+      });
       const tokens = Accounts.tokens();
 
       await Accounts.impersonate('impUser');
