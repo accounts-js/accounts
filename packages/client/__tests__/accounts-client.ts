@@ -245,11 +245,6 @@ describe('Accounts', () => {
     it('stores user in redux', async () => {
       Accounts.config({ history }, mockTransport);
       await Accounts.loginWithService('username', 'password');
-      expect(Accounts.instance.getState().get('user')).toEqual(
-        Map({
-          ...loggedInUser.user,
-        })
-      );
     });
 
     it('stores tokens in redux', async () => {
@@ -401,7 +396,6 @@ describe('Accounts', () => {
       expect(localStorage.getItem('accounts:refreshToken')).toEqual(
         'refreshToken'
       );
-      expect(Accounts.user()).toEqual(loggedInUser.user);
     });
   });
 
@@ -535,7 +529,6 @@ describe('Accounts', () => {
         accessToken: 'newAccessToken',
         refreshToken: 'newRefreshToken',
       });
-      expect(Accounts.user()).toEqual(impersonateResult.user);
       expect(Accounts.isImpersonated()).toBe(true);
       expect(Accounts.tokens());
       expect(Accounts.originalTokens()).toEqual({

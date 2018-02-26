@@ -17,7 +17,6 @@ import config, { TokenStorage, AccountsClientConfiguration } from './config';
 import createStore from './create-store';
 import reducer, {
   loggingIn,
-  setUser,
   clearUser,
   setTokens,
   clearTokens as clearStoreTokens,
@@ -154,7 +153,6 @@ export class AccountsClient {
       }
 
       this.store.dispatch(setTokens(res.tokens));
-      this.store.dispatch(setUser(res.user));
       return res;
     }
   }
@@ -278,7 +276,6 @@ export class AccountsClient {
 
           await this.storeTokens(refreshedSession.tokens);
           this.store.dispatch(setTokens(refreshedSession.tokens));
-          this.store.dispatch(setUser(refreshedSession.user));
         }
       } catch (err) {
         this.store.dispatch(loggingIn(false));
@@ -353,7 +350,6 @@ export class AccountsClient {
       this.store.dispatch(loggingIn(false));
       await this.storeTokens(response.tokens);
       this.store.dispatch(setTokens(response.tokens));
-      this.store.dispatch(setUser(response.user));
 
       const { onSignedInHook } = this.options;
 
