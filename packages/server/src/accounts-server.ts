@@ -12,7 +12,6 @@ import {
   ImpersonateReturnType,
   HookListener,
 } from '@accounts/common';
-import config from './config';
 import { generateAccessToken, generateRefreshToken } from './tokens';
 import { emailTemplates, EmailTemplateType, sendMail } from './email';
 import {
@@ -42,6 +41,7 @@ const defaultOptions = {
   emailTemplates,
   userObjectSanitizer: (user: UserObjectType) => user,
   sendMail,
+  siteUrl: 'http://localhost:3000',
 };
 
 export type RemoveListnerHandle = () => EventEmitter;
@@ -361,10 +361,7 @@ export class AccountsServer {
     sessionId: string,
     isImpersonated: boolean = false
   ): TokensType {
-    const {
-      tokenSecret = config.tokenSecret,
-      tokenConfigs = config.tokenConfigs,
-    } = this.options;
+    const { tokenSecret, tokenConfigs } = this.options;
     const accessToken = generateAccessToken({
       data: {
         sessionId,
@@ -592,7 +589,7 @@ export class AccountsServer {
     pathFragment: string,
     token: string
   ): string {
-    const siteUrl = this.options.siteUrl || config.siteUrl;
+    const siteUrl = this.options.siteUrl;
     return `${siteUrl}/${pathFragment}/${token}`;
   }
 }

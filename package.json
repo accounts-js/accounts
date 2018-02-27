@@ -12,9 +12,13 @@
     "publish:canary": "yarn run publish -- --canary",
     "test": "yarn lint && yarn compile && yarn coverage",
     "testonly": "lerna run testonly",
-    "format": "prettier --single-quote --trailing-comma es5 --parser typescript --write \"packages/*/{src,__tests__}/**/*.ts\"",
+    "format": "prettier --write \"packages/*/{src,__tests__}/**/*.ts\"",
     "coverage": "lerna run coverage",
     "codecov": "codecov"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5"
   },
   "repository": {
     "type": "git",
