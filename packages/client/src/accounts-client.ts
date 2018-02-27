@@ -26,9 +26,6 @@ import reducer, {
 } from './module';
 import { TransportInterface } from './transport-interface';
 
-const isValidUserObject = (user: LoginUserIdentityType) =>
-  has(user, 'username') || has(user, 'email') || has(user, 'id');
-
 const ACCESS_TOKEN = 'accounts:accessToken';
 const REFRESH_TOKEN = 'accounts:refreshToken';
 const ORIGINAL_ACCESS_TOKEN = 'accounts:originalAccessToken';
@@ -313,8 +310,6 @@ export class AccountsClient {
     ) {
       throw new AccountsError('Username or Email is required');
     }
-
-    const hashAlgorithm = this.options.passwordHashAlgorithm;
 
     const userToCreate = {
       ...user,

@@ -5,8 +5,6 @@ import {
   PasswordSignupFields,
 } from '@accounts/common';
 import { Store, Middleware } from 'redux';
-import AccountsClient from './accounts-client';
-import redirect from './redirect';
 
 export interface TokenStorage {
   getItem(key: string): Promise<string>;
