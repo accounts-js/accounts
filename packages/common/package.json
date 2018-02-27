@@ -16,8 +16,7 @@
     "test": "npm run testonly",
     "test-ci": "npm lint && npm coverage",
     "testonly": "jest",
-    "coverage": "npm run testonly -- --coverage",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "coverage": "npm run testonly -- --coverage"
   },
   "files": [
     "lib"
@@ -50,7 +49,6 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
-    "coveralls": "^2.11.14",
     "localstorage-polyfill": "^1.0.1",
     "regenerator-runtime": "^0.9.6"
   },

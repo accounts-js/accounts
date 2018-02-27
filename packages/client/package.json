@@ -17,8 +17,7 @@
     "test-ci": "npm lint && npm coverage",
     "testonly": "jest",
     "test:watch": "jest --watch",
-    "coverage": "npm run testonly -- --coverage",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "coverage": "npm run testonly -- --coverage"
   },
   "jest": {
     "transform": {
@@ -50,7 +49,6 @@
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^20.0.2",
-    "coveralls": "^2.11.14",
     "jest": "^20.0.4",
     "jsonwebtoken": "^7.4.1",
     "lerna": "2.0.0-beta.32",
