@@ -44,4 +44,4 @@ export const sendMail = async (mail: object): Promise<void> => {
   );
   // tslint:disable-next-line no-console
   console.log(mail);
-}
+};

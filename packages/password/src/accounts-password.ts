@@ -113,7 +113,7 @@ export default class AccountsPassword implements AuthService {
    * @param {string} email - User email.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  public findUserByEmail(email: string): Promise<UserObjectType> {
+  public findUserByEmail(email: string): Promise<UserObjectType | null> {
     return this.db.findUserByEmail(email);
   }
 
@@ -122,7 +122,7 @@ export default class AccountsPassword implements AuthService {
    * @param {string} username - User username.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  public findUserByUsername(username: string): Promise<UserObjectType> {
+  public findUserByUsername(username: string): Promise<UserObjectType | null> {
     return this.db.findUserByUsername(username);
   }
 

@@ -13,15 +13,8 @@ import {
   HookListener,
 } from '@accounts/common';
 import config from './config';
-import {
-  generateAccessToken,
-  generateRefreshToken,
-} from './tokens';
-import {
-  emailTemplates,
-  EmailTemplateType,
-  sendMail,
-} from './email';
+import { generateAccessToken, generateRefreshToken } from './tokens';
+import { emailTemplates, EmailTemplateType, sendMail } from './email';
 import {
   AccountsServerOptions,
   ConnectionInformationsType,
