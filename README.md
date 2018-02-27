@@ -13,7 +13,7 @@ Copyright (c) 2016 by Gadi Cohen & Tim Mikeladze.  Released under the MIT licens
 
 ## Note
 
-This package, along with the rest of the packages under the `accounts-js` organization are under active development and are **not** ready for consumption.
+This package, along with the rest of the packages under the `accounts-js` organization are under active development, expect changes on minor versions.
 
 ## Getting Started
 
