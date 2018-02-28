@@ -22,7 +22,11 @@
     "trailingComma": "es5"
   },
   "renovate": {
-    "extends": ["config:base"]
+    "extends": ["config:base"],
+    "automerge": true,
+    "major": {
+      "automerge": false
+    }
   },
   "files": ["src", "lib"],
   "jest": {
