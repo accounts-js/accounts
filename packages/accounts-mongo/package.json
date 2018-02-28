@@ -53,7 +53,7 @@
     "@accounts/tslint-config-accounts": "0.0.6",
     "@types/jest": "21.1.10",
     "@types/lodash": "4.14.104",
-    "@types/mongodb": "2.2.15",
+    "@types/mongodb": "2.2.20",
     "@types/node": "8.0.47",
     "codecov": "3.0.0",
     "coveralls": "3.0.0",
