@@ -1,6 +1,6 @@
 {
   "name": "@accounts/common",
-  "version": "0.0.21",
+  "version": "0.1.0",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -12,12 +12,11 @@
     "clean": "rimraf lib",
     "precompile": "npm run clean",
     "compile": "tsc",
-    "prepublish": "npm run compile",
+    "prepublishOnly": "npm run compile",
     "test": "npm run testonly",
     "test-ci": "npm lint && npm coverage",
     "testonly": "jest",
-    "coverage": "npm run testonly -- --coverage",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "coverage": "npm run testonly -- --coverage"
   },
   "files": [
     "lib"
@@ -50,10 +49,8 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
-    "coveralls": "^2.11.14",
     "localstorage-polyfill": "^1.0.1",
-    "regenerator-runtime": "^0.9.6",
-    "rimraf": "^2.6.1"
+    "regenerator-runtime": "^0.9.6"
   },
   "dependencies": {
     "lodash": "^4.16.4"

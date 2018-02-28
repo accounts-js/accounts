@@ -1,8 +1,13 @@
-import Accounts, { AccountsServer } from './accounts-server';
+import { AccountsServer } from './accounts-server';
 import * as encryption from './encryption';
-import { DBInterface } from './db-interface';
-import config from './config';
+import { generateRandomToken } from './tokens';
+import { AuthService, DBInterface } from './types';
 
-export default Accounts;
-
-export { AccountsServer, encryption, config, DBInterface };
+export default AccountsServer;
+export {
+  AccountsServer,
+  AuthService,
+  encryption,
+  DBInterface,
+  generateRandomToken,
+};

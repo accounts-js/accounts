@@ -1,6 +1,6 @@
 {
   "name": "@accounts/server",
-  "version": "0.0.21",
+  "version": "0.1.0",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -8,16 +8,16 @@
     "access": "public"
   },
   "scripts": {
-    "start": "webpack -p --config --progress --watch",
     "clean": "rimraf lib",
+    "start": "tsc --watch",
     "precompile": "npm run clean",
     "compile": "tsc",
-    "prepublish": "npm run compile",
+    "prepublishOnly": "npm run compile",
     "test": "npm run testonly",
     "test-ci": "npm lint && npm coverage",
     "testonly": "jest",
-    "coverage": "npm run testonly -- --coverage",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "test:watch": "jest --watch",
+    "coverage": "npm run testonly -- --coverage"
   },
   "jest": {
     "transform": {
@@ -47,19 +47,18 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "dependencies": {
-    "@accounts/common": "^0.0.21",
+    "@accounts/common": "^0.1.0",
     "babel-polyfill": "^6.23.0",
     "bcryptjs": "^2.4.0",
     "crypto": "^0.0.3",
-    "emailjs": "^1.0.8",
     "jsonwebtoken": "^7.2.1",
     "jwt-decode": "^2.1.0",
     "lodash": "^4.16.4"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^7.2.3",
+    "@types/jwt-decode": "^2.2.1",
     "coveralls": "^2.11.14",
-    "jest": "^18.0.0",
-    "localstorage-polyfill": "^1.0.1",
-    "rimraf": "^2.6.1"
+    "rimraf": "^2.6.2"
   }
 }

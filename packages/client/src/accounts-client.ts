@@ -6,12 +6,10 @@ import {
   AccountsError,
   validators,
   CreateUserType,
-  PasswordLoginUserType,
-  PasswordLoginUserIdentityType,
+  LoginUserIdentityType,
   LoginReturnType,
   UserObjectType,
   TokensType,
-  PasswordType,
   ImpersonateReturnType,
 } from '@accounts/common';
 
@@ -19,7 +17,6 @@ import config, { TokenStorage, AccountsClientConfiguration } from './config';
 import createStore from './create-store';
 import reducer, {
   loggingIn,
-  setUser,
   clearUser,
   setTokens,
   clearTokens as clearStoreTokens,
@@ -27,11 +24,7 @@ import reducer, {
   setImpersonated,
   clearOriginalTokens,
 } from './module';
-import { hashPassword } from './encryption';
 import { TransportInterface } from './transport-interface';
-
-const isValidUserObject = (user: PasswordLoginUserIdentityType) =>
-  has(user, 'username') || has(user, 'email') || has(user, 'id');
 
 const ACCESS_TOKEN = 'accounts:accessToken';
 const REFRESH_TOKEN = 'accounts:refreshToken';
@@ -74,6 +67,11 @@ export class AccountsClient {
         },
         middleware,
       });
+  }
+
+  public async config(): Promise<void> {
+    await this.loadTokensFromStorage();
+    await this.loadOriginalTokensFromStorage();
   }
 
   public getState(): Map<string, any> {
@@ -157,7 +155,6 @@ export class AccountsClient {
       }
 
       this.store.dispatch(setTokens(res.tokens));
-      this.store.dispatch(setUser(res.user));
       return res;
     }
   }
@@ -281,7 +278,6 @@ export class AccountsClient {
 
           await this.storeTokens(refreshedSession.tokens);
           this.store.dispatch(setTokens(refreshedSession.tokens));
-          this.store.dispatch(setUser(refreshedSession.user));
         }
       } catch (err) {
         this.store.dispatch(loggingIn(false));
@@ -296,11 +292,8 @@ export class AccountsClient {
     }
   }
 
-  public async createUser(
-    user: CreateUserType,
-    callback?: (err?: Error) => void
-  ): Promise<void> {
-    if (!user || user.password === undefined) {
+  public async createUser(user: CreateUserType): Promise<void> {
+    if (!user) {
       throw new AccountsError(
         'Unrecognized options for create user request',
         {
@@ -311,15 +304,6 @@ export class AccountsClient {
       );
     }
 
-    // In case where password is an object we assume it was prevalidated and hashed
-    if (
-      !user.password ||
-      (isString(user.password) &&
-        !validators.validatePassword(user.password as string))
-    ) {
-      throw new AccountsError('Password is required');
-    }
-
     if (
       !validators.validateUsername(user.username) &&
       !validators.validateEmail(user.email)
@@ -327,18 +311,13 @@ export class AccountsClient {
       throw new AccountsError('Username or Email is required');
     }
 
-    const hashAlgorithm = this.options.passwordHashAlgorithm;
-    const password =
-      user.password && hashAlgorithm
-        ? hashPassword(user.password, hashAlgorithm)
-        : user.password;
-    const userToCreate = { ...user, password };
+    const userToCreate = {
+      ...user,
+    };
     try {
       const userId = await this.transport.createUser(userToCreate);
       const { onUserCreated } = this.options;
-      if (callback && isFunction(callback)) {
-        callback();
-      }
+
       if (isFunction(onUserCreated)) {
         try {
           await onUserCreated({ id: userId });
@@ -347,68 +326,46 @@ export class AccountsClient {
           console.error(err);
         }
       }
-      await this.loginWithPassword({ id: userId }, user.password);
     } catch (err) {
-      if (callback && isFunction(callback)) {
-        callback(err);
-      }
       throw new AccountsError(err.message);
     }
   }
 
-  public async loginWithPassword(
-    user: PasswordLoginUserType,
-    password: PasswordType,
-    callback?: (err?: Error, res?: LoginReturnType) => void
+  public async loginWithService(
+    service: string,
+    credentials: { [key: string]: string | object }
   ): Promise<LoginReturnType> {
-    if (!password || !user) {
-      throw new AccountsError(
-        'Unrecognized options for login request',
-        user,
-        400
-      );
-    }
-    if (
-      (!isString(user) &&
-        !isValidUserObject(user as PasswordLoginUserIdentityType)) ||
-      !isString(password)
-    ) {
-      throw new AccountsError('Match failed', user, 400);
+    if (!isString(service)) {
+      throw new AccountsError('Unrecognized options for login request');
     }
 
-    this.store.dispatch(loggingIn(true));
     try {
-      const hashAlgorithm = this.options.passwordHashAlgorithm;
-      const pass = hashAlgorithm
-        ? hashPassword(password, hashAlgorithm)
-        : password;
-      const res: LoginReturnType = await this.transport.loginWithPassword(
-        user,
-        pass
+      this.store.dispatch(loggingIn(true));
+
+      const response = await this.transport.loginWithService(
+        service,
+        credentials
       );
 
       this.store.dispatch(loggingIn(false));
-      await this.storeTokens(res.tokens);
-      this.store.dispatch(setTokens(res.tokens));
-      this.store.dispatch(setUser(res.user));
+      await this.storeTokens(response.tokens);
+      this.store.dispatch(setTokens(response.tokens));
 
-      if (
-        this.options.onSignedInHook &&
-        isFunction(this.options.onSignedInHook)
-      ) {
-        this.options.onSignedInHook();
+      const { onSignedInHook } = this.options;
+
+      if (isFunction(onSignedInHook)) {
+        try {
+          await onSignedInHook(response);
+        } catch (err) {
+          // tslint:disable-next-line no-console
+          console.error(err);
+        }
       }
-
-      if (callback && isFunction(callback)) {
-        callback(null, res);
-      }
-
-      return res;
+      return response;
     } catch (err) {
+      this.clearTokens();
+      this.store.dispatch(clearUser());
       this.store.dispatch(loggingIn(false));
-      if (callback && isFunction(callback)) {
-        callback(err, null);
-      }
       throw new AccountsError(err.message);
     }
   }
@@ -421,7 +378,7 @@ export class AccountsClient {
     return this.getState().get('isLoading');
   }
 
-  public async logout(callback: (err?: Error) => void): Promise<void> {
+  public async logout(callback?: (err?: Error) => void): Promise<void> {
     try {
       const { accessToken } = await this.tokens();
 
@@ -451,48 +408,6 @@ export class AccountsClient {
   public async verifyEmail(token: string): Promise<void> {
     try {
       await this.transport.verifyEmail(token);
-    } catch (err) {
-      throw new AccountsError(err.message);
-    }
-  }
-
-  public async resetPassword(
-    token: string,
-    newPassword: string
-  ): Promise<void> {
-    if (!validators.validatePassword(newPassword)) {
-      throw new AccountsError('Password is invalid!');
-    }
-
-    const hashAlgorithm = this.options.passwordHashAlgorithm;
-    const password = hashAlgorithm
-      ? hashPassword(newPassword, hashAlgorithm)
-      : newPassword;
-
-    try {
-      await this.transport.resetPassword(token, password);
-    } catch (err) {
-      throw new AccountsError(err.message);
-    }
-  }
-
-  public async requestPasswordReset(email: string): Promise<void> {
-    if (!validators.validateEmail(email)) {
-      throw new AccountsError('Valid email must be provided');
-    }
-    try {
-      await this.transport.sendResetPasswordEmail(email);
-    } catch (err) {
-      throw new AccountsError(err.message);
-    }
-  }
-
-  public async requestVerificationEmail(email: string): Promise<void> {
-    if (!validators.validateEmail(email)) {
-      throw new AccountsError('Valid email must be provided');
-    }
-    try {
-      await this.transport.sendVerificationEmail(email);
     } catch (err) {
       throw new AccountsError(err.message);
     }
@@ -532,12 +447,11 @@ const Accounts = {
   ): Promise<void> {
     return this.instance.createUser(user, callback);
   },
-  loginWithPassword(
-    user: PasswordLoginUserType,
-    password: string,
-    callback?: (err?: Error, res?: LoginReturnType) => void
-  ): Promise<void> {
-    return this.instance.loginWithPassword(user, password, callback);
+  loginWithService(
+    service: string,
+    credentials: { [key: string]: string | object }
+  ): Promise<LoginReturnType> {
+    return this.instance.loginWithService(service, credentials);
   },
   loggingIn(): boolean {
     return this.instance.loggingIn();
@@ -560,12 +474,6 @@ const Accounts = {
   verifyEmail(token: string): Promise<void> {
     return this.instance.verifyEmail(token);
   },
-  resetPassword(token: string, newPassword: string): Promise<void> {
-    return this.instance.resetPassword(token, newPassword);
-  },
-  requestPasswordReset(email?: string): Promise<void> {
-    return this.instance.requestPasswordReset(email);
-  },
   requestVerificationEmail(email?: string): Promise<void> {
     return this.instance.requestVerificationEmail(email);
   },
@@ -584,12 +492,3 @@ const Accounts = {
 };
 
 export default Accounts;
-
-// TODO Could this be handled better?
-// if (typeof window !== 'undefined') {
-//   window.onload = async () => {
-//     if (Accounts.instance && Accounts.instance.resumeSession) {
-//       await Accounts.resumeSession();
-//     }
-//   };
-// }

@@ -5,8 +5,6 @@ import {
   PasswordSignupFields,
 } from '@accounts/common';
 import { Store, Middleware } from 'redux';
-import AccountsClient from './accounts-client';
-import redirect from './redirect';
 
 export interface TokenStorage {
   getItem(key: string): Promise<string>;
@@ -82,18 +80,6 @@ export default {
   changePasswordPath: null,
   homePath: '/',
   signOutPath: '/',
-  // TODO enable all of these
-  // onSubmitHook: () => {},
-  // onPreSignUpHook: () => new Promise(resolve => resolve()),
-  // onPostSignUpHook: () => {},
-  onEnrollAccountHook: () =>
-    redirect(AccountsClient.options().loginPath || '/'),
-  onResetPasswordHook: () =>
-    redirect(AccountsClient.options().loginPath || '/'),
-  onVerifyEmailHook: () =>
-    redirect(AccountsClient.options().profilePath || '/'),
-  onSignedInHook: () => redirect(AccountsClient.options().homePath || '/'),
-  onSignedOutHook: () => redirect(AccountsClient.options().signOutPath || '/'),
   loginOnSignUp: true,
   persistImpersonation: true,
 };

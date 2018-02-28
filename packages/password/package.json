@@ -1,0 +1,43 @@
+{
+  "name": "@accounts/password",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib",
+    "start": "tsc --watch",
+    "precompile": "npm run clean",
+    "compile": "tsc",
+    "prepublishOnly": "npm run compile",
+    "test": "npm run test",
+    "testonly": "jest --coverage",
+    "coverage": "jest --coverage"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "mapCoverage": true
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "@accounts/common": "^0.1.0",
+    "@accounts/server": "^0.1.0",
+    "@types/bcryptjs": "^2.4.0",
+    "@types/lodash": "^4.14.81",
+    "rimraf": "^2.6.1"
+  },
+  "peerDependencies": {
+    "@accounts/common": "^0.1.0",
+    "@accounts/server": "^0.1.0"
+  }
+}

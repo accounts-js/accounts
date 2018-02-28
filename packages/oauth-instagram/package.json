@@ -1,0 +1,37 @@
+{
+  "name": "@accounts/oauth-instagram",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "start": "tsc --watch",
+    "compile": "tsc",
+    "prepublishOnly": "yarn compile",
+    "testonly": "jest",
+    "coverage": "jest --coverage"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "mapCoverage": true
+  },
+  "dependencies": {
+    "request": "^2.83.0",
+    "request-promise": "^4.2.1"
+  },
+  "devDependencies": {
+    "@accounts/common": "^0.1.0",
+    "@accounts/server": "^0.1.0"
+  },
+  "peerDependencies": {
+    "@accounts/common": "^0.1.0",
+    "@accounts/server": "^0.1.0"
+  }
+}

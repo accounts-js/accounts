@@ -1,14 +1,13 @@
-import { HashAlgorithm } from './config';
-
-export type PasswordType =
-  | string
-  | {
-      digest: string;
-      algorithm: HashAlgorithm;
-    };
+export interface TokenRecord {
+  token: string;
+  address: string;
+  when: number;
+  reason: string;
+}
 
 export interface EmailRecord {
   address: string;
+  verified: boolean;
 }
 
 export interface UserObjectType {
@@ -23,17 +22,15 @@ export interface UserObjectType {
 export interface CreateUserType {
   username?: string;
   email?: string;
-  password?: PasswordType;
   profile?: object;
+  [additionalKey: string]: any;
 }
 
-export interface PasswordLoginUserIdentityType {
+export interface LoginUserIdentityType {
   id?: string;
   username?: string;
   email?: string;
 }
-
-export type PasswordLoginUserType = string | PasswordLoginUserIdentityType;
 
 export interface TokensType {
   accessToken?: string;
@@ -42,7 +39,6 @@ export interface TokensType {
 
 export interface LoginReturnType {
   sessionId: string;
-  user: UserObjectType;
   tokens: TokensType;
 }
 

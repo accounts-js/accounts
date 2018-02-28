@@ -1,47 +1,25 @@
-// @flow
-
 import * as pick from 'lodash/pick';
 import * as omit from 'lodash/omit';
 import * as isString from 'lodash/isString';
-import * as isPlainObject from 'lodash/isPlainObject';
-import * as isFunction from 'lodash/isFunction';
-import * as isArray from 'lodash/isArray';
-import * as find from 'lodash/find';
-import * as includes from 'lodash/includes';
-import * as get from 'lodash/get';
 import { EventEmitter } from 'events';
 import * as jwt from 'jsonwebtoken';
 import {
   AccountsError,
-  toUsernameAndEmail,
-  validators,
   UserObjectType,
-  CreateUserType,
-  PasswordLoginUserType,
   LoginReturnType,
   TokensType,
   SessionType,
   ImpersonateReturnType,
-  PasswordType,
-  EmailRecord,
   HookListener,
 } from '@accounts/common';
-import config, {
-  AccountsServerConfiguration,
-  PasswordAuthenticator,
-} from './config';
-import { DBInterface } from './db-interface';
-import { verifyPassword, hashPassword, bcryptPassword } from './encryption';
+import { generateAccessToken, generateRefreshToken } from './tokens';
+import { emailTemplates, EmailTemplateType, sendMail } from './email';
 import {
-  generateAccessToken,
-  generateRefreshToken,
-  generateRandomToken,
-} from './tokens';
-import Email, { EmailConnector } from './email';
-import emailTemplates, {
-  EmailTemplatesType,
-  EmailTemplateType,
-} from './email-templates';
+  AccountsServerOptions,
+  ConnectionInformationsType,
+  AuthService,
+  DBInterface,
+} from './types';
 
 export interface TokenRecord {
   token: string;
@@ -49,6 +27,22 @@ export interface TokenRecord {
   when: number;
   reason: string;
 }
+
+const defaultOptions = {
+  tokenSecret: 'secret',
+  tokenConfigs: {
+    accessToken: {
+      expiresIn: '90m',
+    },
+    refreshToken: {
+      expiresIn: '7d',
+    },
+  },
+  emailTemplates,
+  userObjectSanitizer: (user: UserObjectType) => user,
+  sendMail,
+  siteUrl: 'http://localhost:3000',
+};
 
 export type RemoveListnerHandle = () => EventEmitter;
 
@@ -68,156 +62,107 @@ export const ServerHooks = {
 };
 
 export class AccountsServer {
-  // tslint:disable-next-line variable-name
-  private _options: AccountsServerConfiguration;
+  public options: AccountsServerOptions;
+  private services: { [key: string]: AuthService };
   private db: DBInterface;
-  private email: EmailConnector;
-  private emailTemplates: EmailTemplatesType;
   private hooks: EventEmitter;
 
-  /**
-   * @description Configure AccountsServer.
-   * @param {Object} options - Options for AccountsServer.
-   * @param {Object} db - DBInterface for AccountsServer.
-   * @returns {Object} - Return the options.
-   */
-  public config(options: AccountsServerConfiguration, db: DBInterface) {
-    this._options = {
-      ...config,
-      ...options,
-    };
-    if (!db) {
+  constructor(options: AccountsServerOptions, services: any) {
+    this.options = { ...defaultOptions, ...options };
+    if (!this.options.db) {
       throw new AccountsError('A database driver is required');
     }
+    // TODO if this.options.tokenSecret === 'secret' warm user to change it
 
-    this.db = db;
-    this.email = this._options.sendMail
-      ? { sendMail: this._options.sendMail }
-      : new Email(this._options.email);
+    this.services = services;
+    this.db = this.options.db;
 
-    this.emailTemplates = this._options.emailTemplates;
-
-    if (!this.hooks) {
-      this.hooks = new EventEmitter();
+    // Set the db to all services
+    // tslint:disable-next-line
+    for (const service in this.services) {
+      this.services[service].setStore(this.db);
+      this.services[service].server = this;
     }
+
+    // Initialize hooks
+    this.hooks = new EventEmitter();
   }
 
-  /**
-   * @description Return the AccountsServer options.
-   * @returns {AccountsServerConfiguration} - Return the options.
-   */
-  public options(): AccountsServerConfiguration {
-    return this._options;
+  public getServices(): { [key: string]: AuthService } {
+    return this.services;
+  }
+
+  public getOptions(): AccountsServerOptions {
+    return this.options;
   }
 
   public onLoginSuccess(callback: HookListener): RemoveListnerHandle {
-    return this._on(ServerHooks.LoginSuccess, callback);
+    return this.on(ServerHooks.LoginSuccess, callback);
   }
 
   public onLoginError(callback: HookListener): RemoveListnerHandle {
-    return this._on(ServerHooks.LoginError, callback);
+    return this.on(ServerHooks.LoginError, callback);
   }
 
   public onLogoutSuccess(callback: HookListener): RemoveListnerHandle {
-    return this._on(ServerHooks.LogoutSuccess, callback);
+    return this.on(ServerHooks.LogoutSuccess, callback);
   }
 
   public onLogoutError(callback: HookListener): RemoveListnerHandle {
-    return this._on(ServerHooks.LogoutError, callback);
+    return this.on(ServerHooks.LogoutError, callback);
   }
 
   public onCreateUserSuccess(callback: HookListener): RemoveListnerHandle {
-    return this._on(ServerHooks.CreateUserSuccess, callback);
+    return this.on(ServerHooks.CreateUserSuccess, callback);
   }
 
   public onCreateUserError(callback: HookListener): RemoveListnerHandle {
-    return this._on(ServerHooks.CreateUserError, callback);
+    return this.on(ServerHooks.CreateUserError, callback);
   }
 
   public onResumeSessionSuccess(callback: HookListener): RemoveListnerHandle {
-    return this._on(ServerHooks.ResumeSessionSuccess, callback);
+    return this.on(ServerHooks.ResumeSessionSuccess, callback);
   }
 
   public onResumeSessionError(callback: HookListener): RemoveListnerHandle {
-    return this._on(ServerHooks.ResumeSessionError, callback);
+    return this.on(ServerHooks.ResumeSessionError, callback);
   }
 
   public onRefreshTokensSuccess(callback: HookListener): RemoveListnerHandle {
-    return this._on(ServerHooks.RefreshTokensSuccess, callback);
+    return this.on(ServerHooks.RefreshTokensSuccess, callback);
   }
 
   public onRefreshTokensError(callback: HookListener): RemoveListnerHandle {
-    return this._on(ServerHooks.RefreshTokensError, callback);
+    return this.on(ServerHooks.RefreshTokensError, callback);
   }
 
   public onImpersonationSuccess(callback: HookListener): RemoveListnerHandle {
-    return this._on(ServerHooks.ImpersonationSuccess, callback);
+    return this.on(ServerHooks.ImpersonationSuccess, callback);
   }
 
   public onImpersonationError(callback: HookListener): RemoveListnerHandle {
-    return this._on(ServerHooks.ImpersonationError, callback);
+    return this.on(ServerHooks.ImpersonationError, callback);
   }
 
-  /**
-   * @description Login the user with his password.
-   * @param {Object} user - User to login.
-   * @param {PasswordType} password - Password of user to login.
-   * @param {string} ip - User ip.
-   * @param {string} userAgent - User user agent.
-   * @returns {Promise<Object>} - LoginReturnType.
-   */
-  public async loginWithPassword(
-    user: PasswordLoginUserType,
-    password: PasswordType,
-    ip: string,
-    userAgent: string
+  public async loginWithService(
+    serviceName: string,
+    params,
+    infos: ConnectionInformationsType
   ): Promise<LoginReturnType> {
-    try {
-      if (!user || !password) {
-        throw new AccountsError(
-          'Unrecognized options for login request',
-          user,
-          400
-        );
-      }
-      if ((!isString(user) && !isPlainObject(user)) || !isString(password)) {
-        throw new AccountsError('Match failed', user, 400);
-      }
-
-      let foundUser;
-
-      if (this._options.passwordAuthenticator) {
-        foundUser = await this._externalPasswordAuthenticator(
-          this._options.passwordAuthenticator,
-          user,
-          password
-        );
-      } else {
-        foundUser = await this._defaultPasswordAuthenticator(user, password);
-      }
-
-      if (!foundUser) {
-        throw new AccountsError('User not found', user, 403);
-      }
-
-      const loginResult = await this.loginWithUser(foundUser, ip, userAgent);
-
-      this.hooks.emit(ServerHooks.LoginSuccess, loginResult);
-
-      return loginResult;
-    } catch (error) {
-      this.hooks.emit(ServerHooks.LoginError, error);
-
-      throw error;
+    if (!this.services[serviceName]) {
+      throw new Error(
+        `No service with the name ${serviceName} was registered.`
+      );
     }
-  }
-
-  public async _externalPasswordAuthenticator(
-    authFn: PasswordAuthenticator,
-    user: PasswordLoginUserType,
-    password: PasswordType
-  ): Promise<any> {
-    return authFn(user, password);
+    const user: UserObjectType = await this.services[serviceName].authenticate(
+      params
+    );
+    if (!user) {
+      throw new Error(
+        `Service ${serviceName} was not able to authenticate user`
+      );
+    }
+    return this.loginWithUser(user, infos);
   }
 
   /**
@@ -229,85 +174,30 @@ export class AccountsServer {
    * @param {string} userAgent - User's client agent.
    * @returns {Promise<LoginReturnType>} - Session tokens and user object.
    */
-  // eslint-disable-next-line max-len
   public async loginWithUser(
     user: UserObjectType,
-    ip?: string,
-    userAgent?: string
+    infos: ConnectionInformationsType
   ): Promise<LoginReturnType> {
-    const sessionId = await this.db.createSession(user.id, ip, userAgent);
-    const { accessToken, refreshToken } = this.createTokens(sessionId);
+    const { ip, userAgent } = infos;
 
-    const loginResult = {
-      sessionId,
-      user: this._sanitizeUser(user),
-      tokens: {
-        refreshToken,
-        accessToken,
-      },
-    };
-
-    return loginResult;
-  }
-
-  /**
-   * @description Create a new user.
-   * @param {Object} user - The user object.
-   * @returns {Promise<string>} - Return the id of user created.
-   */
-  public async createUser(user: CreateUserType): Promise<string> {
     try {
-      if (
-        !validators.validateUsername(user.username) &&
-        !validators.validateEmail(user.email)
-      ) {
-        throw new AccountsError('Username or Email is required', {
-          username: user && user.username,
-          email: user && user.email,
-        });
-      }
+      const sessionId = await this.db.createSession(user.id, ip, userAgent);
+      const { accessToken, refreshToken } = this.createTokens(sessionId);
 
-      if (user.username && (await this.db.findUserByUsername(user.username))) {
-        throw new AccountsError('Username already exists', {
-          username: user.username,
-        });
-      }
-
-      if (user.email && (await this.db.findUserByEmail(user.email))) {
-        throw new AccountsError('Email already exists', { email: user.email });
-      }
-
-      let password;
-      if (user.password) {
-        password = await this._hashAndBcryptPassword(user.password);
-      }
-      const { validateNewUser } = this.options();
-
-      const proposedUserObject = {
-        username: user.username,
-        email: user.email && user.email.toLowerCase(),
-        password,
-        profile: user.profile,
+      const loginResult = {
+        sessionId,
+        user: this.sanitizeUser(user),
+        tokens: {
+          refreshToken,
+          accessToken,
+        },
       };
 
-      if (isFunction(validateNewUser)) {
-        await validateNewUser(proposedUserObject);
-      }
-
-      const userId: string = await this.db.createUser(proposedUserObject);
-      this.hooks.emit(
-        ServerHooks.CreateUserSuccess,
-        userId,
-        proposedUserObject
-      );
-
-      // TODO: Send enrollment email if flag is on
-
-      return userId;
-    } catch (error) {
-      this.hooks.emit(ServerHooks.CreateUserError, error);
-
-      throw error;
+      this.hooks.emit(ServerHooks.LoginSuccess, user);
+      return loginResult;
+    } catch (e) {
+      this.hooks.emit(ServerHooks.LoginError, e);
+      throw e;
     }
   }
 
@@ -331,7 +221,7 @@ export class AccountsServer {
       }
 
       try {
-        jwt.verify(accessToken, this._options.tokenSecret);
+        jwt.verify(accessToken, this.options.tokenSecret);
       } catch (err) {
         throw new AccountsError('Access token is not valid');
       }
@@ -348,16 +238,16 @@ export class AccountsServer {
         throw new AccountsError('User not found');
       }
 
-      const impersonatedUser = await this.findUserByUsername(username);
+      const impersonatedUser = await this.db.findUserByUsername(username);
       if (!impersonatedUser) {
         throw new AccountsError(`User ${username} not found`);
       }
 
-      if (!this._options.impersonationAuthorize) {
+      if (!this.options.impersonationAuthorize) {
         return { authorized: false };
       }
 
-      const isAuthorized = await this._options.impersonationAuthorize(
+      const isAuthorized = await this.options.impersonationAuthorize(
         user,
         impersonatedUser
       );
@@ -376,7 +266,7 @@ export class AccountsServer {
       const impersonationResult = {
         authorized: true,
         tokens: impersonationTokens,
-        user: this._sanitizeUser(impersonatedUser),
+        user: this.sanitizeUser(impersonatedUser),
       };
 
       this.hooks.emit(
@@ -414,10 +304,10 @@ export class AccountsServer {
 
       let sessionId;
       try {
-        jwt.verify(refreshToken, this._options.tokenSecret);
+        jwt.verify(refreshToken, this.options.tokenSecret);
         const decodedAccessToken: any = jwt.verify(
           accessToken,
-          this._options.tokenSecret,
+          this.options.tokenSecret,
           {
             ignoreExpiration: true,
           }
@@ -442,7 +332,7 @@ export class AccountsServer {
 
         const result = {
           sessionId,
-          user: this._sanitizeUser(user),
+          user: this.sanitizeUser(user),
           tokens,
         };
 
@@ -450,7 +340,6 @@ export class AccountsServer {
 
         return result;
       } else {
-        // eslint-disable-line no-else-return
         throw new AccountsError('Session is no longer valid', {
           id: session.userId,
         });
@@ -472,10 +361,7 @@ export class AccountsServer {
     sessionId: string,
     isImpersonated: boolean = false
   ): TokensType {
-    const {
-      tokenSecret = config.tokenSecret,
-      tokenConfigs = config.tokenConfigs,
-    } = this._options;
+    const { tokenSecret, tokenConfigs } = this.options;
     const accessToken = generateAccessToken({
       data: {
         sessionId,
@@ -512,12 +398,11 @@ export class AccountsServer {
         await this.db.invalidateSession(session.sessionId);
         this.hooks.emit(
           ServerHooks.LogoutSuccess,
-          this._sanitizeUser(user),
+          this.sanitizeUser(user),
           session,
           accessToken
         );
       } else {
-        // eslint-disable-line no-else-return
         throw new AccountsError('Session is no longer valid', {
           id: session.userId,
         });
@@ -542,9 +427,9 @@ export class AccountsServer {
           throw new AccountsError('User not found', { id: session.userId });
         }
 
-        if (this._options.resumeSessionValidator) {
+        if (this.options.resumeSessionValidator) {
           try {
-            await this._options.resumeSessionValidator(user, session);
+            await this.options.resumeSessionValidator(user, session);
           } catch (e) {
             throw new AccountsError(e, { id: session.userId }, 403);
           }
@@ -552,7 +437,7 @@ export class AccountsServer {
 
         this.hooks.emit(ServerHooks.ResumeSessionSuccess, user, accessToken);
 
-        return this._sanitizeUser(user);
+        return this.sanitizeUser(user);
       }
 
       this.hooks.emit(
@@ -579,7 +464,7 @@ export class AccountsServer {
     try {
       const decodedAccessToken: any = jwt.verify(
         accessToken,
-        this._options.tokenSecret
+        this.options.tokenSecret
       );
       sessionId = decodedAccessToken.data.sessionId;
     } catch (err) {
@@ -595,151 +480,12 @@ export class AccountsServer {
   }
 
   /**
-   * @description Find a user by one of his emails.
-   * @param {string} email - User email.
-   * @returns {Promise<Object>} - Return a user or null if not found.
-   */
-  public findUserByEmail(email: string): Promise<UserObjectType> {
-    return this.db.findUserByEmail(email);
-  }
-
-  /**
-   * @description Find a user by his username.
-   * @param {string} username - User username.
-   * @returns {Promise<Object>} - Return a user or null if not found.
-   */
-  public findUserByUsername(username: string): Promise<UserObjectType> {
-    return this.db.findUserByUsername(username);
-  }
-
-  /**
    * @description Find a user by his id.
    * @param {string} userId - User id.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
   public findUserById(userId: string): Promise<UserObjectType> {
     return this.db.findUserById(userId);
-  }
-
-  /**
-   * @description Add an email address for a user.
-   * Use this instead of directly updating the database.
-   * @param {string} userId - User id.
-   * @param {string} newEmail - A new email address for the user.
-   * @param {boolean} [verified] - Whether the new email address should be marked as verified.
-   * Defaults to false.
-   * @returns {Promise<void>} - Return a Promise.
-   */
-  public addEmail(
-    userId: string,
-    newEmail: string,
-    verified: boolean
-  ): Promise<void> {
-    return this.db.addEmail(userId, newEmail, verified);
-  }
-
-  /**
-   * @description Remove an email address for a user.
-   * Use this instead of directly updating the database.
-   * @param {string} userId - User id.
-   * @param {string} email - The email address to remove.
-   * @returns {Promise<void>} - Return a Promise.
-   */
-  public removeEmail(userId: string, email: string): Promise<void> {
-    return this.db.removeEmail(userId, email);
-  }
-
-  /**
-   * @description Marks the user's email address as verified.
-   * @param {string} token - The token retrieved from the verification URL.
-   * @returns {Promise<void>} - Return a Promise.
-   */
-  public async verifyEmail(token: string): Promise<void> {
-    const user = await this.db.findUserByEmailVerificationToken(token);
-    if (!user) {
-      throw new AccountsError('Verify email link expired');
-    }
-
-    const verificationTokens: TokenRecord[] = get(
-      user,
-      ['services', 'email', 'verificationTokens'],
-      []
-    );
-    const tokenRecord = find(
-      verificationTokens,
-      (t: TokenRecord) => t.token === token
-    );
-    if (!tokenRecord) {
-      throw new AccountsError('Verify email link expired');
-    }
-    // TODO check time for expiry date
-    const emailRecord = find(
-      user.emails,
-      (e: EmailRecord) => e.address === tokenRecord.address
-    );
-    if (!emailRecord) {
-      throw new AccountsError('Verify email link is for unknown address');
-    }
-    await this.db.verifyEmail(user.id, emailRecord.address);
-  }
-
-  /**
-   * @description Reset the password for a user using a token received in email.
-   * @param {string} token - The token retrieved from the reset password URL.
-   * @param {string} newPassword - A new password for the user.
-   * @returns {Promise<void>} - Return a Promise.
-   */
-  public async resetPassword(
-    token: string,
-    newPassword: PasswordType
-  ): Promise<void> {
-    const user = await this.db.findUserByResetPasswordToken(token);
-    if (!user) {
-      throw new AccountsError('Reset password link expired');
-    }
-
-    // TODO move this getter into a password service module
-    const resetTokens = get(user, ['services', 'password', 'reset'], []);
-    const asArray = isArray(resetTokens) ? resetTokens : [resetTokens];
-    const resetTokenRecord = find(asArray, t => t.token === token);
-
-    if (this._isTokenExpired(token, resetTokenRecord)) {
-      throw new AccountsError('Reset password link expired');
-    }
-
-    const emails = user.emails || [];
-    const tokenAddress = resetTokenRecord.email || resetTokenRecord.address;
-
-    if (
-      !includes(
-        emails.map((email: EmailRecord) => email.address),
-        tokenAddress
-      )
-    ) {
-      throw new AccountsError('Token has invalid email address');
-    }
-
-    const password = await this._hashAndBcryptPassword(newPassword);
-    // Change the user password and remove the old token
-    await this.db.setResetPasssword(
-      user.id,
-      resetTokenRecord.address,
-      password,
-      token
-    );
-    // Changing the password should invalidate existing sessions
-    this.db.invalidateAllSessions(user.id);
-  }
-
-  /**
-   * @description Change the password for a user.
-   * @param {string} userId - User id.
-   * @param {string} newPassword - A new password for the user.
-   * @returns {Promise<void>} - Return a Promise.
-   */
-  public async setPassword(userId: string, newPassword: string): Promise<void> {
-    const password = await bcryptPassword(newPassword);
-    return this.db.setPasssword(userId, password);
   }
 
   /**
@@ -771,123 +517,20 @@ export class AccountsServer {
     return this.db.setProfile(userId, { ...user.profile, ...profile });
   }
 
-  /**
-   * @description Send an email with a link the user can use verify their email address.
-   * @param {string} [address] - Which address of the user's to send the email to.
-   * This address must be in the user's emails list.
-   * Defaults to the first unverified email in the list.
-   * @returns {Promise<void>} - Return a Promise.
-   */
-  public async sendVerificationEmail(address: string): Promise<void> {
-    const user = await this.findUserByEmail(address);
-    if (!user) {
-      throw new AccountsError('User not found', { email: address });
-    }
-    // If no address provided find the first unverified email
-    if (!address) {
-      const email = find(user.emails, e => !e.verified);
-      address = email && email.address;
-    }
-    // Make sure the address is valid
-    const emails = user.emails || [];
-    if (!address || !includes(emails.map(email => email.address), address)) {
-      throw new AccountsError('No such email address for user');
-    }
-    const token = generateRandomToken();
-    await this.db.addEmailVerificationToken(user.id, address, token);
-
-    const resetPasswordMail = this._prepareMail(
-      address,
-      token,
-      this._sanitizeUser(user),
-      'verify-email',
-      this.emailTemplates.verifyEmail,
-      this.emailTemplates.from
-    );
-
-    await this.email.sendMail(resetPasswordMail);
-  }
-
-  /**
-   * @description Send an email with a link the user can use to reset their password.
-   * @param {string} [address] - Which address of the user's to send the email to.
-   * This address must be in the user's emails list.
-   * Defaults to the first email in the list.
-   * @returns {Promise<void>} - Return a Promise.
-   */
-  public async sendResetPasswordEmail(address: string): Promise<void> {
-    const user = await this.findUserByEmail(address);
-    if (!user) {
-      throw new AccountsError('User not found', { email: address });
-    }
-    address = this._getFirstUserEmail(user, address); // eslint-disable-line no-param-reassign
-    const token = generateRandomToken();
-    await this.db.addResetPasswordToken(user.id, address, token);
-
-    const resetPasswordMail = this._prepareMail(
-      address,
-      token,
-      this._sanitizeUser(user),
-      'reset-password',
-      this.emailTemplates.resetPassword,
-      this.emailTemplates.from
-    );
-
-    await this.email.sendMail(resetPasswordMail);
-  }
-
-  /**
-   * @description Send an email with a link the user can use to set their initial password.
-   * @param {string} [address] - Which address of the user's to send the email to.
-   * This address must be in the user's emails list.
-   * Defaults to the first email in the list.
-   * @returns {Promise<void>} - Return a Promise.
-   */
-  public async sendEnrollmentEmail(address: string): Promise<void> {
-    const user = await this.findUserByEmail(address);
-    if (!user) {
-      throw new AccountsError('User not found', { email: address });
-    }
-    address = this._getFirstUserEmail(user, address); // eslint-disable-line no-param-reassign
-    const token = generateRandomToken();
-    await this.db.addResetPasswordToken(user.id, address, token, 'enroll');
-
-    const enrollmentMail = this._prepareMail(
-      address,
-      token,
-      this._sanitizeUser(user),
-      'enroll-account',
-      this.emailTemplates.enrollAccount,
-      this.emailTemplates.from
-    );
-
-    await this.email.sendMail(enrollmentMail);
-  }
-
-  private _on(eventName: string, callback: HookListener): RemoveListnerHandle {
+  public on(eventName: string, callback: HookListener): RemoveListnerHandle {
     this.hooks.on(eventName, callback);
 
     return () => this.hooks.removeListener(eventName, callback);
   }
 
-  private _isTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
+  public isTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
     return (
       !tokenRecord ||
-      Number(tokenRecord.when) + this._options.emailTokensExpiry < Date.now()
+      Number(tokenRecord.when) + this.options.emailTokensExpiry < Date.now()
     );
   }
 
-  private _internalUserSanitizer(user: UserObjectType): UserObjectType {
-    return omit(user, ['services']);
-  }
-
-  private _sanitizeUser(user: UserObjectType): UserObjectType {
-    const { userObjectSanitizer } = this.options();
-
-    return userObjectSanitizer(this._internalUserSanitizer(user), omit, pick);
-  }
-
-  private _prepareMail(
+  public prepareMail(
     to: string,
     token: string,
     user: UserObjectType,
@@ -895,8 +538,8 @@ export class AccountsServer {
     emailTemplate: EmailTemplateType,
     from: string
   ): any {
-    if (this._options.prepareMail) {
-      return this._options.prepareMail(
+    if (this.options.prepareMail) {
+      return this.options.prepareMail(
         to,
         token,
         user,
@@ -905,7 +548,7 @@ export class AccountsServer {
         from
       );
     }
-    return this._defaultPrepareEmail(
+    return this.defaultPrepareEmail(
       to,
       token,
       user,
@@ -915,7 +558,17 @@ export class AccountsServer {
     );
   }
 
-  private _defaultPrepareEmail(
+  public sanitizeUser(user: UserObjectType): UserObjectType {
+    const { userObjectSanitizer } = this.options;
+
+    return userObjectSanitizer(this.internalUserSanitizer(user), omit, pick);
+  }
+
+  private internalUserSanitizer(user: UserObjectType): UserObjectType {
+    return omit(user, ['services']);
+  }
+
+  private defaultPrepareEmail(
     to: string,
     token: string,
     user: UserObjectType,
@@ -923,7 +576,7 @@ export class AccountsServer {
     emailTemplate: EmailTemplateType,
     from: string
   ): object {
-    const tokenizedUrl = this._defaultCreateTokenizedUrl(pathFragment, token);
+    const tokenizedUrl = this.defaultCreateTokenizedUrl(pathFragment, token);
     return {
       from: emailTemplate.from || from,
       to,
@@ -932,93 +585,13 @@ export class AccountsServer {
     };
   }
 
-  private _defaultCreateTokenizedUrl(
+  private defaultCreateTokenizedUrl(
     pathFragment: string,
     token: string
   ): string {
-    const siteUrl = this._options.siteUrl || config.siteUrl;
+    const siteUrl = this.options.siteUrl;
     return `${siteUrl}/${pathFragment}/${token}`;
-  }
-
-  private _getFirstUserEmail(user: UserObjectType, address: string): string {
-    // Pick the first email if we weren't passed an email
-    if (!address && user.emails && user.emails[0]) {
-      address = user.emails[0].address; // eslint-disable-line no-param-reassign
-    }
-    // Make sure the address is valid
-    const emails = user.emails || [];
-    if (
-      !address ||
-      !includes(emails.map((email: EmailRecord) => email.address), address)
-    ) {
-      throw new AccountsError('No such email address for user');
-    }
-    return address;
-  }
-
-  private async _hashAndBcryptPassword(
-    password: PasswordType
-  ): Promise<string> {
-    const hashAlgorithm = this._options.passwordHashAlgorithm;
-    const hashedPassword = hashAlgorithm
-      ? hashPassword(password, hashAlgorithm)
-      : password;
-    return bcryptPassword(hashedPassword);
-  }
-
-  private _validateLoginWithField(
-    fieldName: string,
-    user: PasswordLoginUserType
-  ) {
-    const allowedFields = this._options.allowedLoginFields || [];
-    const isAllowed = allowedFields.includes(fieldName);
-
-    if (!isAllowed) {
-      throw new AccountsError(`Login with ${fieldName} is not allowed!`, user);
-    }
-  }
-
-  private async _defaultPasswordAuthenticator(
-    user: PasswordLoginUserType,
-    password: PasswordType
-  ): Promise<any> {
-    const { username, email, id } = isString(user)
-      ? toUsernameAndEmail({ user: user as string })
-      : toUsernameAndEmail({ ...user as object });
-
-    let foundUser;
-
-    if (id) {
-      this._validateLoginWithField('id', user);
-      foundUser = await this.db.findUserById(id);
-    } else if (username) {
-      this._validateLoginWithField('username', user);
-      foundUser = await this.db.findUserByUsername(username);
-    } else if (email) {
-      this._validateLoginWithField('email', user);
-      foundUser = await this.db.findUserByEmail(email);
-    }
-
-    if (!foundUser) {
-      throw new AccountsError('User not found', user, 403);
-    }
-    const hash = await this.db.findPasswordHash(foundUser.id);
-    if (!hash) {
-      throw new AccountsError('User has no password set', user, 403);
-    }
-
-    const hashAlgorithm = this._options.passwordHashAlgorithm;
-    const pass = hashAlgorithm
-      ? hashPassword(password, hashAlgorithm)
-      : password;
-    const isPasswordValid = await verifyPassword(pass, hash);
-
-    if (!isPasswordValid) {
-      throw new AccountsError('Incorrect password', user, 403);
-    }
-
-    return foundUser;
   }
 }
 
-export default new AccountsServer();
+export default AccountsServer;

@@ -1,13 +1,13 @@
-import { PasswordLoginUserType } from './types';
+import { LoginUserIdentityType } from './types';
 
 export class AccountsError extends Error {
-  public loginInfo: PasswordLoginUserType;
+  public loginInfo: LoginUserIdentityType;
   public errorCode: string | number;
   public epochTime: number;
 
   constructor(
     message: string,
-    loginInfo?: PasswordLoginUserType,
+    loginInfo?: LoginUserIdentityType,
     errorCode?: string | number
   ) {
     super(message);

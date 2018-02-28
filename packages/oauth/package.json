@@ -1,0 +1,37 @@
+{
+  "name": "@accounts/oauth",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "start": "tsc --watch",
+    "compile": "tsc",
+    "testonly": "jest",
+    "test:watch": "jest --watch",
+    "coverage": "jest --coverage",
+    "prepublishOnly": "yarn compile"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "mapCoverage": true
+  },
+  "dependencies": {
+    "@accounts/common": "^0.1.0",
+    "request-promise": "^4.2.1"
+  },
+  "devDependencies": {
+    "@accounts/server": "^0.1.0"
+  },
+  "peerDependencies": {
+    "@accounts/common": "^0.1.0",
+    "@accounts/server": "^0.1.0"
+  }
+}
