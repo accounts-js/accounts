@@ -33,9 +33,9 @@
   dependencies:
     "@types/node" "*"
 
-"@types/jest@21.1.5":
-  version "21.1.5"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-21.1.5.tgz#3db93d069d12602ca115d3604550e15131d8eb7a"
+"@types/jest@21.1.10":
+  version "21.1.10"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-21.1.10.tgz#dcacb5217ddf997a090cc822bba219b4b2fd7984"
 
 "@types/lodash@4.14.104":
   version "4.14.104"
