@@ -3,12 +3,10 @@
   "version": "0.1.0",
   "description": "MongoDB adaptor for accounts",
   "main": "lib/index.js",
-  "jsnext:main": "lib-es6/index.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
     "start": "tsc --watch",
-    "compile": "npm run compile:es6 && npm run compile:umd",
-    "compile:es6": "tsc",
-    "compile:umd": "tsc",
+    "compile": "tsc",
     "test": "yarn lint && yarn coverage && yarn prettier-diff",
     "testonly": "jest",
     "lint": "tslint -c tslint.json '{src,__tests__}/**/*.ts'",
@@ -43,9 +41,11 @@
   },
   "homepage": "https://github.com/js-accounts/mongo",
   "devDependencies": {
-    "@accounts/server": "^0.0.17",
+    "@accounts/common": "^0.1.0-alpha.04203cca",
+    "@accounts/server": "^0.1.0-alpha.04203cca",
     "@accounts/tslint-config-accounts": "^0.0.4",
     "@types/jest": "^21.1.5",
+    "@types/lodash": "^4.14.104",
     "@types/mongodb": "^2.2.15",
     "@types/node": "^8.0.47",
     "codecov": "^3.0.0",
@@ -59,7 +59,8 @@
     "typescript": "^2.6.1"
   },
   "peerDependencies": {
-    "@accounts/server": "^0.0.10"
+    "@accounts/common": "^0.1.0",
+    "@accounts/server": "^0.1.0"
   },
   "dependencies": {
     "lodash": "^4.17.4",

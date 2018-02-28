@@ -232,7 +232,6 @@ describe('Mongo', () => {
       const ret = await mongoWithOptions.findUserByUsername(
         user.username.toUpperCase()
       );
-      await delay(10);
       expect(ret).toBeTruthy();
       expect(ret._id).toBeTruthy();
       expect(ret.id).toBeTruthy();
@@ -241,20 +240,17 @@ describe('Mongo', () => {
     it('should return null for incomplete matching user when using insensitive', async () => {
       const mongoWithOptions = new Mongo(db, { caseSensitiveUserName: false });
       const ret = await mongoWithOptions.findUserByUsername('john');
-      await delay(10);
       expect(ret).not.toBeTruthy();
     });
 
     it('should return null when using regex wildcards when using insensitive', async () => {
       const mongoWithOptions = new Mongo(db, { caseSensitiveUserName: false });
       const ret = await mongoWithOptions.findUserByUsername('*');
-      await delay(10);
       expect(ret).not.toBeTruthy();
     });
 
     it('should return user', async () => {
       const ret = await mongo.findUserByUsername(user.username);
-      await delay(10);
       expect(ret).toBeTruthy();
       expect(ret._id).toBeTruthy();
       expect(ret.id).toBeTruthy();
@@ -287,7 +283,24 @@ describe('Mongo', () => {
       const userId = await mongo.createUser(user);
       await mongo.addResetPasswordToken(userId, 'john@doe.com', 'token');
       const ret = await mongo.findUserByResetPasswordToken('token');
-      await delay(10);
+      expect(ret).toBeTruthy();
+      expect(ret._id).toBeTruthy();
+      expect(ret.id).toBeTruthy();
+    });
+  });
+
+  describe('findUserByServiceId', () => {
+    it('should return null for not found user', async () => {
+      const ret = await mongo.findUserByServiceId('facebook', 'invalid');
+      expect(ret).not.toBeTruthy();
+    });
+
+    it('should return user', async () => {
+      const userId = await mongo.createUser(user);
+      let ret = await mongo.findUserByServiceId('facebook', '1');
+      expect(ret).not.toBeTruthy();
+      await mongo.setService(userId, 'facebook', { id: '1' });
+      ret = await mongo.findUserByServiceId('facebook', '1');
       expect(ret).toBeTruthy();
       expect(ret._id).toBeTruthy();
       expect(ret.id).toBeTruthy();
@@ -508,6 +521,26 @@ describe('Mongo', () => {
       await delay(10);
       const retUser = await mongo.setProfile(userId, { username: 'toto' });
       expect(retUser.username).toEqual('toto');
+    });
+  });
+
+  describe('setService', () => {
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(db, {
+        convertUserIdToMongoObjectId: false,
+      });
+      await mongoOptions.setService('toto', 'twitter', { id: '1' });
+    });
+
+    it('should set service', async () => {
+      const userId = await mongo.createUser(user);
+      let ret = await mongo.findUserByServiceId('google', '1');
+      expect(ret).not.toBeTruthy();
+      await mongo.setService(userId, 'google', { id: '1' });
+      ret = await mongo.findUserByServiceId('google', '1');
+      expect(ret).toBeTruthy();
+      expect(ret._id).toBeTruthy();
+      expect(ret.id).toBeTruthy();
     });
   });
 

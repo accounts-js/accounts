@@ -1,6 +1,7 @@
 import { ObjectID } from 'mongodb';
 import { get } from 'lodash';
-import { CreateUserType, UserObjectType, SessionType } from '@accounts/server';
+import { CreateUserType, UserObjectType, SessionType } from '@accounts/common';
+import { DBInterface } from '@accounts/server';
 
 export interface MongoOptionsType {
   // The users collection name, default 'users'.
@@ -62,7 +63,7 @@ const defaultOptions = {
   dateProvider: (date?: Date) => (date ? date.getTime() : Date.now()),
 };
 
-export default class Mongo {
+export default class Mongo implements DBInterface {
   // Options of Mongo class
   private options: MongoOptionsType;
   // Db object
@@ -189,6 +190,19 @@ export default class Mongo {
     return user;
   }
 
+  public async findUserByServiceId(
+    serviceName: string,
+    serviceId: string
+  ): Promise<UserObjectType | null> {
+    const user = await this.collection.findOne({
+      [`services.${serviceName}.id`]: serviceId,
+    });
+    if (user) {
+      user.id = user._id;
+    }
+    return user;
+  }
+
   public async addEmail(
     userId: string,
     newEmail: string,
@@ -306,6 +320,25 @@ export default class Mongo {
       }
     );
     return profile;
+  }
+
+  public async setService(
+    userId: string,
+    serviceName: string,
+    service: object
+  ): Promise<void> {
+    const id = this.options.convertUserIdToMongoObjectId
+      ? toMongoID(userId)
+      : userId;
+    await this.collection.update(
+      { _id: id },
+      {
+        $set: {
+          [`services.${serviceName}`]: service,
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+        },
+      }
+    );
   }
 
   public async createSession(
