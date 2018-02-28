@@ -20,9 +20,9 @@
     jwt-decode "^2.1.0"
     lodash "^4.16.4"
 
-"@accounts/tslint-config-accounts@0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@accounts/tslint-config-accounts/-/tslint-config-accounts-0.0.4.tgz#f7ac27d290a14bb0351ca30fbc743994a4db346b"
+"@accounts/tslint-config-accounts@0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@accounts/tslint-config-accounts/-/tslint-config-accounts-0.0.6.tgz#d2ab1480f0aff7c911b2bea9fb924d7f04328931"
   dependencies:
     tslint-config-prettier "^1.1.0"
     tslint-eslint-rules "^4.1.1"
