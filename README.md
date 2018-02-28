@@ -2,7 +2,12 @@
 
 *Fullstack authentication and accounts-management for GraphQL and REST*
 
-[![Backers on Open Collective](https://opencollective.com/accounts-js/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/accounts-js/sponsors/badge.svg)](#sponsors) [![npm](https://img.shields.io/npm/v/@accounts/server.svg?maxAge=2592000)](https://www.npmjs.com/package/@accounts/accounts) [![CircleCI](https://circleci.com/gh/accounts-js/accounts.svg?style=svg)](https://circleci.com/gh/accounts-js/accounts) [![Coverage Status](https://coveralls.io/repos/github/accounts-js/accounts/badge.svg?branch=master)](https://coveralls.io/github/accounts-js/accounts?branch=master) ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
+[![Backers on Open Collective](https://opencollective.com/accounts-js/backers/badge.svg)](#backers)
+[![Sponsors on Open Collective](https://opencollective.com/accounts-js/sponsors/badge.svg)](#sponsors)
+[![npm](https://img.shields.io/npm/v/@accounts/server.svg?maxAge=2592000)](https://www.npmjs.com/package/@accounts/accounts)
+[![CircleCI](https://circleci.com/gh/accounts-js/accounts.svg?style=svg)](https://circleci.com/gh/accounts-js/accounts)
+[![codecov](https://codecov.io/gh/accounts-js/accounts/branch/master/graph/badge.svg)](https://codecov.io/gh/accounts-js/accounts)
+![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 ## Community
 
