@@ -39,7 +39,7 @@
     "@types/jest": "21.1.10",
     "@types/node": "8.0.47",
     "codecov": "3.0.0",
-    "flow-bin": "0.41.0",
+    "flow-bin": "0.66.0",
     "jest": "21.2.1",
     "lerna": "2.9.0",
     "opencollective": "1.0.3",
