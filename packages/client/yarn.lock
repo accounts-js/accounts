@@ -1395,9 +1395,9 @@ jsonify@~0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
 
-jsonwebtoken@7.4.1:
-  version "7.4.1"
-  resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-7.4.1.tgz#7ca324f5215f8be039cd35a6c45bb8cb74a448fb"
+jsonwebtoken@7.4.3:
+  version "7.4.3"
+  resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-7.4.3.tgz#77f5021de058b605a1783fa1283e99812e645638"
   dependencies:
     joi "^6.10.1"
     jws "^3.1.4"
