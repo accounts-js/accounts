@@ -49,8 +49,8 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
-    "localstorage-polyfill": "^1.0.1",
-    "regenerator-runtime": "^0.9.6"
+    "localstorage-polyfill": "1.0.1",
+    "regenerator-runtime": "0.9.6"
   },
   "dependencies": {
     "lodash": "^4.16.4"
