@@ -21,6 +21,9 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
+  "renovate": {
+    "extends": ["config:base"]
+  },
   "files": ["src", "lib"],
   "jest": {
     "transform": {
