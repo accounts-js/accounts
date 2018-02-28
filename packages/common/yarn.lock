@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-localstorage-polyfill@^1.0.1:
+localstorage-polyfill@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/localstorage-polyfill/-/localstorage-polyfill-1.0.1.tgz#4b3083d4bc51d23b4158537e66816137413fd31a"
 
@@ -10,6 +10,6 @@ lodash@^4.16.4:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
-regenerator-runtime@^0.9.6:
+regenerator-runtime@0.9.6:
   version "0.9.6"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.9.6.tgz#d33eb95d0d2001a4be39659707c51b0cb71ce029"
