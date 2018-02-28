@@ -2,21 +2,20 @@
 # yarn lockfile v1
 
 
-"@accounts/common@^0.0.16":
-  version "0.0.16"
-  resolved "https://registry.yarnpkg.com/@accounts/common/-/common-0.0.16.tgz#41f6f6a16314c49b0b7342931b71c39146fd7255"
+"@accounts/common@^0.1.0-alpha.04203cca":
+  version "0.1.0-alpha.04203cca"
+  resolved "https://registry.yarnpkg.com/@accounts/common/-/common-0.1.0-alpha.04203cca.tgz#916199792e47ca5afcb6ebe2f513ac226096e10b"
   dependencies:
     lodash "^4.16.4"
 
-"@accounts/server@^0.0.17":
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/@accounts/server/-/server-0.0.17.tgz#145b901ea7758e4072616ed62d58f0a1e24f020e"
+"@accounts/server@^0.1.0-alpha.04203cca":
+  version "0.1.0-alpha.04203cca"
+  resolved "https://registry.yarnpkg.com/@accounts/server/-/server-0.1.0-alpha.04203cca.tgz#040fbc5d216512cf1743c3e5114933e1fb8853ea"
   dependencies:
-    "@accounts/common" "^0.0.16"
+    "@accounts/common" "^0.1.0-alpha.04203cca"
     babel-polyfill "^6.23.0"
     bcryptjs "^2.4.0"
     crypto "^0.0.3"
-    emailjs "^1.0.8"
     jsonwebtoken "^7.2.1"
     jwt-decode "^2.1.0"
     lodash "^4.16.4"
@@ -37,6 +36,10 @@
 "@types/jest@^21.1.5":
   version "21.1.5"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-21.1.5.tgz#3db93d069d12602ca115d3604550e15131d8eb7a"
+
+"@types/lodash@^4.14.104":
+  version "4.14.104"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.104.tgz#53ee2357fa2e6e68379341d92eb2ecea4b11bb80"
 
 "@types/mongodb@^2.2.15":
   version "2.2.15"
@@ -70,14 +73,6 @@ acorn-globals@^3.1.0:
 acorn@^4.0.4:
   version "4.0.13"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-4.0.13.tgz#105495ae5361d697bd195c825192e1ad7f253787"
-
-addressparser@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/addressparser/-/addressparser-0.3.2.tgz#59873f35e8fcf6c7361c10239261d76e15348bb2"
-
-addressparser@~0.2.0:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/addressparser/-/addressparser-0.2.1.tgz#d11a5b2eeda04cfefebdf3196c10ae13db6cd607"
 
 ajv@^4.9.1:
   version "4.11.8"
@@ -521,10 +516,6 @@ buffer-shims@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/buffer-shims/-/buffer-shims-1.0.0.tgz#9978ce317388c649ad8793028c3477ef044a8b51"
 
-bufferjs@=1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/bufferjs/-/bufferjs-1.1.0.tgz#095ffa39c5e6b40a2178a1169c9effc584a73201"
-
 builtin-modules@^1.0.0, builtin-modules@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/builtin-modules/-/builtin-modules-1.1.1.tgz#270f076c5a72c02f5b65a47df94c5fe3a278892f"
@@ -786,23 +777,6 @@ ecdsa-sig-formatter@1.0.9:
   dependencies:
     base64url "^2.0.0"
     safe-buffer "^5.0.1"
-
-emailjs@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/emailjs/-/emailjs-1.0.8.tgz#d4240db7670dc78aff97352092d8460edc130f66"
-  dependencies:
-    addressparser "^0.3.2"
-    mimelib "0.2.14"
-    moment "= 2.11.2"
-    starttls "1.0.1"
-  optionalDependencies:
-    bufferjs "=1.1.0"
-
-encoding@~0.1:
-  version "0.1.12"
-  resolved "https://registry.yarnpkg.com/encoding/-/encoding-0.1.12.tgz#538b66f3ee62cd1ab51ec323829d1f9480c74beb"
-  dependencies:
-    iconv-lite "~0.4.13"
 
 errno@^0.1.4:
   version "0.1.4"
@@ -1202,7 +1176,7 @@ husky@^0.14.3:
     normalize-path "^1.0.0"
     strip-indent "^2.0.0"
 
-iconv-lite@0.4.13, iconv-lite@~0.4.13:
+iconv-lite@0.4.13:
   version "0.4.13"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.13.tgz#1f88aba4ab0b1508e8312acc39345f36e992e2f2"
 
@@ -1922,13 +1896,6 @@ mime-types@^2.1.12, mime-types@~2.1.7:
   dependencies:
     mime-db "~1.25.0"
 
-mimelib@0.2.14:
-  version "0.2.14"
-  resolved "https://registry.yarnpkg.com/mimelib/-/mimelib-0.2.14.tgz#2a1aa724bd190b85bd526e6317ab6106edfd6831"
-  dependencies:
-    addressparser "~0.2.0"
-    encoding "~0.1"
-
 mimic-fn@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-1.1.0.tgz#e667783d92e89dbd342818b5230b9d62a672ad18"
@@ -1963,7 +1930,7 @@ minimist@~0.0.1:
   dependencies:
     minimist "0.0.8"
 
-moment@2.x.x, "moment@= 2.11.2":
+moment@2.x.x:
   version "2.11.2"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.11.2.tgz#87968e5f95ac038c2e42ac959c75819cd3f52901"
 
@@ -2628,10 +2595,6 @@ sshpk@^1.7.0:
     jodid25519 "^1.0.0"
     jsbn "~0.1.0"
     tweetnacl "~0.14.0"
-
-starttls@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/starttls/-/starttls-1.0.1.tgz#e6081c25de6b178f5a75f8f271c1487449183b42"
 
 string-length@^2.0.0:
   version "2.0.0"
