@@ -44,54 +44,9 @@ npm i -S @accounts/redis
 npm i -S @accounts/sql
 ```
 
-## Example
+## Examples
 
-You can find a working example [here](https://github.com/accounts-js/examples).
-
-## Emails
-
-Configuration:
-```javascript
-AccountsServer.config({
- siteUrl: 'https://my-app.com',
- email: // a valid email config object passed to emailjs
- // https://github.com/eleith/emailjs#example-usage---text-only-emails
- // You can handle the send of the emails by providing an optional sendMail function
- // sendMail: ({ from, to, text, html }): Promise<void>
-});
-```
-
-To overwrite the email templates:
-```javascript
-AccountsServer.emailTemplates.from = 'my-app <no-reply@my-app.com>';
-AccountsServer.emailTemplates.verifyEmail.subject = (user) => `Verify your account email ${user.profile.lastname}`;
-AccountsServer.emailTemplates.verifyEmail.text = (user, url) => `To verify your account email please click on this link: ${url}`;
-```
-
-## Server Side Hooks
-
-`@accounts/server` also exposes hooks, that let you know about actions that happened by the client. every action has a hook for success and error.
-
-> Server side hooks does not effect the flow on the actions at all - it's just a notification.
-
-> You can subscribe to each hook multiple time!
-
-Pass for each hooks a callback function, and each hooks provides a different arguments.
-
-The following hooks are available:
-
-* `onLoginSuccess`: will call with the login result, an object with: `({ sessionId, user, tokens: { accessToken, refreshToken } })`
-* `onLoginError`: the callback will call with the `AccountsError` object.
-* `onLogoutSuccess`: will be caled with the logout result: `(user, session, accessToken)`
-* `onLogoutError`: the callback will call with the `AccountsError` object.
-* `onCreateUserSuccess`: will call with: `(userId, userObject)`
-* `onCreateUserError`: the callback will call with the `AccountsError` object.
-* `onResumeSessionSuccess`: will call with `(user, accessToken)`
-* `onResumeSessionError`: the callback will call with the `AccountsError` object.
-* `onRefreshTokensSuccess`: will call with: `({ sessionId, user, tokens: { accessToken, refreshToken } })`
-* `onRefreshTokensError`: the callback will call with the `AccountsError` object.
-* `onImpersonationSuccess`: will call with: `(originalUser, impersonationResult: { authorized, user, tokens: { refreshToken, accessToken }})`
-* `onImpersonationError`: the callback will call with the `AccountsError` object.
+You can find a working examples [here](https://github.com/accounts-js/examples).
 
 ## Contributors
 
