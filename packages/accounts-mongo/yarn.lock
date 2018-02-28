@@ -2,13 +2,13 @@
 # yarn lockfile v1
 
 
-"@accounts/common@^0.1.0-beta.0":
+"@accounts/common@0.1.0-beta.0", "@accounts/common@^0.1.0-beta.0":
   version "0.1.0-beta.0"
   resolved "https://registry.yarnpkg.com/@accounts/common/-/common-0.1.0-beta.0.tgz#04a9496c64bbd5ab22c2f6911cb621ba106421ca"
   dependencies:
     lodash "^4.16.4"
 
-"@accounts/server@^0.1.0-beta.0":
+"@accounts/server@0.1.0-beta.0":
   version "0.1.0-beta.0"
   resolved "https://registry.yarnpkg.com/@accounts/server/-/server-0.1.0-beta.0.tgz#d13e7c76dc7fdfeb9cbc8e622915101db3041ff1"
   dependencies:
@@ -20,7 +20,7 @@
     jwt-decode "^2.1.0"
     lodash "^4.16.4"
 
-"@accounts/tslint-config-accounts@^0.0.4":
+"@accounts/tslint-config-accounts@0.0.4":
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/@accounts/tslint-config-accounts/-/tslint-config-accounts-0.0.4.tgz#f7ac27d290a14bb0351ca30fbc743994a4db346b"
   dependencies:
@@ -33,15 +33,15 @@
   dependencies:
     "@types/node" "*"
 
-"@types/jest@^21.1.5":
+"@types/jest@21.1.5":
   version "21.1.5"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-21.1.5.tgz#3db93d069d12602ca115d3604550e15131d8eb7a"
 
-"@types/lodash@^4.14.104":
+"@types/lodash@4.14.104":
   version "4.14.104"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.104.tgz#53ee2357fa2e6e68379341d92eb2ecea4b11bb80"
 
-"@types/mongodb@^2.2.15":
+"@types/mongodb@2.2.15":
   version "2.2.15"
   resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-2.2.15.tgz#42577d8a92b9840dad440acf92fea6435c1fcfb3"
   dependencies:
@@ -52,7 +52,7 @@
   version "8.0.10"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.10.tgz#12efec9183b072d5f951cf86395a4c780f868a17"
 
-"@types/node@^8.0.47":
+"@types/node@8.0.47":
   version "8.0.47"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.47.tgz#968e596f91acd59069054558a00708c445ca30c2"
 
@@ -593,7 +593,7 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codecov@^3.0.0:
+codecov@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/codecov/-/codecov-3.0.0.tgz#c273b8c4f12945723e8dc9d25803d89343e5f28e"
   dependencies:
@@ -651,7 +651,7 @@ core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
 
-coveralls@^3.0.0:
+coveralls@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/coveralls/-/coveralls-3.0.0.tgz#22ef730330538080d29b8c151dc9146afde88a99"
   dependencies:
@@ -1168,7 +1168,7 @@ http-signature@~1.1.0:
     jsprim "^1.2.2"
     sshpk "^1.7.0"
 
-husky@^0.14.3:
+husky@0.14.3:
   version "0.14.3"
   resolved "https://registry.yarnpkg.com/husky/-/husky-0.14.3.tgz#c69ed74e2d2779769a17ba8399b54ce0b63c12c3"
   dependencies:
@@ -1620,7 +1620,7 @@ jest-validate@^21.2.1:
     leven "^2.1.0"
     pretty-format "^21.2.1"
 
-jest@^21.2.1:
+jest@21.2.1:
   version "21.2.1"
   resolved "https://registry.yarnpkg.com/jest/-/jest-21.2.1.tgz#c964e0b47383768a1438e3ccf3c3d470327604e1"
   dependencies:
@@ -2226,7 +2226,7 @@ preserve@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
 
-prettier@^1.8.2:
+prettier@1.8.2:
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.8.2.tgz#bff83e7fd573933c607875e5ba3abbdffb96aeb8"
 
@@ -2237,7 +2237,7 @@ pretty-format@^21.2.1:
     ansi-regex "^3.0.0"
     ansi-styles "^3.2.0"
 
-pretty-quick@^1.2.0:
+pretty-quick@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/pretty-quick/-/pretty-quick-1.2.0.tgz#9ed94bcf110f0df1eba8759ce16dcd15f2764be1"
   dependencies:
@@ -2745,7 +2745,7 @@ trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
 
-ts-jest@^21.1.4:
+ts-jest@21.1.4:
   version "21.1.4"
   resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-21.1.4.tgz#6b720cd4ebfacbc935468e60dd395392f817095b"
   dependencies:
@@ -2776,7 +2776,7 @@ tslint-eslint-rules@^4.1.1:
     tslib "^1.0.0"
     tsutils "^1.4.0"
 
-tslint@^5.8.0:
+tslint@5.8.0:
   version "5.8.0"
   resolved "https://registry.yarnpkg.com/tslint/-/tslint-5.8.0.tgz#1f49ad5b2e77c76c3af4ddcae552ae4e3612eb13"
   dependencies:
@@ -2822,7 +2822,7 @@ type-check@~0.3.2:
   dependencies:
     prelude-ls "~1.1.2"
 
-typescript@^2.6.1:
+typescript@2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.6.1.tgz#ef39cdea27abac0b500242d6726ab90e0c846631"
 
