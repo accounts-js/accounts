@@ -9,9 +9,9 @@
     tslint-config-prettier "^1.1.0"
     tslint-eslint-rules "^4.1.1"
 
-"@types/jest@21.1.10":
-  version "21.1.10"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-21.1.10.tgz#dcacb5217ddf997a090cc822bba219b4b2fd7984"
+"@types/jest@22.1.4":
+  version "22.1.4"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-22.1.4.tgz#5c0c06a9bb495c67e0a78002a952f151e2ae58a1"
 
 "@types/node@8.0.47":
   version "8.0.47"

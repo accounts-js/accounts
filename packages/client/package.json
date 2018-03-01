@@ -48,7 +48,7 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "20.0.8",
+    "@types/jest": "22.1.4",
     "jest": "20.0.4",
     "jsonwebtoken": "7.4.3",
     "lerna": "2.9.0",
