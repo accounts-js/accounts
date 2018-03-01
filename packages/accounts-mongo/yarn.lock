@@ -2,23 +2,17 @@
 # yarn lockfile v1
 
 
-"@accounts/common@0.1.0-beta.2":
+"@accounts/common@0.1.0-beta.2", "@accounts/common@^0.1.0-beta.2":
   version "0.1.0-beta.2"
   resolved "https://registry.yarnpkg.com/@accounts/common/-/common-0.1.0-beta.2.tgz#5ea493fac393b4e045c6007ab67aa4bf3e27dcb1"
   dependencies:
     lodash "^4.16.4"
 
-"@accounts/common@^0.1.0-beta.0":
-  version "0.1.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@accounts/common/-/common-0.1.0-beta.0.tgz#04a9496c64bbd5ab22c2f6911cb621ba106421ca"
+"@accounts/server@0.1.0-beta.2":
+  version "0.1.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@accounts/server/-/server-0.1.0-beta.2.tgz#db199872154f2d3d826422aa933cf88714213a9a"
   dependencies:
-    lodash "^4.16.4"
-
-"@accounts/server@0.1.0-beta.0":
-  version "0.1.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@accounts/server/-/server-0.1.0-beta.0.tgz#d13e7c76dc7fdfeb9cbc8e622915101db3041ff1"
-  dependencies:
-    "@accounts/common" "^0.1.0-beta.0"
+    "@accounts/common" "^0.1.0-beta.2"
     babel-polyfill "^6.23.0"
     bcryptjs "^2.4.0"
     crypto "^0.0.3"
