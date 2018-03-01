@@ -20,8 +20,8 @@ yarn add @accounts/mongo
 ## Usage
 
 ```javascript
-import AccountsServer from '@accounts/server';
-import MongoDBInterface from '@accounts/mongo';
+import { AccountsServer } from '@accounts/server';
+import { Mongo } from '@accounts/mongo';
 
 // If you are using mongoose
 mongoose.connect(process.env.MONGO_URL);
@@ -34,8 +34,7 @@ const db = await mongodb.MongoClient.connect(process.env.MONGO_URL);
 const client = await mongodb.MongoClient.connect(process.env.MONGO_URL);
 const db = client.db('my-db-name');
 
-AccountsServer.config({
-}, new MongoDBInterface(db));
+const accountsServer = new AccountsServer({ db: new MongoDBInterface(db) });
 ```
 
 The users will be saved under the `users` collection.
