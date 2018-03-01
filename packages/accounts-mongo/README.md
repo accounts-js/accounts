@@ -28,10 +28,10 @@ mongoose.connect(process.env.MONGO_URL);
 const db = mongoose.connection;
 
 // If you are using mongodb 2.x
-const db =  await mongodb.MongoClient.connect(process.env.MONGO_URL);
+const db = await mongodb.MongoClient.connect(process.env.MONGO_URL);
 
 // If you are using mongodb 3.x
-const client =  await mongodb.MongoClient.connect(process.env.MONGO_URL);
+const client = await mongodb.MongoClient.connect(process.env.MONGO_URL);
 const db = client.db('my-db-name');
 
 AccountsServer.config({
