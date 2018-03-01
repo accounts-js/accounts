@@ -81,7 +81,7 @@ export interface DBInterface {
   setService(userId: string, serviceName: string, data: object): Promise<void>;
 
   // Password related operation
-  findPasswordHash(userId: string): Promise<string>;
+  findPasswordHash(userId: string): Promise<string | null>;
   findUserByResetPasswordToken(token: string): Promise<UserObjectType | null>;
   setPassword(userId: string, newPassword: string): Promise<void>;
   addResetPasswordToken(
