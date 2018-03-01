@@ -1,4 +1,4 @@
-import { ObjectID } from 'mongodb';
+import { ObjectID, Db, Collection } from 'mongodb';
 import { get } from 'lodash';
 import { CreateUserType, UserObjectType, SessionType } from '@accounts/common';
 import { DBInterface } from '@accounts/server';
@@ -67,11 +67,11 @@ export class Mongo implements DBInterface {
   // Options of Mongo class
   private options: MongoOptionsType;
   // Db object
-  private db: any;
+  private db: Db;
   // Account collection
-  private collection: any;
+  private collection: Collection;
   // Session collection
-  private sessionCollection: any;
+  private sessionCollection: Collection;
 
   constructor(db: any, options?: MongoOptionsType) {
     this.options = { ...defaultOptions, ...options };
@@ -86,10 +86,13 @@ export class Mongo implements DBInterface {
   }
 
   public async setupIndexes(): Promise<void> {
-    await this.collection.createIndex('username', { unique: 1, sparse: 1 });
+    await this.collection.createIndex('username', {
+      unique: true,
+      sparse: true,
+    });
     await this.collection.createIndex('emails.address', {
-      unique: 1,
-      sparse: 1,
+      unique: true,
+      sparse: true,
     });
   }
 

@@ -8,7 +8,7 @@
     "start": "tsc --watch",
     "compile": "tsc",
     "test": "yarn lint && yarn coverage && yarn prettier-diff",
-    "testonly": "jest",
+    "testonly": "jest --forceExit",
     "lint": "tslint -c tslint.json '{src,__tests__}/**/*.ts'",
     "prettier": "prettier '{src,__tests__}/**/*.ts' 'README.md'",
     "prettier-diff": "yarn prettier --list-different",
@@ -53,7 +53,7 @@
     "@accounts/tslint-config-accounts": "0.0.6",
     "@types/jest": "22.1.4",
     "@types/lodash": "4.14.104",
-    "@types/mongodb": "2.2.20",
+    "@types/mongodb": "3.0.5",
     "@types/node": "8.9.4",
     "codecov": "3.0.0",
     "coveralls": "3.0.0",
@@ -72,6 +72,6 @@
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "mongodb": "^2.2.33"
+    "mongodb": "^3.0.0"
   }
 }

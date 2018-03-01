@@ -4,7 +4,8 @@ import { ObjectID } from 'mongodb';
 import Mongo from '../src';
 
 let mongo;
-let db;
+let db: mongodb.Db;
+let client: mongodb.MongoClient;
 const user = {
   username: 'johndoe',
   email: 'john@doe.com',
@@ -27,9 +28,10 @@ function dropDatabase(cb) {
 }
 
 function createConnection(cb) {
-  const url = 'mongodb://localhost:27017/accounts-mongo-tests';
-  mongodb.MongoClient.connect(url, (err, dbArg) => {
-    db = dbArg;
+  const url = 'mongodb://localhost:27017';
+  mongodb.MongoClient.connect(url, (err, clientMongo) => {
+    client = clientMongo;
+    db = client.db('accounts-mongo-tests');
     mongo = new Mongo(db);
     if (err) {
       return cb(err);
@@ -41,11 +43,11 @@ function createConnection(cb) {
 }
 
 function closeConnection(cb) {
-  dropDatabase(err => {
-    db.close();
+  dropDatabase(async err => {
     if (err) {
       return cb(err);
     }
+    await client.close();
     return cb();
   });
 }
@@ -56,6 +58,7 @@ function delay(time) {
 
 describe('Mongo', () => {
   beforeAll(createConnection);
+  afterAll(closeConnection);
 
   describe('toMongoID', () => {
     it('should not throw when mongo id is valid', () => {
@@ -743,6 +746,4 @@ describe('Mongo', () => {
       expect(retUser.createdAt).not.toEqual(retUser.updatedAt);
     });
   });
-
-  afterAll(closeConnection);
 });
