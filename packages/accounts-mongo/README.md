@@ -41,13 +41,13 @@ The users will be saved under the `users` collection.
 
 ## Options
 
-| Property                        |          Type          |                         Default                         | Description                                                  |
-| ------------------------------- | :--------------------: | :-----------------------------------------------------: | ------------------------------------------------------------ |
-| collectionName                  |         String         |                          users                          | The users collection name.                                   |
-| sessionCollectionName           |         String         |                        sessions                         | The sessions collection name.                                |
-| timestamps                      |         Object         |  `{ createdAt: 'createdAt', updatedAt: 'updatedAt' }`   | The timestamps for the users and sessions collection.        |
-| convertUserIdToMongoObjectId    |        Boolean         |                          true                           | Should the user collection use _id as string or ObjectId.    |
-| convertSessionIdToMongoObjectId |        Boolean         |                          true                           | Should the session collection use _id as string or ObjectId. |
-| caseSensitiveUserName           |        Boolean         |                          true                           | Perform case intensitive query for user name.                |
-| idProvider                      |        Function        |                                                         | Function that generate the id for new objects.               |
-| dateProvider                    | `(date?: Date) => any` | `(date?: Date) => (date ? date.getTime() : Date.now())` | Function that generate the date for the timestamps.          |
+| Property                        |          Type          |                         Default                         | Description                                                   |
+| ------------------------------- | :--------------------: | :-----------------------------------------------------: | ------------------------------------------------------------- |
+| collectionName                  |         String         |                          users                          | The users collection name.                                    |
+| sessionCollectionName           |         String         |                        sessions                         | The sessions collection name.                                 |
+| timestamps                      |         Object         |  `{ createdAt: 'createdAt', updatedAt: 'updatedAt' }`   | The timestamps for the users and sessions collection.         |
+| convertUserIdToMongoObjectId    |        Boolean         |                          true                           | Should the user collection use \_id as string or ObjectId.    |
+| convertSessionIdToMongoObjectId |        Boolean         |                          true                           | Should the session collection use \_id as string or ObjectId. |
+| caseSensitiveUserName           |        Boolean         |                          true                           | Perform case intensitive query for user name.                 |
+| idProvider                      |        Function        |                                                         | Function that generate the id for new objects.                |
+| dateProvider                    | `(date?: Date) => any` | `(date?: Date) => (date ? date.getTime() : Date.now())` | Function that generate the date for the timestamps.           |
