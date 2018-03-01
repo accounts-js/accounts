@@ -63,7 +63,7 @@ const defaultOptions = {
   dateProvider: (date?: Date) => (date ? date.getTime() : Date.now()),
 };
 
-export default class Mongo implements DBInterface {
+export class Mongo implements DBInterface {
   // Options of Mongo class
   private options: MongoOptionsType;
   // Db object
