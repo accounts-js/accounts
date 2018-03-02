@@ -63,6 +63,6 @@
     "jwt-decode": "^2.1.0",
     "lodash": "^4.16.4",
     "redux": "^3.7.2",
-    "redux-immutable": "^3.0.8"
+    "redux-immutable": "^4.0.0"
   }
 }
