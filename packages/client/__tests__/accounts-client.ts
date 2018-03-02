@@ -331,7 +331,6 @@ describe('Accounts', () => {
       Accounts.instance.clearTokens = jest.fn(
         () => Accounts.instance.clearTokens
       );
-      Accounts.instance.clearUser = jest.fn(() => Accounts.instance.clearUser);
       try {
         await Accounts.refreshSession();
         throw new Error();
