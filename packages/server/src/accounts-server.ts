@@ -12,7 +12,7 @@ import {
   ImpersonateReturnType,
   HookListener,
 } from '@accounts/common';
-import { generateAccessToken, generateRefreshToken } from './tokens';
+import { generateAccessToken, generateRefreshToken, generateRandomToken } from './tokens';
 import { emailTemplates, EmailTemplateType, sendMail } from './email';
 import {
   AccountsServerOptions,
@@ -186,13 +186,12 @@ export class AccountsServer {
     const { ip, userAgent } = infos;
 
     try {
-      // TODO get a random token
-      const token = '';
+      const token = generateRandomToken();
       const sessionId = await this.db.createSession(user.id, token, {
         ip,
         userAgent,
       });
-      const { accessToken, refreshToken } = this.createTokens(sessionId);
+      const { accessToken, refreshToken } = this.createTokens(token);
 
       const loginResult = {
         sessionId,
@@ -266,8 +265,7 @@ export class AccountsServer {
         return { authorized: false };
       }
 
-      // TODO get a random token
-      const token = '';
+      const token = generateRandomToken();
       const newSessionId = await this.db.createSession(
         impersonatedUser.id,
         token,
