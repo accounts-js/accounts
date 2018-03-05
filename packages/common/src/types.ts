@@ -51,6 +51,7 @@ export interface ImpersonateReturnType {
 export interface SessionType {
   sessionId: string;
   userId: string;
+  token: string;
   valid: boolean;
   userAgent?: string;
   createdAt: string;

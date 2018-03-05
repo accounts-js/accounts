@@ -111,18 +111,17 @@ export interface DBInterface {
   ): Promise<void>;
 
   // Session related operations
-  findSessionById(sessionId: string): Promise<SessionType | null>;
+  findSessionByToken(token: string): Promise<SessionType | null>;
   createSession(
     userId: string,
-    ip?: string,
-    userAgent?: string,
+    token: string,
+    connection: ConnectionInformationsType,
     extraData?: object
   ): Promise<string>;
   updateSession(
-    sessionId: string,
-    ip?: string,
-    userAgent?: string
+    token: string,
+    connection: ConnectionInformationsType
   ): Promise<void>;
-  invalidateSession(sessionId: string): Promise<void>;
+  invalidateSession(token: string): Promise<void>;
   invalidateAllSessions(userId: string): Promise<void>;
 }

@@ -28,6 +28,11 @@ export interface TokenRecord {
   reason: string;
 }
 
+export interface JwtData {
+  token: string;
+  isImpersonated: boolean;
+}
+
 const defaultOptions = {
   tokenSecret: 'secret',
   tokenConfigs: {
@@ -181,7 +186,12 @@ export class AccountsServer {
     const { ip, userAgent } = infos;
 
     try {
-      const sessionId = await this.db.createSession(user.id, ip, userAgent);
+      // TODO get a random token
+      const token = '';
+      const sessionId = await this.db.createSession(user.id, token, {
+        ip,
+        userAgent,
+      });
       const { accessToken, refreshToken } = this.createTokens(sessionId);
 
       const loginResult = {
@@ -256,10 +266,15 @@ export class AccountsServer {
         return { authorized: false };
       }
 
+      // TODO get a random token
+      const token = '';
       const newSessionId = await this.db.createSession(
         impersonatedUser.id,
-        ip,
-        userAgent,
+        token,
+        {
+          ip,
+          userAgent,
+        },
         { impersonatorUserId: user.id }
       );
       const impersonationTokens = this.createTokens(newSessionId, true);
@@ -302,22 +317,24 @@ export class AccountsServer {
         throw new AccountsError('An accessToken and refreshToken are required');
       }
 
-      let sessionId;
+      let sessionToken: string;
       try {
         jwt.verify(refreshToken, this.options.tokenSecret);
-        const decodedAccessToken: any = jwt.verify(
+        const decodedAccessToken = jwt.verify(
           accessToken,
           this.options.tokenSecret,
           {
             ignoreExpiration: true,
           }
-        );
-        sessionId = decodedAccessToken.data.sessionId;
+        ) as { data: JwtData };
+        sessionToken = decodedAccessToken.data.token;
       } catch (err) {
         throw new AccountsError('Tokens are not valid');
       }
 
-      const session: SessionType = await this.db.findSessionById(sessionId);
+      const session: SessionType = await this.db.findSessionByToken(
+        sessionToken
+      );
       if (!session) {
         throw new AccountsError('Session not found');
       }
@@ -327,11 +344,11 @@ export class AccountsServer {
         if (!user) {
           throw new AccountsError('User not found', { id: session.userId });
         }
-        const tokens = this.createTokens(sessionId);
-        await this.db.updateSession(sessionId, ip, userAgent);
+        const tokens = this.createTokens(sessionToken);
+        await this.db.updateSession(sessionToken, { ip, userAgent });
 
         const result = {
-          sessionId,
+          sessionId: session.sessionId,
           user: this.sanitizeUser(user),
           tokens,
         };
@@ -353,20 +370,21 @@ export class AccountsServer {
 
   /**
    * @description Refresh a user token.
-   * @param {string} sessionId - User session id.
+   * @param {string} token - User session token.
    * @param {boolean} isImpersonated - Should be true if impersonating another user.
    * @returns {Promise<Object>} - Return a new accessToken and refreshToken.
    */
   public createTokens(
-    sessionId: string,
+    token: string,
     isImpersonated: boolean = false
   ): TokensType {
     const { tokenSecret, tokenConfigs } = this.options;
+    const jwtData: JwtData = {
+      token,
+      isImpersonated,
+    };
     const accessToken = generateAccessToken({
-      data: {
-        sessionId,
-        isImpersonated,
-      },
+      data: jwtData,
       secret: tokenSecret,
       config: tokenConfigs.accessToken || {},
     });
@@ -453,6 +471,11 @@ export class AccountsServer {
     }
   }
 
+  /**
+   * @description Find a session by his token.
+   * @param {string} accessToken
+   * @returns {Promise<SessionType>} - Return a session.
+   */
   public async findSessionByAccessToken(
     accessToken: string
   ): Promise<SessionType> {
@@ -460,18 +483,18 @@ export class AccountsServer {
       throw new AccountsError('An accessToken is required');
     }
 
-    let sessionId;
+    let sessionToken: string;
     try {
-      const decodedAccessToken: any = jwt.verify(
+      const decodedAccessToken = jwt.verify(
         accessToken,
         this.options.tokenSecret
-      );
-      sessionId = decodedAccessToken.data.sessionId;
+      ) as { data: JwtData };
+      sessionToken = decodedAccessToken.data.token;
     } catch (err) {
       throw new AccountsError('Tokens are not valid');
     }
 
-    const session: SessionType = await this.db.findSessionById(sessionId);
+    const session: SessionType = await this.db.findSessionByToken(sessionToken);
     if (!session) {
       throw new AccountsError('Session not found');
     }
