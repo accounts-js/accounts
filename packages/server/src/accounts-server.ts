@@ -12,7 +12,11 @@ import {
   ImpersonateReturnType,
   HookListener,
 } from '@accounts/common';
-import { generateAccessToken, generateRefreshToken, generateRandomToken } from './tokens';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  generateRandomToken,
+} from './tokens';
 import { emailTemplates, EmailTemplateType, sendMail } from './email';
 import {
   AccountsServerOptions,
