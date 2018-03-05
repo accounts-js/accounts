@@ -307,22 +307,6 @@ describe('Accounts', () => {
         expect(Accounts.instance.getState().get('tokens')).toEqual(null);
       }
     });
-
-    it('clear user in redux', async () => {
-      const transport = {
-        ...mockTransport,
-        logout: () => Promise.reject({ message: 'error message' }),
-      };
-      Accounts.instance.storeTokens({ accessToken: '1' });
-      Accounts.config({ history }, transport);
-      const callback = jest.fn();
-      try {
-        await Accounts.logout(callback);
-        throw new Error();
-      } catch (err) {
-        expect(Accounts.instance.getState().get('user')).toEqual(null);
-      }
-    });
   });
 
   describe('refreshSession', async () => {
@@ -332,13 +316,11 @@ describe('Accounts', () => {
       Accounts.instance.clearTokens = jest.fn(
         () => Accounts.instance.clearTokens
       );
-      Accounts.instance.clearUser = jest.fn(() => Accounts.instance.clearUser);
       try {
         await Accounts.refreshSession();
       } catch (err) {
         expect(err.message).toEqual('no tokens provided');
         expect(Accounts.instance.clearTokens).toHaveBeenCalledTimes(1);
-        expect(Accounts.instance.clearUser).toHaveBeenCalledTimes(1);
       }
     });
 
@@ -349,7 +331,6 @@ describe('Accounts', () => {
       Accounts.instance.clearTokens = jest.fn(
         () => Accounts.instance.clearTokens
       );
-      Accounts.instance.clearUser = jest.fn(() => Accounts.instance.clearUser);
       try {
         await Accounts.refreshSession();
         throw new Error();

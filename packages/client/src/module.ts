@@ -2,10 +2,8 @@ import { Map } from 'immutable';
 
 const PATH = 'js-accounts/';
 const LOGIN = `${PATH}LOGIN`;
-const SET_USER = `${PATH}SET_USER`;
 const SET_TOKENS = `${PATH}SET_TOKENS`;
 const CLEAR_TOKENS = `${PATH}CLEAR_TOKENS`;
-const CLEAR_USER = `${PATH}CLEAR_USER`;
 const LOGGING_IN = `${PATH}LOGGING_IN`;
 const SET_ORIGINAL_TOKENS = `${PATH}SET_ORIGINAL_TOKENS`;
 const CLEAR_ORIGINAL_TOKENS = `${PATH}CLEAR_ORIGINAL_TOKENS`;
@@ -13,7 +11,6 @@ const SET_IMPERSONATED = `${PATH}SET_IMPERSONATED`;
 
 const initialState = Map<string, any>({
   isLoading: false,
-  user: null,
   tokens: null,
   loggingIn: false,
   originalTokens: null,
@@ -26,10 +23,6 @@ const reducer = (state = initialState, action) => {
     case LOGIN: {
       break;
     }
-    case SET_USER: {
-      const { user } = action.payload;
-      return state.set('user', Map(user));
-    }
     case SET_TOKENS: {
       const { tokens } = action.payload;
       return state.set('tokens', Map(tokens));
@@ -37,9 +30,6 @@ const reducer = (state = initialState, action) => {
     case CLEAR_TOKENS: {
       state.set('originalTokens', null);
       return state.set('tokens', null);
-    }
-    case CLEAR_USER: {
-      return state.set('user', null);
     }
     case LOGGING_IN: {
       const { isLoggingIn } = action.payload;
@@ -75,13 +65,6 @@ export const loggingIn = isLoggingIn => ({
   },
 });
 
-export const setUser = user => ({
-  type: SET_USER,
-  payload: {
-    user,
-  },
-});
-
 export const setTokens = tokens => ({
   type: SET_TOKENS,
   payload: {
@@ -91,10 +74,6 @@ export const setTokens = tokens => ({
 
 export const clearTokens = () => ({
   type: CLEAR_TOKENS,
-});
-
-export const clearUser = () => ({
-  type: CLEAR_USER,
 });
 
 export const setOriginalTokens = tokens => ({

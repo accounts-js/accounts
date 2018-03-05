@@ -17,7 +17,6 @@ import config, { TokenStorage, AccountsClientConfiguration } from './config';
 import createStore from './create-store';
 import reducer, {
   loggingIn,
-  clearUser,
   setTokens,
   clearTokens as clearStoreTokens,
   setOriginalTokens,
@@ -120,12 +119,6 @@ export class AccountsClient {
         )) || null,
     };
     this.store.dispatch(setOriginalTokens(tokens));
-  }
-
-  public user(): UserObjectType {
-    const user = this.getState().get('user');
-
-    return user ? user.toJS() : null;
   }
 
   public async impersonate(username: string): Promise<ImpersonateReturnType> {
@@ -239,10 +232,6 @@ export class AccountsClient {
     }
   }
 
-  public clearUser() {
-    this.store.dispatch(clearUser());
-  }
-
   public async resumeSession(): Promise<void> {
     try {
       await this.refreshSession();
@@ -267,7 +256,6 @@ export class AccountsClient {
         // Refresh token is expired, user must sign back in
         if (decodedRefreshToken.exp < currentTime) {
           this.clearTokens();
-          this.clearUser();
         } else {
           // Request a new token pair
           const refreshedSession: LoginReturnType = await this.transport.refreshTokens(
@@ -282,12 +270,10 @@ export class AccountsClient {
       } catch (err) {
         this.store.dispatch(loggingIn(false));
         this.clearTokens();
-        this.clearUser();
         throw new AccountsError('falsy token provided');
       }
     } else {
       this.clearTokens();
-      this.clearUser();
       throw new AccountsError('no tokens provided');
     }
   }
@@ -364,7 +350,6 @@ export class AccountsClient {
       return response;
     } catch (err) {
       this.clearTokens();
-      this.store.dispatch(clearUser());
       this.store.dispatch(loggingIn(false));
       throw new AccountsError(err.message);
     }
@@ -387,7 +372,6 @@ export class AccountsClient {
       }
 
       this.clearTokens();
-      this.store.dispatch(clearUser());
       if (callback && isFunction(callback)) {
         callback();
       }
@@ -397,7 +381,6 @@ export class AccountsClient {
       }
     } catch (err) {
       this.clearTokens();
-      this.store.dispatch(clearUser());
       if (callback && isFunction(callback)) {
         callback(err);
       }
@@ -434,9 +417,6 @@ const Accounts = {
     await this.instance.loadOriginalTokensFromStorage();
 
     return this.instance;
-  },
-  user(): UserObjectType | null {
-    return this.instance.user();
   },
   options(): AccountsClientConfiguration {
     return this.instance.options;
