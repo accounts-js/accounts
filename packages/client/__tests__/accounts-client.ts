@@ -350,15 +350,13 @@ describe('Accounts', () => {
       });
       const oldTokens = {
         accessToken,
-        refreshToken
+        refreshToken,
       };
       Accounts.instance.storeTokens(oldTokens);
       // tslint:disable-next-line no-string-literal
       Accounts.instance['store'].dispatch(setTokens(oldTokens));
       await Accounts.refreshSession();
-      expect(localStorage.getItem('accounts:accessToken')).toEqual(
-        accessToken
-      );
+      expect(localStorage.getItem('accounts:accessToken')).toEqual(accessToken);
       expect(localStorage.getItem('accounts:refreshToken')).toEqual(
         refreshToken
       );
@@ -374,7 +372,7 @@ describe('Accounts', () => {
       });
       const oldTokens = {
         accessToken,
-        refreshToken
+        refreshToken,
       };
       Accounts.instance.storeTokens(oldTokens);
       // tslint:disable-next-line no-string-literal

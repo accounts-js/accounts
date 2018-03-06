@@ -266,7 +266,7 @@ export class AccountsClient {
           await this.storeTokens(refreshedSession.tokens);
           this.store.dispatch(setTokens(refreshedSession.tokens));
         } else if (decodedRefreshToken.exp < currentTime) {
-        // Refresh token is expired, user must sign back in
+          // Refresh token is expired, user must sign back in
           this.clearTokens();
         }
         this.store.dispatch(loggingIn(false));
