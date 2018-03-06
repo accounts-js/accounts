@@ -111,6 +111,7 @@ export interface DBInterface {
   ): Promise<void>;
 
   // Session related operations
+  findSessionById(sessionId: string): Promise<SessionType | null>;
   findSessionByToken(token: string): Promise<SessionType | null>;
   createSession(
     userId: string,
