@@ -251,22 +251,25 @@ export class AccountsClient {
     if (accessToken && refreshToken) {
       try {
         this.store.dispatch(loggingIn(true));
-        const decodedRefreshToken = jwtDecode(refreshToken);
         const currentTime = Date.now() / 1000;
-        // Refresh token is expired, user must sign back in
-        if (decodedRefreshToken.exp < currentTime) {
-          this.clearTokens();
-        } else {
+
+        const decodedAccessToken = jwtDecode(accessToken);
+        const decodedRefreshToken = jwtDecode(refreshToken);
+        // See if accessToken is expired
+        if (decodedAccessToken.exp < currentTime) {
           // Request a new token pair
           const refreshedSession: LoginReturnType = await this.transport.refreshTokens(
             accessToken,
             refreshToken
           );
-          this.store.dispatch(loggingIn(false));
 
           await this.storeTokens(refreshedSession.tokens);
           this.store.dispatch(setTokens(refreshedSession.tokens));
+        } else if (decodedRefreshToken.exp < currentTime) {
+        // Refresh token is expired, user must sign back in
+          this.clearTokens();
         }
+        this.store.dispatch(loggingIn(false));
       } catch (err) {
         this.store.dispatch(loggingIn(false));
         this.clearTokens();
