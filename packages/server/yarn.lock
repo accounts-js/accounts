@@ -2,6 +2,12 @@
 # yarn lockfile v1
 
 
+"@accounts/common@^0.1.0-beta.2":
+  version "0.1.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@accounts/common/-/common-0.1.0-beta.2.tgz#5ea493fac393b4e045c6007ab67aa4bf3e27dcb1"
+  dependencies:
+    lodash "^4.16.4"
+
 "@types/jsonwebtoken@7.2.5":
   version "7.2.5"
   resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-7.2.5.tgz#413159d570ec45fc3e7da7ea3f7bca6fb9300e72"
@@ -65,10 +71,6 @@ core-js@^2.4.0:
 core-js@^2.5.0:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.1.tgz#ae6874dc66937789b80754ff5428df66819ca50b"
-
-crypto@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/crypto/-/crypto-1.0.1.tgz#2af1b7cad8175d24c8a1b0778255794a21803037"
 
 ecdsa-sig-formatter@1.0.9:
   version "1.0.9"
