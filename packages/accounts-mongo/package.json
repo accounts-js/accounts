@@ -51,7 +51,7 @@
     "@accounts/common": "0.1.0-beta.2",
     "@accounts/server": "0.1.0-beta.2",
     "@accounts/tslint-config-accounts": "0.0.6",
-    "@types/jest": "22.1.4",
+    "@types/jest": "22.2.0",
     "@types/lodash": "4.14.104",
     "@types/mongodb": "3.0.6",
     "@types/node": "8.9.4",
