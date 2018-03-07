@@ -347,10 +347,10 @@ export class AccountsServer {
           throw new AccountsError('User not found', { id: session.userId });
         }
         const tokens = this.createTokens(sessionToken);
-        await this.db.updateSession(session.sessionId, { ip, userAgent });
+        await this.db.updateSession(session.id, { ip, userAgent });
 
         const result = {
-          sessionId: session.sessionId,
+          sessionId: session.id,
           user: this.sanitizeUser(user),
           tokens,
         };
@@ -415,7 +415,7 @@ export class AccountsServer {
           throw new AccountsError('User not found', { id: session.userId });
         }
 
-        await this.db.invalidateSession(session.sessionId);
+        await this.db.invalidateSession(session.id);
         this.hooks.emit(
           ServerHooks.LogoutSuccess,
           this.sanitizeUser(user),
