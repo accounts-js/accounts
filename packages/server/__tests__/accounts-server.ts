@@ -115,7 +115,7 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -147,7 +147,7 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -219,7 +219,7 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -244,7 +244,7 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -277,7 +277,7 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -307,7 +307,7 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: false,
                 userId: '123',
               }),
@@ -403,7 +403,7 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -505,7 +505,7 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -632,7 +632,7 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -752,7 +752,7 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -783,7 +783,7 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: false,
                 userId: '123',
               }),
@@ -808,7 +808,7 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
