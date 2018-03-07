@@ -34,7 +34,8 @@ const db = await mongodb.MongoClient.connect(process.env.MONGO_URL);
 const client = await mongodb.MongoClient.connect(process.env.MONGO_URL);
 const db = client.db('my-db-name');
 
-const accountsServer = new AccountsServer({ db: new MongoDBInterface(db) });
+const accountsMongo = new Mongo(db, options);
+const accountsServer = new AccountsServer({ db: accountsMongo });
 ```
 
 The users will be saved under the `users` collection.
