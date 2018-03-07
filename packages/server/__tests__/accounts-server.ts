@@ -1,5 +1,5 @@
 import * as jwtDecode from 'jwt-decode';
-import { AccountsServer } from '../src/accounts-server';
+import { AccountsServer, JwtData } from '../src/accounts-server';
 import {
   bcryptPassword,
   hashPassword,
@@ -100,10 +100,9 @@ describe('AccountsServer', () => {
       );
 
       const res = await accountsServer.loginWithUser(user, {});
-      expect(res.user).toEqual(user);
       const { accessToken, refreshToken } = res.tokens;
-      const decodedAccessToken: any = jwtDecode(accessToken);
-      expect(decodedAccessToken.data.sessionId).toEqual('sessionId');
+      const decodedAccessToken: { data: JwtData } = jwtDecode(accessToken);
+      expect(decodedAccessToken.data.token).toBeTruthy();
       expect(accessToken).toBeTruthy();
       expect(refreshToken).toBeTruthy();
     });
@@ -114,9 +113,9 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () =>
+            findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -146,9 +145,9 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () =>
+            findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -218,9 +217,9 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () =>
+            findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -243,9 +242,9 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () =>
+            findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -276,9 +275,9 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () =>
+            findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -306,9 +305,9 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () =>
+            findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: false,
                 userId: '123',
               }),
@@ -341,7 +340,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () => Promise.reject(''),
+            findSessionByToken: () => Promise.reject(''),
             findUserById: () => Promise.resolve(user),
           } as any,
           tokenSecret: 'secret',
@@ -367,7 +366,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () =>
+            findSessionByToken: () =>
               Promise.resolve({
                 valid: false,
               }),
@@ -402,9 +401,9 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () =>
+            findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -504,9 +503,9 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () =>
+            findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -528,7 +527,10 @@ describe('AccountsServer', () => {
         'ip',
         'user agent'
       );
-      expect(updateSession.mock.calls[0]).toEqual(['456', 'ip', 'user agent']);
+      expect(updateSession.mock.calls[0]).toEqual([
+        '456',
+        { ip: 'ip', userAgent: 'user agent' },
+      ]);
       expect(res.user).toEqual({
         userId: '123',
         username: 'username',
@@ -577,7 +579,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () => Promise.resolve(null),
+            findSessionByToken: () => Promise.resolve(null),
           } as any,
           tokenSecret: 'secret',
         },
@@ -601,7 +603,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () =>
+            findSessionByToken: () =>
               Promise.resolve({
                 valid: false,
               }),
@@ -628,9 +630,9 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () =>
+            findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -690,7 +692,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () => Promise.resolve(null),
+            findSessionByToken: () => Promise.resolve(null),
           } as any,
           tokenSecret: 'secret',
         },
@@ -708,7 +710,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () =>
+            findSessionByToken: () =>
               Promise.resolve({
                 valid: false,
               }),
@@ -748,9 +750,9 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () =>
+            findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -779,9 +781,9 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () =>
+            findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: false,
                 userId: '123',
               }),
@@ -804,9 +806,9 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {
-            findSessionById: () =>
+            findSessionByToken: () =>
               Promise.resolve({
-                sessionId: '456',
+                id: '456',
                 valid: true,
                 userId: '123',
               }),
@@ -1148,14 +1150,9 @@ describe('AccountsServer', () => {
         tokens: { sessionId: '001', isImpersonated: true },
         user: impersonatedUser,
       });
-      expect(createSession).toHaveBeenCalledWith(
-        impersonatedUser.id,
-        null,
-        null,
-        {
-          impersonatorUserId: user.id,
-        }
-      );
+      expect(createSession.mock.calls[0][3]).toEqual({
+        impersonatorUserId: user.id,
+      });
     });
   });
 

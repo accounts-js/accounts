@@ -27,8 +27,7 @@
     "moduleFileExtensions": [
       "ts",
       "js"
-    ],
-    "mapCoverage": true
+    ]
   },
   "repository": {
     "type": "git",
