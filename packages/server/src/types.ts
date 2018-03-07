@@ -120,7 +120,7 @@ export interface DBInterface {
     extraData?: object
   ): Promise<string>;
   updateSession(
-    token: string,
+    sessionId: string,
     connection: ConnectionInformationsType
   ): Promise<void>;
   invalidateSession(sessionId: string): Promise<void>;

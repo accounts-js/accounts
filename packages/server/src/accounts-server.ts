@@ -347,7 +347,7 @@ export class AccountsServer {
           throw new AccountsError('User not found', { id: session.userId });
         }
         const tokens = this.createTokens(sessionToken);
-        await this.db.updateSession(sessionToken, { ip, userAgent });
+        await this.db.updateSession(session.sessionId, { ip, userAgent });
 
         const result = {
           sessionId: session.sessionId,
