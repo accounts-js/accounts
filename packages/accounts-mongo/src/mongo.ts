@@ -1,7 +1,7 @@
 import { ObjectID, Db, Collection } from 'mongodb';
 import { get } from 'lodash';
 import { CreateUserType, UserObjectType, SessionType } from '@accounts/common';
-import { DBInterface } from '@accounts/server';
+import { DBInterface, ConnectionInformationsType } from '@accounts/server';
 
 export interface MongoOptionsType {
   // The users collection name, default 'users'.
@@ -86,6 +86,10 @@ export class Mongo implements DBInterface {
   }
 
   public async setupIndexes(): Promise<void> {
+    await this.sessionCollection.createIndex('token', {
+      unique: true,
+      sparse: true,
+    });
     await this.collection.createIndex('username', {
       unique: true,
       sparse: true,
@@ -346,14 +350,15 @@ export class Mongo implements DBInterface {
 
   public async createSession(
     userId: string,
-    ip?: string,
-    userAgent?: string,
+    token: string,
+    connection: ConnectionInformationsType = {},
     extraData?: object
   ): Promise<string> {
     const session = {
       userId,
-      userAgent,
-      ip,
+      token,
+      userAgent: connection.userAgent,
+      ip: connection.ip,
       extraData,
       valid: true,
       [this.options.timestamps.createdAt]: this.options.dateProvider(),
@@ -370,8 +375,7 @@ export class Mongo implements DBInterface {
 
   public async updateSession(
     sessionId: string,
-    ip: string,
-    userAgent: string
+    connection: ConnectionInformationsType
   ): Promise<void> {
     // tslint:disable-next-line variable-name
     const _id = this.options.convertSessionIdToMongoObjectId
@@ -381,8 +385,8 @@ export class Mongo implements DBInterface {
       { _id },
       {
         $set: {
-          ip,
-          userAgent,
+          userAgent: connection.userAgent,
+          ip: connection.ip,
           [this.options.timestamps.updatedAt]: this.options.dateProvider(),
         },
       }
@@ -417,12 +421,24 @@ export class Mongo implements DBInterface {
     );
   }
 
-  public findSessionById(sessionId: string): Promise<SessionType | null> {
+  public async findSessionByToken(token: string): Promise<SessionType | null> {
+    const session = await this.sessionCollection.findOne({ token });
+    if (session) {
+      session.id = session._id;
+    }
+    return session;
+  }
+
+  public async findSessionById(sessionId: string): Promise<SessionType | null> {
     // tslint:disable-next-line variable-name
     const _id = this.options.convertSessionIdToMongoObjectId
       ? toMongoID(sessionId)
       : sessionId;
-    return this.sessionCollection.findOne({ _id });
+    const session = await this.sessionCollection.findOne({ _id });
+    if (session) {
+      session.id = session._id;
+    }
+    return session;
   }
 
   public async addEmailVerificationToken(

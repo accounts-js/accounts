@@ -2,5 +2,6 @@ lib/
 node_modules/
 coverage/
 npm-debug.log
+yarn-error.log
 .idea
 lib-es6
