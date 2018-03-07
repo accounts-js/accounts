@@ -7,7 +7,8 @@
   "scripts": {
     "start": "tsc --watch",
     "compile": "tsc",
-    "test": "yarn lint && yarn coverage && yarn prettier-diff",
+    "test":
+      "yarn lint && yarn coverage && yarn prettier-diff && yarn run compile",
     "testonly": "jest --forceExit",
     "lint": "tslint -c tslint.json '{src,__tests__}/**/*.ts'",
     "prettier": "prettier '{src,__tests__}/**/*.ts' 'README.md'",
@@ -34,8 +35,7 @@
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "./__tests__/.*.ts$",
-    "moduleFileExtensions": ["ts", "js"],
-    "mapCoverage": true
+    "moduleFileExtensions": ["ts", "js"]
   },
   "repository": {
     "type": "git",
@@ -48,13 +48,13 @@
   },
   "homepage": "https://github.com/js-accounts/mongo",
   "devDependencies": {
-    "@accounts/common": "0.1.0-beta.2",
-    "@accounts/server": "0.1.0-beta.2",
+    "@accounts/common": "0.1.0-beta.3",
+    "@accounts/server": "0.1.0-beta.3",
     "@accounts/tslint-config-accounts": "0.0.6",
     "@types/jest": "22.2.0",
     "@types/lodash": "4.14.104",
     "@types/mongodb": "3.0.7",
-    "@types/node": "8.9.4",
+    "@types/node": "9.4.6",
     "codecov": "3.0.0",
     "coveralls": "3.0.0",
     "husky": "0.14.3",
@@ -66,8 +66,8 @@
     "typescript": "2.7.2"
   },
   "peerDependencies": {
-    "@accounts/common": "^0.1.0-beta.0",
-    "@accounts/server": "^0.1.0-beta.0"
+    "@accounts/common": "^0.1.0-beta.3",
+    "@accounts/server": "^0.1.0-beta.3"
   },
   "dependencies": {
     "lodash": "^4.17.4",

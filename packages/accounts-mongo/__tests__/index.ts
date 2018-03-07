@@ -1,9 +1,13 @@
 import * as mongodb from 'mongodb';
 // tslint:disable-next-line
 import { ObjectID } from 'mongodb';
+import { randomBytes } from 'crypto';
 import Mongo from '../src';
 
-let mongo;
+const generateRandomToken = (length: number = 43): string =>
+  randomBytes(length).toString('hex');
+
+let mongo: Mongo;
 let db: mongodb.Db;
 let client: mongodb.MongoClient;
 const user = {
@@ -549,17 +553,18 @@ describe('Mongo', () => {
 
   describe('createSession', () => {
     it('should create session', async () => {
-      const sessionId = await mongo.createSession(
-        session.userId,
-        session.ip,
-        session.userAgent
-      );
+      const token = generateRandomToken();
+      const sessionId = await mongo.createSession(session.userId, token, {
+        ip: session.ip,
+        userAgent: session.userAgent,
+      });
       const ret = await mongo.findSessionById(sessionId);
       expect(ret).toBeTruthy();
       expect(ret._id).toBeTruthy();
       expect(ret.userId).toEqual(session.userId);
       expect(ret.ip).toEqual(session.ip);
       expect(ret.userAgent).toEqual(session.userAgent);
+      expect(ret.token).toEqual(token);
       expect(ret.valid).toEqual(true);
       expect(ret.createdAt).toBeTruthy();
       expect(ret.createdAt).toEqual(new Date(ret.createdAt).getTime());
@@ -568,10 +573,11 @@ describe('Mongo', () => {
 
     it('should create session with extra data', async () => {
       const impersonatorUserId = '789';
+      const token = generateRandomToken();
       const sessionId = await mongo.createSession(
         session.userId,
-        session.ip,
-        session.userAgent,
+        token,
+        { ip: session.ip, userAgent: session.userAgent },
         { impersonatorUserId }
       );
       const ret = await mongo.findSessionById(sessionId);
@@ -581,6 +587,7 @@ describe('Mongo', () => {
       expect(ret.ip).toEqual(session.ip);
       expect(ret.userAgent).toEqual(session.userAgent);
       expect(ret.valid).toEqual(true);
+      expect(ret.token).toEqual(token);
       expect(ret.createdAt).toEqual(new Date(ret.createdAt).getTime());
       expect(ret.updatedAt).toBeTruthy();
       expect(ret.extraData).toEqual({ impersonatorUserId });
@@ -618,6 +625,23 @@ describe('Mongo', () => {
     });
   });
 
+  describe('findSessionByToken', () => {
+    it('should return null for not found session', async () => {
+      const ret = await mongo.findSessionByToken('589871d1c9393d445745a57c');
+      expect(ret).not.toBeTruthy();
+    });
+
+    it('should find session', async () => {
+      const token = generateRandomToken();
+      const sessionId = await mongo.createSession(session.userId, token, {
+        ip: session.ip,
+        userAgent: session.userAgent,
+      });
+      const ret = await mongo.findSessionByToken(token);
+      expect(ret).toBeTruthy();
+    });
+  });
+
   describe('findSessionById', () => {
     it('should return null for not found session', async () => {
       const ret = await mongo.findSessionById('589871d1c9393d445745a57c');
@@ -640,18 +664,22 @@ describe('Mongo', () => {
     });
 
     it('should update session', async () => {
-      const sessionId = await mongo.createSession(
-        session.userId,
-        session.ip,
-        session.userAgent
-      );
+      const token = generateRandomToken();
+      const sessionId = await mongo.createSession(session.userId, token, {
+        ip: session.ip,
+        userAgent: session.userAgent,
+      });
       await delay(10);
-      await mongo.updateSession(sessionId, 'new ip', 'new user agent');
+      await mongo.updateSession(sessionId, {
+        ip: 'new ip',
+        userAgent: 'new user agent',
+      });
       const ret = await mongo.findSessionById(sessionId);
       expect(ret.userId).toEqual(session.userId);
       expect(ret.ip).toEqual('new ip');
       expect(ret.userAgent).toEqual('new user agent');
       expect(ret.valid).toEqual(true);
+      expect(ret.token).toEqual(token);
       expect(ret.createdAt).toBeTruthy();
       expect(ret.updatedAt).toBeTruthy();
       expect(ret.createdAt).not.toEqual(ret.updatedAt);
@@ -667,11 +695,11 @@ describe('Mongo', () => {
     });
 
     it('invalidates a session', async () => {
-      const sessionId = await mongo.createSession(
-        session.userId,
-        session.ip,
-        session.userAgent
-      );
+      const token = generateRandomToken();
+      const sessionId = await mongo.createSession(session.userId, token, {
+        ip: session.ip,
+        userAgent: session.userAgent,
+      });
       await delay(10);
       await mongo.invalidateSession(sessionId);
       const ret = await mongo.findSessionById(sessionId);
@@ -684,13 +712,13 @@ describe('Mongo', () => {
     it('invalidates all sessions', async () => {
       const sessionId1 = await mongo.createSession(
         session.userId,
-        session.ip,
-        session.userAgent
+        generateRandomToken(),
+        { ip: session.ip, userAgent: session.userAgent }
       );
       const sessionId2 = await mongo.createSession(
         session.userId,
-        session.ip,
-        session.userAgent
+        generateRandomToken(),
+        { ip: session.ip, userAgent: session.userAgent }
       );
       await delay(10);
       await mongo.invalidateAllSessions(session.userId);
