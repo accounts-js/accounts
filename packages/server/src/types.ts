@@ -123,6 +123,6 @@ export interface DBInterface {
     token: string,
     connection: ConnectionInformationsType
   ): Promise<void>;
-  invalidateSession(token: string): Promise<void>;
+  invalidateSession(sessionId: string): Promise<void>;
   invalidateAllSessions(userId: string): Promise<void>;
 }
