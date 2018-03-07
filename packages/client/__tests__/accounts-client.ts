@@ -340,14 +340,41 @@ describe('Accounts', () => {
       }
     });
 
+    it('should do nothing if tokens are still valid', async () => {
+      Accounts.config({}, mockTransport);
+      const accessToken = jwt.sign({ data: 'oldRefreshToken' }, 'secret', {
+        expiresIn: 10,
+      });
+      const refreshToken = jwt.sign({ data: 'oldRefreshToken' }, 'secret', {
+        expiresIn: '1d',
+      });
+      const oldTokens = {
+        accessToken,
+        refreshToken,
+      };
+      Accounts.instance.storeTokens(oldTokens);
+      // tslint:disable-next-line no-string-literal
+      Accounts.instance['store'].dispatch(setTokens(oldTokens));
+      await Accounts.refreshSession();
+      expect(localStorage.getItem('accounts:accessToken')).toEqual(accessToken);
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual(
+        refreshToken
+      );
+    });
+
     it('requests a new token pair, sets the tokens and the user', async () => {
       Accounts.config({}, mockTransport);
+      const accessToken = jwt.sign({ data: 'oldRefreshToken' }, 'secret', {
+        expiresIn: -10,
+      });
+      const refreshToken = jwt.sign({ data: 'oldRefreshToken' }, 'secret', {
+        expiresIn: '1d',
+      });
       const oldTokens = {
-        accessToken: 'oldAccessToken',
-        refreshToken: jwt.sign({ data: 'oldRefreshToken' }, 'secret', {
-          expiresIn: '1d',
-        }),
+        accessToken,
+        refreshToken,
       };
+      Accounts.instance.storeTokens(oldTokens);
       // tslint:disable-next-line no-string-literal
       Accounts.instance['store'].dispatch(setTokens(oldTokens));
       await Accounts.refreshSession();
