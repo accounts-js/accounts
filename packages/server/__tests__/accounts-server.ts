@@ -455,11 +455,14 @@ describe('AccountsServer', () => {
     it('onImpersonationSuccess', async () => {
       const user = { username: 'myUser', id: '123' };
       const impersonatedUser = { username: 'impUser', id: '456' };
+      const findUserById = jest.fn();
+      findUserById
+        .mockReturnValueOnce(user)
+        .mockReturnValueOnce(impersonatedUser);
       const accountsServer = new AccountsServer(
         {
           db: {
-            findUserById: () => Promise.resolve(user),
-            findUserByUsername: () => Promise.resolve(impersonatedUser),
+            findUserById,
             createSession: () => Promise.resolve('001'),
           } as any,
           tokenSecret: 'secret',
@@ -1010,10 +1013,13 @@ describe('AccountsServer', () => {
     });
 
     it('throws error if impersonated user is not found', async () => {
+      const findUserById = jest.fn();
+      findUserById
+        .mockReturnValueOnce(user);
       const accountsServer = new AccountsServer(
         {
           db: {
-            findUserById: () => Promise.resolve(user),
+            findUserById,
             findUserByUsername: () => Promise.resolve(null),
           } as any,
           tokenSecret: 'secret',
@@ -1037,7 +1043,7 @@ describe('AccountsServer', () => {
         );
         throw new Error();
       } catch (err) {
-        expect(err.message).toEqual('User someUser not found');
+        expect(err.message).toEqual('Impersonated user not found');
       }
     });
 
@@ -1109,11 +1115,14 @@ describe('AccountsServer', () => {
 
     it('returns correct response if authorized', async () => {
       const createSession = jest.fn(() => Promise.resolve('001'));
+      const findUserById = jest.fn();
+      findUserById
+        .mockReturnValueOnce(user)
+        .mockReturnValueOnce(impersonatedUser);
       const accountsServer = new AccountsServer(
         {
           db: {
-            findUserById: () => Promise.resolve(user),
-            findUserByUsername: () => Promise.resolve(impersonatedUser),
+            findUserById,
             createSession,
           } as any,
           tokenSecret: 'secret',
