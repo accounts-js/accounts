@@ -1,5 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`TwoFactor authenticate should throw if invalid code 1`] = `"2FA code didn't match"`;
+
+exports[`TwoFactor authenticate should throw that 2fa is not set 1`] = `"2FA not set"`;
+
 exports[`TwoFactor set should set two-factor service 1`] = `
 Array [
   Array [

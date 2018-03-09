@@ -31,13 +31,17 @@ export class TwoFactor {
   /**
    * Set two factor store
    */
-  public setStore(store: DBInterface) {
+  public setStore(store: DBInterface): void {
     this.db = store;
   }
 
-  public async authenticate(userId: string, code: string) {
+  public async authenticate(userId: string, code: string): Promise<void> {
     const user = await this.db.findUserById(userId);
     const twoFactorService: TwoFactorService = user.services[this.serviceName];
+    // If user does not have 2fa set return error
+    if (!twoFactorService) {
+      throw new Error(errors.userTwoFactorNotSet);
+    }
     if (
       !speakeasy.totp.verify({
         secret: twoFactorService.secret.base32,
@@ -64,7 +68,7 @@ export class TwoFactor {
    * Verify the code is correct
    * Add the code to the user profile
    */
-  public async set(userId: string, secret: speakeasy.Key, code: string) {
+  public async set(userId: string, secret: speakeasy.Key, code: string): Promise<void> {
     if (
       speakeasy.totp.verify({
         secret: secret.base32,
@@ -85,7 +89,7 @@ export class TwoFactor {
   /**
    * Remove two factor for a user
    */
-  public async unset(userId: string, code: string) {
+  public async unset(userId: string, code: string): Promise<void> {
     const user = await this.db.findUserById(userId);
     const twoFactorService: TwoFactorService = user.services[this.serviceName];
     // If user does not have 2fa set return error
