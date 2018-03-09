@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`errors should have named export errors 1`] = `
+Object {
+  "codeDidNotMatch": "2FA code didn't match",
+}
+`;

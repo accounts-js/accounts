@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TwoFactor set should set two-factor service 1`] = `
+Array [
+  Array [
+    "userId",
+    "two-factor",
+    Object {
+      "secret": "secret",
+    },
+  ],
+]
+`;
+
+exports[`TwoFactor set should throw if invalid code 1`] = `"2FA code didn't match"`;
