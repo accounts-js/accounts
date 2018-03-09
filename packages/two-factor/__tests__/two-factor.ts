@@ -8,7 +8,7 @@ const dbMock: any = {
 };
 
 const accountsTwoFactor = new TwoFactor({
-  appName: 'Accounts-js test'
+  appName: 'Accounts-js test',
 });
 accountsTwoFactor.setStore(dbMock);
 
@@ -27,7 +27,9 @@ describe('TwoFactor', () => {
   describe('set', () => {
     it('should throw if invalid code', async () => {
       const secret = accountsTwoFactor.getNewAuthSecret();
-      await expect(accountsTwoFactor.set('userId', secret, 'invalidCode')).rejects.toThrowErrorMatchingSnapshot();
+      await expect(
+        accountsTwoFactor.set('userId', secret, 'invalidCode')
+      ).rejects.toThrowErrorMatchingSnapshot();
     });
 
     it('should set two-factor service', async () => {

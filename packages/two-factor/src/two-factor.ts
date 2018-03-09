@@ -3,7 +3,7 @@ import { DBInterface } from '@accounts/server';
 import { errors } from './errors';
 
 export interface TwoFactorService {
-  secret: speakeasy.Key,
+  secret: speakeasy.Key;
 }
 
 export interface AccountsTwoFactorOptions {
@@ -11,12 +11,12 @@ export interface AccountsTwoFactorOptions {
   appName: string;
   // Two factor secret length, default to 20
   secretLength?: number;
-  window? :number;
+  window?: number;
 }
 
 const defaultOptions = {
   secretLength: 20,
-  window: 0
+  window: 0,
 };
 
 export class TwoFactor {
@@ -43,7 +43,7 @@ export class TwoFactor {
         secret: twoFactorService.secret.base32,
         encoding: 'base32',
         token: code,
-        window: this.options.window
+        window: this.options.window,
       })
     ) {
       throw new Error(errors.codeDidNotMatch);
@@ -70,11 +70,11 @@ export class TwoFactor {
         secret: secret.base32,
         encoding: 'base32',
         token: code,
-        window: this.options.window
+        window: this.options.window,
       })
     ) {
       const twoFactorService: TwoFactorService = {
-        secret
+        secret,
       };
       await this.db.setService(userId, this.serviceName, twoFactorService);
     } else {
@@ -88,12 +88,14 @@ export class TwoFactor {
   public async unset(userId: string, code: string) {
     const user = await this.db.findUserById(userId);
     const twoFactorService: TwoFactorService = user.services[this.serviceName];
-    if (speakeasy.totp.verify({
-      secret: twoFactorService.secret.base32,
-      encoding: 'base32',
-      token: code,
-      window: this.options.window
-    })) {
+    if (
+      speakeasy.totp.verify({
+        secret: twoFactorService.secret.base32,
+        encoding: 'base32',
+        token: code,
+        window: this.options.window,
+      })
+    ) {
       this.db.unsetService(userId, this.serviceName);
     } else {
       throw new Error(errors.codeDidNotMatch);
