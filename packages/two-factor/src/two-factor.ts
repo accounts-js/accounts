@@ -9,7 +9,7 @@ export interface TwoFactorService {
 
 export interface AccountsTwoFactorOptions {
   // Two factor app name
-  appName: string;
+  appName?: string;
   // Two factor secret length, default to 20
   secretLength?: number;
   window?: number;
@@ -46,8 +46,7 @@ export class TwoFactor {
   /**
    * Authenticate a user with a 2fa code
    */
-  public async authenticate(userId: string, code: string): Promise<void> {
-    const user = await this.db.findUserById(userId);
+  public async authenticate(user: UserObjectType, code: string): Promise<void> {
     const twoFactorService = this.getUserService(user);
     // If user does not have 2fa set return error
     if (!twoFactorService) {
