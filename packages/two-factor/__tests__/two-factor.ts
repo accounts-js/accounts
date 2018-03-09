@@ -8,14 +8,14 @@ const dbMock: any = {
 };
 
 const mockedUserWithoutTwoFactor = {
-  services: {}
-}
+  services: {},
+};
 
 const mockedUserWithTwoFactor = {
   services: {
-    'two-factor': { secret: {} }
-  }
-}
+    'two-factor': { secret: {} },
+  },
+};
 
 const accountsTwoFactor = new TwoFactor({
   appName: 'Accounts-js test',
@@ -30,21 +30,27 @@ describe('TwoFactor', () => {
 
   describe('authenticate', () => {
     it('should throw that 2fa is not set', async () => {
-      dbMock.findUserById.mockImplementation(() => Promise.resolve(mockedUserWithoutTwoFactor));
+      dbMock.findUserById.mockImplementation(() =>
+        Promise.resolve(mockedUserWithoutTwoFactor)
+      );
       await expect(
         accountsTwoFactor.authenticate('userId', 'invalidCode')
       ).rejects.toThrowErrorMatchingSnapshot();
     });
 
     it('should throw if invalid code', async () => {
-      dbMock.findUserById.mockImplementation(() => Promise.resolve(mockedUserWithTwoFactor));
+      dbMock.findUserById.mockImplementation(() =>
+        Promise.resolve(mockedUserWithTwoFactor)
+      );
       await expect(
         accountsTwoFactor.authenticate('userId', 'invalidCode')
       ).rejects.toThrowErrorMatchingSnapshot();
     });
 
     it('should authenticate user with 2fa', async () => {
-      dbMock.findUserById.mockImplementation(() => Promise.resolve(mockedUserWithTwoFactor));
+      dbMock.findUserById.mockImplementation(() =>
+        Promise.resolve(mockedUserWithTwoFactor)
+      );
       const spy = jest.spyOn(speakeasy.totp, 'verify').mockReturnValue(true);
       await accountsTwoFactor.authenticate('userId', 'validCode');
       expect(spy).toHaveBeenCalled();
@@ -76,21 +82,27 @@ describe('TwoFactor', () => {
 
   describe('unset', () => {
     it('should throw that 2fa is not set', async () => {
-      dbMock.findUserById.mockImplementation(() => Promise.resolve(mockedUserWithoutTwoFactor));
+      dbMock.findUserById.mockImplementation(() =>
+        Promise.resolve(mockedUserWithoutTwoFactor)
+      );
       await expect(
         accountsTwoFactor.unset('userId', 'invalidCode')
       ).rejects.toThrowErrorMatchingSnapshot();
     });
 
     it('should throw if invalid code', async () => {
-      dbMock.findUserById.mockImplementation(() => Promise.resolve(mockedUserWithTwoFactor));
+      dbMock.findUserById.mockImplementation(() =>
+        Promise.resolve(mockedUserWithTwoFactor)
+      );
       await expect(
         accountsTwoFactor.unset('userId', 'invalidCode')
       ).rejects.toThrowErrorMatchingSnapshot();
     });
 
     it('should unset two-factor service', async () => {
-      dbMock.findUserById.mockImplementation(() => Promise.resolve(mockedUserWithTwoFactor));
+      dbMock.findUserById.mockImplementation(() =>
+        Promise.resolve(mockedUserWithTwoFactor)
+      );
       const spy = jest.spyOn(speakeasy.totp, 'verify').mockReturnValue(true);
       await accountsTwoFactor.unset('userId', 'validCode');
       expect(spy).toHaveBeenCalled();

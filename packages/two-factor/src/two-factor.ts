@@ -68,7 +68,11 @@ export class TwoFactor {
    * Verify the code is correct
    * Add the code to the user profile
    */
-  public async set(userId: string, secret: speakeasy.Key, code: string): Promise<void> {
+  public async set(
+    userId: string,
+    secret: speakeasy.Key,
+    code: string
+  ): Promise<void> {
     if (
       speakeasy.totp.verify({
         secret: secret.base32,
