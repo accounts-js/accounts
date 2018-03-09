@@ -1,1 +1,1 @@
-export { TwoFactor } from './two-factor';
+export { TwoFactor, AccountsTwoFactorOptions } from './two-factor';

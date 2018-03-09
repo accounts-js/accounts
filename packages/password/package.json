@@ -26,6 +26,7 @@
     "mapCoverage": true
   },
   "dependencies": {
+    "@accounts/two-factor": "^0.1.0-beta.3",
     "bcryptjs": "^2.4.3",
     "lodash": "^4.17.4"
   },

@@ -22,6 +22,10 @@ import {
   generateRandomToken,
   AuthService,
 } from '@accounts/server';
+import {
+  TwoFactor,
+  AccountsTwoFactorOptions,
+} from '@accounts/two-factor';
 import { getFirstUserEmail } from '@accounts/server/lib/utils';
 import { hashPassword, bcryptPassword, verifyPassword } from './encryption';
 import {
@@ -36,6 +40,7 @@ export const isEmail = (email?: string) => {
 };
 
 export interface AccountsPasswordOptions {
+  twoFactor?: AccountsTwoFactorOptions
   passwordHashAlgorithm?: HashAlgorithm;
   passwordResetTokenExpirationInDays?: number;
   passwordEnrollTokenExpirationInDays?: number;
@@ -71,9 +76,11 @@ export default class AccountsPassword implements AuthService {
   public server: AccountsServer;
   private options: AccountsPasswordOptions;
   private db: DBInterface;
+  private twoFactor: TwoFactor;
 
   constructor(options: AccountsPasswordOptions = {}) {
     this.options = { ...defaultOptions, ...options };
+    this.twoFactor = new TwoFactor(options.twoFactor);
   }
 
   public setStore(store: DBInterface) {
@@ -83,7 +90,7 @@ export default class AccountsPassword implements AuthService {
   public async authenticate(
     params: PasswordLoginType
   ): Promise<UserObjectType> {
-    const { user, password } = params;
+    const { user, password, code } = params;
     if (!user || !password) {
       throw new Error('Unrecognized options for login request');
     }
@@ -91,16 +98,12 @@ export default class AccountsPassword implements AuthService {
       throw new Error('Match failed');
     }
 
-    /* if (this._options.passwordAuthenticator) {
-      foundUser = await this._externalPasswordAuthenticator(
-        this._options.passwordAuthenticator,
-        user,
-        password
-      );
-    } else { */
     const foundUser = await this.passwordAuthenticator(user, password);
 
-    // TODO 2fa check
+    // If user activated two factor authentication try with the code
+    if (this.twoFactor.getUserService(foundUser)) {
+      await this.twoFactor.authenticate(foundUser, code);
+    }
 
     return foundUser;
   }
