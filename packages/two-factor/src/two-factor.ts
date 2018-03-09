@@ -25,7 +25,7 @@ export class TwoFactor {
   private db: DBInterface;
   private serviceName = 'two-factor';
 
-  constructor(options: AccountsTwoFactorOptions) {
+  constructor(options: AccountsTwoFactorOptions = {}) {
     this.options = { ...defaultOptions, ...options };
   }
 
@@ -47,6 +47,10 @@ export class TwoFactor {
    * Authenticate a user with a 2fa code
    */
   public async authenticate(user: UserObjectType, code: string): Promise<void> {
+    if (!code) {
+      throw new Error(errors.codeRequired);
+    }
+
     const twoFactorService = this.getUserService(user);
     // If user does not have 2fa set return error
     if (!twoFactorService) {
@@ -83,6 +87,9 @@ export class TwoFactor {
     secret: speakeasy.Key,
     code: string
   ): Promise<void> {
+    if (!code) {
+      throw new Error(errors.codeRequired);
+    }
     if (
       speakeasy.totp.verify({
         secret: secret.base32,
@@ -104,6 +111,10 @@ export class TwoFactor {
    * Remove two factor for a user
    */
   public async unset(userId: string, code: string): Promise<void> {
+    if (!code) {
+      throw new Error(errors.codeRequired);
+    }
+
     const user = await this.db.findUserById(userId);
     const twoFactorService = this.getUserService(user);
     // If user does not have 2fa set return error
