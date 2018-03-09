@@ -29,6 +29,13 @@ describe('TwoFactor', () => {
   });
 
   describe('authenticate', () => {
+    it('should throw if code is not set', async () => {
+      const code: any = null;
+      await expect(
+        accountsTwoFactor.authenticate(mockedUserWithoutTwoFactor, code)
+      ).rejects.toThrowErrorMatchingSnapshot();
+    });
+
     it('should throw that 2fa is not set', async () => {
       await expect(
         accountsTwoFactor.authenticate(mockedUserWithoutTwoFactor, 'invalidCode')
@@ -56,6 +63,14 @@ describe('TwoFactor', () => {
   });
 
   describe('set', () => {
+    it('should throw if code is not set', async () => {
+      const secret = accountsTwoFactor.getNewAuthSecret();
+      const code: any = null;
+      await expect(
+        accountsTwoFactor.set('userId', secret, code)
+      ).rejects.toThrowErrorMatchingSnapshot();
+    });
+
     it('should throw if invalid code', async () => {
       const secret = accountsTwoFactor.getNewAuthSecret();
       await expect(
@@ -72,6 +87,13 @@ describe('TwoFactor', () => {
   });
 
   describe('unset', () => {
+    it('should throw if code is not set', async () => {
+      const code: any = null;
+      await expect(
+        accountsTwoFactor.unset('userId', code)
+      ).rejects.toThrowErrorMatchingSnapshot();
+    });
+
     it('should throw that 2fa is not set', async () => {
       dbMock.findUserById.mockImplementation(() =>
         Promise.resolve(mockedUserWithoutTwoFactor)
