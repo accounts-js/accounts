@@ -13,3 +13,16 @@ Array [
 `;
 
 exports[`TwoFactor set should throw if invalid code 1`] = `"2FA code didn't match"`;
+
+exports[`TwoFactor unset should throw if invalid code 1`] = `"2FA code didn't match"`;
+
+exports[`TwoFactor unset should throw that 2fa is not set 1`] = `"2FA not set"`;
+
+exports[`TwoFactor unset should unset two-factor service 1`] = `
+Array [
+  Array [
+    "userId",
+    "two-factor",
+  ],
+]
+`;

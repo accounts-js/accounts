@@ -88,6 +88,10 @@ export class TwoFactor {
   public async unset(userId: string, code: string) {
     const user = await this.db.findUserById(userId);
     const twoFactorService: TwoFactorService = user.services[this.serviceName];
+    // If user does not have 2fa set return error
+    if (!twoFactorService) {
+      throw new Error(errors.userTwoFactorNotSet);
+    }
     if (
       speakeasy.totp.verify({
         secret: twoFactorService.secret.base32,
