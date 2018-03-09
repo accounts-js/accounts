@@ -91,7 +91,6 @@ export default class AccountsPassword implements AuthService {
       throw new Error('Match failed');
     }
 
-    let foundUser;
     /* if (this._options.passwordAuthenticator) {
       foundUser = await this._externalPasswordAuthenticator(
         this._options.passwordAuthenticator,
@@ -99,11 +98,9 @@ export default class AccountsPassword implements AuthService {
         password
       );
     } else { */
-    foundUser = await this.passwordAuthenticator(user, password);
+    const foundUser = await this.passwordAuthenticator(user, password);
 
-    if (!foundUser) {
-      throw new Error('User not found');
-    }
+    // TODO 2fa check
 
     return foundUser;
   }
@@ -140,6 +137,7 @@ export default class AccountsPassword implements AuthService {
     newEmail: string,
     verified: boolean
   ): Promise<void> {
+    // TODO use this.options.verifyEmail before
     return this.db.addEmail(userId, newEmail, verified);
   }
 
@@ -388,12 +386,12 @@ export default class AccountsPassword implements AuthService {
   private async passwordAuthenticator(
     user: string | LoginUserIdentityType,
     password: PasswordType
-  ): Promise<any> {
+  ): Promise<UserObjectType> {
     const { username, email, id } = isString(user)
       ? this.toUsernameAndEmail({ user })
       : this.toUsernameAndEmail({ ...user });
 
-    let foundUser;
+    let foundUser: UserObjectType;
 
     if (id) {
       // this._validateLoginWithField('id', user);
