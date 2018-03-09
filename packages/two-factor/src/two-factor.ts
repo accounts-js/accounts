@@ -1,5 +1,6 @@
 import * as speakeasy from 'speakeasy';
 import { DBInterface } from '@accounts/server';
+import { UserObjectType } from '@accounts/common';
 import { errors } from './errors';
 
 export interface TwoFactorService {
@@ -35,9 +36,19 @@ export class TwoFactor {
     this.db = store;
   }
 
+  /**
+   * Return the user two factor service object
+   */
+  public getUserService = (user: UserObjectType): TwoFactorService => {
+    return user.services[this.serviceName];
+  }
+
+  /**
+   * Authenticate a user with a 2fa code
+   */
   public async authenticate(userId: string, code: string): Promise<void> {
     const user = await this.db.findUserById(userId);
-    const twoFactorService: TwoFactorService = user.services[this.serviceName];
+    const twoFactorService = this.getUserService(user);
     // If user does not have 2fa set return error
     if (!twoFactorService) {
       throw new Error(errors.userTwoFactorNotSet);
@@ -95,7 +106,7 @@ export class TwoFactor {
    */
   public async unset(userId: string, code: string): Promise<void> {
     const user = await this.db.findUserById(userId);
-    const twoFactorService: TwoFactorService = user.services[this.serviceName];
+    const twoFactorService = this.getUserService(user);
     // If user does not have 2fa set return error
     if (!twoFactorService) {
       throw new Error(errors.userTwoFactorNotSet);
