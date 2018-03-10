@@ -26,9 +26,9 @@ import {
 import { hashPassword, bcryptPassword, verifyPassword } from './utils/encryption';
 
 
-import { PasswordCreateUserType } from './types/PasswordCreateUserType'
-import { PasswordLoginType } from './types/PasswordLoginType'
-import { PasswordType } from './types/PasswordType'
+import { PasswordCreateUserType } from './types/password-create-user-type'
+import { PasswordLoginType } from './types/password-login-type'
+import { PasswordType } from './types/password-type'
 
 import { isEmail } from './utils/isEmail'
 
