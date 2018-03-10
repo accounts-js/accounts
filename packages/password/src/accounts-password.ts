@@ -24,11 +24,11 @@ import {
   getFirstUserEmail
 } from '@accounts/server';
 import { hashPassword, bcryptPassword, verifyPassword } from './utils/encryption';
-import {
-  PasswordCreateUserType,
-  PasswordLoginType,
-  PasswordType,
-} from './types';
+
+
+import { PasswordCreateUserType } from './types/PasswordCreateUserType'
+import { PasswordLoginType } from './types/PasswordLoginType'
+import { PasswordType } from './types/PasswordType'
 
 import { isEmail } from './utils/isEmail'
 
