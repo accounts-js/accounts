@@ -1,6 +1,6 @@
 import * as oauth from 'oauth';
 
-import { AccountsOAuthTwitterOptions } from './types/AccountsOAuthTwitterOptions';
+import { AccountsOAuthTwitterOptions } from './types/accounts-oauth-twitter-options';
 
 
 export class AccountsOAuthTwitter {
