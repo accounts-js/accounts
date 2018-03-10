@@ -1,15 +1,13 @@
 import * as oauth from 'oauth';
 
-export interface AccountsOauthTwitterOptions {
-  key: string;
-  secret: string;
-}
+import { AccountsOAuthTwitterOptions } from './types/AccountsOAuthTwitterOptions';
+
 
 export class AccountsOAuthTwitter {
-  private options: AccountsOauthTwitterOptions;
+  private options: AccountsOAuthTwitterOptions;
   private oauth: any;
 
-  constructor(options: AccountsOauthTwitterOptions) {
+  constructor(options: AccountsOAuthTwitterOptions) {
     this.options = options;
     this.oauth = new oauth.OAuth(
       'https://twitter.com/oauth/request_token',
