@@ -23,7 +23,7 @@ import {
   AuthService,
   getFirstUserEmail
 } from '@accounts/server';
-import { hashPassword, bcryptPassword, verifyPassword } from './encryption';
+import { hashPassword, bcryptPassword, verifyPassword } from './utils/encryption';
 import {
   PasswordCreateUserType,
   PasswordLoginType,
