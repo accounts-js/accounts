@@ -1,19 +1,19 @@
 import * as oauth from 'oauth';
 
-import { AccountsOAuthTwitterOptions } from './types/accounts-oauth-twitter-options';
+import { Configuration } from './types/configuration';
 
 
 export class AccountsOAuthTwitter {
-  private options: AccountsOAuthTwitterOptions;
+  private config: Configuration;
   private oauth: any;
 
-  constructor(options: AccountsOAuthTwitterOptions) {
-    this.options = options;
+  constructor(config: Configuration) {
+    this.config = config;
     this.oauth = new oauth.OAuth(
       'https://twitter.com/oauth/request_token',
       'https://twitter.com/oauth/access_token',
-      this.options.key,
-      this.options.secret,
+      this.config.key,
+      this.config.secret,
       '1.0A',
       null,
       'HMAC-SHA1'
