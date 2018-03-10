@@ -21,8 +21,8 @@ import {
   AccountsServer,
   generateRandomToken,
   AuthService,
+  getFirstUserEmail
 } from '@accounts/server';
-import { getFirstUserEmail } from '@accounts/server/lib/utils';
 import { hashPassword, bcryptPassword, verifyPassword } from './encryption';
 import {
   PasswordCreateUserType,
