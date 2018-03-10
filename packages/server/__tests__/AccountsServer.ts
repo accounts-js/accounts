@@ -1,10 +1,11 @@
 import * as jwtDecode from 'jwt-decode';
-import { AccountsServer, JwtData } from '../src/accounts-server';
+import { AccountsServer } from '../src/AccountsServer';
+import { JwtData } from '../src/types/JwtData'
 import {
   bcryptPassword,
   hashPassword,
   verifyPassword,
-} from '../src/encryption';
+} from '../src/utils/encryption';
 
 describe('AccountsServer', () => {
   const db = {
