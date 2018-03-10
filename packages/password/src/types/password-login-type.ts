@@ -1,5 +1,5 @@
 import { LoginUserIdentityType } from '@accounts/common';
-import { PasswordType } from './PasswordType'
+import { PasswordType } from './password-type'
 
 export interface PasswordLoginType {
   user: string | LoginUserIdentityType;
