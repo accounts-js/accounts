@@ -19,7 +19,7 @@ import {
 } from './utils/tokens';
 
 import { emailTemplates, sendMail } from './utils/email';
-import { ServerHooks } from './utils/serverHooks';
+import { ServerHooks } from './utils/server-hooks';
 
 import { AccountsServerOptions } from './types/accounts-server-options'
 import { ConnectionInformationsType } from './types/connection-informations-type'
