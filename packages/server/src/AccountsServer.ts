@@ -19,6 +19,7 @@ import {
 } from './utils/tokens';
 
 import { emailTemplates, sendMail } from './utils/email';
+import { ServerHooks } from './utils/serverHooks';
 
 import { AccountsServerOptions } from './types/AccountsServerOptions'
 import { ConnectionInformationsType } from './types/ConnectionInformationsType'
@@ -43,21 +44,6 @@ const defaultOptions = {
   userObjectSanitizer: (user: UserObjectType) => user,
   sendMail,
   siteUrl: 'http://localhost:3000',
-};
-
-export const ServerHooks = {
-  LoginSuccess: 'LoginSuccess',
-  LoginError: 'LoginError',
-  LogoutSuccess: 'LogoutSuccess',
-  LogoutError: 'LogoutError',
-  CreateUserSuccess: 'CreateUserSuccess',
-  CreateUserError: 'CreateUserError',
-  ResumeSessionSuccess: 'ResumeSessionSuccess',
-  ResumeSessionError: 'ResumeSessionError',
-  RefreshTokensSuccess: 'RefreshTokensSuccess',
-  RefreshTokensError: 'RefreshTokensError',
-  ImpersonationSuccess: 'ImpersonationSuccess',
-  ImpersonationError: 'ImpersonationError',
 };
 
 export class AccountsServer {
