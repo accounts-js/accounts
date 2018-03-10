@@ -1,3 +1,3 @@
-import { EmailTemplateType } from './EmailTemplateType'
+import { EmailTemplateType } from './email-template-type'
 
 export type EmailType = EmailTemplateType & { to: string };

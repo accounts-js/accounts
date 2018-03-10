@@ -1,11 +1,11 @@
-import { AccountsServer } from './AccountsServer';
+import { AccountsServer } from './accounts-server';
 import * as encryption from './utils/encryption';
 import { generateRandomToken } from './utils/tokens';
-import { getFirstUserEmail } from './utils/getFirstUserEmail';
+import { getFirstUserEmail } from './utils/get-first-user-email';
 
-import { ConnectionInformationsType } from './types/ConnectionInformationsType'
-import { AuthService } from './types/AuthService'
-import { DBInterface } from './types/DBInterface'
+import { ConnectionInformationsType } from './types/connection-informations-type'
+import { AuthService } from './types/auth-service'
+import { DBInterface } from './types/db-interface'
 
 export default AccountsServer;
 export {

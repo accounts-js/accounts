@@ -1,4 +1,4 @@
-import { EmailTemplateType } from './EmailTemplateType'
+import { EmailTemplateType } from './email-template-type'
 
 export interface EmailTemplatesType {
   from: string;
