@@ -1,6 +1,6 @@
 import { UserObjectType } from '@accounts/common';
-import { EmailTemplateType } from '../types/EmailTemplateType';
-import { EmailTemplatesType } from '../types/EmailTemplatesType';
+import { EmailTemplateType } from '../types/email-template-type';
+import { EmailTemplatesType } from '../types/email-templates-type';
 
 export const emailTemplates = {
   from: 'js-accounts <no-reply@js-accounts.com>',

@@ -1,5 +1,5 @@
 import { UserObjectType } from '@accounts/common';
-import { EmailTemplateType } from './EmailTemplateType';
+import { EmailTemplateType } from './email-template-type';
 
 export type PrepareMailFunction = (
   to: string,

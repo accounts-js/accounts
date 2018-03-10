@@ -1,5 +1,5 @@
 import { UserObjectType, SessionType, CreateUserType } from '@accounts/common';
-import { ConnectionInformationsType } from './ConnectionInformationsType';
+import { ConnectionInformationsType } from './connection-informations-type';
 
 export interface DBInterface {
   // Find user by identity fields

@@ -1,7 +1,7 @@
 import { UserObjectType } from '@accounts/common';
-import { DBInterface } from './DBInterface'
+import { DBInterface } from './db-interface'
 
-import { AccountsServer } from '../AccountsServer';
+import { AccountsServer } from '../accounts-server';
 
 export interface AuthService {
   server: AccountsServer;

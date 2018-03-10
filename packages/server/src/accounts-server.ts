@@ -21,14 +21,14 @@ import {
 import { emailTemplates, sendMail } from './utils/email';
 import { ServerHooks } from './utils/serverHooks';
 
-import { AccountsServerOptions } from './types/AccountsServerOptions'
-import { ConnectionInformationsType } from './types/ConnectionInformationsType'
-import { AuthService } from './types/AuthService'
-import { DBInterface } from './types/DBInterface'
-import { TokenRecord } from './types/TokenRecord'
-import { JwtData } from './types/JwtData'
-import { RemoveListenerHandle } from './types/RemoveListenerHandle'
-import { EmailTemplateType } from './types/EmailTemplateType'
+import { AccountsServerOptions } from './types/accounts-server-options'
+import { ConnectionInformationsType } from './types/connection-informations-type'
+import { AuthService } from './types/auth-service'
+import { DBInterface } from './types/db-interface'
+import { TokenRecord } from './types/token-record'
+import { JwtData } from './types/jwt-data'
+import { RemoveListenerHandle } from './types/remove-listener-handle'
+import { EmailTemplateType } from './types/email-template-type'
 
 const defaultOptions = {
   tokenSecret: 'secret',

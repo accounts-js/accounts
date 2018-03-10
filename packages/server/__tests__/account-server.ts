@@ -1,6 +1,6 @@
 import * as jwtDecode from 'jwt-decode';
-import { AccountsServer } from '../src/AccountsServer';
-import { JwtData } from '../src/types/JwtData'
+import { AccountsServer } from '../src/accounts-server';
+import { JwtData } from '../src/types/jwt-data'
 import {
   bcryptPassword,
   hashPassword,
