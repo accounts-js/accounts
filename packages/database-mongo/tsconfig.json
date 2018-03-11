@@ -4,7 +4,6 @@
     "rootDir": "./src",
     "outDir": "./lib",
   },
-  "types":[],
   "exclude": [
     "node_modules", 
     "__tests__", 
