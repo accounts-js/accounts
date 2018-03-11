@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./lib",
+    "lib": ["dom", "es6", "es2015", "es2016", "es2017"],
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "__tests__",
+    "lib"
+  ]
+}
