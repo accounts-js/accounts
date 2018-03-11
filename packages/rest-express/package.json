@@ -10,7 +10,7 @@
   "scripts": {
     "start": "tsc --watch",
     "compile": "tsc",
-    "prepublish": "npm run compile",
+    "prepublishOnly": "npm run compile",
     "test": "npm run testonly",
     "test:watch": "npm run testonly -- --watch --coverage",
     "testonly": "jest",
