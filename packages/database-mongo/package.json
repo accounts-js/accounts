@@ -7,20 +7,10 @@
   "scripts": {
     "start": "tsc --watch",
     "compile": "tsc",
-    "test":
-      "yarn lint && yarn coverage && yarn prettier-diff && yarn run compile",
-    "testonly": "jest --forceExit",
-    "lint": "tslint -c tslint.json '{src,__tests__}/**/*.ts'",
-    "prettier": "prettier '{src,__tests__}/**/*.ts' 'README.md'",
-    "prettier-diff": "yarn prettier --list-different",
-    "format": "yarn prettier --write",
+    "testonly": "jest",
+    "test:watch": "jest --watch",
     "coverage": "yarn testonly --coverage",
-    "codecov": "codecov",
-    "precommit": "pretty-quick --staged"
-  },
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "es5"
+    "prepublishOnly": "yarn compile"
   },
   "renovate": {
     "extends": ["config:base"],
@@ -32,38 +22,24 @@
   "files": ["src", "lib"],
   "jest": {
     "transform": {
-      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "./__tests__/.*.ts$",
     "moduleFileExtensions": ["ts", "js"]
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/js-accounts/mongo.git"
+    "url": "https://github.com/accounts-js/accounts.git"
   },
   "author": "Leo Pradel",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/js-accounts/mongo/issues"
+    "url": "https://github.com/accounts-js/accounts/issues"
   },
-  "homepage": "https://github.com/js-accounts/mongo",
+  "homepage": "https://github.com/accounts-js/accounts",
   "devDependencies": {
     "@accounts/common": "0.1.0-beta.3",
-    "@accounts/server": "0.1.0-beta.3",
-    "@accounts/tslint-config-accounts": "0.0.6",
-    "@types/jest": "22.2.0",
-    "@types/lodash": "4.14.104",
-    "@types/mongodb": "3.0.7",
-    "@types/node": "9.4.7",
-    "codecov": "3.0.0",
-    "coveralls": "3.0.0",
-    "husky": "0.14.3",
-    "jest": "22.4.2",
-    "prettier": "1.11.1",
-    "pretty-quick": "1.4.1",
-    "ts-jest": "22.4.1",
-    "tslint": "5.9.1",
-    "typescript": "2.7.2"
+    "@accounts/server": "0.1.0-beta.3"
   },
   "peerDependencies": {
     "@accounts/common": "^0.1.0-beta.3",
