@@ -1,0 +1,57 @@
+{
+  "name": "@accounts/rest-express",
+  "version": "0.1.0-beta.2",
+  "description": "Server side REST express middleware for accounts",
+  "main": "lib/index",
+  "typings": "lib/index",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "start": "tsc --watch",
+    "compile": "tsc",
+    "prepublish": "npm run compile",
+    "test": "npm run testonly",
+    "test:watch": "npm run testonly -- --watch --coverage",
+    "testonly": "jest",
+    "coverage": "npm run testonly -- --coverage",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "mapCoverage": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/js-accounts/rest/tree/master/packages/rest-express"
+  },
+  "keywords": [
+    "users",
+    "accounts",
+    "rest",
+    "express"
+  ],
+  "author": "Tim Mikeladze",
+  "license": "MIT",
+  "devDependencies": {
+    "@accounts/common": "0.1.0-beta.3",
+    "@accounts/server": "0.1.0-beta.3"
+  },
+  "peerDependencies": {
+    "@accounts/common": "^0.1.0-beta.0",
+    "@accounts/server": "^0.1.0-beta.0"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "lodash": "^4.17.4",
+    "request-ip": "^2.0.2"
+  }
+}
