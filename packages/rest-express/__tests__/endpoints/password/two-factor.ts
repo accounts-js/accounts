@@ -6,7 +6,6 @@ import {
 
 const res: any = {
   json: jest.fn(),
-  send: jest.fn(),
   status: jest.fn(() => res),
 };
 
@@ -113,7 +112,7 @@ describe('twoFactor', () => {
       await middleware({} as any, res);
 
       expect(res.status).toBeCalledWith(401);
-      expect(res.send).toBeCalled();
+      expect(res.json).toBeCalled();
     });
 
     it('Sends error if it was thrown on twoFactorSecret', async () => {
@@ -185,7 +184,7 @@ describe('twoFactor', () => {
       await middleware({} as any, res);
 
       expect(res.status).toBeCalledWith(401);
-      expect(res.send).toBeCalled();
+      expect(res.json).toBeCalled();
     });
 
     it('Sends error if it was thrown on twoFactorSecret', async () => {

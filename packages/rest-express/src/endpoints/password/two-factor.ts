@@ -22,7 +22,7 @@ export const twoFactorSet = (accountsServer: AccountsServer) => async (
   try {
     if (!(req as any).userId) {
       res.status(401);
-      res.send();
+      res.json({ message: 'Unauthorized' });
       return;
     }
     const password: any = accountsServer.getServices().password;
@@ -40,7 +40,7 @@ export const twoFactorUnset = (accountsServer: AccountsServer) => async (
   try {
     if (!(req as any).userId) {
       res.status(401);
-      res.send();
+      res.json({ message: 'Unauthorized' });
       return;
     }
     const password: any = accountsServer.getServices().password;
