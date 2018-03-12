@@ -1,8 +1,9 @@
+export { DatabaseInterface as DBInterface } from './types/database-interface'
+
 // ? Tokens
 export { Tokens as TokensType } from './types/tokens'
 export { TokenRecord } from './types/token-record'
 export { Session as SessionType} from './types/session'
-
 
 // ? User
 export { User as UserObjectType } from './types/user'
