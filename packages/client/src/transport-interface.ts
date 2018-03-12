@@ -1,8 +1,4 @@
-import {
-  CreateUserType,
-  LoginReturnType,
-  ImpersonateReturnType,
-} from '@accounts/common';
+import { CreateUserType, LoginReturnType, ImpersonateReturnType } from '@accounts/common';
 
 export interface TransportInterface {
   createUser(user: CreateUserType): Promise<string>;
@@ -13,10 +9,7 @@ export interface TransportInterface {
     }
   ): Promise<LoginReturnType>;
   logout(accessToken: string): Promise<void>;
-  refreshTokens(
-    accessToken: string,
-    refreshToken: string
-  ): Promise<LoginReturnType>;
+  refreshTokens(accessToken: string, refreshToken: string): Promise<LoginReturnType>;
   verifyEmail(token: string): Promise<void>;
   sendResetPasswordEmail(email: string): Promise<void>;
   sendVerificationEmail(email: string): Promise<void>;

@@ -1,10 +1,6 @@
 import * as jwtDecode from 'jwt-decode';
 import { AccountsServer, JwtData } from '../src/accounts-server';
-import {
-  bcryptPassword,
-  hashPassword,
-  verifyPassword,
-} from '../src/encryption';
+import { bcryptPassword, hashPassword, verifyPassword } from '../src/encryption';
 
 describe('AccountsServer', () => {
   const db = {
@@ -379,12 +375,7 @@ describe('AccountsServer', () => {
 
       try {
         const { accessToken, refreshToken } = accountsServer.createTokens(null);
-        await accountsServer.refreshTokens(
-          accessToken,
-          refreshToken,
-          null,
-          null
-        );
+        await accountsServer.refreshTokens(accessToken, refreshToken, null, null);
       } catch (err) {
         // nothing to do
       }
@@ -422,12 +413,7 @@ describe('AccountsServer', () => {
         refreshToken: 'newRefreshToken',
       });
 
-      await accountsServer.refreshTokens(
-        accessToken,
-        refreshToken,
-        'ip',
-        'user agent'
-      );
+      await accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
 
       expect(hookSpy).toBeCalled();
     });
@@ -464,10 +450,7 @@ describe('AccountsServer', () => {
           } as any,
           tokenSecret: 'secret',
           impersonationAuthorize: async (userObject, impersonateToUser) => {
-            return (
-              userObject.id === user.id &&
-              impersonateToUser === impersonatedUser
-            );
+            return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
         },
         {}
@@ -521,16 +504,8 @@ describe('AccountsServer', () => {
         accessToken: 'newAccessToken',
         refreshToken: 'newRefreshToken',
       });
-      const res = await accountsServer.refreshTokens(
-        accessToken,
-        refreshToken,
-        'ip',
-        'user agent'
-      );
-      expect(updateSession.mock.calls[0]).toEqual([
-        '456',
-        { ip: 'ip', userAgent: 'user agent' },
-      ]);
+      const res = await accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
+      expect(updateSession.mock.calls[0]).toEqual(['456', { ip: 'ip', userAgent: 'user agent' }]);
       expect(res.user).toEqual({
         userId: '123',
         username: 'username',
@@ -549,9 +524,7 @@ describe('AccountsServer', () => {
         await accountsServer.refreshTokens(null, null, null, null);
         throw new Error();
       } catch (err) {
-        expect(err.message).toEqual(
-          'An accessToken and refreshToken are required'
-        );
+        expect(err.message).toEqual('An accessToken and refreshToken are required');
       }
     });
     it('throws error if tokens are not valid', async () => {
@@ -563,12 +536,7 @@ describe('AccountsServer', () => {
         {}
       );
       try {
-        await accountsServer.refreshTokens(
-          'bad access token',
-          'bad refresh token',
-          null,
-          null
-        );
+        await accountsServer.refreshTokens('bad access token', 'bad refresh token', null, null);
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('Tokens are not valid');
@@ -587,12 +555,7 @@ describe('AccountsServer', () => {
       );
       try {
         const { accessToken, refreshToken } = accountsServer.createTokens(null);
-        await accountsServer.refreshTokens(
-          accessToken,
-          refreshToken,
-          null,
-          null
-        );
+        await accountsServer.refreshTokens(accessToken, refreshToken, null, null);
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('Session not found');
@@ -614,12 +577,7 @@ describe('AccountsServer', () => {
       );
       try {
         const { accessToken, refreshToken } = accountsServer.createTokens(null);
-        await accountsServer.refreshTokens(
-          accessToken,
-          refreshToken,
-          null,
-          null
-        );
+        await accountsServer.refreshTokens(accessToken, refreshToken, null, null);
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('Session is no longer valid');
@@ -644,12 +602,7 @@ describe('AccountsServer', () => {
       );
       try {
         const { accessToken, refreshToken } = accountsServer.createTokens(null);
-        await accountsServer.refreshTokens(
-          accessToken,
-          refreshToken,
-          null,
-          null
-        );
+        await accountsServer.refreshTokens(accessToken, refreshToken, null, null);
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('User not found');
@@ -937,12 +890,7 @@ describe('AccountsServer', () => {
       );
 
       try {
-        const res = await accountsServer.impersonate(
-          'invalidToken',
-          'someUser',
-          null,
-          null
-        );
+        const res = await accountsServer.impersonate('invalidToken', 'someUser', null, null);
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('Access token is not valid');
@@ -966,12 +914,7 @@ describe('AccountsServer', () => {
         } as any);
 
       try {
-        const res = await accountsServer.impersonate(
-          accessToken,
-          'someUser',
-          null,
-          null
-        );
+        const res = await accountsServer.impersonate(accessToken, 'someUser', null, null);
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('Session is not valid for user');
@@ -997,12 +940,7 @@ describe('AccountsServer', () => {
         } as any);
 
       try {
-        const res = await accountsServer.impersonate(
-          accessToken,
-          'someUser',
-          null,
-          null
-        );
+        const res = await accountsServer.impersonate(accessToken, 'someUser', null, null);
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('User not found');
@@ -1029,12 +967,7 @@ describe('AccountsServer', () => {
         } as any);
 
       try {
-        const res = await accountsServer.impersonate(
-          accessToken,
-          'someUser',
-          null,
-          null
-        );
+        const res = await accountsServer.impersonate(accessToken, 'someUser', null, null);
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('User someUser not found');
@@ -1060,12 +993,7 @@ describe('AccountsServer', () => {
           userId: '123',
         } as any);
 
-      const res = await accountsServer.impersonate(
-        accessToken,
-        'someUser',
-        null,
-        null
-      );
+      const res = await accountsServer.impersonate(accessToken, 'someUser', null, null);
       expect(res.authorized).toEqual(false);
     });
 
@@ -1078,10 +1006,7 @@ describe('AccountsServer', () => {
           } as any,
           tokenSecret: 'secret',
           impersonationAuthorize: async (userObject, impersonateToUser) => {
-            return (
-              userObject.id === user.id &&
-              impersonateToUser === impersonatedUser
-            );
+            return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
         },
         {}
@@ -1094,16 +1019,10 @@ describe('AccountsServer', () => {
           userId: '123',
         } as any);
 
-      const impersonationAuthorize = accountsServer.getOptions()
-        .impersonationAuthorize;
+      const impersonationAuthorize = accountsServer.getOptions().impersonationAuthorize;
       expect(impersonationAuthorize).toBeDefined();
 
-      const res = await accountsServer.impersonate(
-        accessToken,
-        'someUser',
-        null,
-        null
-      );
+      const res = await accountsServer.impersonate(accessToken, 'someUser', null, null);
       expect(res.authorized).toEqual(false);
     });
 
@@ -1118,10 +1037,7 @@ describe('AccountsServer', () => {
           } as any,
           tokenSecret: 'secret',
           impersonationAuthorize: async (userObject, impersonateToUser) => {
-            return (
-              userObject.id === user.id &&
-              impersonateToUser === impersonatedUser
-            );
+            return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
         },
         {}
@@ -1139,12 +1055,7 @@ describe('AccountsServer', () => {
           isImpersonated,
         } as any);
 
-      const res = await accountsServer.impersonate(
-        accessToken,
-        'impUser',
-        null,
-        null
-      );
+      const res = await accountsServer.impersonate(accessToken, 'impUser', null, null);
       expect(res).toEqual({
         authorized: true,
         tokens: { sessionId: '001', isImpersonated: true },
