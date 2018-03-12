@@ -82,6 +82,7 @@ export default class AccountsPassword implements AuthService {
 
   public setStore(store: DBInterface) {
     this.db = store;
+    this.twoFactor.setStore(store);
   }
 
   public async authenticate(
