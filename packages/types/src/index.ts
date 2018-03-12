@@ -1,4 +1,5 @@
 export { DatabaseInterface as DBInterface } from './types/database-interface'
+import { ConnectionInformations as ConnectionInformationsType } from './types/connection-informations'
 
 // ? Tokens
 export { Tokens as TokensType } from './types/tokens'

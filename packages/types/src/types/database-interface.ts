@@ -1,6 +1,7 @@
 import { User } from './user'
 import { Session } from './session'
 import { CreateUser } from './create-user'
+import { ConnectionInformations } from './connection-informations'
 
 
 export interface DatabaseInterface {
