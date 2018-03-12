@@ -21,7 +21,8 @@ export const twoFactorSet = (accountsServer: AccountsServer) => async (
 ) => {
   try {
     if (!(req as any).userId) {
-      res.status(401).send();
+      res.status(401);
+      res.send();
       return;
     }
     const password: any = accountsServer.getServices().password;
@@ -38,11 +39,12 @@ export const twoFactorUnset = (accountsServer: AccountsServer) => async (
 ) => {
   try {
     if (!(req as any).userId) {
-      res.status(401).send();
+      res.status(401);
+      res.send();
       return;
     }
     const password: any = accountsServer.getServices().password;
-    const secret = await password.twoFactor.set((req as any).userId, req.body.code);
+    const secret = await password.twoFactor.unset((req as any).userId, req.body.code);
     res.json({});
   } catch (err) {
     sendError(res, err);
