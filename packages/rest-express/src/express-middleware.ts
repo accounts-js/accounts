@@ -18,7 +18,7 @@ import { impersonate } from './endpoints/impersonate';
 import { logout } from './endpoints/logout';
 import { serviceAuthenticate } from './endpoints/service-authenticate';
 import { registerPassword } from './endpoints/password/register';
-import { twoFactorSecret } from './endpoints/password/two-factor';
+import { twoFactorSecret, twoFactorSet, twoFactorUnset } from './endpoints/password/two-factor';
 import { userLoader } from './user-loader';
 
 export interface AccountsExpressOptions {
@@ -83,13 +83,13 @@ const accountsExpress = (
     router.post(
       `${path}/password/twoFactorSet`,
       userLoader(accountsServer),
-      twoFactorSecret(accountsServer)
+      twoFactorSet(accountsServer)
     );
 
     router.post(
       `${path}/password/twoFactorUnset`,
       userLoader(accountsServer),
-      twoFactorSecret(accountsServer)
+      twoFactorUnset(accountsServer)
     );
   }
 
