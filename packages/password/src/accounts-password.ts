@@ -22,10 +22,7 @@ import {
   generateRandomToken,
   AuthService,
 } from '@accounts/server';
-import {
-  TwoFactor,
-  AccountsTwoFactorOptions,
-} from '@accounts/two-factor';
+import { TwoFactor, AccountsTwoFactorOptions } from '@accounts/two-factor';
 import { getFirstUserEmail } from '@accounts/server/lib/utils';
 import { hashPassword, bcryptPassword, verifyPassword } from './encryption';
 import {
@@ -40,7 +37,7 @@ export const isEmail = (email?: string) => {
 };
 
 export interface AccountsPasswordOptions {
-  twoFactor?: AccountsTwoFactorOptions
+  twoFactor?: AccountsTwoFactorOptions;
   passwordHashAlgorithm?: HashAlgorithm;
   passwordResetTokenExpirationInDays?: number;
   passwordEnrollTokenExpirationInDays?: number;

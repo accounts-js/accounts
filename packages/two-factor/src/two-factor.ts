@@ -41,7 +41,7 @@ export class TwoFactor {
    */
   public getUserService = (user: UserObjectType): TwoFactorService => {
     return user.services[this.serviceName];
-  }
+  };
 
   /**
    * Authenticate a user with a 2fa code

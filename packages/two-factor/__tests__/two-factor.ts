@@ -38,7 +38,10 @@ describe('TwoFactor', () => {
 
     it('should throw that 2fa is not set', async () => {
       await expect(
-        accountsTwoFactor.authenticate(mockedUserWithoutTwoFactor, 'invalidCode')
+        accountsTwoFactor.authenticate(
+          mockedUserWithoutTwoFactor,
+          'invalidCode'
+        )
       ).rejects.toThrowErrorMatchingSnapshot();
     });
 
@@ -50,7 +53,10 @@ describe('TwoFactor', () => {
 
     it('should authenticate user with 2fa', async () => {
       const spy = jest.spyOn(speakeasy.totp, 'verify').mockReturnValue(true);
-      await accountsTwoFactor.authenticate(mockedUserWithTwoFactor, 'validCode');
+      await accountsTwoFactor.authenticate(
+        mockedUserWithTwoFactor,
+        'validCode'
+      );
       expect(spy).toHaveBeenCalled();
     });
   });
