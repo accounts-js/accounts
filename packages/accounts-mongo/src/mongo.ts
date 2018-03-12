@@ -348,6 +348,26 @@ export class Mongo implements DBInterface {
     );
   }
 
+  public async unsetService(
+    userId: string,
+    serviceName: string
+  ): Promise<void> {
+    const id = this.options.convertUserIdToMongoObjectId
+      ? toMongoID(userId)
+      : userId;
+    await this.collection.update(
+      { _id: id },
+      {
+        $set: {
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+        },
+        $unset: {
+          [`services.${serviceName}`]: '',
+        },
+      }
+    );
+  }
+
   public async createSession(
     userId: string,
     token: string,

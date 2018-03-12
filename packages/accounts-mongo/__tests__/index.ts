@@ -551,6 +551,26 @@ describe('Mongo', () => {
     });
   });
 
+  describe('unsetService', () => {
+    it('should not convert id', async () => {
+      const collection: any = { update: jest.fn() };
+      const mockDb: any = { collection: () => collection };
+      const mongoOptions = new Mongo(mockDb, {
+        convertUserIdToMongoObjectId: false,
+      });
+      await mongoOptions.unsetService('toto', 'twitter');
+      expect(collection.update.mock.calls[0][0]._id).toBe('toto');
+    });
+
+    it('should unset service', async () => {
+      const userId = await mongo.createUser(user);
+      await mongo.setService(userId, 'telegram', { id: '1' });
+      await mongo.unsetService(userId, 'telegram');
+      const ret = await mongo.findUserByServiceId('telegram', '1');
+      expect(ret).not.toBeTruthy();
+    });
+  });
+
   describe('createSession', () => {
     it('should create session', async () => {
       const token = generateRandomToken();
