@@ -29,4 +29,10 @@ describe('AccountsError', () => {
     expect(new AccountsError('Package', 'method', 'reason').reason).toBe('reason');
   });
 
+  Error.captureStackTrace = null;
+
+  it('should capture a stackTrace even if Error.captureStackTrace is not available', () => {
+    expect(new AccountsError().stack).not.toBe(undefined);
+  });
+
 });
