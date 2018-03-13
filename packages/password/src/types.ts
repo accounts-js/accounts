@@ -1,8 +1,4 @@
-import {
-  CreateUserType,
-  HashAlgorithm,
-  LoginUserIdentityType,
-} from '@accounts/common';
+import { CreateUserType, HashAlgorithm, LoginUserIdentityType } from '@accounts/common';
 
 export type PasswordType =
   | string

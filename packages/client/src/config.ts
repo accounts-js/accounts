@@ -1,9 +1,4 @@
-import {
-  config as sharedConfig,
-  AccountsCommonConfiguration,
-  HookListener,
-  PasswordSignupFields,
-} from '@accounts/common';
+import { config as sharedConfig, AccountsCommonConfiguration, HookListener, PasswordSignupFields } from '@accounts/common';
 import { Store, Middleware } from 'redux';
 
 export interface TokenStorage {

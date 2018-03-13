@@ -1,0 +1,54 @@
+{
+  "name": "@accounts/mongo",
+  "version": "0.1.0-beta.3",
+  "description": "MongoDB adaptor for accounts",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "start": "tsc --watch",
+    "compile": "tsc",
+    "testonly": "jest",
+    "test:watch": "jest --watch",
+    "coverage": "yarn testonly --coverage",
+    "prepublishOnly": "yarn compile"
+  },
+  "renovate": {
+    "extends": ["config:base"],
+    "automerge": true,
+    "major": {
+      "automerge": false
+    }
+  },
+  "files": ["src", "lib"],
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "./__tests__/.*.ts$",
+    "moduleFileExtensions": ["ts", "js"]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/accounts-js/accounts.git"
+  },
+  "author": "Leo Pradel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/accounts-js/accounts/issues"
+  },
+  "homepage": "https://github.com/accounts-js/accounts",
+  "devDependencies": {
+    "@accounts/common": "0.1.0-beta.3",
+    "@accounts/server": "0.1.0-beta.3",
+    "@types/lodash": "4.14.104",
+    "@types/mongodb": "3.0.7"
+  },
+  "peerDependencies": {
+    "@accounts/common": "^0.1.0-beta.3",
+    "@accounts/server": "^0.1.0-beta.3"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "mongodb": "^3.0.0"
+  }
+}

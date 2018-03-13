@@ -4,18 +4,9 @@ import { randomBytes } from 'crypto';
 /**
  * Generate a random token string
  */
-export const generateRandomToken = (length: number = 43): string =>
-  randomBytes(length).toString('hex');
+export const generateRandomToken = (length: number = 43): string => randomBytes(length).toString('hex');
 
-export const generateAccessToken = ({
-  secret,
-  data,
-  config,
-}: {
-  secret: string;
-  data?: any;
-  config: object;
-}) =>
+export const generateAccessToken = ({ secret, data, config }: { secret: string; data?: any; config: object }) =>
   jwt.sign(
     {
       data,
@@ -24,15 +15,7 @@ export const generateAccessToken = ({
     config
   );
 
-export const generateRefreshToken = ({
-  secret,
-  data,
-  config,
-}: {
-  secret: string;
-  data?: any;
-  config: object;
-}) =>
+export const generateRefreshToken = ({ secret, data, config }: { secret: string; data?: any; config: object }) =>
   jwt.sign(
     {
       data,

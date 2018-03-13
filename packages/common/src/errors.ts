@@ -5,11 +5,7 @@ export class AccountsError extends Error {
   public errorCode: string | number;
   public epochTime: number;
 
-  constructor(
-    message: string,
-    loginInfo?: LoginUserIdentityType,
-    errorCode?: string | number
-  ) {
+  constructor(message: string, loginInfo?: LoginUserIdentityType, errorCode?: string | number) {
     super(message);
     Object.setPrototypeOf(this, AccountsError.prototype);
 
