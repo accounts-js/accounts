@@ -1,8 +1,7 @@
 export interface TokenGenerationConfiguration {
-	
-	algorithm?: string;
+  algorithm?: string;
 
-	expiresIn?: string;
+  expiresIn?: string;
 
   // TODO : explore jwt configuration
   /*
@@ -22,5 +21,4 @@ export interface TokenGenerationConfiguration {
   header:null,
 
   keyid:null,*/
-
 }

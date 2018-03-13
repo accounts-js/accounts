@@ -1,13 +1,11 @@
-import { TokenGenerationConfiguration } from "./token-generation-configuration";
+import { TokenGenerationConfiguration } from './token-generation-configuration';
 
 export interface Configuration {
-	
-	secret: string;
+  secret: string;
 
-	emailTokensExpiration?: number;
+  emailTokenExpiration?: number;
 
-	access?: TokenGenerationConfiguration;
+  access?: TokenGenerationConfiguration;
 
-	refresh?: TokenGenerationConfiguration
-
+  refresh?: TokenGenerationConfiguration;
 }
