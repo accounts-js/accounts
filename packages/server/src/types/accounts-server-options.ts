@@ -1,7 +1,7 @@
 import { UserObjectType } from '@accounts/common';
-import { DBInterface } from './db-interface'
-import { EmailTemplateType } from './email-template-type'
-import { EmailTemplatesType } from './email-templates-type'
+import { DBInterface } from './db-interface';
+import { EmailTemplateType } from './email-template-type';
+import { EmailTemplatesType } from './email-templates-type';
 import { UserObjectSanitizerFunction } from './user-object-sanitizer-function';
 import { ResumeSessionValidator } from './resume-session-validator';
 import { PrepareMailFunction } from './prepare-mail-function';

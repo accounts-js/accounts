@@ -21,16 +21,19 @@ import {
   AccountsServer,
   generateRandomToken,
   AuthService,
-  getFirstUserEmail
+  getFirstUserEmail,
 } from '@accounts/server';
-import { hashPassword, bcryptPassword, verifyPassword } from './utils/encryption';
+import {
+  hashPassword,
+  bcryptPassword,
+  verifyPassword,
+} from './utils/encryption';
 
+import { PasswordCreateUserType } from './types/password-create-user-type';
+import { PasswordLoginType } from './types/password-login-type';
+import { PasswordType } from './types/password-type';
 
-import { PasswordCreateUserType } from './types/password-create-user-type'
-import { PasswordLoginType } from './types/password-login-type'
-import { PasswordType } from './types/password-type'
-
-import { isEmail } from './utils/isEmail'
+import { isEmail } from './utils/isEmail';
 
 export interface AccountsPasswordOptions {
   passwordHashAlgorithm?: HashAlgorithm;
