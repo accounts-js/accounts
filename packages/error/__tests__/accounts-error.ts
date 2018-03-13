@@ -1,7 +1,6 @@
 import AccountsError from '../src'
 
 describe('AccountsError', () => {
-
   it('should return an Error', () => {
     expect(new AccountsError() instanceof Error).toBe(true);
   });
@@ -30,28 +29,10 @@ describe('AccountsError', () => {
     expect(new AccountsError('Package', 'method', 'reason').reason).toBe('reason');
   });
 
-  it('should capture the stackTrace', () => {
-    Error.captureStackTrace = jest.fn(()=>null);
-    new AccountsError()
-    expect(Error.captureStackTrace).toHaveBeenCalled();
-  });
-
   Error.captureStackTrace = null;
 
   it('should capture a stackTrace even if Error.captureStackTrace is not available', () => {
     expect(new AccountsError().stack).not.toBe(undefined);
   });
-
-  /* it('should call super', ()=>{
-    const trigger = jest.fn(()=>null);
-    const eee = Error
-    Error.call = function(error, message){
-      trigger(message)
-      return eee(error, message)
-    }
-    const a = new AccountsError('test')
-    
-    expect(trigger).toHaveBeenCalledWith('test')
-  }) */
 
 });
