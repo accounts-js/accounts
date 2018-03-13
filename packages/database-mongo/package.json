@@ -12,13 +12,6 @@
     "coverage": "yarn testonly --coverage",
     "prepublishOnly": "yarn compile"
   },
-  "renovate": {
-    "extends": ["config:base"],
-    "automerge": true,
-    "major": {
-      "automerge": false
-    }
-  },
   "files": ["src", "lib"],
   "jest": {
     "transform": {
