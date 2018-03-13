@@ -50,7 +50,7 @@
   "devDependencies": {
     "@accounts/common": "0.1.0-beta.3",
     "@accounts/server": "0.1.0-beta.3",
-    "@accounts/tslint-config-accounts": "0.0.8",
+    "@accounts/tslint-config-accounts": "0.0.9",
     "@types/jest": "22.2.0",
     "@types/lodash": "4.14.104",
     "@types/mongodb": "3.0.7",
