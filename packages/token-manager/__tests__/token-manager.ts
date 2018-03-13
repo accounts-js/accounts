@@ -8,13 +8,11 @@ const TM = new TokenManager({
 describe('TokenManager', () => {
   describe('validateConfiguration', () => {
     it('should throw if no configuration provided', () => {
-      expect(() => { new TokenManager(); }).toThrow();
+      expect(() => new TokenManager()).toThrow();
     });
 
     it('should throw if configuration does not provide secret property', () => {
-      expect(() => {
-        new TokenManager({});
-      }).toThrow();
+      expect(() => new TokenManager({})).toThrow();
     });
   });
 
