@@ -29,20 +29,12 @@ export default class TokenManager {
     this.validateConfiguration(config);
     this.secret = config.secret;
     this.emailTokenExpiration = config.emailTokenExpiration || 1000 * 60;
-    this.accessTokenConfig = {
-      ...defaultTokenConfig,
-      ...defaultAccessTokenConfig,
-      ...config.access,
-    };
-    this.refreshTokenConfig = {
-      ...defaultTokenConfig,
-      ...defaultRefreshTokenConfig,
-      ...config.refresh,
-    };
+    this.accessTokenConfig = { ...defaultTokenConfig, ...defaultAccessTokenConfig, ...config.access };
+    this.refreshTokenConfig = { ...defaultTokenConfig, ...defaultRefreshTokenConfig, ...config.refresh };
   }
 
-  public generateRandomToken(length: number | undefined = 43): string {
-    return randomBytes(length).toString('hex');
+  public generateRandomToken(length: number | undefined): string {
+    return randomBytes(length || 43).toString('hex');
   }
 
   public generateAccessToken(data): string {
@@ -53,33 +45,20 @@ export default class TokenManager {
     return jwt.sign(data, this.secret, this.refreshTokenConfig);
   }
 
-  public isEmailTokenExpired(
-    token: string,
-    tokenRecord?: TokenRecord
-  ): boolean {
-    return (
-      !tokenRecord ||
-      Number(tokenRecord.when) + this.emailTokensExpiration < Date.now()
-    );
+  public isEmailTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
+    return !tokenRecord || Number(tokenRecord.when) + this.emailTokenExpiration < Date.now();
   }
 
-  public decodeToken(
-    token: string,
-    ignoreExpiration: boolean = false
-  ): Promise<any> {
+  public decodeToken(token: string, ignoreExpiration: boolean = false): string | object {
     return jwt.verify(token, this.secret, { ignoreExpiration });
   }
 
   private validateConfiguration(config: Configuration): void {
     if (!config) {
-      throw new Error(
-        '[ Accounts - TokenManager ] configuration : A configuration object is needed'
-      );
+      throw new Error('[ Accounts - TokenManager ] configuration : A configuration object is needed');
     }
-    if (typeof config.secret === 'string') {
-      throw new Error(
-        '[ Accounts - TokenManager ] configuration : A string secret property is needed'
-      );
+    if (typeof config.secret !== 'string') {
+      throw new Error('[ Accounts - TokenManager ] configuration : A string secret property is needed');
     }
   }
 }
