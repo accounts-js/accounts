@@ -2,7 +2,7 @@ import { UserObjectType } from '@accounts/common';
 import { AccountsServer, DBInterface, AuthService } from '@accounts/server';
 import * as requestPromise from 'request-promise';
 
-import { OAuthOptions } from './types/oauth-options'
+import { OAuthOptions } from './types/oauth-options';
 
 export class AccountsOauth implements AuthService {
   public server: AccountsServer;

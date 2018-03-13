@@ -2,7 +2,6 @@ import * as oauth from 'oauth';
 
 import { Configuration } from './types/configuration';
 
-
 export class AccountsOAuthTwitter {
   private config: Configuration;
   private oauth: any;

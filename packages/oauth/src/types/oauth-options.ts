@@ -1,4 +1,4 @@
-import { OAuthUser } from './oauth-user'
+import { OAuthUser } from './oauth-user';
 
 export interface OAuthOptions {
   [provider: string]: {

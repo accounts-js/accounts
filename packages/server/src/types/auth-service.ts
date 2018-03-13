@@ -1,5 +1,5 @@
 import { UserObjectType } from '@accounts/common';
-import { DBInterface } from './db-interface'
+import { DBInterface } from './db-interface';
 
 import { AccountsServer } from '../accounts-server';
 
