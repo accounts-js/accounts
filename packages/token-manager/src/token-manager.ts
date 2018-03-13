@@ -1,3 +1,5 @@
+import { TokenRecord } from '@accounts/common';
+
 import { randomBytes } from 'crypto';
 import * as jwt from 'jsonwebtoken';
 import { error } from 'util';
@@ -33,6 +35,26 @@ export default class TokenManager {
     this.emailTokenExpiration = config.emailTokenExpiration || 1000 * 60;
     this.accessTokenConfig = { ...defaultTokenConfig, ...defaultAccessTokenConfig, ...config.access };
     this.refreshTokenConfig = { ...defaultTokenConfig, ...defaultRefreshTokenConfig, ...config.refresh };
+  }
+
+  public generateRandomToken(length: number | undefined): string {
+    return randomBytes(length || 43).toString('hex');
+  }
+
+  public generateAccessToken(data): string {
+    return jwt.sign(data, this.secret, this.accessTokenConfig);
+  }
+
+  public generateRefreshToken(data = {}): string {
+    return jwt.sign(data, this.secret, this.refreshTokenConfig);
+  }
+
+  public isEmailTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
+    return !tokenRecord || Number(tokenRecord.when) + this.emailTokenExpiration < Date.now();
+  }
+
+  public decodeToken(token: string, ignoreExpiration: boolean = false): string | object {
+    return jwt.verify(token, this.secret, { ignoreExpiration });
   }
 
   private validateConfiguration(config: Configuration): void {
