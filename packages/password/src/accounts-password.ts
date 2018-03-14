@@ -22,6 +22,7 @@ import {
   generateRandomToken,
   AuthService,
 } from '@accounts/server';
+import { TwoFactor, AccountsTwoFactorOptions } from '@accounts/two-factor';
 import { getFirstUserEmail } from '@accounts/server/lib/utils';
 import { hashPassword, bcryptPassword, verifyPassword } from './encryption';
 import {
@@ -36,6 +37,7 @@ export const isEmail = (email?: string) => {
 };
 
 export interface AccountsPasswordOptions {
+  twoFactor?: AccountsTwoFactorOptions;
   passwordHashAlgorithm?: HashAlgorithm;
   passwordResetTokenExpirationInDays?: number;
   passwordEnrollTokenExpirationInDays?: number;
@@ -69,21 +71,24 @@ const defaultOptions = {
 export default class AccountsPassword implements AuthService {
   public serviceName = 'password';
   public server: AccountsServer;
+  public twoFactor: TwoFactor;
   private options: AccountsPasswordOptions;
   private db: DBInterface;
 
   constructor(options: AccountsPasswordOptions = {}) {
     this.options = { ...defaultOptions, ...options };
+    this.twoFactor = new TwoFactor(options.twoFactor);
   }
 
   public setStore(store: DBInterface) {
     this.db = store;
+    this.twoFactor.setStore(store);
   }
 
   public async authenticate(
     params: PasswordLoginType
   ): Promise<UserObjectType> {
-    const { user, password } = params;
+    const { user, password, code } = params;
     if (!user || !password) {
       throw new Error('Unrecognized options for login request');
     }
@@ -91,18 +96,11 @@ export default class AccountsPassword implements AuthService {
       throw new Error('Match failed');
     }
 
-    let foundUser;
-    /* if (this._options.passwordAuthenticator) {
-      foundUser = await this._externalPasswordAuthenticator(
-        this._options.passwordAuthenticator,
-        user,
-        password
-      );
-    } else { */
-    foundUser = await this.passwordAuthenticator(user, password);
+    const foundUser = await this.passwordAuthenticator(user, password);
 
-    if (!foundUser) {
-      throw new Error('User not found');
+    // If user activated two factor authentication try with the code
+    if (this.twoFactor.getUserService(foundUser)) {
+      await this.twoFactor.authenticate(foundUser, code);
     }
 
     return foundUser;
@@ -140,6 +138,7 @@ export default class AccountsPassword implements AuthService {
     newEmail: string,
     verified: boolean
   ): Promise<void> {
+    // TODO use this.options.verifyEmail before
     return this.db.addEmail(userId, newEmail, verified);
   }
 
@@ -388,12 +387,12 @@ export default class AccountsPassword implements AuthService {
   private async passwordAuthenticator(
     user: string | LoginUserIdentityType,
     password: PasswordType
-  ): Promise<any> {
+  ): Promise<UserObjectType> {
     const { username, email, id } = isString(user)
       ? this.toUsernameAndEmail({ user })
       : this.toUsernameAndEmail({ ...user });
 
-    let foundUser;
+    let foundUser: UserObjectType;
 
     if (id) {
       // this._validateLoginWithField('id', user);
