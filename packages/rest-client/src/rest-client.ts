@@ -137,6 +137,41 @@ export class RestClient implements TransportInterface {
     return this.fetch('password/sendResetPasswordEmail', args, customHeaders);
   }
 
+  public getTwoFactorSecret(customHeaders?: object): Promise<any> {
+    const args = {
+      method: 'POST',
+    };
+    return this.fetch('password/twoFactorSecret', args, customHeaders);
+  }
+
+  public twoFactorSet(
+    secret: any,
+    code: string,
+    customHeaders?: object
+  ): Promise<void> {
+    const args = {
+      method: 'POST',
+      body: JSON.stringify({
+        secret,
+        code
+      }),
+    };
+    return this.fetch('password/twoFactorSet', args, customHeaders);
+  }
+
+  public twoFactorUnset(
+    code: string,
+    customHeaders?: object
+  ): Promise<void> {
+    const args = {
+      method: 'POST',
+      body: JSON.stringify({
+        code
+      }),
+    };
+    return this.fetch('password/twoFactorUnset', args, customHeaders);
+  }
+
   private _loadHeadersObject(plainHeaders: object): { [key: string]: string } {
     if (isPlainObject(plainHeaders)) {
       const customHeaders = headers;

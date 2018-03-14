@@ -200,4 +200,52 @@ describe('RestClient', () => {
           expect(window.fetch.mock.calls[0][0]).toBe('http://localhost:3000/accounts/password/sendResetPasswordEmail')
         ));
   });
+
+  describe('getTwoFactorSecret', () => {
+    const client = new RestClient({
+      apiHost: 'http://localhost:3000',
+      rootPath: '/accounts',
+    });
+
+    it('should call fetch with verifyEmail path', () =>
+      client
+        .getTwoFactorSecret()
+        .then(() =>
+          expect(window.fetch.mock.calls[0][0]).toBe(
+            'http://localhost:3000/accounts/password/twoFactorSecret'
+          )
+        ));
+  });
+
+  describe('twoFactorSet', () => {
+    const client = new RestClient({
+      apiHost: 'http://localhost:3000',
+      rootPath: '/accounts',
+    });
+
+    it('should call fetch with verifyEmail path', () =>
+      client
+        .twoFactorSet('secret', 'code')
+        .then(() =>
+          expect(window.fetch.mock.calls[0][0]).toBe(
+            'http://localhost:3000/accounts/password/twoFactorSet'
+          )
+        ));
+  });
+
+  describe('twoFactorUnset', () => {
+    const client = new RestClient({
+      apiHost: 'http://localhost:3000',
+      rootPath: '/accounts',
+    });
+
+    it('should call fetch with verifyEmail path', () =>
+      client
+        .twoFactorUnset('code')
+        .then(() =>
+          expect(window.fetch.mock.calls[0][0]).toBe(
+            'http://localhost:3000/accounts/password/twoFactorUnset'
+          )
+        ));
+  });
 });

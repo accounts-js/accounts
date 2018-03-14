@@ -70,6 +70,7 @@ export interface DBInterface {
   // Auth services related operations
   findUserByServiceId(serviceName: string, serviceId: string): Promise<UserObjectType | null>;
   setService(userId: string, serviceName: string, data: object): Promise<void>;
+  unsetService(userId: string, serviceName: string): Promise<void>;
 
   // Password related operation
   findPasswordHash(userId: string): Promise<string | null>;

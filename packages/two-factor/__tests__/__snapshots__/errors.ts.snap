@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`errors should have named export errors 1`] = `
+Object {
+  "codeDidNotMatch": "2FA code didn't match",
+  "codeRequired": "2FA code required",
+  "userTwoFactorNotSet": "2FA not set",
+}
+`;
