@@ -73,7 +73,6 @@ const accountsExpress = (
       userLoader(accountsServer),
       twoFactorUnset(accountsServer)
     );
-
   }
 
   // @accounts/oauth

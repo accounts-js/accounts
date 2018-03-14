@@ -31,7 +31,7 @@ describe('AccountsPassword', () => {
 
     it('return user', async () => {
       const user = {
-        services: {}
+        services: {},
       };
       const tmpAccountsPassword = new AccountsPassword({});
       tmpAccountsPassword.passwordAuthenticator = jest.fn(() => Promise.resolve(user));
