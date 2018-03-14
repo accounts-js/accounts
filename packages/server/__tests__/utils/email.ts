@@ -1,4 +1,4 @@
-import { emailTemplates } from '../src/email';
+import { emailTemplates } from '../../src/utils/email';
 
 describe('email', () => {
   describe('emailTemplates', () => {
