@@ -67,6 +67,10 @@ export default class Database {
     return this.name;
   }
 
+  public unsetService() {
+    return this.name;
+  }
+
   public createSession() {
     return this.name;
   }
@@ -195,6 +199,10 @@ describe('DatabaseManager', () => {
 
   it('setService should be called on userStorage', () => {
     expect(databaseManager.setService()).toBe('userStorage');
+  });
+
+  it('unsetService should be called on userStorage', () => {
+    expect(databaseManager.unsetService()).toBe('userStorage');
   });
 
   it('createSession should be called on sessionStorage', () => {

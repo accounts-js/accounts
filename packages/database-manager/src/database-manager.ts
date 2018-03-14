@@ -86,6 +86,10 @@ export default class DatabaseManager implements DatabaseInterface {
     return this.userStorage.setService.bind(this.userStorage);
   }
 
+  public get unsetService(): DatabaseInterface['unsetService'] {
+    return this.userStorage.unsetService.bind(this.userStorage);
+  }
+
   public get createSession(): DatabaseInterface['createSession'] {
     return this.sessionStorage.createSession.bind(this.sessionStorage);
   }
