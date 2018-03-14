@@ -80,9 +80,7 @@ export class Mongo implements DBInterface {
     }
     this.db = db;
     this.collection = this.db.collection(this.options.collectionName);
-    this.sessionCollection = this.db.collection(
-      this.options.sessionCollectionName
-    );
+    this.sessionCollection = this.db.collection(this.options.sessionCollectionName);
   }
 
   public async setupIndexes(): Promise<void> {
@@ -127,9 +125,7 @@ export class Mongo implements DBInterface {
   }
 
   public async findUserById(userId: string): Promise<UserObjectType | null> {
-    const id = this.options.convertUserIdToMongoObjectId
-      ? toMongoID(userId)
-      : userId;
+    const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     const user = await this.collection.findOne({ _id: id });
     if (user) {
       user.id = user._id;
@@ -147,9 +143,7 @@ export class Mongo implements DBInterface {
     return user;
   }
 
-  public async findUserByUsername(
-    username: string
-  ): Promise<UserObjectType | null> {
+  public async findUserByUsername(username: string): Promise<UserObjectType | null> {
     const filter = this.options.caseSensitiveUserName
       ? { username }
       : {
@@ -163,9 +157,7 @@ export class Mongo implements DBInterface {
   }
 
   public async findPasswordHash(userId: string): Promise<string | null> {
-    const id = this.options.convertUserIdToMongoObjectId
-      ? toMongoID(userId)
-      : userId;
+    const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     const user = await this.findUserById(id);
     if (user) {
       return get(user, 'services.password.bcrypt');
@@ -173,9 +165,7 @@ export class Mongo implements DBInterface {
     return null;
   }
 
-  public async findUserByEmailVerificationToken(
-    token: string
-  ): Promise<UserObjectType | null> {
+  public async findUserByEmailVerificationToken(token: string): Promise<UserObjectType | null> {
     const user = await this.collection.findOne({
       'services.email.verificationTokens.token': token,
     });
@@ -185,9 +175,7 @@ export class Mongo implements DBInterface {
     return user;
   }
 
-  public async findUserByResetPasswordToken(
-    token: string
-  ): Promise<UserObjectType | null> {
+  public async findUserByResetPasswordToken(token: string): Promise<UserObjectType | null> {
     const user = await this.collection.findOne({
       'services.password.reset.token': token,
     });
@@ -197,10 +185,7 @@ export class Mongo implements DBInterface {
     return user;
   }
 
-  public async findUserByServiceId(
-    serviceName: string,
-    serviceId: string
-  ): Promise<UserObjectType | null> {
+  public async findUserByServiceId(serviceName: string, serviceId: string): Promise<UserObjectType | null> {
     const user = await this.collection.findOne({
       [`services.${serviceName}.id`]: serviceId,
     });
@@ -210,14 +195,8 @@ export class Mongo implements DBInterface {
     return user;
   }
 
-  public async addEmail(
-    userId: string,
-    newEmail: string,
-    verified: boolean
-  ): Promise<void> {
-    const id = this.options.convertUserIdToMongoObjectId
-      ? toMongoID(userId)
-      : userId;
+  public async addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
+    const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     const ret = await this.collection.update(
       { _id: id },
       {
@@ -238,9 +217,7 @@ export class Mongo implements DBInterface {
   }
 
   public async removeEmail(userId: string, email: string): Promise<void> {
-    const id = this.options.convertUserIdToMongoObjectId
-      ? toMongoID(userId)
-      : userId;
+    const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     const ret = await this.collection.update(
       { _id: id },
       {
@@ -256,9 +233,7 @@ export class Mongo implements DBInterface {
   }
 
   public async verifyEmail(userId: string, email: string): Promise<void> {
-    const id = this.options.convertUserIdToMongoObjectId
-      ? toMongoID(userId)
-      : userId;
+    const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     const ret = await this.collection.update(
       { _id: id, 'emails.address': email },
       {
@@ -275,9 +250,7 @@ export class Mongo implements DBInterface {
   }
 
   public async setUsername(userId: string, newUsername: string): Promise<void> {
-    const id = this.options.convertUserIdToMongoObjectId
-      ? toMongoID(userId)
-      : userId;
+    const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     const ret = await this.collection.update(
       { _id: id },
       {
@@ -293,9 +266,7 @@ export class Mongo implements DBInterface {
   }
 
   public async setPassword(userId: string, newPassword: string): Promise<void> {
-    const id = this.options.convertUserIdToMongoObjectId
-      ? toMongoID(userId)
-      : userId;
+    const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     const ret = await this.collection.update(
       { _id: id },
       {
@@ -314,9 +285,7 @@ export class Mongo implements DBInterface {
   }
 
   public async setProfile(userId: string, profile: object): Promise<object> {
-    const id = this.options.convertUserIdToMongoObjectId
-      ? toMongoID(userId)
-      : userId;
+    const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     await this.collection.update(
       { _id: id },
       {
@@ -329,14 +298,8 @@ export class Mongo implements DBInterface {
     return profile;
   }
 
-  public async setService(
-    userId: string,
-    serviceName: string,
-    service: object
-  ): Promise<void> {
-    const id = this.options.convertUserIdToMongoObjectId
-      ? toMongoID(userId)
-      : userId;
+  public async setService(userId: string, serviceName: string, service: object): Promise<void> {
+    const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     await this.collection.update(
       { _id: id },
       {
@@ -348,13 +311,8 @@ export class Mongo implements DBInterface {
     );
   }
 
-  public async unsetService(
-    userId: string,
-    serviceName: string
-  ): Promise<void> {
-    const id = this.options.convertUserIdToMongoObjectId
-      ? toMongoID(userId)
-      : userId;
+  public async unsetService(userId: string, serviceName: string): Promise<void> {
+    const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     await this.collection.update(
       { _id: id },
       {
@@ -393,14 +351,9 @@ export class Mongo implements DBInterface {
     return ret.ops[0]._id;
   }
 
-  public async updateSession(
-    sessionId: string,
-    connection: ConnectionInformationsType
-  ): Promise<void> {
+  public async updateSession(sessionId: string, connection: ConnectionInformationsType): Promise<void> {
     // tslint:disable-next-line variable-name
-    const _id = this.options.convertSessionIdToMongoObjectId
-      ? toMongoID(sessionId)
-      : sessionId;
+    const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
     await this.sessionCollection.update(
       { _id },
       {
@@ -415,9 +368,7 @@ export class Mongo implements DBInterface {
 
   public async invalidateSession(sessionId: string): Promise<void> {
     // tslint:disable-next-line variable-name
-    const _id = this.options.convertSessionIdToMongoObjectId
-      ? toMongoID(sessionId)
-      : sessionId;
+    const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
     await this.sessionCollection.update(
       { _id },
       {
@@ -451,9 +402,7 @@ export class Mongo implements DBInterface {
 
   public async findSessionById(sessionId: string): Promise<SessionType | null> {
     // tslint:disable-next-line variable-name
-    const _id = this.options.convertSessionIdToMongoObjectId
-      ? toMongoID(sessionId)
-      : sessionId;
+    const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
     const session = await this.sessionCollection.findOne({ _id });
     if (session) {
       session.id = session._id;
@@ -461,11 +410,7 @@ export class Mongo implements DBInterface {
     return session;
   }
 
-  public async addEmailVerificationToken(
-    userId: string,
-    email: string,
-    token: string
-  ): Promise<void> {
+  public async addEmailVerificationToken(userId: string, email: string, token: string): Promise<void> {
     await this.collection.update(
       { _id: userId },
       {
@@ -480,12 +425,7 @@ export class Mongo implements DBInterface {
     );
   }
 
-  public async addResetPasswordToken(
-    userId: string,
-    email: string,
-    token: string,
-    reason: string = 'reset'
-  ): Promise<void> {
+  public async addResetPasswordToken(userId: string, email: string, token: string, reason: string = 'reset'): Promise<void> {
     await this.collection.update(
       { _id: userId },
       {
@@ -501,11 +441,7 @@ export class Mongo implements DBInterface {
     );
   }
 
-  public async setResetPassword(
-    userId: string,
-    email: string,
-    newPassword: string
-  ): Promise<void> {
+  public async setResetPassword(userId: string, email: string, newPassword: string): Promise<void> {
     await this.setPassword(userId, newPassword);
   }
 }

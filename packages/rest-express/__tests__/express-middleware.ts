@@ -49,12 +49,8 @@ describe('express middleware', () => {
     expect(router.post.mock.calls[5][0]).toBe('test/password/register');
     expect(router.post.mock.calls[6][0]).toBe('test/password/verifyEmail');
     expect(router.post.mock.calls[7][0]).toBe('test/password/resetPassword');
-    expect(router.post.mock.calls[8][0]).toBe(
-      'test/password/sendVerificationEmail'
-    );
-    expect(router.post.mock.calls[9][0]).toBe(
-      'test/password/sendResetPasswordEmail'
-    );
+    expect(router.post.mock.calls[8][0]).toBe('test/password/sendVerificationEmail');
+    expect(router.post.mock.calls[9][0]).toBe('test/password/sendResetPasswordEmail');
   });
 
   it('Defines oauth endpoints when oauth service is present', () => {

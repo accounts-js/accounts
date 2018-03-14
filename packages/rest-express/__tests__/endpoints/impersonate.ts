@@ -31,12 +31,7 @@ describe('impersonate', () => {
     await middleware(req, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.impersonate).toBeCalledWith(
-      'token',
-      'toto',
-      null,
-      ''
-    );
+    expect(accountsServer.impersonate).toBeCalledWith('token', 'toto', null, '');
     expect(res.json).toBeCalledWith(impersonateReturnType);
     expect(res.status).not.toBeCalled();
   });
@@ -61,12 +56,7 @@ describe('impersonate', () => {
     await middleware(req, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.impersonate).toBeCalledWith(
-      'token',
-      'toto',
-      null,
-      ''
-    );
+    expect(accountsServer.impersonate).toBeCalledWith('token', 'toto', null, '');
     expect(res.status).toBeCalledWith(400);
     expect(res.json).toBeCalledWith(error);
   });

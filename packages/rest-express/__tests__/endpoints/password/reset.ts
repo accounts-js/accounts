@@ -1,7 +1,4 @@
-import {
-  resetPassword,
-  sendResetPasswordEmail,
-} from '../../../src/endpoints/password/reset';
+import { resetPassword, sendResetPasswordEmail } from '../../../src/endpoints/password/reset';
 
 const res = {
   json: jest.fn(),
@@ -38,9 +35,7 @@ describe('resetPassword', () => {
       await middleware(req, res);
 
       expect(req).toEqual(reqCopy);
-      expect(
-        accountsServer.getServices().password.resetPassword
-      ).toBeCalledWith('token', 'new-password');
+      expect(accountsServer.getServices().password.resetPassword).toBeCalledWith('token', 'new-password');
       expect(res.json).toBeCalledWith({ message });
       expect(res.status).not.toBeCalled();
     });
@@ -70,9 +65,7 @@ describe('resetPassword', () => {
       await middleware(req, res);
 
       expect(req).toEqual(reqCopy);
-      expect(
-        accountsServer.getServices().password.resetPassword
-      ).toBeCalledWith('token', 'new-password');
+      expect(accountsServer.getServices().password.resetPassword).toBeCalledWith('token', 'new-password');
       expect(res.status).toBeCalledWith(400);
       expect(res.json).toBeCalledWith(error);
     });
@@ -102,9 +95,7 @@ describe('resetPassword', () => {
       await middleware(req, res);
 
       expect(req).toEqual(reqCopy);
-      expect(
-        accountsServer.getServices().password.sendResetPasswordEmail
-      ).toBeCalledWith('email');
+      expect(accountsServer.getServices().password.sendResetPasswordEmail).toBeCalledWith('email');
       expect(res.json).toBeCalledWith({ message });
       expect(res.status).not.toBeCalled();
     });
@@ -133,9 +124,7 @@ describe('resetPassword', () => {
       await middleware(req, res);
 
       expect(req).toEqual(reqCopy);
-      expect(
-        accountsServer.getServices().password.sendResetPasswordEmail
-      ).toBeCalledWith('email');
+      expect(accountsServer.getServices().password.sendResetPasswordEmail).toBeCalledWith('email');
       expect(res.status).toBeCalledWith(400);
       expect(res.json).toBeCalledWith(error);
     });

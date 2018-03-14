@@ -1,7 +1,4 @@
-import {
-  verifyEmail,
-  sendVerificationEmail,
-} from '../../../src/endpoints/password/verify-email';
+import { verifyEmail, sendVerificationEmail } from '../../../src/endpoints/password/verify-email';
 
 const res = {
   json: jest.fn(),
@@ -37,9 +34,7 @@ describe('verifyEmail', () => {
       await middleware(req, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.verifyEmail).toBeCalledWith(
-        'token'
-      );
+      expect(accountsServer.getServices().password.verifyEmail).toBeCalledWith('token');
       expect(res.json).toBeCalledWith({ message });
       expect(res.status).not.toBeCalled();
     });
@@ -68,9 +63,7 @@ describe('verifyEmail', () => {
       await middleware(req, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.verifyEmail).toBeCalledWith(
-        'token'
-      );
+      expect(accountsServer.getServices().password.verifyEmail).toBeCalledWith('token');
       expect(res.status).toBeCalledWith(400);
       expect(res.json).toBeCalledWith(error);
     });
@@ -100,9 +93,7 @@ describe('verifyEmail', () => {
       await middleware(req, res);
 
       expect(req).toEqual(reqCopy);
-      expect(
-        accountsServer.getServices().password.sendVerificationEmail
-      ).toBeCalledWith('email');
+      expect(accountsServer.getServices().password.sendVerificationEmail).toBeCalledWith('email');
       expect(res.json).toBeCalledWith({ message });
       expect(res.status).not.toBeCalled();
     });
@@ -131,9 +122,7 @@ describe('verifyEmail', () => {
       await middleware(req, res);
 
       expect(req).toEqual(reqCopy);
-      expect(
-        accountsServer.getServices().password.sendVerificationEmail
-      ).toBeCalledWith('email');
+      expect(accountsServer.getServices().password.sendVerificationEmail).toBeCalledWith('email');
       expect(res.status).toBeCalledWith(400);
       expect(res.json).toBeCalledWith(error);
     });

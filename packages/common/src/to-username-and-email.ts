@@ -6,17 +6,7 @@ import { isEmail } from './validators';
  * @param {Object} An object containing at least `username`, `user` and/or `email`.
  * @returns {Object} An object containing `username` and `email`.
  */
-const toUsernameAndEmail = ({
-  user,
-  username,
-  email,
-  id,
-}: {
-  user?: string;
-  username?: string;
-  email?: string;
-  id?: string;
-}) => {
+const toUsernameAndEmail = ({ user, username, email, id }: { user?: string; username?: string; email?: string; id?: string }) => {
   if (user && !username && !email) {
     if (isEmail(user)) {
       email = user;

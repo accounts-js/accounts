@@ -23,9 +23,7 @@ describe('RestClient', () => {
     expect(client.options.rootPath).toBe('accounts');
 
     return client.fetch('try').then(() => {
-      expect(window.fetch.mock.calls[0][0]).toBe(
-        'http://localhost:3000/accounts/try'
-      );
+      expect(window.fetch.mock.calls[0][0]).toBe('http://localhost:3000/accounts/try');
     });
   });
 
@@ -38,11 +36,7 @@ describe('RestClient', () => {
     it('should enable custom headers', () =>
       client
         .fetch('route', {}, { origin: 'localhost:3000' })
-        .then(() =>
-          expect(window.fetch.mock.calls[0][1].headers.origin).toBe(
-            'localhost:3000'
-          )
-        ));
+        .then(() => expect(window.fetch.mock.calls[0][1].headers.origin).toBe('localhost:3000')));
 
     it('should throw error', async () => {
       window.fetch = jest.fn().mockImplementation(() => ({
@@ -54,9 +48,7 @@ describe('RestClient', () => {
         await client.fetch('route', {}, { origin: 'localhost:3000' });
         throw new Error();
       } catch (err) {
-        expect(window.fetch.mock.calls[0][1].headers.origin).toBe(
-          'localhost:3000'
-        );
+        expect(window.fetch.mock.calls[0][1].headers.origin).toBe('localhost:3000');
       }
       window.fetch = jest.fn().mockImplementation(() => ({
         status: 200,
@@ -71,9 +63,7 @@ describe('RestClient', () => {
         await client.fetch('route', {}, { origin: 'localhost:3000' });
         throw new Error();
       } catch (err) {
-        expect(window.fetch.mock.calls[0][1].headers.origin).toBe(
-          'localhost:3000'
-        );
+        expect(window.fetch.mock.calls[0][1].headers.origin).toBe('localhost:3000');
         expect(err.message).toBe('Server did not return a response');
       }
       window.fetch = jest.fn().mockImplementation(() => ({
@@ -96,12 +86,8 @@ describe('RestClient', () => {
         },
         password: 'password',
       });
-      expect(window.fetch.mock.calls[0][0]).toBe(
-        'http://localhost:3000/accounts/password/authenticate'
-      );
-      expect(window.fetch.mock.calls[0][1].body).toBe(
-        '{"user":{"username":"toto"},"password":"password"}'
-      );
+      expect(window.fetch.mock.calls[0][0]).toBe('http://localhost:3000/accounts/password/authenticate');
+      expect(window.fetch.mock.calls[0][1].body).toBe('{"user":{"username":"toto"},"password":"password"}');
     });
   });
 
@@ -114,11 +100,7 @@ describe('RestClient', () => {
     it('should call fetch with impersonate path', () =>
       client
         .impersonate('token', 'user')
-        .then(() =>
-          expect(window.fetch.mock.calls[0][0]).toBe(
-            'http://localhost:3000/accounts/impersonate'
-          )
-        ));
+        .then(() => expect(window.fetch.mock.calls[0][0]).toBe('http://localhost:3000/accounts/impersonate')));
   });
 
   describe('refreshTokens', () => {
@@ -130,11 +112,7 @@ describe('RestClient', () => {
     it('should call fetch with refreshTokens path', () =>
       client
         .refreshTokens('accessToken', 'refreshToken')
-        .then(() =>
-          expect(window.fetch.mock.calls[0][0]).toBe(
-            'http://localhost:3000/accounts/refreshTokens'
-          )
-        ));
+        .then(() => expect(window.fetch.mock.calls[0][0]).toBe('http://localhost:3000/accounts/refreshTokens')));
   });
 
   describe('logout', () => {
@@ -146,11 +124,7 @@ describe('RestClient', () => {
     it('should call fetch with logout path', () =>
       client
         .logout('accessToken')
-        .then(() =>
-          expect(window.fetch.mock.calls[0][0]).toBe(
-            'http://localhost:3000/accounts/logout'
-          )
-        ));
+        .then(() => expect(window.fetch.mock.calls[0][0]).toBe('http://localhost:3000/accounts/logout')));
   });
 
   describe('getUser', () => {
@@ -162,11 +136,7 @@ describe('RestClient', () => {
     it('should call fetch with user path', () =>
       client
         .getUser('accessToken')
-        .then(() =>
-          expect(window.fetch.mock.calls[0][0]).toBe(
-            'http://localhost:3000/accounts/user'
-          )
-        ));
+        .then(() => expect(window.fetch.mock.calls[0][0]).toBe('http://localhost:3000/accounts/user')));
   });
 
   describe('createUser', () => {
@@ -178,11 +148,7 @@ describe('RestClient', () => {
     it('should call fetch with register path', () =>
       client
         .createUser('user')
-        .then(() =>
-          expect(window.fetch.mock.calls[0][0]).toBe(
-            'http://localhost:3000/accounts/password/register'
-          )
-        ));
+        .then(() => expect(window.fetch.mock.calls[0][0]).toBe('http://localhost:3000/accounts/password/register')));
   });
 
   describe('resetPassword', () => {
@@ -194,11 +160,7 @@ describe('RestClient', () => {
     it('should call fetch with resetPassword path', () =>
       client
         .resetPassword('token', 'resetPassword')
-        .then(() =>
-          expect(window.fetch.mock.calls[0][0]).toBe(
-            'http://localhost:3000/accounts/password/resetPassword'
-          )
-        ));
+        .then(() => expect(window.fetch.mock.calls[0][0]).toBe('http://localhost:3000/accounts/password/resetPassword')));
   });
 
   describe('verifyEmail', () => {
@@ -210,11 +172,7 @@ describe('RestClient', () => {
     it('should call fetch with verifyEmail path', () =>
       client
         .verifyEmail('token')
-        .then(() =>
-          expect(window.fetch.mock.calls[0][0]).toBe(
-            'http://localhost:3000/accounts/password/verifyEmail'
-          )
-        ));
+        .then(() => expect(window.fetch.mock.calls[0][0]).toBe('http://localhost:3000/accounts/password/verifyEmail')));
   });
 
   describe('sendVerificationEmail', () => {
@@ -226,11 +184,7 @@ describe('RestClient', () => {
     it('should call fetch with verifyEmail path', () =>
       client
         .sendVerificationEmail('email')
-        .then(() =>
-          expect(window.fetch.mock.calls[0][0]).toBe(
-            'http://localhost:3000/accounts/password/sendVerificationEmail'
-          )
-        ));
+        .then(() => expect(window.fetch.mock.calls[0][0]).toBe('http://localhost:3000/accounts/password/sendVerificationEmail')));
   });
 
   describe('sendResetPasswordEmail', () => {
@@ -243,9 +197,7 @@ describe('RestClient', () => {
       client
         .sendResetPasswordEmail('email')
         .then(() =>
-          expect(window.fetch.mock.calls[0][0]).toBe(
-            'http://localhost:3000/accounts/password/sendResetPasswordEmail'
-          )
+          expect(window.fetch.mock.calls[0][0]).toBe('http://localhost:3000/accounts/password/sendResetPasswordEmail')
         ));
   });
 });
