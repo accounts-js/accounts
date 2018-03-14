@@ -1,4 +1,4 @@
-import AccountsError from '../src'
+import AccountsError from '../src';
 
 describe('AccountsError', () => {
   it('should return an Error', () => {
@@ -9,7 +9,7 @@ describe('AccountsError', () => {
     expect(new AccountsError() instanceof AccountsError).toBe(true);
   });
 
-  it('should take 1 parameter and make it it\'s message', () => {
+  it("should take 1 parameter and make it it's message", () => {
     expect(new AccountsError('message').message).toBe('message');
   });
 
@@ -34,5 +34,4 @@ describe('AccountsError', () => {
   it('should capture a stackTrace even if Error.captureStackTrace is not available', () => {
     expect(new AccountsError().stack).not.toBe(undefined);
   });
-
 });

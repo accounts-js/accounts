@@ -1,1 +1,1 @@
-export { default } from './accounts-error'
+export { default } from './accounts-error';
