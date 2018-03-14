@@ -1,10 +1,10 @@
 import { set } from 'lodash';
-import { AccountsPassword } from '../src';
+import AccountsPassword from '../src';
 
 describe('AccountsPassword', () => {
   const password = new AccountsPassword({});
 
-  describe('config', () => {
+  describe('options', () => {
     it('should have default options', async () => {
       expect(password.options.passwordResetTokenExpirationInDays).toBe(3);
     });
