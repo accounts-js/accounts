@@ -2,6 +2,8 @@ import { UserObjectType } from '@accounts/common';
 import { AccountsServer, DBInterface, AuthService } from '@accounts/server';
 import * as requestPromise from 'request-promise';
 
+import { Configuration } from './types/configuration';
+
 export interface OauthUser {
   id: string;
   email?: string;
@@ -18,9 +20,9 @@ export class AccountsOauth implements AuthService {
   public server: AccountsServer;
   public serviceName = 'oauth';
   private db: DBInterface;
-  private options: OauthOptions;
+  private options: Configuration;
 
-  constructor(options) {
+  constructor(options: Configuration) {
     this.options = options;
   }
 
