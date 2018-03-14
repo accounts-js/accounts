@@ -1,7 +1,7 @@
-import { TwoFactor } from '../src';
+import TwoFactor from '../src';
 
 describe('TwoFactor', () => {
-  it('should have named export TwoFactor', () => {
+  it('should have default export TwoFactor', () => {
     expect(typeof TwoFactor).toBe('function');
   });
 });
