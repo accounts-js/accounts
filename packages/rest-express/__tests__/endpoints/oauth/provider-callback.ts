@@ -61,7 +61,11 @@ describe('providerCallback', () => {
     await middleware(req, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.loginWithService).toBeCalledWith('oauth', { accessToken: 'token' }, { ip: null, userAgent: '' });
+    expect(accountsServer.loginWithService).toBeCalledWith(
+      'oauth',
+      { accessToken: 'token' },
+      { ip: null, userAgent: '' }
+    );
     expect(res.status).toBeCalledWith(400);
     expect(res.json).toBeCalledWith(error);
   });

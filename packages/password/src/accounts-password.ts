@@ -1,5 +1,12 @@
 import { trim, isEmpty, isFunction, isString, isPlainObject, get, find, includes } from 'lodash';
-import { CreateUserType, UserObjectType, HashAlgorithm, LoginUserIdentityType, EmailRecord, TokenRecord } from '@accounts/common';
+import {
+  CreateUserType,
+  UserObjectType,
+  HashAlgorithm,
+  LoginUserIdentityType,
+  EmailRecord,
+  TokenRecord,
+} from '@accounts/common';
 import { DBInterface, AccountsServer, generateRandomToken, AuthService } from '@accounts/server';
 import { getFirstUserEmail } from '@accounts/server/lib/utils';
 import { hashPassword, bcryptPassword, verifyPassword } from './encryption';
@@ -133,7 +140,11 @@ export default class AccountsPassword implements AuthService {
       throw new Error('Verify email link expired');
     }
 
-    const verificationTokens: TokenRecord[] = get(user, ['services', 'email', 'verificationTokens'], []);
+    const verificationTokens: TokenRecord[] = get(
+      user,
+      ['services', 'email', 'verificationTokens'],
+      []
+    );
     const tokenRecord = find(verificationTokens, (t: TokenRecord) => t.token === token);
     if (!tokenRecord) {
       throw new Error('Verify email link expired');
@@ -324,8 +335,13 @@ export default class AccountsPassword implements AuthService {
     return this.db.createUser(proposedUserObject);
   }
 
-  private async passwordAuthenticator(user: string | LoginUserIdentityType, password: PasswordType): Promise<any> {
-    const { username, email, id } = isString(user) ? this.toUsernameAndEmail({ user }) : this.toUsernameAndEmail({ ...user });
+  private async passwordAuthenticator(
+    user: string | LoginUserIdentityType,
+    password: PasswordType
+  ): Promise<any> {
+    const { username, email, id } = isString(user)
+      ? this.toUsernameAndEmail({ user })
+      : this.toUsernameAndEmail({ ...user });
 
     let foundUser;
 

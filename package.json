@@ -12,7 +12,7 @@
     "publish:canary": "yarn run publish -- --canary",
     "test": "yarn lint && yarn compile && yarn coverage",
     "testonly": "lerna run testonly",
-    "format": "prettier --print-width 130 --write \"packages/*/{src,__tests__}/**/*.ts\"",
+    "format": "prettier --print-width 100 --write \"packages/*/{src,__tests__}/**/*.ts\"",
     "coverage": "lerna run coverage",
     "codecov": "codecov"
   },

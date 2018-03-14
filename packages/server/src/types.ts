@@ -42,7 +42,10 @@ export interface AccountsServerOptions {
   emailTokensExpiry?: number;
   emailTemplates?: EmailTemplatesType;
   userObjectSanitizer?: UserObjectSanitizerFunction;
-  impersonationAuthorize?: (user: UserObjectType, impersonateToUser: UserObjectType) => Promise<any>;
+  impersonationAuthorize?: (
+    user: UserObjectType,
+    impersonateToUser: UserObjectType
+  ) => Promise<any>;
   resumeSessionValidator?: ResumeSessionValidator;
   siteUrl?: string;
   prepareMail?: PrepareMailFunction;
@@ -75,8 +78,18 @@ export interface DBInterface {
   findPasswordHash(userId: string): Promise<string | null>;
   findUserByResetPasswordToken(token: string): Promise<UserObjectType | null>;
   setPassword(userId: string, newPassword: string): Promise<void>;
-  addResetPasswordToken(userId: string, email: string, token: string, reason?: string): Promise<void>;
-  setResetPassword(userId: string, email: string, newPassword: string, token: string): Promise<void>;
+  addResetPasswordToken(
+    userId: string,
+    email: string,
+    token: string,
+    reason?: string
+  ): Promise<void>;
+  setResetPassword(
+    userId: string,
+    email: string,
+    newPassword: string,
+    token: string
+  ): Promise<void>;
 
   // Email related operations
   findUserByEmailVerificationToken(token: string): Promise<UserObjectType | null>;
@@ -88,7 +101,12 @@ export interface DBInterface {
   // Session related operations
   findSessionById(sessionId: string): Promise<SessionType | null>;
   findSessionByToken(token: string): Promise<SessionType | null>;
-  createSession(userId: string, token: string, connection: ConnectionInformationsType, extraData?: object): Promise<string>;
+  createSession(
+    userId: string,
+    token: string,
+    connection: ConnectionInformationsType,
+    extraData?: object
+  ): Promise<string>;
   updateSession(sessionId: string, connection: ConnectionInformationsType): Promise<void>;
   invalidateSession(sessionId: string): Promise<void>;
   invalidateAllSessions(userId: string): Promise<void>;

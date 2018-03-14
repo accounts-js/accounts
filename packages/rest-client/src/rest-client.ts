@@ -1,6 +1,12 @@
 import { forIn, isPlainObject } from 'lodash';
 import { TransportInterface, AccountsClient } from '@accounts/client';
-import { AccountsError, CreateUserType, LoginReturnType, UserObjectType, ImpersonateReturnType } from '@accounts/common';
+import {
+  AccountsError,
+  CreateUserType,
+  LoginReturnType,
+  UserObjectType,
+  ImpersonateReturnType,
+} from '@accounts/common';
 
 export interface OptionsType {
   apiHost: string;
@@ -23,7 +29,10 @@ export class RestClient implements TransportInterface {
       headers: this._loadHeadersObject(customHeaders),
       ...args,
     };
-    const res = await fetch(`${this.options.apiHost}${this.options.rootPath}/${route}`, fetchOptions);
+    const res = await fetch(
+      `${this.options.apiHost}${this.options.rootPath}/${route}`,
+      fetchOptions
+    );
 
     if (res) {
       if (res.status >= 400 && res.status < 600) {
@@ -36,7 +45,11 @@ export class RestClient implements TransportInterface {
     }
   }
 
-  public loginWithService(provider: string, data: any, customHeaders?: object): Promise<LoginReturnType> {
+  public loginWithService(
+    provider: string,
+    data: any,
+    customHeaders?: object
+  ): Promise<LoginReturnType> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
@@ -46,7 +59,11 @@ export class RestClient implements TransportInterface {
     return this.fetch(`${provider}/authenticate`, args, customHeaders);
   }
 
-  public impersonate(accessToken: string, username: string, customHeaders?: object): Promise<ImpersonateReturnType> {
+  public impersonate(
+    accessToken: string,
+    username: string,
+    customHeaders?: object
+  ): Promise<ImpersonateReturnType> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
@@ -57,7 +74,11 @@ export class RestClient implements TransportInterface {
     return this.fetch('impersonate', args, customHeaders);
   }
 
-  public refreshTokens(accessToken: string, refreshToken: string, customHeaders?: object): Promise<LoginReturnType> {
+  public refreshTokens(
+    accessToken: string,
+    refreshToken: string,
+    customHeaders?: object
+  ): Promise<LoginReturnType> {
     const args = {
       method: 'POST',
       body: JSON.stringify({

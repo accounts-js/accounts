@@ -75,7 +75,9 @@ describe('Mongo', () => {
         await mongo.findUserById('invalid_hex');
         throw new Error();
       } catch (err) {
-        expect(err.message).toEqual('Argument passed in must be a single String of 12 bytes or a string of 24 hex characters');
+        expect(err.message).toEqual(
+          'Argument passed in must be a single String of 12 bytes or a string of 24 hex characters'
+        );
       }
     });
 
@@ -607,7 +609,11 @@ describe('Mongo', () => {
       const mongoTestOptions = new Mongo(db, {
         dateProvider: () => new Date(),
       });
-      const sessionId = await mongoTestOptions.createSession(session.userId, session.ip, session.userAgent);
+      const sessionId = await mongoTestOptions.createSession(
+        session.userId,
+        session.ip,
+        session.userAgent
+      );
       const ret = await mongoTestOptions.findSessionById(sessionId);
       expect(ret.createdAt).toBeTruthy();
       expect(ret.createdAt).not.toEqual(new Date(ret.createdAt).getTime());
@@ -619,7 +625,11 @@ describe('Mongo', () => {
         idProvider: () => new ObjectID().toHexString(),
         convertSessionIdToMongoObjectId: false,
       });
-      const sessionId = await mongoTestOptions.createSession(session.userId, session.ip, session.userAgent);
+      const sessionId = await mongoTestOptions.createSession(
+        session.userId,
+        session.ip,
+        session.userAgent
+      );
       const ret = await mongoTestOptions.findSessionById(sessionId);
       expect(ret._id).toBeTruthy();
       expect(ret._id).not.toEqual(new ObjectID(ret._id));

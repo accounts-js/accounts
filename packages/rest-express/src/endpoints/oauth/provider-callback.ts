@@ -8,7 +8,10 @@ interface RequestWithSession extends express.Request {
   session: { [key: string]: any };
 }
 
-export const providerCallback = (accountsServer: AccountsServer) => async (req: express.Request, res: express.Response) => {
+export const providerCallback = (accountsServer: AccountsServer) => async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const userAgent = getUserAgent(req);
     const ip = requestIp.getClientIp(req);

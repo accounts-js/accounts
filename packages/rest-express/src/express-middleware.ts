@@ -22,7 +22,10 @@ const defaultOptions: AccountsExpressOptions = {
   path: '/accounts',
 };
 
-const accountsExpress = (accountsServer: AccountsServer, options: AccountsExpressOptions = {}): express.Router => {
+const accountsExpress = (
+  accountsServer: AccountsServer,
+  options: AccountsExpressOptions = {}
+): express.Router => {
   options = { ...defaultOptions, ...options };
   const { path } = options;
 

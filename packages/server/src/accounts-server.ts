@@ -14,7 +14,12 @@ import {
 } from '@accounts/common';
 import { generateAccessToken, generateRefreshToken, generateRandomToken } from './tokens';
 import { emailTemplates, EmailTemplateType, sendMail } from './email';
-import { AccountsServerOptions, ConnectionInformationsType, AuthService, DBInterface } from './types';
+import {
+  AccountsServerOptions,
+  ConnectionInformationsType,
+  AuthService,
+  DBInterface,
+} from './types';
 
 export interface TokenRecord {
   token: string;
@@ -144,7 +149,11 @@ export class AccountsServer {
     return this.on(ServerHooks.ImpersonationError, callback);
   }
 
-  public async loginWithService(serviceName: string, params, infos: ConnectionInformationsType): Promise<LoginReturnType> {
+  public async loginWithService(
+    serviceName: string,
+    params,
+    infos: ConnectionInformationsType
+  ): Promise<LoginReturnType> {
     if (!this.services[serviceName]) {
       throw new Error(`No service with the name ${serviceName} was registered.`);
     }
@@ -164,7 +173,10 @@ export class AccountsServer {
    * @param {string} userAgent - User's client agent.
    * @returns {Promise<LoginReturnType>} - Session tokens and user object.
    */
-  public async loginWithUser(user: UserObjectType, infos: ConnectionInformationsType): Promise<LoginReturnType> {
+  public async loginWithUser(
+    user: UserObjectType,
+    infos: ConnectionInformationsType
+  ): Promise<LoginReturnType> {
     const { ip, userAgent } = infos;
 
     try {
@@ -200,7 +212,12 @@ export class AccountsServer {
    * @param {string} userAgent - User user agent.
    * @returns {Promise<Object>} - ImpersonateReturnType
    */
-  public async impersonate(accessToken: string, username: string, ip: string, userAgent: string): Promise<ImpersonateReturnType> {
+  public async impersonate(
+    accessToken: string,
+    username: string,
+    ip: string,
+    userAgent: string
+  ): Promise<ImpersonateReturnType> {
     try {
       if (!isString(accessToken)) {
         throw new AccountsError('An access token is required');
@@ -274,7 +291,12 @@ export class AccountsServer {
    * @param {string} userAgent - User user agent.
    * @returns {Promise<Object>} - LoginReturnType.
    */
-  public async refreshTokens(accessToken: string, refreshToken: string, ip: string, userAgent: string): Promise<LoginReturnType> {
+  public async refreshTokens(
+    accessToken: string,
+    refreshToken: string,
+    ip: string,
+    userAgent: string
+  ): Promise<LoginReturnType> {
     try {
       if (!isString(accessToken) || !isString(refreshToken)) {
         throw new AccountsError('An accessToken and refreshToken are required');
@@ -403,7 +425,10 @@ export class AccountsServer {
         return this.sanitizeUser(user);
       }
 
-      this.hooks.emit(ServerHooks.ResumeSessionError, new AccountsError('Invalid Session', { id: session.userId }));
+      this.hooks.emit(
+        ServerHooks.ResumeSessionError,
+        new AccountsError('Invalid Session', { id: session.userId })
+      );
 
       return null;
     } catch (e) {
@@ -425,7 +450,9 @@ export class AccountsServer {
 
     let sessionToken: string;
     try {
-      const decodedAccessToken = jwt.verify(accessToken, this.options.tokenSecret) as { data: JwtData };
+      const decodedAccessToken = jwt.verify(accessToken, this.options.tokenSecret) as {
+        data: JwtData;
+      };
       sessionToken = decodedAccessToken.data.token;
     } catch (err) {
       throw new AccountsError('Tokens are not valid');
