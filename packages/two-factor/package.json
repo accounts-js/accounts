@@ -1,5 +1,5 @@
 {
-  "name": "@accounts/password",
+  "name": "@accounts/two-factor",
   "version": "0.1.0-beta.3",
   "license": "MIT",
   "main": "lib/index.js",
@@ -25,19 +25,15 @@
     ]
   },
   "dependencies": {
-    "@accounts/two-factor": "^0.1.0-beta.3",
-    "bcryptjs": "^2.4.3",
-    "lodash": "^4.17.4"
+    "speakeasy": "^2.0.0"
   },
   "devDependencies": {
     "@accounts/common": "^0.1.0-beta.3",
     "@accounts/server": "^0.1.0-beta.3",
-    "@types/bcryptjs": "2.4.1",
-    "@types/lodash": "4.14.104",
-    "rimraf": "2.6.2"
+    "@types/speakeasy": "2.0.2"
   },
   "peerDependencies": {
-    "@accounts/common": "^0.1.0-beta.0",
-    "@accounts/server": "^0.1.0-beta.0"
+    "@accounts/common": "^0.1.0-beta.3",
+    "@accounts/server": "^0.1.0-beta.3"
   }
 }

@@ -29,8 +29,10 @@ describe('AccountsPassword', () => {
       }
     });
 
-    it('throws when user not found', async () => {
-      const user = 'user';
+    it('return user', async () => {
+      const user = {
+        services: {}
+      };
       const tmpAccountsPassword = new AccountsPassword({});
       tmpAccountsPassword.passwordAuthenticator = jest.fn(() => Promise.resolve(user));
       const ret = await tmpAccountsPassword.authenticate({

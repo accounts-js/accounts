@@ -9,7 +9,10 @@ export type PasswordType =
 
 export interface PasswordLoginType {
   user: string | LoginUserIdentityType;
+  // User password
   password: PasswordType;
+  // Two factor code
+  code?: string;
 }
 
 export interface PasswordCreateUserType extends CreateUserType {
