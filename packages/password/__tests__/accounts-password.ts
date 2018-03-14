@@ -42,20 +42,6 @@ describe('AccountsPassword', () => {
       expect(ret).toEqual(user);
     });
 
-    it('return user', async () => {
-      try {
-        const tmpAccountsPassword = new AccountsPassword({});
-        tmpAccountsPassword.passwordAuthenticator = jest.fn(() => Promise.resolve());
-        await tmpAccountsPassword.authenticate({
-          user: 'toto',
-          password: 'toto',
-        } as any);
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toMatchSnapshot();
-      }
-    });
-
     it('throws when user not found', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
       password.setStore({ findUserByEmail } as any);
