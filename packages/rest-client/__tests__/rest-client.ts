@@ -23,9 +23,7 @@ describe('RestClient', () => {
     expect(client.options.rootPath).toBe('accounts');
 
     return client.fetch('try').then(() => {
-      expect(window.fetch.mock.calls[0][0]).toBe(
-        'http://localhost:3000/accounts/try'
-      );
+      expect(window.fetch.mock.calls[0][0]).toBe('http://localhost:3000/accounts/try');
     });
   });
 
@@ -38,11 +36,7 @@ describe('RestClient', () => {
     it('should enable custom headers', () =>
       client
         .fetch('route', {}, { origin: 'localhost:3000' })
-        .then(() =>
-          expect(window.fetch.mock.calls[0][1].headers.origin).toBe(
-            'localhost:3000'
-          )
-        ));
+        .then(() => expect(window.fetch.mock.calls[0][1].headers.origin).toBe('localhost:3000')));
 
     it('should throw error', async () => {
       window.fetch = jest.fn().mockImplementation(() => ({
@@ -54,9 +48,7 @@ describe('RestClient', () => {
         await client.fetch('route', {}, { origin: 'localhost:3000' });
         throw new Error();
       } catch (err) {
-        expect(window.fetch.mock.calls[0][1].headers.origin).toBe(
-          'localhost:3000'
-        );
+        expect(window.fetch.mock.calls[0][1].headers.origin).toBe('localhost:3000');
       }
       window.fetch = jest.fn().mockImplementation(() => ({
         status: 200,
@@ -71,9 +63,7 @@ describe('RestClient', () => {
         await client.fetch('route', {}, { origin: 'localhost:3000' });
         throw new Error();
       } catch (err) {
-        expect(window.fetch.mock.calls[0][1].headers.origin).toBe(
-          'localhost:3000'
-        );
+        expect(window.fetch.mock.calls[0][1].headers.origin).toBe('localhost:3000');
         expect(err.message).toBe('Server did not return a response');
       }
       window.fetch = jest.fn().mockImplementation(() => ({
@@ -115,9 +105,7 @@ describe('RestClient', () => {
       client
         .impersonate('token', 'user')
         .then(() =>
-          expect(window.fetch.mock.calls[0][0]).toBe(
-            'http://localhost:3000/accounts/impersonate'
-          )
+          expect(window.fetch.mock.calls[0][0]).toBe('http://localhost:3000/accounts/impersonate')
         ));
   });
 
@@ -131,9 +119,7 @@ describe('RestClient', () => {
       client
         .refreshTokens('accessToken', 'refreshToken')
         .then(() =>
-          expect(window.fetch.mock.calls[0][0]).toBe(
-            'http://localhost:3000/accounts/refreshTokens'
-          )
+          expect(window.fetch.mock.calls[0][0]).toBe('http://localhost:3000/accounts/refreshTokens')
         ));
   });
 
@@ -147,9 +133,7 @@ describe('RestClient', () => {
       client
         .logout('accessToken')
         .then(() =>
-          expect(window.fetch.mock.calls[0][0]).toBe(
-            'http://localhost:3000/accounts/logout'
-          )
+          expect(window.fetch.mock.calls[0][0]).toBe('http://localhost:3000/accounts/logout')
         ));
   });
 
@@ -163,9 +147,7 @@ describe('RestClient', () => {
       client
         .getUser('accessToken')
         .then(() =>
-          expect(window.fetch.mock.calls[0][0]).toBe(
-            'http://localhost:3000/accounts/user'
-          )
+          expect(window.fetch.mock.calls[0][0]).toBe('http://localhost:3000/accounts/user')
         ));
   });
 

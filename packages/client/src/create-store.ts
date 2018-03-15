@@ -1,10 +1,4 @@
-import {
-  createStore,
-  applyMiddleware,
-  compose,
-  Store,
-  Middleware,
-} from 'redux';
+import { createStore, applyMiddleware, compose, Store, Middleware } from 'redux';
 import { Map } from 'immutable';
 import { combineReducers } from 'redux-immutable';
 
@@ -16,9 +10,4 @@ export default ({
   reducers?: object;
   middleware?: Middleware[];
   state?: Map<string, any>;
-}) =>
-  createStore(
-    combineReducers(reducers),
-    state,
-    compose(applyMiddleware(...middleware))
-  );
+}) => createStore(combineReducers(reducers), state, compose(applyMiddleware(...middleware)));

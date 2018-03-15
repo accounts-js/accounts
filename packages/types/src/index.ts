@@ -1,22 +1,20 @@
-export { DatabaseInterface as DBInterface } from './types/database-interface'
-import { ConnectionInformations as ConnectionInformationsType } from './types/connection-informations'
+export { DatabaseInterface as DBInterface } from './types/database-interface';
+import { ConnectionInformations as ConnectionInformationsType } from './types/connection-informations';
 
 // ? Tokens
-export { Tokens as TokensType } from './types/tokens'
-export { TokenRecord } from './types/token-record'
-export { Session as SessionType} from './types/session'
+export { Tokens as TokensType } from './types/tokens';
+export { TokenRecord } from './types/token-record';
+export { Session as SessionType } from './types/session';
 
 // ? User
-export { User as UserObjectType } from './types/user'
-export { CreateUser as CreateUserType } from './types/create-user'
+export { User as UserObjectType } from './types/user';
+export { CreateUser as CreateUserType } from './types/create-user';
 
-
-export { EmailRecord } from './types/email-record'
+export { EmailRecord } from './types/email-record';
 
 // ? Operation Results
-export { LoginResult as LoginReturnType } from './types/login-result'
-export { ImpersonationResult as ImpersonateReturnType } from './types/impersonation-result'
-
+export { LoginResult as LoginReturnType } from './types/login-result';
+export { ImpersonationResult as ImpersonateReturnType } from './types/impersonation-result';
 
 // ? Operation Parameters
 /*
@@ -31,7 +29,6 @@ export { ImpersonationResult as ImpersonateReturnType } from './types/impersonat
   }
 
 */
-export { Login as LoginUserIdentityType } from './types/login'
+export { Login as LoginUserIdentityType } from './types/login';
 
-
-export { HookListener } from './types/hook-listener'
+export { HookListener } from './types/hook-listener';

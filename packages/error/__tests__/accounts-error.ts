@@ -14,7 +14,9 @@ describe('AccountsError', () => {
   });
 
   it('should take 3 parameter and make a formatted Message', () => {
-    expect(new AccountsError('Package', 'method', 'reason').message).toBe('[ Accounts - Package ] method : reason');
+    expect(new AccountsError('Package', 'method', 'reason').message).toBe(
+      '[ Accounts - Package ] method : reason'
+    );
   });
 
   it('should have a public property packageName', () => {

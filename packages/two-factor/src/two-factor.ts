@@ -83,11 +83,7 @@ export class TwoFactor {
    * Add the code to the user profile
    * Throw if user already have 2fa enabled
    */
-  public async set(
-    userId: string,
-    secret: speakeasy.Key,
-    code: string
-  ): Promise<void> {
+  public async set(userId: string, secret: speakeasy.Key, code: string): Promise<void> {
     if (!code) {
       throw new Error(errors.codeRequired);
     }

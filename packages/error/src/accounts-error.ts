@@ -7,7 +7,9 @@ export default class AccountsError extends Error {
 
   constructor(packageName?: string, functionName?: string, reason?: string) {
     // Build Error message from parameters
-    const message = reason ? `[ Accounts - ${packageName} ] ${functionName} : ${reason}` : packageName;
+    const message = reason
+      ? `[ Accounts - ${packageName} ] ${functionName} : ${reason}`
+      : packageName;
 
     // Build the underlying Error
     super(message);

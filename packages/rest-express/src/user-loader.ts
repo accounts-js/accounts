@@ -8,8 +8,7 @@ export const userLoader = (accountsServer: AccountsServer) => async (
   next: any
 ) => {
   const accessToken =
-    get(req.headers, 'accounts-access-token') ||
-    get(req.body, 'accessToken', undefined);
+    get(req.headers, 'accounts-access-token') || get(req.body, 'accessToken', undefined);
   if (!isEmpty(accessToken)) {
     try {
       const user = await accountsServer.resumeSession(accessToken);
