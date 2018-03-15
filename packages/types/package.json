@@ -46,6 +46,6 @@
   "author": "Elies Lou (Aetherall)",
   "license": "MIT",
   "devDependencies": {
-    "rimraf": "^2.6.2"
+    "rimraf": "2.6.2"
   }
 }
