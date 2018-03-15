@@ -4,6 +4,8 @@ exports[`errors should have named export errors 1`] = `
 Object {
   "codeDidNotMatch": "2FA code didn't match",
   "codeRequired": "2FA code required",
+  "userNotFound": "User not found",
+  "userTwoFactorAlreadySet": "2FA already set",
   "userTwoFactorNotSet": "2FA not set",
 }
 `;

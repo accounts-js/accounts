@@ -77,7 +77,30 @@ describe('TwoFactor', () => {
       ).rejects.toThrowErrorMatchingSnapshot();
     });
 
+    it('should throw if user not found', async () => {
+      dbMock.findUserById.mockImplementation(() =>
+        Promise.resolve(null)
+      );
+      const secret = accountsTwoFactor.getNewAuthSecret();
+      await expect(
+        accountsTwoFactor.set('userId', secret, 'invalidCode')
+      ).rejects.toThrowErrorMatchingSnapshot();
+    });
+
+    it('should throw if user already have 2fa', async () => {
+      dbMock.findUserById.mockImplementation(() =>
+        Promise.resolve(mockedUserWithTwoFactor)
+      );
+      const secret = accountsTwoFactor.getNewAuthSecret();
+      await expect(
+        accountsTwoFactor.set('userId', secret, 'invalidCode')
+      ).rejects.toThrowErrorMatchingSnapshot();
+    });
+
     it('should throw if invalid code', async () => {
+      dbMock.findUserById.mockImplementation(() =>
+        Promise.resolve(mockedUserWithoutTwoFactor)
+      );
       const secret = accountsTwoFactor.getNewAuthSecret();
       await expect(
         accountsTwoFactor.set('userId', secret, 'invalidCode')
@@ -97,6 +120,15 @@ describe('TwoFactor', () => {
       const code: any = null;
       await expect(
         accountsTwoFactor.unset('userId', code)
+      ).rejects.toThrowErrorMatchingSnapshot();
+    });
+
+    it('should throw if user not found', async () => {
+      dbMock.findUserById.mockImplementation(() =>
+        Promise.resolve(null)
+      );
+      await expect(
+        accountsTwoFactor.unset('userId', 'invalidCode')
       ).rejects.toThrowErrorMatchingSnapshot();
     });
 

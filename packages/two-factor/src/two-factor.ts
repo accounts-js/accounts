@@ -81,6 +81,7 @@ export class TwoFactor {
   /**
    * Verify the code is correct
    * Add the code to the user profile
+   * Throw if user already have 2fa enabled
    */
   public async set(
     userId: string,
@@ -90,6 +91,17 @@ export class TwoFactor {
     if (!code) {
       throw new Error(errors.codeRequired);
     }
+
+    const user = await this.db.findUserById(userId);
+    if (!user) {
+      throw new Error(errors.userNotFound);
+    }
+    let twoFactorService = this.getUserService(user);
+    // If user already have 2fa return error
+    if (twoFactorService) {
+      throw new Error(errors.userTwoFactorAlreadySet);
+    }
+
     if (
       speakeasy.totp.verify({
         secret: secret.base32,
@@ -98,7 +110,7 @@ export class TwoFactor {
         window: this.options.window,
       })
     ) {
-      const twoFactorService: TwoFactorService = {
+      twoFactorService = {
         secret,
       };
       await this.db.setService(userId, this.serviceName, twoFactorService);
@@ -116,6 +128,9 @@ export class TwoFactor {
     }
 
     const user = await this.db.findUserById(userId);
+    if (!user) {
+      throw new Error(errors.userNotFound);
+    }
     const twoFactorService = this.getUserService(user);
     // If user does not have 2fa set return error
     if (!twoFactorService) {
