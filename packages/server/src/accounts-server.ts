@@ -56,6 +56,7 @@ const defaultOptions = {
 export type RemoveListnerHandle = () => EventEmitter;
 
 export const ServerHooks = {
+  Login: 'Login',
   LoginSuccess: 'LoginSuccess',
   LoginError: 'LoginError',
   LogoutSuccess: 'LogoutSuccess',
@@ -69,6 +70,23 @@ export const ServerHooks = {
   ImpersonationSuccess: 'ImpersonationSuccess',
   ImpersonationError: 'ImpersonationError',
 };
+
+class Hooks {
+  private store = {};
+
+  public register(funcName: string, func: any) {
+    if (!this.store[funcName]) {
+      this.store[funcName] = [];
+    }
+    this.store[funcName].push(func);
+  }
+
+  public async call(funcName, ...args) {
+    for (const func of this.store[funcName]) {
+      await func(...args);
+    }
+  }
+}
 
 export class AccountsServer {
   public options: AccountsServerOptions;
@@ -94,7 +112,7 @@ export class AccountsServer {
     }
 
     // Initialize hooks
-    this.hooks = new EventEmitter();
+    this.hooks = new Hooks();
   }
 
   public getServices(): { [key: string]: AuthService } {
@@ -103,6 +121,10 @@ export class AccountsServer {
 
   public getOptions(): AccountsServerOptions {
     return this.options;
+  }
+
+  public onLogin(func: () => boolean | Promise<boolean>): void {
+    this.hooks.register(ServerHooks.Login, func);
   }
 
   public onLoginSuccess(callback: HookListener): RemoveListnerHandle {
@@ -188,6 +210,13 @@ export class AccountsServer {
     infos: ConnectionInformationsType
   ): Promise<LoginReturnType> {
     const { ip, userAgent } = infos;
+
+    if (!await this.hooks.call(ServerHooks.Login, {
+      user,
+      connection: infos,
+    })) {
+      throw new Error('Login forbidden');
+    }
 
     try {
       const token = generateRandomToken();
