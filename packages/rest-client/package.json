@@ -48,7 +48,7 @@
   "devDependencies": {
     "@accounts/client": "^0.1.0-beta.5",
     "@accounts/common": "^0.1.0-beta.5",
-    "@types/lodash": "4.14.104",
+    "@types/lodash": "4.14.105",
     "node-fetch": "2.1.1"
   },
   "peerDependencies": {
