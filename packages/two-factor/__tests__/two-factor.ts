@@ -1,5 +1,5 @@
 import * as speakeasy from 'speakeasy';
-import { TwoFactor } from '../src/two-factor';
+import TwoFactor from '../src';
 
 const dbMock: any = {
   findUserById: jest.fn(),

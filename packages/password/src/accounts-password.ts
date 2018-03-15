@@ -21,32 +21,18 @@ import {
   AccountsServer,
   generateRandomToken,
   AuthService,
+  getFirstUserEmail
 } from '@accounts/server';
-import { TwoFactor, AccountsTwoFactorOptions } from '@accounts/two-factor';
-import { getFirstUserEmail } from '@accounts/server/lib/utils';
-import { hashPassword, bcryptPassword, verifyPassword } from './encryption';
-import {
-  PasswordCreateUserType,
-  PasswordLoginType,
-  PasswordType,
-} from './types';
 
-export const isEmail = (email?: string) => {
-  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return email && re.test(email);
-};
+import TwoFactor, { TwoFactorConfiguration } from '@accounts/two-factor';
 
-export interface AccountsPasswordOptions {
-  twoFactor?: AccountsTwoFactorOptions;
-  passwordHashAlgorithm?: HashAlgorithm;
-  passwordResetTokenExpirationInDays?: number;
-  passwordEnrollTokenExpirationInDays?: number;
-  minimumPasswordLength?: number;
-  validateNewUser?: (user: CreateUserType) => Promise<boolean>;
-  validateEmail?(email?: string): boolean;
-  validatePassword?(password?: PasswordType): boolean;
-  validateUsername?(username?: string): boolean;
-}
+import { Configuration } from './types/configuration';
+import { PasswordCreateUserType } from './types/password-create-user-type';
+import { PasswordLoginType } from './types/password-login-type';
+import { PasswordType } from './types/password-type';
+
+import { hashPassword, bcryptPassword, verifyPassword } from './utils/encryption';
+import { isEmail } from './utils/isEmail';
 
 const defaultOptions = {
   passwordResetTokenExpirationInDays: 3,
@@ -72,10 +58,10 @@ export default class AccountsPassword implements AuthService {
   public serviceName = 'password';
   public server: AccountsServer;
   public twoFactor: TwoFactor;
-  private options: AccountsPasswordOptions;
+  private options: Configuration;
   private db: DBInterface;
 
-  constructor(options: AccountsPasswordOptions = {}) {
+  constructor(options: Configuration = {}) {
     this.options = { ...defaultOptions, ...options };
     this.twoFactor = new TwoFactor(options.twoFactor);
   }

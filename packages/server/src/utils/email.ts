@@ -1,17 +1,6 @@
 import { UserObjectType } from '@accounts/common';
-
-export interface EmailTemplateType {
-  from?: string;
-  subject: (user?: UserObjectType) => string;
-  text: (user: UserObjectType, url: string) => string;
-}
-
-export interface EmailTemplatesType {
-  from: string;
-  verifyEmail: EmailTemplateType;
-  resetPassword: EmailTemplateType;
-  enrollAccount: EmailTemplateType;
-}
+import { EmailTemplateType } from '../types/email-template-type';
+import { EmailTemplatesType } from '../types/email-templates-type';
 
 export const emailTemplates = {
   from: 'js-accounts <no-reply@js-accounts.com>',

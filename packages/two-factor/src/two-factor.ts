@@ -1,32 +1,24 @@
 import * as speakeasy from 'speakeasy';
 import { DBInterface } from '@accounts/server';
 import { UserObjectType } from '@accounts/common';
-import { errors } from './errors';
 
-export interface TwoFactorService {
-  secret: speakeasy.Key;
-}
+import { Configuration } from './types/configuration'
+import { TwoFactorService } from './types/two-factor-service'
 
-export interface AccountsTwoFactorOptions {
-  // Two factor app name
-  appName?: string;
-  // Two factor secret length, default to 20
-  secretLength?: number;
-  window?: number;
-}
+import { errors } from './utils/errors';
 
-const defaultOptions = {
+const defaultConfig = {
   secretLength: 20,
   window: 0,
 };
 
-export class TwoFactor {
-  private options: AccountsTwoFactorOptions;
+export default class TwoFactor {
+  private config: Configuration;
   private db: DBInterface;
   private serviceName = 'two-factor';
 
-  constructor(options: AccountsTwoFactorOptions = {}) {
-    this.options = { ...defaultOptions, ...options };
+  constructor(config: Configuration = {}) {
+    this.config = { ...defaultConfig, ...config };
   }
 
   /**
@@ -61,7 +53,7 @@ export class TwoFactor {
         secret: twoFactorService.secret.base32,
         encoding: 'base32',
         token: code,
-        window: this.options.window,
+        window: this.config.window,
       })
     ) {
       throw new Error(errors.codeDidNotMatch);
@@ -73,8 +65,8 @@ export class TwoFactor {
    */
   public getNewAuthSecret(): speakeasy.Key {
     return speakeasy.generateSecret({
-      length: this.options.secretLength,
-      name: this.options.appName,
+      length: this.config.secretLength,
+      name: this.config.appName,
     });
   }
 
@@ -95,7 +87,7 @@ export class TwoFactor {
         secret: secret.base32,
         encoding: 'base32',
         token: code,
-        window: this.options.window,
+        window: this.config.window,
       })
     ) {
       const twoFactorService: TwoFactorService = {
@@ -126,7 +118,7 @@ export class TwoFactor {
         secret: twoFactorService.secret.base32,
         encoding: 'base32',
         token: code,
-        window: this.options.window,
+        window: this.config.window,
       })
     ) {
       this.db.unsetService(userId, this.serviceName);

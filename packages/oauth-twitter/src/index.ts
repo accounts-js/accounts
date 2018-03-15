@@ -1,4 +1,2 @@
-import { AccountsOAuthTwitter } from './accounts-oauth-twitter';
-
-export { AccountsOauthTwitterOptions } from './accounts-oauth-twitter';
-export default AccountsOAuthTwitter;
+export { default } from './accounts-oauth-twitter';
+export { Configuration } from './types/configuration';

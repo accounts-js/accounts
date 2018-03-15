@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcryptjs';
 import * as crypto from 'crypto';
-import { PasswordType } from './types';
+import { PasswordType } from '../types/password-type';
 
 export const bcryptPassword = async (password: string): Promise<string> => {
   const salt = await bcrypt.genSalt(10);
@@ -18,7 +18,6 @@ export const hashPassword = (password: PasswordType, algorithm: string) => {
   return password.digest;
 };
 
-export const verifyPassword = async (
-  password: string,
+export const verifyPassword = async ( password: string,
   hash: string
 ): Promise<boolean> => bcrypt.compare(password, hash);
