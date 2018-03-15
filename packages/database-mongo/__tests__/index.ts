@@ -4,8 +4,7 @@ import { ObjectID } from 'mongodb';
 import { randomBytes } from 'crypto';
 import Mongo from '../src';
 
-const generateRandomToken = (length: number = 43): string =>
-  randomBytes(length).toString('hex');
+const generateRandomToken = (length: number = 43): string => randomBytes(length).toString('hex');
 
 let mongo: Mongo;
 let db: mongodb.Db;
@@ -90,10 +89,7 @@ describe('Mongo', () => {
       mongoWithStringIds.collection.findOne = mockFindOne;
       await mongoWithStringIds.findUserById('589871d1c9393d445745a57c');
 
-      expect(mockFindOne.mock.calls[0][0]).toHaveProperty(
-        '_id',
-        '589871d1c9393d445745a57c'
-      );
+      expect(mockFindOne.mock.calls[0][0]).toHaveProperty('_id', '589871d1c9393d445745a57c');
     });
   });
 
@@ -109,9 +105,7 @@ describe('Mongo', () => {
       });
       expect(mongoTestOptions.options).toBeTruthy();
       expect(mongoTestOptions.options.collectionName).toEqual('users-test');
-      expect(mongoTestOptions.options.sessionCollectionName).toEqual(
-        'sessions-test'
-      );
+      expect(mongoTestOptions.options.sessionCollectionName).toEqual('sessions-test');
     });
 
     it('should throw with an invalid database connection object', () => {
@@ -236,9 +230,7 @@ describe('Mongo', () => {
 
     it('should return username for case insensitive query', async () => {
       const mongoWithOptions = new Mongo(db, { caseSensitiveUserName: false });
-      const ret = await mongoWithOptions.findUserByUsername(
-        user.username.toUpperCase()
-      );
+      const ret = await mongoWithOptions.findUserByUsername(user.username.toUpperCase());
       expect(ret).toBeTruthy();
       expect(ret._id).toBeTruthy();
       expect(ret.id).toBeTruthy();
@@ -730,16 +722,14 @@ describe('Mongo', () => {
 
   describe('invalidateAllSessions', () => {
     it('invalidates all sessions', async () => {
-      const sessionId1 = await mongo.createSession(
-        session.userId,
-        generateRandomToken(),
-        { ip: session.ip, userAgent: session.userAgent }
-      );
-      const sessionId2 = await mongo.createSession(
-        session.userId,
-        generateRandomToken(),
-        { ip: session.ip, userAgent: session.userAgent }
-      );
+      const sessionId1 = await mongo.createSession(session.userId, generateRandomToken(), {
+        ip: session.ip,
+        userAgent: session.userAgent,
+      });
+      const sessionId2 = await mongo.createSession(session.userId, generateRandomToken(), {
+        ip: session.ip,
+        userAgent: session.userAgent,
+      });
       await delay(10);
       await mongo.invalidateAllSessions(session.userId);
       const session1 = await mongo.findSessionById(sessionId1);
@@ -757,12 +747,8 @@ describe('Mongo', () => {
       await mongo.addEmailVerificationToken(userId, 'john@doe.com', 'token');
       const retUser = await mongo.findUserById(userId);
       expect(retUser.services.email.verificationTokens.length).toEqual(1);
-      expect(retUser.services.email.verificationTokens[0].address).toEqual(
-        'john@doe.com'
-      );
-      expect(retUser.services.email.verificationTokens[0].token).toEqual(
-        'token'
-      );
+      expect(retUser.services.email.verificationTokens[0].address).toEqual('john@doe.com');
+      expect(retUser.services.email.verificationTokens[0].token).toEqual('token');
       expect(retUser.services.email.verificationTokens[0].when).toBeTruthy();
     });
   });
@@ -773,9 +759,7 @@ describe('Mongo', () => {
       await mongo.addResetPasswordToken(userId, 'john@doe.com', 'token');
       const retUser = await mongo.findUserById(userId);
       expect(retUser.services.password.reset.length).toEqual(1);
-      expect(retUser.services.password.reset[0].address).toEqual(
-        'john@doe.com'
-      );
+      expect(retUser.services.password.reset[0].address).toEqual('john@doe.com');
       expect(retUser.services.password.reset[0].token).toEqual('token');
       expect(retUser.services.password.reset[0].when).toBeTruthy();
       expect(retUser.services.password.reset[0].reason).toEqual('reset');

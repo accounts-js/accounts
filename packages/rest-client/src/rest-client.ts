@@ -24,11 +24,7 @@ export class RestClient implements TransportInterface {
     this.options = options;
   }
 
-  public async fetch(
-    route: string,
-    args: object,
-    customHeaders: object = {}
-  ): Promise<any> {
+  public async fetch(route: string, args: object, customHeaders: object = {}): Promise<any> {
     const fetchOptions = {
       headers: this._loadHeadersObject(customHeaders),
       ...args,
@@ -103,10 +99,7 @@ export class RestClient implements TransportInterface {
     return this.fetch('logout', args, customHeaders);
   }
 
-  public async getUser(
-    accessToken: string,
-    customHeaders?: object
-  ): Promise<UserObjectType> {
+  public async getUser(accessToken: string, customHeaders?: object): Promise<UserObjectType> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
@@ -116,10 +109,7 @@ export class RestClient implements TransportInterface {
     return this.fetch('user', args, customHeaders);
   }
 
-  public async createUser(
-    user: CreateUserType,
-    customHeaders?: object
-  ): Promise<string> {
+  public async createUser(user: CreateUserType, customHeaders?: object): Promise<string> {
     const args = {
       method: 'POST',
       body: JSON.stringify({ user }),
@@ -127,11 +117,7 @@ export class RestClient implements TransportInterface {
     return this.fetch('password/register', args, customHeaders);
   }
 
-  public resetPassword(
-    token: string,
-    newPassword: string,
-    customHeaders?: object
-  ): Promise<void> {
+  public resetPassword(token: string, newPassword: string, customHeaders?: object): Promise<void> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
@@ -152,10 +138,7 @@ export class RestClient implements TransportInterface {
     return this.fetch('password/verifyEmail', args, customHeaders);
   }
 
-  public sendVerificationEmail(
-    email: string,
-    customHeaders?: object
-  ): Promise<void> {
+  public sendVerificationEmail(email: string, customHeaders?: object): Promise<void> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
@@ -165,10 +148,7 @@ export class RestClient implements TransportInterface {
     return this.fetch('password/sendVerificationEmail', args, customHeaders);
   }
 
-  public sendResetPasswordEmail(
-    email: string,
-    customHeaders?: object
-  ): Promise<void> {
+  public sendResetPasswordEmail(email: string, customHeaders?: object): Promise<void> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
@@ -185,29 +165,22 @@ export class RestClient implements TransportInterface {
     return this.fetch('password/twoFactorSecret', args, customHeaders);
   }
 
-  public twoFactorSet(
-    secret: any,
-    code: string,
-    customHeaders?: object
-  ): Promise<void> {
+  public twoFactorSet(secret: any, code: string, customHeaders?: object): Promise<void> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
         secret,
-        code
+        code,
       }),
     };
     return this.fetch('password/twoFactorSet', args, customHeaders);
   }
 
-  public twoFactorUnset(
-    code: string,
-    customHeaders?: object
-  ): Promise<void> {
+  public twoFactorUnset(code: string, customHeaders?: object): Promise<void> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
-        code
+        code,
       }),
     };
     return this.fetch('password/twoFactorUnset', args, customHeaders);

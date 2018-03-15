@@ -16,9 +16,10 @@ export const resetPassword = (accountsServer: AccountsServer) => async (
   }
 };
 
-export const sendResetPasswordEmail = (
-  accountsServer: AccountsServer
-) => async (req: express.Request, res: express.Response) => {
+export const sendResetPasswordEmail = (accountsServer: AccountsServer) => async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const { email } = req.body;
     const password: any = accountsServer.getServices().password;

@@ -29,9 +29,7 @@ describe('authFetch', () => {
     await authFetch(accounts, 'path', {});
     expect(accounts.refreshSession).toBeCalled();
     expect(accounts.tokens).toBeCalled();
-    expect(window.fetch.mock.calls[0][1].headers['accounts-access-token']).toBe(
-      'accessToken'
-    );
+    expect(window.fetch.mock.calls[0][1].headers['accounts-access-token']).toBe('accessToken');
   });
 
   it('should pass other headers', async () => {

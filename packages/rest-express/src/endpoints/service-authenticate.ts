@@ -12,11 +12,10 @@ export const serviceAuthenticate = (accountsServer: AccountsServer) => async (
     const serviceName = req.params.service;
     const userAgent = getUserAgent(req);
     const ip = requestIp.getClientIp(req);
-    const loggedInUser = await accountsServer.loginWithService(
-      serviceName,
-      req.body,
-      { ip, userAgent }
-    );
+    const loggedInUser = await accountsServer.loginWithService(serviceName, req.body, {
+      ip,
+      userAgent,
+    });
     res.json(loggedInUser);
   } catch (err) {
     sendError(res, err);

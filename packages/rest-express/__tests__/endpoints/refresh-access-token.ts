@@ -32,12 +32,7 @@ describe('refreshAccessToken', () => {
 
     await middleware(req, res);
 
-    expect(accountsServer.refreshTokens).toBeCalledWith(
-      'token',
-      'refresh',
-      null,
-      ''
-    );
+    expect(accountsServer.refreshTokens).toBeCalledWith('token', 'refresh', null, '');
     expect(req).toEqual(reqCopy);
     expect(res.json).toBeCalledWith(session);
     expect(res.status).not.toBeCalled();
@@ -63,12 +58,7 @@ describe('refreshAccessToken', () => {
     await middleware(req, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.refreshTokens).toBeCalledWith(
-      'token',
-      'refresh',
-      null,
-      ''
-    );
+    expect(accountsServer.refreshTokens).toBeCalledWith('token', 'refresh', null, '');
     expect(res.status).toBeCalledWith(400);
     expect(res.json).toBeCalledWith(error);
   });

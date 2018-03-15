@@ -12,11 +12,7 @@ import {
   ImpersonateReturnType,
   HookListener,
 } from '@accounts/common';
-import {
-  generateAccessToken,
-  generateRefreshToken,
-  generateRandomToken,
-} from './tokens';
+import { generateAccessToken, generateRefreshToken, generateRandomToken } from './tokens';
 import { emailTemplates, EmailTemplateType, sendMail } from './email';
 import {
   AccountsServerOptions,
@@ -159,17 +155,11 @@ export class AccountsServer {
     infos: ConnectionInformationsType
   ): Promise<LoginReturnType> {
     if (!this.services[serviceName]) {
-      throw new Error(
-        `No service with the name ${serviceName} was registered.`
-      );
+      throw new Error(`No service with the name ${serviceName} was registered.`);
     }
-    const user: UserObjectType = await this.services[serviceName].authenticate(
-      params
-    );
+    const user: UserObjectType = await this.services[serviceName].authenticate(params);
     if (!user) {
-      throw new Error(
-        `Service ${serviceName} was not able to authenticate user`
-      );
+      throw new Error(`Service ${serviceName} was not able to authenticate user`);
     }
     return this.loginWithUser(user, infos);
   }
@@ -260,10 +250,7 @@ export class AccountsServer {
         return { authorized: false };
       }
 
-      const isAuthorized = await this.options.impersonationAuthorize(
-        user,
-        impersonatedUser
-      );
+      const isAuthorized = await this.options.impersonationAuthorize(user, impersonatedUser);
 
       if (!isAuthorized) {
         return { authorized: false };
@@ -286,11 +273,7 @@ export class AccountsServer {
         user: this.sanitizeUser(impersonatedUser),
       };
 
-      this.hooks.emit(
-        ServerHooks.ImpersonationSuccess,
-        user,
-        impersonationResult
-      );
+      this.hooks.emit(ServerHooks.ImpersonationSuccess, user, impersonationResult);
 
       return impersonationResult;
     } catch (e) {
@@ -322,21 +305,15 @@ export class AccountsServer {
       let sessionToken: string;
       try {
         jwt.verify(refreshToken, this.options.tokenSecret);
-        const decodedAccessToken = jwt.verify(
-          accessToken,
-          this.options.tokenSecret,
-          {
-            ignoreExpiration: true,
-          }
-        ) as { data: JwtData };
+        const decodedAccessToken = jwt.verify(accessToken, this.options.tokenSecret, {
+          ignoreExpiration: true,
+        }) as { data: JwtData };
         sessionToken = decodedAccessToken.data.token;
       } catch (err) {
         throw new AccountsError('Tokens are not valid');
       }
 
-      const session: SessionType = await this.db.findSessionByToken(
-        sessionToken
-      );
+      const session: SessionType = await this.db.findSessionByToken(sessionToken);
       if (!session) {
         throw new AccountsError('Session not found');
       }
@@ -376,10 +353,7 @@ export class AccountsServer {
    * @param {boolean} isImpersonated - Should be true if impersonating another user.
    * @returns {Promise<Object>} - Return a new accessToken and refreshToken.
    */
-  public createTokens(
-    token: string,
-    isImpersonated: boolean = false
-  ): TokensType {
+  public createTokens(token: string, isImpersonated: boolean = false): TokensType {
     const { tokenSecret, tokenConfigs } = this.options;
     const jwtData: JwtData = {
       token,
@@ -404,9 +378,7 @@ export class AccountsServer {
    */
   public async logout(accessToken: string): Promise<void> {
     try {
-      const session: SessionType = await this.findSessionByAccessToken(
-        accessToken
-      );
+      const session: SessionType = await this.findSessionByAccessToken(accessToken);
 
       if (session.valid) {
         const user = await this.db.findUserById(session.userId);
@@ -416,12 +388,7 @@ export class AccountsServer {
         }
 
         await this.db.invalidateSession(session.id);
-        this.hooks.emit(
-          ServerHooks.LogoutSuccess,
-          this.sanitizeUser(user),
-          session,
-          accessToken
-        );
+        this.hooks.emit(ServerHooks.LogoutSuccess, this.sanitizeUser(user), session, accessToken);
       } else {
         throw new AccountsError('Session is no longer valid', {
           id: session.userId,
@@ -436,9 +403,7 @@ export class AccountsServer {
 
   public async resumeSession(accessToken: string): Promise<UserObjectType> {
     try {
-      const session: SessionType = await this.findSessionByAccessToken(
-        accessToken
-      );
+      const session: SessionType = await this.findSessionByAccessToken(accessToken);
 
       if (session.valid) {
         const user = await this.db.findUserById(session.userId);
@@ -478,19 +443,16 @@ export class AccountsServer {
    * @param {string} accessToken
    * @returns {Promise<SessionType>} - Return a session.
    */
-  public async findSessionByAccessToken(
-    accessToken: string
-  ): Promise<SessionType> {
+  public async findSessionByAccessToken(accessToken: string): Promise<SessionType> {
     if (!isString(accessToken)) {
       throw new AccountsError('An accessToken is required');
     }
 
     let sessionToken: string;
     try {
-      const decodedAccessToken = jwt.verify(
-        accessToken,
-        this.options.tokenSecret
-      ) as { data: JwtData };
+      const decodedAccessToken = jwt.verify(accessToken, this.options.tokenSecret) as {
+        data: JwtData;
+      };
       sessionToken = decodedAccessToken.data.token;
     } catch (err) {
       throw new AccountsError('Tokens are not valid');
@@ -549,10 +511,7 @@ export class AccountsServer {
   }
 
   public isTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
-    return (
-      !tokenRecord ||
-      Number(tokenRecord.when) + this.options.emailTokensExpiry < Date.now()
-    );
+    return !tokenRecord || Number(tokenRecord.when) + this.options.emailTokensExpiry < Date.now();
   }
 
   public prepareMail(
@@ -564,23 +523,9 @@ export class AccountsServer {
     from: string
   ): any {
     if (this.options.prepareMail) {
-      return this.options.prepareMail(
-        to,
-        token,
-        user,
-        pathFragment,
-        emailTemplate,
-        from
-      );
+      return this.options.prepareMail(to, token, user, pathFragment, emailTemplate, from);
     }
-    return this.defaultPrepareEmail(
-      to,
-      token,
-      user,
-      pathFragment,
-      emailTemplate,
-      from
-    );
+    return this.defaultPrepareEmail(to, token, user, pathFragment, emailTemplate, from);
   }
 
   public sanitizeUser(user: UserObjectType): UserObjectType {
@@ -610,10 +555,7 @@ export class AccountsServer {
     };
   }
 
-  private defaultCreateTokenizedUrl(
-    pathFragment: string,
-    token: string
-  ): string {
+  private defaultCreateTokenizedUrl(pathFragment: string, token: string): string {
     const siteUrl = this.options.siteUrl;
     return `${siteUrl}/${pathFragment}/${token}`;
   }

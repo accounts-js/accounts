@@ -1,7 +1,7 @@
 import {
   twoFactorSecret,
   twoFactorSet,
-  twoFactorUnset
+  twoFactorUnset,
 } from '../../../src/endpoints/password/two-factor';
 
 const res: any = {
@@ -20,7 +20,7 @@ describe('twoFactor', () => {
       const passwordService = {
         twoFactor: {
           getNewAuthSecret: jest.fn(() => 'secret'),
-        }
+        },
       };
       const accountsServer = {
         getServices: () => ({
@@ -50,7 +50,7 @@ describe('twoFactor', () => {
           getNewAuthSecret: jest.fn(() => {
             throw error;
           }),
-        }
+        },
       };
       const accountsServer = {
         getServices: () => ({
@@ -81,7 +81,7 @@ describe('twoFactor', () => {
       const passwordService = {
         twoFactor: {
           set: jest.fn(() => null),
-        }
+        },
       };
       const accountsServer = {
         getServices: () => ({
@@ -94,7 +94,7 @@ describe('twoFactor', () => {
         userId: 'userId',
         body: {
           secret: 'secret',
-          code: 'code'
+          code: 'code',
         },
       };
       const reqCopy = { ...req };
@@ -102,7 +102,11 @@ describe('twoFactor', () => {
       await middleware(req, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.twoFactor.set).toBeCalledWith('userId', 'secret', 'code');
+      expect(accountsServer.getServices().password.twoFactor.set).toBeCalledWith(
+        'userId',
+        'secret',
+        'code'
+      );
       expect(res.json).toBeCalled();
       expect(res.status).not.toBeCalled();
     });
@@ -122,7 +126,7 @@ describe('twoFactor', () => {
           set: jest.fn(() => {
             throw error;
           }),
-        }
+        },
       };
       const accountsServer = {
         getServices: () => ({
@@ -134,7 +138,7 @@ describe('twoFactor', () => {
         userId: 'userId',
         body: {
           secret: 'secret',
-          code: 'code'
+          code: 'code',
         },
       };
       const reqCopy = { ...req };
@@ -142,7 +146,11 @@ describe('twoFactor', () => {
       await middleware(req, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.twoFactor.set).toBeCalledWith('userId', 'secret', 'code');
+      expect(accountsServer.getServices().password.twoFactor.set).toBeCalledWith(
+        'userId',
+        'secret',
+        'code'
+      );
       expect(res.status).toBeCalledWith(400);
       expect(res.json).toBeCalledWith(error);
     });
@@ -154,7 +162,7 @@ describe('twoFactor', () => {
       const passwordService = {
         twoFactor: {
           unset: jest.fn(() => null),
-        }
+        },
       };
       const accountsServer = {
         getServices: () => ({
@@ -166,7 +174,7 @@ describe('twoFactor', () => {
       const req = {
         userId: 'userId',
         body: {
-          code: 'code'
+          code: 'code',
         },
       };
       const reqCopy = { ...req };
@@ -174,7 +182,10 @@ describe('twoFactor', () => {
       await middleware(req, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.twoFactor.unset).toBeCalledWith('userId', 'code');
+      expect(accountsServer.getServices().password.twoFactor.unset).toBeCalledWith(
+        'userId',
+        'code'
+      );
       expect(res.json).toBeCalled();
       expect(res.status).not.toBeCalled();
     });
@@ -194,7 +205,7 @@ describe('twoFactor', () => {
           unset: jest.fn(() => {
             throw error;
           }),
-        }
+        },
       };
       const accountsServer = {
         getServices: () => ({
@@ -205,7 +216,7 @@ describe('twoFactor', () => {
       const req = {
         userId: 'userId',
         body: {
-          code: 'code'
+          code: 'code',
         },
       };
       const reqCopy = { ...req };
@@ -213,7 +224,10 @@ describe('twoFactor', () => {
       await middleware(req, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.twoFactor.unset).toBeCalledWith('userId', 'code');
+      expect(accountsServer.getServices().password.twoFactor.unset).toBeCalledWith(
+        'userId',
+        'code'
+      );
       expect(res.status).toBeCalledWith(400);
       expect(res.json).toBeCalledWith(error);
     });
