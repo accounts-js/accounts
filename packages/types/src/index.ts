@@ -1,20 +1,50 @@
-export { DatabaseInterface as DBInterface } from './types/database-interface';
-import { ConnectionInformations as ConnectionInformationsType } from './types/connection-informations';
+import { DatabaseInterface } from './types/database-interface';
+import { ConnectionInformations } from './types/connection-informations';
+import { Tokens } from './types/tokens';
+import { TokenRecord } from './types/token-record';
+import { Session } from './types/session';
+import { User } from './types/user';
+import { CreateUser } from './types/create-user';
+import { EmailRecord } from './types/email-record';
+import { LoginResult } from './types/login-result';
+import { ImpersonationResult } from './types/impersonation-result';
+import { Login } from './types/login';
+import { HookListener } from './types/hook-listener';
+
+
+
+export { DatabaseInterface }
+export { DatabaseInterface as DBInterface }
+
+export { ConnectionInformations }
+export { ConnectionInformations as ConnectionInformationsType }
+
 
 // ? Tokens
-export { Tokens as TokensType } from './types/tokens';
-export { TokenRecord } from './types/token-record';
-export { Session as SessionType } from './types/session';
+export { Tokens }
+export { Tokens as TokensType }
+
+export { TokenRecord }
+export { Session }
+export { Session as SessionType }
+
 
 // ? User
-export { User as UserObjectType } from './types/user';
-export { CreateUser as CreateUserType } from './types/create-user';
+export { User }
+export { User as UserObjectType }
 
-export { EmailRecord } from './types/email-record';
+export { CreateUser }
+export { CreateUser as CreateUserType }
+
+export { EmailRecord }
+
 
 // ? Operation Results
-export { LoginResult as LoginReturnType } from './types/login-result';
-export { ImpersonationResult as ImpersonateReturnType } from './types/impersonation-result';
+export { LoginResult }
+export { LoginResult as LoginReturnType }
+
+export { ImpersonationResult }
+export { ImpersonationResult as ImpersonateReturnType }
 
 // ? Operation Parameters
 /*
@@ -29,6 +59,7 @@ export { ImpersonationResult as ImpersonateReturnType } from './types/impersonat
   }
 
 */
-export { Login as LoginUserIdentityType } from './types/login';
+export { Login }
+export { Login as LoginUserIdentityType }
 
-export { HookListener } from './types/hook-listener';
+export { HookListener }
