@@ -36,7 +36,7 @@
     "@accounts/common": "^0.1.0-beta.5",
     "@accounts/server": "^0.1.0-beta.5",
     "@types/lodash": "4.14.105",
-    "@types/mongodb": "3.0.7"
+    "@types/mongodb": "3.0.8"
   },
   "peerDependencies": {
     "@accounts/common": "^0.1.0-beta.3",
