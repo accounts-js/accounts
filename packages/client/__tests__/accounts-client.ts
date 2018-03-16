@@ -220,12 +220,8 @@ describe('Accounts', () => {
         username: 'user',
         password: 'password',
       });
-      expect(localStorage.getItem('accounts:accessToken')).toEqual(
-        'accessToken'
-      );
-      expect(localStorage.getItem('accounts:refreshToken')).toEqual(
-        'refreshToken'
-      );
+      expect(localStorage.getItem('accounts:accessToken')).toEqual('accessToken');
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual('refreshToken');
     });
 
     it('should return tokens in a sync return value', async () => {
@@ -313,9 +309,7 @@ describe('Accounts', () => {
     // TODO test that user and tokens are cleared if refreshToken is expired
     it('clears tokens and user if tokens are not set', async () => {
       Accounts.config({}, mockTransport);
-      Accounts.instance.clearTokens = jest.fn(
-        () => Accounts.instance.clearTokens
-      );
+      Accounts.instance.clearTokens = jest.fn(() => Accounts.instance.clearTokens);
       try {
         await Accounts.refreshSession();
       } catch (err) {
@@ -328,9 +322,7 @@ describe('Accounts', () => {
       localStorage.setItem('accounts:refreshToken', 'bad token');
       localStorage.setItem('accounts:accessToken', 'bad token');
       await Accounts.config({}, mockTransport);
-      Accounts.instance.clearTokens = jest.fn(
-        () => Accounts.instance.clearTokens
-      );
+      Accounts.instance.clearTokens = jest.fn(() => Accounts.instance.clearTokens);
       try {
         await Accounts.refreshSession();
         throw new Error();
@@ -357,9 +349,7 @@ describe('Accounts', () => {
       Accounts.instance['store'].dispatch(setTokens(oldTokens));
       await Accounts.refreshSession();
       expect(localStorage.getItem('accounts:accessToken')).toEqual(accessToken);
-      expect(localStorage.getItem('accounts:refreshToken')).toEqual(
-        refreshToken
-      );
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual(refreshToken);
     });
 
     it('requests a new token pair, sets the tokens and the user', async () => {
@@ -378,12 +368,8 @@ describe('Accounts', () => {
       // tslint:disable-next-line no-string-literal
       Accounts.instance['store'].dispatch(setTokens(oldTokens));
       await Accounts.refreshSession();
-      expect(localStorage.getItem('accounts:accessToken')).toEqual(
-        'accessToken'
-      );
-      expect(localStorage.getItem('accounts:refreshToken')).toEqual(
-        'refreshToken'
-      );
+      expect(localStorage.getItem('accounts:accessToken')).toEqual('accessToken');
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual('refreshToken');
     });
   });
 
@@ -499,10 +485,7 @@ describe('Accounts', () => {
     });
 
     it('should not save persist impersonation when persistImpersonation=false', async () => {
-      await Accounts.config(
-        { history, persistImpersonation: false },
-        mockTransport
-      );
+      await Accounts.config({ history, persistImpersonation: false }, mockTransport);
       await Accounts.loginWithService('password', {
         username: 'user',
         password: 'password',

@@ -5,11 +5,7 @@ const headers: { [key: string]: string } = {
   'Content-Type': 'application/json',
 };
 
-export const authFetch = async (
-  accounts: AccountsClient,
-  path: string,
-  request: any
-) => {
+export const authFetch = async (accounts: AccountsClient, path: string, request: any) => {
   await accounts.refreshSession();
   const { accessToken } = await accounts.tokens();
   const headersCopy = { ...headers };

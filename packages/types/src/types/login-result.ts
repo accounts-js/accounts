@@ -1,4 +1,4 @@
-import { Tokens } from './tokens'
+import { Tokens } from './tokens';
 
 export interface LoginResult {
   sessionId: string;

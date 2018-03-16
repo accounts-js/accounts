@@ -31,12 +31,10 @@ describe('AccountsPassword', () => {
 
     it('return user', async () => {
       const user = {
-        services: {}
+        services: {},
       };
       const tmpAccountsPassword = new AccountsPassword({});
-      tmpAccountsPassword.passwordAuthenticator = jest.fn(() =>
-        Promise.resolve(user)
-      );
+      tmpAccountsPassword.passwordAuthenticator = jest.fn(() => Promise.resolve(user));
       const ret = await tmpAccountsPassword.authenticate({
         user: 'toto',
         password: 'toto',
@@ -131,9 +129,7 @@ describe('AccountsPassword', () => {
     const token = 'token';
     const validUser: any = {};
     const email = 'john.doe@gmail.com';
-    set(validUser, 'services.email.verificationTokens', [
-      { token, address: email },
-    ]);
+    set(validUser, 'services.email.verificationTokens', [{ token, address: email }]);
     validUser.emails = [{ address: email }];
     const invalidUser = { ...validUser };
     invalidUser.emails = [];
@@ -150,9 +146,7 @@ describe('AccountsPassword', () => {
     });
 
     it('throws when token not found', async () => {
-      const findUserByEmailVerificationToken = jest.fn(() =>
-        Promise.resolve({})
-      );
+      const findUserByEmailVerificationToken = jest.fn(() => Promise.resolve({}));
       password.setStore({ findUserByEmailVerificationToken } as any);
       try {
         await password.verifyEmail(token);
@@ -163,9 +157,7 @@ describe('AccountsPassword', () => {
     });
 
     it('throws when email not found', async () => {
-      const findUserByEmailVerificationToken = jest.fn(() =>
-        Promise.resolve(invalidUser)
-      );
+      const findUserByEmailVerificationToken = jest.fn(() => Promise.resolve(invalidUser));
       password.setStore({ findUserByEmailVerificationToken } as any);
       try {
         await password.verifyEmail(token);
@@ -176,9 +168,7 @@ describe('AccountsPassword', () => {
     });
 
     it('call this.db.verifyEmail', async () => {
-      const findUserByEmailVerificationToken = jest.fn(() =>
-        Promise.resolve(validUser)
-      );
+      const findUserByEmailVerificationToken = jest.fn(() => Promise.resolve(validUser));
       const verifyEmail = jest.fn(() => Promise.resolve());
       password.setStore({
         findUserByEmailVerificationToken,
@@ -213,9 +203,7 @@ describe('AccountsPassword', () => {
     });
 
     it('throws when token is expired', async () => {
-      const findUserByResetPasswordToken = jest.fn(() =>
-        Promise.resolve(invalidUser)
-      );
+      const findUserByResetPasswordToken = jest.fn(() => Promise.resolve(invalidUser));
       const isTokenExpired = jest.fn(() => true);
       password.setStore({ findUserByResetPasswordToken } as any);
       password.server = { isTokenExpired } as any;
@@ -228,9 +216,7 @@ describe('AccountsPassword', () => {
     });
 
     it('throws when token have invalid email', async () => {
-      const findUserByResetPasswordToken = jest.fn(() =>
-        Promise.resolve(invalidUser)
-      );
+      const findUserByResetPasswordToken = jest.fn(() => Promise.resolve(invalidUser));
       const isTokenExpired = jest.fn(() => false);
       password.setStore({ findUserByResetPasswordToken } as any);
       password.server = { isTokenExpired } as any;
@@ -243,9 +229,7 @@ describe('AccountsPassword', () => {
     });
 
     it('reset password and invalidate all sessions', async () => {
-      const findUserByResetPasswordToken = jest.fn(() =>
-        Promise.resolve(validUser)
-      );
+      const findUserByResetPasswordToken = jest.fn(() => Promise.resolve(validUser));
       const isTokenExpired = jest.fn(() => false);
       const setResetPassword = jest.fn(() => Promise.resolve());
       const invalidateAllSessions = jest.fn(() => Promise.resolve());

@@ -38,10 +38,7 @@ describe('TwoFactor', () => {
 
     it('should throw that 2fa is not set', async () => {
       await expect(
-        accountsTwoFactor.authenticate(
-          mockedUserWithoutTwoFactor,
-          'invalidCode'
-        )
+        accountsTwoFactor.authenticate(mockedUserWithoutTwoFactor, 'invalidCode')
       ).rejects.toThrowErrorMatchingSnapshot();
     });
 
@@ -53,10 +50,7 @@ describe('TwoFactor', () => {
 
     it('should authenticate user with 2fa', async () => {
       const spy = jest.spyOn(speakeasy.totp, 'verify').mockReturnValue(true);
-      await accountsTwoFactor.authenticate(
-        mockedUserWithTwoFactor,
-        'validCode'
-      );
+      await accountsTwoFactor.authenticate(mockedUserWithTwoFactor, 'validCode');
       expect(spy).toHaveBeenCalled();
     });
   });
@@ -78,9 +72,7 @@ describe('TwoFactor', () => {
     });
 
     it('should throw if user not found', async () => {
-      dbMock.findUserById.mockImplementation(() =>
-        Promise.resolve(null)
-      );
+      dbMock.findUserById.mockImplementation(() => Promise.resolve(null));
       const secret = accountsTwoFactor.getNewAuthSecret();
       await expect(
         accountsTwoFactor.set('userId', secret, 'invalidCode')
@@ -88,9 +80,7 @@ describe('TwoFactor', () => {
     });
 
     it('should throw if user already have 2fa', async () => {
-      dbMock.findUserById.mockImplementation(() =>
-        Promise.resolve(mockedUserWithTwoFactor)
-      );
+      dbMock.findUserById.mockImplementation(() => Promise.resolve(mockedUserWithTwoFactor));
       const secret = accountsTwoFactor.getNewAuthSecret();
       await expect(
         accountsTwoFactor.set('userId', secret, 'invalidCode')
@@ -98,9 +88,7 @@ describe('TwoFactor', () => {
     });
 
     it('should throw if invalid code', async () => {
-      dbMock.findUserById.mockImplementation(() =>
-        Promise.resolve(mockedUserWithoutTwoFactor)
-      );
+      dbMock.findUserById.mockImplementation(() => Promise.resolve(mockedUserWithoutTwoFactor));
       const secret = accountsTwoFactor.getNewAuthSecret();
       await expect(
         accountsTwoFactor.set('userId', secret, 'invalidCode')
@@ -118,42 +106,32 @@ describe('TwoFactor', () => {
   describe('unset', () => {
     it('should throw if code is not set', async () => {
       const code: any = null;
-      await expect(
-        accountsTwoFactor.unset('userId', code)
-      ).rejects.toThrowErrorMatchingSnapshot();
+      await expect(accountsTwoFactor.unset('userId', code)).rejects.toThrowErrorMatchingSnapshot();
     });
 
     it('should throw if user not found', async () => {
-      dbMock.findUserById.mockImplementation(() =>
-        Promise.resolve(null)
-      );
+      dbMock.findUserById.mockImplementation(() => Promise.resolve(null));
       await expect(
         accountsTwoFactor.unset('userId', 'invalidCode')
       ).rejects.toThrowErrorMatchingSnapshot();
     });
 
     it('should throw that 2fa is not set', async () => {
-      dbMock.findUserById.mockImplementation(() =>
-        Promise.resolve(mockedUserWithoutTwoFactor)
-      );
+      dbMock.findUserById.mockImplementation(() => Promise.resolve(mockedUserWithoutTwoFactor));
       await expect(
         accountsTwoFactor.unset('userId', 'invalidCode')
       ).rejects.toThrowErrorMatchingSnapshot();
     });
 
     it('should throw if invalid code', async () => {
-      dbMock.findUserById.mockImplementation(() =>
-        Promise.resolve(mockedUserWithTwoFactor)
-      );
+      dbMock.findUserById.mockImplementation(() => Promise.resolve(mockedUserWithTwoFactor));
       await expect(
         accountsTwoFactor.unset('userId', 'invalidCode')
       ).rejects.toThrowErrorMatchingSnapshot();
     });
 
     it('should unset two-factor service', async () => {
-      dbMock.findUserById.mockImplementation(() =>
-        Promise.resolve(mockedUserWithTwoFactor)
-      );
+      dbMock.findUserById.mockImplementation(() => Promise.resolve(mockedUserWithTwoFactor));
       const spy = jest.spyOn(speakeasy.totp, 'verify').mockReturnValue(true);
       await accountsTwoFactor.unset('userId', 'validCode');
       expect(spy).toHaveBeenCalled();
