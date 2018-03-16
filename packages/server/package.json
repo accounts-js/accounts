@@ -54,7 +54,7 @@
     "lodash": "^4.16.4"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "7.2.5",
+    "@types/jsonwebtoken": "7.2.6",
     "@types/jwt-decode": "2.2.1",
     "rimraf": "2.6.2"
   }
