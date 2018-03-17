@@ -24,13 +24,5 @@
   },
   "dependencies": {
     "oauth": "^0.9.15"
-  },
-  "devDependencies": {
-    "@accounts/common": "^0.1.0-beta.5",
-    "@accounts/server": "^0.1.0-beta.5"
-  },
-  "peerDependencies": {
-    "@accounts/common": "^0.1.0-beta.0",
-    "@accounts/server": "^0.1.0-beta.0"
   }
 }
