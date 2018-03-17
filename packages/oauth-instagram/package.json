@@ -25,13 +25,5 @@
   "dependencies": {
     "request": "^2.83.0",
     "request-promise": "^4.2.1"
-  },
-  "devDependencies": {
-    "@accounts/common": "^0.1.0-beta.5",
-    "@accounts/server": "^0.1.0-beta.5"
-  },
-  "peerDependencies": {
-    "@accounts/common": "^0.1.0-beta.0",
-    "@accounts/server": "^0.1.0-beta.0"
   }
 }
