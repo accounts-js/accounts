@@ -10,6 +10,10 @@ import { LoginResult } from './types/login-result';
 import { ImpersonationResult } from './types/impersonation-result';
 import { Login } from './types/login';
 import { HookListener } from './types/hook-listener';
+import { AuthenticationService } from './types/authentication-service'
+
+export { AuthenticationService }
+export { AuthenticationService as AuthService }
 
 
 
