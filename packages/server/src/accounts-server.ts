@@ -12,29 +12,12 @@ import {
   ImpersonateReturnType,
   HookListener,
 } from '@accounts/common';
-<<<<<<< HEAD
-import { generateAccessToken, generateRefreshToken, generateRandomToken } from './tokens';
-import { emailTemplates, EmailTemplateType, sendMail } from './email';
-import {
-  AccountsServerOptions,
-  ConnectionInformationsType,
-  AuthService,
-  DBInterface,
-} from './types';
 
-export interface TokenRecord {
-  token: string;
-  address: string;
-  when: number;
-  reason: string;
-}
-=======
 import {
   generateAccessToken,
   generateRefreshToken,
   generateRandomToken,
 } from './utils/tokens';
->>>>>>> code-cleanup
 
 import { emailTemplates, sendMail } from './utils/email';
 import { ServerHooks } from './utils/server-hooks';
