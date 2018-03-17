@@ -12,6 +12,7 @@ import {
   ImpersonateReturnType,
   HookListener,
 } from '@accounts/common';
+<<<<<<< HEAD
 import { generateAccessToken, generateRefreshToken, generateRandomToken } from './tokens';
 import { emailTemplates, EmailTemplateType, sendMail } from './email';
 import {
@@ -27,11 +28,25 @@ export interface TokenRecord {
   when: number;
   reason: string;
 }
+=======
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  generateRandomToken,
+} from './utils/tokens';
+>>>>>>> code-cleanup
 
-export interface JwtData {
-  token: string;
-  isImpersonated: boolean;
-}
+import { emailTemplates, sendMail } from './utils/email';
+import { ServerHooks } from './utils/server-hooks';
+
+import { AccountsServerOptions } from './types/accounts-server-options';
+import { ConnectionInformationsType } from './types/connection-informations-type';
+import { AuthService } from './types/auth-service';
+import { DBInterface } from './types/db-interface';
+import { TokenRecord } from './types/token-record';
+import { JwtData } from './types/jwt-data';
+import { RemoveListenerHandle } from './types/remove-listener-handle';
+import { EmailTemplateType } from './types/email-template-type';
 
 const defaultOptions = {
   tokenSecret: 'secret',
@@ -47,23 +62,6 @@ const defaultOptions = {
   userObjectSanitizer: (user: UserObjectType) => user,
   sendMail,
   siteUrl: 'http://localhost:3000',
-};
-
-export type RemoveListnerHandle = () => EventEmitter;
-
-export const ServerHooks = {
-  LoginSuccess: 'LoginSuccess',
-  LoginError: 'LoginError',
-  LogoutSuccess: 'LogoutSuccess',
-  LogoutError: 'LogoutError',
-  CreateUserSuccess: 'CreateUserSuccess',
-  CreateUserError: 'CreateUserError',
-  ResumeSessionSuccess: 'ResumeSessionSuccess',
-  ResumeSessionError: 'ResumeSessionError',
-  RefreshTokensSuccess: 'RefreshTokensSuccess',
-  RefreshTokensError: 'RefreshTokensError',
-  ImpersonationSuccess: 'ImpersonationSuccess',
-  ImpersonationError: 'ImpersonationError',
 };
 
 export class AccountsServer {
@@ -101,51 +99,51 @@ export class AccountsServer {
     return this.options;
   }
 
-  public onLoginSuccess(callback: HookListener): RemoveListnerHandle {
+  public onLoginSuccess(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.LoginSuccess, callback);
   }
 
-  public onLoginError(callback: HookListener): RemoveListnerHandle {
+  public onLoginError(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.LoginError, callback);
   }
 
-  public onLogoutSuccess(callback: HookListener): RemoveListnerHandle {
+  public onLogoutSuccess(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.LogoutSuccess, callback);
   }
 
-  public onLogoutError(callback: HookListener): RemoveListnerHandle {
+  public onLogoutError(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.LogoutError, callback);
   }
 
-  public onCreateUserSuccess(callback: HookListener): RemoveListnerHandle {
+  public onCreateUserSuccess(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.CreateUserSuccess, callback);
   }
 
-  public onCreateUserError(callback: HookListener): RemoveListnerHandle {
+  public onCreateUserError(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.CreateUserError, callback);
   }
 
-  public onResumeSessionSuccess(callback: HookListener): RemoveListnerHandle {
+  public onResumeSessionSuccess(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.ResumeSessionSuccess, callback);
   }
 
-  public onResumeSessionError(callback: HookListener): RemoveListnerHandle {
+  public onResumeSessionError(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.ResumeSessionError, callback);
   }
 
-  public onRefreshTokensSuccess(callback: HookListener): RemoveListnerHandle {
+  public onRefreshTokensSuccess(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.RefreshTokensSuccess, callback);
   }
 
-  public onRefreshTokensError(callback: HookListener): RemoveListnerHandle {
+  public onRefreshTokensError(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.RefreshTokensError, callback);
   }
 
-  public onImpersonationSuccess(callback: HookListener): RemoveListnerHandle {
+  public onImpersonationSuccess(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.ImpersonationSuccess, callback);
   }
 
-  public onImpersonationError(callback: HookListener): RemoveListnerHandle {
+  public onImpersonationError(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.ImpersonationError, callback);
   }
 
@@ -504,7 +502,7 @@ export class AccountsServer {
     return this.db.setProfile(userId, { ...user.profile, ...profile });
   }
 
-  public on(eventName: string, callback: HookListener): RemoveListnerHandle {
+  public on(eventName: string, callback: HookListener): RemoveListenerHandle {
     this.hooks.on(eventName, callback);
 
     return () => this.hooks.removeListener(eventName, callback);

@@ -7,16 +7,25 @@ import {
   EmailRecord,
   TokenRecord,
 } from '@accounts/common';
-import { DBInterface, AccountsServer, generateRandomToken, AuthService } from '@accounts/server';
 import { TwoFactor, AccountsTwoFactorOptions } from '@accounts/two-factor';
-import { getFirstUserEmail } from '@accounts/server/lib/utils';
-import { hashPassword, bcryptPassword, verifyPassword } from './encryption';
-import { PasswordCreateUserType, PasswordLoginType, PasswordType } from './types';
+import {
+  DBInterface,
+  AccountsServer,
+  generateRandomToken,
+  AuthService,
+  getFirstUserEmail,
+} from '@accounts/server';
+import {
+  hashPassword,
+  bcryptPassword,
+  verifyPassword,
+} from './utils/encryption';
 
-export const isEmail = (email?: string) => {
-  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return email && re.test(email);
-};
+import { PasswordCreateUserType } from './types/password-create-user-type';
+import { PasswordLoginType } from './types/password-login-type';
+import { PasswordType } from './types/password-type';
+
+import { isEmail } from './utils/isEmail';
 
 export interface AccountsPasswordOptions {
   twoFactor?: AccountsTwoFactorOptions;
