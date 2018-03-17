@@ -1,7 +1,7 @@
-import { UserObjectType } from '@accounts/common';
+import { User } from '@accounts/types';
 
 export type UserObjectSanitizerFunction = (
-  userObject: UserObjectType,
-  omitFunction: (userDoc: object, fields: string[]) => UserObjectType,
-  pickFunction: (userDoc: object, fields: string[]) => UserObjectType
+  userObject: User,
+  omitFunction: (userDoc: object, fields: string[]) => User,
+  pickFunction: (userDoc: object, fields: string[]) => User
 ) => any;

@@ -1,6 +1,6 @@
-import { UserObjectType, SessionType } from '@accounts/common';
+import { User, Session } from '@accounts/types';
 
 export type ResumeSessionValidator = (
-  user: UserObjectType,
-  session: SessionType
+  user: User,
+  session: Session
 ) => Promise<any>;

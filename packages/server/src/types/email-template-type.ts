@@ -1,7 +1,7 @@
-import { UserObjectType } from '@accounts/common';
+import { User } from '@accounts/types';
 
 export interface EmailTemplateType {
   from?: string;
-  subject: (user?: UserObjectType) => string;
-  text: (user: UserObjectType, url: string) => string;
+  subject: (user?: User) => string;
+  text: (user: User, url: string) => string;
 }

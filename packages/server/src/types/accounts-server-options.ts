@@ -1,5 +1,4 @@
-import { UserObjectType } from '@accounts/common';
-import { DBInterface } from './db-interface';
+import { User, DatabaseInterface } from '@accounts/types';
 import { EmailTemplateType } from './email-template-type';
 import { EmailTemplatesType } from './email-templates-type';
 import { UserObjectSanitizerFunction } from './user-object-sanitizer-function';
@@ -8,7 +7,7 @@ import { PrepareMailFunction } from './prepare-mail-function';
 import { SendMailType } from './send-mail-type';
 
 export interface AccountsServerOptions {
-  db: DBInterface;
+  db: DatabaseInterface;
   tokenSecret: string;
   tokenConfigs?: {
     accessToken?: {
@@ -22,8 +21,8 @@ export interface AccountsServerOptions {
   emailTemplates?: EmailTemplatesType;
   userObjectSanitizer?: UserObjectSanitizerFunction;
   impersonationAuthorize?: (
-    user: UserObjectType,
-    impersonateToUser: UserObjectType
+    user: User,
+    impersonateToUser: User
   ) => Promise<any>;
   resumeSessionValidator?: ResumeSessionValidator;
   siteUrl?: string;

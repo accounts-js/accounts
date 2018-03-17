@@ -1,10 +1,10 @@
-import { UserObjectType } from '@accounts/common';
+import { User } from '@accounts/types';
 import { EmailTemplateType } from './email-template-type';
 
 export type PrepareMailFunction = (
   to: string,
   token: string,
-  user: UserObjectType,
+  user: User,
   pathFragment: string,
   emailTemplate: EmailTemplateType,
   from: string
