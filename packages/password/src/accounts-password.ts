@@ -1,25 +1,9 @@
 import { trim, isEmpty, isFunction, isString, isPlainObject, get, find, includes } from 'lodash';
-import {
-  CreateUserType,
-  UserObjectType,
-  HashAlgorithm,
-  LoginUserIdentityType,
-  EmailRecord,
-  TokenRecord,
-} from '@accounts/common';
+import { CreateUser, User, Login, EmailRecord, TokenRecord, DatabaseInterface, AuthenticationService } from '@accounts/types';
+import { HashAlgorithm } from '@accounts/common';
 import { TwoFactor, AccountsTwoFactorOptions } from '@accounts/two-factor';
-import {
-  DBInterface,
-  AccountsServer,
-  generateRandomToken,
-  AuthService,
-  getFirstUserEmail,
-} from '@accounts/server';
-import {
-  hashPassword,
-  bcryptPassword,
-  verifyPassword,
-} from './utils/encryption';
+import { AccountsServer, generateRandomToken, getFirstUserEmail } from '@accounts/server';
+import { hashPassword, bcryptPassword, verifyPassword } from './utils/encryption';
 
 import { PasswordCreateUserType } from './types/password-create-user-type';
 import { PasswordLoginType } from './types/password-login-type';
@@ -33,7 +17,7 @@ export interface AccountsPasswordOptions {
   passwordResetTokenExpirationInDays?: number;
   passwordEnrollTokenExpirationInDays?: number;
   minimumPasswordLength?: number;
-  validateNewUser?: (user: CreateUserType) => Promise<boolean>;
+  validateNewUser?: (user: CreateUser) => Promise<boolean>;
   validateEmail?(email?: string): boolean;
   validatePassword?(password?: PasswordType): boolean;
   validateUsername?(username?: string): boolean;
@@ -58,24 +42,24 @@ const defaultOptions = {
   },
 };
 
-export default class AccountsPassword implements AuthService {
+export default class AccountsPassword implements AuthenticationService {
   public serviceName = 'password';
   public server: AccountsServer;
   public twoFactor: TwoFactor;
   private options: AccountsPasswordOptions;
-  private db: DBInterface;
+  private db: DatabaseInterface;
 
   constructor(options: AccountsPasswordOptions = {}) {
     this.options = { ...defaultOptions, ...options };
     this.twoFactor = new TwoFactor(options.twoFactor);
   }
 
-  public setStore(store: DBInterface) {
+  public setStore(store: DatabaseInterface) {
     this.db = store;
     this.twoFactor.setStore(store);
   }
 
-  public async authenticate(params: PasswordLoginType): Promise<UserObjectType> {
+  public async authenticate(params: PasswordLoginType): Promise<User> {
     const { user, password, code } = params;
     if (!user || !password) {
       throw new Error('Unrecognized options for login request');
@@ -99,7 +83,7 @@ export default class AccountsPassword implements AuthService {
    * @param {string} email - User email.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  public findUserByEmail(email: string): Promise<UserObjectType | null> {
+  public findUserByEmail(email: string): Promise<User | null> {
     return this.db.findUserByEmail(email);
   }
 
@@ -108,7 +92,7 @@ export default class AccountsPassword implements AuthService {
    * @param {string} username - User username.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  public findUserByUsername(username: string): Promise<UserObjectType | null> {
+  public findUserByUsername(username: string): Promise<User | null> {
     return this.db.findUserByUsername(username);
   }
 
@@ -344,14 +328,14 @@ export default class AccountsPassword implements AuthService {
   }
 
   private async passwordAuthenticator(
-    user: string | LoginUserIdentityType,
+    user: string | Login,
     password: PasswordType
-  ): Promise<UserObjectType> {
+  ): Promise<User> {
     const { username, email, id } = isString(user)
       ? this.toUsernameAndEmail({ user })
       : this.toUsernameAndEmail({ ...user });
 
-    let foundUser: UserObjectType;
+    let foundUser: User;
 
     if (id) {
       // this._validateLoginWithField('id', user);
