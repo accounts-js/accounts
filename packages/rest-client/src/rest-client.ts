@@ -1,12 +1,7 @@
 import { forIn, isPlainObject } from 'lodash';
 import { TransportInterface, AccountsClient } from '@accounts/client';
-import {
-  AccountsError,
-  CreateUserType,
-  LoginReturnType,
-  UserObjectType,
-  ImpersonateReturnType,
-} from '@accounts/common';
+import { User, LoginResult, CreateUser, ImpersonationResult } from '@accounts/types'
+import { AccountsError } from '@accounts/common';
 
 export interface OptionsType {
   apiHost: string;
@@ -49,7 +44,7 @@ export class RestClient implements TransportInterface {
     provider: string,
     data: any,
     customHeaders?: object
-  ): Promise<LoginReturnType> {
+  ): Promise<LoginResult> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
@@ -63,7 +58,7 @@ export class RestClient implements TransportInterface {
     accessToken: string,
     username: string,
     customHeaders?: object
-  ): Promise<ImpersonateReturnType> {
+  ): Promise<ImpersonationResult> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
@@ -78,7 +73,7 @@ export class RestClient implements TransportInterface {
     accessToken: string,
     refreshToken: string,
     customHeaders?: object
-  ): Promise<LoginReturnType> {
+  ): Promise<LoginResult> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
@@ -99,7 +94,7 @@ export class RestClient implements TransportInterface {
     return this.fetch('logout', args, customHeaders);
   }
 
-  public async getUser(accessToken: string, customHeaders?: object): Promise<UserObjectType> {
+  public async getUser(accessToken: string, customHeaders?: object): Promise<User> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
@@ -109,7 +104,7 @@ export class RestClient implements TransportInterface {
     return this.fetch('user', args, customHeaders);
   }
 
-  public async createUser(user: CreateUserType, customHeaders?: object): Promise<string> {
+  public async createUser(user: CreateUser, customHeaders?: object): Promise<string> {
     const args = {
       method: 'POST',
       body: JSON.stringify({ user }),
