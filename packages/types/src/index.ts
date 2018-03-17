@@ -13,42 +13,42 @@ import { HookListener } from './types/hook-listener';
 import { AuthenticationService } from './types/authentication-service'
 
 export { AuthenticationService }
-export { AuthenticationService as AuthService }
+// export { AuthenticationService as AuthService }
 
 
 
 export { DatabaseInterface }
-export { DatabaseInterface as DBInterface }
+// export { DatabaseInterface as DBInterface }
 
 export { ConnectionInformations }
-export { ConnectionInformations as ConnectionInformationsType }
+// export { ConnectionInformations as ConnectionInformationsType }
 
 
 // ? Tokens
 export { Tokens }
-export { Tokens as TokensType }
+// export { Tokens as TokensType }
 
 export { TokenRecord }
 export { Session }
-export { Session as SessionType }
+// export { Session as SessionType }
 
 
 // ? User
 export { User }
-export { User as UserObjectType }
+// export { User as UserObjectType }
 
 export { CreateUser }
-export { CreateUser as CreateUserType }
+// export { CreateUser as CreateUserType }
 
 export { EmailRecord }
 
 
 // ? Operation Results
 export { LoginResult }
-export { LoginResult as LoginReturnType }
+// export { LoginResult as LoginReturnType }
 
 export { ImpersonationResult }
-export { ImpersonationResult as ImpersonateReturnType }
+// export { ImpersonationResult as ImpersonateReturnType }
 
 // ? Operation Parameters
 /*
@@ -64,6 +64,6 @@ export { ImpersonationResult as ImpersonateReturnType }
 
 */
 export { Login }
-export { Login as LoginUserIdentityType }
+// export { Login as LoginUserIdentityType }
 
 export { HookListener }
