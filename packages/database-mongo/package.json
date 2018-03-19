@@ -33,14 +33,9 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
-    "@accounts/common": "^0.1.0-beta.5",
-    "@accounts/server": "^0.1.0-beta.5",
+    "@accounts/types": "^0.1.0-beta.5",
     "@types/lodash": "4.14.105",
     "@types/mongodb": "3.0.8"
-  },
-  "peerDependencies": {
-    "@accounts/common": "^0.1.0-beta.3",
-    "@accounts/server": "^0.1.0-beta.3"
   },
   "dependencies": {
     "lodash": "^4.17.4",

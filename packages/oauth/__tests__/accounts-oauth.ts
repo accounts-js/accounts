@@ -1,13 +1,12 @@
-import { UserObjectType } from '@accounts/common';
-import { DBInterface } from '@accounts/server';
+import { User, DatabaseInterface } from '@accounts/types';
 import { AccountsOauth } from '../src';
 
-const user: UserObjectType = {
+const user: User = {
   id: '1',
   username: 'neo',
   email: 't1@matrix.com',
 };
-const mockStore: DBInterface = {
+const mockStore: DatabaseInterface = {
   findUserByServiceId: jest.fn(() => user),
   findUserByEmail: jest.fn(),
   findUserByUsername: jest.fn(),
