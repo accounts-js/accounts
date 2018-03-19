@@ -1,34 +1,29 @@
 import * as pick from 'lodash/pick';
 import * as omit from 'lodash/omit';
 import * as isString from 'lodash/isString';
-import { EventEmitter } from 'events';
 import * as jwt from 'jsonwebtoken';
+import * as Emittery from 'emittery';
 import { AccountsError } from '@accounts/common';
 import {
-  User, 
-  LoginResult, 
-  Tokens, 
-  Session, 
-  ImpersonationResult, 
-  HookListener, 
-  DatabaseInterface, 
-  AuthenticationService, 
-  ConnectionInformations, 
-  TokenRecord
-} from '@accounts/types'
+  User,
+  LoginResult,
+  Tokens,
+  Session,
+  ImpersonationResult,
+  HookListener,
+  DatabaseInterface,
+  AuthenticationService,
+  ConnectionInformations,
+  TokenRecord,
+} from '@accounts/types';
 
-import {
-  generateAccessToken,
-  generateRefreshToken,
-  generateRandomToken,
-} from './utils/tokens';
+import { generateAccessToken, generateRefreshToken, generateRandomToken } from './utils/tokens';
 
 import { emailTemplates, sendMail } from './utils/email';
 import { ServerHooks } from './utils/server-hooks';
 
 import { AccountsServerOptions } from './types/accounts-server-options';
 import { JwtData } from './types/jwt-data';
-import { RemoveListenerHandle } from './types/remove-listener-handle';
 import { EmailTemplateType } from './types/email-template-type';
 
 const defaultOptions = {
@@ -51,7 +46,7 @@ export class AccountsServer {
   public options: AccountsServerOptions;
   private services: { [key: string]: AuthenticationService };
   private db: DatabaseInterface;
-  private hooks: EventEmitter;
+  private hooks: Emittery;
 
   constructor(options: AccountsServerOptions, services: any) {
     this.options = { ...defaultOptions, ...options };
@@ -71,7 +66,7 @@ export class AccountsServer {
     }
 
     // Initialize hooks
-    this.hooks = new EventEmitter();
+    this.hooks = new Emittery();
   }
 
   public getServices(): { [key: string]: AuthenticationService } {
@@ -82,52 +77,10 @@ export class AccountsServer {
     return this.options;
   }
 
-  public onLoginSuccess(callback: HookListener): RemoveListenerHandle {
-    return this.on(ServerHooks.LoginSuccess, callback);
-  }
+  public on(eventName: string, callback: HookListener): () => void {
+    this.hooks.on(eventName, callback);
 
-  public onLoginError(callback: HookListener): RemoveListenerHandle {
-    return this.on(ServerHooks.LoginError, callback);
-  }
-
-  public onLogoutSuccess(callback: HookListener): RemoveListenerHandle {
-    return this.on(ServerHooks.LogoutSuccess, callback);
-  }
-
-  public onLogoutError(callback: HookListener): RemoveListenerHandle {
-    return this.on(ServerHooks.LogoutError, callback);
-  }
-
-  public onCreateUserSuccess(callback: HookListener): RemoveListenerHandle {
-    return this.on(ServerHooks.CreateUserSuccess, callback);
-  }
-
-  public onCreateUserError(callback: HookListener): RemoveListenerHandle {
-    return this.on(ServerHooks.CreateUserError, callback);
-  }
-
-  public onResumeSessionSuccess(callback: HookListener): RemoveListenerHandle {
-    return this.on(ServerHooks.ResumeSessionSuccess, callback);
-  }
-
-  public onResumeSessionError(callback: HookListener): RemoveListenerHandle {
-    return this.on(ServerHooks.ResumeSessionError, callback);
-  }
-
-  public onRefreshTokensSuccess(callback: HookListener): RemoveListenerHandle {
-    return this.on(ServerHooks.RefreshTokensSuccess, callback);
-  }
-
-  public onRefreshTokensError(callback: HookListener): RemoveListenerHandle {
-    return this.on(ServerHooks.RefreshTokensError, callback);
-  }
-
-  public onImpersonationSuccess(callback: HookListener): RemoveListenerHandle {
-    return this.on(ServerHooks.ImpersonationSuccess, callback);
-  }
-
-  public onImpersonationError(callback: HookListener): RemoveListenerHandle {
-    return this.on(ServerHooks.ImpersonationError, callback);
+    return () => this.hooks.off(eventName, callback);
   }
 
   public async loginWithService(
@@ -154,10 +107,7 @@ export class AccountsServer {
    * @param {string} userAgent - User's client agent.
    * @returns {Promise<LoginResult>} - Session tokens and user object.
    */
-  public async loginWithUser(
-    user: User,
-    infos: ConnectionInformations
-  ): Promise<LoginResult> {
+  public async loginWithUser(user: User, infos: ConnectionInformations): Promise<LoginResult> {
     const { ip, userAgent } = infos;
 
     try {
@@ -254,7 +204,10 @@ export class AccountsServer {
         user: this.sanitizeUser(impersonatedUser),
       };
 
-      this.hooks.emit(ServerHooks.ImpersonationSuccess, user, impersonationResult);
+      this.hooks.emit(ServerHooks.ImpersonationSuccess, {
+        user,
+        impersonationResult,
+      });
 
       return impersonationResult;
     } catch (e) {
@@ -369,7 +322,11 @@ export class AccountsServer {
         }
 
         await this.db.invalidateSession(session.id);
-        this.hooks.emit(ServerHooks.LogoutSuccess, this.sanitizeUser(user), session, accessToken);
+        this.hooks.emit(ServerHooks.LogoutSuccess, {
+          user: this.sanitizeUser(user),
+          session,
+          accessToken,
+        });
       } else {
         throw new AccountsError('Session is no longer valid', {
           id: session.userId,
@@ -401,7 +358,7 @@ export class AccountsServer {
           }
         }
 
-        this.hooks.emit(ServerHooks.ResumeSessionSuccess, user, accessToken);
+        this.hooks.emit(ServerHooks.ResumeSessionSuccess, { user, accessToken });
 
         return this.sanitizeUser(user);
       }
@@ -483,12 +440,6 @@ export class AccountsServer {
       throw new AccountsError('User not found', { id: userId });
     }
     return this.db.setProfile(userId, { ...user.profile, ...profile });
-  }
-
-  public on(eventName: string, callback: HookListener): RemoveListenerHandle {
-    this.hooks.on(eventName, callback);
-
-    return () => this.hooks.removeListener(eventName, callback);
   }
 
   public isTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {

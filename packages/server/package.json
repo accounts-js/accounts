@@ -49,6 +49,7 @@
     "@accounts/common": "^0.1.0-beta.5",
     "babel-polyfill": "^6.23.0",
     "bcryptjs": "^2.4.0",
+    "emittery": "^0.3.0",
     "jsonwebtoken": "^8.0.0",
     "jwt-decode": "^2.1.0",
     "lodash": "^4.16.4"
