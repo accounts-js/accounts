@@ -1,6 +1,5 @@
 import * as speakeasy from 'speakeasy';
-import { DBInterface } from '@accounts/server';
-import { UserObjectType } from '@accounts/common';
+import { User, DatabaseInterface } from '@accounts/types';
 import { errors } from './errors';
 
 export interface TwoFactorService {
@@ -22,7 +21,7 @@ const defaultOptions = {
 
 export class TwoFactor {
   private options: AccountsTwoFactorOptions;
-  private db: DBInterface;
+  private db: DatabaseInterface;
   private serviceName = 'two-factor';
 
   constructor(options: AccountsTwoFactorOptions = {}) {
@@ -32,21 +31,21 @@ export class TwoFactor {
   /**
    * Set two factor store
    */
-  public setStore(store: DBInterface): void {
+  public setStore(store: DatabaseInterface): void {
     this.db = store;
   }
 
   /**
    * Return the user two factor service object
    */
-  public getUserService = (user: UserObjectType): TwoFactorService => {
+  public getUserService = (user: User): TwoFactorService => {
     return user.services[this.serviceName];
   };
 
   /**
    * Authenticate a user with a 2fa code
    */
-  public async authenticate(user: UserObjectType, code: string): Promise<void> {
+  public async authenticate(user: User, code: string): Promise<void> {
     if (!code) {
       throw new Error(errors.codeRequired);
     }

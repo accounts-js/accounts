@@ -31,12 +31,7 @@
     "speakeasy": "^2.0.0"
   },
   "devDependencies": {
-    "@accounts/common": "^0.1.0-beta.5",
-    "@accounts/server": "^0.1.0-beta.5",
+    "@accounts/types": "^0.1.0-beta.5",
     "@types/speakeasy": "2.0.2"
-  },
-  "peerDependencies": {
-    "@accounts/common": "^0.1.0-beta.3",
-    "@accounts/server": "^0.1.0-beta.3"
   }
 }

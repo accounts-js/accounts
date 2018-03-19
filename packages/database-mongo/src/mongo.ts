@@ -1,7 +1,6 @@
 import { ObjectID, Db, Collection } from 'mongodb';
 import { get } from 'lodash';
-import { CreateUserType, UserObjectType, SessionType } from '@accounts/common';
-import { DBInterface, ConnectionInformationsType } from '@accounts/server';
+import { CreateUser, User, Session, DatabaseInterface, ConnectionInformations } from '@accounts/types';
 
 export interface MongoOptionsType {
   // The users collection name, default 'users'.
@@ -25,7 +24,7 @@ export interface MongoOptionsType {
   dateProvider?: (date?: Date) => any;
 }
 
-export interface MongoUserObjectType {
+export interface MongoUser {
   _id?: string | object;
   username?: string;
   profile?: object;
@@ -63,7 +62,7 @@ const defaultOptions = {
   dateProvider: (date?: Date) => (date ? date.getTime() : Date.now()),
 };
 
-export class Mongo implements DBInterface {
+export class Mongo implements DatabaseInterface {
   // Options of Mongo class
   private options: MongoOptionsType;
   // Db object
@@ -98,8 +97,8 @@ export class Mongo implements DBInterface {
     });
   }
 
-  public async createUser(options: CreateUserType): Promise<string> {
-    const user: MongoUserObjectType = {
+  public async createUser(options: CreateUser): Promise<string> {
+    const user: MongoUser = {
       services: {},
       profile: {},
       [this.options.timestamps.createdAt]: this.options.dateProvider(),
@@ -124,7 +123,7 @@ export class Mongo implements DBInterface {
     return ret.ops[0]._id;
   }
 
-  public async findUserById(userId: string): Promise<UserObjectType | null> {
+  public async findUserById(userId: string): Promise<User | null> {
     const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     const user = await this.collection.findOne({ _id: id });
     if (user) {
@@ -133,7 +132,7 @@ export class Mongo implements DBInterface {
     return user;
   }
 
-  public async findUserByEmail(email: string): Promise<UserObjectType | null> {
+  public async findUserByEmail(email: string): Promise<User | null> {
     const user = await this.collection.findOne({
       'emails.address': email.toLowerCase(),
     });
@@ -143,7 +142,7 @@ export class Mongo implements DBInterface {
     return user;
   }
 
-  public async findUserByUsername(username: string): Promise<UserObjectType | null> {
+  public async findUserByUsername(username: string): Promise<User | null> {
     const filter = this.options.caseSensitiveUserName
       ? { username }
       : {
@@ -165,7 +164,7 @@ export class Mongo implements DBInterface {
     return null;
   }
 
-  public async findUserByEmailVerificationToken(token: string): Promise<UserObjectType | null> {
+  public async findUserByEmailVerificationToken(token: string): Promise<User | null> {
     const user = await this.collection.findOne({
       'services.email.verificationTokens.token': token,
     });
@@ -175,7 +174,7 @@ export class Mongo implements DBInterface {
     return user;
   }
 
-  public async findUserByResetPasswordToken(token: string): Promise<UserObjectType | null> {
+  public async findUserByResetPasswordToken(token: string): Promise<User | null> {
     const user = await this.collection.findOne({
       'services.password.reset.token': token,
     });
@@ -188,7 +187,7 @@ export class Mongo implements DBInterface {
   public async findUserByServiceId(
     serviceName: string,
     serviceId: string
-  ): Promise<UserObjectType | null> {
+  ): Promise<User | null> {
     const user = await this.collection.findOne({
       [`services.${serviceName}.id`]: serviceId,
     });
@@ -332,7 +331,7 @@ export class Mongo implements DBInterface {
   public async createSession(
     userId: string,
     token: string,
-    connection: ConnectionInformationsType = {},
+    connection: ConnectionInformations = {},
     extraData?: object
   ): Promise<string> {
     const session = {
@@ -356,7 +355,7 @@ export class Mongo implements DBInterface {
 
   public async updateSession(
     sessionId: string,
-    connection: ConnectionInformationsType
+    connection: ConnectionInformations
   ): Promise<void> {
     // tslint:disable-next-line variable-name
     const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
@@ -398,7 +397,7 @@ export class Mongo implements DBInterface {
     );
   }
 
-  public async findSessionByToken(token: string): Promise<SessionType | null> {
+  public async findSessionByToken(token: string): Promise<Session | null> {
     const session = await this.sessionCollection.findOne({ token });
     if (session) {
       session.id = session._id;
@@ -406,7 +405,7 @@ export class Mongo implements DBInterface {
     return session;
   }
 
-  public async findSessionById(sessionId: string): Promise<SessionType | null> {
+  public async findSessionById(sessionId: string): Promise<Session | null> {
     // tslint:disable-next-line variable-name
     const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
     const session = await this.sessionCollection.findOne({ _id });

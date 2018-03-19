@@ -3,35 +3,33 @@ import * as omit from 'lodash/omit';
 import * as isString from 'lodash/isString';
 import { EventEmitter } from 'events';
 import * as jwt from 'jsonwebtoken';
+import { AccountsError } from '@accounts/common';
 import {
-  AccountsError,
-  UserObjectType,
-  LoginReturnType,
-  TokensType,
-  SessionType,
-  ImpersonateReturnType,
-  HookListener,
-} from '@accounts/common';
-import { generateAccessToken, generateRefreshToken, generateRandomToken } from './tokens';
-import { emailTemplates, EmailTemplateType, sendMail } from './email';
+  User, 
+  LoginResult, 
+  Tokens, 
+  Session, 
+  ImpersonationResult, 
+  HookListener, 
+  DatabaseInterface, 
+  AuthenticationService, 
+  ConnectionInformations, 
+  TokenRecord
+} from '@accounts/types'
+
 import {
-  AccountsServerOptions,
-  ConnectionInformationsType,
-  AuthService,
-  DBInterface,
-} from './types';
+  generateAccessToken,
+  generateRefreshToken,
+  generateRandomToken,
+} from './utils/tokens';
 
-export interface TokenRecord {
-  token: string;
-  address: string;
-  when: number;
-  reason: string;
-}
+import { emailTemplates, sendMail } from './utils/email';
+import { ServerHooks } from './utils/server-hooks';
 
-export interface JwtData {
-  token: string;
-  isImpersonated: boolean;
-}
+import { AccountsServerOptions } from './types/accounts-server-options';
+import { JwtData } from './types/jwt-data';
+import { RemoveListenerHandle } from './types/remove-listener-handle';
+import { EmailTemplateType } from './types/email-template-type';
 
 const defaultOptions = {
   tokenSecret: 'secret',
@@ -44,32 +42,15 @@ const defaultOptions = {
     },
   },
   emailTemplates,
-  userObjectSanitizer: (user: UserObjectType) => user,
+  userObjectSanitizer: (user: User) => user,
   sendMail,
   siteUrl: 'http://localhost:3000',
 };
 
-export type RemoveListnerHandle = () => EventEmitter;
-
-export const ServerHooks = {
-  LoginSuccess: 'LoginSuccess',
-  LoginError: 'LoginError',
-  LogoutSuccess: 'LogoutSuccess',
-  LogoutError: 'LogoutError',
-  CreateUserSuccess: 'CreateUserSuccess',
-  CreateUserError: 'CreateUserError',
-  ResumeSessionSuccess: 'ResumeSessionSuccess',
-  ResumeSessionError: 'ResumeSessionError',
-  RefreshTokensSuccess: 'RefreshTokensSuccess',
-  RefreshTokensError: 'RefreshTokensError',
-  ImpersonationSuccess: 'ImpersonationSuccess',
-  ImpersonationError: 'ImpersonationError',
-};
-
 export class AccountsServer {
   public options: AccountsServerOptions;
-  private services: { [key: string]: AuthService };
-  private db: DBInterface;
+  private services: { [key: string]: AuthenticationService };
+  private db: DatabaseInterface;
   private hooks: EventEmitter;
 
   constructor(options: AccountsServerOptions, services: any) {
@@ -93,7 +74,7 @@ export class AccountsServer {
     this.hooks = new EventEmitter();
   }
 
-  public getServices(): { [key: string]: AuthService } {
+  public getServices(): { [key: string]: AuthenticationService } {
     return this.services;
   }
 
@@ -101,63 +82,63 @@ export class AccountsServer {
     return this.options;
   }
 
-  public onLoginSuccess(callback: HookListener): RemoveListnerHandle {
+  public onLoginSuccess(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.LoginSuccess, callback);
   }
 
-  public onLoginError(callback: HookListener): RemoveListnerHandle {
+  public onLoginError(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.LoginError, callback);
   }
 
-  public onLogoutSuccess(callback: HookListener): RemoveListnerHandle {
+  public onLogoutSuccess(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.LogoutSuccess, callback);
   }
 
-  public onLogoutError(callback: HookListener): RemoveListnerHandle {
+  public onLogoutError(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.LogoutError, callback);
   }
 
-  public onCreateUserSuccess(callback: HookListener): RemoveListnerHandle {
+  public onCreateUserSuccess(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.CreateUserSuccess, callback);
   }
 
-  public onCreateUserError(callback: HookListener): RemoveListnerHandle {
+  public onCreateUserError(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.CreateUserError, callback);
   }
 
-  public onResumeSessionSuccess(callback: HookListener): RemoveListnerHandle {
+  public onResumeSessionSuccess(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.ResumeSessionSuccess, callback);
   }
 
-  public onResumeSessionError(callback: HookListener): RemoveListnerHandle {
+  public onResumeSessionError(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.ResumeSessionError, callback);
   }
 
-  public onRefreshTokensSuccess(callback: HookListener): RemoveListnerHandle {
+  public onRefreshTokensSuccess(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.RefreshTokensSuccess, callback);
   }
 
-  public onRefreshTokensError(callback: HookListener): RemoveListnerHandle {
+  public onRefreshTokensError(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.RefreshTokensError, callback);
   }
 
-  public onImpersonationSuccess(callback: HookListener): RemoveListnerHandle {
+  public onImpersonationSuccess(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.ImpersonationSuccess, callback);
   }
 
-  public onImpersonationError(callback: HookListener): RemoveListnerHandle {
+  public onImpersonationError(callback: HookListener): RemoveListenerHandle {
     return this.on(ServerHooks.ImpersonationError, callback);
   }
 
   public async loginWithService(
     serviceName: string,
     params,
-    infos: ConnectionInformationsType
-  ): Promise<LoginReturnType> {
+    infos: ConnectionInformations
+  ): Promise<LoginResult> {
     if (!this.services[serviceName]) {
       throw new Error(`No service with the name ${serviceName} was registered.`);
     }
-    const user: UserObjectType = await this.services[serviceName].authenticate(params);
+    const user: User = await this.services[serviceName].authenticate(params);
     if (!user) {
       throw new Error(`Service ${serviceName} was not able to authenticate user`);
     }
@@ -168,15 +149,15 @@ export class AccountsServer {
    * @description Server use only. This method creates a session
    *              without authenticating any user identity.
    *              Any authentication should happen before calling this function.
-   * @param {UserObjectType} userId - The user object.
+   * @param {User} userId - The user object.
    * @param {string} ip - User's ip.
    * @param {string} userAgent - User's client agent.
-   * @returns {Promise<LoginReturnType>} - Session tokens and user object.
+   * @returns {Promise<LoginResult>} - Session tokens and user object.
    */
   public async loginWithUser(
-    user: UserObjectType,
-    infos: ConnectionInformationsType
-  ): Promise<LoginReturnType> {
+    user: User,
+    infos: ConnectionInformations
+  ): Promise<LoginResult> {
     const { ip, userAgent } = infos;
 
     try {
@@ -210,14 +191,14 @@ export class AccountsServer {
    * @param {string} username - impersonated user username.
    * @param {string} ip - The user ip.
    * @param {string} userAgent - User user agent.
-   * @returns {Promise<Object>} - ImpersonateReturnType
+   * @returns {Promise<Object>} - ImpersonationResult
    */
   public async impersonate(
     accessToken: string,
     username: string,
     ip: string,
     userAgent: string
-  ): Promise<ImpersonateReturnType> {
+  ): Promise<ImpersonationResult> {
     try {
       if (!isString(accessToken)) {
         throw new AccountsError('An access token is required');
@@ -289,14 +270,14 @@ export class AccountsServer {
    * @param {string} refreshToken - User refresh token.
    * @param {string} ip - User ip.
    * @param {string} userAgent - User user agent.
-   * @returns {Promise<Object>} - LoginReturnType.
+   * @returns {Promise<Object>} - LoginResult.
    */
   public async refreshTokens(
     accessToken: string,
     refreshToken: string,
     ip: string,
     userAgent: string
-  ): Promise<LoginReturnType> {
+  ): Promise<LoginResult> {
     try {
       if (!isString(accessToken) || !isString(refreshToken)) {
         throw new AccountsError('An accessToken and refreshToken are required');
@@ -313,7 +294,7 @@ export class AccountsServer {
         throw new AccountsError('Tokens are not valid');
       }
 
-      const session: SessionType = await this.db.findSessionByToken(sessionToken);
+      const session: Session = await this.db.findSessionByToken(sessionToken);
       if (!session) {
         throw new AccountsError('Session not found');
       }
@@ -353,7 +334,7 @@ export class AccountsServer {
    * @param {boolean} isImpersonated - Should be true if impersonating another user.
    * @returns {Promise<Object>} - Return a new accessToken and refreshToken.
    */
-  public createTokens(token: string, isImpersonated: boolean = false): TokensType {
+  public createTokens(token: string, isImpersonated: boolean = false): Tokens {
     const { tokenSecret, tokenConfigs } = this.options;
     const jwtData: JwtData = {
       token,
@@ -378,7 +359,7 @@ export class AccountsServer {
    */
   public async logout(accessToken: string): Promise<void> {
     try {
-      const session: SessionType = await this.findSessionByAccessToken(accessToken);
+      const session: Session = await this.findSessionByAccessToken(accessToken);
 
       if (session.valid) {
         const user = await this.db.findUserById(session.userId);
@@ -401,9 +382,9 @@ export class AccountsServer {
     }
   }
 
-  public async resumeSession(accessToken: string): Promise<UserObjectType> {
+  public async resumeSession(accessToken: string): Promise<User> {
     try {
-      const session: SessionType = await this.findSessionByAccessToken(accessToken);
+      const session: Session = await this.findSessionByAccessToken(accessToken);
 
       if (session.valid) {
         const user = await this.db.findUserById(session.userId);
@@ -441,9 +422,9 @@ export class AccountsServer {
   /**
    * @description Find a session by his token.
    * @param {string} accessToken
-   * @returns {Promise<SessionType>} - Return a session.
+   * @returns {Promise<Session>} - Return a session.
    */
-  public async findSessionByAccessToken(accessToken: string): Promise<SessionType> {
+  public async findSessionByAccessToken(accessToken: string): Promise<Session> {
     if (!isString(accessToken)) {
       throw new AccountsError('An accessToken is required');
     }
@@ -458,7 +439,7 @@ export class AccountsServer {
       throw new AccountsError('Tokens are not valid');
     }
 
-    const session: SessionType = await this.db.findSessionByToken(sessionToken);
+    const session: Session = await this.db.findSessionByToken(sessionToken);
     if (!session) {
       throw new AccountsError('Session not found');
     }
@@ -471,7 +452,7 @@ export class AccountsServer {
    * @param {string} userId - User id.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  public findUserById(userId: string): Promise<UserObjectType> {
+  public findUserById(userId: string): Promise<User> {
     return this.db.findUserById(userId);
   }
 
@@ -504,7 +485,7 @@ export class AccountsServer {
     return this.db.setProfile(userId, { ...user.profile, ...profile });
   }
 
-  public on(eventName: string, callback: HookListener): RemoveListnerHandle {
+  public on(eventName: string, callback: HookListener): RemoveListenerHandle {
     this.hooks.on(eventName, callback);
 
     return () => this.hooks.removeListener(eventName, callback);
@@ -517,7 +498,7 @@ export class AccountsServer {
   public prepareMail(
     to: string,
     token: string,
-    user: UserObjectType,
+    user: User,
     pathFragment: string,
     emailTemplate: EmailTemplateType,
     from: string
@@ -528,20 +509,20 @@ export class AccountsServer {
     return this.defaultPrepareEmail(to, token, user, pathFragment, emailTemplate, from);
   }
 
-  public sanitizeUser(user: UserObjectType): UserObjectType {
+  public sanitizeUser(user: User): User {
     const { userObjectSanitizer } = this.options;
 
     return userObjectSanitizer(this.internalUserSanitizer(user), omit, pick);
   }
 
-  private internalUserSanitizer(user: UserObjectType): UserObjectType {
+  private internalUserSanitizer(user: User): User {
     return omit(user, ['services']);
   }
 
   private defaultPrepareEmail(
     to: string,
     token: string,
-    user: UserObjectType,
+    user: User,
     pathFragment: string,
     emailTemplate: EmailTemplateType,
     from: string
