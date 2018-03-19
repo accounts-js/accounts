@@ -29,5 +29,4 @@ export interface AccountsServerOptions {
   prepareMail?: PrepareMailFunction;
   sendMail?: SendMailType;
   // https://github.com/eleith/emailjs#emailserverconnectoptions
-  email?: object;
 }
