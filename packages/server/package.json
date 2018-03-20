@@ -1,6 +1,6 @@
 {
   "name": "@accounts/server",
-  "version": "0.1.0-beta.5",
+  "version": "0.1.0-beta.6",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -46,7 +46,7 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "dependencies": {
-    "@accounts/common": "^0.1.0-beta.5",
+    "@accounts/common": "^0.1.0-beta.6",
     "babel-polyfill": "^6.23.0",
     "bcryptjs": "^2.4.0",
     "emittery": "^0.3.0",
@@ -55,7 +55,7 @@
     "lodash": "^4.16.4"
   },
   "devDependencies": {
-    "@accounts/types": "^0.1.0-beta.5",
+    "@accounts/types": "^0.1.0-beta.6",
     "@types/jsonwebtoken": "7.2.6",
     "@types/jwt-decode": "2.2.1",
     "rimraf": "2.6.2"
