@@ -6,6 +6,7 @@ import {
   hashPassword,
   verifyPassword,
 } from '../src/utils/encryption';
+import { ServerHooks } from '../src/utils/server-hooks';
 
 describe('AccountsServer', () => {
   const db = {
@@ -167,7 +168,7 @@ describe('AccountsServer', () => {
   });
 
   describe('hooks', () => {
-    it('onLoginSuccess', async () => {
+    it('ServerHooks.LoginSuccess', async () => {
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
         {
@@ -178,13 +179,13 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      accountsServer.onLoginSuccess(hookSpy);
+      accountsServer.on(ServerHooks.LoginSuccess, hookSpy);
 
       await accountsServer.loginWithUser({} as any, {});
       expect(hookSpy).toBeCalled();
     });
 
-    it('onLoginError', async () => {
+    it('ServerHooks.LoginError', async () => {
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
         {
@@ -197,7 +198,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      accountsServer.onLoginError(hookSpy);
+      accountsServer.on(ServerHooks.LoginError, hookSpy);
 
       try {
         await accountsServer.loginWithUser({} as any, {});
@@ -207,7 +208,7 @@ describe('AccountsServer', () => {
       expect(hookSpy).toBeCalled();
     });
 
-    it('onLogoutSuccess', async () => {
+    it('ServerHooks.LogoutSuccess', async () => {
       const user = {
         userId: '123',
         username: 'username',
@@ -231,14 +232,14 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      accountsServer.onLogoutSuccess(hookSpy);
+      accountsServer.on(ServerHooks.LogoutSuccess, hookSpy);
 
       const { accessToken } = accountsServer.createTokens('456');
       await accountsServer.logout(accessToken);
       expect(hookSpy).toBeCalled();
     });
 
-    it('onLogoutError', async () => {
+    it('ServerHooks.LogoutError', async () => {
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
         {
@@ -255,7 +256,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      accountsServer.onLogoutError(hookSpy);
+      accountsServer.on(ServerHooks.LogoutError, hookSpy);
 
       try {
         const { accessToken } = accountsServer.createTokens('456');
@@ -267,7 +268,7 @@ describe('AccountsServer', () => {
       expect(hookSpy).toBeCalled();
     });
 
-    it('onResumeSessionSuccess', async () => {
+    it('ServerHooks.ResumeSessionSuccess', async () => {
       const user = {
         userId: '123',
         username: 'username',
@@ -289,7 +290,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      accountsServer.onResumeSessionSuccess(hookSpy);
+      accountsServer.on(ServerHooks.ResumeSessionSuccess, hookSpy);
 
       const { accessToken } = accountsServer.createTokens('456');
       await accountsServer.resumeSession(accessToken);
@@ -297,7 +298,7 @@ describe('AccountsServer', () => {
       expect(hookSpy).toBeCalled();
     });
 
-    it('onResumeSessionError with invalid session', async () => {
+    it('ServerHooks.ResumeSessionError with invalid session', async () => {
       const user = {
         userId: '123',
         username: 'username',
@@ -319,7 +320,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      accountsServer.onResumeSessionError(hookSpy);
+      accountsServer.on(ServerHooks.ResumeSessionError, hookSpy);
 
       const { accessToken } = accountsServer.createTokens('456');
 
@@ -332,7 +333,7 @@ describe('AccountsServer', () => {
       expect(hookSpy).toBeCalled();
     });
 
-    it('onResumeSessionError with invalid errored session', async () => {
+    it('ServerHooks.ResumeSessionError with invalid errored session', async () => {
       const user = {
         userId: '123',
         username: 'username',
@@ -349,7 +350,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      accountsServer.onResumeSessionError(hookSpy);
+      accountsServer.on(ServerHooks.ResumeSessionError, hookSpy);
 
       const { accessToken } = accountsServer.createTokens('456');
 
@@ -362,7 +363,7 @@ describe('AccountsServer', () => {
       expect(hookSpy).toBeCalled();
     });
 
-    it('onRefreshTokenError', async () => {
+    it('ServerHooks.RefreshTokensError', async () => {
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
         {
@@ -376,7 +377,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      accountsServer.onRefreshTokensError(hookSpy);
+      accountsServer.on(ServerHooks.RefreshTokensError, hookSpy);
 
       try {
         const { accessToken, refreshToken } = accountsServer.createTokens(null);
@@ -388,7 +389,7 @@ describe('AccountsServer', () => {
       expect(hookSpy).toBeCalled();
     });
 
-    it('onRefreshTokenSuccess', async () => {
+    it('ServerHooks.RefreshTokensSuccess', async () => {
       const user = {
         userId: '123',
         username: 'username',
@@ -410,7 +411,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      accountsServer.onRefreshTokensSuccess(hookSpy);
+      accountsServer.on(ServerHooks.RefreshTokensSuccess, hookSpy);
 
       const { accessToken, refreshToken } = accountsServer.createTokens('456');
       accountsServer.createTokens = () => ({
@@ -423,7 +424,7 @@ describe('AccountsServer', () => {
       expect(hookSpy).toBeCalled();
     });
 
-    it('onImpersonationError', async () => {
+    it('ServerHooks.ImpersonationError', async () => {
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
         {
@@ -432,7 +433,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      accountsServer.onImpersonationError(hookSpy);
+      accountsServer.on(ServerHooks.ImpersonationError, hookSpy);
 
       try {
         await accountsServer.impersonate(null, null, null, null);
@@ -443,7 +444,7 @@ describe('AccountsServer', () => {
       expect(hookSpy).toBeCalled();
     });
 
-    it('onImpersonationSuccess', async () => {
+    it('ServerHooks.ImpersonationSuccess', async () => {
       const user = { username: 'myUser', id: '123' };
       const impersonatedUser = { username: 'impUser', id: '456' };
       const accountsServer = new AccountsServer(
@@ -462,7 +463,7 @@ describe('AccountsServer', () => {
       );
       const { accessToken } = accountsServer.createTokens('555');
       const hookSpy = jest.fn(() => null);
-      accountsServer.onImpersonationSuccess(hookSpy);
+      accountsServer.on(ServerHooks.ImpersonationSuccess, hookSpy);
 
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
