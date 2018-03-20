@@ -96,7 +96,7 @@ export class AccountsServer {
       throw new Error(`Service ${serviceName} was not able to authenticate user`);
     }
 
-    await this.hooks.emit(ServerHooks.Login, {
+    await this.hooks.emitSerial(ServerHooks.Login, {
       // The service name, such as “password” or “twitter”.
       service: serviceName,
       // The user object
