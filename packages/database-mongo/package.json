@@ -1,6 +1,6 @@
 {
   "name": "@accounts/mongo",
-  "version": "0.1.0-beta.6",
+  "version": "0.1.0-beta.7",
   "description": "MongoDB adaptor for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -37,7 +37,7 @@
     "@types/mongodb": "3.0.8"
   },
   "dependencies": {
-    "@accounts/types": "^0.1.0-beta.6",
+    "@accounts/types": "^0.1.0-beta.7",
     "lodash": "^4.17.4",
     "mongodb": "^3.0.0"
   }
