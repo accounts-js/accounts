@@ -49,7 +49,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "22.2.0",
-    "jest": "22.4.2",
+    "jest": "22.4.3",
     "jsonwebtoken": "8.2.0",
     "lerna": "2.9.0",
     "localstorage-polyfill": "1.0.1",
