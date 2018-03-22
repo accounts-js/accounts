@@ -23,9 +23,9 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-"@types/jest@22.2.1":
-  version "22.2.1"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-22.2.1.tgz#fe798757afc13880e03e3644a3448d7b3dd878d8"
+"@types/jest@22.2.2":
+  version "22.2.2"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-22.2.2.tgz#afe5dacbd00d65325f52da0ed3e76e259629ac9d"
 
 "@types/node@9.4.6":
   version "9.4.6"
