@@ -224,7 +224,7 @@ export class AccountsClient {
     }
   }
 
-  public async refreshSession(): Promise<void> {
+  public async refreshSession(): Promise<TokensType> {
     const { accessToken, refreshToken } = await this.tokens();
     if (accessToken && refreshToken) {
       try {
@@ -243,6 +243,8 @@ export class AccountsClient {
 
           await this.storeTokens(refreshedSession.tokens);
           this.store.dispatch(setTokens(refreshedSession.tokens));
+          this.store.dispatch(loggingIn(false));
+          return refreshedSession.tokens;
         } else if (decodedRefreshToken.exp < currentTime) {
           // Refresh token is expired, user must sign back in
           this.clearTokens();
@@ -253,10 +255,8 @@ export class AccountsClient {
         this.clearTokens();
         throw new AccountsError('falsy token provided');
       }
-    } else {
-      this.clearTokens();
-      throw new AccountsError('no tokens provided');
     }
+    return { accessToken, refreshToken };
   }
 
   public async createUser(user: CreateUserType): Promise<void> {
