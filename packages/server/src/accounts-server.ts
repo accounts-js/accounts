@@ -147,14 +147,18 @@ export class AccountsServer {
   /**
    * @description Impersonate to another user.
    * @param {string} accessToken - User access token.
-   * @param {string} impersonatedUserId - impersonated user username.
+   * @param {object} impersonated - impersonated user.
    * @param {string} ip - The user ip.
    * @param {string} userAgent - User user agent.
    * @returns {Promise<Object>} - ImpersonationResult
    */
   public async impersonate(
     accessToken: string,
-    impersonatedUserId: string,
+    impersonated: {
+      userId?: string,
+      username?: string,
+      email?: string
+    },
     ip: string,
     userAgent: string
   ): Promise<ImpersonationResult> {
@@ -181,7 +185,15 @@ export class AccountsServer {
         throw new AccountsError('User not found');
       }
 
-      const impersonatedUser = await this.db.findUserById(impersonatedUserId);
+      let impersonatedUser;
+      if (impersonated.userId) {
+        impersonatedUser = await this.db.findUserById(impersonated.userId);
+      } else if (impersonated.username) {
+        impersonatedUser = await this.db.findUserByUsername(impersonated.username);
+      } else if (impersonated.email) {
+        impersonatedUser = await this.db.findUserByEmail(impersonated.email);
+      }
+
       if (!impersonatedUser) {
         throw new AccountsError(`Impersonated user not found`);
       }
