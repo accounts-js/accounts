@@ -102,7 +102,7 @@ export class AccountsServer {
       // The user object
       user,
       // The connection informations <ConnectionInformations>
-      connection: infos
+      connection: infos,
     });
     return this.loginWithUser(user, infos);
   }
@@ -155,9 +155,9 @@ export class AccountsServer {
   public async impersonate(
     accessToken: string,
     impersonated: {
-      userId?: string,
-      username?: string,
-      email?: string
+      userId?: string;
+      username?: string;
+      email?: string;
     },
     ip: string,
     userAgent: string
