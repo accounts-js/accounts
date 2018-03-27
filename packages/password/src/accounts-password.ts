@@ -1,46 +1,23 @@
-import {
-  trim,
-  isEmpty,
-  isFunction,
-  isString,
-  isPlainObject,
-  get,
-  find,
-  includes,
-} from 'lodash';
-import {
-  CreateUserType,
-  UserObjectType,
-  HashAlgorithm,
-  LoginUserIdentityType,
-  EmailRecord,
-  TokenRecord,
-} from '@accounts/common';
-import {
-  DBInterface,
-  AccountsServer,
-  generateRandomToken,
-  AuthService,
-} from '@accounts/server';
-import { getFirstUserEmail } from '@accounts/server/lib/utils';
-import { hashPassword, bcryptPassword, verifyPassword } from './encryption';
-import {
-  PasswordCreateUserType,
-  PasswordLoginType,
-  PasswordType,
-} from './types';
+import { trim, isEmpty, isFunction, isString, isPlainObject, get, find, includes } from 'lodash';
+import { CreateUser, User, Login, EmailRecord, TokenRecord, DatabaseInterface, AuthenticationService } from '@accounts/types';
+import { HashAlgorithm } from '@accounts/common';
+import { TwoFactor, AccountsTwoFactorOptions } from '@accounts/two-factor';
+import { AccountsServer, generateRandomToken, getFirstUserEmail } from '@accounts/server';
+import { hashPassword, bcryptPassword, verifyPassword } from './utils/encryption';
 
-export const isEmail = (email?: string) => {
-  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return email && re.test(email);
-};
+import { PasswordCreateUserType } from './types/password-create-user-type';
+import { PasswordLoginType } from './types/password-login-type';
+import { PasswordType } from './types/password-type';
+
+import { isEmail } from './utils/isEmail';
 
 export interface AccountsPasswordOptions {
+  twoFactor?: AccountsTwoFactorOptions;
   passwordHashAlgorithm?: HashAlgorithm;
   passwordResetTokenExpirationInDays?: number;
   passwordEnrollTokenExpirationInDays?: number;
   minimumPasswordLength?: number;
-  validateNewUser?: (user: CreateUserType) => Promise<boolean>;
+  validateNewUser?: (user: CreateUser) => Promise<boolean>;
   validateEmail?(email?: string): boolean;
   validatePassword?(password?: PasswordType): boolean;
   validateUsername?(username?: string): boolean;
@@ -60,30 +37,30 @@ const defaultOptions = {
   },
   validateUsername(username?: string): boolean {
     const usernameRegex = /^[a-zA-Z][a-zA-Z0-9]*$/;
-    const isValid =
-      username && !isEmpty(trim(username)) && usernameRegex.test(username);
+    const isValid = username && !isEmpty(trim(username)) && usernameRegex.test(username);
     return Boolean(isValid);
   },
 };
 
-export default class AccountsPassword implements AuthService {
+export default class AccountsPassword implements AuthenticationService {
   public serviceName = 'password';
   public server: AccountsServer;
+  public twoFactor: TwoFactor;
   private options: AccountsPasswordOptions;
-  private db: DBInterface;
+  private db: DatabaseInterface;
 
   constructor(options: AccountsPasswordOptions = {}) {
     this.options = { ...defaultOptions, ...options };
+    this.twoFactor = new TwoFactor(options.twoFactor);
   }
 
-  public setStore(store: DBInterface) {
+  public setStore(store: DatabaseInterface) {
     this.db = store;
+    this.twoFactor.setStore(store);
   }
 
-  public async authenticate(
-    params: PasswordLoginType
-  ): Promise<UserObjectType> {
-    const { user, password } = params;
+  public async authenticate(params: PasswordLoginType): Promise<User> {
+    const { user, password, code } = params;
     if (!user || !password) {
       throw new Error('Unrecognized options for login request');
     }
@@ -91,18 +68,11 @@ export default class AccountsPassword implements AuthService {
       throw new Error('Match failed');
     }
 
-    let foundUser;
-    /* if (this._options.passwordAuthenticator) {
-      foundUser = await this._externalPasswordAuthenticator(
-        this._options.passwordAuthenticator,
-        user,
-        password
-      );
-    } else { */
-    foundUser = await this.passwordAuthenticator(user, password);
+    const foundUser = await this.passwordAuthenticator(user, password);
 
-    if (!foundUser) {
-      throw new Error('User not found');
+    // If user activated two factor authentication try with the code
+    if (this.twoFactor.getUserService(foundUser)) {
+      await this.twoFactor.authenticate(foundUser, code);
     }
 
     return foundUser;
@@ -113,7 +83,7 @@ export default class AccountsPassword implements AuthService {
    * @param {string} email - User email.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  public findUserByEmail(email: string): Promise<UserObjectType | null> {
+  public findUserByEmail(email: string): Promise<User | null> {
     return this.db.findUserByEmail(email);
   }
 
@@ -122,7 +92,7 @@ export default class AccountsPassword implements AuthService {
    * @param {string} username - User username.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  public findUserByUsername(username: string): Promise<UserObjectType | null> {
+  public findUserByUsername(username: string): Promise<User | null> {
     return this.db.findUserByUsername(username);
   }
 
@@ -135,11 +105,8 @@ export default class AccountsPassword implements AuthService {
    * Defaults to false.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public addEmail(
-    userId: string,
-    newEmail: string,
-    verified: boolean
-  ): Promise<void> {
+  public addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
+    // TODO use this.options.verifyEmail before
     return this.db.addEmail(userId, newEmail, verified);
   }
 
@@ -170,18 +137,12 @@ export default class AccountsPassword implements AuthService {
       ['services', 'email', 'verificationTokens'],
       []
     );
-    const tokenRecord = find(
-      verificationTokens,
-      (t: TokenRecord) => t.token === token
-    );
+    const tokenRecord = find(verificationTokens, (t: TokenRecord) => t.token === token);
     if (!tokenRecord) {
       throw new Error('Verify email link expired');
     }
     // TODO check time for expiry date
-    const emailRecord = find(
-      user.emails,
-      (e: EmailRecord) => e.address === tokenRecord.address
-    );
+    const emailRecord = find(user.emails, (e: EmailRecord) => e.address === tokenRecord.address);
     if (!emailRecord) {
       throw new Error('Verify email link is for unknown address');
     }
@@ -194,10 +155,7 @@ export default class AccountsPassword implements AuthService {
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public async resetPassword(
-    token: string,
-    newPassword: PasswordType
-  ): Promise<void> {
+  public async resetPassword(token: string, newPassword: PasswordType): Promise<void> {
     const user = await this.db.findUserByResetPasswordToken(token);
     if (!user) {
       throw new Error('Reset password link expired');
@@ -212,23 +170,13 @@ export default class AccountsPassword implements AuthService {
     }
 
     const emails = user.emails || [];
-    if (
-      !includes(
-        emails.map((email: EmailRecord) => email.address),
-        resetTokenRecord.address
-      )
-    ) {
+    if (!includes(emails.map((email: EmailRecord) => email.address), resetTokenRecord.address)) {
       throw new Error('Token has invalid email address');
     }
 
     const password = await this.hashAndBcryptPassword(newPassword);
     // Change the user password and remove the old token
-    await this.db.setResetPassword(
-      user.id,
-      resetTokenRecord.address,
-      password,
-      token
-    );
+    await this.db.setResetPassword(user.id, resetTokenRecord.address, password, token);
     // Changing the password should invalidate existing sessions
     this.db.invalidateAllSessions(user.id);
   }
@@ -344,10 +292,7 @@ export default class AccountsPassword implements AuthService {
    * @returns Return the id of user created.
    */
   public async createUser(user: PasswordCreateUserType): Promise<string> {
-    if (
-      !this.options.validateUsername(user.username) &&
-      !this.options.validateEmail(user.email)
-    ) {
+    if (!this.options.validateUsername(user.username) && !this.options.validateEmail(user.email)) {
       throw new Error('Username or Email is required');
     }
 
@@ -375,10 +320,7 @@ export default class AccountsPassword implements AuthService {
     };
 
     const { validateNewUser } = this.options;
-    if (
-      isFunction(validateNewUser) &&
-      !await validateNewUser(proposedUserObject)
-    ) {
+    if (isFunction(validateNewUser) && !await validateNewUser(proposedUserObject)) {
       throw new Error('User invalid');
     }
 
@@ -386,14 +328,14 @@ export default class AccountsPassword implements AuthService {
   }
 
   private async passwordAuthenticator(
-    user: string | LoginUserIdentityType,
+    user: string | Login,
     password: PasswordType
-  ): Promise<any> {
+  ): Promise<User> {
     const { username, email, id } = isString(user)
       ? this.toUsernameAndEmail({ user })
       : this.toUsernameAndEmail({ ...user });
 
-    let foundUser;
+    let foundUser: User;
 
     if (id) {
       // this._validateLoginWithField('id', user);
@@ -416,9 +358,7 @@ export default class AccountsPassword implements AuthService {
     }
 
     const hashAlgorithm = this.options.passwordHashAlgorithm;
-    const pass: any = hashAlgorithm
-      ? hashPassword(password, hashAlgorithm)
-      : password;
+    const pass: any = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
     const isPasswordValid = await verifyPassword(pass, hash);
 
     if (!isPasswordValid) {
@@ -430,9 +370,7 @@ export default class AccountsPassword implements AuthService {
 
   private async hashAndBcryptPassword(password: PasswordType): Promise<string> {
     const hashAlgorithm = this.options.passwordHashAlgorithm;
-    const hashedPassword: any = hashAlgorithm
-      ? hashPassword(password, hashAlgorithm)
-      : password;
+    const hashedPassword: any = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
     return bcryptPassword(hashedPassword);
   }
 

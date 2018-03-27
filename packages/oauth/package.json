@@ -1,6 +1,6 @@
 {
   "name": "@accounts/oauth",
-  "version": "0.1.0-beta.3",
+  "version": "0.1.0-beta.9",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -24,14 +24,10 @@
     "mapCoverage": true
   },
   "dependencies": {
-    "@accounts/common": "^0.1.0-beta.3",
+    "@accounts/types": "^0.1.0-beta.9",
     "request-promise": "^4.2.1"
   },
   "devDependencies": {
-    "@accounts/server": "^0.1.0-beta.3"
-  },
-  "peerDependencies": {
-    "@accounts/common": "^0.1.0-beta.0",
-    "@accounts/server": "^0.1.0-beta.0"
+    "@accounts/server": "^0.1.0-beta.9"
   }
 }

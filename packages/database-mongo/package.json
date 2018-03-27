@@ -1,0 +1,44 @@
+{
+  "name": "@accounts/mongo",
+  "version": "0.1.0-beta.9",
+  "description": "MongoDB adaptor for accounts",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "start": "tsc --watch",
+    "compile": "tsc",
+    "testonly": "jest",
+    "test:watch": "jest --watch",
+    "coverage": "yarn testonly --coverage",
+    "prepublishOnly": "yarn compile"
+  },
+  "files": [
+    "src",
+    "lib"
+  ],
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "./__tests__/.*.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/database-mongo"
+  },
+  "author": "Leo Pradel",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/lodash": "4.14.106",
+    "@types/mongodb": "3.0.9"
+  },
+  "dependencies": {
+    "@accounts/types": "^0.1.0-beta.9",
+    "lodash": "^4.17.4",
+    "mongodb": "^3.0.0"
+  }
+}

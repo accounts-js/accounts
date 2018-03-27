@@ -1,0 +1,51 @@
+{
+  "name": "@accounts/types",
+  "version": "0.1.0-beta.9",
+  "description": "Accounts-js Types",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rimraf lib",
+    "start": "tsc --watch",
+    "precompile": "yarn clean",
+    "compile": "tsc",
+    "prepublishOnly": "yarn compile",
+    "test": "yarn testonly",
+    "test-ci": "yarn lint && yarn coverage",
+    "testonly": "jest",
+    "test:watch": "jest --watch",
+    "coverage": "yarn testonly -- --coverage"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/types"
+  },
+  "keywords": [
+    "rest",
+    "graphql",
+    "grant",
+    "auth",
+    "authentication",
+    "accounts",
+    "users",
+    "oauth"
+  ],
+  "author": "Elies Lou (Aetherall)",
+  "license": "MIT",
+  "devDependencies": {
+    "rimraf": "2.6.2"
+  }
+}

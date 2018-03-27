@@ -1,41 +1,30 @@
 import * as pick from 'lodash/pick';
 import * as omit from 'lodash/omit';
 import * as isString from 'lodash/isString';
-import { EventEmitter } from 'events';
 import * as jwt from 'jsonwebtoken';
+import * as Emittery from 'emittery';
+import { AccountsError } from '@accounts/common';
 import {
-  AccountsError,
-  UserObjectType,
-  LoginReturnType,
-  TokensType,
-  SessionType,
-  ImpersonateReturnType,
+  User,
+  LoginResult,
+  Tokens,
+  Session,
+  ImpersonationResult,
   HookListener,
-} from '@accounts/common';
-import {
-  generateAccessToken,
-  generateRefreshToken,
-  generateRandomToken,
-} from './tokens';
-import { emailTemplates, EmailTemplateType, sendMail } from './email';
-import {
-  AccountsServerOptions,
-  ConnectionInformationsType,
-  AuthService,
-  DBInterface,
-} from './types';
+  DatabaseInterface,
+  AuthenticationService,
+  ConnectionInformations,
+  TokenRecord,
+} from '@accounts/types';
 
-export interface TokenRecord {
-  token: string;
-  address: string;
-  when: number;
-  reason: string;
-}
+import { generateAccessToken, generateRefreshToken, generateRandomToken } from './utils/tokens';
 
-export interface JwtData {
-  token: string;
-  isImpersonated: boolean;
-}
+import { emailTemplates, sendMail } from './utils/email';
+import { ServerHooks } from './utils/server-hooks';
+
+import { AccountsServerOptions } from './types/accounts-server-options';
+import { JwtData } from './types/jwt-data';
+import { EmailTemplateType } from './types/email-template-type';
 
 const defaultOptions = {
   tokenSecret: 'secret',
@@ -48,33 +37,16 @@ const defaultOptions = {
     },
   },
   emailTemplates,
-  userObjectSanitizer: (user: UserObjectType) => user,
+  userObjectSanitizer: (user: User) => user,
   sendMail,
   siteUrl: 'http://localhost:3000',
 };
 
-export type RemoveListnerHandle = () => EventEmitter;
-
-export const ServerHooks = {
-  LoginSuccess: 'LoginSuccess',
-  LoginError: 'LoginError',
-  LogoutSuccess: 'LogoutSuccess',
-  LogoutError: 'LogoutError',
-  CreateUserSuccess: 'CreateUserSuccess',
-  CreateUserError: 'CreateUserError',
-  ResumeSessionSuccess: 'ResumeSessionSuccess',
-  ResumeSessionError: 'ResumeSessionError',
-  RefreshTokensSuccess: 'RefreshTokensSuccess',
-  RefreshTokensError: 'RefreshTokensError',
-  ImpersonationSuccess: 'ImpersonationSuccess',
-  ImpersonationError: 'ImpersonationError',
-};
-
 export class AccountsServer {
   public options: AccountsServerOptions;
-  private services: { [key: string]: AuthService };
-  private db: DBInterface;
-  private hooks: EventEmitter;
+  private services: { [key: string]: AuthenticationService };
+  private db: DatabaseInterface;
+  private hooks: Emittery;
 
   constructor(options: AccountsServerOptions, services: any) {
     this.options = { ...defaultOptions, ...options };
@@ -94,10 +66,10 @@ export class AccountsServer {
     }
 
     // Initialize hooks
-    this.hooks = new EventEmitter();
+    this.hooks = new Emittery();
   }
 
-  public getServices(): { [key: string]: AuthService } {
+  public getServices(): { [key: string]: AuthenticationService } {
     return this.services;
   }
 
@@ -105,72 +77,33 @@ export class AccountsServer {
     return this.options;
   }
 
-  public onLoginSuccess(callback: HookListener): RemoveListnerHandle {
-    return this.on(ServerHooks.LoginSuccess, callback);
-  }
+  public on(eventName: string, callback: HookListener): () => void {
+    this.hooks.on(eventName, callback);
 
-  public onLoginError(callback: HookListener): RemoveListnerHandle {
-    return this.on(ServerHooks.LoginError, callback);
-  }
-
-  public onLogoutSuccess(callback: HookListener): RemoveListnerHandle {
-    return this.on(ServerHooks.LogoutSuccess, callback);
-  }
-
-  public onLogoutError(callback: HookListener): RemoveListnerHandle {
-    return this.on(ServerHooks.LogoutError, callback);
-  }
-
-  public onCreateUserSuccess(callback: HookListener): RemoveListnerHandle {
-    return this.on(ServerHooks.CreateUserSuccess, callback);
-  }
-
-  public onCreateUserError(callback: HookListener): RemoveListnerHandle {
-    return this.on(ServerHooks.CreateUserError, callback);
-  }
-
-  public onResumeSessionSuccess(callback: HookListener): RemoveListnerHandle {
-    return this.on(ServerHooks.ResumeSessionSuccess, callback);
-  }
-
-  public onResumeSessionError(callback: HookListener): RemoveListnerHandle {
-    return this.on(ServerHooks.ResumeSessionError, callback);
-  }
-
-  public onRefreshTokensSuccess(callback: HookListener): RemoveListnerHandle {
-    return this.on(ServerHooks.RefreshTokensSuccess, callback);
-  }
-
-  public onRefreshTokensError(callback: HookListener): RemoveListnerHandle {
-    return this.on(ServerHooks.RefreshTokensError, callback);
-  }
-
-  public onImpersonationSuccess(callback: HookListener): RemoveListnerHandle {
-    return this.on(ServerHooks.ImpersonationSuccess, callback);
-  }
-
-  public onImpersonationError(callback: HookListener): RemoveListnerHandle {
-    return this.on(ServerHooks.ImpersonationError, callback);
+    return () => this.hooks.off(eventName, callback);
   }
 
   public async loginWithService(
     serviceName: string,
     params,
-    infos: ConnectionInformationsType
-  ): Promise<LoginReturnType> {
+    infos: ConnectionInformations
+  ): Promise<LoginResult> {
     if (!this.services[serviceName]) {
-      throw new Error(
-        `No service with the name ${serviceName} was registered.`
-      );
+      throw new Error(`No service with the name ${serviceName} was registered.`);
     }
-    const user: UserObjectType = await this.services[serviceName].authenticate(
-      params
-    );
+    const user: User = await this.services[serviceName].authenticate(params);
     if (!user) {
-      throw new Error(
-        `Service ${serviceName} was not able to authenticate user`
-      );
+      throw new Error(`Service ${serviceName} was not able to authenticate user`);
     }
+
+    await this.hooks.emitSerial(ServerHooks.Login, {
+      // The service name, such as “password” or “twitter”.
+      service: serviceName,
+      // The user object
+      user,
+      // The connection informations <ConnectionInformations>
+      connection: infos
+    });
     return this.loginWithUser(user, infos);
   }
 
@@ -178,15 +111,12 @@ export class AccountsServer {
    * @description Server use only. This method creates a session
    *              without authenticating any user identity.
    *              Any authentication should happen before calling this function.
-   * @param {UserObjectType} userId - The user object.
+   * @param {User} userId - The user object.
    * @param {string} ip - User's ip.
    * @param {string} userAgent - User's client agent.
-   * @returns {Promise<LoginReturnType>} - Session tokens and user object.
+   * @returns {Promise<LoginResult>} - Session tokens and user object.
    */
-  public async loginWithUser(
-    user: UserObjectType,
-    infos: ConnectionInformationsType
-  ): Promise<LoginReturnType> {
+  public async loginWithUser(user: User, infos: ConnectionInformations): Promise<LoginResult> {
     const { ip, userAgent } = infos;
 
     try {
@@ -220,14 +150,14 @@ export class AccountsServer {
    * @param {string} impersonatedUserId - impersonated user username.
    * @param {string} ip - The user ip.
    * @param {string} userAgent - User user agent.
-   * @returns {Promise<Object>} - ImpersonateReturnType
+   * @returns {Promise<Object>} - ImpersonationResult
    */
   public async impersonate(
     accessToken: string,
     impersonatedUserId: string,
     ip: string,
     userAgent: string
-  ): Promise<ImpersonateReturnType> {
+  ): Promise<ImpersonationResult> {
     try {
       if (!isString(accessToken)) {
         throw new AccountsError('An access token is required');
@@ -260,10 +190,7 @@ export class AccountsServer {
         return { authorized: false };
       }
 
-      const isAuthorized = await this.options.impersonationAuthorize(
-        user,
-        impersonatedUser
-      );
+      const isAuthorized = await this.options.impersonationAuthorize(user, impersonatedUser);
 
       if (!isAuthorized) {
         return { authorized: false };
@@ -286,11 +213,10 @@ export class AccountsServer {
         user: this.sanitizeUser(impersonatedUser),
       };
 
-      this.hooks.emit(
-        ServerHooks.ImpersonationSuccess,
+      this.hooks.emit(ServerHooks.ImpersonationSuccess, {
         user,
-        impersonationResult
-      );
+        impersonationResult,
+      });
 
       return impersonationResult;
     } catch (e) {
@@ -306,14 +232,14 @@ export class AccountsServer {
    * @param {string} refreshToken - User refresh token.
    * @param {string} ip - User ip.
    * @param {string} userAgent - User user agent.
-   * @returns {Promise<Object>} - LoginReturnType.
+   * @returns {Promise<Object>} - LoginResult.
    */
   public async refreshTokens(
     accessToken: string,
     refreshToken: string,
     ip: string,
     userAgent: string
-  ): Promise<LoginReturnType> {
+  ): Promise<LoginResult> {
     try {
       if (!isString(accessToken) || !isString(refreshToken)) {
         throw new AccountsError('An accessToken and refreshToken are required');
@@ -322,21 +248,15 @@ export class AccountsServer {
       let sessionToken: string;
       try {
         jwt.verify(refreshToken, this.options.tokenSecret);
-        const decodedAccessToken = jwt.verify(
-          accessToken,
-          this.options.tokenSecret,
-          {
-            ignoreExpiration: true,
-          }
-        ) as { data: JwtData };
+        const decodedAccessToken = jwt.verify(accessToken, this.options.tokenSecret, {
+          ignoreExpiration: true,
+        }) as { data: JwtData };
         sessionToken = decodedAccessToken.data.token;
       } catch (err) {
         throw new AccountsError('Tokens are not valid');
       }
 
-      const session: SessionType = await this.db.findSessionByToken(
-        sessionToken
-      );
+      const session: Session = await this.db.findSessionByToken(sessionToken);
       if (!session) {
         throw new AccountsError('Session not found');
       }
@@ -376,10 +296,7 @@ export class AccountsServer {
    * @param {boolean} isImpersonated - Should be true if impersonating another user.
    * @returns {Promise<Object>} - Return a new accessToken and refreshToken.
    */
-  public createTokens(
-    token: string,
-    isImpersonated: boolean = false
-  ): TokensType {
+  public createTokens(token: string, isImpersonated: boolean = false): Tokens {
     const { tokenSecret, tokenConfigs } = this.options;
     const jwtData: JwtData = {
       token,
@@ -404,9 +321,7 @@ export class AccountsServer {
    */
   public async logout(accessToken: string): Promise<void> {
     try {
-      const session: SessionType = await this.findSessionByAccessToken(
-        accessToken
-      );
+      const session: Session = await this.findSessionByAccessToken(accessToken);
 
       if (session.valid) {
         const user = await this.db.findUserById(session.userId);
@@ -416,12 +331,11 @@ export class AccountsServer {
         }
 
         await this.db.invalidateSession(session.id);
-        this.hooks.emit(
-          ServerHooks.LogoutSuccess,
-          this.sanitizeUser(user),
+        this.hooks.emit(ServerHooks.LogoutSuccess, {
+          user: this.sanitizeUser(user),
           session,
-          accessToken
-        );
+          accessToken,
+        });
       } else {
         throw new AccountsError('Session is no longer valid', {
           id: session.userId,
@@ -434,11 +348,9 @@ export class AccountsServer {
     }
   }
 
-  public async resumeSession(accessToken: string): Promise<UserObjectType> {
+  public async resumeSession(accessToken: string): Promise<User> {
     try {
-      const session: SessionType = await this.findSessionByAccessToken(
-        accessToken
-      );
+      const session: Session = await this.findSessionByAccessToken(accessToken);
 
       if (session.valid) {
         const user = await this.db.findUserById(session.userId);
@@ -455,7 +367,7 @@ export class AccountsServer {
           }
         }
 
-        this.hooks.emit(ServerHooks.ResumeSessionSuccess, user, accessToken);
+        this.hooks.emit(ServerHooks.ResumeSessionSuccess, { user, accessToken });
 
         return this.sanitizeUser(user);
       }
@@ -476,27 +388,24 @@ export class AccountsServer {
   /**
    * @description Find a session by his token.
    * @param {string} accessToken
-   * @returns {Promise<SessionType>} - Return a session.
+   * @returns {Promise<Session>} - Return a session.
    */
-  public async findSessionByAccessToken(
-    accessToken: string
-  ): Promise<SessionType> {
+  public async findSessionByAccessToken(accessToken: string): Promise<Session> {
     if (!isString(accessToken)) {
       throw new AccountsError('An accessToken is required');
     }
 
     let sessionToken: string;
     try {
-      const decodedAccessToken = jwt.verify(
-        accessToken,
-        this.options.tokenSecret
-      ) as { data: JwtData };
+      const decodedAccessToken = jwt.verify(accessToken, this.options.tokenSecret) as {
+        data: JwtData;
+      };
       sessionToken = decodedAccessToken.data.token;
     } catch (err) {
       throw new AccountsError('Tokens are not valid');
     }
 
-    const session: SessionType = await this.db.findSessionByToken(sessionToken);
+    const session: Session = await this.db.findSessionByToken(sessionToken);
     if (!session) {
       throw new AccountsError('Session not found');
     }
@@ -509,7 +418,7 @@ export class AccountsServer {
    * @param {string} userId - User id.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  public findUserById(userId: string): Promise<UserObjectType> {
+  public findUserById(userId: string): Promise<User> {
     return this.db.findUserById(userId);
   }
 
@@ -542,61 +451,38 @@ export class AccountsServer {
     return this.db.setProfile(userId, { ...user.profile, ...profile });
   }
 
-  public on(eventName: string, callback: HookListener): RemoveListnerHandle {
-    this.hooks.on(eventName, callback);
-
-    return () => this.hooks.removeListener(eventName, callback);
-  }
-
   public isTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
-    return (
-      !tokenRecord ||
-      Number(tokenRecord.when) + this.options.emailTokensExpiry < Date.now()
-    );
+    return !tokenRecord || Number(tokenRecord.when) + this.options.emailTokensExpiry < Date.now();
   }
 
   public prepareMail(
     to: string,
     token: string,
-    user: UserObjectType,
+    user: User,
     pathFragment: string,
     emailTemplate: EmailTemplateType,
     from: string
   ): any {
     if (this.options.prepareMail) {
-      return this.options.prepareMail(
-        to,
-        token,
-        user,
-        pathFragment,
-        emailTemplate,
-        from
-      );
+      return this.options.prepareMail(to, token, user, pathFragment, emailTemplate, from);
     }
-    return this.defaultPrepareEmail(
-      to,
-      token,
-      user,
-      pathFragment,
-      emailTemplate,
-      from
-    );
+    return this.defaultPrepareEmail(to, token, user, pathFragment, emailTemplate, from);
   }
 
-  public sanitizeUser(user: UserObjectType): UserObjectType {
+  public sanitizeUser(user: User): User {
     const { userObjectSanitizer } = this.options;
 
     return userObjectSanitizer(this.internalUserSanitizer(user), omit, pick);
   }
 
-  private internalUserSanitizer(user: UserObjectType): UserObjectType {
+  private internalUserSanitizer(user: User): User {
     return omit(user, ['services']);
   }
 
   private defaultPrepareEmail(
     to: string,
     token: string,
-    user: UserObjectType,
+    user: User,
     pathFragment: string,
     emailTemplate: EmailTemplateType,
     from: string
@@ -610,10 +496,7 @@ export class AccountsServer {
     };
   }
 
-  private defaultCreateTokenizedUrl(
-    pathFragment: string,
-    token: string
-  ): string {
+  private defaultCreateTokenizedUrl(pathFragment: string, token: string): string {
     const siteUrl = this.options.siteUrl;
     return `${siteUrl}/${pathFragment}/${token}`;
   }

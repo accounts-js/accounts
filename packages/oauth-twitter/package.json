@@ -1,6 +1,6 @@
 {
   "name": "@accounts/oauth-twitter",
-  "version": "0.1.0-beta.3",
+  "version": "0.1.0-beta.9",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -24,13 +24,5 @@
   },
   "dependencies": {
     "oauth": "^0.9.15"
-  },
-  "devDependencies": {
-    "@accounts/common": "^0.1.0-beta.3",
-    "@accounts/server": "^0.1.0-beta.3"
-  },
-  "peerDependencies": {
-    "@accounts/common": "^0.1.0-beta.0",
-    "@accounts/server": "^0.1.0-beta.0"
   }
 }

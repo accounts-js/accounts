@@ -1,14 +1,14 @@
 import { AccountsServer } from './accounts-server';
-import * as encryption from './encryption';
-import { generateRandomToken } from './tokens';
-import { AuthService, DBInterface, ConnectionInformationsType } from './types';
+import * as encryption from './utils/encryption';
+import { generateRandomToken } from './utils/tokens';
+import { getFirstUserEmail } from './utils/get-first-user-email';
+import { ServerHooks } from './utils/server-hooks';
 
 export default AccountsServer;
 export {
   AccountsServer,
-  AuthService,
   encryption,
-  DBInterface,
+  ServerHooks,
   generateRandomToken,
-  ConnectionInformationsType,
+  getFirstUserEmail
 };
