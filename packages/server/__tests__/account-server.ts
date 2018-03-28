@@ -1,11 +1,7 @@
 import * as jwtDecode from 'jwt-decode';
 import { AccountsServer } from '../src/accounts-server';
 import { JwtData } from '../src/types/jwt-data';
-import {
-  bcryptPassword,
-  hashPassword,
-  verifyPassword,
-} from '../src/utils/encryption';
+import { bcryptPassword, hashPassword, verifyPassword } from '../src/utils/encryption';
 import { ServerHooks } from '../src/utils/server-hooks';
 
 describe('AccountsServer', () => {
@@ -447,11 +443,12 @@ describe('AccountsServer', () => {
     it('ServerHooks.ImpersonationSuccess', async () => {
       const user = { username: 'myUser', id: '123' };
       const impersonatedUser = { username: 'impUser', id: '456' };
+      const findUserById = jest.fn();
+      findUserById.mockReturnValueOnce(user).mockReturnValueOnce(impersonatedUser);
       const accountsServer = new AccountsServer(
         {
           db: {
-            findUserById: () => Promise.resolve(user),
-            findUserByUsername: () => Promise.resolve(impersonatedUser),
+            findUserById,
             createSession: () => Promise.resolve('001'),
           } as any,
           tokenSecret: 'secret',
@@ -476,7 +473,7 @@ describe('AccountsServer', () => {
           isImpersonated,
         } as any);
 
-      await accountsServer.impersonate(accessToken, 'impUser', null, null);
+      await accountsServer.impersonate(accessToken, { userId: 'userId' }, null, null);
 
       expect(hookSpy).toBeCalled();
     });
@@ -896,7 +893,7 @@ describe('AccountsServer', () => {
       );
 
       try {
-        const res = await accountsServer.impersonate('invalidToken', 'someUser', null, null);
+        const res = await accountsServer.impersonate('invalidToken', {}, null, null);
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('Access token is not valid');
@@ -920,7 +917,7 @@ describe('AccountsServer', () => {
         } as any);
 
       try {
-        const res = await accountsServer.impersonate(accessToken, 'someUser', null, null);
+        const res = await accountsServer.impersonate(accessToken, {}, null, null);
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('Session is not valid for user');
@@ -946,7 +943,7 @@ describe('AccountsServer', () => {
         } as any);
 
       try {
-        const res = await accountsServer.impersonate(accessToken, 'someUser', null, null);
+        const res = await accountsServer.impersonate(accessToken, { userId: 'userId' }, null, null);
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('User not found');
@@ -954,10 +951,12 @@ describe('AccountsServer', () => {
     });
 
     it('throws error if impersonated user is not found', async () => {
+      const findUserById = jest.fn();
+      findUserById.mockReturnValueOnce(user);
       const accountsServer = new AccountsServer(
         {
           db: {
-            findUserById: () => Promise.resolve(user),
+            findUserById,
             findUserByUsername: () => Promise.resolve(null),
           } as any,
           tokenSecret: 'secret',
@@ -973,10 +972,10 @@ describe('AccountsServer', () => {
         } as any);
 
       try {
-        const res = await accountsServer.impersonate(accessToken, 'someUser', null, null);
+        const res = await accountsServer.impersonate(accessToken, { userId: 'userId' }, null, null);
         throw new Error();
       } catch (err) {
-        expect(err.message).toEqual('User someUser not found');
+        expect(err.message).toEqual('Impersonated user not found');
       }
     });
 
@@ -999,7 +998,7 @@ describe('AccountsServer', () => {
           userId: '123',
         } as any);
 
-      const res = await accountsServer.impersonate(accessToken, 'someUser', null, null);
+      const res = await accountsServer.impersonate(accessToken, { userId: 'userId' }, null, null);
       expect(res.authorized).toEqual(false);
     });
 
@@ -1028,17 +1027,18 @@ describe('AccountsServer', () => {
       const impersonationAuthorize = accountsServer.getOptions().impersonationAuthorize;
       expect(impersonationAuthorize).toBeDefined();
 
-      const res = await accountsServer.impersonate(accessToken, 'someUser', null, null);
+      const res = await accountsServer.impersonate(accessToken, { userId: 'userId' }, null, null);
       expect(res.authorized).toEqual(false);
     });
 
     it('returns correct response if authorized', async () => {
       const createSession = jest.fn(() => Promise.resolve('001'));
+      const findUserById = jest.fn();
+      findUserById.mockReturnValueOnce(user).mockReturnValueOnce(impersonatedUser);
       const accountsServer = new AccountsServer(
         {
           db: {
-            findUserById: () => Promise.resolve(user),
-            findUserByUsername: () => Promise.resolve(impersonatedUser),
+            findUserById,
             createSession,
           } as any,
           tokenSecret: 'secret',
@@ -1061,7 +1061,7 @@ describe('AccountsServer', () => {
           isImpersonated,
         } as any);
 
-      const res = await accountsServer.impersonate(accessToken, 'impUser', null, null);
+      const res = await accountsServer.impersonate(accessToken, { userId: 'userId' }, null, null);
       expect(res).toEqual({
         authorized: true,
         tokens: { sessionId: '001', isImpersonated: true },
