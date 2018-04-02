@@ -1,4 +1,4 @@
-import { DBInterface as DatabaseInterface } from '@accounts/server';
+import { DatabaseInterface } from '@accounts/types';
 
 export interface Configuration {
 
