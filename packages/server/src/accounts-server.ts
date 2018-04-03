@@ -34,8 +34,8 @@ const defaultOptions = {
 export class AccountsServer {
   public options: AccountsServerOptions;
   public tokenManager: TokenManager;
+  public db: DatabaseInterface;
   private services: { [key: string]: AuthenticationService };
-  private db: DatabaseInterface;
   private hooks: Emittery;
 
   constructor(options: AccountsServerOptions, services: any) {
