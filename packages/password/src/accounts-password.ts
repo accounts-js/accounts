@@ -2,7 +2,7 @@ import { trim, isEmpty, isFunction, isString, isPlainObject, get, find, includes
 import { CreateUser, User, Login, EmailRecord, TokenRecord, DatabaseInterface, AuthenticationService } from '@accounts/types';
 import { HashAlgorithm } from '@accounts/common';
 import { TwoFactor, AccountsTwoFactorOptions } from '@accounts/two-factor';
-import { AccountsServer, generateRandomToken, getFirstUserEmail } from '@accounts/server';
+import { AccountsServer, getFirstUserEmail } from '@accounts/server';
 import { hashPassword, bcryptPassword, verifyPassword } from './utils/encryption';
 
 import { PasswordCreateUserType } from './types/password-create-user-type';
@@ -165,7 +165,7 @@ export default class AccountsPassword implements AuthenticationService {
     const resetTokens = get(user, ['services', 'password', 'reset']);
     const resetTokenRecord = find(resetTokens, t => t.token === token);
 
-    if (this.server.isTokenExpired(token, resetTokenRecord)) {
+    if (this.server.tokenManager.isEmailTokenExpired(token, resetTokenRecord)) {
       throw new Error('Reset password link expired');
     }
 
@@ -212,7 +212,7 @@ export default class AccountsPassword implements AuthenticationService {
     if (!address || !includes(emails.map(email => email.address), address)) {
       throw new Error('No such email address for user');
     }
-    const token = generateRandomToken();
+    const token = this.server.tokenManager.generateRandomToken();
     await this.db.addEmailVerificationToken(user.id, address, token);
 
     const resetPasswordMail = this.server.prepareMail(
@@ -243,7 +243,7 @@ export default class AccountsPassword implements AuthenticationService {
       throw new Error('User not found');
     }
     address = getFirstUserEmail(user, address);
-    const token = generateRandomToken();
+    const token = this.server.tokenManager.generateRandomToken();
     await this.db.addResetPasswordToken(user.id, address, token);
 
     const resetPasswordMail = this.server.prepareMail(
@@ -271,7 +271,7 @@ export default class AccountsPassword implements AuthenticationService {
       throw new Error('User not found');
     }
     address = getFirstUserEmail(user, address);
-    const token = generateRandomToken();
+    const token = this.server.tokenManager.generateRandomToken();
     await this.db.addResetPasswordToken(user.id, address, token, 'enroll');
 
     const enrollmentMail = this.server.prepareMail(
