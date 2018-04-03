@@ -30,6 +30,7 @@ const defaultOptions = {
   userObjectSanitizer: (user: User) => user,
   sendMail,
   siteUrl: 'http://localhost:3000',
+  authenticationServices: []
 };
 
 export class AccountsServer {
@@ -39,7 +40,7 @@ export class AccountsServer {
   private services: AuthenticationServices;
   private hooks: Emittery;
 
-  constructor(options: AccountsServerOptions, services: any) {
+  constructor(options: AccountsServerOptions) {
     this.options = { ...defaultOptions, ...options };
     if (!this.options.db) {
       throw new AccountsError('A database driver is required');
@@ -51,7 +52,7 @@ export class AccountsServer {
     this.db = this.options.db;
     this.tokenManager = this.options.tokenManager;
 
-    this.services = options.authenticationServices.reduce(
+    this.services = this.options.authenticationServices.reduce(
       ( acc: AuthenticationServices, authenticationService: AuthenticationService ) =>
       ({ ...acc, [authenticationService.serviceName]: authenticationService.link(this) })
     ,{})

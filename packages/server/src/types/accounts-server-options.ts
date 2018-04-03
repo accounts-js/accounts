@@ -10,7 +10,7 @@ import { SendMailType } from './send-mail-type';
 export interface AccountsServerOptions {
   db: DatabaseInterface;
   tokenManager: TokenManager;
-  authenticationServices: AuthenticationService[];
+  authenticationServices?: AuthenticationService[];
   emailTemplates?: EmailTemplatesType;
   userObjectSanitizer?: UserObjectSanitizerFunction;
   impersonationAuthorize?: (user: User, impersonateToUser: User) => Promise<any>;
