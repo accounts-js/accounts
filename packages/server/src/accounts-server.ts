@@ -13,6 +13,7 @@ import {
   HookListener,
   DatabaseInterface,
   AuthenticationService,
+  AuthenticationServices,
   ConnectionInformations,
   TokenRecord,
 } from '@accounts/types';
@@ -29,16 +30,17 @@ const defaultOptions = {
   userObjectSanitizer: (user: User) => user,
   sendMail,
   siteUrl: 'http://localhost:3000',
+  authenticationServices: []
 };
 
 export class AccountsServer {
   public options: AccountsServerOptions;
   public tokenManager: TokenManager;
   public db: DatabaseInterface;
-  private services: { [key: string]: AuthenticationService };
+  private services: AuthenticationServices;
   private hooks: Emittery;
 
-  constructor(options: AccountsServerOptions, services: any) {
+  constructor(options: AccountsServerOptions) {
     this.options = { ...defaultOptions, ...options };
     if (!this.options.db) {
       throw new AccountsError('A database driver is required');
@@ -46,18 +48,14 @@ export class AccountsServer {
     if (!this.options.tokenManager) {
       throw new AccountsError('A tokenManager is required');
     }
-    // TODO if this.options.tokenSecret === 'secret' warm user to change it
 
-    this.services = services;
     this.db = this.options.db;
     this.tokenManager = this.options.tokenManager;
 
-    // Set the db to all services
-    // tslint:disable-next-line
-    for (const service in this.services) {
-      this.services[service].setStore(this.db);
-      this.services[service].server = this;
-    }
+    this.services = this.options.authenticationServices.reduce(
+      ( acc: AuthenticationServices, authenticationService: AuthenticationService ) =>
+      ({ ...acc, [authenticationService.serviceName]: authenticationService.link(this) })
+    ,{})
 
     // Initialize hooks
     this.hooks = new Emittery();

@@ -7,6 +7,11 @@ import { DatabaseInterface } from './database-interface';
 export interface AuthenticationService {
   server: any;
   serviceName: string;
+  link(accountsServer: any): ThisType<AuthenticationService>;
   setStore(store: DatabaseInterface): void;
   authenticate(params: any): Promise<User | null>;
+}
+
+export interface AuthenticationServices {
+  [key: string]: AuthenticationService
 }
