@@ -1,7 +1,6 @@
 import * as pick from 'lodash/pick';
 import * as omit from 'lodash/omit';
 import * as isString from 'lodash/isString';
-import * as jwt from 'jsonwebtoken';
 import * as Emittery from 'emittery';
 import { AccountsError } from '@accounts/common';
 import {
@@ -16,8 +15,6 @@ import {
   ConnectionInformations,
   TokenRecord,
 } from '@accounts/types';
-
-import { generateAccessToken, generateRefreshToken, generateRandomToken } from './utils/tokens';
 
 import { emailTemplates, sendMail } from './utils/email';
 import { ServerHooks } from './utils/server-hooks';

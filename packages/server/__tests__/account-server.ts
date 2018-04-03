@@ -1,7 +1,5 @@
-import * as jwtDecode from 'jwt-decode';
 import { AccountsServer } from '../src/accounts-server';
 import { JwtData } from '../src/types/jwt-data';
-import { bcryptPassword, hashPassword, verifyPassword } from '../src/utils/encryption';
 import { ServerHooks } from '../src/utils/server-hooks';
 import TokenManager from '@accounts/token-manager';
 
@@ -95,7 +93,6 @@ describe('AccountsServer', () => {
 
   describe('loginWithUser', () => {
     it('creates a session when given a proper user object', async () => {
-      const hash = bcryptPassword('1234567');
       const user = {
         id: '123',
         username: 'username',
