@@ -1,12 +1,3 @@
-import { 
-	ConnectionInformations, 
-	ImpersonationResult, 
-	LoginResult, 
-	Tokens, 
-	TokenTransport, 
-	UserSafe  
-} from '@accounts/types';
-
 import AccountsError from '@accounts/error'
 
 import AccountsServer from '@accounts/server';
@@ -26,15 +17,11 @@ export default class TransportExpress {
 	public router: Router;
   
 	private accountsServer: AccountsServer;
-  
-	private tokenTransport: TokenTransport;
 	
 	private path: string;
 	
 
 	constructor( config: Configuration ){
-
-		this.accountsServer = config.accountsServer;
 
 		this.path = config.path || 'accounts';
 
