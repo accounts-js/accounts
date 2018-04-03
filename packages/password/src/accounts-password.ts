@@ -54,7 +54,7 @@ export default class AccountsPassword implements AuthenticationService {
     this.twoFactor = new TwoFactor(options.twoFactor);
   }
 
-  public link = (accountsServer: AccountsServer) => {
+  public link = (accountsServer: AccountsServer): ThisType<AuthenticationService> => {
     this.server = accountsServer;
     this.db = accountsServer.db;
     return this;
