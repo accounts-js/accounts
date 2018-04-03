@@ -125,7 +125,7 @@ export class AccountsServer {
     const { ip, userAgent } = infos;
 
     try {
-      const token = generateRandomToken();
+      const token = this.tokenManager.generateRandomToken();
       const sessionId = await this.db.createSession(user.id, token, {
         ip,
         userAgent,
@@ -173,7 +173,7 @@ export class AccountsServer {
       }
 
       try {
-        jwt.verify(accessToken, this.options.tokenSecret);
+        this.tokenManager.decodeToken(accessToken);
       } catch (err) {
         throw new AccountsError('Access token is not valid');
       }
@@ -213,7 +213,7 @@ export class AccountsServer {
         return { authorized: false };
       }
 
-      const token = generateRandomToken();
+      const token = this.tokenManager.generateRandomToken();
       const newSessionId = await this.db.createSession(
         impersonatedUser.id,
         token,
@@ -264,10 +264,11 @@ export class AccountsServer {
 
       let sessionToken: string;
       try {
-        jwt.verify(refreshToken, this.options.tokenSecret);
-        const decodedAccessToken = jwt.verify(accessToken, this.options.tokenSecret, {
-          ignoreExpiration: true,
-        }) as { data: JwtData };
+        this.tokenManager.decodeToken(refreshToken);
+        const decodedAccessToken: { data: JwtData } = this.tokenManager.decodeToken(
+          accessToken,
+          true
+        );
         sessionToken = decodedAccessToken.data.token;
       } catch (err) {
         throw new AccountsError('Tokens are not valid');
@@ -315,19 +316,9 @@ export class AccountsServer {
    */
   public createTokens(token: string, isImpersonated: boolean = false): Tokens {
     const { tokenSecret, tokenConfigs } = this.options;
-    const jwtData: JwtData = {
-      token,
-      isImpersonated,
-    };
-    const accessToken = generateAccessToken({
-      data: jwtData,
-      secret: tokenSecret,
-      config: tokenConfigs.accessToken || {},
-    });
-    const refreshToken = generateRefreshToken({
-      secret: tokenSecret,
-      config: tokenConfigs.refreshToken || {},
-    });
+    const jwtData: JwtData = { token, isImpersonated };
+    const accessToken = this.tokenManager.generateAccessToken(jwtData);
+    const refreshToken = this.tokenManager.generateRefreshToken();
     return { accessToken, refreshToken };
   }
 
@@ -414,9 +405,7 @@ export class AccountsServer {
 
     let sessionToken: string;
     try {
-      const decodedAccessToken = jwt.verify(accessToken, this.options.tokenSecret) as {
-        data: JwtData;
-      };
+      const decodedAccessToken: { data: JwtData } = this.tokenManager.decodeToken(accessToken);
       sessionToken = decodedAccessToken.data.token;
     } catch (err) {
       throw new AccountsError('Tokens are not valid');
