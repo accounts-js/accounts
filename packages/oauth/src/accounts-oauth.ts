@@ -14,6 +14,11 @@ export class AccountsOauth implements AuthenticationService {
     this.options = options;
   }
 
+  public link = (accountsServer: AccountsServer) => {
+    this.server = accountsServer;
+    return this;
+  }
+
   public setStore(store: DatabaseInterface) {
     this.db = store;
   }
