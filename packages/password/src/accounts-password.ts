@@ -54,6 +54,11 @@ export default class AccountsPassword implements AuthenticationService {
     this.twoFactor = new TwoFactor(options.twoFactor);
   }
 
+  public link = (accountsServer: AccountsServer) => {
+    this.server = accountsServer;
+    return this;
+  }
+
   public setStore(store: DatabaseInterface) {
     this.db = store;
     this.twoFactor.setStore(store);
