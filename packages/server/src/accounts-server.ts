@@ -44,6 +44,7 @@ const defaultOptions = {
 
 export class AccountsServer {
   public options: AccountsServerOptions;
+  public tokenManager: any;
   private services: { [key: string]: AuthenticationService };
   private db: DatabaseInterface;
   private hooks: Emittery;
@@ -53,10 +54,14 @@ export class AccountsServer {
     if (!this.options.db) {
       throw new AccountsError('A database driver is required');
     }
+    if (!this.options.tokenManager) {
+      throw new AccountsError('A tokenManager is required');
+    }
     // TODO if this.options.tokenSecret === 'secret' warm user to change it
 
     this.services = services;
     this.db = this.options.db;
+    this.tokenManager = this.options.tokenManager;
 
     // Set the db to all services
     // tslint:disable-next-line

@@ -3,6 +3,11 @@ import { AccountsServer } from '../src/accounts-server';
 import { JwtData } from '../src/types/jwt-data';
 import { bcryptPassword, hashPassword, verifyPassword } from '../src/utils/encryption';
 import { ServerHooks } from '../src/utils/server-hooks';
+import TokenManager from '@accounts/token-manager';
+
+const tokenManager = new TokenManager({
+  secret: 'secret',
+});
 
 describe('AccountsServer', () => {
   const db = {
@@ -23,6 +28,17 @@ describe('AccountsServer', () => {
     });
   });
 
+  describe('config', () => {
+    it('throws on invalid tokenManager', async () => {
+      try {
+        const account = new AccountsServer({ db: {} } as any, {});
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+  });
+
   describe('getServices', () => {
     it('should return instance services', async () => {
       const services: any = {
@@ -30,7 +46,7 @@ describe('AccountsServer', () => {
           setStore: () => null,
         },
       };
-      const account = new AccountsServer({ db: {} } as any, services);
+      const account = new AccountsServer({ db: {}, tokenManager } as any, services);
       expect(account.getServices()).toEqual(services);
     });
   });
@@ -38,7 +54,7 @@ describe('AccountsServer', () => {
   describe('loginWithService', () => {
     it('throws on invalid service', async () => {
       try {
-        const accountServer = new AccountsServer({ db: {} } as any, {});
+        const accountServer = new AccountsServer({ db: {}, tokenManager } as any, {});
         await accountServer.loginWithService('facebook', {}, {});
         throw new Error();
       } catch (err) {
@@ -49,7 +65,7 @@ describe('AccountsServer', () => {
     it('throws when user not found', async () => {
       const authenticate = jest.fn(() => Promise.resolve());
       try {
-        const accountServer = new AccountsServer({ db: {} } as any, {
+        const accountServer = new AccountsServer({ db: {}, tokenManager } as any, {
           facebook: { authenticate, setStore: jest.fn() },
         });
         await accountServer.loginWithService('facebook', {}, {});
@@ -66,6 +82,7 @@ describe('AccountsServer', () => {
         {
           db: { createSession } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {
           facebook: { authenticate, setStore: jest.fn() },
@@ -93,13 +110,16 @@ describe('AccountsServer', () => {
             createSession: () => Promise.resolve('sessionId'),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
 
       const res = await accountsServer.loginWithUser(user, {});
       const { accessToken, refreshToken } = res.tokens;
-      const decodedAccessToken: { data: JwtData } = jwtDecode(accessToken);
+      const decodedAccessToken: { data: JwtData } = accountsServer.tokenManager.decodeToken(
+        accessToken
+      );
       expect(decodedAccessToken.data.token).toBeTruthy();
       expect(accessToken).toBeTruthy();
       expect(refreshToken).toBeTruthy();
@@ -120,6 +140,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(null),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -153,6 +174,7 @@ describe('AccountsServer', () => {
             invalidateSession,
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -172,6 +194,7 @@ describe('AccountsServer', () => {
             createSession: () => '123',
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -191,6 +214,7 @@ describe('AccountsServer', () => {
             },
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -225,6 +249,7 @@ describe('AccountsServer', () => {
             invalidateSession,
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -249,6 +274,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(null),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -283,6 +309,7 @@ describe('AccountsServer', () => {
             resumeSessionValidator: () => Promise.resolve(user),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -312,6 +339,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
           resumeSessionValidator: () => Promise.resolve(user),
         },
         {}
@@ -342,6 +370,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
           resumeSessionValidator: () => Promise.resolve(user),
         },
         {}
@@ -370,6 +399,7 @@ describe('AccountsServer', () => {
               }),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -404,6 +434,7 @@ describe('AccountsServer', () => {
             updateSession: () => Promise.resolve(),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -426,6 +457,7 @@ describe('AccountsServer', () => {
         {
           db: db as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -452,6 +484,7 @@ describe('AccountsServer', () => {
             createSession: () => Promise.resolve('001'),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
           impersonationAuthorize: async (userObject, impersonateToUser) => {
             return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
@@ -499,6 +532,7 @@ describe('AccountsServer', () => {
             updateSession,
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -520,6 +554,7 @@ describe('AccountsServer', () => {
         {
           db: {} as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -535,6 +570,7 @@ describe('AccountsServer', () => {
         {
           db: {} as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -553,6 +589,7 @@ describe('AccountsServer', () => {
             findSessionByToken: () => Promise.resolve(null),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -575,6 +612,7 @@ describe('AccountsServer', () => {
               }),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -600,6 +638,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(null),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -619,6 +658,7 @@ describe('AccountsServer', () => {
         {
           db: {} as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -634,6 +674,7 @@ describe('AccountsServer', () => {
         {
           db: {} as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -651,6 +692,7 @@ describe('AccountsServer', () => {
             findSessionByToken: () => Promise.resolve(null),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -672,6 +714,7 @@ describe('AccountsServer', () => {
               }),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -692,6 +735,7 @@ describe('AccountsServer', () => {
         {
           db: { findUserById } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -715,6 +759,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(null),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -746,6 +791,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -771,6 +817,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -789,6 +836,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(null),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -817,6 +865,7 @@ describe('AccountsServer', () => {
             setProfile,
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -850,6 +899,7 @@ describe('AccountsServer', () => {
             setProfile,
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -872,6 +922,7 @@ describe('AccountsServer', () => {
         {
           db: db as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -888,6 +939,7 @@ describe('AccountsServer', () => {
         {
           db: {} as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -905,6 +957,7 @@ describe('AccountsServer', () => {
         {
           db: {} as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -931,6 +984,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(null),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -960,6 +1014,7 @@ describe('AccountsServer', () => {
             findUserByUsername: () => Promise.resolve(null),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -987,6 +1042,7 @@ describe('AccountsServer', () => {
             findUserByUsername: () => Promise.resolve(someUser),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -1010,6 +1066,8 @@ describe('AccountsServer', () => {
             findUserByUsername: () => Promise.resolve(someUser),
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
+
           impersonationAuthorize: async (userObject, impersonateToUser) => {
             return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
@@ -1042,6 +1100,8 @@ describe('AccountsServer', () => {
             createSession,
           } as any,
           tokenSecret: 'secret',
+          tokenManager,
+
           impersonationAuthorize: async (userObject, impersonateToUser) => {
             return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
@@ -1081,6 +1141,7 @@ describe('AccountsServer', () => {
         {
           db: db as any,
           tokenSecret: 'secret',
+          tokenManager,
         },
         {}
       );
@@ -1093,6 +1154,8 @@ describe('AccountsServer', () => {
         {
           db: db as any,
           tokenSecret: 'secret',
+          tokenManager,
+
           userObjectSanitizer: (user, omit) => omit(user, ['username']),
         },
         {}

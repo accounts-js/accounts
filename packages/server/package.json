@@ -58,6 +58,7 @@
   "devDependencies": {
     "@types/jsonwebtoken": "7.2.6",
     "@types/jwt-decode": "2.2.1",
-    "rimraf": "2.6.2"
+    "rimraf": "2.6.2",
+    "@accounts/token-manager": "^0.1.0-beta.10"
   }
 }
