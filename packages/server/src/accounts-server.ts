@@ -3,6 +3,7 @@ import * as omit from 'lodash/omit';
 import * as isString from 'lodash/isString';
 import * as Emittery from 'emittery';
 import { AccountsError } from '@accounts/common';
+import TokenManager from '@accounts/token-manager';
 import {
   User,
   LoginResult,
@@ -32,7 +33,7 @@ const defaultOptions = {
 
 export class AccountsServer {
   public options: AccountsServerOptions;
-  public tokenManager: any;
+  public tokenManager: TokenManager;
   private services: { [key: string]: AuthenticationService };
   private db: DatabaseInterface;
   private hooks: Emittery;

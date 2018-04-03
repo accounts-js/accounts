@@ -48,12 +48,12 @@
   "dependencies": {
     "@accounts/common": "^0.1.0-beta.10",
     "@accounts/types": "^0.1.0-beta.10",
+    "@accounts/token-manager": "^0.1.0-beta.10",
     "babel-polyfill": "^6.23.0",
     "emittery": "^0.3.0",
     "lodash": "^4.16.4"
   },
   "devDependencies": {
-    "rimraf": "2.6.2",
-    "@accounts/token-manager": "^0.1.0-beta.10"
+    "rimraf": "2.6.2"
   }
 }

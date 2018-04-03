@@ -37,7 +37,7 @@ export default class TokenManager {
     this.refreshTokenConfig = { ...defaultTokenConfig, ...defaultRefreshTokenConfig, ...config.refresh };
   }
 
-  public generateRandomToken(length: number | undefined): string {
+  public generateRandomToken(length?: number | undefined): string {
     return randomBytes(length || 43).toString('hex');
   }
 
@@ -53,7 +53,7 @@ export default class TokenManager {
     return !tokenRecord || Number(tokenRecord.when) + this.emailTokenExpiration < Date.now();
   }
 
-  public decodeToken(token: string, ignoreExpiration: boolean = false): string | object {
+  public decodeToken(token: string, ignoreExpiration: boolean = false): any {
     return jwt.verify(token, this.secret, { ignoreExpiration });
   }
 
