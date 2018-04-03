@@ -1,4 +1,5 @@
 import { TokenRecord } from '@accounts/types';
+import AccountsError from '@accounts/error';
 
 import { randomBytes } from 'crypto';
 import * as jwt from 'jsonwebtoken';
@@ -58,10 +59,10 @@ export default class TokenManager {
 
   private validateConfiguration(config: Configuration): void {
     if (!config) {
-      throw new Error('[ Accounts - TokenManager ] configuration : A configuration object is needed');
+      throw new AccountsError('TokenManager', 'configuration', 'A configuration object is needed');
     }
     if (typeof config.secret !== 'string') {
-      throw new Error('[ Accounts - TokenManager ] configuration : A string secret property is needed');
+      throw new AccountsError('TokenManager', 'configuration', 'A string secret property is needed');
     }
   }
 }

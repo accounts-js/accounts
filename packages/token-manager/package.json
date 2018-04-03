@@ -27,7 +27,8 @@
     "bcryptjs": "^2.4.0",
     "jsonwebtoken": "^8.0.0",
     "jwt-decode": "^2.1.0",
-    "@accounts/types": "^0.1.0-beta.10"
+    "@accounts/types": "^0.1.0-beta.10",
+    "@accounts/error": "^0.1.0-beta.10"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "7.2.5",
