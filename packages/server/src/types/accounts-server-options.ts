@@ -9,16 +9,6 @@ import { SendMailType } from './send-mail-type';
 export interface AccountsServerOptions {
   db: DatabaseInterface;
   tokenManager: any;
-  tokenSecret: string;
-  tokenConfigs?: {
-    accessToken?: {
-      expiresIn?: string;
-    };
-    refreshToken?: {
-      expiresIn?: string;
-    };
-  };
-  emailTokensExpiry?: number;
   emailTemplates?: EmailTemplatesType;
   userObjectSanitizer?: UserObjectSanitizerFunction;
   impersonationAuthorize?: (user: User, impersonateToUser: User) => Promise<any>;

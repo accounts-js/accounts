@@ -24,15 +24,6 @@ import { JwtData } from './types/jwt-data';
 import { EmailTemplateType } from './types/email-template-type';
 
 const defaultOptions = {
-  tokenSecret: 'secret',
-  tokenConfigs: {
-    accessToken: {
-      expiresIn: '90m',
-    },
-    refreshToken: {
-      expiresIn: '7d',
-    },
-  },
   emailTemplates,
   userObjectSanitizer: (user: User) => user,
   sendMail,
@@ -312,7 +303,6 @@ export class AccountsServer {
    * @returns {Promise<Object>} - Return a new accessToken and refreshToken.
    */
   public createTokens(token: string, isImpersonated: boolean = false): Tokens {
-    const { tokenSecret, tokenConfigs } = this.options;
     const jwtData: JwtData = { token, isImpersonated };
     const accessToken = this.tokenManager.generateAccessToken(jwtData);
     const refreshToken = this.tokenManager.generateRefreshToken();
@@ -452,10 +442,6 @@ export class AccountsServer {
       throw new AccountsError('User not found', { id: userId });
     }
     return this.db.setProfile(userId, { ...user.profile, ...profile });
-  }
-
-  public isTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
-    return !tokenRecord || Number(tokenRecord.when) + this.options.emailTokensExpiry < Date.now();
   }
 
   public prepareMail(
