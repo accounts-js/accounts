@@ -39,20 +39,28 @@ describe('AccountsServer', () => {
 
   describe('getServices', () => {
     it('should return instance services', async () => {
-      const services: any = {
-        password: {
-          setStore: () => null,
-        },
+      const passwordService = {
+        serviceName: 'password',
+        link: () => passwordService
+      }
+      const authenticationServices = [passwordService]
+
+      const expectedServices: any = {
+        password: passwordService
       };
-      const account = new AccountsServer({ db: {}, tokenManager } as any, services);
-      expect(account.getServices()).toEqual(services);
+      const account = new AccountsServer({ 
+        db: {},
+        tokenManager,
+        authenticationServices
+      } as any);
+      expect(account.getServices()).toEqual(expectedServices);
     });
   });
 
   describe('loginWithService', () => {
     it('throws on invalid service', async () => {
       try {
-        const accountServer = new AccountsServer({ db: {}, tokenManager } as any, {});
+        const accountServer = new AccountsServer({ db: {}, tokenManager } as any);
         await accountServer.loginWithService('facebook', {}, {});
         throw new Error();
       } catch (err) {
@@ -63,9 +71,13 @@ describe('AccountsServer', () => {
     it('throws when user not found', async () => {
       const authenticate = jest.fn(() => Promise.resolve());
       try {
-        const accountServer = new AccountsServer({ db: {}, tokenManager } as any, {
-          facebook: { authenticate, setStore: jest.fn() },
-        });
+        const facebookService = {
+          serviceName: 'facebook',
+          link: () => facebookService,
+          authenticate
+        }
+        const authenticationServices = [facebookService]
+        const accountServer = new AccountsServer({ db: {}, authenticationServices, tokenManager } as any);
         await accountServer.loginWithService('facebook', {}, {});
         throw new Error();
       } catch (err) {
@@ -76,16 +88,17 @@ describe('AccountsServer', () => {
     it('should return tokens', async () => {
       const authenticate = jest.fn(() => Promise.resolve({ id: 'userId' }));
       const createSession = jest.fn(() => Promise.resolve('sessionId'));
-      const accountServer = new AccountsServer(
-        {
-          db: { createSession } as any,
-          tokenSecret: 'secret',
-          tokenManager,
-        },
-        {
-          facebook: { authenticate, setStore: jest.fn() },
-        }
-      );
+      const facebookService = {
+        serviceName: 'facebook',
+        link: () => facebookService,
+        authenticate
+      }
+      const authenticationServices = [facebookService]
+      const accountServer = new AccountsServer({ 
+        db: { createSession }, 
+        authenticationServices, 
+        tokenManager
+      } as any);
       const res = await accountServer.loginWithService('facebook', {}, {});
       expect(res.tokens).toBeTruthy();
     });
@@ -101,16 +114,12 @@ describe('AccountsServer', () => {
           bio: 'bio',
         },
       };
-      const accountsServer = new AccountsServer(
-        {
-          db: {
-            createSession: () => Promise.resolve('sessionId'),
-          } as any,
-          tokenSecret: 'secret',
-          tokenManager,
-        },
-        {}
-      );
+      const accountsServer = new AccountsServer({
+        db: {
+          createSession: () => Promise.resolve('sessionId'),
+        } as any,
+        tokenManager,
+      });
 
       const res = await accountsServer.loginWithUser(user, {});
       const { accessToken, refreshToken } = res.tokens;
@@ -125,22 +134,18 @@ describe('AccountsServer', () => {
 
   describe('logout', () => {
     it('throws error if user is not found', async () => {
-      const accountsServer = new AccountsServer(
-        {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                id: '456',
-                valid: true,
-                userId: '123',
-              }),
-            findUserById: () => Promise.resolve(null),
-          } as any,
-          tokenSecret: 'secret',
-          tokenManager,
-        },
-        {}
-      );
+      const accountsServer = new AccountsServer({
+        db: {
+          findSessionByToken: () =>
+            Promise.resolve({
+              id: '456',
+              valid: true,
+              userId: '123',
+            }),
+          findUserById: () => Promise.resolve(null),
+        } as any,
+        tokenManager,
+      });
       try {
         const { accessToken } = accountsServer.createTokens('456');
         await accountsServer.logout(accessToken);
@@ -158,23 +163,19 @@ describe('AccountsServer', () => {
         username: 'username',
       };
 
-      const accountsServer = new AccountsServer(
-        {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                id: '456',
-                valid: true,
-                userId: '123',
-              }),
-            findUserById: () => Promise.resolve(user),
-            invalidateSession,
-          } as any,
-          tokenSecret: 'secret',
-          tokenManager,
-        },
-        {}
-      );
+      const accountsServer = new AccountsServer({
+        db: {
+          findSessionByToken: () =>
+            Promise.resolve({
+              id: '456',
+              valid: true,
+              userId: '123',
+            }),
+          findUserById: () => Promise.resolve(user),
+          invalidateSession,
+        } as any,
+        tokenManager,
+      });
 
       const { accessToken } = accountsServer.createTokens('456');
       await accountsServer.logout(accessToken);
@@ -190,10 +191,8 @@ describe('AccountsServer', () => {
           db: {
             createSession: () => '123',
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       accountsServer.on(ServerHooks.LoginSuccess, hookSpy);
 
@@ -210,10 +209,8 @@ describe('AccountsServer', () => {
               throw new Error('Could not create session');
             },
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       accountsServer.on(ServerHooks.LoginError, hookSpy);
 
@@ -245,10 +242,8 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             invalidateSession,
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       accountsServer.on(ServerHooks.LogoutSuccess, hookSpy);
 
@@ -270,10 +265,8 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(null),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       accountsServer.on(ServerHooks.LogoutError, hookSpy);
 
@@ -305,10 +298,8 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             resumeSessionValidator: () => Promise.resolve(user),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       accountsServer.on(ServerHooks.ResumeSessionSuccess, hookSpy);
 
@@ -335,11 +326,9 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(user),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
           resumeSessionValidator: () => Promise.resolve(user),
-        },
-        {}
+        }
       );
       accountsServer.on(ServerHooks.ResumeSessionError, hookSpy);
 
@@ -366,11 +355,9 @@ describe('AccountsServer', () => {
             findSessionByToken: () => Promise.reject(''),
             findUserById: () => Promise.resolve(user),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
           resumeSessionValidator: () => Promise.resolve(user),
-        },
-        {}
+        }
       );
       accountsServer.on(ServerHooks.ResumeSessionError, hookSpy);
 
@@ -395,10 +382,8 @@ describe('AccountsServer', () => {
                 valid: false,
               }),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       accountsServer.on(ServerHooks.RefreshTokensError, hookSpy);
 
@@ -430,10 +415,8 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             updateSession: () => Promise.resolve(),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       accountsServer.on(ServerHooks.RefreshTokensSuccess, hookSpy);
 
@@ -453,10 +436,8 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: db as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       accountsServer.on(ServerHooks.ImpersonationError, hookSpy);
 
@@ -480,13 +461,11 @@ describe('AccountsServer', () => {
             findUserById,
             createSession: () => Promise.resolve('001'),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
           impersonationAuthorize: async (userObject, impersonateToUser) => {
             return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
-        },
-        {}
+        }
       );
       const { accessToken } = accountsServer.createTokens('555');
       const hookSpy = jest.fn(() => null);
@@ -528,10 +507,8 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             updateSession,
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       const { accessToken, refreshToken } = accountsServer.createTokens('456');
       accountsServer.createTokens = () => ({
@@ -550,10 +527,8 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {} as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       try {
         await accountsServer.refreshTokens(null, null, null, null);
@@ -566,10 +541,8 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {} as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       try {
         await accountsServer.refreshTokens('bad access token', 'bad refresh token', null, null);
@@ -585,10 +558,8 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () => Promise.resolve(null),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       try {
         const { accessToken, refreshToken } = accountsServer.createTokens(null);
@@ -608,10 +579,8 @@ describe('AccountsServer', () => {
                 valid: false,
               }),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       try {
         const { accessToken, refreshToken } = accountsServer.createTokens(null);
@@ -634,10 +603,8 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(null),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       try {
         const { accessToken, refreshToken } = accountsServer.createTokens(null);
@@ -654,10 +621,8 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {} as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       try {
         await accountsServer.logout(null);
@@ -670,10 +635,8 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {} as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       try {
         await accountsServer.logout('bad access token');
@@ -688,10 +651,8 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () => Promise.resolve(null),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       try {
         const { accessToken } = accountsServer.createTokens(null);
@@ -710,10 +671,8 @@ describe('AccountsServer', () => {
                 valid: false,
               }),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       try {
         const { accessToken } = accountsServer.createTokens(null);
@@ -731,10 +690,8 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: { findUserById } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       const user = await accountsServer.findUserById('id');
       expect(findUserById.mock.calls[0]).toEqual(['id']);
@@ -755,10 +712,8 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(null),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
 
       try {
@@ -787,10 +742,8 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(user),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       const { accessToken } = accountsServer.createTokens('456');
       const ret = await accountsServer.resumeSession(accessToken);
@@ -813,10 +766,8 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(user),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
 
       const { accessToken } = accountsServer.createTokens('456');
@@ -832,10 +783,8 @@ describe('AccountsServer', () => {
           db: {
             findUserById: () => Promise.resolve(null),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       try {
         await accountsServer.setProfile(null, null);
@@ -861,10 +810,8 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             setProfile,
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
 
       await accountsServer.setProfile('123', profile);
@@ -895,10 +842,8 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             setProfile,
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
 
       const res = await accountsServer.updateProfile('123', profile);
@@ -918,10 +863,8 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: db as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       try {
         await accountsServer.impersonate(null, null, null, null);
@@ -935,10 +878,8 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {} as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
 
       try {
@@ -953,10 +894,8 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {} as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       const { accessToken } = accountsServer.createTokens('555');
 
@@ -980,10 +919,8 @@ describe('AccountsServer', () => {
           db: {
             findUserById: () => Promise.resolve(null),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       const { accessToken } = accountsServer.createTokens('555');
 
@@ -1010,10 +947,8 @@ describe('AccountsServer', () => {
             findUserById,
             findUserByUsername: () => Promise.resolve(null),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       const { accessToken } = accountsServer.createTokens('555');
 
@@ -1038,10 +973,8 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             findUserByUsername: () => Promise.resolve(someUser),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       const { accessToken } = accountsServer.createTokens('555');
 
@@ -1062,14 +995,12 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             findUserByUsername: () => Promise.resolve(someUser),
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
 
           impersonationAuthorize: async (userObject, impersonateToUser) => {
             return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
-        },
-        {}
+        }
       );
       const { accessToken } = accountsServer.createTokens('555');
 
@@ -1096,14 +1027,12 @@ describe('AccountsServer', () => {
             findUserById,
             createSession,
           } as any,
-          tokenSecret: 'secret',
           tokenManager,
 
           impersonationAuthorize: async (userObject, impersonateToUser) => {
             return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
-        },
-        {}
+        }
       );
       const { accessToken } = accountsServer.createTokens('555');
 
@@ -1137,10 +1066,8 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: db as any,
-          tokenSecret: 'secret',
           tokenManager,
-        },
-        {}
+        }
       );
       const modifiedUser = accountsServer.sanitizeUser(userObject);
       expect(modifiedUser.services).toBeUndefined();
@@ -1150,12 +1077,10 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: db as any,
-          tokenSecret: 'secret',
           tokenManager,
 
           userObjectSanitizer: (user, omit) => omit(user, ['username']),
-        },
-        {}
+        }
       );
       const modifiedUser = accountsServer.sanitizeUser(userObject);
       expect(modifiedUser.username).toBeUndefined();
