@@ -204,9 +204,9 @@ describe('AccountsPassword', () => {
 
     it('throws when token is expired', async () => {
       const findUserByResetPasswordToken = jest.fn(() => Promise.resolve(invalidUser));
-      const isTokenExpired = jest.fn(() => true);
+      const isEmailTokenExpired = jest.fn(() => true);
       password.setStore({ findUserByResetPasswordToken } as any);
-      password.server = { isTokenExpired } as any;
+      password.server = { tokenManager: { isEmailTokenExpired } } as any;
       try {
         await password.resetPassword(token, newPassword);
         throw new Error();
@@ -217,9 +217,9 @@ describe('AccountsPassword', () => {
 
     it('throws when token have invalid email', async () => {
       const findUserByResetPasswordToken = jest.fn(() => Promise.resolve(invalidUser));
-      const isTokenExpired = jest.fn(() => false);
+      const isEmailTokenExpired = jest.fn(() => false);
       password.setStore({ findUserByResetPasswordToken } as any);
-      password.server = { isTokenExpired } as any;
+      password.server = { tokenManager: { isEmailTokenExpired } } as any;
       try {
         await password.resetPassword(token, newPassword);
         throw new Error();
@@ -230,7 +230,7 @@ describe('AccountsPassword', () => {
 
     it('reset password and invalidate all sessions', async () => {
       const findUserByResetPasswordToken = jest.fn(() => Promise.resolve(validUser));
-      const isTokenExpired = jest.fn(() => false);
+      const isEmailTokenExpired = jest.fn(() => false);
       const setResetPassword = jest.fn(() => Promise.resolve());
       const invalidateAllSessions = jest.fn(() => Promise.resolve());
       password.setStore({
@@ -238,7 +238,7 @@ describe('AccountsPassword', () => {
         setResetPassword,
         invalidateAllSessions,
       } as any);
-      password.server = { isTokenExpired } as any;
+      password.server = { tokenManager: { isEmailTokenExpired } } as any;
       await password.resetPassword(token, newPassword);
       expect(setResetPassword.mock.calls.length).toBe(1);
       expect(invalidateAllSessions.mock.calls[0]).toMatchSnapshot();
@@ -307,6 +307,9 @@ describe('AccountsPassword', () => {
         prepareMail,
         options: { sendMail },
         sanitizeUser,
+        tokenManager: {
+          generateRandomToken: () => 'randomToken'
+        }
       } as any;
       set(password.server, 'options.emailTemplates', {});
       await password.sendVerificationEmail(verifiedEmail);
@@ -326,6 +329,9 @@ describe('AccountsPassword', () => {
         prepareMail,
         options: { sendMail },
         sanitizeUser,
+        tokenManager: {
+          generateRandomToken: () => 'randomToken'
+        }
       } as any;
       set(password.server, 'options.emailTemplates', {});
       await password.sendVerificationEmail(email);
@@ -372,6 +378,9 @@ describe('AccountsPassword', () => {
         options: { sendMail },
         sanitizeUser,
         getFirstUserEmail,
+        tokenManager: {
+          generateRandomToken: () => 'randomToken'
+        }
       } as any;
       set(password.server, 'options.emailTemplates', {});
       await password.sendResetPasswordEmail(email);
@@ -409,6 +418,9 @@ describe('AccountsPassword', () => {
         options: { sendMail },
         sanitizeUser,
         getFirstUserEmail,
+        tokenManager: {
+          generateRandomToken: () => 'randomToken'
+        }
       } as any;
       set(password.server, 'options.emailTemplates', {});
       await password.sendEnrollmentEmail(email);
