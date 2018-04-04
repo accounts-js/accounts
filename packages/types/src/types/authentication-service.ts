@@ -11,6 +11,7 @@ export interface AuthenticationService {
   link(accountsServer: any): ThisType<AuthenticationService>;
   setStore(store: DatabaseInterface): void;
   authenticate(params: any, connectionInfo: ConnectionInformations, provider?: OAuthProvider): Promise<User | null>;
+  useService(target: any, params: any, connectionInfo:ConnectionInformations): any;
 }
 
 export interface AuthenticationServices {
