@@ -135,10 +135,10 @@ describe('AccountsPassword', () => {
     invalidUser.emails = [];
 
     it('throws when no user is found', async () => {
-      const findUserByEmailVerificationToken = jest.fn(() => Promise.resolve());
+      const findUserByEmailVerificationToken = jest.fn(() => Promise.resolve(undefined));
       password.setStore({ findUserByEmailVerificationToken } as any);
       try {
-        await password.verifyEmail(token);
+        await password.verifyEmail({token});
         throw new Error();
       } catch (err) {
         expect(err.message).toMatchSnapshot();
@@ -149,7 +149,7 @@ describe('AccountsPassword', () => {
       const findUserByEmailVerificationToken = jest.fn(() => Promise.resolve({}));
       password.setStore({ findUserByEmailVerificationToken } as any);
       try {
-        await password.verifyEmail(token);
+        await password.verifyEmail({token});
         throw new Error();
       } catch (err) {
         expect(err.message).toMatchSnapshot();
@@ -160,7 +160,7 @@ describe('AccountsPassword', () => {
       const findUserByEmailVerificationToken = jest.fn(() => Promise.resolve(invalidUser));
       password.setStore({ findUserByEmailVerificationToken } as any);
       try {
-        await password.verifyEmail(token);
+        await password.verifyEmail({token});
         throw new Error();
       } catch (err) {
         expect(err.message).toMatchSnapshot();
@@ -174,7 +174,7 @@ describe('AccountsPassword', () => {
         findUserByEmailVerificationToken,
         verifyEmail,
       } as any);
-      await password.verifyEmail(token);
+      await password.verifyEmail({token});
       expect(verifyEmail.mock.calls[0]).toMatchSnapshot();
     });
   });
@@ -195,7 +195,7 @@ describe('AccountsPassword', () => {
       const findUserByResetPasswordToken = jest.fn(() => Promise.resolve());
       password.setStore({ findUserByResetPasswordToken } as any);
       try {
-        await password.resetPassword(token, newPassword);
+        await password.resetPassword({token, newPassword});
         throw new Error();
       } catch (err) {
         expect(err.message).toMatchSnapshot();
@@ -208,7 +208,7 @@ describe('AccountsPassword', () => {
       password.setStore({ findUserByResetPasswordToken } as any);
       password.server = { tokenManager: { isEmailTokenExpired } } as any;
       try {
-        await password.resetPassword(token, newPassword);
+        await password.resetPassword({token, newPassword});
         throw new Error();
       } catch (err) {
         expect(err.message).toMatchSnapshot();
@@ -221,7 +221,7 @@ describe('AccountsPassword', () => {
       password.setStore({ findUserByResetPasswordToken } as any);
       password.server = { tokenManager: { isEmailTokenExpired } } as any;
       try {
-        await password.resetPassword(token, newPassword);
+        await password.resetPassword({token, newPassword});
         throw new Error();
       } catch (err) {
         expect(err.message).toMatchSnapshot();
@@ -239,7 +239,7 @@ describe('AccountsPassword', () => {
         invalidateAllSessions,
       } as any);
       password.server = { tokenManager: { isEmailTokenExpired } } as any;
-      await password.resetPassword(token, newPassword);
+      await password.resetPassword({token, newPassword});
       expect(setResetPassword.mock.calls.length).toBe(1);
       expect(invalidateAllSessions.mock.calls[0]).toMatchSnapshot();
     });
@@ -250,7 +250,7 @@ describe('AccountsPassword', () => {
       const userId = 'id';
       const setPassword = jest.fn(() => Promise.resolve('user'));
       password.setStore({ setPassword } as any);
-      const user = await password.setPassword(userId, 'new-password');
+      const user = await password.setPassword({userId, newPassword:'new-password'});
       expect(setPassword.mock.calls[0][0]).toEqual(userId);
       expect(setPassword.mock.calls[0][1]).toBeTruthy();
       expect(user).toEqual('user');
@@ -267,7 +267,7 @@ describe('AccountsPassword', () => {
 
     it('throws if email is empty', async () => {
       try {
-        await password.sendVerificationEmail('');
+        await password.sendVerificationEmail({address:''});
         throw new Error();
       } catch (err) {
         expect(err.message).toMatchSnapshot();
@@ -278,7 +278,7 @@ describe('AccountsPassword', () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
       password.setStore({ findUserByEmail } as any);
       try {
-        await password.sendVerificationEmail(email);
+        await password.sendVerificationEmail({address: email});
         throw new Error();
       } catch (err) {
         expect(err.message).toMatchSnapshot();
@@ -289,7 +289,7 @@ describe('AccountsPassword', () => {
       const findUserByEmail = jest.fn(() => Promise.resolve(invalidUser));
       password.setStore({ findUserByEmail } as any);
       try {
-        await password.sendVerificationEmail(email);
+        await password.sendVerificationEmail({address: email});
         throw new Error();
       } catch (err) {
         expect(err.message).toMatchSnapshot();
@@ -312,7 +312,7 @@ describe('AccountsPassword', () => {
         }
       } as any;
       set(password.server, 'options.emailTemplates', {});
-      await password.sendVerificationEmail(verifiedEmail);
+      await password.sendVerificationEmail({address: verifiedEmail});
       expect(addEmailVerificationToken.mock.calls[0].length).toBe(3);
       expect(prepareMail.mock.calls[0].length).toBe(6);
       expect(sendMail.mock.calls[0].length).toBe(1);
@@ -334,7 +334,7 @@ describe('AccountsPassword', () => {
         }
       } as any;
       set(password.server, 'options.emailTemplates', {});
-      await password.sendVerificationEmail(email);
+      await password.sendVerificationEmail({address: email});
       expect(addEmailVerificationToken.mock.calls[0].length).toBe(3);
       expect(prepareMail.mock.calls[0].length).toBe(6);
       expect(sendMail.mock.calls[0].length).toBe(1);
@@ -347,7 +347,7 @@ describe('AccountsPassword', () => {
 
     it('throws if email is empty', async () => {
       try {
-        await password.sendResetPasswordEmail('');
+        await password.sendResetPasswordEmail({address: ''});
         throw new Error();
       } catch (err) {
         expect(err.message).toMatchSnapshot();
@@ -358,7 +358,7 @@ describe('AccountsPassword', () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
       password.setStore({ findUserByEmail } as any);
       try {
-        await password.sendResetPasswordEmail(email);
+        await password.sendResetPasswordEmail({address: email});
         throw new Error();
       } catch (err) {
         expect(err.message).toMatchSnapshot();
@@ -383,7 +383,7 @@ describe('AccountsPassword', () => {
         }
       } as any;
       set(password.server, 'options.emailTemplates', {});
-      await password.sendResetPasswordEmail(email);
+      await password.sendResetPasswordEmail({address: email});
       expect(addResetPasswordToken.mock.calls[0].length).toBe(3);
       expect(prepareMail.mock.calls[0].length).toBe(6);
       expect(sendMail.mock.calls[0].length).toBe(1);

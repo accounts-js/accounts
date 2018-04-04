@@ -87,7 +87,7 @@ export default class AccountsPassword implements AuthenticationService {
     return this[actionNameSafe](params, connectionInfo)
   }
 
-  public async authenticate(params: PasswordLoginType): Promise<User> {
+  public async authenticate(params: PasswordLoginType, connectionInfo: ConnectionInformations): Promise<User> {
     const { user, password, code } = params;
     if (!user || !password) {
       throw new Error('Unrecognized options for login request');
