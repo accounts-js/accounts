@@ -39,10 +39,10 @@ describe('AccountsOauth', () => {
 
   describe('authenticate', () => {
     it('should throw when no configuration object provided', async () => {
-      expect(()=>{ new AccountsOauth() }).toThrow();
+      expect(()=>{ new AccountsOauth().link('') }).toThrow();
     });
     it('should throw when no providers property', async () => {
-      expect(()=>{ new AccountsOauth({}) }).toThrow();
+      expect(()=>{ new AccountsOauth({}).link('') }).toThrow();
     });
 
     it('should throw if the authenticate function is not available on the provider', async () => {
