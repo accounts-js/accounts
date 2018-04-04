@@ -75,29 +75,29 @@ export class AccountsServer {
     return () => this.hooks.off(eventName, callback);
   }
 
-  public async loginWithService(
-    serviceName: string,
-    params,
-    infos: ConnectionInformations
-  ): Promise<LoginResult> {
-    if (!this.services[serviceName]) {
-      throw new Error(`No service with the name ${serviceName} was registered.`);
-    }
-    const user: User = await this.services[serviceName].authenticate(params);
-    if (!user) {
-      throw new Error(`Service ${serviceName} was not able to authenticate user`);
-    }
+  // public async loginWithService(
+  //   serviceName: string,
+  //   params,
+  //   infos: ConnectionInformations
+  // ): Promise<LoginResult> {
+  //   if (!this.services[serviceName]) {
+  //     throw new Error(`No service with the name ${serviceName} was registered.`);
+  //   }
+  //   const user: User = await this.services[serviceName].authenticate(params);
+  //   if (!user) {
+  //     throw new Error(`Service ${serviceName} was not able to authenticate user`);
+  //   }
 
-    await this.hooks.emitSerial(ServerHooks.Login, {
-      // The service name, such as “password” or “twitter”.
-      service: serviceName,
-      // The user object
-      user,
-      // The connection informations <ConnectionInformations>
-      connection: infos,
-    });
-    return this.loginWithUser(user, infos);
-  }
+  //   await this.hooks.emitSerial(ServerHooks.Login, {
+  //     // The service name, such as “password” or “twitter”.
+  //     service: serviceName,
+  //     // The user object
+  //     user,
+  //     // The connection informations <ConnectionInformations>
+  //     connection: infos,
+  //   });
+  //   return this.loginWithUser(user, infos);
+  // }
 
   /**
    * @description Server use only. This method creates a session
