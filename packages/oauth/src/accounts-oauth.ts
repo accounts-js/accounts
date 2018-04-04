@@ -1,23 +1,25 @@
-import { User, DatabaseInterface, AuthenticationService, LoginResult } from '@accounts/types';
+import { User, DatabaseInterface, AuthenticationService, LoginResult, OAuthProviders, OAuthProvider } from '@accounts/types';
 import { AccountsServer } from '@accounts/server';
 import * as requestPromise from 'request-promise';
 
-import { OAuthOptions } from './types/oauth-options';
+import { Configuration } from './types/configuration';
 
 export class AccountsOauth implements AuthenticationService {
   public server: AccountsServer;
   public serviceName = 'oauth';
   private db: DatabaseInterface;
-  private options: OAuthOptions;
-  private providers: any;
+  private providers: OAuthProviders;
   private firewall: string[] = [
     'authenticate',
     'unlink'
   ]
 
-  constructor(options: OAuthOptions) {
-    this.options = options;
-    this.providers = options.providers
+  constructor(config: Configuration) {
+    this.providers = config.providers.reduce(
+      (acc: OAuthProviders, provider: OAuthProvider) => 
+      ({ ...acc, [provider.name]: provider})
+      ,{}
+    )
   }
 
   public link = (accountsServer: AccountsServer): ThisType<AuthenticationService> => {
