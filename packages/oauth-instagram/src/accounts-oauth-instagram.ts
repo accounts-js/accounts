@@ -1,6 +1,8 @@
 import * as rp from 'request-promise';
 
 export class AccountsOAuthInstagram {
+  public name: string = 'instagram';
+  
   public async authenticate(params) {
     let data = await rp(
       `https://api.instagram.com/v1/users/self/?access_token=${params.access_token}`
