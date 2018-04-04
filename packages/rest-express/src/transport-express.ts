@@ -1,4 +1,5 @@
 import AccountsError from '@accounts/error'
+import { ConnectionInformations } from '@accounts/types'
 
 import AccountsServer from '@accounts/server';
 
@@ -40,7 +41,7 @@ export default class TransportExpress {
       .post(`/${this.path}/password/twoFactorSet`, this.userLoader, this.twoFactorSet)
       .post(`/${this.path}/password/twoFactorUnset`, this.userLoader, this.twoFactorUnset)
       // .post(`/${this.path}/oauth/:provider/callback`, this.providerCallback)
-			// .post(`/${this.path}/:service/:provider?/:action`, this.useService)
+			.post(`/${this.path}/:service/:provider?/:action`, this.useService)
   }
 
   public link = (accountsServer) => {
@@ -62,6 +63,21 @@ export default class TransportExpress {
   }
 
   private sendError = (res: Response, err: any) =>  res.status(400).json({ message: err.message });
+
+  private useService = async ( req: Request, res: Response ) => {
+    const target: any = req.params;
+    const params: any = {
+      ...(req.query || {}),
+      ...(req.body || {})
+    };
+    const connectionInfo: ConnectionInformations = getConnectionInformations(req);
+    try{
+      const result: any = await this.accountsServer.useService(target, params, connectionInfo);
+      res.json(result);
+    } catch(err) {
+      this.sendError(res, err)
+    }
+  }
 
   private impersonate = async ( req: Request, res: Response ) => {
     try {
