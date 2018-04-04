@@ -30,7 +30,7 @@ export default class TransportExpress {
 			.post(`/${this.path}/user`, this.getUser)
 			.post(`/${this.path}/refreshTokens`, this.refreshTokens)
 			.post(`/${this.path}/logout`, this.logout)
-      .post(`/${this.path}/:service/:authenticate`, this.serviceAuthenticate)
+      // .post(`/${this.path}/:service/:authenticate`, this.serviceAuthenticate)
       .post(`/${this.path}/password/register`, this.registerPassword)
       .post(`/${this.path}/password/verifyEmail`, this.verifyEmail)
       .post(`/${this.path}/password/resetPassword`, this.resetPassword)
@@ -39,7 +39,7 @@ export default class TransportExpress {
       .post(`/${this.path}/password/twoFactorSecret`, this.userLoader, this.twoFactorSecret)
       .post(`/${this.path}/password/twoFactorSet`, this.userLoader, this.twoFactorSet)
       .post(`/${this.path}/password/twoFactorUnset`, this.userLoader, this.twoFactorUnset)
-      .post(`/${this.path}/oauth/:provider/callback`, this.providerCallback)
+      // .post(`/${this.path}/oauth/:provider/callback`, this.providerCallback)
 			// .post(`/${this.path}/:service/:provider?/:action`, this.useService)
   }
 
@@ -110,19 +110,19 @@ export default class TransportExpress {
     }
   };
   
-  private serviceAuthenticate = async ( req: Request, res: Response ) => {
-    try {
-      const serviceName = req.params.service;
-      const { userAgent, ip } = getConnectionInformations(req)
-      const loggedInUser = await this.accountsServer.loginWithService(serviceName, req.body, {
-        ip,
-        userAgent,
-      });
-      res.json(loggedInUser);
-    } catch (err) {
-      this.sendError(res, err);
-    }
-  };
+  // private serviceAuthenticate = async ( req: Request, res: Response ) => {
+  //   try {
+  //     const serviceName = req.params.service;
+  //     const { userAgent, ip } = getConnectionInformations(req)
+  //     const loggedInUser = await this.accountsServer.loginWithService(serviceName, req.body, {
+  //       ip,
+  //       userAgent,
+  //     });
+  //     res.json(loggedInUser);
+  //   } catch (err) {
+  //     this.sendError(res, err);
+  //   }
+  // };
 
 
   // PASSWORD
@@ -224,24 +224,24 @@ export default class TransportExpress {
     }
   };
   
-  private providerCallback = async ( req: Request, res: Response ) => {
-    try {
-      const { userAgent, ip } = getConnectionInformations(req)
-      const loggedInUser = await this.accountsServer.loginWithService(
-        'oauth',
-        {
-          ...(req.params || {}),
-          ...(req.query || {}),
-          ...(req.body || {}),
-          ...((req as RequestWithSession).session || {}),
-        },
-        { ip, userAgent }
-      );
-      // TODO : OAUTH HOOKS ON OAUTH PACKAGE
-      res.json(loggedInUser);
-    } catch (err) {
-      this.sendError(res, err);
-    }
-  };
+  // private providerCallback = async ( req: Request, res: Response ) => {
+  //   try {
+  //     const { userAgent, ip } = getConnectionInformations(req)
+  //     const loggedInUser = await this.accountsServer.loginWithService(
+  //       'oauth',
+  //       {
+  //         ...(req.params || {}),
+  //         ...(req.query || {}),
+  //         ...(req.body || {}),
+  //         ...((req as RequestWithSession).session || {}),
+  //       },
+  //       { ip, userAgent }
+  //     );
+  //     // TODO : OAUTH HOOKS ON OAUTH PACKAGE
+  //     res.json(loggedInUser);
+  //   } catch (err) {
+  //     this.sendError(res, err);
+  //   }
+  // };
   
 }

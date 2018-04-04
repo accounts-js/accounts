@@ -38,28 +38,18 @@ describe('AccountsOauth', () => {
   });
 
   describe('authenticate', () => {
-    it('should throw invalid provider', async () => {
-      const oauth = new AccountsOauth({});
-      try {
-        await oauth.authenticate({
-          provider: 'facebook',
-        });
-      } catch (err) {
-        expect(err.message).toBe('Invalid provider');
-      }
+    it('should throw when no configuration object provided', async () => {
+      expect(()=>{ new AccountsOauth().link('') }).toThrow();
+    });
+    it('should throw when no providers property', async () => {
+      expect(()=>{ new AccountsOauth({}).link('') }).toThrow();
     });
 
-    it('should throw invalid provider if user provider was not supplied', async () => {
+    it('should throw if the authenticate function is not available on the provider', async () => {
       const oauth = new AccountsOauth({
-        facebook: {},
-      });
-      try {
-        await oauth.authenticate({
-          provider: 'facebook',
-        });
-      } catch (err) {
-        expect(err.message).toBe('Invalid provider');
-      }
+        providers: [{ name: 'facebook' }],
+      })
+      expect(oauth.useService({ provider: 'facebook', action: 'authenticate' },{},{})).rejects.toThrow();
     });
 
     it("should call provider's authenticate method in order to get the user itself", async () => {
@@ -69,16 +59,12 @@ describe('AccountsOauth', () => {
         email: 't1@matrix.com',
       }));
       const oauth = new AccountsOauth({
-        facebook: {
-          authenticate: authSpy,
-        },
+        providers: [{ name: 'facebook', authenticate: authSpy }],
       });
       oauth.setStore(mockStore);
 
-      const params = {
-        provider: 'facebook',
-      };
-      await oauth.authenticate(params);
+      const params = { accessToken: 'test' };
+      await oauth.useService({ provider: 'facebook', action: 'authenticate' },params,{})
 
       expect(authSpy).toBeCalledWith(params);
     });
@@ -90,9 +76,7 @@ describe('AccountsOauth', () => {
         email: 't1@matrix.com',
       }));
       const oauth = new AccountsOauth({
-        facebook: {
-          authenticate: authSpy,
-        },
+        providers: [{ name: 'facebook', authenticate: authSpy }],
       });
       const store = {
         ...mockStore,
@@ -102,9 +86,9 @@ describe('AccountsOauth', () => {
       oauth.setStore(store);
 
       const params = {
-        provider: 'facebook',
+        accessToken: 'test',
       };
-      await oauth.authenticate(params);
+      await oauth.useService({ provider: 'facebook', action: 'authenticate' },params,{})
 
       expect(authSpy).toBeCalledWith(params);
       expect(store.findUserByServiceId).toBeCalledWith('facebook', '312312');
@@ -119,9 +103,7 @@ describe('AccountsOauth', () => {
       };
       const authSpy = jest.fn(() => user2);
       const oauth = new AccountsOauth({
-        facebook: {
-          authenticate: authSpy,
-        },
+        providers: [{ name: 'facebook', authenticate: authSpy }],
       });
       const store = {
         ...mockStore,
@@ -136,9 +118,9 @@ describe('AccountsOauth', () => {
       oauth.setStore(store);
 
       const params = {
-        provider: 'facebook',
+        accessToken: 'test',
       };
-      await oauth.authenticate(params);
+      await oauth.useService({ provider: 'facebook', action: 'authenticate' },params,{});
 
       expect(authSpy).toBeCalledWith(params);
       expect(store.findUserByServiceId).toBeCalledWith('facebook', '2');
@@ -160,16 +142,14 @@ describe('AccountsOauth', () => {
     };
     const authSpy = jest.fn(() => userChanged);
     const oauth = new AccountsOauth({
-      facebook: {
-        authenticate: authSpy,
-      },
+      providers: [{ name: 'facebook', authenticate: authSpy }],
     });
     oauth.setStore(mockStore);
 
     const params = {
-      provider: 'facebook',
+      accessToken: 'test',
     };
-    await oauth.authenticate(params);
+    await oauth.useService({ provider: 'facebook', action: 'authenticate' },params,{});
 
     expect(authSpy).toBeCalledWith(params);
     expect(mockStore.findUserByServiceId).toBeCalledWith('facebook', '312312');
@@ -180,22 +160,20 @@ describe('AccountsOauth', () => {
 
 describe('unlink', () => {
   const oauth = new AccountsOauth({
-    facebook: {
-      authenticate: jest.fn(),
-    },
+    providers: [{ name: 'facebook' }],
   });
   oauth.setStore(mockStore);
 
   it('should throw if given wrong provider', async () => {
     try {
-      await oauth.unlink('1', 'twitter');
+      await oauth.unlink({name:'twitter'}, { userId: '1' });
     } catch (e) {
       expect(e.message).toBe('Invalid provider');
     }
   });
 
   it('should unset data of oauth provider', async () => {
-    await oauth.unlink('1', 'facebook');
+    await oauth.unlink({name:'facebook'}, { userId: '1' });
     expect(mockStore.setService).toBeCalledWith('1', 'facebook', null);
   });
 });

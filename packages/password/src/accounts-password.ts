@@ -1,5 +1,5 @@
 import { trim, isEmpty, isFunction, isString, isPlainObject, get, find, includes } from 'lodash';
-import { CreateUser, User, Login, EmailRecord, TokenRecord, DatabaseInterface, AuthenticationService } from '@accounts/types';
+import { CreateUser, User, Login, EmailRecord, TokenRecord, DatabaseInterface, AuthenticationService, ConnectionInformations } from '@accounts/types';
 import { HashAlgorithm } from '@accounts/common';
 import { TwoFactor, AccountsTwoFactorOptions } from '@accounts/two-factor';
 import { AccountsServer, getFirstUserEmail } from '@accounts/server';
@@ -49,6 +49,16 @@ export default class AccountsPassword implements AuthenticationService {
   private options: AccountsPasswordOptions;
   private db: DatabaseInterface;
 
+  private firewall: string[] = [
+    'authenticate',
+    'createUser',
+    'sendEnrollmentEmail',
+    'sendResetPasswordEmail',
+    'sendVerificationEmail',
+    'resetPassword',
+    'twoFactor'
+  ]
+
   constructor(options: AccountsPasswordOptions = {}) {
     this.options = { ...defaultOptions, ...options };
     this.twoFactor = new TwoFactor(options.twoFactor);
@@ -65,7 +75,19 @@ export default class AccountsPassword implements AuthenticationService {
     this.twoFactor.setStore(store);
   }
 
-  public async authenticate(params: PasswordLoginType): Promise<User> {
+  public useService(target: any, params: any, connectionInfo: ConnectionInformations): Promise<object> {
+    const actionName: string = target.action;
+    if(!actionName) { 
+      throw new Error('no action specified')
+    }
+    const actionNameSafe: string = this.firewall.find(safeAction => actionName === safeAction)
+    if(!actionNameSafe) {
+      throw new Error('the action is not allowed')
+    }
+    return this[actionNameSafe](params, connectionInfo)
+  }
+
+  public async authenticate(params: PasswordLoginType, connectionInfo: ConnectionInformations): Promise<User> {
     const { user, password, code } = params;
     if (!user || !password) {
       throw new Error('Unrecognized options for login request');
@@ -132,7 +154,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {string} token - The token retrieved from the verification URL.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public async verifyEmail(token: string): Promise<void> {
+  public async verifyEmail({ token } : { token: string }): Promise<void> {
     const user = await this.db.findUserByEmailVerificationToken(token);
     if (!user) {
       throw new Error('Verify email link expired');
@@ -161,7 +183,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public async resetPassword(token: string, newPassword: PasswordType): Promise<void> {
+  public async resetPassword({ token, newPassword } : { token: string, newPassword: PasswordType }): Promise<void> {
     const user = await this.db.findUserByResetPasswordToken(token);
     if (!user) {
       throw new Error('Reset password link expired');
@@ -193,7 +215,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public async setPassword(userId: string, newPassword: string): Promise<void> {
+  public async setPassword({userId, newPassword}: {userId: string, newPassword: string}): Promise<void> {
     const password = await bcryptPassword(newPassword);
     return this.db.setPassword(userId, password);
   }
@@ -205,7 +227,7 @@ export default class AccountsPassword implements AuthenticationService {
    * Defaults to the first unverified email in the list.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public async sendVerificationEmail(address: string): Promise<void> {
+  public async sendVerificationEmail({ address }: { address: string }): Promise<void> {
     if (!address) {
       throw new Error('Invalid email');
     }
@@ -240,7 +262,7 @@ export default class AccountsPassword implements AuthenticationService {
    * Defaults to the first email in the list.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public async sendResetPasswordEmail(address: string): Promise<void> {
+  public async sendResetPasswordEmail({ address }: { address: string }): Promise<void> {
     if (!address) {
       throw new Error('Invalid email');
     }
@@ -271,7 +293,7 @@ export default class AccountsPassword implements AuthenticationService {
    * Defaults to the first email in the list.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public async sendEnrollmentEmail(address: string): Promise<void> {
+  public async sendEnrollmentEmail({ address }: { address: string }): Promise<void> {
     const user = await this.db.findUserByEmail(address);
     if (!user) {
       throw new Error('User not found');

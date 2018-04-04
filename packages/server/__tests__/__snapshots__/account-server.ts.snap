@@ -3,7 +3,3 @@
 exports[`AccountsServer config throws on invalid db 1`] = `"A database driver is required"`;
 
 exports[`AccountsServer config throws on invalid tokenManager 1`] = `"A tokenManager is required"`;
-
-exports[`AccountsServer loginWithService throws on invalid service 1`] = `"No service with the name facebook was registered."`;
-
-exports[`AccountsServer loginWithService throws when user not found 1`] = `"Service facebook was not able to authenticate user"`;
