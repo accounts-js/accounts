@@ -57,53 +57,6 @@ describe('AccountsServer', () => {
     });
   });
 
-  // describe('loginWithService', () => {
-  //   it('throws on invalid service', async () => {
-  //     try {
-  //       const accountServer = new AccountsServer({ db: {}, tokenManager } as any);
-  //       await accountServer.loginWithService('facebook', {}, {});
-  //       throw new Error();
-  //     } catch (err) {
-  //       expect(err.message).toMatchSnapshot();
-  //     }
-  //   });
-
-  //   it('throws when user not found', async () => {
-  //     const authenticate = jest.fn(() => Promise.resolve());
-  //     try {
-  //       const facebookService = {
-  //         serviceName: 'facebook',
-  //         link: () => facebookService,
-  //         authenticate
-  //       }
-  //       const authenticationServices = [facebookService]
-  //       const accountServer = new AccountsServer({ db: {}, authenticationServices, tokenManager } as any);
-  //       await accountServer.loginWithService('facebook', {}, {});
-  //       throw new Error();
-  //     } catch (err) {
-  //       expect(err.message).toMatchSnapshot();
-  //     }
-  //   });
-
-  //   it('should return tokens', async () => {
-  //     const authenticate = jest.fn(() => Promise.resolve({ id: 'userId' }));
-  //     const createSession = jest.fn(() => Promise.resolve('sessionId'));
-  //     const facebookService = {
-  //       serviceName: 'facebook',
-  //       link: () => facebookService,
-  //       authenticate
-  //     }
-  //     const authenticationServices = [facebookService]
-  //     const accountServer = new AccountsServer({ 
-  //       db: { createSession }, 
-  //       authenticationServices, 
-  //       tokenManager
-  //     } as any);
-  //     const res = await accountServer.loginWithService('facebook', {}, {});
-  //     expect(res.tokens).toBeTruthy();
-  //   });
-  // });
-
   describe('loginWithUser', () => {
     it('creates a session when given a proper user object', async () => {
       const user = {
