@@ -75,6 +75,14 @@ export class AccountsServer {
     return () => this.hooks.off(eventName, callback);
   }
 
+  public useService(target: any, params: any, connectionInfo: ConnectionInformations ): any {
+		const { service, ...serviceParams } = target;
+		const authenticationService: AuthenticationService = this.services[service];
+		if(!authenticationService) {
+			throw new AccountsError(`[ Accounts - Server ] useService : Service ${service} not found`);
+    }
+		return authenticationService.useService(serviceParams, params, connectionInfo);
+	}
   // public async loginWithService(
   //   serviceName: string,
   //   params,
