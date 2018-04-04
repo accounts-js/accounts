@@ -56,9 +56,7 @@ export default class AccountsPassword implements AuthenticationService {
     'sendResetPasswordEmail',
     'sendVerificationEmail',
     'resetPassword',
-    'removeEmail',
-    'setPassword',
-    'addEmail',
+    'twoFactor'
   ]
 
   constructor(options: AccountsPasswordOptions = {}) {
