@@ -1,5 +1,15 @@
+import { 
+  CreateUser,
+  User,
+  Login,
+  EmailRecord,
+  TokenRecord,
+  DatabaseInterface,
+  AuthenticationService,
+  ConnectionInformations,
+  Message
+} from '@accounts/types';
 import { trim, isEmpty, isFunction, isString, isPlainObject, get, find, includes } from 'lodash';
-import { CreateUser, User, Login, EmailRecord, TokenRecord, DatabaseInterface, AuthenticationService, ConnectionInformations } from '@accounts/types';
 import { HashAlgorithm } from '@accounts/common';
 import { TwoFactor, AccountsTwoFactorOptions } from '@accounts/two-factor';
 import { AccountsServer, getFirstUserEmail } from '@accounts/server';
@@ -107,54 +117,11 @@ export default class AccountsPassword implements AuthenticationService {
   }
 
   /**
-   * @description Find a user by one of his emails.
-   * @param {string} email - User email.
-   * @returns {Promise<Object>} - Return a user or null if not found.
-   */
-  public findUserByEmail(email: string): Promise<User | null> {
-    return this.db.findUserByEmail(email);
-  }
-
-  /**
-   * @description Find a user by his username.
-   * @param {string} username - User username.
-   * @returns {Promise<Object>} - Return a user or null if not found.
-   */
-  public findUserByUsername(username: string): Promise<User | null> {
-    return this.db.findUserByUsername(username);
-  }
-
-  /**
-   * @description Add an email address for a user.
-   * Use this instead of directly updating the database.
-   * @param {string} userId - User id.
-   * @param {string} newEmail - A new email address for the user.
-   * @param {boolean} [verified] - Whether the new email address should be marked as verified.
-   * Defaults to false.
-   * @returns {Promise<void>} - Return a Promise.
-   */
-  public addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
-    // TODO use this.options.verifyEmail before
-    return this.db.addEmail(userId, newEmail, verified);
-  }
-
-  /**
-   * @description Remove an email address for a user.
-   * Use this instead of directly updating the database.
-   * @param {string} userId - User id.
-   * @param {string} email - The email address to remove.
-   * @returns {Promise<void>} - Return a Promise.
-   */
-  public removeEmail(userId: string, email: string): Promise<void> {
-    return this.db.removeEmail(userId, email);
-  }
-
-  /**
    * @description Marks the user's email address as verified.
    * @param {string} token - The token retrieved from the verification URL.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public async verifyEmail({ token } : { token: string }): Promise<void> {
+  public async verifyEmail({ token } : { token: string }): Promise<Message> {
     const user = await this.db.findUserByEmailVerificationToken(token);
     if (!user) {
       throw new Error('Verify email link expired');
@@ -175,6 +142,7 @@ export default class AccountsPassword implements AuthenticationService {
       throw new Error('Verify email link is for unknown address');
     }
     await this.db.verifyEmail(user.id, emailRecord.address);
+    return { message: 'Email verified' }
   }
 
   /**
@@ -183,7 +151,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public async resetPassword({ token, newPassword } : { token: string, newPassword: PasswordType }): Promise<void> {
+  public async resetPassword({ token, newPassword } : { token: string, newPassword: PasswordType }): Promise<Message> {
     const user = await this.db.findUserByResetPasswordToken(token);
     if (!user) {
       throw new Error('Reset password link expired');
@@ -207,17 +175,7 @@ export default class AccountsPassword implements AuthenticationService {
     await this.db.setResetPassword(user.id, resetTokenRecord.address, password, token);
     // Changing the password should invalidate existing sessions
     this.db.invalidateAllSessions(user.id);
-  }
-
-  /**
-   * @description Change the password for a user.
-   * @param {string} userId - User id.
-   * @param {string} newPassword - A new password for the user.
-   * @returns {Promise<void>} - Return a Promise.
-   */
-  public async setPassword({userId, newPassword}: {userId: string, newPassword: string}): Promise<void> {
-    const password = await bcryptPassword(newPassword);
-    return this.db.setPassword(userId, password);
+    return {message: 'Password Changed'}
   }
 
   /**
@@ -227,7 +185,7 @@ export default class AccountsPassword implements AuthenticationService {
    * Defaults to the first unverified email in the list.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public async sendVerificationEmail({ address }: { address: string }): Promise<void> {
+  public async sendVerificationEmail({ address }: { address: string }): Promise<Message> {
     if (!address) {
       throw new Error('Invalid email');
     }
@@ -253,6 +211,7 @@ export default class AccountsPassword implements AuthenticationService {
     );
 
     await this.server.options.sendMail(resetPasswordMail);
+    return { message: 'Email Sent' }
   }
 
   /**
@@ -262,7 +221,7 @@ export default class AccountsPassword implements AuthenticationService {
    * Defaults to the first email in the list.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public async sendResetPasswordEmail({ address }: { address: string }): Promise<void> {
+  public async sendResetPasswordEmail({ address }: { address: string }): Promise<Message> {
     if (!address) {
       throw new Error('Invalid email');
     }
@@ -284,6 +243,7 @@ export default class AccountsPassword implements AuthenticationService {
     );
 
     await this.server.options.sendMail(resetPasswordMail);
+    return { message: 'Email sent' }
   }
 
   /**
@@ -293,7 +253,7 @@ export default class AccountsPassword implements AuthenticationService {
    * Defaults to the first email in the list.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public async sendEnrollmentEmail({ address }: { address: string }): Promise<void> {
+  public async sendEnrollmentEmail({ address }: { address: string }): Promise<Message> {
     const user = await this.db.findUserByEmail(address);
     if (!user) {
       throw new Error('User not found');
@@ -312,6 +272,7 @@ export default class AccountsPassword implements AuthenticationService {
     );
 
     await this.server.options.sendMail(enrollmentMail);
+    return { message: 'Email Sent' }
   }
 
   /**
