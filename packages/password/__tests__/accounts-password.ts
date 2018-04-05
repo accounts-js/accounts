@@ -87,44 +87,6 @@ describe('AccountsPassword', () => {
     });
   });
 
-  describe('findUserByEmail', () => {
-    it('call this.db.findUserByEmail', async () => {
-      const findUserByEmail = jest.fn(() => Promise.resolve('user'));
-      password.setStore({ findUserByEmail } as any);
-      const user = await password.findUserByEmail('email');
-      expect(findUserByEmail.mock.calls[0]).toMatchSnapshot();
-      expect(user).toEqual('user');
-    });
-  });
-
-  describe('findUserByUsername', () => {
-    it('call this.db.findUserByUsername', async () => {
-      const findUserByUsername = jest.fn(() => Promise.resolve('user'));
-      password.setStore({ findUserByUsername } as any);
-      const user = await password.findUserByUsername('email');
-      expect(findUserByUsername.mock.calls[0]).toMatchSnapshot();
-      expect(user).toEqual('user');
-    });
-  });
-
-  describe('addEmail', () => {
-    it('call this.db.addEmail', async () => {
-      const addEmail = jest.fn(() => Promise.resolve());
-      password.setStore({ addEmail } as any);
-      await password.addEmail('id', 'email', true);
-      expect(addEmail.mock.calls[0]).toMatchSnapshot();
-    });
-  });
-
-  describe('removeEmail', () => {
-    it('call this.db.removeEmail', async () => {
-      const removeEmail = jest.fn(() => Promise.resolve());
-      password.setStore({ removeEmail } as any);
-      await password.removeEmail('id', 'email');
-      expect(removeEmail.mock.calls[0]).toMatchSnapshot();
-    });
-  });
-
   describe('verifyEmail', () => {
     const token = 'token';
     const validUser: any = {};
@@ -242,18 +204,6 @@ describe('AccountsPassword', () => {
       await password.resetPassword({token, newPassword});
       expect(setResetPassword.mock.calls.length).toBe(1);
       expect(invalidateAllSessions.mock.calls[0]).toMatchSnapshot();
-    });
-  });
-
-  describe('setPassword', () => {
-    it('call this.db.setPassword', async () => {
-      const userId = 'id';
-      const setPassword = jest.fn(() => Promise.resolve('user'));
-      password.setStore({ setPassword } as any);
-      const user = await password.setPassword({userId, newPassword:'new-password'});
-      expect(setPassword.mock.calls[0][0]).toEqual(userId);
-      expect(setPassword.mock.calls[0][1]).toBeTruthy();
-      expect(user).toEqual('user');
     });
   });
 

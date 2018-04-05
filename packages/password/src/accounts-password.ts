@@ -117,49 +117,6 @@ export default class AccountsPassword implements AuthenticationService {
   }
 
   /**
-   * @description Find a user by one of his emails.
-   * @param {string} email - User email.
-   * @returns {Promise<Object>} - Return a user or null if not found.
-   */
-  public findUserByEmail(email: string): Promise<User | null> {
-    return this.db.findUserByEmail(email);
-  }
-
-  /**
-   * @description Find a user by his username.
-   * @param {string} username - User username.
-   * @returns {Promise<Object>} - Return a user or null if not found.
-   */
-  public findUserByUsername(username: string): Promise<User | null> {
-    return this.db.findUserByUsername(username);
-  }
-
-  /**
-   * @description Add an email address for a user.
-   * Use this instead of directly updating the database.
-   * @param {string} userId - User id.
-   * @param {string} newEmail - A new email address for the user.
-   * @param {boolean} [verified] - Whether the new email address should be marked as verified.
-   * Defaults to false.
-   * @returns {Promise<void>} - Return a Promise.
-   */
-  public addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
-    // TODO use this.options.verifyEmail before
-    return this.db.addEmail(userId, newEmail, verified);
-  }
-
-  /**
-   * @description Remove an email address for a user.
-   * Use this instead of directly updating the database.
-   * @param {string} userId - User id.
-   * @param {string} email - The email address to remove.
-   * @returns {Promise<void>} - Return a Promise.
-   */
-  public removeEmail(userId: string, email: string): Promise<void> {
-    return this.db.removeEmail(userId, email);
-  }
-
-  /**
    * @description Marks the user's email address as verified.
    * @param {string} token - The token retrieved from the verification URL.
    * @returns {Promise<void>} - Return a Promise.
@@ -219,17 +176,6 @@ export default class AccountsPassword implements AuthenticationService {
     // Changing the password should invalidate existing sessions
     this.db.invalidateAllSessions(user.id);
     return {message: 'Password Changed'}
-  }
-
-  /**
-   * @description Change the password for a user.
-   * @param {string} userId - User id.
-   * @param {string} newPassword - A new password for the user.
-   * @returns {Promise<void>} - Return a Promise.
-   */
-  public async setPassword({userId, newPassword}: {userId: string, newPassword: string}): Promise<void> {
-    const password = await bcryptPassword(newPassword);
-    return this.db.setPassword(userId, password);
   }
 
   /**
