@@ -1,5 +1,5 @@
 import AccountsError from '@accounts/error'
-import { ConnectionInformations } from '@accounts/types'
+import { ConnectionInformations, TokenTransport } from '@accounts/types'
 
 import AccountsServer from '@accounts/server';
 
@@ -13,18 +13,26 @@ interface RequestWithSession extends Request {
   session: { [key: string]: any };
 }
 
+interface ResponseWithData extends Response {
+  toSend?: object
+}
+
 export default class TransportExpress {
 
 	public router: Router;
   
 	private accountsServer: AccountsServer;
 	
-	private path: string;
-	
+  private path: string;
+  
+  private tokenTransport: TokenTransport;
+
 
 	constructor( config: Configuration ){
 
-		this.path = config.path || 'accounts';
+    this.path = config.path || 'accounts';
+    
+    this.tokenTransport = config.tokenTransport;
 
 		this.router = Router({ mergeParams: true })
 			.post(`/${this.path}/impersonate`, this.impersonate)
@@ -40,8 +48,8 @@ export default class TransportExpress {
   }
 
   public userLoader = async ( req: Request, res: Response, next: NextFunction ) => {
-    const accessToken = req.headers['accounts-access-token'] || req.body.accessToken || undefined
-    if(accessToken == null || accessToken === false ) { return next(); }
+    const accessToken = this.tokenTransport.getAccessToken(req);
+    if(!accessToken) { return next(); }
     try {
       const user = await this.accountsServer.resumeSession(accessToken);
       (req as any).user = user;
@@ -52,7 +60,12 @@ export default class TransportExpress {
     next();
   }
 
-  private sendError = (res: Response, err: any) =>  res.status(400).json({ message: err.message });
+  private sendError = (res: Response, err: any) => res.status(400).json({ message: err.message });
+
+  private send = (res: ResponseWithData, data: object) => {
+    const bodyTokens = res.toSend || {};
+    res.json({...bodyTokens, ...data})
+  }
 
   private useService = async ( req: Request, res: Response ) => {
     const target: any = req.params;
@@ -62,8 +75,8 @@ export default class TransportExpress {
     };
     const connectionInfo: ConnectionInformations = getConnectionInformations(req);
     try{
-      const result: any = await this.accountsServer.useService(target, params, connectionInfo);
-      res.json(result);
+      const { tokens, ...data }: any = await this.accountsServer.useService(target, params, connectionInfo);
+      this.send(res, data)
     } catch(err) {
       this.sendError(res, err)
     }
@@ -71,10 +84,12 @@ export default class TransportExpress {
 
   private impersonate = async ( req: Request, res: Response ) => {
     try {
-      const { username, accessToken } = req.body;
+      const accessToken = this.tokenTransport.getAccessToken(req)
+      const { username } = req.body;
       const { userAgent, ip } = getConnectionInformations(req)
-      const impersonateRes = await this.accountsServer.impersonate(accessToken, username, ip, userAgent);
-      res.json(impersonateRes);
+      const { tokens, ...data } = await this.accountsServer.impersonate(accessToken, username, ip, userAgent);
+      this.tokenTransport.setTokens(tokens, res);
+      this.send(res, data)
     } catch (err) {
       this.sendError(res, err);
     }
@@ -82,9 +97,9 @@ export default class TransportExpress {
 
   private getUser = async ( req: Request, res: Response ) => {
     try {
-      const { accessToken } = req.body;
+      const accessToken = this.tokenTransport.getAccessToken(req)
       const user = await this.accountsServer.resumeSession(accessToken);
-      res.json(user);
+      this.send(res, user);
     } catch (err) {
       this.sendError(res, err);
     }
@@ -92,7 +107,7 @@ export default class TransportExpress {
 
   private refreshTokens = async ( req: Request, res: Response ) => {
     try {
-      const { accessToken, refreshToken } = req.body;
+      const { accessToken, refreshToken } = this.tokenTransport.getTokens(req)
       const { userAgent, ip } = getConnectionInformations(req)
       const refreshedSession = await this.accountsServer.refreshTokens(
         accessToken,
@@ -100,7 +115,9 @@ export default class TransportExpress {
         ip,
         userAgent
       );
-      res.json(refreshedSession);
+      const { tokens, ...data } = refreshedSession;
+      this.tokenTransport.setTokens(tokens, res);
+      this.send(res, data)
     } catch (err) {
       this.sendError(res, err);
     }
@@ -108,9 +125,10 @@ export default class TransportExpress {
 
   private logout = async ( req: Request, res: Response ) => {
     try {
-      const { accessToken } = req.body;
+      const accessToken = this.tokenTransport.getAccessToken(req)
       await this.accountsServer.logout(accessToken);
-      res.json({ message: 'Logged out' });
+      this.tokenTransport.removeTokens(res);
+      this.send(res, { message: 'Logged out' })
     } catch (err) {
       this.sendError(res, err);
     }
