@@ -11,10 +11,6 @@ const transportContainer = {
 }
 
 class TT {
-  constructor(ret){
-    this.getAccessToken = jest.fn(()=>ret)
-    this.getRefreshToken = jest.fn(()=>ret)
-  }
   public setAccessToken = jest.fn(()=>'true')
   public setRefreshToken = jest.fn(()=>'true')
   public setTokens = jest.fn(()=>'true')
@@ -22,6 +18,11 @@ class TT {
   public removeAccessToken = jest.fn(()=>'true')
   public removeRefreshToken = jest.fn(()=>'true')
   public removeTokens = jest.fn(()=>'true')
+
+  constructor(ret){
+    this.getAccessToken = jest.fn(()=>ret)
+    this.getRefreshToken = jest.fn(()=>ret)
+  }
 }
 
 const TTa = new TT('true');
