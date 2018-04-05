@@ -13,3 +13,4 @@ export * from './types/hook-listener';
 export * from './types/authentication-service';
 export * from './types/oauth-provider';
 export * from './types/message';
+export * from './types/token-transport';
