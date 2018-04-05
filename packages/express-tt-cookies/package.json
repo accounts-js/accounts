@@ -1,0 +1,48 @@
+{
+  "name": "@accounts/express-tokens-cookies",
+  "version": "0.1.0-beta.10",
+  "description": "Accounts-JS Express Token Transport Cookies || Allow the authentication tokens to be stored in the request cookies",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rimraf lib",
+    "start": "tsc --watch",
+    "precompile": "npm run clean",
+    "compile": "tsc",
+    "prepublishOnly": "npm run compile",
+    "test": "npm run test",
+    "testonly": "jest --coverage",
+    "coverage": "jest --coverage"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/express-tt-cookies"
+  },
+  "keywords": [
+    "accounts",
+    "express",
+    "headers",
+    "tokens"
+  ],
+  "author": "Elies Lou (Aetherall)",
+  "license": "MIT",
+  "devDependencies": {
+    "rimraf": "2.6.2"
+  },
+  "dependencies": {
+    "@accounts/types": "^0.1.0-beta.10"
+  }
+}
