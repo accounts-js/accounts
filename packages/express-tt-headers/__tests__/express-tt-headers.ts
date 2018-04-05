@@ -89,7 +89,7 @@ describe('ExpressTTHeaders', () => {
 
     it('should not call the set method on the res object if canStore returns false', () => {
       denyExpressTTHeaders.setAccessToken(accessToken, { req, res })
-      expect(res.set).not.toBeCalledWith(config.access.name, accessToken)
+      expect(res.set).not.toBeCalled()
     })
 
   })
@@ -108,7 +108,7 @@ describe('ExpressTTHeaders', () => {
 
     it('should not call the set method on the res object if canStore returns false', () => {
       denyExpressTTHeaders.setRefreshToken(refreshToken, { req, res })
-      expect(res.set).not.toBeCalledWith(config.refresh.name, refreshToken)
+      expect(res.set).not.toBeCalled()
     })
 
   })
