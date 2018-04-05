@@ -13,6 +13,10 @@ interface RequestWithSession extends Request {
   session: { [key: string]: any };
 }
 
+interface ResponseWithData extends Response {
+  toSend?: object
+}
+
 export default class TransportExpress {
 
 	public router: Router;
@@ -58,7 +62,7 @@ export default class TransportExpress {
 
   private sendError = (res: Response, err: any) => res.status(400).json({ message: err.message });
 
-  private send = (res: Response, data: object) => {
+  private send = (res: ResponseWithData, data: object) => {
     const bodyTokens = res.toSend || {};
     res.json({...bodyTokens, ...data})
   }
