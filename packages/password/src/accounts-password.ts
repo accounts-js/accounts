@@ -9,7 +9,7 @@ import {
   ConnectionInformations,
   Message
 } from '@accounts/types';
-import { trim, isEmpty, isFunction, isString, isPlainObject, get, find, includes } from 'lodash';
+import { trim, isEmpty, isFunction, isString, isPlainObject, get } from 'lodash';
 import { HashAlgorithm } from '@accounts/common';
 import { TwoFactor, AccountsTwoFactorOptions } from '@accounts/two-factor';
 import { AccountsServer, getFirstUserEmail } from '@accounts/server';
@@ -127,17 +127,13 @@ export default class AccountsPassword implements AuthenticationService {
       throw new Error('Verify email link expired');
     }
 
-    const verificationTokens: TokenRecord[] = get(
-      user,
-      ['services', 'email', 'verificationTokens'],
-      []
-    );
-    const tokenRecord = find(verificationTokens, (t: TokenRecord) => t.token === token);
+    const verificationTokens: TokenRecord[] = get(user, 'services.email.verificationTokens', []);
+    const tokenRecord = verificationTokens.find((t: TokenRecord) => t.token === token);
     if (!tokenRecord) {
       throw new Error('Verify email link expired');
     }
     // TODO check time for expiry date
-    const emailRecord = find(user.emails, (e: EmailRecord) => e.address === tokenRecord.address);
+    const emailRecord = user.emails.find((e: EmailRecord) => e.address === tokenRecord.address);
     if (!emailRecord) {
       throw new Error('Verify email link is for unknown address');
     }
@@ -158,15 +154,15 @@ export default class AccountsPassword implements AuthenticationService {
     }
 
     // TODO move this getter into a password service module
-    const resetTokens = get(user, ['services', 'password', 'reset']);
-    const resetTokenRecord = find(resetTokens, t => t.token === token);
+    const resetTokens = get(user, 'services.password.reset', []);
+    const resetTokenRecord = resetTokens.find(t => t.token === token);
 
     if (this.server.tokenManager.isEmailTokenExpired(token, resetTokenRecord)) {
       throw new Error('Reset password link expired');
     }
 
-    const emails = user.emails || [];
-    if (!includes(emails.map((email: EmailRecord) => email.address), resetTokenRecord.address)) {
+    const emails: EmailRecord[] = user.emails || [];
+    if (!emails.find((e: EmailRecord) => e.address === resetTokenRecord.address )) {
       throw new Error('Token has invalid email address');
     }
 
@@ -195,7 +191,7 @@ export default class AccountsPassword implements AuthenticationService {
     }
     // Make sure the address is valid
     const emails = user.emails || [];
-    if (!address || !includes(emails.map(email => email.address), address)) {
+    if (!emails.find((e: EmailRecord) => e.address === address )) {
       throw new Error('No such email address for user');
     }
     const token = this.server.tokenManager.generateRandomToken();
