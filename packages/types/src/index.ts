@@ -15,3 +15,4 @@ export * from './types/oauth-provider';
 export * from './types/message';
 export * from './types/token-transport';
 export * from './types/notification-service';
+export * from './types/notification-plugin';
