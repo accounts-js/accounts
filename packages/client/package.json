@@ -50,7 +50,7 @@
   "devDependencies": {
     "@types/jest": "22.2.2",
     "jest": "22.4.3",
-    "jsonwebtoken": "8.2.0",
+    "jsonwebtoken": "8.2.1",
     "lerna": "2.9.1",
     "localstorage-polyfill": "1.0.1",
     "regenerator-runtime": "0.11.1",
