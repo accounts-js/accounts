@@ -16,6 +16,8 @@ import {
   AuthenticationServices,
   ConnectionInformations,
   TokenRecord,
+  NotificationService,
+  NotificationServices,
 } from '@accounts/types';
 
 import { emailTemplates, sendMail } from './utils/email';
@@ -30,13 +32,15 @@ const defaultOptions = {
   userObjectSanitizer: (user: User) => user,
   sendMail,
   siteUrl: 'http://localhost:3000',
-  authenticationServices: []
+  authenticationServices: [],
+  notificationServices: []
 };
 
 export class AccountsServer {
   public options: AccountsServerOptions;
   public tokenManager: TokenManager;
   public db: DatabaseInterface;
+  public notificationServices: NotificationServices;
   private services: AuthenticationServices;
   private hooks: Emittery;
 
@@ -55,6 +59,11 @@ export class AccountsServer {
     this.services = this.options.authenticationServices.reduce(
       ( acc: AuthenticationServices, authenticationService: AuthenticationService ) =>
       ({ ...acc, [authenticationService.serviceName]: authenticationService.link(this) })
+    ,{})
+
+    this.notificationServices = this.options.notificationServices.reduce(
+      ( acc: NotificationServices, notificationService: NotificationService ) =>
+      ({ ...acc, [notificationService.name]: notificationService })
     ,{})
 
     // Initialize hooks
@@ -82,6 +91,14 @@ export class AccountsServer {
 			throw new AccountsError(`[ Accounts - Server ] useService : Service ${service} not found`);
     }
 		return authenticationService.useService(serviceParams, params, connectionInfo);
+  }
+  
+  public useNotificationService = ( notificationServiceName: string ) => {
+		const notificationService: NotificationService = this.notificationServices[notificationServiceName]
+		if(!notificationService){
+      throw new AccountsError(`[ Accounts - Server ] useNotificationService : notificationService ${notificationServiceName} not found`);
+    }
+		return notificationService
 	}
 
   /**
