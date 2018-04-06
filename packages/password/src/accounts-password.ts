@@ -242,20 +242,13 @@ export default class AccountsPassword implements AuthenticationService {
     if (!user) {
       throw new Error('User not found');
     }
-    address = getFirstUserEmail(user, address);
+    const trustedEmail = getFirstUserEmail(user, address);
     const token = this.server.tokenManager.generateRandomToken();
     await this.db.addResetPasswordToken(user.id, address, token, 'enroll');
 
-    const enrollmentMail = this.server.prepareMail(
-      address,
-      token,
-      this.server.sanitizeUser(user),
-      'enroll-account',
-      this.server.options.emailTemplates.enrollAccount,
-      this.server.options.emailTemplates.from
-    );
+    await this.server.useNotificationService('email')
+    .notify('password', 'enroll', { email: trustedEmail, user, token })
 
-    await this.server.options.sendMail(enrollmentMail);
     return { message: 'Email Sent' }
   }
 
