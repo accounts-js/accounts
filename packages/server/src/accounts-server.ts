@@ -140,8 +140,7 @@ export class AccountsServer {
       username?: string;
       email?: string;
     },
-    ip: string,
-    userAgent: string
+    connectionInfo: ConnectionInformations
   ): Promise<ImpersonationResult> {
     try {
       if (!isString(accessToken)) {
@@ -193,10 +192,7 @@ export class AccountsServer {
       const newSessionId = await this.db.createSession(
         impersonatedUser.id,
         token,
-        {
-          ip,
-          userAgent,
-        },
+        connectionInfo,
         { impersonatorUserId: user.id }
       );
       const impersonationTokens = this.createTokens(newSessionId, true);
@@ -230,8 +226,7 @@ export class AccountsServer {
   public async refreshTokens(
     accessToken: string,
     refreshToken: string,
-    ip: string,
-    userAgent: string
+    connectionInfo: ConnectionInformations
   ): Promise<LoginResult> {
     try {
       if (!isString(accessToken) || !isString(refreshToken)) {
@@ -261,7 +256,7 @@ export class AccountsServer {
           throw new AccountsError('User not found', { id: session.userId });
         }
         const tokens = this.createTokens(sessionToken);
-        await this.db.updateSession(session.id, { ip, userAgent });
+        await this.db.updateSession(session.id, connectionInfo);
 
         const result = {
           sessionId: session.id,
