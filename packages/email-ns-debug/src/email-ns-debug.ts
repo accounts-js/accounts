@@ -20,6 +20,7 @@ export default class EmailNotificationServiceDebug implements NotificationServic
 	}
 
 	public send = (mail: object): void => {
+    // tslint:disable-next-line
 		console.dir(mail)
 	}
 
