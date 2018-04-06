@@ -3,7 +3,7 @@ import AccountsError from '@accounts/error';
 
 import { Configuration } from './types/configuration'
 
-export default class EmailServiceMailgun implements NotificationService {
+export default class EmailNotificationServiceDebug implements NotificationService {
 
 	public name: string = 'email';
 
