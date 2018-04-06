@@ -1,7 +1,7 @@
 {
-  "name": "@accounts/email-ns-mailgun",
+  "name": "@accounts/email-ns-debug",
   "version": "0.1.0-beta.10",
-  "description": "Accounts-JS Mailgun Email Notification Service || Allow to send emails using the mailgun API",
+  "description": "Accounts-JS Debug Email Notification Service || Allow to display emails in the console",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "publishConfig": {
@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/accounts-js/accounts/tree/master/packages/email-ns-mailgun"
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/email-ns-debug"
   },
   "keywords": [
     "accounts",
@@ -44,7 +44,6 @@
   },
   "dependencies": {
     "@accounts/types": "^0.1.0-beta.10",
-    "@accounts/error": "^0.1.0-beta.10",
-    "mailgun-js": "^0.16.0"
+    "@accounts/error": "^0.1.0-beta.10"
   }
 }

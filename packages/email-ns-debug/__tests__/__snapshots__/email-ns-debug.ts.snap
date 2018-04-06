@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EmailNSMailgun notify should throw if action not found on plugin 1`] = `"[ Accounts - EmailNotificationServiceDebug ] notify : The action \\"action\\" is not found on plugin \\"password\\""`;
+
+exports[`EmailNSMailgun notify should throw if plugin not found 1`] = `"[ Accounts - EmailNotificationServiceDebug ] notify : The plugin \\"oauth\\" is not registered"`;
