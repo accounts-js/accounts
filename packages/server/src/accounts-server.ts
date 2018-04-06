@@ -65,14 +65,6 @@ export class AccountsServer {
     this.hooks = new Emittery();
   }
 
-  public getServices(): { [key: string]: AuthenticationService } {
-    return this.services;
-  }
-
-  public getOptions(): AccountsServerOptions {
-    return this.options;
-  }
-
   public on(eventName: string, callback: HookListener): () => void {
     this.hooks.on(eventName, callback);
 

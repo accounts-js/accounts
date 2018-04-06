@@ -37,26 +37,6 @@ describe('AccountsServer', () => {
     });
   });
 
-  describe('getServices', () => {
-    it('should return instance services', async () => {
-      const passwordService = {
-        serviceName: 'password',
-        link: () => passwordService
-      }
-      const authenticationServices = [passwordService]
-
-      const expectedServices: any = {
-        password: passwordService
-      };
-      const account = new AccountsServer({ 
-        db: {},
-        tokenManager,
-        authenticationServices
-      } as any);
-      expect(account.getServices()).toEqual(expectedServices);
-    });
-  });
-
   describe('loginWithUser', () => {
     it('creates a session when given a proper user object', async () => {
       const user = {
@@ -963,7 +943,7 @@ describe('AccountsServer', () => {
           userId: '123',
         } as any);
 
-      const impersonationAuthorize = accountsServer.getOptions().impersonationAuthorize;
+      const impersonationAuthorize = accountsServer.options.impersonationAuthorize;
       expect(impersonationAuthorize).toBeDefined();
 
       const res = await accountsServer.impersonate(accessToken, { userId: 'userId' }, null, null);
