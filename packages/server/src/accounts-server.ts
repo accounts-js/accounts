@@ -27,7 +27,6 @@ import { JwtData } from './types/jwt-data';
 
 const defaultOptions = {
   userObjectSanitizer: (user: User) => user,
-  siteUrl: 'http://localhost:3000',
   authenticationServices: [],
   notificationServices: []
 };
