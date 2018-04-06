@@ -16,27 +16,26 @@ import {
   AuthenticationServices,
   ConnectionInformations,
   TokenRecord,
+  NotificationService,
+  NotificationServices,
 } from '@accounts/types';
 
-import { emailTemplates, sendMail } from './utils/email';
 import { ServerHooks } from './utils/server-hooks';
 
 import { AccountsServerOptions } from './types/accounts-server-options';
 import { JwtData } from './types/jwt-data';
-import { EmailTemplateType } from './types/email-template-type';
 
 const defaultOptions = {
-  emailTemplates,
   userObjectSanitizer: (user: User) => user,
-  sendMail,
-  siteUrl: 'http://localhost:3000',
-  authenticationServices: []
+  authenticationServices: [],
+  notificationServices: []
 };
 
 export class AccountsServer {
   public options: AccountsServerOptions;
   public tokenManager: TokenManager;
   public db: DatabaseInterface;
+  public notificationServices: NotificationServices;
   private services: AuthenticationServices;
   private hooks: Emittery;
 
@@ -55,6 +54,11 @@ export class AccountsServer {
     this.services = this.options.authenticationServices.reduce(
       ( acc: AuthenticationServices, authenticationService: AuthenticationService ) =>
       ({ ...acc, [authenticationService.serviceName]: authenticationService.link(this) })
+    ,{})
+
+    this.notificationServices = this.options.notificationServices.reduce(
+      ( acc: NotificationServices, notificationService: NotificationService ) =>
+      ({ ...acc, [notificationService.name]: notificationService })
     ,{})
 
     // Initialize hooks
@@ -82,6 +86,14 @@ export class AccountsServer {
 			throw new AccountsError(`[ Accounts - Server ] useService : Service ${service} not found`);
     }
 		return authenticationService.useService(serviceParams, params, connectionInfo);
+  }
+  
+  public useNotificationService(notificationServiceName: string): NotificationService {
+		const notificationService: NotificationService = this.notificationServices[notificationServiceName]
+		if(!notificationService){
+      throw new AccountsError(`[ Accounts - Server ] useNotificationService : notificationService ${notificationServiceName} not found`);
+    }
+		return notificationService
 	}
 
   /**
@@ -428,20 +440,6 @@ export class AccountsServer {
     return this.db.setProfile(userId, { ...user.profile, ...profile });
   }
 
-  public prepareMail(
-    to: string,
-    token: string,
-    user: User,
-    pathFragment: string,
-    emailTemplate: EmailTemplateType,
-    from: string
-  ): any {
-    if (this.options.prepareMail) {
-      return this.options.prepareMail(to, token, user, pathFragment, emailTemplate, from);
-    }
-    return this.defaultPrepareEmail(to, token, user, pathFragment, emailTemplate, from);
-  }
-
   public sanitizeUser(user: User): User {
     const { userObjectSanitizer } = this.options;
 
@@ -450,28 +448,6 @@ export class AccountsServer {
 
   private internalUserSanitizer(user: User): User {
     return omit(user, ['services']);
-  }
-
-  private defaultPrepareEmail(
-    to: string,
-    token: string,
-    user: User,
-    pathFragment: string,
-    emailTemplate: EmailTemplateType,
-    from: string
-  ): object {
-    const tokenizedUrl = this.defaultCreateTokenizedUrl(pathFragment, token);
-    return {
-      from: emailTemplate.from || from,
-      to,
-      subject: emailTemplate.subject(user),
-      text: emailTemplate.text(user, tokenizedUrl),
-    };
-  }
-
-  private defaultCreateTokenizedUrl(pathFragment: string, token: string): string {
-    const siteUrl = this.options.siteUrl;
-    return `${siteUrl}/${pathFragment}/${token}`;
   }
 }
 

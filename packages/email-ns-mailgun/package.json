@@ -1,0 +1,50 @@
+{
+  "name": "@accounts/email-ns-mailgun",
+  "version": "0.1.0-beta.10",
+  "description": "Accounts-JS Mailgun Email Notification Service || Allow to send emails using the mailgun API",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rimraf lib",
+    "start": "tsc --watch",
+    "precompile": "npm run clean",
+    "compile": "tsc",
+    "prepublishOnly": "npm run compile",
+    "test": "npm run test",
+    "testonly": "jest --coverage",
+    "coverage": "jest --coverage"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/email-ns-mailgun"
+  },
+  "keywords": [
+    "accounts",
+    "express",
+    "headers",
+    "tokens"
+  ],
+  "author": "Elies Lou (Aetherall)",
+  "license": "MIT",
+  "devDependencies": {
+    "rimraf": "2.6.2"
+  },
+  "dependencies": {
+    "@accounts/types": "^0.1.0-beta.10",
+    "@accounts/error": "^0.1.0-beta.10",
+    "mailgun-js": "^0.16.0"
+  }
+}

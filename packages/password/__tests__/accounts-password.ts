@@ -1,6 +1,14 @@
 import { set } from 'lodash';
 import { AccountsPassword } from '../src';
 
+beforeEach(jest.clearAllMocks)
+
+const notify = jest.fn(() => Promise.resolve());
+
+const useNotificationService = () => ({
+  notify
+})
+
 describe('AccountsPassword', () => {
   const password = new AccountsPassword({});
 
@@ -249,35 +257,28 @@ describe('AccountsPassword', () => {
     it('send email to first unverified email', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve(validUser));
       const addEmailVerificationToken = jest.fn(() => Promise.resolve());
-      const prepareMail = jest.fn(() => Promise.resolve());
       const sanitizeUser = jest.fn(() => Promise.resolve());
-      const sendMail = jest.fn(() => Promise.resolve());
       password.setStore({ findUserByEmail, addEmailVerificationToken } as any);
       password.server = {
-        prepareMail,
-        options: { sendMail },
+        useNotificationService,
         sanitizeUser,
         tokenManager: {
           generateRandomToken: () => 'randomToken'
         }
       } as any;
-      set(password.server, 'options.emailTemplates', {});
+
       await password.sendVerificationEmail({address: verifiedEmail});
       expect(addEmailVerificationToken.mock.calls[0].length).toBe(3);
-      expect(prepareMail.mock.calls[0].length).toBe(6);
-      expect(sendMail.mock.calls[0].length).toBe(1);
+      expect(notify).toBeCalled()
     });
 
     it('send email', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve(validUser));
       const addEmailVerificationToken = jest.fn(() => Promise.resolve());
-      const prepareMail = jest.fn(() => Promise.resolve());
       const sanitizeUser = jest.fn(() => Promise.resolve());
-      const sendMail = jest.fn(() => Promise.resolve());
       password.setStore({ findUserByEmail, addEmailVerificationToken } as any);
       password.server = {
-        prepareMail,
-        options: { sendMail },
+        useNotificationService,
         sanitizeUser,
         tokenManager: {
           generateRandomToken: () => 'randomToken'
@@ -286,8 +287,7 @@ describe('AccountsPassword', () => {
       set(password.server, 'options.emailTemplates', {});
       await password.sendVerificationEmail({address: email});
       expect(addEmailVerificationToken.mock.calls[0].length).toBe(3);
-      expect(prepareMail.mock.calls[0].length).toBe(6);
-      expect(sendMail.mock.calls[0].length).toBe(1);
+      expect(notify).toBeCalled()
     });
   });
 
@@ -318,14 +318,11 @@ describe('AccountsPassword', () => {
     it('send email', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve(validUser));
       const addResetPasswordToken = jest.fn(() => Promise.resolve());
-      const prepareMail = jest.fn(() => Promise.resolve());
       const sanitizeUser = jest.fn(() => Promise.resolve());
-      const sendMail = jest.fn(() => Promise.resolve());
       const getFirstUserEmail = jest.fn(() => Promise.resolve(email));
       password.setStore({ findUserByEmail, addResetPasswordToken } as any);
       password.server = {
-        prepareMail,
-        options: { sendMail },
+        useNotificationService,
         sanitizeUser,
         getFirstUserEmail,
         tokenManager: {
@@ -335,8 +332,7 @@ describe('AccountsPassword', () => {
       set(password.server, 'options.emailTemplates', {});
       await password.sendResetPasswordEmail({address: email});
       expect(addResetPasswordToken.mock.calls[0].length).toBe(3);
-      expect(prepareMail.mock.calls[0].length).toBe(6);
-      expect(sendMail.mock.calls[0].length).toBe(1);
+      expect(notify).toBeCalled()
     });
   });
 
@@ -358,14 +354,11 @@ describe('AccountsPassword', () => {
     it('send email', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve(validUser));
       const addResetPasswordToken = jest.fn(() => Promise.resolve());
-      const prepareMail = jest.fn(() => Promise.resolve());
       const sanitizeUser = jest.fn(() => Promise.resolve());
-      const sendMail = jest.fn(() => Promise.resolve());
       const getFirstUserEmail = jest.fn(() => Promise.resolve(email));
       password.setStore({ findUserByEmail, addResetPasswordToken } as any);
       password.server = {
-        prepareMail,
-        options: { sendMail },
+        useNotificationService,
         sanitizeUser,
         getFirstUserEmail,
         tokenManager: {
@@ -375,8 +368,7 @@ describe('AccountsPassword', () => {
       set(password.server, 'options.emailTemplates', {});
       await password.sendEnrollmentEmail(email);
       expect(addResetPasswordToken.mock.calls[0].length).toBe(4);
-      expect(prepareMail.mock.calls[0].length).toBe(6);
-      expect(sendMail.mock.calls[0].length).toBe(1);
+      expect(notify).toBeCalled()
     });
   });
 

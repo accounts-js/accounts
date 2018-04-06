@@ -1,21 +1,14 @@
 import TokenManager from '@accounts/token-manager';
-import { User, DatabaseInterface, AuthenticationService } from '@accounts/types';
-import { EmailTemplateType } from './email-template-type';
-import { EmailTemplatesType } from './email-templates-type';
+import { User, DatabaseInterface, AuthenticationService, NotificationService } from '@accounts/types';
 import { UserObjectSanitizerFunction } from './user-object-sanitizer-function';
 import { ResumeSessionValidator } from './resume-session-validator';
-import { PrepareMailFunction } from './prepare-mail-function';
-import { SendMailType } from './send-mail-type';
 
 export interface AccountsServerOptions {
   db: DatabaseInterface;
   tokenManager: TokenManager;
   authenticationServices?: AuthenticationService[];
-  emailTemplates?: EmailTemplatesType;
+  notificationServices?: NotificationService[];
   userObjectSanitizer?: UserObjectSanitizerFunction;
   impersonationAuthorize?: (user: User, impersonateToUser: User) => Promise<any>;
-  resumeSessionValidator?: ResumeSessionValidator;
-  siteUrl?: string;
-  prepareMail?: PrepareMailFunction;
-  sendMail?: SendMailType;
+  resumeSessionValidator?: ResumeSessionValidator
 }
