@@ -20,17 +20,13 @@ import {
   NotificationServices,
 } from '@accounts/types';
 
-import { emailTemplates, sendMail } from './utils/email';
 import { ServerHooks } from './utils/server-hooks';
 
 import { AccountsServerOptions } from './types/accounts-server-options';
 import { JwtData } from './types/jwt-data';
-import { EmailTemplateType } from './types/email-template-type';
 
 const defaultOptions = {
-  emailTemplates,
   userObjectSanitizer: (user: User) => user,
-  sendMail,
   siteUrl: 'http://localhost:3000',
   authenticationServices: [],
   notificationServices: []
@@ -445,20 +441,6 @@ export class AccountsServer {
     return this.db.setProfile(userId, { ...user.profile, ...profile });
   }
 
-  public prepareMail(
-    to: string,
-    token: string,
-    user: User,
-    pathFragment: string,
-    emailTemplate: EmailTemplateType,
-    from: string
-  ): any {
-    if (this.options.prepareMail) {
-      return this.options.prepareMail(to, token, user, pathFragment, emailTemplate, from);
-    }
-    return this.defaultPrepareEmail(to, token, user, pathFragment, emailTemplate, from);
-  }
-
   public sanitizeUser(user: User): User {
     const { userObjectSanitizer } = this.options;
 
@@ -467,28 +449,6 @@ export class AccountsServer {
 
   private internalUserSanitizer(user: User): User {
     return omit(user, ['services']);
-  }
-
-  private defaultPrepareEmail(
-    to: string,
-    token: string,
-    user: User,
-    pathFragment: string,
-    emailTemplate: EmailTemplateType,
-    from: string
-  ): object {
-    const tokenizedUrl = this.defaultCreateTokenizedUrl(pathFragment, token);
-    return {
-      from: emailTemplate.from || from,
-      to,
-      subject: emailTemplate.subject(user),
-      text: emailTemplate.text(user, tokenizedUrl),
-    };
-  }
-
-  private defaultCreateTokenizedUrl(pathFragment: string, token: string): string {
-    const siteUrl = this.options.siteUrl;
-    return `${siteUrl}/${pathFragment}/${token}`;
   }
 }
 
