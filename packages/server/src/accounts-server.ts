@@ -384,15 +384,6 @@ export class AccountsServer {
   }
 
   /**
-   * @description Find a user by his id.
-   * @param {string} userId - User id.
-   * @returns {Promise<Object>} - Return a user or null if not found.
-   */
-  public findUserById(userId: string): Promise<User> {
-    return this.db.findUserById(userId);
-  }
-
-  /**
    * @description Change the profile for a user.
    * @param {string} userId - User id.
    * @param {Object} profile - The new user profile.
@@ -426,10 +417,6 @@ export class AccountsServer {
     return this.options.sanitizeUser ? this.options.sanitizeUser(userSafe) : userSafe
   }
 
-  private internalUserSanitizer(user: User): UserSafe {
-    const { services, ...userSafe } = user
-    return userSafe
-  }
 }
 
 export default AccountsServer;
