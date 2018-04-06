@@ -93,8 +93,7 @@ export class AccountsServer {
    *              without authenticating any user identity.
    *              Any authentication should happen before calling this function.
    * @param {User} userId - The user object.
-   * @param {string} ip - User's ip.
-   * @param {string} userAgent - User's client agent.
+   * @param {ConnectionInformations} connectionInfo - The user connectionInformations.
    * @returns {Promise<LoginResult>} - Session tokens and user object.
    */
   public async loginWithUser(user: User, infos: ConnectionInformations): Promise<LoginResult> {
@@ -123,8 +122,7 @@ export class AccountsServer {
    * @description Impersonate to another user.
    * @param {string} accessToken - User access token.
    * @param {object} impersonated - impersonated user.
-   * @param {string} ip - The user ip.
-   * @param {string} userAgent - User user agent.
+   * @param {ConnectionInformations} connectionInfo - The user connectionInformations.
    * @returns {Promise<Object>} - ImpersonationResult
    */
   public async impersonate(
@@ -213,8 +211,7 @@ export class AccountsServer {
    * @description Refresh a user token.
    * @param {string} accessToken - User access token.
    * @param {string} refreshToken - User refresh token.
-   * @param {string} ip - User ip.
-   * @param {string} userAgent - User user agent.
+   * @param {ConnectionInformations} connectionInfo - The user connectionInformations.
    * @returns {Promise<Object>} - LoginResult.
    */
   public async refreshTokens(
