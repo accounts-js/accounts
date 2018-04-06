@@ -1,6 +1,5 @@
 import TokenManager from '@accounts/token-manager';
-import { User, DatabaseInterface, AuthenticationService, NotificationService } from '@accounts/types';
-import { UserObjectSanitizerFunction } from './user-object-sanitizer-function';
+import { User, DatabaseInterface, AuthenticationService, NotificationService, UserSafe } from '@accounts/types';
 import { ResumeSessionValidator } from './resume-session-validator';
 
 export interface AccountsServerOptions {
@@ -8,7 +7,7 @@ export interface AccountsServerOptions {
   tokenManager: TokenManager;
   authenticationServices?: AuthenticationService[];
   notificationServices?: NotificationService[];
-  userObjectSanitizer?: UserObjectSanitizerFunction;
+  sanitizeUser?: (user: UserSafe) => UserSafe;
   impersonationAuthorize?: (user: User, impersonateToUser: User) => Promise<any>;
   resumeSessionValidator?: ResumeSessionValidator
 }

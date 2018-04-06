@@ -18,6 +18,7 @@ import {
   TokenRecord,
   NotificationService,
   NotificationServices,
+  UserSafe,
 } from '@accounts/types';
 
 import { ServerHooks } from './utils/server-hooks';
@@ -26,7 +27,6 @@ import { AccountsServerOptions } from './types/accounts-server-options';
 import { JwtData } from './types/jwt-data';
 
 const defaultOptions = {
-  userObjectSanitizer: (user: User) => user,
   authenticationServices: [],
   notificationServices: []
 };
@@ -106,16 +106,10 @@ export class AccountsServer {
         ip,
         userAgent,
       });
-      const { accessToken, refreshToken } = this.createTokens(token);
+      const tokens = this.createTokens(token);
 
-      const loginResult = {
-        sessionId,
-        user: this.sanitizeUser(user),
-        tokens: {
-          refreshToken,
-          accessToken,
-        },
-      };
+      const userSafe = this.sanitizeUser(user);
+      const loginResult = { sessionId, user: userSafe, tokens };
 
       this.hooks.emit(ServerHooks.LoginSuccess, user);
       return loginResult;
@@ -427,14 +421,14 @@ export class AccountsServer {
     return this.db.setProfile(userId, { ...user.profile, ...profile });
   }
 
-  public sanitizeUser(user: User): User {
-    const { userObjectSanitizer } = this.options;
-
-    return userObjectSanitizer(this.internalUserSanitizer(user), omit, pick);
+  public sanitizeUser(user: User): UserSafe {
+    const { services, ...userSafe } = user;
+    return this.options.sanitizeUser ? this.options.sanitizeUser(userSafe) : userSafe
   }
 
-  private internalUserSanitizer(user: User): User {
-    return omit(user, ['services']);
+  private internalUserSanitizer(user: User): UserSafe {
+    const { services, ...userSafe } = user
+    return userSafe
   }
 }
 
