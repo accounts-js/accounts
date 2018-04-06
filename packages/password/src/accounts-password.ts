@@ -201,16 +201,8 @@ export default class AccountsPassword implements AuthenticationService {
     const token = this.server.tokenManager.generateRandomToken();
     await this.db.addEmailVerificationToken(user.id, address, token);
 
-    const resetPasswordMail = this.server.prepareMail(
-      address,
-      token,
-      this.server.sanitizeUser(user),
-      'verify-email',
-      this.server.options.emailTemplates.verifyEmail,
-      this.server.options.emailTemplates.from
-    );
+    await this.server.useNotificationService('email').notify('password', 'verifyEmail', { email: address, user, token })
 
-    await this.server.options.sendMail(resetPasswordMail);
     return { message: 'Email Sent' }
   }
 
@@ -229,20 +221,12 @@ export default class AccountsPassword implements AuthenticationService {
     if (!user) {
       throw new Error('User not found');
     }
-    address = getFirstUserEmail(user, address);
+    const trustedEmail = getFirstUserEmail(user, address);
     const token = this.server.tokenManager.generateRandomToken();
     await this.db.addResetPasswordToken(user.id, address, token);
 
-    const resetPasswordMail = this.server.prepareMail(
-      address,
-      token,
-      this.server.sanitizeUser(user),
-      'reset-password',
-      this.server.options.emailTemplates.resetPassword,
-      this.server.options.emailTemplates.from
-    );
+    await this.server.useNotificationService('email').notify( 'password', 'resetPassword', { email: trustedEmail, user, token })
 
-    await this.server.options.sendMail(resetPasswordMail);
     return { message: 'Email sent' }
   }
 
