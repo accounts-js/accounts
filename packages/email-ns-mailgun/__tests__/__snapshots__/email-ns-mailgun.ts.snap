@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EmailNSMailgun notify should throw if action not found on plugin 1`] = `"[ Accounts - EmailNotificationServiceMailgun ] notify : The action \\"action\\" is not found on plugin \\"password\\""`;
+
+exports[`EmailNSMailgun notify should throw if plugin not found 1`] = `"[ Accounts - EmailNotificationServiceMailgun ] notify : The plugin \\"oauth\\" is not registered"`;
+
+exports[`EmailNSMailgun validateConfiguration should throw when no configuration object provided 1`] = `"[ Accounts - EmailNotificationServiceMailgun ] configuration : A configuration object is required"`;
+
+exports[`EmailNSMailgun validateConfiguration should throw when no plugins provided 1`] = `"[ Accounts - EmailNotificationServiceMailgun ] configuration : The configuration object should provide at least one EmailNotificationPlugin"`;
+
+exports[`EmailNSMailgun validateConfiguration should throw when no plugins provided 2`] = `"[ Accounts - EmailNotificationServiceMailgun ] configuration : The configuration object should provide at least one EmailNotificationPlugin"`;
+
+exports[`EmailNSMailgun validateConfiguration should throw when no valid mailgun config provided 1`] = `"[ Accounts - EmailNotificationServiceMailgun ] configuration : The configuration object should either provide a mailgun-js client or an apiKey and a domain"`;
+
+exports[`EmailNSMailgun validateConfiguration should throw when no valid mailgun config provided 2`] = `"[ Accounts - EmailNotificationServiceMailgun ] configuration : The configuration object should either provide a mailgun-js client or an apiKey and a domain"`;
