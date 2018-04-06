@@ -93,7 +93,7 @@ export class AccountsServer {
 		return authenticationService.useService(serviceParams, params, connectionInfo);
   }
   
-  public useNotificationService = ( notificationServiceName: string ) => {
+  public useNotificationService(notificationServiceName: string): NotificationService {
 		const notificationService: NotificationService = this.notificationServices[notificationServiceName]
 		if(!notificationService){
       throw new AccountsError(`[ Accounts - Server ] useNotificationService : notificationService ${notificationServiceName} not found`);
