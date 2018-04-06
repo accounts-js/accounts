@@ -258,10 +258,6 @@ describe('AccountsPassword', () => {
       const findUserByEmail = jest.fn(() => Promise.resolve(validUser));
       const addEmailVerificationToken = jest.fn(() => Promise.resolve());
       const sanitizeUser = jest.fn(() => Promise.resolve());
-      const notify = jest.fn(() => Promise.resolve());
-      const useNotificationService = () => ({
-        notify
-      })
       password.setStore({ findUserByEmail, addEmailVerificationToken } as any);
       password.server = {
         useNotificationService,
