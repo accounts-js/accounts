@@ -2,7 +2,7 @@ import TokenManager from '@accounts/token-manager';
 import { User, DatabaseInterface, AuthenticationService, NotificationService, UserSafe } from '@accounts/types';
 import { ResumeSessionValidator } from './resume-session-validator';
 
-export interface AccountsServerOptions {
+export interface Configuration {
   db: DatabaseInterface;
   tokenManager: TokenManager;
   authenticationServices?: AuthenticationService[];

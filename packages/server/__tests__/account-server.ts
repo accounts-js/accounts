@@ -448,7 +448,7 @@ describe('AccountsServer', () => {
         accessToken: 'newAccessToken',
         refreshToken: 'newRefreshToken',
       });
-      const res = await accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
+      const res = await accountsServer.refreshTokens(accessToken, refreshToken, { ip:'ip', userAgent:'user agent' });
       expect(updateSession.mock.calls[0]).toEqual(['456', { ip: 'ip', userAgent: 'user agent' }]);
       expect(res.user).toEqual({
         userId: '123',
@@ -614,21 +614,6 @@ describe('AccountsServer', () => {
       } catch (err) {
         expect(err.message).toEqual('Session is no longer valid');
       }
-    });
-  });
-
-  describe('findUserById', () => {
-    it('call this.db.findUserById', async () => {
-      const findUserById = jest.fn(() => Promise.resolve('user'));
-      const accountsServer = new AccountsServer(
-        {
-          db: { findUserById } as any,
-          tokenManager,
-        }
-      );
-      const user = await accountsServer.findUserById('id');
-      expect(findUserById.mock.calls[0]).toEqual(['id']);
-      expect(user).toEqual('user');
     });
   });
 
@@ -943,7 +928,7 @@ describe('AccountsServer', () => {
           userId: '123',
         } as any);
 
-      const impersonationAuthorize = accountsServer.options.impersonationAuthorize;
+      const impersonationAuthorize = accountsServer.config.impersonationAuthorize;
       expect(impersonationAuthorize).toBeDefined();
 
       const res = await accountsServer.impersonate(accessToken, { userId: 'userId' }, null, null);
@@ -996,27 +981,23 @@ describe('AccountsServer', () => {
     const userObject = { username: 'test', services: [], id: '123' };
 
     it('internal sanitizer should clean services field from the user object', () => {
-      const accountsServer = new AccountsServer(
-        {
-          db: db as any,
-          tokenManager,
-        }
-      );
+      const accountsServer = new AccountsServer({ db: db as any, tokenManager });
       const modifiedUser = accountsServer.sanitizeUser(userObject);
       expect(modifiedUser.services).toBeUndefined();
     });
 
     it('should run external sanitizier when provided one', () => {
-      const accountsServer = new AccountsServer(
-        {
-          db: db as any,
-          tokenManager,
-
-          userObjectSanitizer: (user, omit) => omit(user, ['username']),
+      const accountsServer = new AccountsServer({
+        db: db as any,
+        tokenManager,
+        sanitizeUser: (user) => {
+          const { username, ...rest } = user;
+          return rest
         }
-      );
+      });
       const modifiedUser = accountsServer.sanitizeUser(userObject);
       expect(modifiedUser.username).toBeUndefined();
+      expect(modifiedUser.services).toBeUndefined();
     });
   });
 });

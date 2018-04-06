@@ -23,40 +23,40 @@ import {
 
 import { ServerHooks } from './utils/server-hooks';
 
-import { AccountsServerOptions } from './types/accounts-server-options';
+import { Configuration } from './types/configuration';
 import { JwtData } from './types/jwt-data';
 
-const defaultOptions = {
+const defaultConfig = {
   authenticationServices: [],
   notificationServices: []
 };
 
 export class AccountsServer {
-  public options: AccountsServerOptions;
+  public config: Configuration;
   public tokenManager: TokenManager;
   public db: DatabaseInterface;
   public notificationServices: NotificationServices;
   private services: AuthenticationServices;
   private hooks: Emittery;
 
-  constructor(options: AccountsServerOptions) {
-    this.options = { ...defaultOptions, ...options };
-    if (!this.options.db) {
+  constructor(config: Configuration) {
+    this.config = { ...defaultConfig, ...config };
+    if (!this.config.db) {
       throw new AccountsError('A database driver is required');
     }
-    if (!this.options.tokenManager) {
+    if (!this.config.tokenManager) {
       throw new AccountsError('A tokenManager is required');
     }
 
-    this.db = this.options.db;
-    this.tokenManager = this.options.tokenManager;
+    this.db = this.config.db;
+    this.tokenManager = this.config.tokenManager;
 
-    this.services = this.options.authenticationServices.reduce(
+    this.services = this.config.authenticationServices.reduce(
       ( acc: AuthenticationServices, authenticationService: AuthenticationService ) =>
       ({ ...acc, [authenticationService.serviceName]: authenticationService.link(this) })
     ,{})
 
-    this.notificationServices = this.options.notificationServices.reduce(
+    this.notificationServices = this.config.notificationServices.reduce(
       ( acc: NotificationServices, notificationService: NotificationService ) =>
       ({ ...acc, [notificationService.name]: notificationService })
     ,{})
@@ -172,11 +172,11 @@ export class AccountsServer {
         throw new AccountsError(`Impersonated user not found`);
       }
 
-      if (!this.options.impersonationAuthorize) {
+      if (!this.config.impersonationAuthorize) {
         return { authorized: false };
       }
 
-      const isAuthorized = await this.options.impersonationAuthorize(user, impersonatedUser);
+      const isAuthorized = await this.config.impersonationAuthorize(user, impersonatedUser);
 
       if (!isAuthorized) {
         return { authorized: false };
@@ -331,9 +331,9 @@ export class AccountsServer {
           throw new AccountsError('User not found', { id: session.userId });
         }
 
-        if (this.options.resumeSessionValidator) {
+        if (this.config.resumeSessionValidator) {
           try {
-            await this.options.resumeSessionValidator(user, session);
+            await this.config.resumeSessionValidator(user, session);
           } catch (e) {
             throw new AccountsError(e, { id: session.userId }, 403);
           }
@@ -414,7 +414,7 @@ export class AccountsServer {
 
   public sanitizeUser(user: User): UserSafe {
     const { services, ...userSafe } = user;
-    return this.options.sanitizeUser ? this.options.sanitizeUser(userSafe) : userSafe
+    return this.config.sanitizeUser ? this.config.sanitizeUser(userSafe) : userSafe
   }
 
 }
