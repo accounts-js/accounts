@@ -20,6 +20,10 @@ const response = {
   json: () => tokens
 };
 
+const responseNoTokens = {
+  json: () => ({})
+};
+
 describe('ClientRestTTBody', () => {
 
   describe('constructor', () => {
@@ -65,15 +69,31 @@ describe('ClientRestTTBody', () => {
   describe('getAccessToken', () => {
 
     it('should get accessToken', () => {
-      expect(defaultClientRestTTBody.getAccessToken(response)).resolves.toBe(tokens)
+      expect(defaultClientRestTTBody.getAccessToken(response)).resolves.toBe(accessToken)
+    })
+
+    it('should return undefined if no accessToken in body', () => {
+      expect(defaultClientRestTTBody.getAccessToken(response, {})).resolves.toBe(undefined)
+    })
+
+    it('should return undefined if no accessToken in response body', () => {
+      expect(defaultClientRestTTBody.getAccessToken(responseNoTokens)).resolves.toBe(undefined)
     })
 
   })
 
   describe('getRefreshToken', () => {
 
-    it('should get refreshToken', () => {
-      expect(defaultClientRestTTBody.getRefreshToken(response)).resolves.toBe(tokens)
+    it('should get refreshToken from response body', () => {
+      expect(defaultClientRestTTBody.getRefreshToken(response)).resolves.toBe(refreshToken)
+    })
+
+    it('should return undefined if no refreshToken in body', () => {
+      expect(defaultClientRestTTBody.getRefreshToken(response, {})).resolves.toBe(undefined)
+    })
+
+    it('should return undefined if no refreshToken in response body', () => {
+      expect(defaultClientRestTTBody.getRefreshToken(responseNoTokens)).resolves.toBe(undefined)
     })
 
   })

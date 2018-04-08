@@ -1,8 +1,8 @@
 import { Configuration } from './types/configuration';
-import { TokenConfiguration, StrictTokenConfiguration } from './types/token-configuration';
+import { TokenConfiguration } from './types/token-configuration';
 import { Tokens } from '@accounts/types';
 
-const defaultConfig: Configuration<StrictTokenConfiguration> = {
+const defaultConfig: Configuration<TokenConfiguration> = {
   access: {
     name: 'accessToken',
     canStore: true,
@@ -15,10 +15,10 @@ const defaultConfig: Configuration<StrictTokenConfiguration> = {
 
 export default class ClientRestTTBody {
 	
-	private accessConfig: StrictTokenConfiguration;
-	private refreshConfig: StrictTokenConfiguration;
+	private accessConfig: TokenConfiguration;
+	private refreshConfig: TokenConfiguration;
 
-	constructor(config?: Configuration<TokenConfiguration>) {
+	constructor(config?: Partial<Configuration<Partial<TokenConfiguration>>>) {
     this.accessConfig = { ...defaultConfig.access, ...(config && config.access || {}) };
     this.refreshConfig = { ...defaultConfig.refresh, ...(config && config.refresh || {}) };
   }
@@ -45,20 +45,20 @@ export default class ClientRestTTBody {
     return this.setRefreshToken(updatedConfig, updatedBody, refreshToken);
 	}
 	
-	public async getAccessToken(response: Response, body?: any): Promise<string> {
+	public async getAccessToken(response: Response, body?: any): Promise<string | undefined> {
     if(body){
-      return body[this.accessConfig.name]
+      return body[this.accessConfig.name] || undefined
     }
 		const json = await response.json();
-		return json[this.accessConfig.name]
+		return json[this.accessConfig.name] || undefined
 	}
 
-	public async getRefreshToken(response: Response, body?: any): Promise<string> {
+	public async getRefreshToken(response: Response, body?: any): Promise<string | undefined> {
     if(body){
-      return body[this.refreshConfig.name]
+      return body[this.refreshConfig.name] || undefined
     }
     const json = await response.json();
-		return json[this.refreshConfig.name]
+		return json[this.refreshConfig.name] || undefined
 	}
 
 	public async getTokens(response: Response): Promise<Tokens> {
