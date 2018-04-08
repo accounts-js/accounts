@@ -2,7 +2,9 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./lib"
+    "outDir": "./lib",
+    "lib": ["es6", "es7", "dom"],
+    "strict": true,
   },
   "exclude": [
     "node_modules",

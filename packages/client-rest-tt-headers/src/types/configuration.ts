@@ -1,7 +1,7 @@
-export interface Configuration {
+export interface Configuration<T> {
 
-	accessToken: any;
+	access: T;
 
-	refreshToken: any;
+	refresh: T;
 	
 }
