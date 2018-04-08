@@ -1,7 +1,9 @@
+import { TokenConfiguration } from './token-configuration'
+
 export interface Configuration {
 
-	accessToken: any;
+	access: TokenConfiguration;
 
-	refreshToken: any;
+	refresh: TokenConfiguration;
 	
 }

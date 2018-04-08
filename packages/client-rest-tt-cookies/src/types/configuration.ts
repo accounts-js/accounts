@@ -1,7 +1,7 @@
 export interface Configuration {
 
-	accessToken: any;
+	access: any;
 
-	refreshToken: any;
+	refresh: any;
 	
 }
