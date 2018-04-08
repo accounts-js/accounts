@@ -1,23 +1,21 @@
 {
   "name": "@accounts/client",
   "version": "0.1.0-beta.10",
-  "description": "Fullstack authentication and accounts-management",
+  "description": "Accounts-JS Client",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "start": "webpack -p --config --progress --watch",
     "clean": "rimraf lib",
+    "start": "tsc --watch",
     "precompile": "npm run clean",
     "compile": "tsc",
     "prepublishOnly": "npm run compile",
-    "test": "npm run testonly",
-    "test-ci": "npm lint && npm coverage",
-    "testonly": "jest",
-    "test:watch": "jest --watch",
-    "coverage": "npm run testonly -- --coverage"
+    "test": "npm run test",
+    "testonly": "jest --coverage",
+    "coverage": "jest --coverage"
   },
   "jest": {
     "transform": {
@@ -27,42 +25,22 @@
     "moduleFileExtensions": [
       "ts",
       "js"
-    ],
-    "testEnvironment": "jsdom",
-    "mapCoverage": true
+    ]
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/js-accounts/accounts/tree/master/packages/client"
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/client"
   },
   "keywords": [
-    "rest",
-    "graphql",
-    "grant",
-    "auth",
-    "authentication",
     "accounts",
-    "users",
-    "oauth"
+    "client"
   ],
-  "author": "Tim Mikeladze",
+  "author": "Elies Lou (Aetherall)",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "22.2.2",
-    "jest": "22.4.3",
-    "jsonwebtoken": "8.2.0",
-    "lerna": "2.9.1",
-    "localstorage-polyfill": "1.0.1",
-    "regenerator-runtime": "0.11.1",
     "rimraf": "2.6.2"
   },
   "dependencies": {
-    "@accounts/common": "^0.1.0-beta.10",
-    "crypto-js": "^3.1.9-1",
-    "immutable": "^3.8.1",
-    "jwt-decode": "^2.1.0",
-    "lodash": "^4.16.4",
-    "redux": "^3.7.2",
-    "redux-immutable": "^4.0.0"
+    "@accounts/types": "^0.1.0-beta.10"
   }
 }
