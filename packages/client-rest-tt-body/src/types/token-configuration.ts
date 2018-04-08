@@ -5,3 +5,11 @@ export interface TokenConfiguration {
   canStore?: boolean;
 
 }
+
+export interface StrictTokenConfiguration {
+
+  name: string;
+
+  canStore: boolean;
+
+}

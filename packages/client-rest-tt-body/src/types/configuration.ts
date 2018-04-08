@@ -1,9 +1,9 @@
 import { TokenConfiguration } from './token-configuration'
 
-export interface Configuration {
+export interface Configuration<T> {
 
-	access: TokenConfiguration;
+	access: T;
 
-	refresh: TokenConfiguration;
+	refresh: T;
 	
 }

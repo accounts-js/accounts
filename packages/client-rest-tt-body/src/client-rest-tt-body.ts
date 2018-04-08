@@ -1,8 +1,8 @@
 import { Configuration } from './types/configuration';
-import { TokenConfiguration } from './types/token-configuration';
+import { TokenConfiguration, StrictTokenConfiguration } from './types/token-configuration';
 import { Tokens } from '@accounts/types';
 
-const defaultConfig: Configuration = {
+const defaultConfig: Configuration<StrictTokenConfiguration> = {
   access: {
     name: 'accessToken',
     canStore: true,
@@ -15,10 +15,10 @@ const defaultConfig: Configuration = {
 
 export default class ClientRestTTBody {
 	
-	private accessConfig: TokenConfiguration;
-	private refreshConfig: TokenConfiguration;
+	private accessConfig: StrictTokenConfiguration;
+	private refreshConfig: StrictTokenConfiguration;
 
-	constructor(config?: Configuration) {
+	constructor(config?: Configuration<TokenConfiguration>) {
     this.accessConfig = { ...defaultConfig.access, ...(config && config.access || {}) };
     this.refreshConfig = { ...defaultConfig.refresh, ...(config && config.refresh || {}) };
   }
