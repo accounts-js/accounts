@@ -10,19 +10,14 @@ export default class EmailNotificationServiceDebug implements NotificationServic
   private plugins: NotificationPlugins;
 	
 	constructor(config: Configuration){
-    
     // Register plugins
-		this.plugins = config.plugins.reduce(
-      (a: NotificationPlugins ,notificationPlugin: NotificationPlugin) =>
-      ({ ...a, [notificationPlugin.name]: notificationPlugin })
-		,{})
-
-	}
+    this.registerPlugins(config.plugins)
+  }
 
 	public send = (mail: object): void => {
     // tslint:disable-next-line
 		console.dir(mail)
-	}
+  }
 
 	public notify (notificationPluginName: string, actionName: string, params: object): void {
     const plugin = this.plugins[notificationPluginName];
@@ -34,6 +29,13 @@ export default class EmailNotificationServiceDebug implements NotificationServic
       throw new AccountsError('EmailNotificationServiceDebug','notify',`The action "${actionName}" is not found on plugin "${notificationPluginName}"`)
     }
     action(this.send, params);
+  }
+
+  private registerPlugins(plugins: NotificationPlugin[]): void {
+    this.plugins = plugins.reduce(
+      (a: NotificationPlugins ,notificationPlugin: NotificationPlugin) =>
+      ({ ...a, [notificationPlugin.name]: notificationPlugin })
+		,{})
   }
 
 }

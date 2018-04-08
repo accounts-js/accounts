@@ -86,8 +86,8 @@ export default class TransportExpress {
     try {
       const accessToken = this.tokenTransport.getAccessToken(req)
       const { username } = req.body;
-      const { userAgent, ip } = getConnectionInformations(req)
-      const { tokens, ...data } = await this.accountsServer.impersonate(accessToken, username, ip, userAgent);
+      const connectionInfo = getConnectionInformations(req)
+      const { tokens, ...data } = await this.accountsServer.impersonate(accessToken, username, connectionInfo);
       this.tokenTransport.setTokens(tokens, res);
       this.send(res, data)
     } catch (err) {
@@ -108,12 +108,11 @@ export default class TransportExpress {
   private refreshTokens = async ( req: Request, res: Response ) => {
     try {
       const { accessToken, refreshToken } = this.tokenTransport.getTokens(req)
-      const { userAgent, ip } = getConnectionInformations(req)
+      const connectionInfo = getConnectionInformations(req)
       const refreshedSession = await this.accountsServer.refreshTokens(
         accessToken,
         refreshToken,
-        ip,
-        userAgent
+        connectionInfo
       );
       const { tokens, ...data } = refreshedSession;
       this.tokenTransport.setTokens(tokens, res);
