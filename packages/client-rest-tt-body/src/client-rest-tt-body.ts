@@ -33,7 +33,7 @@ export default class ClientRestTTBody {
 
   public setRefreshToken(config: RequestInit, body: any, refreshToken?: string): [RequestInit, any] {
     if(this.refreshConfig.canStore && refreshToken){
-      const bodyWithRefreshToken = { ...body, [this.accessConfig.name]: refreshToken }
+      const bodyWithRefreshToken = { ...body, [this.refreshConfig.name]: refreshToken }
       return [config, bodyWithRefreshToken]
     }
     return [config, body]
@@ -45,7 +45,7 @@ export default class ClientRestTTBody {
     return this.setRefreshToken(updatedConfig, updatedBody, refreshToken);
 	}
 	
-	public async getAccessToken(response: Response, body: any): Promise<string> {
+	public async getAccessToken(response: Response, body?: any): Promise<string> {
     if(body){
       return body[this.accessConfig.name]
     }
@@ -53,7 +53,7 @@ export default class ClientRestTTBody {
 		return json[this.accessConfig.name]
 	}
 
-	public async getRefreshToken(response: Response, body: any): Promise<string> {
+	public async getRefreshToken(response: Response, body?: any): Promise<string> {
     if(body){
       return body[this.refreshConfig.name]
     }

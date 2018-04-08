@@ -1,6 +1,6 @@
 export interface TokenConfiguration {
 
-  name: string;
+  name?: string;
 
   canStore?: boolean;
 
