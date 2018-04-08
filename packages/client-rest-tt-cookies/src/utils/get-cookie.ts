@@ -11,5 +11,5 @@ export function getCookie(cname) {
           return cookie.substring(name.length, cookie.length);
       }
   }
-  return "";
+  return undefined;
 }

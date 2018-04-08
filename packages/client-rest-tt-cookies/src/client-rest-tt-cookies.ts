@@ -1,52 +1,66 @@
+import { Tokens } from '@accounts/types'
+
 import { setCookie } from './utils/set-cookie';
 import { getCookie } from './utils/get-cookie';
 
 import { Configuration } from './types/configuration';
+import { TokenConfiguration } from './types/token-configuration'
 
+const defaultConfig: Configuration<TokenConfiguration> = {
+  access: {
+    name: 'accessToken',
+    canStore: true,
+    maxAge: 1*60*60*1000
+  },
+  refresh: {
+    name: 'refreshToken',
+    canStore: true,
+    maxAge: 1*60*60*1000
+  }
+}
 
 export default class ClientRestTTCookies {
 	
-	private accessConfig: any;
-	private refreshConfig: any;
+	private accessConfig: TokenConfiguration;
+	private refreshConfig: TokenConfiguration;
 
-	constructor(config: Configuration) {
-    this.accessConfig = config.access;
-    this.refreshConfig = config.refresh;
+	constructor(config?: Partial<Configuration<Partial<TokenConfiguration>>>) {
+    this.accessConfig = { ...defaultConfig.access, ...(config && config.access || {}) };
+    this.refreshConfig = { ...defaultConfig.refresh, ...(config && config.refresh || {}) };
   }
 
-  public setAccessToken(config, accessToken){
+  public setAccessToken(config: RequestInit, body: any, accessToken?: string): [RequestInit, any] {
     if(this.accessConfig.canStore && accessToken){
-      setCookie(this.accessConfig.name, accessToken, this.accessConfig.maxAge || 1*60*60*1000)
+      setCookie(this.accessConfig.name, accessToken, this.accessConfig.maxAge)
     }
-    return config
+    return [config, body]
   }
 
-  public setRefreshToken(config, refreshToken){
+  public setRefreshToken(config: RequestInit, body: any, refreshToken?: string): [RequestInit, any] {
     if(this.refreshConfig.canStore && refreshToken){
-      setCookie(this.refreshConfig.name, refreshToken, this.refreshConfig.maxAge || 1*60*60*1000)
+      setCookie(this.refreshConfig.name, refreshToken, this.refreshConfig.maxAge)
     }
-    return config
+    return [config, body]
   }
 
-  public setTokens(config, tokens){
+  public setTokens(config: RequestInit, body:any, tokens: Tokens): [RequestInit, any] {
     const { accessToken, refreshToken } = tokens;
-    const withAccessToken = this.setAccessToken(config, accessToken);
-    const withTokens = this.setRefreshToken(config, refreshToken);
-    return withTokens
+    this.setAccessToken(config, body, accessToken);
+    this.setRefreshToken(config, body, refreshToken);
+    return [config, body]
 	}
 	
-	public async getAccessToken(){
+	public getAccessToken(): string | undefined {
 		return getCookie(this.accessConfig.name) || undefined
 	}
 
-	public async getRefreshToken(){
+	public getRefreshToken(): string | undefined {
     return getCookie(this.refreshConfig.name) || undefined
 	}
 
-	public async getTokens(response){
-    const body = await response.json;
+	public getTokens(): Tokens {
 		return {
-			accessToken: await this.getAccessToken(),
+			accessToken: this.getAccessToken(),
 			refreshToken: this.getRefreshToken()
 		}
   }
