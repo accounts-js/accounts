@@ -9,15 +9,15 @@ export default class ClientPassword {
 		return this
 	}
 
-	public login({ username, email, password }): any {
-		return this.client.fetch(['password','authenticate'], {
-			email,
-			password,
-			username
+	public login({ username, email, password }: {[key: string]: string}): any {
+		return this.client.fetch(['password','authenticate'], { 
+			username, 
+			email, 
+			password
 		});
 	};
 
-	public register({ username, email, password }): any {
+	public register({ username, email, password }: {[key: string]: string}): any {
 		return this.client.fetch(['password','register'], {
 			email,
 			password,

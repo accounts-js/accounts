@@ -13,7 +13,7 @@ export default class ClientTransportRest {
 		this.tokenTransport = config.tokenTransport
 	}
 
-	public link = client => {
+	public link = (client: any) => {
 		this.client = client;
 		return this;
 	};

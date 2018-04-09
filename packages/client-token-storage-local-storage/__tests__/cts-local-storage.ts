@@ -41,7 +41,8 @@ describe('CTSLocalStorage', () => {
     })
 
     it('should not set accessToken if invalid token', () => {
-      cts.setAccessToken(['']);
+      localStorage.reset()
+      cts.setAccessToken('');
       expect(localStorage.getItem('accessToken')).toEqual(undefined)
     })
 
@@ -55,6 +56,7 @@ describe('CTSLocalStorage', () => {
     })
 
     it('should not set refreshToken if invalid token', () => {
+      localStorage.reset()
       cts.setRefreshToken(['']);
       expect(localStorage.getItem('refreshToken')).toEqual(undefined)
     })
@@ -80,6 +82,7 @@ describe('CTSLocalStorage', () => {
     })
 
     it('should return undefined if not present', () => {
+      localStorage.reset()
       expect(cts.getAccessToken()).toEqual(undefined)
     })
 
@@ -93,6 +96,7 @@ describe('CTSLocalStorage', () => {
     })
 
     it('should return undefined if not present', () => {
+      localStorage.reset()
       expect(cts.getRefreshToken()).toEqual(undefined)
     })
 
