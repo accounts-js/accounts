@@ -10,13 +10,17 @@ class MockLocalStorage {
 
   public store = {};
 
-  public setItem = (key, value) => {
+  public setItem(key, value){
     this.store[key] = value
+  }
+
+  public removeItem(key){
+    delete this.store[key]
   }
 
   public getItem = (key) => this.store[key]
 
-  public reset = () => {
+  public reset(){
     this.store = {}
   }
 }
@@ -102,6 +106,39 @@ describe('CTSLocalStorage', () => {
       expect(cts.getTokens()).toEqual(tokens)
     })
 
+  })
+
+
+  describe('removeAccessToken', () => {
+
+    it('should remove accessToken', () => {
+      localStorage.setItem('accessToken', accessToken);
+      cts.removeAccessToken();
+      expect(localStorage.getItem('accessToken')).toBe(undefined)
+    })
+    
+  })
+
+  describe('removeRefreshToken', () => {
+
+    it('should remove refreshToken', () => {
+      localStorage.setItem('refreshToken', refreshToken);
+      cts.removeRefreshToken();
+      expect(localStorage.getItem('refreshToken')).toBe(undefined)
+    })
+    
+  })
+
+  describe('removeTokens', () => {
+
+    it('should remove both tokens', () => {
+      localStorage.setItem('accessToken', accessToken);      
+      localStorage.setItem('refreshToken', refreshToken);
+      cts.removeTokens();
+      expect(localStorage.getItem('accessToken')).toBe(undefined)
+      expect(localStorage.getItem('refreshToken')).toBe(undefined)
+    })
+    
   })
 
   describe('checkToken', () => {
