@@ -49,7 +49,7 @@ export class AccountsServer {
       throw new AccountsError('A tokenManager is required');
     }
     if (!this.config.transport) {
-      throw new AccountsError('A transport Interface is required');
+      throw new AccountsError('A transport is required');
     }
 
     this.db = this.config.db;

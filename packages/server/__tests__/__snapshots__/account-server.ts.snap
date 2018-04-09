@@ -3,3 +3,5 @@
 exports[`AccountsServer config throws on invalid db 1`] = `"A database driver is required"`;
 
 exports[`AccountsServer config throws on invalid tokenManager 1`] = `"A tokenManager is required"`;
+
+exports[`AccountsServer config throws on invalid transport 1`] = `"A transport is required"`;
