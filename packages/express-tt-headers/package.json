@@ -1,5 +1,5 @@
 {
-  "name": "@accounts/express-tokens-headers",
+  "name": "@accounts/express-tt-headers",
   "version": "0.1.0-beta.10",
   "description": "Accounts-JS Express Token Transport Headers || Allow the authentication tokens to be stored in the request headers",
   "main": "lib/index.js",

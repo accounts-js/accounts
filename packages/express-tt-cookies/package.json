@@ -1,5 +1,5 @@
 {
-  "name": "@accounts/express-tokens-cookies",
+  "name": "@accounts/express-tt-cookies",
   "version": "0.1.0-beta.10",
   "description": "Accounts-JS Express Token Transport Cookies || Allow the authentication tokens to be stored in the request cookies",
   "main": "lib/index.js",
