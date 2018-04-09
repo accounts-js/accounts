@@ -12,7 +12,7 @@ export default class AccountsClient {
 		this.userStorage = config.userStorage;
 		this.transport = config.transport.link(this);
 		this.services = config.services.reduce(
-      (services, service) => 
+      (services: any, service: any) => 
       ({ ...services, [service.name]: service.link(this) })
       ,{}
 		)
