@@ -8,8 +8,12 @@ export default class CUSInMemory {
 		this.user = config && config.initialUser || {}
 	}
 
-	public setUser(user: any): void{
+	public setUser(user: any): void {
 		this.user = user;
+	}
+
+	public clearUser(): void {
+		this.user = undefined;
 	}
 
 }

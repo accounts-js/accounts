@@ -21,4 +21,13 @@ describe('CUSInMemory', () => {
     })
 
   })
+
+  describe('clearUser', () => {
+
+    it('should clear the user property', () => {
+      cusInMemory.clearUser();
+      expect(cusInMemory.user).toBe(undefined)
+    })
+
+  })
 })
