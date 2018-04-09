@@ -3,6 +3,7 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./lib",
+    "lib": ["es6", "es7", "dom"],
     "strict": true
   },
   "exclude": [

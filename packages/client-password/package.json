@@ -1,5 +1,5 @@
 {
-  "name": "@accounts/client",
+  "name": "@accounts/client-password",
   "version": "0.1.0-beta.10",
   "description": "Accounts-JS Client",
   "main": "lib/index.js",
@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/accounts-js/accounts/tree/master/packages/client"
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/client-password"
   },
   "keywords": [
     "accounts",

@@ -3,7 +3,9 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./lib",
-    "strict": true
+    "lib": ["es6", "es7", "dom"],
+    "strict": true,
+    "noImplicitReturns": true,
   },
   "exclude": [
     "node_modules",

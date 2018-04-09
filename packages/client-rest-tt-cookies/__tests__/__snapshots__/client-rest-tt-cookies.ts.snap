@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ClientRestTTBody setAccessToken should set accessToken 1`] = `"accessToken=accessTokenTest;max-age=3600000"`;
+
+exports[`ClientRestTTBody setRefreshToken should set refreshToken 1`] = `"refreshToken=refreshTokenTest;max-age=3600000"`;
+
+exports[`ClientRestTTBody setTokens should set both Tokens 1`] = `"accessToken=accessTokenTest;max-age=3600000;refreshToken=refreshTokenTest;max-age=3600000"`;
