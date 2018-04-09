@@ -7,6 +7,7 @@ export interface Configuration {
   tokenManager: TokenManager;
   authenticationServices?: AuthenticationService[];
   notificationServices?: NotificationService[];
+  transport: any;
   sanitizeUser?: (user: UserSafe) => UserSafe;
   impersonationAuthorize?: (user: User, impersonateToUser: User) => Promise<any>;
   resumeSessionValidator?: ResumeSessionValidator

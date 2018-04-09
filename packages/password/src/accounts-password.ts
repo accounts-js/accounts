@@ -313,47 +313,6 @@ export default class AccountsPassword implements AuthenticationService {
     return this.db.createUser(proposedUserObject);
   }
 
-  private async passwordAuthenticator(
-    user: string | Login,
-    password: PasswordType
-  ): Promise<User> {
-    const { username, email, id } = isString(user)
-      ? this.toUsernameAndEmail({ user })
-      : this.toUsernameAndEmail({ ...user });
-
-    let foundUser: User;
-
-    if (id) {
-      // this._validateLoginWithField('id', user);
-      foundUser = await this.db.findUserById(id);
-    } else if (username) {
-      // this._validateLoginWithField('username', user);
-      foundUser = await this.db.findUserByUsername(username);
-    } else if (email) {
-      // this._validateLoginWithField('email', user);
-      foundUser = await this.db.findUserByEmail(email);
-    }
-
-    if (!foundUser) {
-      throw new Error('User not found');
-    }
-
-    const hash = await this.db.findPasswordHash(foundUser.id);
-    if (!hash) {
-      throw new Error('User has no password set');
-    }
-
-    const hashAlgorithm = this.options.passwordHashAlgorithm;
-    const pass: any = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
-    const isPasswordValid = await verifyPassword(pass, hash);
-
-    if (!isPasswordValid) {
-      throw new Error('Incorrect password');
-    }
-
-    return foundUser;
-  }
-
   private async hashAndBcryptPassword(password: PasswordType): Promise<string> {
     const hashAlgorithm = this.options.passwordHashAlgorithm;
     const hashedPassword: any = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;

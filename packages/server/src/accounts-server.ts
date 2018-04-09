@@ -37,6 +37,7 @@ export class AccountsServer {
   public db: DatabaseInterface;
   public notificationServices: NotificationServices;
   private services: AuthenticationServices;
+  private transport: any;
   private hooks: Emittery;
 
   constructor(config: Configuration) {
@@ -47,9 +48,13 @@ export class AccountsServer {
     if (!this.config.tokenManager) {
       throw new AccountsError('A tokenManager is required');
     }
+    if (!this.config.transport) {
+      throw new AccountsError('A transport Interface is required');
+    }
 
     this.db = this.config.db;
     this.tokenManager = this.config.tokenManager;
+    this.transport = this.config.transport.link(this)
 
     this.services = this.config.authenticationServices.reduce(
       ( acc: AuthenticationServices, authenticationService: AuthenticationService ) =>
