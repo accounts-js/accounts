@@ -1,26 +1,26 @@
-declare var window: Window;
+import { Tokens } from "@accounts/types";
 
 export default class CTSLocalStorage {
 
 	public setAccessToken = (accessToken: string): void => {
 		if(this.checkToken(accessToken)){
-			window.localStorage.setItem('accessToken', accessToken);
+			localStorage.setItem('accessToken', accessToken);
 		}
 	}
 
 	public setRefreshToken = (refreshToken: string): void => {
 		if(this.checkToken(refreshToken)){
-			window.localStorage.setItem('refreshToken', refreshToken);
+			localStorage.setItem('refreshToken', refreshToken);
 		}
 	}
 
-	public setTokens = ({ accessToken, refreshToken }) => {
+	public setTokens = ({ accessToken, refreshToken }: Tokens): void => {
 		this.setAccessToken(accessToken);
 		this.setRefreshToken(refreshToken);
 	};
 
 	public getAccessToken = (): string | undefined => {
-		const accessToken = window.localStorage.getItem('accessToken');
+		const accessToken = localStorage.getItem('accessToken');
 		if(this.checkToken(accessToken)){ 
 			return accessToken
 		}
@@ -28,19 +28,19 @@ export default class CTSLocalStorage {
 	}
 
 	public getRefreshToken = (): string | undefined => {
-		const refreshToken = window.localStorage.getItem('refreshToken');
+		const refreshToken = localStorage.getItem('refreshToken');
 		if(this.checkToken(refreshToken)){ 
 			return refreshToken
 		}
 		return undefined
 	}
 
-	public getTokens = () => ({
+	public getTokens = (): Tokens => ({
 		accessToken: this.getAccessToken(),
 		refreshToken: this.getRefreshToken()
 	});
 
-	private checkToken = (token: string) => {
+	private checkToken = (token: string): boolean => {
 		if(typeof token !== "string"){
 			return false
 		}
