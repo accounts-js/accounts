@@ -16,7 +16,7 @@ class Store {
 }
 const store = new Store()
 const cusRedux = new CUSRedux({
-  store
+  store,
 });
 
 
@@ -29,7 +29,7 @@ describe('CUSRedux', () => {
 
     it('should set initialUser config property to the user property', () => {
       const config = { initialUser: 'init', store }
-      new CUSRedux(config)
+      const temp = new CUSRedux(config)
       expect(store.state.user).toBe('init')
     })
 
