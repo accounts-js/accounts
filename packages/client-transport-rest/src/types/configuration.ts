@@ -1,6 +1,6 @@
 export interface Configuration {
 
-	url: string;
+	url?: string;
 
 	tokenTransport: any;
 }

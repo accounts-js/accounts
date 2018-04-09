@@ -1,13 +1,12 @@
 import { Configuration } from './types/configuration';
 
-
 export default class ClientTransportRest {
 
-	public url;
+	public url: string;
 
-	public client;
+	public client: any;
 
-	private tokenTransport;
+	private tokenTransport: any;
 
 	constructor(config: Configuration) {
 		this.url = config.url || '/accounts';
@@ -19,22 +18,23 @@ export default class ClientTransportRest {
 		return this;
 	};
 
-	public fetch = async (target, data) =>  {
+	public fetch = async (target: string[], data: any): Promise<any> => {
 		// Get tokens from client
 		const tokens = this.client.tokenStorage.getTokens();
 		// Get default request config
 		const fetchConfig = this.getDefaultFetchConfig()
 		// Add tokens to the request
-		const config = this.tokenTransport.setTokens(fetchConfig, tokens);
+		const [config, body] = this.tokenTransport.setTokens(fetchConfig, {}, tokens);
 		// Add the data to the request and includes the potentials body tokens
-		config.body = JSON.stringify({ ...config.body, ...data })
+		config.body = JSON.stringify({ ...body, ...data })
 		// Fetch the server
 		const response = await fetch(`${this.url}/${target.join('/')}`, config);
 		// Get the tokens from the response
 		const responseTokens = this.tokenTransport.getTokens(response.clone());
+		// Store the tokens
+		this.client.tokenStorage.setTokens(responseTokens);
 		// Get the JSON from response
-		const body = await response.json();
-		return { data: body, tokens: responseTokens }
+		return response.json();
 	}
 
 	private getDefaultFetchConfig(){
@@ -50,7 +50,4 @@ export default class ClientTransportRest {
 		}
 	}
 
-
-	
-		
 }
