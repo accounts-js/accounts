@@ -61,7 +61,7 @@ export default class AccountsPassword implements AuthenticationService {
 
   private firewall: string[] = [
     'authenticate',
-    'createUser',
+    'register',
     'sendEnrollmentEmail',
     'sendResetPasswordEmail',
     'sendVerificationEmail',
@@ -98,15 +98,39 @@ export default class AccountsPassword implements AuthenticationService {
   }
 
   public async authenticate(params: PasswordLoginType, connectionInfo: ConnectionInformations): Promise<User> {
-    const { user, password, code } = params;
-    if (!user || !password) {
-      throw new Error('Unrecognized options for login request');
+    const { username, email, id, password, code } = params;
+    if(!username || !email || !id){
+      throw new Error('No informations on user identity')
     }
-    if ((!isString(user) && !isPlainObject(user)) || !isString(password)) {
-      throw new Error('Match failed');
+    if(!password){
+      throw new Error('No password provided')
+    }
+    let foundUser;
+    if (id) {
+      // this._validateLoginWithField('id', user);
+      foundUser = await this.db.findUserById(id);
+    } else if (username) {
+      // this._validateLoginWithField('username', user);
+      foundUser = await this.db.findUserByUsername(username);
+    } else if (email) {
+      // this._validateLoginWithField('email', user);
+      foundUser = await this.db.findUserByEmail(email);
+    }
+    if (!foundUser) {
+      throw new Error('User not found');
+    }
+    const hash = await this.db.findPasswordHash(foundUser.id);
+    if (!hash) {
+      throw new Error('User has no password set');
     }
 
-    const foundUser = await this.passwordAuthenticator(user, password);
+    const hashAlgorithm = this.options.passwordHashAlgorithm;
+    const pass: any = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
+    const isPasswordValid = await verifyPassword(pass, hash);
+
+    if (!isPasswordValid) {
+      throw new Error('Incorrect password');
+    }
 
     // If user activated two factor authentication try with the code
     if (this.twoFactor.getUserService(foundUser)) {
@@ -253,7 +277,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @param user - The user object.
    * @returns Return the id of user created.
    */
-  public async createUser(user: PasswordCreateUserType): Promise<string> {
+  public async register(user: PasswordCreateUserType): Promise<string> {
     if (!this.options.validateUsername(user.username) && !this.options.validateEmail(user.email)) {
       throw new Error('Username or Email is required');
     }
