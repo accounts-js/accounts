@@ -6,5 +6,5 @@ export interface Configuration {
 
 	transport: any;
 	
-	strategies: any;
+	services: any;
 }

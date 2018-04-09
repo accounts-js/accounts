@@ -5,59 +5,58 @@ export default class AccountsClient {
 	public transport: any;
 	public tokenStorage: any;
 	public userStorage: any;
-	public strategies: any;
+	public services: any;
 	
 	constructor(config: Configuration) {
 		this.tokenStorage = config.tokenStorage;
 		this.userStorage = config.userStorage;
 		this.transport = config.transport.link(this);
-		this.strategies = config.strategies.reduce(
-      (strategies, strategy) => 
-      ({ ...strategies, [strategy.name]: strategy.link(this) })
+		this.services = config.services.reduce(
+      (services, service) => 
+      ({ ...services, [service.name]: service.link(this) })
       ,{}
 		)
 	}
 
-	public use = (strategyName) => this.strategies[strategyName];
+	public use(name: string): any {
+		return this.services[name];
+	}
 
-	public refreshTokens = async () => {
-		const response = await this.fetch(['refreshTokens'],{})
-		return this.handleResponse(response)
+	public refreshTokens(): Promise<any> {
+		return this.fetch(['refreshTokens'],{})
 	}
 	
-	public user = async () => {
-		const response = await this.fetch(['user'],{})
-		return this.handleResponse(response)
+	public user(): Promise<any> {
+		return this.fetch(['user'],{})
 	}
 
-	public impersonate = async () => {
-		const response = await this.fetch(['impersonate'],{})
-		return this.handleResponse(response)
+	public impersonate(): Promise<any> {
+		return this.fetch(['impersonate'],{})
 	}
 
-	public logout = async () => {
+	public async logout(): Promise<any> {
 		const response = await this.fetch(['logout'],{})
-		this.tokenStorage.setTokens({accessToken:null, refreshToken:null})
-		return this.handleResponse(response)
+		this.tokenStorage.removeTokens();
+		return response;
 	}
 
-	public resumeSession = async () => {
+	public async resumeSession(): Promise<any> {
 		const accessToken = this.tokenStorage.getAccessToken();
 		if(!accessToken) {
       return false;
     }
 		const response = await this.fetch(['resumeSession'],{})
-		return this.handleResponse(response)
+		return response
 	}
 
-	public fetch = (target, data) => {
-		const tokens = this.tokenStorage.getTokens()
-		return this.transport.fetch(target, data, tokens)
+	public async fetch(target: string[], data: any): Promise<any> {
+		const response = await this.transport.fetch(target, data);
+		return this.handleResponse(response);
 	}
 
-	public handleResponse = async (response) => {
+	public async handleResponse(response: any): Promise<any> {
 		const res = await response.json();
-		const { error, user, accessToken, refreshToken } = res
+		const { error, user } = res
 		if(error) {
       return error;
     }
