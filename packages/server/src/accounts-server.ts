@@ -1,9 +1,9 @@
 import * as pick from 'lodash/pick';
 import * as omit from 'lodash/omit';
 import * as isString from 'lodash/isString';
-import * as jwt from 'jsonwebtoken';
 import * as Emittery from 'emittery';
 import { AccountsError } from '@accounts/common';
+import TokenManager from '@accounts/token-manager';
 import {
   User,
   LoginResult,
@@ -17,8 +17,6 @@ import {
   TokenRecord,
 } from '@accounts/types';
 
-import { generateAccessToken, generateRefreshToken, generateRandomToken } from './utils/tokens';
-
 import { emailTemplates, sendMail } from './utils/email';
 import { ServerHooks } from './utils/server-hooks';
 
@@ -27,15 +25,6 @@ import { JwtData } from './types/jwt-data';
 import { EmailTemplateType } from './types/email-template-type';
 
 const defaultOptions = {
-  tokenSecret: 'secret',
-  tokenConfigs: {
-    accessToken: {
-      expiresIn: '90m',
-    },
-    refreshToken: {
-      expiresIn: '7d',
-    },
-  },
   emailTemplates,
   userObjectSanitizer: (user: User) => user,
   sendMail,
@@ -44,6 +33,7 @@ const defaultOptions = {
 
 export class AccountsServer {
   public options: AccountsServerOptions;
+  public tokenManager: TokenManager;
   private services: { [key: string]: AuthenticationService };
   private db: DatabaseInterface;
   private hooks: Emittery;
@@ -53,10 +43,14 @@ export class AccountsServer {
     if (!this.options.db) {
       throw new AccountsError('A database driver is required');
     }
+    if (!this.options.tokenManager) {
+      throw new AccountsError('A tokenManager is required');
+    }
     // TODO if this.options.tokenSecret === 'secret' warm user to change it
 
     this.services = services;
     this.db = this.options.db;
+    this.tokenManager = this.options.tokenManager;
 
     // Set the db to all services
     // tslint:disable-next-line
@@ -120,7 +114,7 @@ export class AccountsServer {
     const { ip, userAgent } = infos;
 
     try {
-      const token = generateRandomToken();
+      const token = this.tokenManager.generateRandomToken();
       const sessionId = await this.db.createSession(user.id, token, {
         ip,
         userAgent,
@@ -168,7 +162,7 @@ export class AccountsServer {
       }
 
       try {
-        jwt.verify(accessToken, this.options.tokenSecret);
+        this.tokenManager.decodeToken(accessToken);
       } catch (err) {
         throw new AccountsError('Access token is not valid');
       }
@@ -208,7 +202,7 @@ export class AccountsServer {
         return { authorized: false };
       }
 
-      const token = generateRandomToken();
+      const token = this.tokenManager.generateRandomToken();
       const newSessionId = await this.db.createSession(
         impersonatedUser.id,
         token,
@@ -259,10 +253,11 @@ export class AccountsServer {
 
       let sessionToken: string;
       try {
-        jwt.verify(refreshToken, this.options.tokenSecret);
-        const decodedAccessToken = jwt.verify(accessToken, this.options.tokenSecret, {
-          ignoreExpiration: true,
-        }) as { data: JwtData };
+        this.tokenManager.decodeToken(refreshToken);
+        const decodedAccessToken: { data: JwtData } = this.tokenManager.decodeToken(
+          accessToken,
+          true
+        );
         sessionToken = decodedAccessToken.data.token;
       } catch (err) {
         throw new AccountsError('Tokens are not valid');
@@ -309,20 +304,9 @@ export class AccountsServer {
    * @returns {Promise<Object>} - Return a new accessToken and refreshToken.
    */
   public createTokens(token: string, isImpersonated: boolean = false): Tokens {
-    const { tokenSecret, tokenConfigs } = this.options;
-    const jwtData: JwtData = {
-      token,
-      isImpersonated,
-    };
-    const accessToken = generateAccessToken({
-      data: jwtData,
-      secret: tokenSecret,
-      config: tokenConfigs.accessToken || {},
-    });
-    const refreshToken = generateRefreshToken({
-      secret: tokenSecret,
-      config: tokenConfigs.refreshToken || {},
-    });
+    const jwtData: JwtData = { token, isImpersonated };
+    const accessToken = this.tokenManager.generateAccessToken(jwtData);
+    const refreshToken = this.tokenManager.generateRefreshToken();
     return { accessToken, refreshToken };
   }
 
@@ -409,9 +393,7 @@ export class AccountsServer {
 
     let sessionToken: string;
     try {
-      const decodedAccessToken = jwt.verify(accessToken, this.options.tokenSecret) as {
-        data: JwtData;
-      };
+      const decodedAccessToken: { data: JwtData } = this.tokenManager.decodeToken(accessToken);
       sessionToken = decodedAccessToken.data.token;
     } catch (err) {
       throw new AccountsError('Tokens are not valid');
@@ -461,10 +443,6 @@ export class AccountsServer {
       throw new AccountsError('User not found', { id: userId });
     }
     return this.db.setProfile(userId, { ...user.profile, ...profile });
-  }
-
-  public isTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
-    return !tokenRecord || Number(tokenRecord.when) + this.options.emailTokensExpiry < Date.now();
   }
 
   public prepareMail(

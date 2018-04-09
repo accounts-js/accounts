@@ -1,12 +1,9 @@
 {
-  "name": "@accounts/server",
+  "name": "@accounts/token-manager",
   "version": "0.1.0-beta.10",
-  "description": "Fullstack authentication and accounts-management",
+  "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "clean": "rimraf lib",
     "start": "tsc --watch",
@@ -24,36 +21,18 @@
       ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ]
+    "moduleFileExtensions": ["ts", "js"]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/js-accounts/accounts/tree/master/packages/server"
-  },
-  "keywords": [
-    "rest",
-    "graphql",
-    "grant",
-    "auth",
-    "authentication",
-    "accounts",
-    "users",
-    "oauth"
-  ],
-  "author": "Tim Mikeladze",
-  "license": "MIT",
   "dependencies": {
-    "@accounts/common": "^0.1.0-beta.10",
+    "bcryptjs": "^2.4.0",
+    "jsonwebtoken": "^8.0.0",
+    "jwt-decode": "^2.1.0",
     "@accounts/types": "^0.1.0-beta.10",
-    "@accounts/token-manager": "^0.1.0-beta.10",
-    "babel-polyfill": "^6.23.0",
-    "emittery": "^0.3.0",
-    "lodash": "^4.16.4"
+    "@accounts/error": "^0.1.0-beta.10"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "7.2.5",
+    "@types/jwt-decode": "2.2.1",
     "rimraf": "2.6.2"
   }
 }
