@@ -42,7 +42,7 @@
     "codecov": "3.0.0",
     "flow-bin": "0.69.0",
     "jest": "22.4.3",
-    "lerna": "2.9.1",
+    "lerna": "2.10.1",
     "opencollective": "1.0.3",
     "prettier": "1.11.1",
     "rimraf": "2.6.2",
