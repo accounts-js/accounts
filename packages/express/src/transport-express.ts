@@ -76,6 +76,7 @@ export default class TransportExpress {
     const connectionInfo: ConnectionInformations = getConnectionInformations(req);
     try{
       const { tokens, ...data }: any = await this.accountsServer.useService(target, params, connectionInfo);
+      this.tokenTransport.setTokens(tokens, {res});
       this.send(res, data)
     } catch(err) {
       this.sendError(res, err)
@@ -88,7 +89,7 @@ export default class TransportExpress {
       const { username } = req.body;
       const connectionInfo = getConnectionInformations(req)
       const { tokens, ...data } = await this.accountsServer.impersonate(accessToken, username, connectionInfo);
-      this.tokenTransport.setTokens(tokens, res);
+      this.tokenTransport.setTokens(tokens, {res});
       this.send(res, data)
     } catch (err) {
       this.sendError(res, err);
@@ -115,7 +116,7 @@ export default class TransportExpress {
         connectionInfo
       );
       const { tokens, ...data } = refreshedSession;
-      this.tokenTransport.setTokens(tokens, res);
+      this.tokenTransport.setTokens(tokens, {res});
       this.send(res, data)
     } catch (err) {
       this.sendError(res, err);

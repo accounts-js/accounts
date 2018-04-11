@@ -7,7 +7,8 @@ import {
   DatabaseInterface,
   AuthenticationService,
   ConnectionInformations,
-  Message
+  Message,
+  LoginResult
 } from '@accounts/types';
 import { trim, isEmpty, isFunction, isString, isPlainObject, get } from 'lodash';
 import { HashAlgorithm } from '@accounts/common';
@@ -97,9 +98,9 @@ export default class AccountsPassword implements AuthenticationService {
     return this[actionNameSafe](params, connectionInfo)
   }
 
-  public async authenticate(params: PasswordLoginType, connectionInfo: ConnectionInformations): Promise<User> {
+  public async authenticate(params: PasswordLoginType, connectionInfo: ConnectionInformations): Promise<any> {
     const { username, email, id, password, code } = params;
-    if(!username || !email || !id){
+    if(!username && !email && !id){
       throw new Error('No informations on user identity')
     }
     if(!password){
@@ -137,7 +138,7 @@ export default class AccountsPassword implements AuthenticationService {
       await this.twoFactor.authenticate(foundUser, code);
     }
 
-    return foundUser;
+    return this.server.loginWithUser(foundUser, connectionInfo)
   }
 
   /**
