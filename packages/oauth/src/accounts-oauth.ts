@@ -1,7 +1,6 @@
 import { User, DatabaseInterface, AuthenticationService } from '@accounts/types';
-import { AccountsServer } from '@accounts/server';
+import { AccountsServer, ServerHooks } from '@accounts/server';
 import * as requestPromise from 'request-promise';
-
 import { OAuthOptions } from './types/oauth-options';
 
 export class AccountsOauth implements AuthenticationService {
@@ -37,17 +36,27 @@ export class AccountsOauth implements AuthenticationService {
     }
 
     if (!user) {
-      const userId = await this.db.createUser({
-        email: oauthUser.email,
-        profile: oauthUser.profile,
-      });
+      try {
+        const userId = await this.db.createUser({
+          email: oauthUser.email,
+          profile: oauthUser.profile,
+        });
 
-      user = await this.db.findUserById(userId);
+        user = await this.db.findUserById(userId);
+
+        await this.server.getHooks().emit(ServerHooks.CreateUserSuccess, user);
+      } catch (e) {
+        await this.server.getHooks().emit(ServerHooks.CreateUserError, user);
+
+        throw e;
+      }
     } else {
       // If user exist, attempt to update profile
-      this.db.setProfile(user.id, oauthUser.profile);
+      await this.db.setProfile(user.id, oauthUser.profile);
     }
+
     await this.db.setService(user.id, params.provider, oauthUser);
+
     return user;
   }
 
