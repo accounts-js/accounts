@@ -7,6 +7,10 @@ const tokenManager = new TokenManager({
   secret: 'secret',
 });
 
+const transport = {
+  link: () => transport
+}
+
 describe('AccountsServer', () => {
   const db = {
     findUserByUsername: () => Promise.resolve(),
@@ -18,18 +22,25 @@ describe('AccountsServer', () => {
   describe('config', () => {
     it('throws on invalid db', async () => {
       try {
-        const account = new AccountsServer({} as any, {});
+        const account = new AccountsServer({} as any);
         throw new Error();
       } catch (err) {
         expect(err.message).toMatchSnapshot();
       }
     });
-  });
 
-  describe('config', () => {
     it('throws on invalid tokenManager', async () => {
       try {
-        const account = new AccountsServer({ db: {} } as any, {});
+        const account = new AccountsServer({ db: {} } as any);
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('throws on invalid transport', async () => {
+      try {
+        const account = new AccountsServer({ db: {}, tokenManager } as any);
         throw new Error();
       } catch (err) {
         expect(err.message).toMatchSnapshot();
@@ -51,7 +62,7 @@ describe('AccountsServer', () => {
         db: {
           createSession: () => Promise.resolve('sessionId'),
         } as any,
-        tokenManager,
+        tokenManager, transport
       });
 
       const res = await accountsServer.loginWithUser(user, {});
@@ -77,7 +88,7 @@ describe('AccountsServer', () => {
             }),
           findUserById: () => Promise.resolve(null),
         } as any,
-        tokenManager,
+        tokenManager, transport
       });
       try {
         const { accessToken } = accountsServer.createTokens('456');
@@ -107,7 +118,7 @@ describe('AccountsServer', () => {
           findUserById: () => Promise.resolve(user),
           invalidateSession,
         } as any,
-        tokenManager,
+        tokenManager, transport
       });
 
       const { accessToken } = accountsServer.createTokens('456');
@@ -124,7 +135,7 @@ describe('AccountsServer', () => {
           db: {
             createSession: () => '123',
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       accountsServer.on(ServerHooks.LoginSuccess, hookSpy);
@@ -142,7 +153,7 @@ describe('AccountsServer', () => {
               throw new Error('Could not create session');
             },
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       accountsServer.on(ServerHooks.LoginError, hookSpy);
@@ -175,7 +186,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             invalidateSession,
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       accountsServer.on(ServerHooks.LogoutSuccess, hookSpy);
@@ -198,7 +209,7 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(null),
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       accountsServer.on(ServerHooks.LogoutError, hookSpy);
@@ -231,7 +242,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             resumeSessionValidator: () => Promise.resolve(user),
           } as any,
-          tokenManager,
+          tokenManager, transport,
         }
       );
       accountsServer.on(ServerHooks.ResumeSessionSuccess, hookSpy);
@@ -259,7 +270,7 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(user),
           } as any,
-          tokenManager,
+          tokenManager, transport,
           resumeSessionValidator: () => Promise.resolve(user),
         }
       );
@@ -288,7 +299,7 @@ describe('AccountsServer', () => {
             findSessionByToken: () => Promise.reject(''),
             findUserById: () => Promise.resolve(user),
           } as any,
-          tokenManager,
+          tokenManager, transport,
           resumeSessionValidator: () => Promise.resolve(user),
         }
       );
@@ -315,7 +326,7 @@ describe('AccountsServer', () => {
                 valid: false,
               }),
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       accountsServer.on(ServerHooks.RefreshTokensError, hookSpy);
@@ -348,7 +359,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             updateSession: () => Promise.resolve(),
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       accountsServer.on(ServerHooks.RefreshTokensSuccess, hookSpy);
@@ -369,7 +380,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: db as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       accountsServer.on(ServerHooks.ImpersonationError, hookSpy);
@@ -394,7 +405,7 @@ describe('AccountsServer', () => {
             findUserById,
             createSession: () => Promise.resolve('001'),
           } as any,
-          tokenManager,
+          tokenManager, transport,
           impersonationAuthorize: async (userObject, impersonateToUser) => {
             return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
@@ -440,7 +451,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             updateSession,
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       const { accessToken, refreshToken } = accountsServer.createTokens('456');
@@ -460,7 +471,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {} as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       try {
@@ -474,7 +485,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {} as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       try {
@@ -491,7 +502,7 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () => Promise.resolve(null),
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       try {
@@ -512,7 +523,7 @@ describe('AccountsServer', () => {
                 valid: false,
               }),
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       try {
@@ -536,7 +547,7 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(null),
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       try {
@@ -554,7 +565,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {} as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       try {
@@ -568,7 +579,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {} as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       try {
@@ -584,7 +595,7 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () => Promise.resolve(null),
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       try {
@@ -604,7 +615,7 @@ describe('AccountsServer', () => {
                 valid: false,
               }),
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       try {
@@ -630,7 +641,7 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(null),
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
 
@@ -660,7 +671,7 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(user),
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       const { accessToken } = accountsServer.createTokens('456');
@@ -684,7 +695,7 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(user),
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
 
@@ -701,7 +712,7 @@ describe('AccountsServer', () => {
           db: {
             findUserById: () => Promise.resolve(null),
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       try {
@@ -728,7 +739,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             setProfile,
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
 
@@ -760,7 +771,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             setProfile,
           } as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
 
@@ -781,7 +792,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: db as any,
-          tokenManager,
+          tokenManager, transport
         }
       );
       try {
@@ -797,6 +808,7 @@ describe('AccountsServer', () => {
         {
           db: {} as any,
           tokenManager,
+          transport
         }
       );
 
@@ -813,6 +825,7 @@ describe('AccountsServer', () => {
         {
           db: {} as any,
           tokenManager,
+          transport
         }
       );
       const { accessToken } = accountsServer.createTokens('555');
@@ -838,6 +851,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(null),
           } as any,
           tokenManager,
+          transport
         }
       );
       const { accessToken } = accountsServer.createTokens('555');
@@ -866,6 +880,7 @@ describe('AccountsServer', () => {
             findUserByUsername: () => Promise.resolve(null),
           } as any,
           tokenManager,
+          transport
         }
       );
       const { accessToken } = accountsServer.createTokens('555');
@@ -892,6 +907,7 @@ describe('AccountsServer', () => {
             findUserByUsername: () => Promise.resolve(someUser),
           } as any,
           tokenManager,
+          transport
         }
       );
       const { accessToken } = accountsServer.createTokens('555');
@@ -913,8 +929,8 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             findUserByUsername: () => Promise.resolve(someUser),
           } as any,
-          tokenManager,
-
+          tokenManager, 
+          transport,
           impersonationAuthorize: async (userObject, impersonateToUser) => {
             return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
@@ -946,7 +962,7 @@ describe('AccountsServer', () => {
             createSession,
           } as any,
           tokenManager,
-
+          transport,
           impersonationAuthorize: async (userObject, impersonateToUser) => {
             return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
@@ -981,7 +997,7 @@ describe('AccountsServer', () => {
     const userObject = { username: 'test', services: [], id: '123' };
 
     it('internal sanitizer should clean services field from the user object', () => {
-      const accountsServer = new AccountsServer({ db: db as any, tokenManager });
+      const accountsServer = new AccountsServer({ db: db as any, tokenManager, transport });
       const modifiedUser = accountsServer.sanitizeUser(userObject);
       expect(modifiedUser.services).toBeUndefined();
     });
@@ -990,6 +1006,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer({
         db: db as any,
         tokenManager,
+        transport,
         sanitizeUser: (user) => {
           const { username, ...rest } = user;
           return rest

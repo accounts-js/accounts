@@ -77,7 +77,11 @@ export class Mongo implements DatabaseInterface {
     if (!db) {
       throw new Error('A database connection is required');
     }
-    this.db = db;
+    this.awaitDb(db)
+  }
+
+  public async awaitDb(db: any): Promise<void> {
+    this.db = await db;
     this.collection = this.db.collection(this.options.collectionName);
     this.sessionCollection = this.db.collection(this.options.sessionCollectionName);
   }

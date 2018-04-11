@@ -7,7 +7,7 @@ const userStorage = {
 }
 
 const defaultResponse = {
-  json: async () => defaultResponse
+  content: true
 }
 
 const transport = {
@@ -106,19 +106,19 @@ describe('AccountsClient', () => {
   describe('handleResponse', () => {
     
     it('should return the body of the response',async () => {
-      const response = { json: () => ({ content: true }) }
+      const response = { content: true }
       client.handleResponse(response)
       expect((await client.handleResponse(response)).content).toBe(true)
     })
 
     it('should return the error if the response contains one',async () => {
-      const response = { json: () => ({ error: 'error' }) }
+      const response = { error: 'error' }
       client.handleResponse(response)
       expect((await client.handleResponse(response))).toBe('error')
     })
 
     it('should set the user if the response contains one',async () => {
-      const response = { json: () => ({ user: 'user' }) }
+      const response = { user: 'user' }
       await client.handleResponse(response)
       expect(userStorage.setUser).toBeCalledWith('user')
     })

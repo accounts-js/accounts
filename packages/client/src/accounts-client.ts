@@ -55,15 +55,14 @@ export default class AccountsClient {
 	}
 
 	public async handleResponse(response: any): Promise<any> {
-		const res = await response.json();
-		const { error, user } = res
+		const { error, user } = response
 		if(error) {
       return error;
     }
 		if(user) {
       this.userStorage.setUser(user)
     }
-		return res
+		return response
   }
   
 }

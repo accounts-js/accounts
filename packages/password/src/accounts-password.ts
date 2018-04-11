@@ -7,7 +7,8 @@ import {
   DatabaseInterface,
   AuthenticationService,
   ConnectionInformations,
-  Message
+  Message,
+  LoginResult
 } from '@accounts/types';
 import { trim, isEmpty, isFunction, isString, isPlainObject, get } from 'lodash';
 import { HashAlgorithm } from '@accounts/common';
@@ -61,7 +62,7 @@ export default class AccountsPassword implements AuthenticationService {
 
   private firewall: string[] = [
     'authenticate',
-    'createUser',
+    'register',
     'sendEnrollmentEmail',
     'sendResetPasswordEmail',
     'sendVerificationEmail',
@@ -97,23 +98,47 @@ export default class AccountsPassword implements AuthenticationService {
     return this[actionNameSafe](params, connectionInfo)
   }
 
-  public async authenticate(params: PasswordLoginType, connectionInfo: ConnectionInformations): Promise<User> {
-    const { user, password, code } = params;
-    if (!user || !password) {
-      throw new Error('Unrecognized options for login request');
+  public async authenticate(params: PasswordLoginType, connectionInfo: ConnectionInformations): Promise<any> {
+    const { username, email, id, password, code } = params;
+    if(!username && !email && !id){
+      throw new Error('No informations on user identity')
     }
-    if ((!isString(user) && !isPlainObject(user)) || !isString(password)) {
-      throw new Error('Match failed');
+    if(!password){
+      throw new Error('No password provided')
+    }
+    let foundUser;
+    if (id) {
+      // this._validateLoginWithField('id', user);
+      foundUser = await this.db.findUserById(id);
+    } else if (username) {
+      // this._validateLoginWithField('username', user);
+      foundUser = await this.db.findUserByUsername(username);
+    } else if (email) {
+      // this._validateLoginWithField('email', user);
+      foundUser = await this.db.findUserByEmail(email);
+    }
+    if (!foundUser) {
+      throw new Error('User not found');
+    }
+    const hash = await this.db.findPasswordHash(foundUser.id);
+    if (!hash) {
+      throw new Error('User has no password set');
     }
 
-    const foundUser = await this.passwordAuthenticator(user, password);
+    const hashAlgorithm = this.options.passwordHashAlgorithm;
+    const pass: any = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
+    const isPasswordValid = await verifyPassword(pass, hash);
+
+    if (!isPasswordValid) {
+      throw new Error('Incorrect password');
+    }
 
     // If user activated two factor authentication try with the code
     if (this.twoFactor.getUserService(foundUser)) {
       await this.twoFactor.authenticate(foundUser, code);
     }
 
-    return foundUser;
+    return this.server.loginWithUser(foundUser, connectionInfo)
   }
 
   /**
@@ -253,7 +278,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @param user - The user object.
    * @returns Return the id of user created.
    */
-  public async createUser(user: PasswordCreateUserType): Promise<string> {
+  public async register(user: PasswordCreateUserType): Promise<string> {
     if (!this.options.validateUsername(user.username) && !this.options.validateEmail(user.email)) {
       throw new Error('Username or Email is required');
     }
@@ -287,47 +312,6 @@ export default class AccountsPassword implements AuthenticationService {
     }
 
     return this.db.createUser(proposedUserObject);
-  }
-
-  private async passwordAuthenticator(
-    user: string | Login,
-    password: PasswordType
-  ): Promise<User> {
-    const { username, email, id } = isString(user)
-      ? this.toUsernameAndEmail({ user })
-      : this.toUsernameAndEmail({ ...user });
-
-    let foundUser: User;
-
-    if (id) {
-      // this._validateLoginWithField('id', user);
-      foundUser = await this.db.findUserById(id);
-    } else if (username) {
-      // this._validateLoginWithField('username', user);
-      foundUser = await this.db.findUserByUsername(username);
-    } else if (email) {
-      // this._validateLoginWithField('email', user);
-      foundUser = await this.db.findUserByEmail(email);
-    }
-
-    if (!foundUser) {
-      throw new Error('User not found');
-    }
-
-    const hash = await this.db.findPasswordHash(foundUser.id);
-    if (!hash) {
-      throw new Error('User has no password set');
-    }
-
-    const hashAlgorithm = this.options.passwordHashAlgorithm;
-    const pass: any = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
-    const isPasswordValid = await verifyPassword(pass, hash);
-
-    if (!isPasswordValid) {
-      throw new Error('Incorrect password');
-    }
-
-    return foundUser;
   }
 
   private async hashAndBcryptPassword(password: PasswordType): Promise<string> {

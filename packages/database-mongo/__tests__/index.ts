@@ -6,6 +6,8 @@ import Mongo from '../src';
 
 const generateRandomToken = (length: number = 43): string => randomBytes(length).toString('hex');
 
+
+
 let mongo: Mongo;
 let db: mongodb.Db;
 let client: mongodb.MongoClient;
@@ -30,20 +32,6 @@ function dropDatabase(cb) {
   });
 }
 
-function createConnection(cb) {
-  const url = 'mongodb://localhost:27017';
-  mongodb.MongoClient.connect(url, (err, clientMongo) => {
-    client = clientMongo;
-    db = client.db('accounts-mongo-tests');
-    mongo = new Mongo(db);
-    if (err) {
-      return cb(err);
-    }
-    return dropDatabase(error => {
-      cb(error);
-    });
-  });
-}
 
 function closeConnection(cb) {
   dropDatabase(async err => {
@@ -59,9 +47,20 @@ function delay(time) {
   return new Promise(resolve => setTimeout(() => resolve(), time));
 }
 
+const connectDatabase = async () => {
+  client = await mongodb.MongoClient.connect('mongodb://localhost:27017');
+  db = await client.db('accounts-mongo-tests');
+  mongo = new Mongo(db);
+  await mongo.db
+  return true
+}
+
+
+beforeAll(connectDatabase,5000);
+afterAll(closeConnection,5000);
+
+
 describe('Mongo', () => {
-  beforeAll(createConnection);
-  afterAll(closeConnection);
 
   describe('toMongoID', () => {
     it('should not throw when mongo id is valid', () => {
@@ -85,6 +84,7 @@ describe('Mongo', () => {
       const mongoWithStringIds = new Mongo(db, {
         convertUserIdToMongoObjectId: false,
       });
+      await mongo.db;
       const mockFindOne = jest.fn();
       mongoWithStringIds.collection.findOne = mockFindOne;
       await mongoWithStringIds.findUserById('589871d1c9393d445745a57c');
@@ -98,11 +98,12 @@ describe('Mongo', () => {
       expect(mongo.options).toBeTruthy();
     });
 
-    it('should overwrite options', () => {
+    it('should overwrite options', async () => {
       const mongoTestOptions = new Mongo(db, {
         collectionName: 'users-test',
         sessionCollectionName: 'sessions-test',
       });
+      await mongoTestOptions.db;
       expect(mongoTestOptions.options).toBeTruthy();
       expect(mongoTestOptions.options.collectionName).toEqual('users-test');
       expect(mongoTestOptions.options.sessionCollectionName).toEqual('sessions-test');
@@ -178,6 +179,7 @@ describe('Mongo', () => {
         idProvider: () => 'toto',
         convertUserIdToMongoObjectId: false,
       });
+      await mongoOptions.db;
       const userId = await mongoOptions.createUser({ email: 'JohN@doe.com' });
       const ret = await mongoOptions.findUserById(userId);
       expect(userId).toBe('toto');
@@ -230,6 +232,7 @@ describe('Mongo', () => {
 
     it('should return username for case insensitive query', async () => {
       const mongoWithOptions = new Mongo(db, { caseSensitiveUserName: false });
+      await mongoWithOptions.db;
       const ret = await mongoWithOptions.findUserByUsername(user.username.toUpperCase());
       expect(ret).toBeTruthy();
       expect(ret._id).toBeTruthy();
@@ -238,12 +241,14 @@ describe('Mongo', () => {
 
     it('should return null for incomplete matching user when using insensitive', async () => {
       const mongoWithOptions = new Mongo(db, { caseSensitiveUserName: false });
+      await mongoWithOptions.db;
       const ret = await mongoWithOptions.findUserByUsername('john');
       expect(ret).not.toBeTruthy();
     });
 
     it('should return null when using regex wildcards when using insensitive', async () => {
       const mongoWithOptions = new Mongo(db, { caseSensitiveUserName: false });
+      await mongoWithOptions.db;
       const ret = await mongoWithOptions.findUserByUsername('*');
       expect(ret).not.toBeTruthy();
     });
@@ -311,6 +316,7 @@ describe('Mongo', () => {
       const mongoOptions = new Mongo(db, {
         convertUserIdToMongoObjectId: false,
       });
+      await mongoOptions.db;
       await mongoOptions.findPasswordHash('toto');
     });
 
@@ -333,6 +339,7 @@ describe('Mongo', () => {
       const mongoOptions = new Mongo(db, {
         convertUserIdToMongoObjectId: false,
       });
+      await mongoOptions.db;
       await mongoOptions.addEmail('toto', 'hey', false);
     });
 
@@ -370,6 +377,7 @@ describe('Mongo', () => {
       const mongoOptions = new Mongo(db, {
         convertUserIdToMongoObjectId: false,
       });
+      await mongoOptions.db;
       await mongoOptions.removeEmail('toto', 'hey');
     });
 
@@ -410,6 +418,7 @@ describe('Mongo', () => {
       const mongoOptions = new Mongo(db, {
         convertUserIdToMongoObjectId: false,
       });
+      await mongoOptions.db;
       try {
         await mongoOptions.verifyEmail('toto', 'hey');
       } catch (err) {
@@ -447,6 +456,7 @@ describe('Mongo', () => {
       const mongoOptions = new Mongo(db, {
         convertUserIdToMongoObjectId: false,
       });
+      await mongoOptions.db;
       try {
         await mongoOptions.setUsername('toto', 'hey');
       } catch (err) {
@@ -479,6 +489,7 @@ describe('Mongo', () => {
       const mongoOptions = new Mongo(db, {
         convertUserIdToMongoObjectId: false,
       });
+      await mongoOptions.db;
       try {
         await mongoOptions.setPassword('toto', 'hey');
       } catch (err) {
@@ -512,6 +523,7 @@ describe('Mongo', () => {
       const mongoOptions = new Mongo(db, {
         convertUserIdToMongoObjectId: false,
       });
+      await mongoOptions.db;
       await mongoOptions.setProfile('toto', { username: 'toto' });
     });
 
@@ -528,6 +540,7 @@ describe('Mongo', () => {
       const mongoOptions = new Mongo(db, {
         convertUserIdToMongoObjectId: false,
       });
+      await mongoOptions.db;
       await mongoOptions.setService('toto', 'twitter', { id: '1' });
     });
 
@@ -550,6 +563,7 @@ describe('Mongo', () => {
       const mongoOptions = new Mongo(mockDb, {
         convertUserIdToMongoObjectId: false,
       });
+      await mongoOptions.db;
       await mongoOptions.unsetService('toto', 'twitter');
       expect(collection.update.mock.calls[0][0]._id).toBe('toto');
     });
@@ -609,6 +623,7 @@ describe('Mongo', () => {
       const mongoTestOptions = new Mongo(db, {
         dateProvider: () => new Date(),
       });
+      await mongoTestOptions.db;
       const sessionId = await mongoTestOptions.createSession(
         session.userId,
         session.ip,
@@ -625,6 +640,7 @@ describe('Mongo', () => {
         idProvider: () => new ObjectID().toHexString(),
         convertSessionIdToMongoObjectId: false,
       });
+      await mongoTestOptions.db;
       const sessionId = await mongoTestOptions.createSession(
         session.userId,
         session.ip,
@@ -672,6 +688,7 @@ describe('Mongo', () => {
       const mongoOptions = new Mongo(db, {
         convertSessionIdToMongoObjectId: false,
       });
+      await mongoOptions.db;
       await mongoOptions.updateSession('toto', 'new ip', 'new user agent');
     });
 
@@ -703,6 +720,7 @@ describe('Mongo', () => {
       const mongoOptions = new Mongo(db, {
         convertSessionIdToMongoObjectId: false,
       });
+      await mongoOptions.db;
       await mongoOptions.invalidateSession('toto');
     });
 

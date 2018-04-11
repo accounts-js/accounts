@@ -1,7 +1,7 @@
 {
-  "name": "@accounts/express-tt-body",
+  "name": "@accounts/ctt-rest-manager",
   "version": "0.1.0-beta.10",
-  "description": "Accounts-JS Express Token Transport Body || Allow the authentication tokens to be stored in the request body",
+  "description": "Accounts-JS Client Token Transport Rest Manager | Allow the use of multiple CRTT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "publishConfig": {
@@ -29,13 +29,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/accounts-js/accounts/tree/master/packages/express-tt-body"
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/ctt-rest-manager"
   },
   "keywords": [
     "accounts",
-    "express",
-    "headers",
-    "tokens"
+    "client"
   ],
   "author": "Elies Lou (Aetherall)",
   "license": "MIT",
