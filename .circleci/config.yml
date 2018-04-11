@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:8@sha256:3fb018db8a18ac6df1114370a2faa45715f6e01575aa98321f433dd9b73c16f7
+      - image: circleci/node:8@sha256:26795ce4671c335e1ab6d71d4586182adf4f66fab694e403a9b80e101ac112ad
       - image: circleci/mongo:3@sha256:ab010e111b2fb6b3fd5e3e8e3ea88beaca57086ba05a76369ff4c01f96456f2d
     steps:
       - checkout
