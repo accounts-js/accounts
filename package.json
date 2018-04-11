@@ -37,7 +37,7 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/tslint-config-accounts": "0.0.9",
-    "@types/jest": "22.2.2",
+    "@types/jest": "22.2.3",
     "@types/node": "9.6.4",
     "codecov": "3.0.0",
     "flow-bin": "0.69.0",
