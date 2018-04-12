@@ -44,7 +44,7 @@
     "jest": "22.4.3",
     "lerna": "2.10.1",
     "opencollective": "1.0.3",
-    "prettier": "1.11.1",
+    "prettier": "1.12.0",
     "rimraf": "2.6.2",
     "ts-jest": "22.4.2",
     "tslint": "5.9.1",
