@@ -16,9 +16,9 @@
   version "4.14.106"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.106.tgz#6093e9a02aa567ddecfe9afadca89e53e5dce4dd"
 
-"@types/mongodb@3.0.12":
-  version "3.0.12"
-  resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.0.12.tgz#1777d1be5be52b2d34c58e6c7ee05f6d6b972e32"
+"@types/mongodb@3.0.13":
+  version "3.0.13"
+  resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.0.13.tgz#e53c842587ff38125f5c88c537bb7335883383a9"
   dependencies:
     "@types/bson" "*"
     "@types/events" "*"
