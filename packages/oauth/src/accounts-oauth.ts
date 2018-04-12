@@ -44,9 +44,13 @@ export class AccountsOauth implements AuthenticationService {
 
         user = await this.db.findUserById(userId);
 
-        await this.server.getHooks().emit(ServerHooks.CreateUserSuccess, user);
+        if (this.server) {
+          await this.server.getHooks().emit(ServerHooks.CreateUserSuccess, user);
+        }
       } catch (e) {
-        await this.server.getHooks().emit(ServerHooks.CreateUserError, user);
+        if (this.server) {
+          await this.server.getHooks().emit(ServerHooks.CreateUserError, user);
+        }
 
         throw e;
       }
