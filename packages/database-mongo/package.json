@@ -33,7 +33,7 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
-    "@types/lodash": "4.14.106",
+    "@types/lodash": "4.14.107",
     "@types/mongodb": "3.0.13"
   },
   "dependencies": {
