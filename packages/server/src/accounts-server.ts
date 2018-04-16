@@ -77,6 +77,10 @@ export class AccountsServer {
     return this.options;
   }
 
+  public getHooks(): Emittery {
+    return this.hooks;
+  }
+
   public on(eventName: string, callback: HookListener): () => void {
     this.hooks.on(eventName, callback);
 
