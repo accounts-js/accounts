@@ -51,7 +51,7 @@
     "@types/jest": "22.2.3",
     "jest": "22.4.3",
     "jsonwebtoken": "8.2.1",
-    "lerna": "2.10.2",
+    "lerna": "2.11.0",
     "localstorage-polyfill": "1.0.1",
     "regenerator-runtime": "0.11.1",
     "rimraf": "2.6.2"
