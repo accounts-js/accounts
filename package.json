@@ -23,7 +23,8 @@
   },
   "renovate": {
     "extends": [
-      "config:base"
+      "config:base",
+      "schedule:weekly"
     ],
     "automerge": true,
     "major": {
