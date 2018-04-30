@@ -1,6 +1,4 @@
-import * as pick from 'lodash/pick';
-import * as omit from 'lodash/omit';
-import * as isString from 'lodash/isString';
+import { pick, omit, isString } from 'lodash';
 import * as jwt from 'jsonwebtoken';
 import * as Emittery from 'emittery';
 import { AccountsError } from '@accounts/common';
@@ -488,11 +486,11 @@ export class AccountsServer {
   public sanitizeUser(user: User): User {
     const { userObjectSanitizer } = this.options;
 
-    return userObjectSanitizer(this.internalUserSanitizer(user), omit, pick);
+    return userObjectSanitizer(this.internalUserSanitizer(user), omit, pick as any);
   }
 
   private internalUserSanitizer(user: User): User {
-    return omit(user, ['services']);
+    return omit(user, ['services']) as any;
   }
 
   private defaultPrepareEmail(

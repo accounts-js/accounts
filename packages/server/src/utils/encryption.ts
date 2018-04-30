@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcryptjs';
 import { createHash } from 'crypto';
-import * as isString from 'lodash/isString';
+import { isString } from 'lodash';
 
 const bcryptPassword = async password => {
   const salt = await bcrypt.genSalt(10);
