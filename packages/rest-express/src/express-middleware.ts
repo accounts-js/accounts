@@ -13,6 +13,7 @@ import { logout } from './endpoints/logout';
 import { serviceAuthenticate } from './endpoints/service-authenticate';
 import { registerPassword } from './endpoints/password/register';
 import { twoFactorSecret, twoFactorSet, twoFactorUnset } from './endpoints/password/two-factor';
+import { changePassword } from './endpoints/password/change-password';
 import { userLoader } from './user-loader';
 import { AccountsExpressOptions } from './types';
 
@@ -52,6 +53,12 @@ const accountsExpress = (
     router.post(`${path}/password/sendVerificationEmail`, sendVerificationEmail(accountsServer));
 
     router.post(`${path}/password/sendResetPasswordEmail`, sendResetPasswordEmail(accountsServer));
+
+    router.post(
+      `${path}/password/changePassword`,
+      userLoader(accountsServer),
+      changePassword(accountsServer)
+    );
 
     router.post(
       `${path}/password/twoFactorSecret`,
