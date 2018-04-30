@@ -19,8 +19,7 @@
     "moduleFileExtensions": [
       "ts",
       "js"
-    ],
-    "mapCoverage": true
+    ]
   },
   "dependencies": {
     "request": "^2.83.0",

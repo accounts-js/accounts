@@ -28,8 +28,7 @@
       "ts",
       "js"
     ],
-    "testEnvironment": "jsdom",
-    "mapCoverage": true
+    "testEnvironment": "jsdom"
   },
   "repository": {
     "type": "git",
