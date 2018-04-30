@@ -6,8 +6,7 @@
     "clean": "lerna run clean",
     "compile": "lerna run compile",
     "lint": "tslint packages/*/{src,__tests__}/**/*.ts",
-    "prebootstrap": "yarn install",
-    "postinstall": "lerna bootstrap && opencollective postinstall",
+    "postinstall": "opencollective postinstall",
     "publish": "lerna publish",
     "publish:canary": "yarn run publish -- --canary",
     "test": "yarn lint && yarn compile && yarn coverage",
@@ -16,6 +15,9 @@
     "coverage": "lerna run coverage",
     "codecov": "codecov"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "prettier": {
     "singleQuote": true,
     "trailingComma": "es5",
