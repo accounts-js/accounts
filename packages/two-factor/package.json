@@ -31,5 +31,8 @@
     "@accounts/types": "^0.1.0-beta.10",
     "@types/speakeasy": "2.0.2",
     "speakeasy": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "9.6.7"
   }
 }

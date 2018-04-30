@@ -23,6 +23,9 @@
     "trailingComma": "es5",
     "printWidth": 100
   },
+  "resolutions": {
+    "@types/node": "9.6.7"
+  },
   "renovate": {
     "extends": [
       "config:base",
@@ -41,7 +44,6 @@
   "devDependencies": {
     "@accounts/tslint-config-accounts": "0.0.9",
     "@types/jest": "22.2.3",
-    "@types/node": "9.6.7",
     "codecov": "3.0.1",
     "flow-bin": "0.71.0",
     "jest": "22.4.3",

@@ -25,5 +25,8 @@
   "dependencies": {
     "request": "^2.83.0",
     "request-promise": "^4.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "9.6.7"
   }
 }

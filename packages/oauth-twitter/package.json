@@ -24,5 +24,8 @@
   },
   "dependencies": {
     "oauth": "^0.9.15"
+  },
+  "devDependencies": {
+    "@types/node": "9.6.7"
   }
 }

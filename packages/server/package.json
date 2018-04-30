@@ -58,6 +58,7 @@
   "devDependencies": {
     "@types/jsonwebtoken": "7.2.6",
     "@types/jwt-decode": "2.2.1",
+    "@types/node": "9.6.7",
     "rimraf": "2.6.2"
   }
 }
