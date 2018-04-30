@@ -8,5 +8,6 @@ jobs:
     steps:
       - checkout
       - run: yarn install --frozen-lockfile
+      - run: yarn run lerna bootstrap
       - run: yarn test
       - run: yarn codecov
