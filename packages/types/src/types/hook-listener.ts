@@ -1,1 +1,1 @@
-export type HookListener = (event?: object) => void;
+export type HookListener = (event?: any) => void;
