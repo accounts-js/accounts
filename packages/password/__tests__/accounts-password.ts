@@ -268,6 +268,7 @@ describe('AccountsPassword', () => {
       expect(passwordAuthenticator.mock.calls[0][1]).toEqual('old-password');
       expect(setPassword.mock.calls[0][0]).toEqual(userId);
       expect(setPassword.mock.calls[0][1]).toBeTruthy();
+      password.passwordAuthenticator.mockRestore();
     });
   });
 
