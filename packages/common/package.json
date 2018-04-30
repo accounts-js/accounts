@@ -49,10 +49,11 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
+    "@types/lodash-es": "^4.17.0",
     "localstorage-polyfill": "1.0.1",
     "regenerator-runtime": "0.11.1"
   },
   "dependencies": {
-    "lodash": "^4.16.4"
+    "lodash-es": "^4.17.10"
   }
 }
