@@ -13,7 +13,7 @@ import {
   ImpersonateReturnType,
 } from '@accounts/common';
 
-import config, { TokenStorage, AccountsClientConfiguration } from './config';
+import config, { AccountsClientConfiguration } from './config';
 import createStore from './create-store';
 import reducer, {
   loggingIn,
@@ -25,6 +25,9 @@ import reducer, {
 } from './module';
 import { TransportInterface } from './transport-interface';
 
+import { TokenStorage } from './types';
+import { tokenStorageLocal } from './token-storage-local';
+
 const ACCESS_TOKEN = 'accounts:accessToken';
 const REFRESH_TOKEN = 'accounts:refreshToken';
 const ORIGINAL_ACCESS_TOKEN = 'accounts:originalAccessToken';
@@ -35,68 +38,154 @@ const getTokenKey = (type: string, options: AccountsClientConfiguration) =>
     ? `${options.tokenStoragePrefix}:${type}`
     : type;
 
+// tslint:disable max-classes-per-file
+
+// TODO allow change name of local-storage keys
+const defaultOptions = {
+  tokenStorage: tokenStorageLocal,
+};
+
+export class Test {
+  // TODO define options type
+  private options: any;
+  private transport: TransportInterface;
+  private storage: TokenStorage;
+
+  // TODO define options type
+  constructor(options: any, transport: TransportInterface) {
+    this.options = { ...config, ...options };
+    this.storage = this.options.tokenStorage;
+
+    if (!transport) {
+      throw new AccountsError('A valid transport is required');
+    }
+    this.transport = transport;
+  }
+
+  /**
+   * Get the tokens from the storage
+   */
+  public async getTokens(): Promise<TokensType | null> {
+    const accessToken = await this.storage.getItem(ACCESS_TOKEN);
+    const refreshToken = await this.storage.getItem(REFRESH_TOKEN);
+    if (!accessToken || !refreshToken) {
+      return null;
+    }
+    return { accessToken, refreshToken };
+  }
+
+  /**
+   * Store the tokens in the storage
+   */
+  public async setTokens(tokens: TokensType): Promise<void> {
+    await this.storage.setItem(ACCESS_TOKEN, tokens.accessToken);
+    await this.storage.setItem(REFRESH_TOKEN, tokens.refreshToken);
+  }
+
+  /**
+   * Remove the tokens from the storage
+   */
+  public async clearTokens(): Promise<void> {
+    await this.storage.removeItem(ACCESS_TOKEN);
+    await this.storage.removeItem(REFRESH_TOKEN);
+  }
+
+  /**
+   * Refresh the user session
+   * If the tokens have expired try to refresh them
+   */
+  public async refreshSession(): Promise<TokensType | null> {
+    const tokens = await this.getTokens();
+    if (tokens) {
+      try {
+        const currentTime = Date.now() / 1000;
+        const decodedAccessToken = jwtDecode(tokens.accessToken);
+        const decodedRefreshToken = jwtDecode(tokens.refreshToken);
+        // See if accessToken is expired
+        if (decodedAccessToken.exp < currentTime) {
+          // Request a new token pair
+          const refreshedSession = await this.transport.refreshTokens(
+            tokens.accessToken,
+            tokens.refreshToken
+          );
+
+          await this.setTokens(refreshedSession.tokens);
+          return refreshedSession.tokens;
+        } else if (decodedRefreshToken.exp < currentTime) {
+          // Refresh token is expired, user must sign back in
+          this.clearTokens();
+          return null;
+        }
+        return tokens;
+      } catch (err) {
+        this.clearTokens();
+        throw err;
+      }
+    }
+  }
+
+  /**
+   * Logout the user
+   * Call the server to invalidate the tokens
+   * Clean user local storage
+   */
+  public async logout(): Promise<void> {
+    try {
+      const tokens = await this.getTokens();
+
+      // TODO see if needed, No refresh token here ?
+      if (tokens.accessToken) {
+        await this.transport.logout(tokens.accessToken);
+      }
+
+      this.clearTokens();
+    } catch (err) {
+      this.clearTokens();
+      throw err;
+    }
+  }
+
+  /**
+   * Impersonate to another user.
+   */
+  public async impersonate(impersonated: {
+    userId?: string;
+    username?: string;
+    email?: string;
+  }): Promise<ImpersonateReturnType> {
+    if (this.isImpersonated()) {
+      throw new AccountsError('User already impersonating');
+    }
+    const tokens = await this.getTokens();
+
+    if (!tokens.accessToken) {
+      throw new AccountsError('An access token is required');
+    }
+
+    const res = await this.transport.impersonate(tokens.accessToken, impersonated);
+    if (!res.authorized) {
+      throw new AccountsError(`User unauthorized to impersonate`);
+    } else {
+      const { persistImpersonation } = this.options;
+      this.store.dispatch(setImpersonated(true));
+      this.store.dispatch(setOriginalTokens({ accessToken, refreshToken }));
+
+      if (persistImpersonation) {
+        await this.storeOriginalTokens({ accessToken, refreshToken });
+        await this.storeTokens(res.tokens);
+      }
+
+      this.store.dispatch(setTokens(res.tokens));
+      return res;
+    }
+  }
+}
+
 export class AccountsClient {
   private options: AccountsClientConfiguration;
   private transport: TransportInterface;
   private store: Store<object>;
   private storage: TokenStorage;
-
-  constructor(options: AccountsClientConfiguration, transport: TransportInterface) {
-    this.options = { ...config, ...options };
-    this.storage = options.tokenStorage || config.tokenStorage;
-    if (!transport) {
-      throw new AccountsError('A REST or GraphQL transport is required');
-    }
-
-    this.transport = transport;
-
-    const middleware: Middleware[] = options.reduxLogger ? [options.reduxLogger] : [];
-
-    const reduxStoreKey = options.reduxStoreKey || config.reduxStoreKey;
-    this.store =
-      options.store ||
-      createStore({
-        reducers: {
-          [reduxStoreKey]: reducer,
-        },
-        middleware,
-      });
-  }
-
-  public async config(): Promise<void> {
-    await this.loadTokensFromStorage();
-    await this.loadOriginalTokensFromStorage();
-  }
-
-  public getState(): Map<string, any> {
-    const state: object | Map<string, any> = this.store.getState();
-
-    if (typeof (state as Map<string, any>).get === 'function') {
-      return (state as Map<string, any>).get(this.options.reduxStoreKey);
-    }
-
-    return state[this.options.reduxStoreKey];
-  }
-
-  public async getStorageData(keyName: string): Promise<string> {
-    return Promise.resolve(this.storage.getItem(keyName));
-  }
-
-  public async setStorageData(keyName: string, value: any): Promise<string> {
-    return Promise.resolve(this.storage.setItem(keyName, value));
-  }
-
-  public async removeStorageData(keyName: string): Promise<string> {
-    return Promise.resolve(this.storage.removeItem(keyName));
-  }
-
-  public async loadTokensFromStorage(): Promise<void> {
-    const tokens = {
-      accessToken: (await this.getStorageData(getTokenKey(ACCESS_TOKEN, this.options))) || null,
-      refreshToken: (await this.getStorageData(getTokenKey(REFRESH_TOKEN, this.options))) || null,
-    };
-    this.store.dispatch(setTokens(tokens));
-  }
 
   public async loadOriginalTokensFromStorage(): Promise<void> {
     const tokens = {
@@ -163,36 +252,6 @@ export class AccountsClient {
         };
   }
 
-  public tokens(): TokensType {
-    const tokens = this.getState().get('tokens');
-
-    return tokens
-      ? tokens.toJS()
-      : {
-          accessToken: null,
-          refreshToken: null,
-        };
-  }
-
-  public async clearTokens(): Promise<void> {
-    this.store.dispatch(clearStoreTokens());
-    await this.removeStorageData(getTokenKey(ACCESS_TOKEN, this.options));
-    await this.removeStorageData(getTokenKey(REFRESH_TOKEN, this.options));
-  }
-
-  public async storeTokens(tokens: TokensType): Promise<void> {
-    if (tokens) {
-      const newAccessToken = tokens.accessToken;
-      if (newAccessToken) {
-        await this.setStorageData(getTokenKey(ACCESS_TOKEN, this.options), newAccessToken);
-      }
-
-      const newRefreshToken = tokens.refreshToken;
-      if (newRefreshToken) {
-        await this.setStorageData(getTokenKey(REFRESH_TOKEN, this.options), newRefreshToken);
-      }
-    }
-  }
   public async storeOriginalTokens(tokens: TokensType): Promise<void> {
     if (tokens) {
       const originalAccessToken = tokens.accessToken;
@@ -211,52 +270,6 @@ export class AccountsClient {
         );
       }
     }
-  }
-
-  public async resumeSession(): Promise<void> {
-    try {
-      await this.refreshSession();
-      if (this.options.onResumedSessionHook && isFunction(this.options.onResumedSessionHook)) {
-        this.options.onResumedSessionHook();
-      }
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  public async refreshSession(): Promise<TokensType> {
-    const { accessToken, refreshToken } = await this.tokens();
-    if (accessToken && refreshToken) {
-      try {
-        this.store.dispatch(loggingIn(true));
-        const currentTime = Date.now() / 1000;
-
-        const decodedAccessToken = jwtDecode(accessToken);
-        const decodedRefreshToken = jwtDecode(refreshToken);
-        // See if accessToken is expired
-        if (decodedAccessToken.exp < currentTime) {
-          // Request a new token pair
-          const refreshedSession: LoginReturnType = await this.transport.refreshTokens(
-            accessToken,
-            refreshToken
-          );
-
-          await this.storeTokens(refreshedSession.tokens);
-          this.store.dispatch(setTokens(refreshedSession.tokens));
-          this.store.dispatch(loggingIn(false));
-          return refreshedSession.tokens;
-        } else if (decodedRefreshToken.exp < currentTime) {
-          // Refresh token is expired, user must sign back in
-          this.clearTokens();
-        }
-        this.store.dispatch(loggingIn(false));
-      } catch (err) {
-        this.store.dispatch(loggingIn(false));
-        this.clearTokens();
-        throw new AccountsError('falsy token provided');
-      }
-    }
-    return { accessToken, refreshToken };
   }
 
   public async createUser(user: CreateUserType): Promise<void> {
@@ -326,47 +339,6 @@ export class AccountsClient {
     } catch (err) {
       this.clearTokens();
       this.store.dispatch(loggingIn(false));
-      throw new AccountsError(err.message);
-    }
-  }
-
-  public loggingIn(): boolean {
-    return this.getState().get('loggingIn');
-  }
-
-  public isLoading(): boolean {
-    return this.getState().get('isLoading');
-  }
-
-  public async logout(callback?: (err?: Error) => void): Promise<void> {
-    try {
-      const { accessToken } = await this.tokens();
-
-      if (accessToken) {
-        await this.transport.logout(accessToken);
-      }
-
-      this.clearTokens();
-      if (callback && isFunction(callback)) {
-        callback();
-      }
-
-      if (this.options.onSignedOutHook) {
-        this.options.onSignedOutHook();
-      }
-    } catch (err) {
-      this.clearTokens();
-      if (callback && isFunction(callback)) {
-        callback(err);
-      }
-      throw new AccountsError(err.message);
-    }
-  }
-
-  public async verifyEmail(token: string): Promise<void> {
-    try {
-      await this.transport.verifyEmail(token);
-    } catch (err) {
       throw new AccountsError(err.message);
     }
   }

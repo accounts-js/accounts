@@ -13,5 +13,12 @@ export interface TransportInterface {
   verifyEmail(token: string): Promise<void>;
   sendResetPasswordEmail(email: string): Promise<void>;
   sendVerificationEmail(email: string): Promise<void>;
-  impersonate(token: string, username: string): Promise<ImpersonateReturnType>;
+  impersonate(
+    token: string,
+    impersonated: {
+      userId?: string;
+      username?: string;
+      email?: string;
+    }
+  ): Promise<ImpersonateReturnType>;
 }
