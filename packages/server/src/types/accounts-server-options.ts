@@ -1,3 +1,4 @@
+import TokenManager from '@accounts/token-manager';
 import { User, DatabaseInterface } from '@accounts/types';
 import { EmailTemplateType } from './email-template-type';
 import { EmailTemplatesType } from './email-templates-type';
@@ -8,22 +9,10 @@ import { SendMailType } from './send-mail-type';
 
 export interface AccountsServerOptions {
   db: DatabaseInterface;
-  tokenSecret: string;
-  tokenConfigs?: {
-    accessToken?: {
-      expiresIn?: string;
-    };
-    refreshToken?: {
-      expiresIn?: string;
-    };
-  };
-  emailTokensExpiry?: number;
+  tokenManager: TokenManager;
   emailTemplates?: EmailTemplatesType;
   userObjectSanitizer?: UserObjectSanitizerFunction;
-  impersonationAuthorize?: (
-    user: User,
-    impersonateToUser: User
-  ) => Promise<any>;
+  impersonationAuthorize?: (user: User, impersonateToUser: User) => Promise<any>;
   resumeSessionValidator?: ResumeSessionValidator;
   siteUrl?: string;
   prepareMail?: PrepareMailFunction;
