@@ -125,19 +125,11 @@ export class AccountsClient {
    * Clean user local storage
    */
   public async logout(): Promise<void> {
-    try {
-      const tokens = await this.getTokens();
-
-      // TODO see if needed, No refresh token here ?
-      if (tokens.accessToken) {
-        await this.transport.logout(tokens.accessToken);
-      }
-
-      this.clearTokens();
-    } catch (err) {
-      this.clearTokens();
-      throw err;
+    const tokens = await this.getTokens();
+    if (tokens) {
+      await this.transport.logout(tokens.accessToken);
     }
+    await this.clearTokens();
   }
 
   /**
@@ -184,14 +176,9 @@ export class AccountsClient {
     service: string,
     credentials: { [key: string]: any }
   ): Promise<LoginResult> {
-    try {
-      const response = await this.transport.loginWithService(service, credentials);
-      await this.setTokens(response.tokens);
-      return response;
-    } catch (err) {
-      this.clearTokens();
-      throw new Error(err.message);
-    }
+    const response = await this.transport.loginWithService(service, credentials);
+    await this.setTokens(response.tokens);
+    return response;
   }
 
   private getTokenKey(tokenName: TokenKey): string {

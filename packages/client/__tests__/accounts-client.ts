@@ -113,6 +113,24 @@ describe('Accounts', () => {
     });
   });
 
+  describe('logout', () => {
+    it('should clear the tokens', async () => {
+      await accountsClient.logout();
+      expect(localStorage.removeItem).toHaveBeenCalledTimes(2);
+      expect(localStorage.getItem('accounts:accessToken')).toEqual(null);
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual(null);
+    });
+
+    it('should logout and clear the tokens', async () => {
+      await accountsClient.setTokens(tokens);
+      await accountsClient.logout();
+      expect(localStorage.removeItem).toHaveBeenCalledTimes(2);
+      expect(localStorage.getItem('accounts:accessToken')).toEqual(null);
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual(null);
+      expect(mockTransport.logout).toHaveBeenCalled();
+    });
+  });
+
   // describe('login', () => {
   //   it('throws error if service is undefined', async () => {
   //     Accounts.config({ history }, mockTransport);
