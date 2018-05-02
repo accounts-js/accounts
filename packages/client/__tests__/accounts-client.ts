@@ -211,102 +211,36 @@ describe('Accounts', () => {
     });
   });
 
-  // describe('impersonate', () => {
-  //   it('should throw error if username is not provided', async () => {
-  //     await Accounts.config({ history }, mockTransport);
+  describe('impersonate', () => {
+    it('should throw error if no tokens', async () => {
+      try {
+        await accountsClient.impersonate({ userId: 'test' });
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toBe('An access token is required');
+      }
+    });
 
-  //     try {
-  //       await Accounts.impersonate(undefined);
-  //     } catch (err) {
-  //       expect(err.message).toEqual('Username is required');
-  //     }
-  //   });
+    it('should throw if server return unauthorized', async () => {
+      (mockTransport.impersonate as jest.Mock).mockImplementationOnce(() => Promise.resolve({ authorized: false }))
+      try {
+        await accountsClient.setTokens(tokens);
+        await accountsClient.impersonate({ userId: 'test' });
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toBe('User unauthorized to impersonate');
+      }
+    });
 
-  //   it('should throw error if already impersonating', async () => {
-  //     await Accounts.config({ history }, mockTransport);
-  //     Accounts.instance.isImpersonated = () => true;
-
-  //     try {
-  //       await Accounts.impersonate('user');
-  //     } catch (err) {
-  //       expect(err.message).toEqual('User already impersonating');
-  //     }
-  //   });
-
-  //   it('should throw if no access token is present', async () => {
-  //     const transport = {
-  //       ...mockTransport,
-  //       impersonate: jest.fn(() => Promise.resolve({ authorized: false })),
-  //     };
-  //     await Accounts.config({ history }, transport);
-
-  //     try {
-  //       await Accounts.impersonate('user');
-  //     } catch (err) {
-  //       expect(err.message).toEqual('There is no access tokens available');
-  //       expect(transport.impersonate).not.toHaveBeenCalled();
-  //     }
-  //   });
-
-  //   it('should throw if server return unauthorized', async () => {
-  //     const transport = {
-  //       ...mockTransport,
-  //       impersonate: () => Promise.resolve({ authorized: false }),
-  //     };
-  //     await Accounts.instance.storeTokens({ accessToken: '1' });
-  //     await Accounts.config({ history }, transport);
-
-  //     try {
-  //       await Accounts.impersonate('user');
-  //     } catch (err) {
-  //       expect(err.message).toEqual('User unauthorized to impersonate user');
-  //     }
-  //   });
-
-  //   it('should set state correctly if impersonation was authorized', async () => {
-  //     await Accounts.config({ history }, mockTransport);
-  //     await Accounts.loginWithService('password', {
-  //       username: 'user',
-  //       password: 'password',
-  //     });
-
-  //     const result = await Accounts.impersonate('impUser');
-  //     const tokens = Accounts.tokens();
-  //     expect(tokens).toEqual({
-  //       accessToken: 'newAccessToken',
-  //       refreshToken: 'newRefreshToken',
-  //     });
-  //     expect(Accounts.isImpersonated()).toBe(true);
-  //     expect(Accounts.tokens());
-  //     expect(Accounts.originalTokens()).toEqual({
-  //       accessToken: 'accessToken',
-  //       refreshToken: 'refreshToken',
-  //     });
-  //     expect(result).toBe(impersonateResult);
-  //   });
-
-  //   it('should save impersonation state and persist it in the storage', async () => {
-  //     await Accounts.config({ history }, mockTransport);
-  //     await Accounts.loginWithService('password', {
-  //       username: 'user',
-  //       password: 'password',
-  //     });
-  //     Accounts.instance.storeTokens = jest.fn();
-  //     await Accounts.impersonate('impUser');
-  //     expect(Accounts.instance.storeTokens).toHaveBeenCalledTimes(1);
-  //   });
-
-  //   it('should not save persist impersonation when persistImpersonation=false', async () => {
-  //     await Accounts.config({ history, persistImpersonation: false }, mockTransport);
-  //     await Accounts.loginWithService('password', {
-  //       username: 'user',
-  //       password: 'password',
-  //     });
-  //     Accounts.instance.storeTokens = jest.fn();
-  //     await Accounts.impersonate('impUser');
-  //     expect(Accounts.instance.storeTokens).not.toHaveBeenCalled();
-  //   });
-  // });
+    it('should set tokens correctly if impersonation was authorized', async () => {
+      await accountsClient.setTokens(tokens);
+      await accountsClient.impersonate({ userId: 'test' });
+      const userTokens = await accountsClient.getTokens();
+      const originalTokens = await accountsClient.getTokens(true);
+      expect(userTokens).toEqual(impersonateResult.tokens);
+      expect(originalTokens).toEqual(tokens);
+    });
+  });
 
   // describe('stopImpersonation', () => {
   //   it('should not replace tokens if not impersonating', async () => {

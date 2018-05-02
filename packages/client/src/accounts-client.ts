@@ -147,10 +147,8 @@ export class AccountsClient {
     if (!res.authorized) {
       throw new Error(`User unauthorized to impersonate`);
     } else {
-      if (this.options.persistImpersonation) {
-        await this.setTokens(tokens, true);
-        await this.setTokens(res.tokens);
-      }
+      await this.setTokens(tokens, true);
+      await this.setTokens(res.tokens);
       return res;
     }
   }
