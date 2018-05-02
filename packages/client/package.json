@@ -28,7 +28,10 @@
       "ts",
       "js"
     ],
-    "testEnvironment": "jsdom"
+    "testEnvironment": "jsdom",
+    "setupFiles": [
+      "jest-localstorage-mock"
+    ]
   },
   "repository": {
     "type": "git",
@@ -50,10 +53,9 @@
     "@types/jest": "22.2.3",
     "@types/node": "^9.6.7",
     "jest": "22.4.3",
+    "jest-localstorage-mock": "^2.2.0",
     "jsonwebtoken": "8.2.1",
-    "lerna": "2.11.0",
     "localstorage-polyfill": "1.0.1",
-    "regenerator-runtime": "0.11.1",
     "rimraf": "2.6.2"
   },
   "dependencies": {

@@ -1,7 +1,7 @@
 import { TokenStorage } from '.';
 
 export interface AccountsClientOptions {
-  tokenStorage: TokenStorage;
+  tokenStorage?: TokenStorage;
   tokenStoragePrefix?: string;
   persistImpersonation?: boolean;
 }
