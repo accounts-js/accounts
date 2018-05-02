@@ -23,7 +23,6 @@ enum TokenKey {
   OriginalRefreshToken = 'originalRefreshToken',
 }
 
-// TODO allow change name of local-storage keys
 const defaultOptions = {
   tokenStorage: tokenStorageLocal,
   tokenStoragePrefix: 'accounts',
