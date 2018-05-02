@@ -2,6 +2,7 @@ import * as crypto from 'crypto';
 import * as jwt from 'jsonwebtoken';
 import { TransportInterface } from '../src';
 import { AccountsClient } from '../src/accounts-client';
+import { ENGINE_METHOD_PKEY_METHS } from 'constants';
 
 const loggedInUser = {
   user: {
@@ -22,6 +23,11 @@ const impersonateResult = {
   user: { id: '2', username: 'impUser' },
 };
 
+const tokens = {
+  accessToken: 'accessTokenTest',
+  refreshToken: 'refreshTokenTest',
+};
+
 const mockTransport: TransportInterface = {
   loginWithService: jest.fn(() => Promise.resolve(loggedInUser)),
   logout: jest.fn(() => Promise.resolve()),
@@ -37,6 +43,7 @@ describe('Accounts', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+    localStorage.clear();
   });
 
   it('requires a transport', async () => {
@@ -51,34 +58,60 @@ describe('Accounts', () => {
   });
 
   describe('getTokens', () => {
-    it('return null when no tokens', async () => {
+    it('should return null when no tokens', async () => {
       const result = await accountsClient.getTokens();
       expect(result).toBe(null);
+      expect(localStorage.getItem).toHaveBeenCalledTimes(2);
     });
 
-    it('return the tokens', async () => {
-      const tokens = {
-        accessToken: 'accessTokenTest',
-        refreshToken: 'refreshTokenTest',
-      }
+    it('should return the tokens', async () => {
       await accountsClient.setTokens(tokens);
       const result = await accountsClient.getTokens();
-      await accountsClient.clearTokens();
       expect(tokens).toEqual(result);
+      expect(localStorage.getItem).toHaveBeenCalledTimes(2);
     });
 
-    it('return the original tokens', async () => {
-      const tokens = {
-        accessToken: 'accessTokenTest',
-        refreshToken: 'refreshTokenTest',
-      }
+    it('should return the original tokens', async () => {
       await accountsClient.setTokens(tokens, true);
       const result = await accountsClient.getTokens(true);
-      await accountsClient.clearTokens(true);
       expect(tokens).toEqual(result);
+      expect(localStorage.getItem).toHaveBeenCalledTimes(2);
     });
   });
 
+  describe('setTokens', () => {
+    it('should set the tokens', async () => {
+      await accountsClient.setTokens(tokens);
+      expect(localStorage.setItem).toHaveBeenCalledTimes(2);
+      expect(localStorage.getItem('accounts:accessToken')).toEqual(tokens.accessToken);
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual(tokens.refreshToken);
+    });
+
+    it('should set the oiriginal tokens', async () => {
+      await accountsClient.setTokens(tokens, true);
+      expect(localStorage.setItem).toHaveBeenCalledTimes(2);
+      expect(localStorage.getItem('accounts:originalAccessToken')).toEqual(tokens.accessToken);
+      expect(localStorage.getItem('accounts:originalRefreshToken')).toEqual(tokens.refreshToken);
+    });
+  });
+
+  describe('clearTokens', () => {
+    it('should clear the tokens', async () => {
+      await accountsClient.setTokens(tokens);
+      await accountsClient.clearTokens();
+      expect(localStorage.removeItem).toHaveBeenCalledTimes(2);
+      expect(localStorage.getItem('accounts:accessToken')).toEqual(null);
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual(null);
+    });
+
+    it('should clear the oiriginal tokens', async () => {
+      await accountsClient.setTokens(tokens, true);
+      await accountsClient.clearTokens(true);
+      expect(localStorage.removeItem).toHaveBeenCalledTimes(2);
+      expect(localStorage.getItem('accounts:originalAccessToken')).toEqual(null);
+      expect(localStorage.getItem('accounts:originalRefreshToken')).toEqual(null);
+    });
+  });
 
   // describe('login', () => {
   //   it('throws error if service is undefined', async () => {
