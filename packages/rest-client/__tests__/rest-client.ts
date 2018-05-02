@@ -231,6 +231,22 @@ describe('RestClient', () => {
         ));
   });
 
+  describe('changePassword', () => {
+    const client = new RestClient({
+      apiHost: 'http://localhost:3000',
+      rootPath: '/accounts',
+    });
+
+    it('should call fetch with changePassword path', () =>
+      client
+        .changePassword('oldPassword', 'newPassword')
+        .then(() =>
+          expect(window.fetch.mock.calls[0][0]).toBe(
+            'http://localhost:3000/accounts/password/changePassword'
+          )
+        ));
+  });
+
   describe('getTwoFactorSecret', () => {
     const client = new RestClient({
       apiHost: 'http://localhost:3000',
