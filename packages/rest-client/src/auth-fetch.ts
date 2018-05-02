@@ -6,8 +6,7 @@ const headers: { [key: string]: string } = {
 };
 
 export const authFetch = async (accounts: AccountsClient, path: string, request: any) => {
-  await accounts.refreshSession();
-  const tokens = await accounts.getTokens();
+  const tokens = await accounts.refreshSession();
   const headersCopy = { ...headers };
 
   if (tokens) {
