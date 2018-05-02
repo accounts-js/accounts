@@ -222,7 +222,9 @@ describe('Accounts', () => {
     });
 
     it('should throw if server return unauthorized', async () => {
-      (mockTransport.impersonate as jest.Mock).mockImplementationOnce(() => Promise.resolve({ authorized: false }))
+      (mockTransport.impersonate as jest.Mock).mockImplementationOnce(() =>
+        Promise.resolve({ authorized: false })
+      );
       try {
         await accountsClient.setTokens(tokens);
         await accountsClient.impersonate({ userId: 'test' });
