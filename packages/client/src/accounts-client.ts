@@ -1,17 +1,5 @@
-import { isFunction, isString, has } from 'lodash';
-import { Map } from 'immutable';
-import { Store, Middleware } from 'redux';
 import * as jwtDecode from 'jwt-decode';
-import {
-  AccountsError,
-  validators,
-  CreateUserType,
-  LoginUserIdentityType,
-  LoginReturnType,
-  UserObjectType,
-  TokensType,
-  ImpersonateReturnType,
-} from '@accounts/common';
+import { CreateUser, LoginResult, User, Tokens, ImpersonationResult } from '@accounts/types';
 import { TransportInterface } from './transport-interface';
 import { TokenStorage, AccountsClientOptions } from './types';
 import { tokenStorageLocal } from './token-storage-local';
@@ -38,7 +26,7 @@ export class AccountsClient {
     this.storage = this.options.tokenStorage;
 
     if (!transport) {
-      throw new AccountsError('A valid transport is required');
+      throw new Error('A valid transport is required');
     }
     this.transport = transport;
   }
@@ -46,7 +34,7 @@ export class AccountsClient {
   /**
    * Get the tokens from the storage
    */
-  public async getTokens(original?: boolean): Promise<TokensType | null> {
+  public async getTokens(original?: boolean): Promise<Tokens | null> {
     const accessToken = await this.storage.getItem(
       original
         ? this.getTokenKey(TokenKey.OriginalAccessToken)
@@ -66,7 +54,7 @@ export class AccountsClient {
   /**
    * Store the tokens in the storage
    */
-  public async setTokens(tokens: TokensType, original?: boolean): Promise<void> {
+  public async setTokens(tokens: Tokens, original?: boolean): Promise<void> {
     await this.storage.setItem(
       original
         ? this.getTokenKey(TokenKey.OriginalAccessToken)
@@ -101,7 +89,7 @@ export class AccountsClient {
    * Refresh the user session
    * If the tokens have expired try to refresh them
    */
-  public async refreshSession(): Promise<TokensType | null> {
+  public async refreshSession(): Promise<Tokens | null> {
     const tokens = await this.getTokens();
     if (tokens) {
       try {
@@ -159,17 +147,17 @@ export class AccountsClient {
     userId?: string;
     username?: string;
     email?: string;
-  }): Promise<ImpersonateReturnType> {
+  }): Promise<ImpersonationResult> {
     const tokens = await this.getTokens();
 
     if (!tokens) {
-      throw new AccountsError('An access token is required');
+      throw new Error('An access token is required');
     }
 
     const res = await this.transport.impersonate(tokens.accessToken, impersonated);
 
     if (!res.authorized) {
-      throw new AccountsError(`User unauthorized to impersonate`);
+      throw new Error(`User unauthorized to impersonate`);
     } else {
       if (this.options.persistImpersonation) {
         await this.setTokens(tokens, true);
@@ -195,14 +183,14 @@ export class AccountsClient {
   public async loginWithService(
     service: string,
     credentials: { [key: string]: any }
-  ): Promise<LoginReturnType> {
+  ): Promise<LoginResult> {
     try {
       const response = await this.transport.loginWithService(service, credentials);
       await this.setTokens(response.tokens);
       return response;
     } catch (err) {
       this.clearTokens();
-      throw new AccountsError(err.message);
+      throw new Error(err.message);
     }
   }
 

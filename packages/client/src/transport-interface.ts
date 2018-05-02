@@ -1,15 +1,14 @@
-import { CreateUserType, LoginReturnType, ImpersonateReturnType } from '@accounts/common';
+import { LoginResult, ImpersonationResult } from '@accounts/types';
 
 export interface TransportInterface {
-  createUser(user: CreateUserType): Promise<string>;
   loginWithService(
     service: string,
     authenticateParams: {
       [key: string]: string | object;
     }
-  ): Promise<LoginReturnType>;
+  ): Promise<LoginResult>;
   logout(accessToken: string): Promise<void>;
-  refreshTokens(accessToken: string, refreshToken: string): Promise<LoginReturnType>;
+  refreshTokens(accessToken: string, refreshToken: string): Promise<LoginResult>;
   verifyEmail(token: string): Promise<void>;
   sendResetPasswordEmail(email: string): Promise<void>;
   sendVerificationEmail(email: string): Promise<void>;
@@ -20,5 +19,5 @@ export interface TransportInterface {
       username?: string;
       email?: string;
     }
-  ): Promise<ImpersonateReturnType>;
+  ): Promise<ImpersonationResult>;
 }
