@@ -162,8 +162,8 @@ export default class AccountsPassword implements AuthenticationService {
     }
 
     // TODO move this getter into a password service module
-    const resetTokens = get(user, ['services', 'password', 'reset']);
-    const resetTokenRecord = find(resetTokens, t => t.token === token);
+    const resetTokens: TokenRecord[] = get(user, ['services', 'password', 'reset']);
+    const resetTokenRecord: TokenRecord | null = find(resetTokens, t => t.token === token);
 
     if (this.server.isTokenExpired(token, resetTokenRecord)) {
       throw new Error('Reset password link expired');
@@ -177,6 +177,12 @@ export default class AccountsPassword implements AuthenticationService {
     const password = await this.hashAndBcryptPassword(newPassword);
     // Change the user password and remove the old token
     await this.db.setResetPassword(user.id, resetTokenRecord.address, password, token);
+
+    // If user clicked on an enrollment link we can verify his email
+    if (resetTokenRecord.reason === 'enroll-account') {
+      await this.db.verifyEmail(user.id, resetTokenRecord.address);
+    }
+
     // Changing the password should invalidate existing sessions
     this.db.invalidateAllSessions(user.id);
   }
@@ -273,6 +279,7 @@ export default class AccountsPassword implements AuthenticationService {
 
   /**
    * @description Send an email with a link the user can use to set their initial password.
+   * The user's email will be verified after clicking on the link.
    * @param {string} [address] - Which address of the user's to send the email to.
    * This address must be in the user's emails list.
    * Defaults to the first email in the list.
