@@ -56,14 +56,18 @@ export class RestClient implements TransportInterface {
 
   public impersonate(
     accessToken: string,
-    username: string,
+    impersonated: {
+      userId?: string;
+      username?: string;
+      email?: string;
+    },
     customHeaders?: object
   ): Promise<ImpersonationResult> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
         accessToken,
-        username,
+        impersonated,
       }),
     };
     return this.fetch('impersonate', args, customHeaders);
