@@ -193,6 +193,19 @@ export default class AccountsPassword implements AuthenticationService {
   }
 
   /**
+   * @description Change the current user's password.
+   * @param {string} userId - User id.
+   * @param {string} oldPassword - The user's current password.
+   * @param {string} newPassword - A new password for the user.
+   * @returns {Promise<void>} - Return a Promise.
+   */
+  public async changePassword(userId: string, oldPassword: string, newPassword: string): Promise<void> {
+    const foundUser = await this.passwordAuthenticator({ id: userId }, oldPassword);
+    const password = await bcryptPassword(newPassword);
+    return this.db.setPassword(userId, password);
+  }
+
+  /**
    * @description Send an email with a link the user can use verify their email address.
    * @param {string} [address] - Which address of the user's to send the email to.
    * This address must be in the user's emails list.

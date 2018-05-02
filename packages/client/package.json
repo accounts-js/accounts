@@ -28,8 +28,7 @@
       "ts",
       "js"
     ],
-    "testEnvironment": "jsdom",
-    "mapCoverage": true
+    "testEnvironment": "jsdom"
   },
   "repository": {
     "type": "git",
@@ -49,6 +48,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "22.2.3",
+    "@types/node": "^9.6.7",
     "jest": "22.4.3",
     "jsonwebtoken": "8.2.1",
     "lerna": "2.11.0",

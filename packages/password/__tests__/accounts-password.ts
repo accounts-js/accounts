@@ -257,6 +257,21 @@ describe('AccountsPassword', () => {
     });
   });
 
+  describe('changePassword', () => {
+    it('call passwordAuthenticator and this.db.setPassword', async () => {
+      const userId = 'id';
+      const setPassword = jest.fn(() => Promise.resolve('user'));
+      password.setStore({ setPassword } as any);
+      const passwordAuthenticator = jest.spyOn(password, 'passwordAuthenticator').mockImplementation(() => Promise.resolve({}));
+      await password.changePassword(userId, 'old-password', 'new-password');
+      expect(passwordAuthenticator.mock.calls[0][0]).toEqual({ id: userId });
+      expect(passwordAuthenticator.mock.calls[0][1]).toEqual('old-password');
+      expect(setPassword.mock.calls[0][0]).toEqual(userId);
+      expect(setPassword.mock.calls[0][1]).toBeTruthy();
+      password.passwordAuthenticator.mockRestore();
+    });
+  });
+
   describe('sendVerificationEmail', () => {
     const email = 'john.doe@gmail.com';
     const verifiedEmail = 'john.doe2@gmail.com';

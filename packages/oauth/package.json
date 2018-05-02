@@ -20,14 +20,16 @@
     "moduleFileExtensions": [
       "ts",
       "js"
-    ],
-    "mapCoverage": true
+    ]
   },
   "dependencies": {
     "@accounts/types": "^0.1.0-beta.10",
     "request-promise": "^4.2.1"
   },
   "devDependencies": {
-    "@accounts/server": "^0.1.0-beta.10"
+    "@accounts/server": "^0.1.0-beta.10",
+    "@types/jest": "22.2.3",
+    "@types/node": "9.6.7",
+    "jest": "22.4.3"
   }
 }
