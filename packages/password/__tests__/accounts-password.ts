@@ -188,6 +188,11 @@ describe('AccountsPassword', () => {
     };
     set(validUser, 'services.password.reset', [{ token, address: email }]);
     validUser.emails = [{ address: email }];
+    const validUserEnroll: any = {
+      id: 'id',
+    };
+    validUserEnroll.emails = [{ address: email }];
+    set(validUserEnroll, 'services.password.reset', [{ token, address: email, reason: 'enroll-account' }]);
     const invalidUser = { ...validUser };
     invalidUser.emails = [];
 
@@ -226,6 +231,25 @@ describe('AccountsPassword', () => {
       } catch (err) {
         expect(err.message).toMatchSnapshot();
       }
+    });
+
+    it('validate user email if enrolled', async () => {
+      const findUserByResetPasswordToken = jest.fn(() => Promise.resolve(validUserEnroll));
+      const isTokenExpired = jest.fn(() => false);
+      const setResetPassword = jest.fn(() => Promise.resolve());
+      const invalidateAllSessions = jest.fn(() => Promise.resolve());
+      const verifyEmail = jest.fn(() => Promise.resolve());
+      password.setStore({
+        findUserByResetPasswordToken,
+        setResetPassword,
+        invalidateAllSessions,
+        verifyEmail,
+      } as any);
+      password.server = { isTokenExpired } as any;
+      await password.resetPassword(token, newPassword);
+      expect(setResetPassword.mock.calls.length).toBe(1);
+      expect(verifyEmail.mock.calls.length).toBe(1);
+      expect(invalidateAllSessions.mock.calls[0]).toMatchSnapshot();
     });
 
     it('reset password and invalidate all sessions', async () => {
