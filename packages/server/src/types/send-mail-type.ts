@@ -1,1 +1,1 @@
-export type SendMailType = (mail: object) => Promise<void>;
+export type SendMailType = (mail: any) => Promise<void>;
