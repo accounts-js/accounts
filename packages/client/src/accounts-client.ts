@@ -86,6 +86,18 @@ export class AccountsClient {
   }
 
   /**
+   * Login the user with a specific service
+   */
+  public async loginWithService(
+    service: string,
+    credentials: { [key: string]: any }
+  ): Promise<LoginResult> {
+    const response = await this.transport.loginWithService(service, credentials);
+    await this.setTokens(response.tokens);
+    return response;
+  }
+
+  /**
    * Refresh the user session
    * If the tokens have expired try to refresh them
    */
@@ -117,19 +129,6 @@ export class AccountsClient {
         throw err;
       }
     }
-  }
-
-  /**
-   * Logout the user
-   * Call the server to invalidate the tokens
-   * Clean user local storage
-   */
-  public async logout(): Promise<void> {
-    const tokens = await this.getTokens();
-    if (tokens) {
-      await this.transport.logout(tokens.accessToken);
-    }
-    await this.clearTokens();
   }
 
   /**
@@ -170,15 +169,16 @@ export class AccountsClient {
   }
 
   /**
-   * Login the user with a specific service
+   * Logout the user
+   * Call the server to invalidate the tokens
+   * Clean user local storage
    */
-  public async loginWithService(
-    service: string,
-    credentials: { [key: string]: any }
-  ): Promise<LoginResult> {
-    const response = await this.transport.loginWithService(service, credentials);
-    await this.setTokens(response.tokens);
-    return response;
+  public async logout(): Promise<void> {
+    const tokens = await this.getTokens();
+    if (tokens) {
+      await this.transport.logout(tokens.accessToken);
+    }
+    await this.clearTokens();
   }
 
   private getTokenKey(tokenName: TokenKey): string {

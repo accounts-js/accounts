@@ -4,12 +4,7 @@ import { TransportInterface } from '../src';
 import { AccountsClient } from '../src/accounts-client';
 import { ENGINE_METHOD_PKEY_METHS } from 'constants';
 
-const loggedInUser = {
-  user: {
-    id: '123',
-    username: 'test',
-    email: 'test@test.com',
-  },
+const loggedInResponse = {
   sessionId: '1',
   tokens: {
     accessToken: 'accessToken',
@@ -29,9 +24,9 @@ const tokens = {
 };
 
 const mockTransport: TransportInterface = {
-  loginWithService: jest.fn(() => Promise.resolve(loggedInUser)),
+  loginWithService: jest.fn(() => Promise.resolve(loggedInResponse)),
   logout: jest.fn(() => Promise.resolve()),
-  refreshTokens: jest.fn(() => Promise.resolve(loggedInUser)),
+  refreshTokens: jest.fn(() => Promise.resolve(loggedInResponse)),
   sendResetPasswordEmail: jest.fn(() => Promise.resolve()),
   verifyEmail: jest.fn(() => Promise.resolve()),
   sendVerificationEmail: jest.fn(() => Promise.resolve()),
@@ -131,159 +126,29 @@ describe('Accounts', () => {
     });
   });
 
-  // describe('login', () => {
-  //   it('throws error if service is undefined', async () => {
-  //     Accounts.config({ history }, mockTransport);
-  //     try {
-  //       await Accounts.loginWithService(undefined, {});
-  //       throw new Error();
-  //     } catch (err) {
-  //       const { message } = err;
-  //       expect(message).toEqual('Unrecognized options for login request');
-  //     }
-  //   });
+  describe('loginWithService', () => {
+    it('calls transport', async () => {
+      await accountsClient.loginWithService('password', {
+        username: 'user',
+        password: 'password',
+      });
+      expect(mockTransport.loginWithService).toHaveBeenCalledTimes(1);
+      expect(mockTransport.loginWithService).toHaveBeenCalledWith('password', {
+        username: 'user',
+        password: 'password',
+      });
+    });
 
-  //   it('throws error if service is not a string or is an empty object', async () => {
-  //     Accounts.config({ history }, mockTransport);
-  //     try {
-  //       await Accounts.loginWithService({}, { password: 'password' });
-  //       throw new Error();
-  //     } catch (err) {
-  //       const { message } = err;
-  //       expect(message).toEqual('Unrecognized options for login request');
-  //     }
-  //   });
-
-  //   it('calls transport', async () => {
-  //     Accounts.config({ history }, mockTransport);
-  //     await Accounts.loginWithService('password', {
-  //       username: 'user',
-  //       password: 'password',
-  //     });
-  //     expect(mockTransport.loginWithService).toHaveBeenCalledTimes(1);
-  //     expect(mockTransport.loginWithService).toHaveBeenCalledWith('password', {
-  //       username: 'user',
-  //       password: 'password',
-  //     });
-  //   });
-
-  //   it('calls onSignedInHook on successful login', async () => {
-  //     const onSignedInHook = jest.fn();
-  //     Accounts.config({ history, onSignedInHook }, mockTransport);
-  //     await Accounts.loginWithService('password', {
-  //       username: 'user',
-  //       password: 'password',
-  //     });
-  //     expect(onSignedInHook).toHaveBeenCalledTimes(1);
-  //   });
-
-  //   it('sets loggingIn flag to false on failed login', async () => {
-  //     const transport = {
-  //       ...mockTransport,
-  //       loginWithService: () => Promise.reject('error'),
-  //     };
-  //     Accounts.config({ history }, transport);
-  //     try {
-  //       await Accounts.loginWithService('password', {
-  //         username: 'user',
-  //         password: 'password',
-  //       });
-  //       throw new Error();
-  //     } catch (err) {
-  //       expect(Accounts.loggingIn()).toBe(false);
-  //     }
-  //   });
-
-  //   it('stores tokens in local storage', async () => {
-  //     Accounts.config({ history }, mockTransport);
-  //     await Accounts.loginWithService('password', {
-  //       username: 'user',
-  //       password: 'password',
-  //     });
-  //     expect(localStorage.getItem('accounts:accessToken')).toEqual('accessToken');
-  //     expect(localStorage.getItem('accounts:refreshToken')).toEqual('refreshToken');
-  //   });
-
-  //   it('should return tokens in a sync return value', async () => {
-  //     await Accounts.config(
-  //       {
-  //         history,
-  //         tokenStorage: mockTokenStorage,
-  //       },
-  //       mockTransport
-  //     );
-
-  //     const tokens = Accounts.tokens();
-  //     expect(tokens.accessToken).toBe('testValue');
-  //     expect(tokens.refreshToken).toBe('testValue');
-  //   });
-
-  //   it('stores user in redux', async () => {
-  //     Accounts.config({ history }, mockTransport);
-  //     await Accounts.loginWithService('username', 'password');
-  //   });
-
-  //   it('stores tokens in redux', async () => {
-  //     Accounts.config({ history }, mockTransport);
-  //     await Accounts.loginWithService('username', 'password');
-  //     expect(Accounts.instance.getState().get('tokens')).toEqual(
-  //       Map({
-  //         ...loggedInUser.tokens,
-  //       })
-  //     );
-  //   });
-  // });
-
-  // describe('logout', () => {
-  //   it('calls callback on successful logout', async () => {
-  //     Accounts.config({ history }, mockTransport);
-  //     const callback = jest.fn();
-  //     await Accounts.logout(callback);
-  //     expect(callback).toHaveBeenCalledTimes(1);
-  //   });
-
-  //   it('calls onLogout on successful logout', async () => {
-  //     const onSignedOutHook = jest.fn();
-  //     Accounts.config({ history, onSignedOutHook }, mockTransport);
-  //     await Accounts.logout(undefined);
-  //     expect(onSignedOutHook).toHaveBeenCalledTimes(1);
-  //   });
-
-  //   it('calls callback on failure with error message', async () => {
-  //     const transport = {
-  //       ...mockTransport,
-  //       logout: () => Promise.reject({ message: 'error message' }),
-  //     };
-  //     await Accounts.instance.storeTokens({ accessToken: '1' });
-  //     await Accounts.config({ history }, transport);
-  //     const callback = jest.fn();
-  //     try {
-  //       await Accounts.logout(callback);
-  //       throw new Error();
-  //     } catch (err) {
-  //       expect(err.message).toEqual('error message');
-  //       expect(callback).toHaveBeenCalledTimes(1);
-  //       expect(callback).toHaveBeenCalledWith({ message: 'error message' });
-  //     }
-  //   });
-
-  //   it('clear tokens in redux', async () => {
-  //     const transport = {
-  //       ...mockTransport,
-  //       logout: () => Promise.reject({ message: 'error message' }),
-  //     };
-  //     Accounts.config({ history }, transport);
-  //     await Accounts.instance.storeTokens({ accessToken: '1' });
-  //     await Accounts.instance.loadTokensFromStorage();
-  //     const callback = jest.fn();
-  //     try {
-  //       await Accounts.logout(callback);
-  //       throw new Error();
-  //     } catch (err) {
-  //       expect(Accounts.instance.getState().get('tokens')).toEqual(null);
-  //     }
-  //   });
-  // });
+    it('set the tokens', async () => {
+      await accountsClient.loginWithService('password', {
+        username: 'user',
+        password: 'password',
+      });
+      expect(localStorage.setItem).toHaveBeenCalledTimes(2);
+      expect(localStorage.getItem('accounts:accessToken')).toEqual(loggedInResponse.tokens.accessToken);
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual(loggedInResponse.tokens.refreshToken);
+    });
+  });
 
   // describe('refreshSession', async () => {
   //   // TODO test that user and tokens are cleared if refreshToken is expired
