@@ -12,19 +12,7 @@ import {
   TokensType,
   ImpersonateReturnType,
 } from '@accounts/common';
-
-import config, { AccountsClientConfiguration } from './config';
-import createStore from './create-store';
-import reducer, {
-  loggingIn,
-  setTokens,
-  clearTokens as clearStoreTokens,
-  setOriginalTokens,
-  setImpersonated,
-  clearOriginalTokens,
-} from './module';
 import { TransportInterface } from './transport-interface';
-
 import { TokenStorage, AccountsClientOptions } from './types';
 import { tokenStorageLocal } from './token-storage-local';
 
@@ -212,10 +200,6 @@ export class AccountsClient {
     try {
       const response = await this.transport.loginWithService(service, credentials);
       await this.setTokens(response.tokens);
-
-      if (this.options.onSignedInHook) {
-        await this.options.onSignedInHook(response);
-      }
       return response;
     } catch (err) {
       this.clearTokens();
