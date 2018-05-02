@@ -7,11 +7,11 @@ const headers: { [key: string]: string } = {
 
 export const authFetch = async (accounts: AccountsClient, path: string, request: any) => {
   await accounts.refreshSession();
-  const { accessToken } = await accounts.getTokens();
+  const tokens = await accounts.getTokens();
   const headersCopy = { ...headers };
 
-  if (accessToken) {
-    headersCopy['accounts-access-token'] = accessToken;
+  if (tokens) {
+    headersCopy['accounts-access-token'] = tokens.accessToken;
   }
 
   /* tslint:disable no-string-literal */
