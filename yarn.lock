@@ -75,7 +75,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/jwt-decode@2.2.1":
+"@types/jwt-decode@2.2.1", "@types/jwt-decode@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@types/jwt-decode/-/jwt-decode-2.2.1.tgz#afdf5c527fcfccbd4009b5fd02d1e18241f2d2f2"
 

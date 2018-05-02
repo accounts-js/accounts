@@ -1,8 +1,8 @@
-import * as jwtDecode from 'jwt-decode';
 import { CreateUser, LoginResult, User, Tokens, ImpersonationResult } from '@accounts/types';
 import { TransportInterface } from './transport-interface';
 import { TokenStorage, AccountsClientOptions } from './types';
 import { tokenStorageLocal } from './token-storage-local';
+import { isTokenExpired } from './utils'; 
 
 enum TokenKey {
   AccessToken = 'accessToken',
@@ -105,11 +105,8 @@ export class AccountsClient {
     const tokens = await this.getTokens();
     if (tokens) {
       try {
-        const currentTime = Date.now() / 1000;
-        const decodedAccessToken = jwtDecode(tokens.accessToken) as any;
-        const decodedRefreshToken = jwtDecode(tokens.refreshToken) as any;
         // See if accessToken is expired
-        if (decodedAccessToken.exp < currentTime) {
+        if (isTokenExpired(tokens.accessToken)) {
           // Request a new token pair
           const refreshedSession = await this.transport.refreshTokens(
             tokens.accessToken,
@@ -118,7 +115,7 @@ export class AccountsClient {
 
           await this.setTokens(refreshedSession.tokens);
           return refreshedSession.tokens;
-        } else if (decodedRefreshToken.exp < currentTime) {
+        } else if (isTokenExpired(tokens.refreshToken)) {
           // Refresh token is expired, user must sign back in
           this.clearTokens();
           return null;

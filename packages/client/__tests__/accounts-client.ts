@@ -1,8 +1,11 @@
 import * as crypto from 'crypto';
 import * as jwt from 'jsonwebtoken';
+import { isTokenExpired } from '../src/utils';
 import { TransportInterface } from '../src';
 import { AccountsClient } from '../src/accounts-client';
 import { ENGINE_METHOD_PKEY_METHS } from 'constants';
+
+jest.mock('../src/utils');
 
 const loggedInResponse = {
   sessionId: '1',
@@ -15,7 +18,6 @@ const loggedInResponse = {
 const impersonateResult = {
   authorized: true,
   tokens: { accessToken: 'newAccessToken', refreshToken: 'newRefreshToken' },
-  user: { id: '2', username: 'impUser' },
 };
 
 const tokens = {
@@ -145,104 +147,69 @@ describe('Accounts', () => {
         password: 'password',
       });
       expect(localStorage.setItem).toHaveBeenCalledTimes(2);
-      expect(localStorage.getItem('accounts:accessToken')).toEqual(loggedInResponse.tokens.accessToken);
-      expect(localStorage.getItem('accounts:refreshToken')).toEqual(loggedInResponse.tokens.refreshToken);
+      expect(localStorage.getItem('accounts:accessToken')).toEqual(
+        loggedInResponse.tokens.accessToken
+      );
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual(
+        loggedInResponse.tokens.refreshToken
+      );
     });
   });
 
-  // describe('refreshSession', async () => {
-  //   // TODO test that user and tokens are cleared if refreshToken is expired
-  //   it('clears tokens and user if tokens are not set', async () => {
-  //     Accounts.config({}, mockTransport);
-  //     Accounts.instance.clearTokens = jest.fn(() => Accounts.instance.clearTokens);
-  //     try {
-  //       await Accounts.refreshSession();
-  //     } catch (err) {
-  //       expect(err.message).toEqual('no tokens provided');
-  //       expect(Accounts.instance.clearTokens).toHaveBeenCalledTimes(1);
-  //     }
-  //   });
+  describe('refreshSession', () => {
+    it('should do nothing when no tokens', async () => {
+      const result = await accountsClient.refreshSession();
+      expect(result).not.toBeTruthy();
+      expect(isTokenExpired).not.toHaveBeenCalled();
+    });
 
-  //   it('clears tokens, users and throws error if bad refresh token provided', async () => {
-  //     localStorage.setItem('accounts:refreshToken', 'bad token');
-  //     localStorage.setItem('accounts:accessToken', 'bad token');
-  //     await Accounts.config({}, mockTransport);
-  //     Accounts.instance.clearTokens = jest.fn(() => Accounts.instance.clearTokens);
-  //     try {
-  //       await Accounts.refreshSession();
-  //       throw new Error();
-  //     } catch (err) {
-  //       const { message } = err;
-  //       expect(message).toEqual('falsy token provided');
-  //     }
-  //   });
+    it('should call transport.refreshTokens if accessToken is expired and set the tokens', async () => {
+      (isTokenExpired as jest.Mock).mockImplementation(() => true);
+      await accountsClient.setTokens(tokens);
+      const result = await accountsClient.refreshSession();
+      expect(result).toEqual(loggedInResponse.tokens);
+      expect(isTokenExpired).toHaveBeenCalledWith(tokens.accessToken);
+      expect(mockTransport.refreshTokens).toHaveBeenCalledWith(
+        tokens.accessToken,
+        tokens.refreshToken
+      );
+      expect(localStorage.setItem).toHaveBeenCalledTimes(4);
+    });
 
-  //   it('should do nothing if tokens are still valid', async () => {
-  //     Accounts.config({}, mockTransport);
-  //     const accessToken = jwt.sign({ data: 'oldRefreshToken' }, 'secret', {
-  //       expiresIn: 10,
-  //     });
-  //     const refreshToken = jwt.sign({ data: 'oldRefreshToken' }, 'secret', {
-  //       expiresIn: '1d',
-  //     });
-  //     const oldTokens = {
-  //       accessToken,
-  //       refreshToken,
-  //     };
-  //     Accounts.instance.storeTokens(oldTokens);
-  //     // tslint:disable-next-line no-string-literal
-  //     Accounts.instance['store'].dispatch(setTokens(oldTokens));
-  //     await Accounts.refreshSession();
-  //     expect(localStorage.getItem('accounts:accessToken')).toEqual(accessToken);
-  //     expect(localStorage.getItem('accounts:refreshToken')).toEqual(refreshToken);
-  //   });
+    it('should do nothing if tokens are still valid', async () => {
+      (isTokenExpired as jest.Mock).mockImplementation(() => false);
+      await accountsClient.setTokens(tokens);
+      const result = await accountsClient.refreshSession();
+      expect(result).toEqual(tokens);
+      expect(localStorage.setItem).toHaveBeenCalledTimes(2);
+      expect(mockTransport.refreshTokens).not.toHaveBeenCalledWith();
+    });
 
-  //   it('requests a new token pair, sets the tokens and the user', async () => {
-  //     Accounts.config({}, mockTransport);
-  //     const accessToken = jwt.sign({ data: 'oldRefreshToken' }, 'secret', {
-  //       expiresIn: -10,
-  //     });
-  //     const refreshToken = jwt.sign({ data: 'oldRefreshToken' }, 'secret', {
-  //       expiresIn: '1d',
-  //     });
-  //     const oldTokens = {
-  //       accessToken,
-  //       refreshToken,
-  //     };
-  //     Accounts.instance.storeTokens(oldTokens);
-  //     // tslint:disable-next-line no-string-literal
-  //     Accounts.instance['store'].dispatch(setTokens(oldTokens));
-  //     await Accounts.refreshSession();
-  //     expect(localStorage.getItem('accounts:accessToken')).toEqual('accessToken');
-  //     expect(localStorage.getItem('accounts:refreshToken')).toEqual('refreshToken');
-  //   });
-  // });
+    it('should clear the tokens is refreshToken is expired', async () => {
+      (isTokenExpired as jest.Mock).mockImplementationOnce(() => false);
+      (isTokenExpired as jest.Mock).mockImplementationOnce(() => true);
+      await accountsClient.setTokens(tokens);
+      const result = await accountsClient.refreshSession();
+      expect(result).toBe(null);
+      expect(localStorage.removeItem).toHaveBeenCalledTimes(2);
+      expect(mockTransport.refreshTokens).not.toHaveBeenCalledWith();
+    });
 
-  // describe('verifyEmail', () => {
-  //   it('should return an AccountsError', async () => {
-  //     const error = 'something bad';
-  //     Accounts.config(
-  //       {},
-  //       {
-  //         ...mockTransport,
-  //         verifyEmail: () => Promise.reject({ message: error }),
-  //       }
-  //     );
-  //     try {
-  //       await Accounts.verifyEmail(undefined);
-  //       throw new Error();
-  //     } catch (err) {
-  //       expect(err.message).toEqual(error);
-  //     }
-  //   });
-
-  //   it('should call transport.verifyEmail', async () => {
-  //     Accounts.config({}, mockTransport);
-  //     await Accounts.verifyEmail('token');
-  //     expect(mockTransport.verifyEmail).toHaveBeenCalledTimes(1);
-  //     expect(mockTransport.verifyEmail).toHaveBeenCalledWith('token');
-  //   });
-  // });
+    it('should clear the tokens and forward the error', async () => {
+      try {
+        (isTokenExpired as jest.Mock).mockImplementation(() => {
+          throw new Error('Err');
+        });
+        await accountsClient.setTokens(tokens);
+        await accountsClient.refreshSession();
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toBe('Err');
+        expect(localStorage.removeItem).toHaveBeenCalledTimes(2);
+        expect(mockTransport.refreshTokens).not.toHaveBeenCalledWith();
+      }
+    });
+  });
 
   // describe('impersonate', () => {
   //   it('should throw error if username is not provided', async () => {
