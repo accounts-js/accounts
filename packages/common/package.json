@@ -33,7 +33,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/js-accounts/accounts/tree/master/packages/common"
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/common"
   },
   "keywords": [
     "rest",
