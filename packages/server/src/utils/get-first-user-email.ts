@@ -1,4 +1,4 @@
-import * as includes from 'lodash/includes';
+import { includes } from 'lodash';
 import { UserObjectType, AccountsError, EmailRecord } from '@accounts/common';
 
 export function getFirstUserEmail(user: UserObjectType, address: string): string {

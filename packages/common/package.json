@@ -29,8 +29,7 @@
     "moduleFileExtensions": [
       "ts",
       "js"
-    ],
-    "mapCoverage": true
+    ]
   },
   "repository": {
     "type": "git",
@@ -49,10 +48,14 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
+    "@types/jest": "22.2.3",
+    "@types/lodash": "^4.14.108",
+    "@types/node": "9.6.7",
+    "jest": "22.4.3",
     "localstorage-polyfill": "1.0.1",
     "regenerator-runtime": "0.11.1"
   },
   "dependencies": {
-    "lodash": "^4.16.4"
+    "lodash": "^4.17.10"
   }
 }

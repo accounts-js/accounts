@@ -231,8 +231,8 @@ export class AccountsClient {
         this.store.dispatch(loggingIn(true));
         const currentTime = Date.now() / 1000;
 
-        const decodedAccessToken = jwtDecode(accessToken);
-        const decodedRefreshToken = jwtDecode(refreshToken);
+        const decodedAccessToken = jwtDecode(accessToken) as any;
+        const decodedRefreshToken = jwtDecode(refreshToken) as any;
         // See if accessToken is expired
         if (decodedAccessToken.exp < currentTime) {
           // Request a new token pair
