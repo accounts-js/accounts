@@ -242,60 +242,20 @@ describe('Accounts', () => {
     });
   });
 
-  // describe('stopImpersonation', () => {
-  //   it('should not replace tokens if not impersonating', async () => {
-  //     await Accounts.config({ history }, mockTransport);
+  describe('stopImpersonation', () => {
+    it('should not replace tokens if not impersonating', async () => {
+      await accountsClient.setTokens(tokens);
+      await accountsClient.stopImpersonation();
+      const userTokens = await accountsClient.getTokens();
+      expect(userTokens).toEqual(tokens);
+    });
 
-  //     await Accounts.loginWithService('password', {
-  //       username: 'user',
-  //       password: 'password',
-  //     });
-
-  //     expect(Accounts.originalTokens()).toEqual({
-  //       accessToken: null,
-  //       refreshToken: null,
-  //     });
-  //     expect(Accounts.tokens()).toEqual(loggedInUser.tokens);
-  //     await Accounts.stopImpersonation();
-  //     expect(Accounts.originalTokens()).toEqual({
-  //       accessToken: null,
-  //       refreshToken: null,
-  //     });
-  //     expect(Accounts.tokens()).toEqual(loggedInUser.tokens);
-  //   });
-
-  //   it('should set impersonated state to false', async () => {
-  //     await Accounts.instance.storeTokens({ accessToken: '1' });
-  //     await Accounts.config({ history }, mockTransport);
-  //     Accounts.instance.refreshSession = () => Promise.resolve();
-
-  //     await Accounts.impersonate('impUser');
-  //     expect(Accounts.isImpersonated()).toBe(true);
-  //     await Accounts.stopImpersonation();
-  //     expect(Accounts.isImpersonated()).toBe(false);
-  //   });
-
-  //   it('should set the original tokens as current tokens and delete original tokens', async () => {
-  //     await Accounts.config({ history }, mockTransport);
-  //     Accounts.instance.refreshSession = () => Promise.resolve();
-
-  //     await Accounts.loginWithService('password', {
-  //       username: 'user',
-  //       password: 'password',
-  //     });
-  //     const tokens = Accounts.tokens();
-
-  //     await Accounts.impersonate('impUser');
-  //     expect(Accounts.tokens()).toEqual({
-  //       accessToken: 'newAccessToken',
-  //       refreshToken: 'newRefreshToken',
-  //     });
-  //     await Accounts.stopImpersonation();
-  //     expect(Accounts.tokens()).toEqual(tokens);
-  //     expect(Accounts.originalTokens()).toEqual({
-  //       accessToken: null,
-  //       refreshToken: null,
-  //     });
-  //   });
-  // });
+    it('should replace the tokens', async () => {
+      await accountsClient.setTokens(tokens);
+      await accountsClient.setTokens(impersonateResult.tokens, true);
+      await accountsClient.stopImpersonation();
+      const userTokens = await accountsClient.getTokens();
+      expect(userTokens).toEqual(impersonateResult.tokens);
+    });
+  });
 });
