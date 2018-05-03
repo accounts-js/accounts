@@ -1,7 +1,7 @@
 import { trim, isEmpty, isFunction, isString, isPlainObject, get, find, includes } from 'lodash';
 import { CreateUser, User, Login, EmailRecord, TokenRecord, DatabaseInterface, AuthenticationService } from '@accounts/types';
 import { HashAlgorithm } from '@accounts/common';
-import { TwoFactor, AccountsTwoFactorOptions } from '@accounts/two-factor';
+import { TwoFactor, AccountsTwoFactorOptions, getUserTwoFactorService } from '@accounts/two-factor';
 import { AccountsServer, generateRandomToken, getFirstUserEmail } from '@accounts/server';
 import { hashPassword, bcryptPassword, verifyPassword } from './utils/encryption';
 
@@ -71,7 +71,7 @@ export default class AccountsPassword implements AuthenticationService {
     const foundUser = await this.passwordAuthenticator(user, password);
 
     // If user activated two factor authentication try with the code
-    if (this.twoFactor.getUserService(foundUser)) {
+    if (getUserTwoFactorService(foundUser)) {
       await this.twoFactor.authenticate(foundUser, code);
     }
 
