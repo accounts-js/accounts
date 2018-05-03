@@ -192,7 +192,9 @@ describe('AccountsPassword', () => {
       id: 'id',
     };
     validUserEnroll.emails = [{ address: email }];
-    set(validUserEnroll, 'services.password.reset', [{ token, address: email, reason: 'enroll-account' }]);
+    set(validUserEnroll, 'services.password.reset', [
+      { token, address: email, reason: 'enroll-account' },
+    ]);
     const invalidUser = { ...validUser };
     invalidUser.emails = [];
 
@@ -286,7 +288,9 @@ describe('AccountsPassword', () => {
       const userId = 'id';
       const setPassword = jest.fn(() => Promise.resolve('user'));
       password.setStore({ setPassword } as any);
-      const passwordAuthenticator = jest.spyOn(password, 'passwordAuthenticator').mockImplementation(() => Promise.resolve({}));
+      const passwordAuthenticator = jest
+        .spyOn(password, 'passwordAuthenticator')
+        .mockImplementation(() => Promise.resolve({}));
       await password.changePassword(userId, 'old-password', 'new-password');
       expect(passwordAuthenticator.mock.calls[0][0]).toEqual({ id: userId });
       expect(passwordAuthenticator.mock.calls[0][1]).toEqual('old-password');

@@ -1,15 +1,25 @@
 import { trim, isEmpty, isFunction, isString, isPlainObject, find, includes } from 'lodash';
-import { CreateUser, User, Login, EmailRecord, TokenRecord, DatabaseInterface, AuthenticationService } from '@accounts/types';
+import {
+  CreateUser,
+  User,
+  Login,
+  EmailRecord,
+  TokenRecord,
+  DatabaseInterface,
+  AuthenticationService,
+} from '@accounts/types';
 import { HashAlgorithm } from '@accounts/common';
 import { TwoFactor, AccountsTwoFactorOptions } from '@accounts/two-factor';
 import { AccountsServer, generateRandomToken, getFirstUserEmail } from '@accounts/server';
-import { getUserResetTokens, getUserVerificationTokens, hashPassword, bcryptPassword, verifyPassword } from './utils';
-
-import { PasswordCreateUserType } from './types/password-create-user-type';
-import { PasswordLoginType } from './types/password-login-type';
-import { PasswordType } from './types/password-type';
-
-import { isEmail } from './utils/isEmail';
+import {
+  getUserResetTokens,
+  getUserVerificationTokens,
+  hashPassword,
+  bcryptPassword,
+  verifyPassword,
+  isEmail,
+} from './utils';
+import { PasswordCreateUserType, PasswordLoginType, PasswordType } from './types';
 
 export interface AccountsPasswordOptions {
   twoFactor?: AccountsTwoFactorOptions;
@@ -200,7 +210,11 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public async changePassword(userId: string, oldPassword: string, newPassword: string): Promise<void> {
+  public async changePassword(
+    userId: string,
+    oldPassword: string,
+    newPassword: string
+  ): Promise<void> {
     const foundUser = await this.passwordAuthenticator({ id: userId }, oldPassword);
     const password = await bcryptPassword(newPassword);
     return this.db.setPassword(userId, password);
@@ -335,17 +349,14 @@ export default class AccountsPassword implements AuthenticationService {
     };
 
     const { validateNewUser } = this.options;
-    if (isFunction(validateNewUser) && !await validateNewUser(proposedUserObject)) {
+    if (isFunction(validateNewUser) && !(await validateNewUser(proposedUserObject))) {
       throw new Error('User invalid');
     }
 
     return this.db.createUser(proposedUserObject);
   }
 
-  private async passwordAuthenticator(
-    user: string | Login,
-    password: PasswordType
-  ): Promise<User> {
+  private async passwordAuthenticator(user: string | Login, password: PasswordType): Promise<User> {
     const { username, email, id } = isString(user)
       ? this.toUsernameAndEmail({ user })
       : this.toUsernameAndEmail({ ...user });
