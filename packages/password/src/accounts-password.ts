@@ -1,9 +1,9 @@
-import { trim, isEmpty, isFunction, isString, isPlainObject, get, find, includes } from 'lodash';
+import { trim, isEmpty, isFunction, isString, isPlainObject, find, includes } from 'lodash';
 import { CreateUser, User, Login, EmailRecord, TokenRecord, DatabaseInterface, AuthenticationService } from '@accounts/types';
 import { HashAlgorithm } from '@accounts/common';
 import { TwoFactor, AccountsTwoFactorOptions } from '@accounts/two-factor';
 import { AccountsServer, generateRandomToken, getFirstUserEmail } from '@accounts/server';
-import { hashPassword, bcryptPassword, verifyPassword } from './utils/encryption';
+import { getUserResetTokens, getUserVerificationTokens, hashPassword, bcryptPassword, verifyPassword } from './utils';
 
 import { PasswordCreateUserType } from './types/password-create-user-type';
 import { PasswordLoginType } from './types/password-login-type';
@@ -132,11 +132,7 @@ export default class AccountsPassword implements AuthenticationService {
       throw new Error('Verify email link expired');
     }
 
-    const verificationTokens: TokenRecord[] = get(
-      user,
-      ['services', 'email', 'verificationTokens'],
-      []
-    );
+    const verificationTokens = getUserVerificationTokens(user);
     const tokenRecord = find(verificationTokens, (t: TokenRecord) => t.token === token);
     if (!tokenRecord) {
       throw new Error('Verify email link expired');
@@ -161,9 +157,8 @@ export default class AccountsPassword implements AuthenticationService {
       throw new Error('Reset password link expired');
     }
 
-    // TODO move this getter into a password service module
-    const resetTokens: TokenRecord[] = get(user, ['services', 'password', 'reset']);
-    const resetTokenRecord: TokenRecord | null = find(resetTokens, t => t.token === token);
+    const resetTokens = getUserResetTokens(user);
+    const resetTokenRecord = find(resetTokens, t => t.token === token);
 
     if (this.server.isTokenExpired(token, resetTokenRecord)) {
       throw new Error('Reset password link expired');
