@@ -90,29 +90,38 @@ export class AccountsServer {
     params,
     infos: ConnectionInformations
   ): Promise<LoginResult> {
-    if (!this.services[serviceName]) {
-      throw new Error(`No service with the name ${serviceName} was registered.`);
-    }
-    const user: User = await this.services[serviceName].authenticate(params);
-    if (!user) {
-      throw new Error(`Service ${serviceName} was not able to authenticate user`);
-    }
-
-    await this.hooks.emitSerial(ServerHooks.Login, {
+    const hooksInfo: any = {
       // The service name, such as “password” or “twitter”.
       service: serviceName,
-      // The user object
-      user,
       // The connection informations <ConnectionInformations>
       connection: infos,
-    });
-    return this.loginWithUser(user, infos);
+    };
+    try {
+      if (!this.services[serviceName]) {
+        throw new Error(`No service with the name ${serviceName} was registered.`);
+      }
+
+      const user: User = await this.services[serviceName].authenticate(params);
+      if (!user) {
+        throw new Error(`Service ${serviceName} was not able to authenticate user`);
+      }
+      hooksInfo.user = user;
+
+      // Let the user validate the login attempt
+      await this.hooks.emitSerial(ServerHooks.Login, hooksInfo);
+      const loginResult = await this.loginWithUser(user, infos);
+      this.hooks.emit(ServerHooks.LoginSuccess, hooksInfo);
+      return loginResult;
+    } catch (err) {
+      this.hooks.emit(ServerHooks.LoginError, hooksInfo);
+      throw err;
+    }
   }
 
   /**
-   * @description Server use only. This method creates a session
-   *              without authenticating any user identity.
-   *              Any authentication should happen before calling this function.
+   * @description Server use only.
+   * This method creates a session without authenticating any user identity.
+   * Any authentication should happen before calling this function.
    * @param {User} userId - The user object.
    * @param {string} ip - User's ip.
    * @param {string} userAgent - User's client agent.
@@ -120,30 +129,20 @@ export class AccountsServer {
    */
   public async loginWithUser(user: User, infos: ConnectionInformations): Promise<LoginResult> {
     const { ip, userAgent } = infos;
+    const token = generateRandomToken();
+    const sessionId = await this.db.createSession(user.id, token, {
+      ip,
+      userAgent,
+    });
+    const { accessToken, refreshToken } = this.createTokens(token);
 
-    try {
-      const token = generateRandomToken();
-      const sessionId = await this.db.createSession(user.id, token, {
-        ip,
-        userAgent,
-      });
-      const { accessToken, refreshToken } = this.createTokens(token);
-
-      const loginResult = {
-        sessionId,
-        user: this.sanitizeUser(user),
-        tokens: {
-          refreshToken,
-          accessToken,
-        },
-      };
-
-      this.hooks.emit(ServerHooks.LoginSuccess, user);
-      return loginResult;
-    } catch (e) {
-      this.hooks.emit(ServerHooks.LoginError, e);
-      throw e;
-    }
+    return {
+      sessionId,
+      tokens: {
+        refreshToken,
+        accessToken,
+      },
+    };
   }
 
   /**
