@@ -108,7 +108,7 @@ export class AccountsServer {
       hooksInfo.user = user;
 
       // Let the user validate the login attempt
-      await this.hooks.emitSerial(ServerHooks.Login, hooksInfo);
+      await this.hooks.emitSerial(ServerHooks.ValidateLogin, hooksInfo);
       const loginResult = await this.loginWithUser(user, infos);
       this.hooks.emit(ServerHooks.LoginSuccess, hooksInfo);
       return loginResult;

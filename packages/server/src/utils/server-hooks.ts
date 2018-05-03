@@ -1,5 +1,5 @@
 export const ServerHooks = {
-  Login: 'Login',
+  ValidateLogin: 'ValidateLogin',
   LoginSuccess: 'LoginSuccess',
   LoginError: 'LoginError',
   LogoutSuccess: 'LogoutSuccess',
