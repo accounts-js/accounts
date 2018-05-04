@@ -1,4 +1,10 @@
+import * as IORedis from 'ioredis';
+
 export interface AccountsRedisOptions {
+  /**
+   * The options for the ioredis instance
+   */
+  ioredis?: IORedis.RedisOptions;
   /**
    * The users collection name, default 'users'.
    */
@@ -18,7 +24,7 @@ export interface AccountsRedisOptions {
    * Function that generate the id for new objects.
    * Default to shortid npm package `shortid.generate()`
    */
-  idProvider?: () => string | object;
+  idProvider?: () => string;
   /**
    * Function that generate the date for the timestamps.
    */
