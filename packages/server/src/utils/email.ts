@@ -3,7 +3,7 @@ import { EmailTemplateType } from '../types/email-template-type';
 import { EmailTemplatesType } from '../types/email-templates-type';
 
 export const emailTemplates = {
-  from: 'js-accounts <no-reply@js-accounts.com>',
+  from: 'accounts-js <no-reply@accounts-js.com>',
 
   verifyEmail: {
     subject: () => 'Verify your account email',
