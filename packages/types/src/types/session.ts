@@ -4,6 +4,7 @@ export interface Session {
   token: string;
   valid: boolean;
   userAgent?: string;
+  ip?: string;
   createdAt: string;
   updatedAt: string;
 }

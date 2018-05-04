@@ -24,9 +24,12 @@ export class Redis implements DatabaseInterface {
   private options: AccountsRedisOptions;
   private db: IORedis.Redis;
 
-  constructor(db: any, options?: AccountsRedisOptions) {
+  constructor(db: IORedis.Redis, options?: AccountsRedisOptions) {
     this.options = { ...defaultOptions, ...options };
-    this.db = new IORedis(this.options.ioredis);
+    if (!db) {
+      throw new Error('A database connection is required');
+    }
+    this.db = db;
   }
 
   public async createSession(
@@ -58,7 +61,7 @@ export class Redis implements DatabaseInterface {
   }
 
   public async updateSession(sessionId: string, connection: ConnectionInformations): Promise<void> {
-    if (this.db.exists(`${this.options.sessionCollectionName}:${sessionId}`)) {
+    if (await this.db.exists(`${this.options.sessionCollectionName}:${sessionId}`)) {
       await this.db.hmset(`${this.options.sessionCollectionName}:${sessionId}`, {
         userAgent: connection.userAgent,
         ip: connection.ip,
@@ -68,7 +71,7 @@ export class Redis implements DatabaseInterface {
   }
 
   public async invalidateSession(sessionId: string): Promise<void> {
-    if (this.db.exists(`${this.options.sessionCollectionName}:${sessionId}`)) {
+    if (await this.db.exists(`${this.options.sessionCollectionName}:${sessionId}`)) {
       await this.db.hmset(`${this.options.sessionCollectionName}:${sessionId}`, {
         valid: false,
         [this.options.timestamps.updatedAt]: this.options.dateProvider(),
@@ -77,11 +80,20 @@ export class Redis implements DatabaseInterface {
   }
 
   public async invalidateAllSessions(userId: string): Promise<void> {
-    // TODO
+    if (
+      await this.db.exists(
+        `${this.options.sessionCollectionName}:${this.options.userCollectionName}:${userId}`
+      )
+    ) {
+      const sessionIds: string[] = await this.db.smembers(
+        `${this.options.sessionCollectionName}:${this.options.userCollectionName}:${userId}`
+      );
+      await sessionIds.map(sessionId => this.invalidateSession(sessionId));
+    }
   }
 
   public async findSessionByToken(token: string): Promise<Session | null> {
-    if (this.db.exists(`${this.options.sessionCollectionName}:token:${token}`)) {
+    if (await this.db.exists(`${this.options.sessionCollectionName}:token:${token}`)) {
       const sessionId = await this.db.get(`${this.options.sessionCollectionName}:token:${token}`);
       return this.findSessionById(sessionId);
     }
@@ -89,7 +101,7 @@ export class Redis implements DatabaseInterface {
   }
 
   public async findSessionById(sessionId: string): Promise<Session | null> {
-    if (this.db.exists(`${this.options.sessionCollectionName}:${sessionId}`)) {
+    if (await this.db.exists(`${this.options.sessionCollectionName}:${sessionId}`)) {
       const session = await this.db.hgetall(`${this.options.sessionCollectionName}:${sessionId}`);
       return this.formatSession(sessionId, session);
     }
