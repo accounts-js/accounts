@@ -2,7 +2,8 @@ import * as mongodb from 'mongodb';
 // tslint:disable-next-line
 import { ObjectID } from 'mongodb';
 import { randomBytes } from 'crypto';
-import Mongo from '../src';
+import { runDatabaseTests } from '@accounts/database-tests';
+import { Mongo } from '../src';
 
 const generateRandomToken = (length: number = 43): string => randomBytes(length).toString('hex');
 
@@ -28,6 +29,37 @@ function dropDatabase(cb) {
     }
     return cb();
   });
+}
+
+class Test {
+  private client: mongodb.MongoClient;
+  private db: mongodb.Db;
+  private mongo: Mongo;
+
+  public async setup() {
+    await this.createConnection();
+  }
+
+  public async teardown() {
+    await this.dropDatabase();
+    await this.closeConnection();
+  }
+
+  public async createConnection() {
+    const url = 'mongodb://localhost:27017';
+    this.client = await mongodb.MongoClient.connect(url);
+    this.db = client.db('accounts-mongo-tests');
+    this.mongo = new Mongo(this.db);
+  }
+
+  public async closeConnection() {
+    await this.dropDatabase();
+    await this.client.close();
+  }
+
+  public async dropDatabase() {
+    await this.db.dropDatabase();
+  }
 }
 
 function createConnection(cb) {
@@ -62,6 +94,10 @@ function delay(time) {
 describe('Mongo', () => {
   beforeAll(createConnection);
   afterAll(closeConnection);
+
+  it('should pass @accounts/database-tests', () => {
+    runDatabaseTests(mongo);
+  });
 
   describe('toMongoID', () => {
     it('should not throw when mongo id is valid', () => {
