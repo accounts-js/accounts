@@ -1,4 +1,5 @@
 import * as Ioredis from 'ioredis';
+import * as shortid from 'shortid';
 import {
   CreateUser,
   User,
@@ -8,7 +9,16 @@ import {
 } from '@accounts/types';
 import { AccountsRedisOptions } from './types';
 
-const defaultOptions = {};
+const defaultOptions = {
+  userCollectionName: 'users',
+  sessionCollectionName: 'sessions',
+  timestamps: {
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+  },
+  idProvider: () => shortid.generate(),
+  dateProvider: (date?: Date) => (date ? date.getTime() : Date.now()),
+};
 
 export class Redis implements DatabaseInterface {
   private options: AccountsRedisOptions;
