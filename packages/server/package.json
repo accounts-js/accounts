@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@types/jest": "22.2.3",
-    "@types/jsonwebtoken": "7.2.6",
+    "@types/jsonwebtoken": "7.2.7",
     "@types/jwt-decode": "2.2.1",
     "@types/node": "9.6.7",
     "jest": "22.4.3",
