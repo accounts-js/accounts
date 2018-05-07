@@ -20,7 +20,7 @@ class DatabaseTests {
     await this.dropDatabase();
   }
 
-  public async createConnection() {
+  public createConnection = async () => {
     const url = 'mongodb://localhost:27017';
     this.client = await mongodb.MongoClient.connect(url);
     this.db = this.client.db('accounts-mongo-tests');
