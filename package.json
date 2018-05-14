@@ -43,7 +43,7 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/tslint-config-accounts": "0.0.9",
-    "codecov": "3.0.1",
+    "codecov": "3.0.2",
     "lerna": "2.11.0",
     "opencollective": "1.0.3",
     "prettier": "1.12.1",
