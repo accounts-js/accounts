@@ -12,11 +12,9 @@
     "compile": "tsc",
     "prepublishOnly": "npm run compile",
     "test": "npm run testonly",
-    "test:watch": "npm run testonly -- --watch --coverage",
+    "test:watch": "npm run testonly -- --watch",
     "testonly": "jest",
-    "coverage": "npm run testonly -- --coverage",
-    "coveralls":
-      "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "jest": {
     "testEnvironment": "node",
@@ -24,8 +22,7 @@
       ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
-    "moduleFileExtensions": ["ts", "js"],
-    "mapCoverage": true
+    "moduleFileExtensions": ["ts", "js"]
   },
   "repository": {
     "type": "git",
