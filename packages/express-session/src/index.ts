@@ -16,7 +16,7 @@ export interface AccountsSessionOptions {
 export class AccountsSession {
   constructor(private accountsServer: AccountsServer, private options: AccountsSessionOptions) {
     if (!this.options.name) {
-      this.options.name = 'js-accounts-tokens';
+      this.options.name = 'accounts-js-tokens';
     }
   }
 
@@ -37,18 +37,22 @@ export class AccountsSession {
     };
   }
 
-  public async destroy(req?: Request, callback?: (err: any) => void): Promise<void> {
-    req.session.destroy(async err => {
-      const tokens = this.get(req);
+  public destroy(req?: Request): Promise<void> {
+    return new Promise((resolve, reject) => {
+      req.session.destroy(async err => {
+        const tokens = this.get(req);
 
-      if (tokens && tokens.accessToken) {
-        await this.accountsServer.logout(tokens.accessToken);
-        await this.clear(req);
-      }
+        if (tokens && tokens.accessToken) {
+          await this.accountsServer.logout(tokens.accessToken);
+          await this.clear(req);
+        }
 
-      if (callback) {
-        await callback(err);
-      }
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
     });
   }
 
