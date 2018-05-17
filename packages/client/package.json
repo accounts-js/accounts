@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client",
-  "version": "0.1.0-beta.10",
+  "version": "0.1.0-beta.11",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -57,7 +57,7 @@
     "rimraf": "2.6.2"
   },
   "dependencies": {
-    "@accounts/common": "^0.1.0-beta.10",
+    "@accounts/common": "^0.1.0-beta.11",
     "crypto-js": "^3.1.9-1",
     "immutable": "^3.8.1",
     "jwt-decode": "^2.1.0",
