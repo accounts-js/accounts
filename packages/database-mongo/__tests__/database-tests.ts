@@ -9,16 +9,16 @@ class DatabaseTests {
 
   public setup = async () => {
     await this.createConnection();
-  }
+  };
 
   public teardown = async () => {
     await this.dropDatabase();
     await this.closeConnection();
-  }
+  };
 
   public beforeEach = async () => {
     await this.dropDatabase();
-  }
+  };
 
   public createConnection = async () => {
     const url = 'mongodb://localhost:27017';
@@ -28,15 +28,15 @@ class DatabaseTests {
       convertUserIdToMongoObjectId: false,
       convertSessionIdToMongoObjectId: false,
     });
-  }
+  };
 
   public closeConnection = async () => {
     await this.client.close();
-  }
+  };
 
   public dropDatabase = async () => {
     await this.db.dropDatabase();
-  }
+  };
 }
 
 runDatabaseTests(new DatabaseTests());

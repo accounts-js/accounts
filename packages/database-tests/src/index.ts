@@ -11,13 +11,13 @@ export const runDatabaseTests = (tests: any) => {
   describe('@accounts/database-tests', () => {
     const token = generateRandomToken();
     const token2 = generateRandomToken();
-  
+
     const session = {
       userId: '123',
       ip: '127.0.0.1',
       userAgent: 'user agent',
     };
-  
+
     const connectionInfo = {
       ip: '127.0.0.1',
       userAgent: 'user agent',
@@ -26,7 +26,7 @@ export const runDatabaseTests = (tests: any) => {
     beforeAll(tests.setup);
     afterAll(tests.teardown);
     beforeEach(tests.beforeEach);
-  
+
     describe('sessions', () => {
       describe('createSession', () => {
         it('should create session', async () => {
@@ -45,40 +45,52 @@ export const runDatabaseTests = (tests: any) => {
           expect(resultSession.updatedAt).toBeTruthy();
         });
       });
-  
+
       describe('findSessionByToken', () => {
         it('should return null for not found session', async () => {
           const resultSession = await tests.database.findSessionByToken(token);
           expect(resultSession).toBeNull();
         });
-  
+
         it('should find the session', async () => {
-          const sessionId = await tests.database.createSession(session.userId, token, connectionInfo);
+          const sessionId = await tests.database.createSession(
+            session.userId,
+            token,
+            connectionInfo
+          );
           const resultSession = await tests.database.findSessionByToken(token);
           expect(resultSession).toBeTruthy();
         });
       });
-  
+
       describe('findSessionById', () => {
         it('should return null for not found session', async () => {
           const resultSession = await tests.database.findSessionById(token);
           expect(resultSession).toBeNull();
         });
-  
+
         it('should find the session', async () => {
-          const sessionId = await tests.database.createSession(session.userId, token, connectionInfo);
+          const sessionId = await tests.database.createSession(
+            session.userId,
+            token,
+            connectionInfo
+          );
           const resultSession = await tests.database.findSessionById(sessionId);
           expect(resultSession).toBeTruthy();
         });
       });
-  
+
       describe('updateSession', () => {
         it('should not throw for not found session', async () => {
           await expect(tests.database.updateSession(token, connectionInfo)).resolves.not.toThrow();
         });
-  
+
         it('should update the session', async () => {
-          const sessionId = await tests.database.createSession(session.userId, token, connectionInfo);
+          const sessionId = await tests.database.createSession(
+            session.userId,
+            token,
+            connectionInfo
+          );
           // Add a delay to see that createdAt is different that updatedAt
           await delay(10);
           await tests.database.updateSession(sessionId, {
@@ -92,14 +104,18 @@ export const runDatabaseTests = (tests: any) => {
           expect(resultSession.createdAt).not.toEqual(resultSession.updatedAt);
         });
       });
-  
+
       describe('invalidateSession', () => {
         it('should not throw for not found session', async () => {
           await expect(tests.database.invalidateSession('invalid')).resolves.not.toThrow();
         });
-  
+
         it('should invalidate the session', async () => {
-          const sessionId = await tests.database.createSession(session.userId, token, connectionInfo);
+          const sessionId = await tests.database.createSession(
+            session.userId,
+            token,
+            connectionInfo
+          );
           // Add a delay to see that createdAt is different that updatedAt
           await delay(10);
           await tests.database.invalidateSession(sessionId);
@@ -108,11 +124,19 @@ export const runDatabaseTests = (tests: any) => {
           expect(resultSession.createdAt).not.toEqual(resultSession.updatedAt);
         });
       });
-  
+
       describe('invalidateAllSessions', () => {
         it('invalidates all sessions', async () => {
-          const sessionId1 = await tests.database.createSession(session.userId, token, connectionInfo);
-          const sessionId2 = await tests.database.createSession(session.userId, token2, connectionInfo);
+          const sessionId1 = await tests.database.createSession(
+            session.userId,
+            token,
+            connectionInfo
+          );
+          const sessionId2 = await tests.database.createSession(
+            session.userId,
+            token2,
+            connectionInfo
+          );
           await delay(10);
           await tests.database.invalidateAllSessions(session.userId);
           const session1 = await tests.database.findSessionById(sessionId1);
