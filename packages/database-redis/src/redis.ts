@@ -4,7 +4,7 @@ import {
   CreateUser,
   User,
   Session,
-  DatabaseInterface,
+  DatabaseInterfaceSessions,
   ConnectionInformations,
 } from '@accounts/types';
 import { AccountsRedisOptions } from './types';
@@ -20,7 +20,7 @@ const defaultOptions = {
   dateProvider: (date?: Date) => (date ? date.getTime() : Date.now()),
 };
 
-export class Redis implements DatabaseInterface {
+export class Redis implements DatabaseInterfaceSessions {
   private options: AccountsRedisOptions;
   private db: IORedis.Redis;
 
