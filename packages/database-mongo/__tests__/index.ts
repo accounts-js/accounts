@@ -2,13 +2,13 @@ import * as mongodb from 'mongodb';
 // tslint:disable-next-line
 import { ObjectID } from 'mongodb';
 import { randomBytes } from 'crypto';
+import { DatabaseTests } from './database-tests'
 import { Mongo } from '../src';
+
+const databaseTests = new DatabaseTests();
 
 const generateRandomToken = (length: number = 43): string => randomBytes(length).toString('hex');
 
-let mongo: Mongo;
-let db: mongodb.Db;
-let client: mongodb.MongoClient;
 const user = {
   username: 'johndoe',
   email: 'john@doe.com',
@@ -21,58 +21,25 @@ const session = {
   userAgent: 'user agent',
 };
 
-function dropDatabase(cb) {
-  db.dropDatabase(err => {
-    if (err) {
-      return cb(err);
-    }
-    return cb();
-  });
-}
-
-function createConnection(cb) {
-  const url = 'mongodb://localhost:27017';
-  mongodb.MongoClient.connect(url, (err, clientMongo) => {
-    client = clientMongo;
-    db = client.db('accounts-mongo-tests');
-    mongo = new Mongo(db);
-    if (err) {
-      return cb(err);
-    }
-    return dropDatabase(error => {
-      cb(error);
-    });
-  });
-}
-
-function closeConnection(cb) {
-  dropDatabase(async err => {
-    if (err) {
-      return cb(err);
-    }
-    await client.close();
-    return cb();
-  });
-}
-
 function delay(time) {
   return new Promise(resolve => setTimeout(() => resolve(), time));
 }
 
 describe('Mongo', () => {
-  beforeAll(createConnection);
-  afterAll(closeConnection);
+  beforeAll(databaseTests.setup);
+  afterAll(databaseTests.teardown);
+  beforeEach(databaseTests.beforeEach);
 
   describe('toMongoID', () => {
     it('should not throw when mongo id is valid', () => {
       expect(async () => {
-        await mongo.findUserById('589871d1c9393d445745a57c');
+        await databaseTests.database.findUserById('589871d1c9393d445745a57c');
       }).not.toThrow();
     });
 
     it('should throw when mongo id is not valid', async () => {
       try {
-        await mongo.findUserById('invalid_hex');
+        await databaseTests.database.findUserById('invalid_hex');
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual(
@@ -82,7 +49,7 @@ describe('Mongo', () => {
     });
 
     it('should not auto convert to mongo object id when users collection has string ids', async () => {
-      const mongoWithStringIds = new Mongo(db, {
+      const mongoWithStringIds = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
       });
       const mockFindOne = jest.fn();

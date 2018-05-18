@@ -2,10 +2,15 @@ import * as mongodb from 'mongodb';
 import { runDatabaseTests } from '@accounts/database-tests';
 import { Mongo } from '../src';
 
-class DatabaseTests {
+export class DatabaseTests {
   public database: Mongo;
-  private client: mongodb.MongoClient;
-  private db: mongodb.Db;
+  public db: mongodb.Db;
+  public client: mongodb.MongoClient;
+  private options: any;
+
+  constructor(options?) {
+    this.options = options
+  }
 
   public setup = async () => {
     await this.createConnection();
@@ -24,10 +29,7 @@ class DatabaseTests {
     const url = 'mongodb://localhost:27017';
     this.client = await mongodb.MongoClient.connect(url);
     this.db = this.client.db('accounts-mongo-tests');
-    this.database = new Mongo(this.db, {
-      convertUserIdToMongoObjectId: false,
-      convertSessionIdToMongoObjectId: false,
-    });
+    this.database = new Mongo(this.db, this.options);
   };
 
   public closeConnection = async () => {
@@ -39,4 +41,7 @@ class DatabaseTests {
   };
 }
 
-runDatabaseTests(new DatabaseTests());
+runDatabaseTests(new DatabaseTests({
+  convertUserIdToMongoObjectId: false,
+  convertSessionIdToMongoObjectId: false,
+}));
