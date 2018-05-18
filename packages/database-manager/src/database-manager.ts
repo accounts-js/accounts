@@ -1,12 +1,10 @@
-import { DatabaseInterface } from '@accounts/types';
+import { DatabaseInterface, DatabaseInterfaceSessions } from '@accounts/types';
 
 import { Configuration } from './types/configuration';
 
 export default class DatabaseManager implements DatabaseInterface {
-
   private userStorage: DatabaseInterface;
-
-  private sessionStorage: DatabaseInterface;
+  private sessionStorage: DatabaseInterface | DatabaseInterfaceSessions;
 
   constructor(configuration: Configuration) {
     this.validateConfiguration(configuration);
