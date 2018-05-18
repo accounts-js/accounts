@@ -7,6 +7,7 @@ describe('Redis', () => {
         // tslint:disable-next-line
         new RedisSessions(null as any);
         throw new Error();
+      } catch (err) {
         expect(err.message).toBe('A database connection is required');
       }
     });
