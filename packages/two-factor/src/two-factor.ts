@@ -1,18 +1,8 @@
 import * as speakeasy from 'speakeasy';
 import { User, DatabaseInterface } from '@accounts/types';
 import { errors } from './errors';
-
-export interface TwoFactorService {
-  secret: speakeasy.Key;
-}
-
-export interface AccountsTwoFactorOptions {
-  // Two factor app name
-  appName?: string;
-  // Two factor secret length, default to 20
-  secretLength?: number;
-  window?: number;
-}
+import { AccountsTwoFactorOptions } from './types';
+import { getUserTwoFactorService } from './utils';
 
 const defaultOptions = {
   secretLength: 20,
@@ -36,13 +26,6 @@ export class TwoFactor {
   }
 
   /**
-   * Return the user two factor service object
-   */
-  public getUserService = (user: User): TwoFactorService => {
-    return user.services[this.serviceName];
-  };
-
-  /**
    * Authenticate a user with a 2fa code
    */
   public async authenticate(user: User, code: string): Promise<void> {
@@ -50,7 +33,7 @@ export class TwoFactor {
       throw new Error(errors.codeRequired);
     }
 
-    const twoFactorService = this.getUserService(user);
+    const twoFactorService = getUserTwoFactorService(user);
     // If user does not have 2fa set return error
     if (!twoFactorService) {
       throw new Error(errors.userTwoFactorNotSet);
@@ -91,7 +74,7 @@ export class TwoFactor {
     if (!user) {
       throw new Error(errors.userNotFound);
     }
-    let twoFactorService = this.getUserService(user);
+    let twoFactorService = getUserTwoFactorService(user);
     // If user already have 2fa return error
     if (twoFactorService) {
       throw new Error(errors.userTwoFactorAlreadySet);
@@ -126,7 +109,7 @@ export class TwoFactor {
     if (!user) {
       throw new Error(errors.userNotFound);
     }
-    const twoFactorService = this.getUserService(user);
+    const twoFactorService = getUserTwoFactorService(user);
     // If user does not have 2fa set return error
     if (!twoFactorService) {
       throw new Error(errors.userTwoFactorNotSet);

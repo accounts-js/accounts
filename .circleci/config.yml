@@ -3,8 +3,8 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:9
-      - image: circleci/mongo:3@sha256:1b30c31e8c3932064af462d101b5c114d94a2f9e3341391a681f5f1d1aa301c6
+      - image: circleci/node:9@sha256:3bbc0f2ceaa5a136fba38c7ba52238802b37e51242a27b5454bf62045440eb72
+      - image: circleci/mongo:3@sha256:11ecec4935a0c69f00eab5eef60290223a92f36eb2c91892bfb3e821c6decbd5
     steps:
       - checkout
       - run: yarn install --frozen-lockfile

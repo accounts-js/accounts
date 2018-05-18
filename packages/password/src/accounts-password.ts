@@ -1,15 +1,25 @@
-import { trim, isEmpty, isFunction, isString, isPlainObject, get, find, includes } from 'lodash';
-import { CreateUser, User, Login, EmailRecord, TokenRecord, DatabaseInterface, AuthenticationService } from '@accounts/types';
+import { trim, isEmpty, isFunction, isString, isPlainObject, find, includes } from 'lodash';
+import {
+  CreateUser,
+  User,
+  Login,
+  EmailRecord,
+  TokenRecord,
+  DatabaseInterface,
+  AuthenticationService,
+} from '@accounts/types';
 import { HashAlgorithm } from '@accounts/common';
-import { TwoFactor, AccountsTwoFactorOptions } from '@accounts/two-factor';
+import { TwoFactor, AccountsTwoFactorOptions, getUserTwoFactorService } from '@accounts/two-factor';
 import { AccountsServer, generateRandomToken, getFirstUserEmail } from '@accounts/server';
-import { hashPassword, bcryptPassword, verifyPassword } from './utils/encryption';
-
-import { PasswordCreateUserType } from './types/password-create-user-type';
-import { PasswordLoginType } from './types/password-login-type';
-import { PasswordType } from './types/password-type';
-
-import { isEmail } from './utils/isEmail';
+import {
+  getUserResetTokens,
+  getUserVerificationTokens,
+  hashPassword,
+  bcryptPassword,
+  verifyPassword,
+  isEmail,
+} from './utils';
+import { PasswordCreateUserType, PasswordLoginType, PasswordType } from './types';
 
 export interface AccountsPasswordOptions {
   twoFactor?: AccountsTwoFactorOptions;
@@ -71,7 +81,7 @@ export default class AccountsPassword implements AuthenticationService {
     const foundUser = await this.passwordAuthenticator(user, password);
 
     // If user activated two factor authentication try with the code
-    if (this.twoFactor.getUserService(foundUser)) {
+    if (getUserTwoFactorService(foundUser)) {
       await this.twoFactor.authenticate(foundUser, code);
     }
 
@@ -132,11 +142,7 @@ export default class AccountsPassword implements AuthenticationService {
       throw new Error('Verify email link expired');
     }
 
-    const verificationTokens: TokenRecord[] = get(
-      user,
-      ['services', 'email', 'verificationTokens'],
-      []
-    );
+    const verificationTokens = getUserVerificationTokens(user);
     const tokenRecord = find(verificationTokens, (t: TokenRecord) => t.token === token);
     if (!tokenRecord) {
       throw new Error('Verify email link expired');
@@ -161,8 +167,7 @@ export default class AccountsPassword implements AuthenticationService {
       throw new Error('Reset password link expired');
     }
 
-    // TODO move this getter into a password service module
-    const resetTokens = get(user, ['services', 'password', 'reset']);
+    const resetTokens = getUserResetTokens(user);
     const resetTokenRecord = find(resetTokens, t => t.token === token);
 
     if (this.server.isTokenExpired(token, resetTokenRecord)) {
@@ -177,6 +182,12 @@ export default class AccountsPassword implements AuthenticationService {
     const password = await this.hashAndBcryptPassword(newPassword);
     // Change the user password and remove the old token
     await this.db.setResetPassword(user.id, resetTokenRecord.address, password, token);
+
+    // If user clicked on an enrollment link we can verify his email
+    if (resetTokenRecord.reason === 'enroll-account') {
+      await this.db.verifyEmail(user.id, resetTokenRecord.address);
+    }
+
     // Changing the password should invalidate existing sessions
     this.db.invalidateAllSessions(user.id);
   }
@@ -199,7 +210,11 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public async changePassword(userId: string, oldPassword: string, newPassword: string): Promise<void> {
+  public async changePassword(
+    userId: string,
+    oldPassword: string,
+    newPassword: string
+  ): Promise<void> {
     const foundUser = await this.passwordAuthenticator({ id: userId }, oldPassword);
     const password = await bcryptPassword(newPassword);
     return this.db.setPassword(userId, password);
@@ -273,6 +288,7 @@ export default class AccountsPassword implements AuthenticationService {
 
   /**
    * @description Send an email with a link the user can use to set their initial password.
+   * The user's email will be verified after clicking on the link.
    * @param {string} [address] - Which address of the user's to send the email to.
    * This address must be in the user's emails list.
    * Defaults to the first email in the list.
@@ -333,17 +349,14 @@ export default class AccountsPassword implements AuthenticationService {
     };
 
     const { validateNewUser } = this.options;
-    if (isFunction(validateNewUser) && !await validateNewUser(proposedUserObject)) {
+    if (isFunction(validateNewUser) && !(await validateNewUser(proposedUserObject))) {
       throw new Error('User invalid');
     }
 
     return this.db.createUser(proposedUserObject);
   }
 
-  private async passwordAuthenticator(
-    user: string | Login,
-    password: PasswordType
-  ): Promise<User> {
+  private async passwordAuthenticator(user: string | Login, password: PasswordType): Promise<User> {
     const { username, email, id } = isString(user)
       ? this.toUsernameAndEmail({ user })
       : this.toUsernameAndEmail({ ...user });

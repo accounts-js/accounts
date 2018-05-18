@@ -1,6 +1,6 @@
 {
   "name": "@accounts/common",
-  "version": "0.1.0-beta.10",
+  "version": "0.1.0-beta.11",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -33,7 +33,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/js-accounts/accounts/tree/master/packages/common"
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/common"
   },
   "keywords": [
     "rest",
@@ -49,8 +49,8 @@
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "22.2.3",
-    "@types/lodash": "^4.14.108",
-    "@types/node": "9.6.7",
+    "@types/lodash": "4.14.108",
+    "@types/node": "9.6.15",
     "jest": "22.4.3",
     "localstorage-polyfill": "1.0.1",
     "regenerator-runtime": "0.11.1"

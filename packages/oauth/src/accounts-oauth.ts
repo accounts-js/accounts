@@ -38,8 +38,7 @@ export class AccountsOauth implements AuthenticationService {
     if (!user) {
       try {
         const userId = await this.db.createUser({
-          email: oauthUser.email,
-          profile: oauthUser.profile,
+          email: oauthUser.email
         });
 
         user = await this.db.findUserById(userId);
@@ -54,9 +53,6 @@ export class AccountsOauth implements AuthenticationService {
 
         throw e;
       }
-    } else {
-      // If user exist, attempt to update profile
-      await this.db.setProfile(user.id, oauthUser.profile);
     }
 
     await this.db.setService(user.id, params.provider, oauthUser);

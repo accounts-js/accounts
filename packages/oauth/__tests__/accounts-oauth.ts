@@ -149,7 +149,7 @@ describe('AccountsOauth', () => {
     });
   });
 
-  it("should update the user's profile if logged in after change in profile", async () => {
+  it("should not update the user's profile if logged in after change in profile", async () => {
     const userChanged = {
       id: '312312',
       name: 'Mr. Anderson',
@@ -173,7 +173,7 @@ describe('AccountsOauth', () => {
 
     expect(authSpy).toBeCalledWith(params);
     expect(mockStore.findUserByServiceId).toBeCalledWith('facebook', '312312');
-    expect(mockStore.setProfile).toBeCalledWith(user.id, userChanged.profile);
+    expect(mockStore.setProfile).not.toBeCalledWith(user.id, userChanged.profile);
     expect(mockStore.setService).toBeCalledWith(user.id, 'facebook', userChanged);
   });
 });
