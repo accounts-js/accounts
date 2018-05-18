@@ -1,10 +1,10 @@
 import { randomBytes } from 'crypto';
 import * as IORedis from 'ioredis';
 import { runDatabaseTests } from '@accounts/database-tests';
-import { Redis } from '../src/redis';
+import { RedisSessions } from '../src/redis';
 
 class DatabaseTests {
-  public database: Redis;
+  public database: RedisSessions;
   private redis: IORedis.Redis;
 
   public setup = async () => {
@@ -22,7 +22,7 @@ class DatabaseTests {
 
   public createConnection = async () => {
     this.redis = new IORedis();
-    this.database = new Redis(this.redis);
+    this.database = new RedisSessions(this.redis);
   };
 
   public closeConnection = async () => {
