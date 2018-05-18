@@ -9,7 +9,7 @@ export class DatabaseTests {
   private options: any;
 
   constructor(options?) {
-    this.options = options
+    this.options = options;
   }
 
   public setup = async () => {
@@ -41,7 +41,9 @@ export class DatabaseTests {
   };
 }
 
-runDatabaseTests(new DatabaseTests({
-  convertUserIdToMongoObjectId: false,
-  convertSessionIdToMongoObjectId: false,
-}));
+runDatabaseTests(
+  new DatabaseTests({
+    convertUserIdToMongoObjectId: false,
+    convertSessionIdToMongoObjectId: false,
+  })
+);

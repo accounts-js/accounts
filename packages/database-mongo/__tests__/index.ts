@@ -2,7 +2,7 @@ import * as mongodb from 'mongodb';
 // tslint:disable-next-line
 import { ObjectID } from 'mongodb';
 import { randomBytes } from 'crypto';
-import { DatabaseTests } from './database-tests'
+import { DatabaseTests } from './database-tests';
 import { Mongo } from '../src';
 
 const databaseTests = new DatabaseTests();
@@ -690,14 +690,22 @@ describe('Mongo', () => {
 
   describe('invalidateAllSessions', () => {
     it('invalidates all sessions', async () => {
-      const sessionId1 = await databaseTests.database.createSession(session.userId, generateRandomToken(), {
-        ip: session.ip,
-        userAgent: session.userAgent,
-      });
-      const sessionId2 = await databaseTests.database.createSession(session.userId, generateRandomToken(), {
-        ip: session.ip,
-        userAgent: session.userAgent,
-      });
+      const sessionId1 = await databaseTests.database.createSession(
+        session.userId,
+        generateRandomToken(),
+        {
+          ip: session.ip,
+          userAgent: session.userAgent,
+        }
+      );
+      const sessionId2 = await databaseTests.database.createSession(
+        session.userId,
+        generateRandomToken(),
+        {
+          ip: session.ip,
+          userAgent: session.userAgent,
+        }
+      );
       await delay(10);
       await databaseTests.database.invalidateAllSessions(session.userId);
       const session1 = await databaseTests.database.findSessionById(sessionId1);

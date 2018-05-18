@@ -114,19 +114,18 @@ const databaseManager = new DatabaseManager({
 });
 
 describe('DatabaseManager configuration', () => {
-
   it('should throw if no configuration object specified', () => {
     expect(() => databaseManager.validateConfiguration()).toThrow();
   });
-  
+
   it('should throw if no userStorage specified', () => {
     expect(() => databaseManager.validateConfiguration({ sessionStorage: true })).toThrow();
   });
-  
+
   it('should throw if no sessionStorage specified', () => {
     expect(() => databaseManager.validateConfiguration({ userStorage: true })).toThrow();
   });
-  
+
   it('should throw if no sessionStorage specified', () => {
     expect(() =>
       databaseManager.validateConfiguration({
@@ -135,12 +134,9 @@ describe('DatabaseManager configuration', () => {
       })
     ).not.toThrow();
   });
-
 });
 
-
 describe('DatabaseManager', () => {
-
   it('createUser should be called on userStorage', () => {
     expect(databaseManager.createUser()).toBe('userStorage');
   });
