@@ -3,7 +3,7 @@ import * as IORedis from 'ioredis';
 import { runDatabaseTests } from '@accounts/database-tests';
 import { RedisSessions } from '../src/redis';
 
-class DatabaseTests {
+export class DatabaseTests {
   public database: RedisSessions;
   private redis: IORedis.Redis;
 
