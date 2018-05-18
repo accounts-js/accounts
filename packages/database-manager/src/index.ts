@@ -1,1 +1,1 @@
-export { default } from './database-manager';
+export { DatabaseManager } from './database-manager';

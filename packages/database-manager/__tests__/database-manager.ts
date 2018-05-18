@@ -240,5 +240,4 @@ describe('DatabaseManager', () => {
   it('setResetPassword should be called on sessionStorage', () => {
     expect(databaseManager.setResetPassword()).toBe('userStorage');
   });
-
-}
+});

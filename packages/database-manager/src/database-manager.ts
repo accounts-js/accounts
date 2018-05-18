@@ -2,7 +2,7 @@ import { DatabaseInterface, DatabaseInterfaceSessions } from '@accounts/types';
 
 import { Configuration } from './types/configuration';
 
-export default class DatabaseManager implements DatabaseInterface {
+export class DatabaseManager implements DatabaseInterface {
   private userStorage: DatabaseInterface;
   private sessionStorage: DatabaseInterface | DatabaseInterfaceSessions;
 

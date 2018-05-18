@@ -1,1 +1,1 @@
-export { Redis } from './redis';
+export { RedisSessions } from './redis';

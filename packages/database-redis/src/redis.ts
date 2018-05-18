@@ -20,7 +20,7 @@ const defaultOptions = {
   dateProvider: (date?: Date) => (date ? date.getTime() : Date.now()),
 };
 
-export class Redis implements DatabaseInterfaceSessions {
+export class RedisSessions implements DatabaseInterfaceSessions {
   private options: AccountsRedisOptions;
   private db: IORedis.Redis;
 
