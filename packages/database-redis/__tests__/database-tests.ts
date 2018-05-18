@@ -22,6 +22,7 @@ class DatabaseTests {
 
   public createConnection = async () => {
     this.redis = new IORedis();
+    await this.redis.connect();
     this.database = new RedisSessions(this.redis);
   };
 
