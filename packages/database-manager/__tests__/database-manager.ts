@@ -1,4 +1,4 @@
-import DatabaseManager from '../src';
+import { DatabaseManager } from '../src';
 
 export default class Database {
   public name;
