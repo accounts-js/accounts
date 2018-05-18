@@ -2,10 +2,6 @@ import * as IORedis from 'ioredis';
 
 export interface AccountsRedisOptions {
   /**
-   * The options for the ioredis instance
-   */
-  ioredis?: IORedis.RedisOptions;
-  /**
    * The users collection name, default 'users'.
    */
   userCollectionName?: string;
