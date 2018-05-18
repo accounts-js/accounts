@@ -21,7 +21,9 @@ class DatabaseTests {
   };
 
   public createConnection = async () => {
-    this.redis = new IORedis();
+    this.redis = new IORedis({
+      lazyConnect: true,
+    });
     await this.redis.connect();
     this.database = new RedisSessions(this.redis);
   };
