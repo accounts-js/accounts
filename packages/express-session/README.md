@@ -3,8 +3,8 @@
 Stores the access and refresh tokens as part of the session (`express-session`), this way auth flow could be based on it.
 
 [![npm](https://img.shields.io/npm/v/@accounts/express-session.svg?maxAge=2592000)](https://www.npmjs.com/package/@accounts/express-session)
-[![CircleCI](https://circleci.com/gh/accounts-js/express-session.svg?style=shield)](https://circleci.com/gh/accounts-js/rest)
-[![codecov](https://codecov.io/gh/accounts-js/express-session/branch/master/graph/badge.svg)](https://codecov.io/gh/accounts-js/rest)
+[![CircleCI](https://circleci.com/gh/accounts-js/express-session.svg?style=shield)](https://circleci.com/gh/accounts-js/express-session)
+[![codecov](https://codecov.io/gh/accounts-js/express-session/branch/master/graph/badge.svg)](https://codecov.io/gh/accounts-js/express-session)
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 ## Install
