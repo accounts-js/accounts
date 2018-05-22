@@ -15,9 +15,15 @@
     "coverage": "lerna run coverage",
     "codecov": "codecov"
   },
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": ["packages/*"],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,json,md}": ["prettier --write", "git add"]
+  },
   "prettier": {
     "singleQuote": true,
     "trailingComma": "es5",
@@ -27,10 +33,7 @@
     "@types/node": "9.6.15"
   },
   "renovate": {
-    "extends": [
-      "config:base",
-      "schedule:weekly"
-    ],
+    "extends": ["config:base", "schedule:weekly"],
     "automerge": true,
     "major": {
       "automerge": false
@@ -44,7 +47,9 @@
   "devDependencies": {
     "@accounts/tslint-config-accounts": "0.0.9",
     "codecov": "3.0.2",
+    "husky": "1.0.0-rc.6",
     "lerna": "2.11.0",
+    "lint-staged": "7.1.0",
     "opencollective": "1.0.3",
     "prettier": "1.12.1",
     "ts-jest": "22.4.6",
