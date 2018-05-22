@@ -11,17 +11,16 @@
     "start": "tsc --watch",
     "compile": "tsc",
     "prepublishOnly": "npm run compile",
-    "test": "npm run testonly",
-    "test:watch": "npm run testonly -- --watch",
-    "testonly": "jest",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "coverage": "jest --coverage"
   },
   "jest": {
     "testEnvironment": "node",
     "transform": {
       ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
     },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
+    "testRegex": "/__tests__/.*\\.ts$",
     "moduleFileExtensions": ["ts", "js"]
   },
   "repository": {

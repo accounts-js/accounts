@@ -7,8 +7,8 @@ import { getUserAgent } from './utils/get-user-agent';
 
 export interface AccountsSessionOptions {
   user?: {
-    name?: string;
-    resolve?: (tokens: Tokens) => User | Promise<User>;
+    name: string;
+    resolve: (tokens: Tokens) => User | Promise<User>;
   };
   name?: string;
 }
