@@ -22,13 +22,9 @@ export class AccountsSession {
       user: {
         name: 'user',
         resolve: async tokens => {
-          const session = await this.accountsServer.findSessionByAccessToken(tokens.accessToken);
+          const user = await accountsServer.resumeSession(tokens.accessToken);
 
-          if (session) {
-            const user = await this.accountsServer.findUserById(session.userId);
-
-            return user;
-          }
+          return user;
         },
       },
       ...options,
