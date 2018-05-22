@@ -19,7 +19,7 @@ yarn add @accounts/express-session
 import * as express from 'express';
 import * as session from 'express-session';
 import { Tokens } from '@accounts/types';
-import { AccountsSession } from '@accounts/express-session';
+import AccountsSession from '@accounts/express-session';
 import { accountsServer } from './setup';
 
 const accountsSession = new AccountsSession(accountsServer, {

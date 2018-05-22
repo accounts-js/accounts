@@ -115,3 +115,5 @@ export class AccountsSession {
     }
   }
 }
+
+export default AccountsSession;
