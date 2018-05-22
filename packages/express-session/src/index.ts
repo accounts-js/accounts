@@ -52,18 +52,22 @@ export class AccountsSession {
     };
   }
 
-  public destroy(req?: Request, callback?: (err: any) => void): void {
-    req.session.destroy(async err => {
-      const tokens = this.get(req);
+  public destroy(req?: Request): Promise<void> {
+    return new Promise((resolve, reject) => {
+      req.session.destroy(async err => {
+        const tokens = this.get(req);
 
-      if (tokens && tokens.accessToken) {
-        await this.accountsServer.logout(tokens.accessToken);
-        await this.clear(req);
-      }
+        if (tokens && tokens.accessToken) {
+          await this.accountsServer.logout(tokens.accessToken);
+          await this.clear(req);
+        }
 
-      if (callback) {
-        await callback(err);
-      }
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
     });
   }
 
