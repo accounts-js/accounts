@@ -6,18 +6,33 @@ import 'express-session';
 import { getUserAgent } from './utils/get-user-agent';
 
 export interface AccountsSessionOptions {
-  user: {
-    name: string;
-    resolve: (tokens: Tokens) => User | Promise<User>;
+  user?: {
+    name?: string;
+    resolve?: (tokens: Tokens) => User | Promise<User>;
   };
   name?: string;
 }
 
 export class AccountsSession {
-  constructor(private accountsServer: AccountsServer, private options: AccountsSessionOptions) {
-    if (!this.options.name) {
-      this.options.name = 'accounts-js-tokens';
-    }
+  private options: AccountsSessionOptions;
+
+  constructor(private accountsServer: AccountsServer, options: AccountsSessionOptions) {
+    this.options = {
+      name: 'accounts-js-tokens',
+      user: {
+        name: 'user',
+        resolve: async tokens => {
+          const session = await this.accountsServer.findSessionByAccessToken(tokens.accessToken);
+
+          if (session) {
+            const user = await this.accountsServer.findUserById(session.userId);
+
+            return user;
+          }
+        },
+      },
+      ...options,
+    };
   }
 
   public middleware() {

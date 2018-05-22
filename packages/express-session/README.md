@@ -68,6 +68,8 @@ app.get('/logout', (req, res) => {
 
 Specifies the name of a property that holds a user object. For example, By using `currentUser`, a user object is accesible on `req.currentUser`.
 
+By default it uses: `user`
+
 #### user.resolve
 
 Function that receives an access and a refresh tokens to resolve a user object.
@@ -75,6 +77,14 @@ Function that receives an access and a refresh tokens to resolve a user object.
 ```
 (tokens: Tokens) => User | Promise<User>
 ```
+
+By default it uses AccountsServer's API to resolve a user.
+
+#### name
+
+Specifies the name of a property that holds the Tokens. For example, By using `tokens`, tokens are accesible on `req.tokens`.
+
+By default it uses: `accounts-js-tokens`
 
 ## License
 
