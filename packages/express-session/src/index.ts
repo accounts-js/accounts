@@ -16,7 +16,7 @@ export interface AccountsSessionOptions {
 export class AccountsSession {
   private options: AccountsSessionOptions;
 
-  constructor(private accountsServer: AccountsServer, options: AccountsSessionOptions) {
+  constructor(private accountsServer: AccountsServer, options?: AccountsSessionOptions) {
     this.options = {
       name: 'accounts-js-tokens',
       user: {
