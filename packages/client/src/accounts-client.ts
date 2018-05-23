@@ -2,7 +2,7 @@ import { CreateUser, LoginResult, User, Tokens, ImpersonationResult } from '@acc
 import { TransportInterface } from './transport-interface';
 import { TokenStorage, AccountsClientOptions } from './types';
 import { tokenStorageLocal } from './token-storage-local';
-import { isTokenExpired } from './utils'; 
+import { isTokenExpired } from './utils';
 
 enum TokenKey {
   AccessToken = 'accessToken',
@@ -105,8 +105,8 @@ export class AccountsClient {
     const tokens = await this.getTokens();
     if (tokens) {
       try {
-        // See if accessToken is expired
-        if (isTokenExpired(tokens.accessToken)) {
+        // See if accessToken is expired and refreshToken is not
+        if (isTokenExpired(tokens.accessToken) && !isTokenExpired(tokens.refreshToken)) {
           // Request a new token pair
           const refreshedSession = await this.transport.refreshTokens(
             tokens.accessToken,
