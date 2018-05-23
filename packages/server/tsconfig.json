@@ -3,13 +3,7 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./lib",
-    "typeRoots": [
-      "node_modules/@types"
-    ]
+    "typeRoots": ["node_modules/@types"]
   },
-  "exclude": [
-    "node_modules",
-    "__tests__",
-    "lib"
-  ]
+  "exclude": ["node_modules", "__tests__", "lib"]
 }

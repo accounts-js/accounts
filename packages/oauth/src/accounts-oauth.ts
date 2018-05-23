@@ -38,7 +38,7 @@ export class AccountsOauth implements AuthenticationService {
     if (!user) {
       try {
         const userId = await this.db.createUser({
-          email: oauthUser.email
+          email: oauthUser.email,
         });
 
         user = await this.db.findUserById(userId);

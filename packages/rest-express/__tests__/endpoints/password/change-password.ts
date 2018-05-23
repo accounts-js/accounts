@@ -1,6 +1,4 @@
-import {
-  changePassword
-} from '../../../src/endpoints/password/change-password';
+import { changePassword } from '../../../src/endpoints/password/change-password';
 
 const res: any = {
   json: jest.fn(),

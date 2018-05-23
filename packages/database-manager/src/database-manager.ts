@@ -3,7 +3,6 @@ import { DatabaseInterface } from '@accounts/types';
 import { Configuration } from './types/configuration';
 
 export default class DatabaseManager implements DatabaseInterface {
-
   private userStorage: DatabaseInterface;
 
   private sessionStorage: DatabaseInterface;
@@ -15,14 +14,20 @@ export default class DatabaseManager implements DatabaseInterface {
   }
 
   private validateConfiguration(configuration: Configuration): void {
-    if (!configuration){
-      throw new Error('[ Accounts - DatabaseManager ] configuration : A configuration object is required on DatabaseManager');
+    if (!configuration) {
+      throw new Error(
+        '[ Accounts - DatabaseManager ] configuration : A configuration object is required on DatabaseManager'
+      );
     }
-    if (!configuration.userStorage){
-      throw new Error('[ Accounts - DatabaseManager ] configuration : A userStorage DatabaseInterface is required');
+    if (!configuration.userStorage) {
+      throw new Error(
+        '[ Accounts - DatabaseManager ] configuration : A userStorage DatabaseInterface is required'
+      );
     }
-    if (!configuration.sessionStorage){
-      throw new Error('[ Accounts - DatabaseManager ] configuration : A sessionStorage DatabaseInterface is required');
+    if (!configuration.sessionStorage) {
+      throw new Error(
+        '[ Accounts - DatabaseManager ] configuration : A sessionStorage DatabaseInterface is required'
+      );
     }
   }
 

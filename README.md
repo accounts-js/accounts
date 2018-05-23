@@ -1,6 +1,6 @@
 # accounts
 
-*Fullstack authentication and accounts-management for GraphQL and REST*
+_Fullstack authentication and accounts-management for GraphQL and REST_
 
 [![Backers on Open Collective](https://opencollective.com/accounts-js/backers/badge.svg)](#backers)
 [![Sponsors on Open Collective](https://opencollective.com/accounts-js/sponsors/badge.svg)](#sponsors)
@@ -11,8 +11,8 @@
 
 ## Community
 
-- Slack - accounts-js.slack.com
-- [Meeting notes](https://github.com/accounts-js/accounts/blob/master/MEETINGS.md)
+* Slack - accounts-js.slack.com
+* [Meeting notes](https://github.com/accounts-js/accounts/blob/master/MEETINGS.md)
 
 ## Note
 
@@ -34,9 +34,9 @@ npm i -S @accounts/rest-express
 
 Finally you'll need a data store adapter. We support the following data stores.
 
-- [x] [Mongo](https://github.com/accounts-js/mongo)
-- [x] [Redis](https://github.com/accounts-js/redis)
-- [ ] [SQL](https://github.com/accounts-js/sql) with [sequelize](http://docs.sequelizejs.com/en/v3/)
+* [x] [Mongo](https://github.com/accounts-js/mongo)
+* [x] [Redis](https://github.com/accounts-js/redis)
+* [ ] [SQL](https://github.com/accounts-js/sql) with [sequelize](http://docs.sequelizejs.com/en/v3/)
 
 ```
 npm i -S @accounts/mongo
@@ -53,13 +53,11 @@ You can find a working examples [here](https://github.com/accounts-js/examples).
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
 <a href="graphs/contributors"><img src="https://opencollective.com/accounts-js/contributors.svg?width=890" /></a>
 
-
 ## Backers
 
 Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/accounts-js#backer)]
 
 <a href="https://opencollective.com/accounts-js#backers" target="_blank"><img src="https://opencollective.com/accounts-js/backers.svg?width=890"></a>
-
 
 ## Sponsors
 
@@ -75,5 +73,3 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 <a href="https://opencollective.com/accounts-js/sponsor/7/website" target="_blank"><img src="https://opencollective.com/accounts-js/sponsor/7/avatar.svg"></a>
 <a href="https://opencollective.com/accounts-js/sponsor/8/website" target="_blank"><img src="https://opencollective.com/accounts-js/sponsor/8/avatar.svg"></a>
 <a href="https://opencollective.com/accounts-js/sponsor/9/website" target="_blank"><img src="https://opencollective.com/accounts-js/sponsor/9/avatar.svg"></a>
-
-

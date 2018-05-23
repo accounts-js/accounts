@@ -24,26 +24,14 @@
       ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
+    "moduleFileExtensions": ["ts", "js"],
     "testEnvironment": "jsdom"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/accounts-js/accounts/tree/master/packages/client"
   },
-  "keywords": [
-    "rest",
-    "graphql",
-    "grant",
-    "auth",
-    "authentication",
-    "accounts",
-    "users",
-    "oauth"
-  ],
+  "keywords": ["rest", "graphql", "grant", "auth", "authentication", "accounts", "users", "oauth"],
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
