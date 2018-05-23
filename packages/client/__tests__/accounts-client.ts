@@ -164,7 +164,8 @@ describe('Accounts', () => {
     });
 
     it('should call transport.refreshTokens if accessToken is expired and set the tokens', async () => {
-      (isTokenExpired as jest.Mock).mockImplementation(() => true);
+      (isTokenExpired as jest.Mock).mockImplementationOnce(() => true);
+      (isTokenExpired as jest.Mock).mockImplementationOnce(() => false);
       await accountsClient.setTokens(tokens);
       const result = await accountsClient.refreshSession();
       expect(result).toEqual(loggedInResponse.tokens);
