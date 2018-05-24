@@ -164,8 +164,19 @@ describe('AccountsServer', () => {
   });
 
   describe('hooks', () => {
+    const connectionInfo = {
+      userAgent: 'user-agent-test',
+      ip: 'ip-test',
+    };
     it('ServerHooks.LoginSuccess', async () => {
+      const user = { id: 'id-test' };
       const hookSpy = jest.fn(() => null);
+      const services = {
+        password: {
+          setStore: jest.fn(),
+          authenticate: jest.fn(() => Promise.resolve(user)),
+        },
+      };
       const accountsServer = new AccountsServer(
         {
           db: {
@@ -173,15 +184,25 @@ describe('AccountsServer', () => {
           } as any,
           tokenSecret: 'secret',
         },
-        {}
+        services
       );
       accountsServer.on(ServerHooks.LoginSuccess, hookSpy);
-
-      await accountsServer.loginWithUser({} as any, {});
-      expect(hookSpy).toBeCalled();
+      await accountsServer.loginWithService('password', { key: 'value' }, connectionInfo);
+      expect(hookSpy).toHaveBeenCalledWith({
+        service: 'password',
+        connection: connectionInfo,
+        user,
+      });
     });
 
     it('ServerHooks.LoginError', async () => {
+      const user = { id: 'id-test' };
+      const services = {
+        password: {
+          setStore: jest.fn(),
+          authenticate: jest.fn(() => Promise.resolve(user)),
+        },
+      };
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
         {
@@ -192,16 +213,20 @@ describe('AccountsServer', () => {
           } as any,
           tokenSecret: 'secret',
         },
-        {}
+        services
       );
       accountsServer.on(ServerHooks.LoginError, hookSpy);
 
       try {
-        await accountsServer.loginWithUser({} as any, {});
+        await accountsServer.loginWithService('password', { key: 'value' }, connectionInfo);
       } catch (e) {
         // nothing to do
       }
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalledWith({
+        service: 'password',
+        connection: connectionInfo,
+        user,
+      });
     });
 
     it('ServerHooks.LogoutSuccess', async () => {
