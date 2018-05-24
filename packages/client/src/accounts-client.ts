@@ -233,8 +233,8 @@ export class AccountsClient {
 
         const decodedAccessToken = jwtDecode(accessToken) as any;
         const decodedRefreshToken = jwtDecode(refreshToken) as any;
-        // See if accessToken is expired
-        if (decodedAccessToken.exp < currentTime) {
+        // See if accessToken is expired and refresh token is not expired
+        if (decodedAccessToken.exp < currentTime && decodedRefreshToken.exp > currentTime) {
           // Request a new token pair
           const refreshedSession: LoginReturnType = await this.transport.refreshTokens(
             accessToken,
