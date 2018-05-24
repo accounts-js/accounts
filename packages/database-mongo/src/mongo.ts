@@ -1,6 +1,12 @@
 import { ObjectID, Db, Collection } from 'mongodb';
 import { get } from 'lodash';
-import { CreateUser, User, Session, DatabaseInterface, ConnectionInformations } from '@accounts/types';
+import {
+  CreateUser,
+  User,
+  Session,
+  DatabaseInterface,
+  ConnectionInformations,
+} from '@accounts/types';
 
 export interface MongoOptionsType {
   // The users collection name, default 'users'.
@@ -184,10 +190,7 @@ export class Mongo implements DatabaseInterface {
     return user;
   }
 
-  public async findUserByServiceId(
-    serviceName: string,
-    serviceId: string
-  ): Promise<User | null> {
+  public async findUserByServiceId(serviceName: string, serviceId: string): Promise<User | null> {
     const user = await this.collection.findOne({
       [`services.${serviceName}.id`]: serviceId,
     });
@@ -353,10 +356,7 @@ export class Mongo implements DatabaseInterface {
     return ret.ops[0]._id;
   }
 
-  public async updateSession(
-    sessionId: string,
-    connection: ConnectionInformations
-  ): Promise<void> {
+  public async updateSession(sessionId: string, connection: ConnectionInformations): Promise<void> {
     // tslint:disable-next-line variable-name
     const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
     await this.sessionCollection.update(

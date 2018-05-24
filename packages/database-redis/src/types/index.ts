@@ -1,0 +1,1 @@
+export { AccountsRedisOptions } from './options';
