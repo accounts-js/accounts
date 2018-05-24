@@ -23,8 +23,8 @@ export default class AccountsError extends Error {
     Object.setPrototypeOf(this, AccountsError.prototype);
 
     // Recapture the stack trace to avoid this function to be in it
-    if (typeof Error.captureStackTrace === 'function') {
-      Error.captureStackTrace(this, this.constructor);
+    if (typeof (Error as any).captureStackTrace === 'function') {
+      (Error as any).captureStackTrace(this, this.constructor);
     } else {
       this.stack = new Error(message).stack;
     }

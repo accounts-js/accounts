@@ -31,7 +31,7 @@
     "printWidth": 100
   },
   "resolutions": {
-    "@types/node": "9.6.7"
+    "@types/node": "9.6.15"
   },
   "renovate": {
     "extends": ["config:base", "schedule:weekly"],

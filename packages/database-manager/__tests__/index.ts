@@ -1,7 +1,7 @@
-import DatabaseManager from '../src';
+import { DatabaseManager } from '../src';
 
 describe('DatabaseManager entry', () => {
-  it('should have default export DatabaseManager', () => {
+  it('should have named export DatabaseManager', () => {
     expect(typeof DatabaseManager).toBe('function');
   });
 });

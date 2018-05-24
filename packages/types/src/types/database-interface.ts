@@ -3,7 +3,7 @@ import { Session } from './session';
 import { CreateUser } from './create-user';
 import { ConnectionInformations } from './connection-informations';
 
-export interface DatabaseInterface {
+export interface DatabaseInterface extends DatabaseInterfaceSessions {
   // Find user by identity fields
   findUserByEmail(email: string): Promise<User | null>;
 
@@ -56,8 +56,9 @@ export interface DatabaseInterface {
   verifyEmail(userId: string, email: string): Promise<void>;
 
   addEmailVerificationToken(userId: string, email: string, token: string): Promise<void>;
+}
 
-  // Session related operations
+export interface DatabaseInterfaceSessions {
   findSessionById(sessionId: string): Promise<Session | null>;
 
   findSessionByToken(token: string): Promise<Session | null>;
