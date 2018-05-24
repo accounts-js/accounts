@@ -13,6 +13,9 @@
     "prepublishOnly": "yarn compile"
   },
   "files": ["src", "lib"],
+  "publishConfig": {
+    "access": "public"
+  },
   "jest": {
     "transform": {
       ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
