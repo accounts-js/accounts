@@ -20,11 +20,11 @@ import { RedisSessions } from '@accounts/redis';
 const ioRedis = new IORedis();
 
 const sessionDb = new RedisSessions(ioRedis, {
-  ...options
+  ...options,
 });
 
 const accountsDb = new DatabaseManager({
-  sessionStorage: sessionDb
+  sessionStorage: sessionDb,
 });
 
 const accountsServer = new AccountsServer({ db: accountsDb });

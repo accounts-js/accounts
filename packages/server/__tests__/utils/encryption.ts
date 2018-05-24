@@ -1,8 +1,4 @@
-import {
-  bcryptPassword,
-  hashPassword,
-  verifyPassword,
-} from '../../src/utils/encryption';
+import { bcryptPassword, hashPassword, verifyPassword } from '../../src/utils/encryption';
 
 describe('bcryptPassword', () => {
   it('hashes password using bcrypt', async () => {

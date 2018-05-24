@@ -24,25 +24,13 @@
       ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ]
+    "moduleFileExtensions": ["ts", "js"]
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/accounts-js/accounts/tree/master/packages/types"
   },
-  "keywords": [
-    "rest",
-    "graphql",
-    "grant",
-    "auth",
-    "authentication",
-    "accounts",
-    "users",
-    "oauth"
-  ],
+  "keywords": ["rest", "graphql", "grant", "auth", "authentication", "accounts", "users", "oauth"],
   "author": "Elies Lou (Aetherall)",
   "license": "MIT",
   "devDependencies": {
