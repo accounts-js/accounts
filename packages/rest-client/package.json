@@ -1,6 +1,6 @@
 {
   "name": "@accounts/rest-client",
-  "version": "0.1.0-beta.11",
+  "version": "0.1.0-beta.12",
   "description": "REST client for accounts",
   "main": "lib/index",
   "typings": "lib/index",
@@ -15,8 +15,7 @@
     "test": "npm run testonly",
     "testonly": "jest",
     "coverage": "npm run testonly -- --coverage",
-    "coveralls":
-      "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "jest": {
     "testEnvironment": "jsdom",
@@ -24,18 +23,30 @@
       ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
-    "moduleFileExtensions": ["ts", "js"]
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/accounts-js/rest/tree/master/packages/rest-client"
   },
-  "keywords": ["rest", "graphql", "grant", "auth", "authentication", "accounts", "users", "oauth"],
+  "keywords": [
+    "rest",
+    "graphql",
+    "grant",
+    "auth",
+    "authentication",
+    "accounts",
+    "users",
+    "oauth"
+  ],
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
-    "@accounts/client": "^0.1.0-beta.11",
-    "@accounts/common": "^0.1.0-beta.11",
+    "@accounts/client": "^0.1.0-beta.12",
+    "@accounts/common": "^0.1.0-beta.12",
     "@types/jest": "22.2.3",
     "@types/lodash": "4.14.109",
     "@types/node": "9.6.15",
@@ -47,7 +58,7 @@
     "@accounts/common": "^0.1.0-beta.0"
   },
   "dependencies": {
-    "@accounts/types": "^0.1.0-beta.11",
+    "@accounts/types": "^0.1.0-beta.12",
     "lodash": "^4.17.4"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@accounts/common",
-  "version": "0.1.0-beta.11",
+  "version": "0.1.0-beta.12",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -18,19 +18,33 @@
     "testonly": "jest",
     "coverage": "npm run testonly -- --coverage"
   },
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "jest": {
     "transform": {
       ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
-    "moduleFileExtensions": ["ts", "js"]
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/accounts-js/accounts/tree/master/packages/common"
   },
-  "keywords": ["rest", "graphql", "grant", "auth", "authentication", "accounts", "users", "oauth"],
+  "keywords": [
+    "rest",
+    "graphql",
+    "grant",
+    "auth",
+    "authentication",
+    "accounts",
+    "users",
+    "oauth"
+  ],
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {

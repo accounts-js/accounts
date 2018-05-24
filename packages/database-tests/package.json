@@ -1,7 +1,7 @@
 {
   "name": "@accounts/database-tests",
   "private": true,
-  "version": "0.1.0-beta.11",
+  "version": "0.1.0-beta.12",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
@@ -14,7 +14,10 @@
       ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "./__tests__/.*.ts$",
-    "moduleFileExtensions": ["ts", "js"]
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
   },
   "author": "Leo Pradel",
   "license": "MIT",
@@ -24,6 +27,6 @@
     "jest": "22.4.3"
   },
   "dependencies": {
-    "@accounts/types": "^0.1.0-beta.11"
+    "@accounts/types": "^0.1.0-beta.12"
   }
 }

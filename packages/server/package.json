@@ -1,6 +1,6 @@
 {
   "name": "@accounts/server",
-  "version": "0.1.0-beta.11",
+  "version": "0.1.0-beta.12",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -24,18 +24,30 @@
       ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
-    "moduleFileExtensions": ["ts", "js"]
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/accounts-js/accounts/tree/master/packages/server"
   },
-  "keywords": ["rest", "graphql", "grant", "auth", "authentication", "accounts", "users", "oauth"],
+  "keywords": [
+    "rest",
+    "graphql",
+    "grant",
+    "auth",
+    "authentication",
+    "accounts",
+    "users",
+    "oauth"
+  ],
   "author": "Tim Mikeladze",
   "license": "MIT",
   "dependencies": {
-    "@accounts/common": "^0.1.0-beta.11",
-    "@accounts/types": "^0.1.0-beta.11",
+    "@accounts/common": "^0.1.0-beta.12",
+    "@accounts/types": "^0.1.0-beta.12",
     "babel-polyfill": "^6.23.0",
     "bcryptjs": "^2.4.0",
     "emittery": "^0.3.0",
