@@ -20,10 +20,7 @@ export interface AccountsServerOptions {
   emailTokensExpiry?: number;
   emailTemplates?: EmailTemplatesType;
   userObjectSanitizer?: UserObjectSanitizerFunction;
-  impersonationAuthorize?: (
-    user: User,
-    impersonateToUser: User
-  ) => Promise<any>;
+  impersonationAuthorize?: (user: User, impersonateToUser: User) => Promise<any>;
   resumeSessionValidator?: ResumeSessionValidator;
   siteUrl?: string;
   prepareMail?: PrepareMailFunction;

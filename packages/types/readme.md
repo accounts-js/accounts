@@ -1,5 +1,4 @@
-# Accounts Types
-### @accounts/types
+# @accounts/types
 
 This package is a devDependency for most packages of the suite.
 

@@ -1,0 +1,53 @@
+{
+  "name": "@accounts/redis",
+  "version": "0.1.0-beta.12",
+  "description": "Redis adaptor for accounts",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "start": "tsc --watch",
+    "compile": "tsc",
+    "testonly": "jest",
+    "test:watch": "jest --watch",
+    "coverage": "yarn testonly --coverage",
+    "prepublishOnly": "yarn compile"
+  },
+  "files": [
+    "src",
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "./__tests__/.*.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/database-redis"
+  },
+  "author": "Leo Pradel",
+  "license": "MIT",
+  "devDependencies": {
+    "@accounts/database-tests": "^0.1.0-beta.12",
+    "@types/ioredis": "^3.2.7",
+    "@types/jest": "22.2.3",
+    "@types/lodash": "4.14.108",
+    "@types/node": "9.6.7",
+    "@types/shortid": "^0.0.29",
+    "jest": "22.4.3"
+  },
+  "dependencies": {
+    "@accounts/types": "^0.1.0-beta.12",
+    "ioredis": "^3.2.2",
+    "lodash": "^4.17.4",
+    "shortid": "^2.2.8"
+  }
+}

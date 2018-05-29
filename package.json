@@ -9,9 +9,10 @@
     "postinstall": "opencollective postinstall",
     "publish": "lerna publish",
     "publish:canary": "yarn run publish -- --canary",
-    "test": "yarn lint && yarn compile && yarn coverage",
+    "test": "yarn lint && yarn compile && yarn coverage && yarn test:prettier",
     "testonly": "lerna run testonly",
-    "format": "prettier --write \"packages/*/{src,__tests__}/**/*.ts\"",
+    "prettier": "prettier --write '**/*.{json,md,js,ts}'",
+    "test:prettier": "prettier --list-different '**/*.{json,md,js,ts}'",
     "coverage": "lerna run coverage",
     "codecov": "codecov"
   },
@@ -30,7 +31,7 @@
     "printWidth": 100
   },
   "resolutions": {
-    "@types/node": "9.6.7"
+    "@types/node": "9.6.15"
   },
   "renovate": {
     "extends": ["config:base", "schedule:weekly"],

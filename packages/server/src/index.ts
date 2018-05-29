@@ -5,10 +5,4 @@ import { getFirstUserEmail } from './utils/get-first-user-email';
 import { ServerHooks } from './utils/server-hooks';
 
 export default AccountsServer;
-export {
-  AccountsServer,
-  encryption,
-  ServerHooks,
-  generateRandomToken,
-  getFirstUserEmail
-};
+export { AccountsServer, encryption, ServerHooks, generateRandomToken, getFirstUserEmail };
