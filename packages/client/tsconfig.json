@@ -5,9 +5,5 @@
     "outDir": "./lib",
     "lib": ["dom", "es6", "es2015", "es2016", "es2017"]
   },
-  "exclude": [
-    "node_modules",
-    "__tests__",
-    "lib"
-  ]
+  "exclude": ["node_modules", "__tests__", "lib"]
 }
