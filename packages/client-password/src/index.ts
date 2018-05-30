@@ -1,1 +1,1 @@
-import { AccountsClientPassword } from './client-password';
+export { AccountsClientPassword } from './client-password';

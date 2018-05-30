@@ -3,7 +3,7 @@ import { SHA256 } from 'crypto-js';
 
 // TODO option for the user to change hash algo
 
-interface AccountsClientPasswordOptions {}
+// interface AccountsClientPasswordOptions {}
 
 export class AccountsClientPassword {
   private client: AccountsClient;
