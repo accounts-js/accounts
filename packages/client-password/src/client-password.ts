@@ -1,22 +1,15 @@
 import { AccountsClient } from '@accounts/client';
 import { SHA256 } from 'crypto-js';
-
-// TODO option for the user to change hash algo
-
-export interface AccountsClientPasswordOptions {
-  /**
-   * Use this method if you want to customize the hashing method
-   * By default accounts-js will hash the password using SHA256
-   */
-  hashPassword?(password: string): string;
-}
+import { AccountsClientPasswordOptions } from './types';
 
 export class AccountsClientPassword {
   private client: AccountsClient;
   private options: AccountsClientPasswordOptions;
 
   constructor(client: AccountsClient, options?: AccountsClientPasswordOptions) {
-    // TODO check client or throw error
+    if (!client) {
+      throw new Error('A client instance is required');
+    }
     this.client = client;
     this.options = options;
   }
@@ -49,8 +42,12 @@ export class AccountsClientPassword {
     return this.client.transport.sendVerificationEmail(email);
   }
 
-  public async verifyEmail(token: string): Promise<void> {
+  public verifyEmail(token: string): Promise<void> {
     return this.client.transport.verifyEmail(token);
+  }
+
+  public changePassword(oldPassword: string, newPassword: string): Promise<void> {
+    return this.client.transport.changePassword(oldPassword, newPassword);
   }
 
   public hashPassword(password: string): string {
