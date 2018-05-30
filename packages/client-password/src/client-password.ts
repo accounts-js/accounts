@@ -6,9 +6,9 @@ export class AccountsClientPassword {
   private client: AccountsClient;
   private options: AccountsClientPasswordOptions;
 
-  constructor(client: AccountsClient, options?: AccountsClientPasswordOptions) {
+  constructor(client: AccountsClient, options: AccountsClientPasswordOptions = {}) {
     if (!client) {
-      throw new Error('A client instance is required');
+      throw new Error('A valid client instance is required');
     }
     this.client = client;
     this.options = options;

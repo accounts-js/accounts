@@ -17,7 +17,7 @@
     "test-ci": "yarn lint && yarn coverage",
     "testonly": "jest",
     "test:watch": "jest --watch",
-    "coverage": "yarn testonly -- --coverage"
+    "coverage": "yarn testonly --coverage"
   },
   "jest": {
     "transform": {
