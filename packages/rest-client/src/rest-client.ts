@@ -13,6 +13,7 @@ const headers: { [key: string]: string } = {
 };
 
 export class RestClient implements TransportInterface {
+  public client: AccountsClient;
   private options: OptionsType;
 
   constructor(options: OptionsType) {
@@ -38,6 +39,16 @@ export class RestClient implements TransportInterface {
     } else {
       throw new Error('Server did not return a response');
     }
+  }
+
+  public async authFetch(route: string, args: object, customHeaders: object = {}): Promise<any> {
+    const tokens = await this.client.refreshSession();
+    return this.fetch(route, args, {
+      ...customHeaders,
+      ...{
+        'accounts-access-token': tokens ? tokens.accessToken : '',
+      },
+    });
   }
 
   public loginWithService(
@@ -169,7 +180,7 @@ export class RestClient implements TransportInterface {
         newPassword,
       }),
     };
-    return this.fetch('password/changePassword', args, customHeaders);
+    return this.authFetch('password/changePassword', args, customHeaders);
   }
 
   public getTwoFactorSecret(customHeaders?: object): Promise<any> {
@@ -187,7 +198,7 @@ export class RestClient implements TransportInterface {
         code,
       }),
     };
-    return this.fetch('password/twoFactorSet', args, customHeaders);
+    return this.authFetch('password/twoFactorSet', args, customHeaders);
   }
 
   public twoFactorUnset(code: string, customHeaders?: object): Promise<void> {
@@ -197,7 +208,7 @@ export class RestClient implements TransportInterface {
         code,
       }),
     };
-    return this.fetch('password/twoFactorUnset', args, customHeaders);
+    return this.authFetch('password/twoFactorUnset', args, customHeaders);
   }
 
   private _loadHeadersObject(plainHeaders: object): { [key: string]: string } {

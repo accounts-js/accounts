@@ -29,6 +29,7 @@ export class AccountsClient {
       throw new Error('A valid transport is required');
     }
     this.transport = transport;
+    this.transport.client = this;
   }
 
   /**
