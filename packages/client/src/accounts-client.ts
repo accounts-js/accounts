@@ -17,8 +17,8 @@ const defaultOptions = {
 };
 
 export class AccountsClient {
+  public transport: TransportInterface;
   private options: AccountsClientOptions;
-  private transport: TransportInterface;
   private storage: TokenStorage;
 
   constructor(options: AccountsClientOptions, transport: TransportInterface) {
