@@ -1,7 +1,7 @@
 {
-  "name": "@accounts/types",
+  "name": "@accounts/client-password",
   "version": "0.1.0-beta.12",
-  "description": "Accounts-js Types",
+  "description": "@accounts/client-password",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "publishConfig": {
@@ -17,26 +17,34 @@
     "test-ci": "yarn lint && yarn coverage",
     "testonly": "jest",
     "test:watch": "jest --watch",
-    "coverage": "yarn testonly -- --coverage"
+    "coverage": "yarn testonly --coverage"
   },
   "jest": {
     "transform": {
       ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
-    "moduleFileExtensions": ["ts", "js"]
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/accounts-js/accounts/tree/master/packages/types"
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/client-password"
   },
-  "keywords": ["rest", "graphql", "grant", "auth", "authentication", "accounts", "users", "oauth"],
-  "author": "Elies Lou (Aetherall)",
+  "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
+    "@types/crypto-js": "^3.1.40",
     "@types/jest": "22.2.3",
     "@types/node": "9.6.15",
     "jest": "22.4.3",
     "rimraf": "2.6.2"
+  },
+  "dependencies": {
+    "@accounts/client": "^0.1.0-beta.12",
+    "@accounts/types": "^0.1.0-beta.12",
+    "crypto-js": "^3.1.9-1"
   }
 }

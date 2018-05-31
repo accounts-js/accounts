@@ -22,22 +22,13 @@
       ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ]
+    "moduleFileExtensions": ["ts", "js"]
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/accounts-js/accounts/tree/master/packages/database-manager"
   },
-  "keywords": [
-    "accounts",
-    "database",
-    "manager",
-    "users",
-    "sessions"
-  ],
+  "keywords": ["accounts", "database", "manager", "users", "sessions"],
   "author": "Elies Lou (Aetherall)",
   "license": "MIT",
   "devDependencies": {

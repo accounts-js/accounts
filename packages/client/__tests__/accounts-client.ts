@@ -1,17 +1,13 @@
-import { Map } from 'immutable';
 import * as crypto from 'crypto';
-// tslint:disable-next-line
 import * as jwt from 'jsonwebtoken';
-import '../src/mock-local-storage.ts';
-import Accounts, { TransportInterface } from '../src';
-import { setTokens } from '../src/module';
+import { isTokenExpired } from '../src/utils';
+import { TransportInterface } from '../src';
+import { AccountsClient } from '../src/accounts-client';
+import { ENGINE_METHOD_PKEY_METHS } from 'constants';
 
-const loggedInUser = {
-  user: {
-    id: '123',
-    username: 'test',
-    email: 'test@test.com',
-  },
+jest.mock('../src/utils');
+
+const loggedInResponse = {
   sessionId: '1',
   tokens: {
     accessToken: 'accessToken',
@@ -22,161 +18,119 @@ const loggedInUser = {
 const impersonateResult = {
   authorized: true,
   tokens: { accessToken: 'newAccessToken', refreshToken: 'newRefreshToken' },
-  user: { id: '2', username: 'impUser' },
 };
 
-// Mock history object passed to AccountsClient.config
-const history = [];
-
-const mockTokenStorage = {
-  getItem: () => Promise.resolve('testValue'),
-  removeItem: () => Promise.resolve('testValue'),
-  setItem: () => Promise.resolve('testValue'),
+const tokens = {
+  accessToken: 'accessTokenTest',
+  refreshToken: 'refreshTokenTest',
 };
 
 const mockTransport: TransportInterface = {
-  createUser: jest.fn(() => Promise.resolve(loggedInUser.user.id)),
-  loginWithService: jest.fn(() => Promise.resolve(loggedInUser)),
+  loginWithService: jest.fn(() => Promise.resolve(loggedInResponse)),
   logout: jest.fn(() => Promise.resolve()),
-  refreshTokens: jest.fn(() => Promise.resolve(loggedInUser)),
+  refreshTokens: jest.fn(() => Promise.resolve(loggedInResponse)),
   sendResetPasswordEmail: jest.fn(() => Promise.resolve()),
   verifyEmail: jest.fn(() => Promise.resolve()),
   sendVerificationEmail: jest.fn(() => Promise.resolve()),
   impersonate: jest.fn(() => Promise.resolve(impersonateResult)),
 };
 
-// tslint:disable-next-line no-string-literal
-global['onload'] = () => null;
-
 describe('Accounts', () => {
+  const accountsClient = new AccountsClient({}, mockTransport);
+
   afterEach(() => {
     jest.clearAllMocks();
     localStorage.clear();
   });
 
-  describe('config', () => {
-    it('requires a transport', async () => {
-      try {
-        await Accounts.config(
-          {
-            history,
-          },
-          undefined
-        );
-        throw new Error();
-      } catch (err) {
-        const { message } = err;
-        expect(message).toEqual('A REST or GraphQL transport is required');
-      }
+  it('requires a transport', async () => {
+    try {
+      // tslint:disable-next-line no-unused-expression
+      new AccountsClient(null as any, null as any);
+      throw new Error();
+    } catch (err) {
+      const { message } = err;
+      expect(message).toEqual('A valid transport is required');
+    }
+  });
+
+  describe('getTokens', () => {
+    it('should return null when no tokens', async () => {
+      const result = await accountsClient.getTokens();
+      expect(result).toBe(null);
+      expect(localStorage.getItem).toHaveBeenCalledTimes(2);
     });
 
-    it('should eagerly load tokens from storage after using config', async () => {
-      const transport = {
-        loginWithPassword: () => Promise.resolve(loggedInUser),
-      };
-
-      await Accounts.config(
-        {
-          history,
-          tokenStorage: mockTokenStorage,
-        },
-        mockTransport
-      );
-
-      const tokens = Accounts.tokens();
-      expect(tokens.accessToken).toBeDefined();
-      expect(tokens.refreshToken).toBeDefined();
+    it('should return the tokens', async () => {
+      await accountsClient.setTokens(tokens);
+      const result = await accountsClient.getTokens();
+      expect(tokens).toEqual(result);
+      expect(localStorage.getItem).toHaveBeenCalledTimes(2);
     });
 
-    it('sets the transport', () => {
-      const transport = {};
-      Accounts.config(
-        {
-          history,
-        },
-        mockTransport
-      );
-      // tslint:disable-next-line no-string-literal
-      expect(Accounts.instance['transport']).toEqual(mockTransport);
+    it('should return the original tokens', async () => {
+      await accountsClient.setTokens(tokens, true);
+      const result = await accountsClient.getTokens(true);
+      expect(tokens).toEqual(result);
+      expect(localStorage.getItem).toHaveBeenCalledTimes(2);
     });
   });
 
-  describe('createUser', () => {
-    it('requires user object', async () => {
-      Accounts.config(
-        {
-          history,
-        },
-        mockTransport
-      );
-      try {
-        await Accounts.createUser(undefined);
-        throw new Error();
-      } catch (err) {
-        const { message } = err;
-        expect(message).toEqual('Unrecognized options for create user request');
-      }
+  describe('setTokens', () => {
+    it('should set the tokens', async () => {
+      await accountsClient.setTokens(tokens);
+      expect(localStorage.setItem).toHaveBeenCalledTimes(2);
+      expect(localStorage.getItem('accounts:accessToken')).toEqual(tokens.accessToken);
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual(tokens.refreshToken);
     });
 
-    it('requires username or an email', async () => {
-      Accounts.config({ history }, mockTransport);
-      try {
-        await Accounts.createUser({
-          username: '',
-          email: '',
-        });
-        throw new Error();
-      } catch (err) {
-        const { message } = err;
-        expect(message).toEqual('Username or Email is required');
-      }
-    });
-
-    it('calls onUserCreated after successful user creation', async () => {
-      const onUserCreated = jest.fn();
-      Accounts.config(
-        {
-          history,
-          onUserCreated,
-        },
-        mockTransport
-      );
-
-      await Accounts.createUser({
-        username: 'user',
-      });
-
-      expect(onUserCreated.mock.calls.length).toEqual(1);
-      expect(onUserCreated.mock.calls[0][0]).toEqual({ id: '123' });
+    it('should set the oiriginal tokens', async () => {
+      await accountsClient.setTokens(tokens, true);
+      expect(localStorage.setItem).toHaveBeenCalledTimes(2);
+      expect(localStorage.getItem('accounts:originalAccessToken')).toEqual(tokens.accessToken);
+      expect(localStorage.getItem('accounts:originalRefreshToken')).toEqual(tokens.refreshToken);
     });
   });
 
-  describe('login', () => {
-    it('throws error if service is undefined', async () => {
-      Accounts.config({ history }, mockTransport);
-      try {
-        await Accounts.loginWithService(undefined, {});
-        throw new Error();
-      } catch (err) {
-        const { message } = err;
-        expect(message).toEqual('Unrecognized options for login request');
-      }
+  describe('clearTokens', () => {
+    it('should clear the tokens', async () => {
+      await accountsClient.setTokens(tokens);
+      await accountsClient.clearTokens();
+      expect(localStorage.removeItem).toHaveBeenCalledTimes(2);
+      expect(localStorage.getItem('accounts:accessToken')).toEqual(null);
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual(null);
     });
 
-    it('throws error if service is not a string or is an empty object', async () => {
-      Accounts.config({ history }, mockTransport);
-      try {
-        await Accounts.loginWithService({}, { password: 'password' });
-        throw new Error();
-      } catch (err) {
-        const { message } = err;
-        expect(message).toEqual('Unrecognized options for login request');
-      }
+    it('should clear the oiriginal tokens', async () => {
+      await accountsClient.setTokens(tokens, true);
+      await accountsClient.clearTokens(true);
+      expect(localStorage.removeItem).toHaveBeenCalledTimes(2);
+      expect(localStorage.getItem('accounts:originalAccessToken')).toEqual(null);
+      expect(localStorage.getItem('accounts:originalRefreshToken')).toEqual(null);
+    });
+  });
+
+  describe('logout', () => {
+    it('should clear the tokens', async () => {
+      await accountsClient.logout();
+      expect(localStorage.removeItem).toHaveBeenCalledTimes(2);
+      expect(localStorage.getItem('accounts:accessToken')).toEqual(null);
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual(null);
     });
 
+    it('should logout and clear the tokens', async () => {
+      await accountsClient.setTokens(tokens);
+      await accountsClient.logout();
+      expect(localStorage.removeItem).toHaveBeenCalledTimes(2);
+      expect(localStorage.getItem('accounts:accessToken')).toEqual(null);
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual(null);
+      expect(mockTransport.logout).toHaveBeenCalled();
+    });
+  });
+
+  describe('loginWithService', () => {
     it('calls transport', async () => {
-      Accounts.config({ history }, mockTransport);
-      await Accounts.loginWithService('password', {
+      await accountsClient.loginWithService('password', {
         username: 'user',
         password: 'password',
       });
@@ -187,369 +141,124 @@ describe('Accounts', () => {
       });
     });
 
-    it('calls onSignedInHook on successful login', async () => {
-      const onSignedInHook = jest.fn();
-      Accounts.config({ history, onSignedInHook }, mockTransport);
-      await Accounts.loginWithService('password', {
+    it('set the tokens', async () => {
+      await accountsClient.loginWithService('password', {
         username: 'user',
         password: 'password',
       });
-      expect(onSignedInHook).toHaveBeenCalledTimes(1);
-    });
-
-    it('sets loggingIn flag to false on failed login', async () => {
-      const transport = {
-        ...mockTransport,
-        loginWithService: () => Promise.reject('error'),
-      };
-      Accounts.config({ history }, transport);
-      try {
-        await Accounts.loginWithService('password', {
-          username: 'user',
-          password: 'password',
-        });
-        throw new Error();
-      } catch (err) {
-        expect(Accounts.loggingIn()).toBe(false);
-      }
-    });
-
-    it('stores tokens in local storage', async () => {
-      Accounts.config({ history }, mockTransport);
-      await Accounts.loginWithService('password', {
-        username: 'user',
-        password: 'password',
-      });
-      expect(localStorage.getItem('accounts:accessToken')).toEqual('accessToken');
-      expect(localStorage.getItem('accounts:refreshToken')).toEqual('refreshToken');
-    });
-
-    it('should return tokens in a sync return value', async () => {
-      await Accounts.config(
-        {
-          history,
-          tokenStorage: mockTokenStorage,
-        },
-        mockTransport
+      expect(localStorage.setItem).toHaveBeenCalledTimes(2);
+      expect(localStorage.getItem('accounts:accessToken')).toEqual(
+        loggedInResponse.tokens.accessToken
       );
-
-      const tokens = Accounts.tokens();
-      expect(tokens.accessToken).toBe('testValue');
-      expect(tokens.refreshToken).toBe('testValue');
-    });
-
-    it('stores user in redux', async () => {
-      Accounts.config({ history }, mockTransport);
-      await Accounts.loginWithService('username', 'password');
-    });
-
-    it('stores tokens in redux', async () => {
-      Accounts.config({ history }, mockTransport);
-      await Accounts.loginWithService('username', 'password');
-      expect(Accounts.instance.getState().get('tokens')).toEqual(
-        Map({
-          ...loggedInUser.tokens,
-        })
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual(
+        loggedInResponse.tokens.refreshToken
       );
     });
   });
 
-  describe('logout', () => {
-    it('calls callback on successful logout', async () => {
-      Accounts.config({ history }, mockTransport);
-      const callback = jest.fn();
-      await Accounts.logout(callback);
-      expect(callback).toHaveBeenCalledTimes(1);
+  describe('refreshSession', () => {
+    it('should do nothing when no tokens', async () => {
+      const result = await accountsClient.refreshSession();
+      expect(result).not.toBeTruthy();
+      expect(isTokenExpired).not.toHaveBeenCalled();
     });
 
-    it('calls onLogout on successful logout', async () => {
-      const onSignedOutHook = jest.fn();
-      Accounts.config({ history, onSignedOutHook }, mockTransport);
-      await Accounts.logout(undefined);
-      expect(onSignedOutHook).toHaveBeenCalledTimes(1);
-    });
-
-    it('calls callback on failure with error message', async () => {
-      const transport = {
-        ...mockTransport,
-        logout: () => Promise.reject({ message: 'error message' }),
-      };
-      await Accounts.instance.storeTokens({ accessToken: '1' });
-      await Accounts.config({ history }, transport);
-      const callback = jest.fn();
-      try {
-        await Accounts.logout(callback);
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('error message');
-        expect(callback).toHaveBeenCalledTimes(1);
-        expect(callback).toHaveBeenCalledWith({ message: 'error message' });
-      }
-    });
-
-    it('clear tokens in redux', async () => {
-      const transport = {
-        ...mockTransport,
-        logout: () => Promise.reject({ message: 'error message' }),
-      };
-      Accounts.config({ history }, transport);
-      await Accounts.instance.storeTokens({ accessToken: '1' });
-      await Accounts.instance.loadTokensFromStorage();
-      const callback = jest.fn();
-      try {
-        await Accounts.logout(callback);
-        throw new Error();
-      } catch (err) {
-        expect(Accounts.instance.getState().get('tokens')).toEqual(null);
-      }
-    });
-  });
-
-  describe('refreshSession', async () => {
-    // TODO test that user and tokens are cleared if refreshToken is expired
-    it('clears tokens and user if tokens are not set', async () => {
-      Accounts.config({}, mockTransport);
-      Accounts.instance.clearTokens = jest.fn(() => Accounts.instance.clearTokens);
-      try {
-        await Accounts.refreshSession();
-      } catch (err) {
-        expect(err.message).toEqual('no tokens provided');
-        expect(Accounts.instance.clearTokens).toHaveBeenCalledTimes(1);
-      }
-    });
-
-    it('clears tokens, users and throws error if bad refresh token provided', async () => {
-      localStorage.setItem('accounts:refreshToken', 'bad token');
-      localStorage.setItem('accounts:accessToken', 'bad token');
-      await Accounts.config({}, mockTransport);
-      Accounts.instance.clearTokens = jest.fn(() => Accounts.instance.clearTokens);
-      try {
-        await Accounts.refreshSession();
-        throw new Error();
-      } catch (err) {
-        const { message } = err;
-        expect(message).toEqual('falsy token provided');
-      }
+    it('should call transport.refreshTokens if accessToken is expired and set the tokens', async () => {
+      (isTokenExpired as jest.Mock).mockImplementationOnce(() => true);
+      (isTokenExpired as jest.Mock).mockImplementationOnce(() => false);
+      await accountsClient.setTokens(tokens);
+      const result = await accountsClient.refreshSession();
+      expect(result).toEqual(loggedInResponse.tokens);
+      expect(isTokenExpired).toHaveBeenCalledWith(tokens.accessToken);
+      expect(mockTransport.refreshTokens).toHaveBeenCalledWith(
+        tokens.accessToken,
+        tokens.refreshToken
+      );
+      expect(localStorage.setItem).toHaveBeenCalledTimes(4);
     });
 
     it('should do nothing if tokens are still valid', async () => {
-      Accounts.config({}, mockTransport);
-      const accessToken = jwt.sign({ data: 'oldRefreshToken' }, 'secret', {
-        expiresIn: 10,
-      });
-      const refreshToken = jwt.sign({ data: 'oldRefreshToken' }, 'secret', {
-        expiresIn: '1d',
-      });
-      const oldTokens = {
-        accessToken,
-        refreshToken,
-      };
-      Accounts.instance.storeTokens(oldTokens);
-      // tslint:disable-next-line no-string-literal
-      Accounts.instance['store'].dispatch(setTokens(oldTokens));
-      await Accounts.refreshSession();
-      expect(localStorage.getItem('accounts:accessToken')).toEqual(accessToken);
-      expect(localStorage.getItem('accounts:refreshToken')).toEqual(refreshToken);
+      (isTokenExpired as jest.Mock).mockImplementation(() => false);
+      await accountsClient.setTokens(tokens);
+      const result = await accountsClient.refreshSession();
+      expect(result).toEqual(tokens);
+      expect(localStorage.setItem).toHaveBeenCalledTimes(2);
+      expect(mockTransport.refreshTokens).not.toHaveBeenCalledWith();
     });
 
-    it('requests a new token pair, sets the tokens and the user', async () => {
-      Accounts.config({}, mockTransport);
-      const accessToken = jwt.sign({ data: 'oldRefreshToken' }, 'secret', {
-        expiresIn: -10,
-      });
-      const refreshToken = jwt.sign({ data: 'oldRefreshToken' }, 'secret', {
-        expiresIn: '1d',
-      });
-      const oldTokens = {
-        accessToken,
-        refreshToken,
-      };
-      Accounts.instance.storeTokens(oldTokens);
-      // tslint:disable-next-line no-string-literal
-      Accounts.instance['store'].dispatch(setTokens(oldTokens));
-      await Accounts.refreshSession();
-      expect(localStorage.getItem('accounts:accessToken')).toEqual('accessToken');
-      expect(localStorage.getItem('accounts:refreshToken')).toEqual('refreshToken');
+    it('should clear the tokens is refreshToken is expired', async () => {
+      (isTokenExpired as jest.Mock).mockImplementationOnce(() => false);
+      (isTokenExpired as jest.Mock).mockImplementationOnce(() => true);
+      await accountsClient.setTokens(tokens);
+      const result = await accountsClient.refreshSession();
+      expect(result).toBe(null);
+      expect(localStorage.removeItem).toHaveBeenCalledTimes(2);
+      expect(mockTransport.refreshTokens).not.toHaveBeenCalledWith();
     });
-  });
 
-  describe('verifyEmail', () => {
-    it('should return an AccountsError', async () => {
-      const error = 'something bad';
-      Accounts.config(
-        {},
-        {
-          ...mockTransport,
-          verifyEmail: () => Promise.reject({ message: error }),
-        }
-      );
+    it('should clear the tokens and forward the error', async () => {
       try {
-        await Accounts.verifyEmail(undefined);
+        (isTokenExpired as jest.Mock).mockImplementation(() => {
+          throw new Error('Err');
+        });
+        await accountsClient.setTokens(tokens);
+        await accountsClient.refreshSession();
         throw new Error();
       } catch (err) {
-        expect(err.message).toEqual(error);
+        expect(err.message).toBe('Err');
+        expect(localStorage.removeItem).toHaveBeenCalledTimes(2);
+        expect(mockTransport.refreshTokens).not.toHaveBeenCalledWith();
       }
-    });
-
-    it('should call transport.verifyEmail', async () => {
-      Accounts.config({}, mockTransport);
-      await Accounts.verifyEmail('token');
-      expect(mockTransport.verifyEmail).toHaveBeenCalledTimes(1);
-      expect(mockTransport.verifyEmail).toHaveBeenCalledWith('token');
     });
   });
 
   describe('impersonate', () => {
-    it('should throw error if username is not provided', async () => {
-      await Accounts.config({ history }, mockTransport);
-
+    it('should throw error if no tokens', async () => {
       try {
-        await Accounts.impersonate(undefined);
+        await accountsClient.impersonate({ userId: 'test' });
+        throw new Error();
       } catch (err) {
-        expect(err.message).toEqual('Username is required');
-      }
-    });
-
-    it('should throw error if already impersonating', async () => {
-      await Accounts.config({ history }, mockTransport);
-      Accounts.instance.isImpersonated = () => true;
-
-      try {
-        await Accounts.impersonate('user');
-      } catch (err) {
-        expect(err.message).toEqual('User already impersonating');
-      }
-    });
-
-    it('should throw if no access token is present', async () => {
-      const transport = {
-        ...mockTransport,
-        impersonate: jest.fn(() => Promise.resolve({ authorized: false })),
-      };
-      await Accounts.config({ history }, transport);
-
-      try {
-        await Accounts.impersonate('user');
-      } catch (err) {
-        expect(err.message).toEqual('There is no access tokens available');
-        expect(transport.impersonate).not.toHaveBeenCalled();
+        expect(err.message).toBe('An access token is required');
       }
     });
 
     it('should throw if server return unauthorized', async () => {
-      const transport = {
-        ...mockTransport,
-        impersonate: () => Promise.resolve({ authorized: false }),
-      };
-      await Accounts.instance.storeTokens({ accessToken: '1' });
-      await Accounts.config({ history }, transport);
-
+      (mockTransport.impersonate as jest.Mock).mockImplementationOnce(() =>
+        Promise.resolve({ authorized: false })
+      );
       try {
-        await Accounts.impersonate('user');
+        await accountsClient.setTokens(tokens);
+        await accountsClient.impersonate({ userId: 'test' });
+        throw new Error();
       } catch (err) {
-        expect(err.message).toEqual('User unauthorized to impersonate user');
+        expect(err.message).toBe('User unauthorized to impersonate');
       }
     });
 
-    it('should set state correctly if impersonation was authorized', async () => {
-      await Accounts.config({ history }, mockTransport);
-      await Accounts.loginWithService('password', {
-        username: 'user',
-        password: 'password',
-      });
-
-      const result = await Accounts.impersonate('impUser');
-      const tokens = Accounts.tokens();
-      expect(tokens).toEqual({
-        accessToken: 'newAccessToken',
-        refreshToken: 'newRefreshToken',
-      });
-      expect(Accounts.isImpersonated()).toBe(true);
-      expect(Accounts.tokens());
-      expect(Accounts.originalTokens()).toEqual({
-        accessToken: 'accessToken',
-        refreshToken: 'refreshToken',
-      });
-      expect(result).toBe(impersonateResult);
-    });
-
-    it('should save impersonation state and persist it in the storage', async () => {
-      await Accounts.config({ history }, mockTransport);
-      await Accounts.loginWithService('password', {
-        username: 'user',
-        password: 'password',
-      });
-      Accounts.instance.storeTokens = jest.fn();
-      await Accounts.impersonate('impUser');
-      expect(Accounts.instance.storeTokens).toHaveBeenCalledTimes(1);
-    });
-
-    it('should not save persist impersonation when persistImpersonation=false', async () => {
-      await Accounts.config({ history, persistImpersonation: false }, mockTransport);
-      await Accounts.loginWithService('password', {
-        username: 'user',
-        password: 'password',
-      });
-      Accounts.instance.storeTokens = jest.fn();
-      await Accounts.impersonate('impUser');
-      expect(Accounts.instance.storeTokens).not.toHaveBeenCalled();
+    it('should set tokens correctly if impersonation was authorized', async () => {
+      await accountsClient.setTokens(tokens);
+      await accountsClient.impersonate({ userId: 'test' });
+      const userTokens = await accountsClient.getTokens();
+      const originalTokens = await accountsClient.getTokens(true);
+      expect(userTokens).toEqual(impersonateResult.tokens);
+      expect(originalTokens).toEqual(tokens);
     });
   });
 
   describe('stopImpersonation', () => {
     it('should not replace tokens if not impersonating', async () => {
-      await Accounts.config({ history }, mockTransport);
-
-      await Accounts.loginWithService('password', {
-        username: 'user',
-        password: 'password',
-      });
-
-      expect(Accounts.originalTokens()).toEqual({
-        accessToken: null,
-        refreshToken: null,
-      });
-      expect(Accounts.tokens()).toEqual(loggedInUser.tokens);
-      await Accounts.stopImpersonation();
-      expect(Accounts.originalTokens()).toEqual({
-        accessToken: null,
-        refreshToken: null,
-      });
-      expect(Accounts.tokens()).toEqual(loggedInUser.tokens);
+      await accountsClient.setTokens(tokens);
+      await accountsClient.stopImpersonation();
+      const userTokens = await accountsClient.getTokens();
+      expect(userTokens).toEqual(tokens);
     });
 
-    it('should set impersonated state to false', async () => {
-      await Accounts.instance.storeTokens({ accessToken: '1' });
-      await Accounts.config({ history }, mockTransport);
-      Accounts.instance.refreshSession = () => Promise.resolve();
-
-      await Accounts.impersonate('impUser');
-      expect(Accounts.isImpersonated()).toBe(true);
-      await Accounts.stopImpersonation();
-      expect(Accounts.isImpersonated()).toBe(false);
-    });
-
-    it('should set the original tokens as current tokens and delete original tokens', async () => {
-      await Accounts.config({ history }, mockTransport);
-      Accounts.instance.refreshSession = () => Promise.resolve();
-
-      await Accounts.loginWithService('password', {
-        username: 'user',
-        password: 'password',
-      });
-      const tokens = Accounts.tokens();
-
-      await Accounts.impersonate('impUser');
-      expect(Accounts.tokens()).toEqual({
-        accessToken: 'newAccessToken',
-        refreshToken: 'newRefreshToken',
-      });
-      await Accounts.stopImpersonation();
-      expect(Accounts.tokens()).toEqual(tokens);
-      expect(Accounts.originalTokens()).toEqual({
-        accessToken: null,
-        refreshToken: null,
-      });
+    it('should replace the tokens', async () => {
+      await accountsClient.setTokens(tokens);
+      await accountsClient.setTokens(impersonateResult.tokens, true);
+      await accountsClient.stopImpersonation();
+      const userTokens = await accountsClient.getTokens();
+      expect(userTokens).toEqual(impersonateResult.tokens);
     });
   });
 });

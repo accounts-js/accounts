@@ -13,6 +13,7 @@ const headers: { [key: string]: string } = {
 };
 
 export class RestClient implements TransportInterface {
+  public client: AccountsClient;
   private options: OptionsType;
 
   constructor(options: OptionsType) {
@@ -40,6 +41,16 @@ export class RestClient implements TransportInterface {
     }
   }
 
+  public async authFetch(route: string, args: object, customHeaders: object = {}): Promise<any> {
+    const tokens = await this.client.refreshSession();
+    return this.fetch(route, args, {
+      ...customHeaders,
+      ...{
+        'accounts-access-token': tokens ? tokens.accessToken : '',
+      },
+    });
+  }
+
   public loginWithService(
     provider: string,
     data: any,
@@ -56,14 +67,18 @@ export class RestClient implements TransportInterface {
 
   public impersonate(
     accessToken: string,
-    username: string,
+    impersonated: {
+      userId?: string;
+      username?: string;
+      email?: string;
+    },
     customHeaders?: object
   ): Promise<ImpersonationResult> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
         accessToken,
-        username,
+        impersonated,
       }),
     };
     return this.fetch('impersonate', args, customHeaders);
@@ -165,7 +180,7 @@ export class RestClient implements TransportInterface {
         newPassword,
       }),
     };
-    return this.fetch('password/changePassword', args, customHeaders);
+    return this.authFetch('password/changePassword', args, customHeaders);
   }
 
   public getTwoFactorSecret(customHeaders?: object): Promise<any> {
@@ -183,7 +198,7 @@ export class RestClient implements TransportInterface {
         code,
       }),
     };
-    return this.fetch('password/twoFactorSet', args, customHeaders);
+    return this.authFetch('password/twoFactorSet', args, customHeaders);
   }
 
   public twoFactorUnset(code: string, customHeaders?: object): Promise<void> {
@@ -193,7 +208,7 @@ export class RestClient implements TransportInterface {
         code,
       }),
     };
-    return this.fetch('password/twoFactorUnset', args, customHeaders);
+    return this.authFetch('password/twoFactorUnset', args, customHeaders);
   }
 
   private _loadHeadersObject(plainHeaders: object): { [key: string]: string } {

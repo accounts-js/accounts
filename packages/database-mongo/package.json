@@ -12,19 +12,13 @@
     "coverage": "yarn testonly --coverage",
     "prepublishOnly": "yarn compile"
   },
-  "files": [
-    "src",
-    "lib"
-  ],
+  "files": ["src", "lib"],
   "jest": {
     "transform": {
       ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "./__tests__/.*.ts$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ]
+    "moduleFileExtensions": ["ts", "js"]
   },
   "repository": {
     "type": "git",

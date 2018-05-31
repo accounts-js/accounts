@@ -24,45 +24,29 @@
       ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
-    "testEnvironment": "jsdom"
+    "moduleFileExtensions": ["ts", "js"],
+    "testEnvironment": "jsdom",
+    "setupFiles": ["jest-localstorage-mock"]
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/accounts-js/accounts/tree/master/packages/client"
   },
-  "keywords": [
-    "rest",
-    "graphql",
-    "grant",
-    "auth",
-    "authentication",
-    "accounts",
-    "users",
-    "oauth"
-  ],
+  "keywords": ["rest", "graphql", "grant", "auth", "authentication", "accounts", "users", "oauth"],
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "22.2.3",
-    "@types/node": "9.6.15",
+    "@types/jwt-decode": "^2.2.1",
+    "@types/node": "^9.6.7",
     "jest": "22.4.3",
+    "jest-localstorage-mock": "^2.2.0",
     "jsonwebtoken": "8.2.1",
-    "lerna": "2.11.0",
     "localstorage-polyfill": "1.0.1",
-    "regenerator-runtime": "0.11.1",
     "rimraf": "2.6.2"
   },
   "dependencies": {
-    "@accounts/common": "^0.1.0-beta.12",
-    "crypto-js": "^3.1.9-1",
-    "immutable": "^3.8.1",
-    "jwt-decode": "^2.1.0",
-    "lodash": "^4.16.4",
-    "redux": "^3.7.2",
-    "redux-immutable": "^4.0.0"
+    "@accounts/types": "^0.1.0-beta.12",
+    "jwt-decode": "2.1.0"
   }
 }
