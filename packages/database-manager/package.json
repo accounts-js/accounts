@@ -1,6 +1,6 @@
 {
   "name": "@accounts/database-manager",
-  "version": "0.1.0-beta.12",
+  "version": "0.1.0-beta.13",
   "description": "Accounts Database Manager, allow the use of separate databases for session and user",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -22,13 +22,22 @@
       ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
-    "moduleFileExtensions": ["ts", "js"]
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/accounts-js/accounts/tree/master/packages/database-manager"
   },
-  "keywords": ["accounts", "database", "manager", "users", "sessions"],
+  "keywords": [
+    "accounts",
+    "database",
+    "manager",
+    "users",
+    "sessions"
+  ],
   "author": "Elies Lou (Aetherall)",
   "license": "MIT",
   "devDependencies": {
@@ -38,6 +47,6 @@
     "rimraf": "2.6.2"
   },
   "dependencies": {
-    "@accounts/types": "^0.1.0-beta.12"
+    "@accounts/types": "^0.1.0-beta.13"
   }
 }

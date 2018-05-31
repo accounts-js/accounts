@@ -1,6 +1,6 @@
 {
   "name": "@accounts/password",
-  "version": "0.1.0-beta.12",
+  "version": "0.1.0-beta.13",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -19,17 +19,20 @@
       ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
-    "moduleFileExtensions": ["ts", "js"]
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
   },
   "dependencies": {
-    "@accounts/two-factor": "^0.1.0-beta.12",
+    "@accounts/two-factor": "^0.1.0-beta.13",
     "bcryptjs": "^2.4.3",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
-    "@accounts/common": "^0.1.0-beta.12",
-    "@accounts/server": "^0.1.0-beta.12",
-    "@accounts/types": "^0.1.0-beta.12",
+    "@accounts/common": "^0.1.0-beta.13",
+    "@accounts/server": "^0.1.0-beta.13",
+    "@accounts/types": "^0.1.0-beta.13",
     "@types/bcryptjs": "2.4.1",
     "@types/jest": "22.2.3",
     "@types/lodash": "4.14.109",
