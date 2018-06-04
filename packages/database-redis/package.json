@@ -37,11 +37,11 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/database-tests": "^0.1.0-beta.14",
-    "@types/ioredis": "^3.2.7",
+    "@types/ioredis": "3.2.7",
     "@types/jest": "22.2.3",
     "@types/lodash": "4.14.108",
     "@types/node": "9.6.7",
-    "@types/shortid": "^0.0.29",
+    "@types/shortid": "0.0.29",
     "jest": "22.4.3"
   },
   "dependencies": {
