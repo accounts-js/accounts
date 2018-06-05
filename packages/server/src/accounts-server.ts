@@ -115,7 +115,7 @@ export class AccountsServer {
       this.hooks.emit(ServerHooks.LoginSuccess, hooksInfo);
       return loginResult;
     } catch (err) {
-      this.hooks.emit(ServerHooks.LoginError, hooksInfo);
+      this.hooks.emit(ServerHooks.LoginError, { ...hooksInfo, error: err });
       throw err;
     }
   }
