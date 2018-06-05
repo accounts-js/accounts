@@ -205,11 +205,12 @@ describe('AccountsServer', () => {
         },
       };
       const hookSpy = jest.fn(() => null);
+      const SessionError = new Error('Could not create session');
       const accountsServer = new AccountsServer(
         {
           db: {
             createSession: () => {
-              throw new Error('Could not create session');
+              throw SessionError;
             },
           } as any,
           tokenSecret: 'secret',
@@ -228,6 +229,7 @@ describe('AccountsServer', () => {
         connection: connectionInfo,
         user,
         params: { key: 'value' },
+        error: SessionError,
       });
     });
 
