@@ -95,6 +95,8 @@ export class AccountsServer {
       service: serviceName,
       // The connection informations <ConnectionInformations>
       connection: infos,
+      // Params received
+      params,
     };
     try {
       if (!this.services[serviceName]) {
