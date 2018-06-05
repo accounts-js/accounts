@@ -192,6 +192,7 @@ describe('AccountsServer', () => {
         service: 'password',
         connection: connectionInfo,
         user,
+        params: { key: 'value' },
       });
     });
 
@@ -226,6 +227,7 @@ describe('AccountsServer', () => {
         service: 'password',
         connection: connectionInfo,
         user,
+        params: { key: 'value' },
       });
     });
 
