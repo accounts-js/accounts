@@ -126,13 +126,17 @@ describe('AccountsSession', () => {
       },
       session: {
         [defaultName]: tokens,
-        destroy: jest.fn(cb => cb()),
+        destroy: cb => {
+          delete req.session;
+          cb();
+        },
       },
     };
 
     accountsSession
       .destroy(req)
-      .then(() => {
+      .then(result => {
+        expect(result).toBeUndefined();
         expect(mockedServer.logout).toHaveBeenCalledWith(tokens.accessToken);
         expect(accountsSession.get(req)).toBeUndefined();
 

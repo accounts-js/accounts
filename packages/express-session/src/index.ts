@@ -48,16 +48,16 @@ export class AccountsSession {
     };
   }
 
-  public destroy(req?: Request): Promise<void> {
-    return new Promise((resolve, reject) => {
-      req.session.destroy(async err => {
-        const tokens = this.get(req);
+  public async destroy(req?: Request): Promise<void> {
+    const tokens = this.get(req);
 
-        if (tokens && tokens.accessToken) {
-          await this.accountsServer.logout(tokens.accessToken);
-          await this.clear(req);
-        }
+    if (tokens && tokens.accessToken) {
+      await this.accountsServer.logout(tokens.accessToken);
+      await this.clear(req);
+    }
 
+    return new Promise<void>((resolve, reject) => {
+      req.session.destroy(err => {
         if (err) {
           reject(err);
         } else {
