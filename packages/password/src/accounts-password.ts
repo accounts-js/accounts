@@ -2,13 +2,13 @@ import { trim, isEmpty, isFunction, isString, isPlainObject, find, includes } fr
 import {
   CreateUser,
   User,
-  Login,
+  LoginUserIdentity,
   EmailRecord,
   TokenRecord,
   DatabaseInterface,
   AuthenticationService,
+  HashAlgorithm,
 } from '@accounts/types';
-import { HashAlgorithm } from '@accounts/common';
 import { TwoFactor, AccountsTwoFactorOptions, getUserTwoFactorService } from '@accounts/two-factor';
 import { AccountsServer, generateRandomToken, getFirstUserEmail } from '@accounts/server';
 import {
@@ -356,7 +356,10 @@ export default class AccountsPassword implements AuthenticationService {
     return this.db.createUser(proposedUserObject);
   }
 
-  private async passwordAuthenticator(user: string | Login, password: PasswordType): Promise<User> {
+  private async passwordAuthenticator(
+    user: string | LoginUserIdentity,
+    password: PasswordType
+  ): Promise<User> {
     const { username, email, id } = isString(user)
       ? this.toUsernameAndEmail({ user })
       : this.toUsernameAndEmail({ ...user });

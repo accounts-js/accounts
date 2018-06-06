@@ -46,7 +46,6 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "dependencies": {
-    "@accounts/common": "^0.1.0-beta.14",
     "@accounts/types": "^0.1.0-beta.14",
     "babel-polyfill": "^6.23.0",
     "bcryptjs": "^2.4.0",

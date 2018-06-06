@@ -4,7 +4,6 @@ import { verifyEmail, sendVerificationEmail } from './endpoints/password/verify-
 import * as express from 'express';
 import { get, isEmpty, pick } from 'lodash';
 import * as requestIp from 'request-ip';
-import { AccountsError } from '@accounts/common';
 import { AccountsServer } from '@accounts/server';
 import { refreshAccessToken } from './endpoints/refresh-access-token';
 import { getUser } from './endpoints/get-user';
