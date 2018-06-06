@@ -1,4 +1,4 @@
-import { HashAlgorithm } from '@accounts/common';
+import { HashAlgorithm } from '@accounts/types';
 
 export type PasswordType =
   | string

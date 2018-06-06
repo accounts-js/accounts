@@ -1,7 +1,6 @@
 import { forIn, isPlainObject } from 'lodash';
 import { TransportInterface, AccountsClient } from '@accounts/client';
 import { User, LoginResult, CreateUser, ImpersonationResult } from '@accounts/types';
-import { AccountsError } from '@accounts/common';
 
 export interface OptionsType {
   apiHost: string;
@@ -33,7 +32,7 @@ export class RestClient implements TransportInterface {
     if (res) {
       if (res.status >= 400 && res.status < 600) {
         const { message, loginInfo, errorCode } = await res.json();
-        throw new AccountsError(message, loginInfo, errorCode);
+        throw new Error(message);
       }
       return res.json();
     } else {

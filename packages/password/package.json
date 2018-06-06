@@ -30,7 +30,6 @@
     "lodash": "^4.17.4"
   },
   "devDependencies": {
-    "@accounts/common": "^0.1.0-beta.14",
     "@accounts/server": "^0.1.0-beta.14",
     "@accounts/types": "^0.1.0-beta.14",
     "@types/bcryptjs": "2.4.1",
@@ -41,7 +40,6 @@
     "rimraf": "2.6.2"
   },
   "peerDependencies": {
-    "@accounts/common": "^0.1.0-beta.0",
     "@accounts/server": "^0.1.0-beta.0"
   }
 }

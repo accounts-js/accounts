@@ -1,7 +1,6 @@
 import { pick, omit, isString } from 'lodash';
 import * as jwt from 'jsonwebtoken';
 import * as Emittery from 'emittery';
-import { AccountsError } from '@accounts/common';
 import {
   User,
   LoginResult,
@@ -49,7 +48,7 @@ export class AccountsServer {
   constructor(options: AccountsServerOptions, services: any) {
     this.options = { ...defaultOptions, ...options };
     if (!this.options.db) {
-      throw new AccountsError('A database driver is required');
+      throw new Error('A database driver is required');
     }
     // TODO if this.options.tokenSecret === 'secret' warm user to change it
 
@@ -167,25 +166,25 @@ export class AccountsServer {
   ): Promise<ImpersonationResult> {
     try {
       if (!isString(accessToken)) {
-        throw new AccountsError('An access token is required');
+        throw new Error('An access token is required');
       }
 
       try {
         jwt.verify(accessToken, this.options.tokenSecret);
       } catch (err) {
-        throw new AccountsError('Access token is not valid');
+        throw new Error('Access token is not valid');
       }
 
       const session = await this.findSessionByAccessToken(accessToken);
 
       if (!session.valid) {
-        throw new AccountsError('Session is not valid for user');
+        throw new Error('Session is not valid for user');
       }
 
       const user = await this.db.findUserById(session.userId);
 
       if (!user) {
-        throw new AccountsError('User not found');
+        throw new Error('User not found');
       }
 
       let impersonatedUser;
@@ -198,7 +197,7 @@ export class AccountsServer {
       }
 
       if (!impersonatedUser) {
-        throw new AccountsError(`Impersonated user not found`);
+        throw new Error(`Impersonated user not found`);
       }
 
       if (!this.options.impersonationAuthorize) {
@@ -257,7 +256,7 @@ export class AccountsServer {
   ): Promise<LoginResult> {
     try {
       if (!isString(accessToken) || !isString(refreshToken)) {
-        throw new AccountsError('An accessToken and refreshToken are required');
+        throw new Error('An accessToken and refreshToken are required');
       }
 
       let sessionToken: string;
@@ -268,18 +267,18 @@ export class AccountsServer {
         }) as { data: JwtData };
         sessionToken = decodedAccessToken.data.token;
       } catch (err) {
-        throw new AccountsError('Tokens are not valid');
+        throw new Error('Tokens are not valid');
       }
 
       const session: Session = await this.db.findSessionByToken(sessionToken);
       if (!session) {
-        throw new AccountsError('Session not found');
+        throw new Error('Session not found');
       }
 
       if (session.valid) {
         const user = await this.db.findUserById(session.userId);
         if (!user) {
-          throw new AccountsError('User not found', { id: session.userId });
+          throw new Error('User not found');
         }
         const tokens = this.createTokens(sessionToken);
         await this.db.updateSession(session.id, { ip, userAgent });
@@ -294,9 +293,7 @@ export class AccountsServer {
 
         return result;
       } else {
-        throw new AccountsError('Session is no longer valid', {
-          id: session.userId,
-        });
+        throw new Error('Session is no longer valid');
       }
     } catch (err) {
       this.hooks.emit(ServerHooks.RefreshTokensError, err);
@@ -342,7 +339,7 @@ export class AccountsServer {
         const user = await this.db.findUserById(session.userId);
 
         if (!user) {
-          throw new AccountsError('User not found', { id: session.userId });
+          throw new Error('User not found');
         }
 
         await this.db.invalidateSession(session.id);
@@ -352,9 +349,7 @@ export class AccountsServer {
           accessToken,
         });
       } else {
-        throw new AccountsError('Session is no longer valid', {
-          id: session.userId,
-        });
+        throw new Error('Session is no longer valid');
       }
     } catch (error) {
       this.hooks.emit(ServerHooks.LogoutError, error);
@@ -371,14 +366,14 @@ export class AccountsServer {
         const user = await this.db.findUserById(session.userId);
 
         if (!user) {
-          throw new AccountsError('User not found', { id: session.userId });
+          throw new Error('User not found');
         }
 
         if (this.options.resumeSessionValidator) {
           try {
             await this.options.resumeSessionValidator(user, session);
           } catch (e) {
-            throw new AccountsError(e, { id: session.userId }, 403);
+            throw new Error(e);
           }
         }
 
@@ -387,10 +382,7 @@ export class AccountsServer {
         return this.sanitizeUser(user);
       }
 
-      this.hooks.emit(
-        ServerHooks.ResumeSessionError,
-        new AccountsError('Invalid Session', { id: session.userId })
-      );
+      this.hooks.emit(ServerHooks.ResumeSessionError, new Error('Invalid Session'));
 
       return null;
     } catch (e) {
@@ -407,7 +399,7 @@ export class AccountsServer {
    */
   public async findSessionByAccessToken(accessToken: string): Promise<Session> {
     if (!isString(accessToken)) {
-      throw new AccountsError('An accessToken is required');
+      throw new Error('An accessToken is required');
     }
 
     let sessionToken: string;
@@ -417,12 +409,12 @@ export class AccountsServer {
       };
       sessionToken = decodedAccessToken.data.token;
     } catch (err) {
-      throw new AccountsError('Tokens are not valid');
+      throw new Error('Tokens are not valid');
     }
 
     const session: Session = await this.db.findSessionByToken(sessionToken);
     if (!session) {
-      throw new AccountsError('Session not found');
+      throw new Error('Session not found');
     }
 
     return session;
@@ -446,7 +438,7 @@ export class AccountsServer {
   public async setProfile(userId: string, profile: object): Promise<void> {
     const user = await this.db.findUserById(userId);
     if (!user) {
-      throw new AccountsError('User not found', { id: userId });
+      throw new Error('User not found');
     }
     await this.db.setProfile(userId, profile);
   }
@@ -461,7 +453,7 @@ export class AccountsServer {
   public async updateProfile(userId: string, profile: object): Promise<object> {
     const user = await this.db.findUserById(userId);
     if (!user) {
-      throw new AccountsError('User not found', { id: userId });
+      throw new Error('User not found');
     }
     return this.db.setProfile(userId, { ...user.profile, ...profile });
   }

@@ -1,7 +1,7 @@
 import { includes } from 'lodash';
-import { UserObjectType, AccountsError, EmailRecord } from '@accounts/common';
+import { EmailRecord, User } from '@accounts/types';
 
-export function getFirstUserEmail(user: UserObjectType, address: string): string {
+export function getFirstUserEmail(user: User, address: string): string {
   // Pick the first email if we weren't passed an email
   if (!address && user.emails && user.emails[0]) {
     address = user.emails[0].address;
@@ -9,7 +9,7 @@ export function getFirstUserEmail(user: UserObjectType, address: string): string
   // Make sure the address is valid
   const emails = user.emails || [];
   if (!address || !includes(emails.map((email: EmailRecord) => email.address), address)) {
-    throw new AccountsError('No such email address for user');
+    throw new Error('No such email address for user');
   }
   return address;
 }

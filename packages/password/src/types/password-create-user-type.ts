@@ -1,6 +1,6 @@
-import { CreateUserType } from '@accounts/common';
+import { CreateUser } from '@accounts/types';
 import { PasswordType } from './password-type';
 
-export interface PasswordCreateUserType extends CreateUserType {
+export interface PasswordCreateUserType extends CreateUser {
   password: PasswordType;
 }
