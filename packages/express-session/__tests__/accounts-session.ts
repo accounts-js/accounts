@@ -35,6 +35,20 @@ describe('AccountsSession', () => {
 
     expect(req.session[defaultName]).toEqual(tokens);
   });
+
+  test('should should clear when there is no tokens to be set', () => {
+    const accountsSession = new AccountsSession({} as any);
+    const req: any = {
+      session: {
+        [defaultName]: 'tokens',
+      },
+    };
+
+    accountsSession.set(req, undefined);
+
+    expect(req.session[defaultName]).toEqual(null);
+  });
+
   test('should should overwrite', () => {
     const accountsSession = new AccountsSession({} as any);
     const req: any = {
@@ -178,6 +192,44 @@ describe('AccountsSession', () => {
         });
         expect(req.currentUser).toEqual('user');
         expect(next).toHaveBeenCalled();
+
+        done();
+      })
+      .catch(done.fail);
+  });
+
+  test('should have a default resolver', (done: jest.DoneCallback) => {
+    const user = {
+      name: 'foo',
+    };
+    const resumeSession = jest.fn(() => user);
+    const accountsSession = new AccountsSession({
+      ...mockAccountsServer(),
+      resumeSession,
+    } as any);
+
+    const tokens = {
+      accessToken: 'access',
+      refreshToken: 'refresh',
+    };
+    const req: any = {
+      headers: {
+        'user-agent': null,
+      },
+      session: {
+        [defaultName]: tokens,
+      },
+    };
+    const res: any = {};
+    const next = () => {
+      //
+    };
+
+    accountsSession
+      .middleware()(req, res, next)
+      .then(() => {
+        expect(resumeSession).toHaveBeenCalledWith('newAccess');
+        expect(req.user).toEqual(user);
 
         done();
       })
