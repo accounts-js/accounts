@@ -1421,9 +1421,9 @@ elegant-spinner@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/elegant-spinner/-/elegant-spinner-1.0.1.tgz#db043521c95d7e303fd8f345bedc3349cfb0729e"
 
-emittery@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/emittery/-/emittery-0.3.0.tgz#e6dcedabae804b5478c760335ecbbaf159da645c"
+emittery@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/emittery/-/emittery-0.4.0.tgz#b5d194e28f89f494aaad7b308d143e52ac9d0b43"
 
 encodeurl@~1.0.2:
   version "1.0.2"
