@@ -29,7 +29,7 @@ export class AccountsClientPassword {
   // TODO type
   public async login(user: any): Promise<any> {
     const hashedPassword = this.hashPassword(user.password);
-    await this.client.loginWithService('password', {
+    return await this.client.loginWithService('password', {
       ...user,
       password: hashedPassword,
     });
