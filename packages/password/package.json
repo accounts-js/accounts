@@ -1,6 +1,6 @@
 {
   "name": "@accounts/password",
-  "version": "0.1.0-beta.15",
+  "version": "0.1.0-beta.16",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -25,13 +25,13 @@
     ]
   },
   "dependencies": {
-    "@accounts/two-factor": "^0.1.0-beta.15",
+    "@accounts/two-factor": "^0.1.0-beta.16",
     "bcryptjs": "^2.4.3",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
-    "@accounts/server": "^0.1.0-beta.15",
-    "@accounts/types": "^0.1.0-beta.15",
+    "@accounts/server": "^0.1.0-beta.16",
+    "@accounts/types": "^0.1.0-beta.16",
     "@types/bcryptjs": "2.4.1",
     "@types/jest": "22.2.3",
     "@types/lodash": "4.14.109",
