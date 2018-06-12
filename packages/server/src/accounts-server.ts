@@ -50,7 +50,12 @@ export class AccountsServer {
     if (!this.options.db) {
       throw new Error('A database driver is required');
     }
-    // TODO if this.options.tokenSecret === 'secret' warm user to change it
+    if (this.options.tokenSecret === defaultOptions.tokenSecret) {
+      // tslint:disable-next-line no-console
+      console.log(`
+You are using the default secret "${this.options.tokenSecret}" which is not secure.
+Please change it with a strong random token.`);
+    }
 
     this.services = services;
     this.db = this.options.db;
