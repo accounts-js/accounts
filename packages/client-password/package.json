@@ -37,9 +37,9 @@
   "license": "MIT",
   "devDependencies": {
     "@types/crypto-js": "3.1.40",
-    "@types/jest": "22.2.3",
+    "@types/jest": "23.0.2",
     "@types/node": "9.6.15",
-    "jest": "22.4.3",
+    "jest": "23.1.0",
     "rimraf": "2.6.2"
   },
   "dependencies": {
