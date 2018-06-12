@@ -1,6 +1,5 @@
 import { User, DatabaseInterface, AuthenticationService } from '@accounts/types';
 import { AccountsServer, ServerHooks } from '@accounts/server';
-import * as requestPromise from 'request-promise';
 import { OAuthOptions } from './types/oauth-options';
 
 export class AccountsOauth implements AuthenticationService {

@@ -1,4 +1,4 @@
-import { CreateUser, LoginResult, User, Tokens, ImpersonationResult } from '@accounts/types';
+import { LoginResult, Tokens, ImpersonationResult } from '@accounts/types';
 import { TransportInterface } from './transport-interface';
 import { TokenStorage, AccountsClientOptions } from './types';
 import { tokenStorageLocal } from './token-storage-local';

@@ -31,7 +31,7 @@ export class RestClient implements TransportInterface {
 
     if (res) {
       if (res.status >= 400 && res.status < 600) {
-        const { message, loginInfo, errorCode } = await res.json();
+        const { message } = await res.json();
         throw new Error(message);
       }
       return res.json();

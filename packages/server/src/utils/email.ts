@@ -1,8 +1,7 @@
 import { User } from '@accounts/types';
-import { EmailTemplateType } from '../types/email-template-type';
 import { EmailTemplatesType } from '../types/email-templates-type';
 
-export const emailTemplates = {
+export const emailTemplates: EmailTemplatesType = {
   from: 'accounts-js <no-reply@accounts-js.com>',
 
   verifyEmail: {

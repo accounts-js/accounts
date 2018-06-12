@@ -2,8 +2,6 @@ import { providerCallback } from './endpoints/oauth/provider-callback';
 import { resetPassword, sendResetPasswordEmail } from './endpoints/password/reset';
 import { verifyEmail, sendVerificationEmail } from './endpoints/password/verify-email';
 import * as express from 'express';
-import { get, isEmpty, pick } from 'lodash';
-import * as requestIp from 'request-ip';
 import { AccountsServer } from '@accounts/server';
 import { refreshAccessToken } from './endpoints/refresh-access-token';
 import { getUser } from './endpoints/get-user';
