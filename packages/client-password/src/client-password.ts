@@ -1,5 +1,6 @@
 import { AccountsClient } from '@accounts/client';
 import { SHA256 } from 'crypto-js';
+import { LoginResult, CreateUser } from '@accounts/types';
 import { AccountsClientPasswordOptions } from './types';
 
 export class AccountsClientPassword {
@@ -17,8 +18,7 @@ export class AccountsClientPassword {
   /**
    * Create a new user.
    */
-  // TODO type
-  public async createUser(user: any): Promise<string> {
+  public async createUser(user: CreateUser): Promise<string> {
     const hashedPassword = this.hashPassword(user.password);
     return this.client.transport.createUser({ ...user, password: hashedPassword });
   }
@@ -26,10 +26,9 @@ export class AccountsClientPassword {
   /**
    * Log the user in with a password.
    */
-  // TODO type
-  public async login(user: any): Promise<any> {
+  public async login(user: any): Promise<LoginResult> {
     const hashedPassword = this.hashPassword(user.password);
-    await this.client.loginWithService('password', {
+    return this.client.loginWithService('password', {
       ...user,
       password: hashedPassword,
     });
