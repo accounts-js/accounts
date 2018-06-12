@@ -36,13 +36,13 @@
     "@accounts/database-tests": "^0.1.0-beta.16",
     "@types/jest": "23.0.2",
     "@types/lodash": "4.14.109",
-    "@types/mongodb": "3.0.18",
+    "@types/mongodb": "3.0.19",
     "@types/node": "9.6.15",
     "jest": "23.1.0"
   },
   "dependencies": {
     "@accounts/types": "^0.1.0-beta.16",
     "lodash": "^4.17.4",
-    "mongodb": "^3.0.0"
+    "mongodb": "^3.0.10"
   }
 }
