@@ -13,15 +13,15 @@ The Accounts project was intended - since its inception - to be a community main
 
 ## Development
 
-* [Install Node.js](https://nodejs.org/en/download/).
-* [Install Yarn](https://yarnpkg.com/en/docs/install#mac-stable).
+- [Install Node.js](https://nodejs.org/en/download/).
+- [Install Yarn](https://yarnpkg.com/en/docs/install#mac-stable).
 
 #### Useful Commands:
 
-* Install project dependencies: `yarn`
-* Link together all packages: `yarn lerna bootstrap`
-* Watch the packages for changes and recompile: `yarn start`
-* If you want to use the Account project in your own project, use `yarn link`:
+- Install project dependencies: `yarn`
+- Link together all packages: `yarn lerna bootstrap`
+- Watch the packages for changes and recompile: `yarn start`
+- If you want to use the Account project in your own project, use `yarn link`:
   1.  In your cloned directory: `yarn link`
   2.  In your app / project: `yarn start` followed by `yarn link @accounts/accounts`
 
@@ -50,9 +50,9 @@ Alternatively, prepend your PR title with `[discuss]` to have a conversation aro
 
 ## Contributors with Commit Bit
 
-* Should still submit a PR for changes (i.e. no work should be done on a branch directly; all work should be done in it's own separate feature branch), which should be okayed by one other team member before merging.
+- Should still submit a PR for changes (i.e. no work should be done on a branch directly; all work should be done in it's own separate feature branch), which should be okayed by one other team member before merging.
 
-* Should squash merged PRs whenever possible (via GitHub options).
+- Should squash merged PRs whenever possible (via GitHub options).
 
 ## Financial contributions
 

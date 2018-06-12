@@ -11,8 +11,8 @@ _Fullstack authentication and accounts-management for GraphQL and REST_
 
 ## Community
 
-* Slack - accounts-js.slack.com
-* [Meeting notes](https://github.com/accounts-js/accounts/blob/master/MEETINGS.md)
+- Slack - accounts-js.slack.com
+- [Meeting notes](https://github.com/accounts-js/accounts/blob/master/MEETINGS.md)
 
 ## Note
 
@@ -34,9 +34,9 @@ npm i -S @accounts/rest-express
 
 Finally you'll need a data store adapter. We support the following data stores.
 
-* [x] [Mongo](https://github.com/accounts-js/mongo)
-* [x] [Redis](https://github.com/accounts-js/redis)
-* [ ] [SQL](https://github.com/accounts-js/sql) with [sequelize](http://docs.sequelizejs.com/en/v3/)
+- [x] [Mongo](https://github.com/accounts-js/mongo)
+- [x] [Redis](https://github.com/accounts-js/redis)
+- [ ] [SQL](https://github.com/accounts-js/sql) with [sequelize](http://docs.sequelizejs.com/en/v3/)
 
 ```
 npm i -S @accounts/mongo
