@@ -146,6 +146,8 @@ describe('AccountsPassword', () => {
     });
 
     it('throws when token not found', async () => {
+      const isTokenExpired = jest.fn(() => true);
+      password.server = { isTokenExpired } as any;
       const findUserByEmailVerificationToken = jest.fn(() => Promise.resolve({}));
       password.setStore({ findUserByEmailVerificationToken } as any);
       try {
@@ -157,6 +159,8 @@ describe('AccountsPassword', () => {
     });
 
     it('throws when email not found', async () => {
+      const isTokenExpired = jest.fn(() => false);
+      password.server = { isTokenExpired } as any;
       const findUserByEmailVerificationToken = jest.fn(() => Promise.resolve(invalidUser));
       password.setStore({ findUserByEmailVerificationToken } as any);
       try {
@@ -168,6 +172,8 @@ describe('AccountsPassword', () => {
     });
 
     it('call this.db.verifyEmail', async () => {
+      const isTokenExpired = jest.fn(() => false);
+      password.server = { isTokenExpired } as any;
       const findUserByEmailVerificationToken = jest.fn(() => Promise.resolve(validUser));
       const verifyEmail = jest.fn(() => Promise.resolve());
       password.setStore({

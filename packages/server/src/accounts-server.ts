@@ -458,7 +458,7 @@ export class AccountsServer {
     return this.db.setProfile(userId, { ...user.profile, ...profile });
   }
 
-  public isTokenExpired(token: string, tokenRecord?: TokenRecord): boolean {
+  public isTokenExpired(tokenRecord: TokenRecord): boolean {
     return !tokenRecord || Number(tokenRecord.when) + this.options.emailTokensExpiry < Date.now();
   }
 
