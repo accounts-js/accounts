@@ -107,7 +107,7 @@ Please change it with a strong random token.`);
         throw new Error(`No service with the name ${serviceName} was registered.`);
       }
 
-      const user: User = await this.services[serviceName].authenticate(params);
+      const user: User | null = await this.services[serviceName].authenticate(params);
       if (!user) {
         throw new Error(`Service ${serviceName} was not able to authenticate user`);
       }
@@ -275,7 +275,7 @@ Please change it with a strong random token.`);
         throw new Error('Tokens are not valid');
       }
 
-      const session: Session = await this.db.findSessionByToken(sessionToken);
+      const session: Session | null = await this.db.findSessionByToken(sessionToken);
       if (!session) {
         throw new Error('Session not found');
       }
@@ -389,7 +389,7 @@ Please change it with a strong random token.`);
 
       this.hooks.emit(ServerHooks.ResumeSessionError, new Error('Invalid Session'));
 
-      return null;
+      throw new Error('Invalid Session');
     } catch (e) {
       this.hooks.emit(ServerHooks.ResumeSessionError, e);
 
@@ -417,7 +417,7 @@ Please change it with a strong random token.`);
       throw new Error('Tokens are not valid');
     }
 
-    const session: Session = await this.db.findSessionByToken(sessionToken);
+    const session: Session | null = await this.db.findSessionByToken(sessionToken);
     if (!session) {
       throw new Error('Session not found');
     }
@@ -430,7 +430,7 @@ Please change it with a strong random token.`);
    * @param {string} userId - User id.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  public findUserById(userId: string): Promise<User> {
+  public findUserById(userId: string): Promise<User | null> {
     return this.db.findUserById(userId);
   }
 

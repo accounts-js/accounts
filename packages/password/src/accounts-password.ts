@@ -144,7 +144,7 @@ export default class AccountsPassword implements AuthenticationService {
 
     const verificationTokens = getUserVerificationTokens(user);
     const tokenRecord = find(verificationTokens, (t: TokenRecord) => t.token === token);
-    if (this.server.isTokenExpired(tokenRecord)) {
+    if (!tokenRecord || this.server.isTokenExpired(tokenRecord)) {
       throw new Error('Verify email link expired');
     }
 
@@ -170,7 +170,7 @@ export default class AccountsPassword implements AuthenticationService {
     const resetTokens = getUserResetTokens(user);
     const resetTokenRecord = find(resetTokens, t => t.token === token);
 
-    if (this.server.isTokenExpired(resetTokenRecord)) {
+    if (!resetTokenRecord || this.server.isTokenExpired(resetTokenRecord)) {
       throw new Error('Reset password link expired');
     }
 
@@ -364,7 +364,7 @@ export default class AccountsPassword implements AuthenticationService {
       ? this.toUsernameAndEmail({ user })
       : this.toUsernameAndEmail({ ...user });
 
-    let foundUser: User;
+    let foundUser: User | null;
 
     if (id) {
       // this._validateLoginWithField('id', user);
