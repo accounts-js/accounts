@@ -1,6 +1,6 @@
 import { LoginResult, Tokens, ImpersonationResult } from '@accounts/types';
 import { TransportInterface } from './transport-interface';
-import { TokenStorage, AccountsClientOptions, AccountsClientPrivateOptions } from './types';
+import { TokenStorage, AccountsClientOptions } from './types';
 import { tokenStorageLocal } from './token-storage-local';
 import { isTokenExpired } from './utils';
 
@@ -18,7 +18,7 @@ const defaultOptions = {
 
 export class AccountsClient {
   public transport: TransportInterface;
-  private options: AccountsClientPrivateOptions;
+  private options: AccountsClientOptions & typeof defaultOptions;
   private storage: TokenStorage;
 
   constructor(options: AccountsClientOptions, transport: TransportInterface) {
