@@ -1,2 +1,2 @@
-export { AccountsClientOptions, AccountsClientPrivateOptions } from './options';
+export { AccountsClientOptions } from './options';
 export { TokenStorage } from './token-storage';
