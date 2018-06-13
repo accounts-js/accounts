@@ -1,5 +1,3 @@
-import * as IORedis from 'ioredis';
-
 export interface AccountsRedisOptions {
   /**
    * The users collection name, default 'users'.

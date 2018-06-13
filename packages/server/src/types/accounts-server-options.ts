@@ -1,5 +1,4 @@
 import { User, DatabaseInterface } from '@accounts/types';
-import { EmailTemplateType } from './email-template-type';
 import { EmailTemplatesType } from './email-templates-type';
 import { UserObjectSanitizerFunction } from './user-object-sanitizer-function';
 import { ResumeSessionValidator } from './resume-session-validator';

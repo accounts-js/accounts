@@ -215,7 +215,7 @@ export default class AccountsPassword implements AuthenticationService {
     oldPassword: string,
     newPassword: string
   ): Promise<void> {
-    const foundUser = await this.passwordAuthenticator({ id: userId }, oldPassword);
+    await this.passwordAuthenticator({ id: userId }, oldPassword);
     const password = await bcryptPassword(newPassword);
     return this.db.setPassword(userId, password);
   }

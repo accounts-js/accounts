@@ -1,5 +1,4 @@
 import { randomBytes } from 'crypto';
-import { DatabaseInterface } from '@accounts/types';
 
 const generateRandomToken = (length: number = 43): string => randomBytes(length).toString('hex');
 
@@ -53,11 +52,7 @@ export const runDatabaseTests = (tests: any) => {
         });
 
         it('should find the session', async () => {
-          const sessionId = await tests.database.createSession(
-            session.userId,
-            token,
-            connectionInfo
-          );
+          await tests.database.createSession(session.userId, token, connectionInfo);
           const resultSession = await tests.database.findSessionByToken(token);
           expect(resultSession).toBeTruthy();
         });
