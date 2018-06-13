@@ -12,3 +12,8 @@ export interface AccountsClientOptions {
    */
   tokenStoragePrefix?: string;
 }
+
+export interface AccountsClientPrivateOptions extends AccountsClientOptions {
+  tokenStorage: TokenStorage;
+  tokenStoragePrefix: string;
+}

@@ -1,6 +1,6 @@
 import { LoginResult, Tokens, ImpersonationResult } from '@accounts/types';
 import { TransportInterface } from './transport-interface';
-import { TokenStorage, AccountsClientOptions } from './types';
+import { TokenStorage, AccountsClientOptions, AccountsClientPrivateOptions } from './types';
 import { tokenStorageLocal } from './token-storage-local';
 import { isTokenExpired } from './utils';
 
@@ -18,7 +18,7 @@ const defaultOptions = {
 
 export class AccountsClient {
   public transport: TransportInterface;
-  private options: AccountsClientOptions;
+  private options: AccountsClientPrivateOptions;
   private storage: TokenStorage;
 
   constructor(options: AccountsClientOptions, transport: TransportInterface) {
@@ -127,6 +127,7 @@ export class AccountsClient {
         throw err;
       }
     }
+    return null;
   }
 
   /**
@@ -145,7 +146,7 @@ export class AccountsClient {
 
     const res = await this.transport.impersonate(tokens.accessToken, impersonated);
 
-    if (!res.authorized) {
+    if (!res.authorized || !res.tokens) {
       throw new Error(`User unauthorized to impersonate`);
     } else {
       await this.setTokens(tokens, true);

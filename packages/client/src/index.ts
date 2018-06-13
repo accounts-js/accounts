@@ -1,4 +1,3 @@
-import { AccountsClient } from './accounts-client';
-import { TransportInterface } from './transport-interface';
-
-export { AccountsClient, TransportInterface };
+export { AccountsClient } from './accounts-client';
+export { AccountsClientOptions } from './types';
+export { TransportInterface } from './transport-interface';
