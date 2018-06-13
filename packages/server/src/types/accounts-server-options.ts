@@ -21,11 +21,3 @@ export interface AccountsServerOptions {
   prepareMail?: PrepareMailFunction;
   sendMail?: SendMailType;
 }
-
-export interface AccountsServerPrivateOptions extends AccountsServerOptions {
-  tokenConfigs: {
-    accessToken: jwt.SignOptions;
-    refreshToken: jwt.SignOptions;
-  };
-  userObjectSanitizer: UserObjectSanitizerFunction;
-}

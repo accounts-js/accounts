@@ -24,8 +24,18 @@ import { PasswordCreateUserType, PasswordLoginType, PasswordType } from './types
 export interface AccountsPasswordOptions {
   twoFactor?: AccountsTwoFactorOptions;
   passwordHashAlgorithm?: HashAlgorithm;
-  passwordResetTokenExpirationInDays?: number;
-  passwordEnrollTokenExpirationInDays?: number;
+  /**
+   * The number of milliseconds from when a link to verify the user email is sent until token expires and user can't verify his email with the link anymore. Defaults to 3 days.
+   */
+  verifyEmailTokenExpiration?: number;
+  /**
+   * The number of milliseconds from when a link to reset password is sent until token expires and user can't reset password with the link anymore. Defaults to 3 days.
+   */
+  passwordResetTokenExpiration?: number;
+  /**
+   * The number of milliseconds from when a link to set inital password is sent until token expires and user can't set password with the link anymore. Defaults to 30 days.
+   */
+  passwordEnrollTokenExpiration?: number;
   minimumPasswordLength?: number;
   validateNewUser?: (user: CreateUser) => Promise<boolean>;
   validateEmail?(email?: string): boolean;
@@ -34,9 +44,13 @@ export interface AccountsPasswordOptions {
 }
 
 const defaultOptions = {
-  passwordResetTokenExpirationInDays: 3,
-  passwordEnrollTokenExpirationInDays: 30,
   minimumPasswordLength: 7,
+  // 3 days - 3 * 24 * 60 * 60 * 1000
+  verifyEmailTokenExpiration: 259200000,
+  // 3 days - 3 * 24 * 60 * 60 * 1000
+  passwordResetTokenExpiration: 259200000,
+  // 30 days - 30 * 24 * 60 * 60 * 1000
+  passwordEnrollTokenExpiration: 2592000000,
   validateEmail(email?: string): boolean {
     const isValid = !isEmpty(trim(email || '')) && isEmail(email);
     return Boolean(isValid);
@@ -56,7 +70,7 @@ export default class AccountsPassword implements AuthenticationService {
   public serviceName = 'password';
   public server: AccountsServer;
   public twoFactor: TwoFactor;
-  private options: AccountsPasswordOptions;
+  private options: AccountsPasswordOptions & typeof defaultOptions;
   private db: DatabaseInterface;
 
   constructor(options: AccountsPasswordOptions = {}) {
@@ -82,7 +96,7 @@ export default class AccountsPassword implements AuthenticationService {
 
     // If user activated two factor authentication try with the code
     if (getUserTwoFactorService(foundUser)) {
-      await this.twoFactor.authenticate(foundUser, code);
+      await this.twoFactor.authenticate(foundUser, code!);
     }
 
     return foundUser;
@@ -144,7 +158,7 @@ export default class AccountsPassword implements AuthenticationService {
 
     const verificationTokens = getUserVerificationTokens(user);
     const tokenRecord = find(verificationTokens, (t: TokenRecord) => t.token === token);
-    if (!tokenRecord || this.server.isTokenExpired(tokenRecord)) {
+    if (!tokenRecord || this.isTokenExpired(tokenRecord, this.options.verifyEmailTokenExpiration)) {
       throw new Error('Verify email link expired');
     }
 
@@ -170,7 +184,15 @@ export default class AccountsPassword implements AuthenticationService {
     const resetTokens = getUserResetTokens(user);
     const resetTokenRecord = find(resetTokens, t => t.token === token);
 
-    if (!resetTokenRecord || this.server.isTokenExpired(resetTokenRecord)) {
+    if (
+      !resetTokenRecord ||
+      this.isTokenExpired(
+        resetTokenRecord,
+        resetTokenRecord.reason === 'enroll'
+          ? this.options.passwordEnrollTokenExpiration
+          : this.options.passwordResetTokenExpiration
+      )
+    ) {
       throw new Error('Reset password link expired');
     }
 
@@ -184,7 +206,7 @@ export default class AccountsPassword implements AuthenticationService {
     await this.db.setResetPassword(user.id, resetTokenRecord.address, password, token);
 
     // If user clicked on an enrollment link we can verify his email
-    if (resetTokenRecord.reason === 'enroll-account') {
+    if (resetTokenRecord.reason === 'enroll') {
       await this.db.verifyEmail(user.id, resetTokenRecord.address);
     }
 
@@ -356,6 +378,10 @@ export default class AccountsPassword implements AuthenticationService {
     return this.db.createUser(proposedUserObject);
   }
 
+  public isTokenExpired(tokenRecord: TokenRecord, expiryDate: number): boolean {
+    return Number(tokenRecord.when) + expiryDate < Date.now();
+  }
+
   private async passwordAuthenticator(
     user: string | LoginUserIdentity,
     password: PasswordType
@@ -377,6 +403,7 @@ export default class AccountsPassword implements AuthenticationService {
       foundUser = await this.db.findUserByEmail(email);
     }
 
+    // @ts-ignore
     if (!foundUser) {
       throw new Error('User not found');
     }

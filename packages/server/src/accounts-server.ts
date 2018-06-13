@@ -18,10 +18,7 @@ import { generateAccessToken, generateRefreshToken, generateRandomToken } from '
 import { emailTemplates, sendMail } from './utils/email';
 import { ServerHooks } from './utils/server-hooks';
 
-import {
-  AccountsServerOptions,
-  AccountsServerPrivateOptions,
-} from './types/accounts-server-options';
+import { AccountsServerOptions } from './types/accounts-server-options';
 import { JwtData } from './types/jwt-data';
 import { EmailTemplateType } from './types/email-template-type';
 
@@ -42,7 +39,7 @@ const defaultOptions = {
 };
 
 export class AccountsServer {
-  public options: AccountsServerPrivateOptions;
+  public options: AccountsServerOptions & typeof defaultOptions;
   private services: { [key: string]: AuthenticationService };
   private db: DatabaseInterface;
   private hooks: Emittery;
