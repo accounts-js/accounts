@@ -1,5 +1,5 @@
 import { ObjectID, Db, Collection } from 'mongodb';
-import { get } from 'lodash';
+import { get, merge } from 'lodash';
 import {
   CreateUser,
   User,
@@ -7,45 +7,7 @@ import {
   DatabaseInterface,
   ConnectionInformations,
 } from '@accounts/types';
-
-export interface MongoOptionsType {
-  // The users collection name, default 'users'.
-  collectionName?: string;
-  // The sessions collection name, default 'sessions'.
-  sessionCollectionName?: string;
-  // The timestamps for the users and sessions collection, default 'createdAt' and 'updatedAt'.
-  timestamps?: {
-    createdAt: string;
-    updatedAt: string;
-  };
-  // Should the user collection use _id as string or ObjectId, default 'true'.
-  convertUserIdToMongoObjectId?: boolean;
-  // Should the session collection use _id as string or ObjectId, default 'true'.
-  convertSessionIdToMongoObjectId?: boolean;
-  // Perform case intensitive query for user name, default 'true'.
-  caseSensitiveUserName?: boolean;
-  // Function that generate the id for new objects.
-  idProvider?: () => string | object;
-  // Function that generate the date for the timestamps.
-  dateProvider?: (date?: Date) => any;
-}
-
-export interface MongoUser {
-  _id?: string | object;
-  username?: string;
-  profile?: object;
-  services: {
-    password?: {
-      bcrypt: string;
-    };
-  };
-  emails?: [
-    {
-      address: string;
-      verified: boolean;
-    }
-  ];
-}
+import { AccountsMongoOptions, MongoUser } from './types';
 
 const toMongoID = (objectId: string | ObjectID) => {
   if (typeof objectId === 'string') {
@@ -69,7 +31,7 @@ const defaultOptions = {
 
 export class Mongo implements DatabaseInterface {
   // Options of Mongo class
-  private options: MongoOptionsType;
+  private options: AccountsMongoOptions & typeof defaultOptions;
   // Db object
   private db: Db;
   // Account collection
@@ -77,8 +39,8 @@ export class Mongo implements DatabaseInterface {
   // Session collection
   private sessionCollection: Collection;
 
-  constructor(db: any, options?: MongoOptionsType) {
-    this.options = { ...defaultOptions, ...options };
+  constructor(db: any, options?: AccountsMongoOptions) {
+    this.options = merge(defaultOptions, options);
     if (!db) {
       throw new Error('A database connection is required');
     }

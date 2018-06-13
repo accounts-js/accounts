@@ -16,7 +16,7 @@ const defaultOptions = {
 };
 
 export class RedisSessions implements DatabaseInterfaceSessions {
-  private options: Required<AccountsRedisOptions>;
+  private options: AccountsRedisOptions & typeof defaultOptions;
   private db: IORedis.Redis;
 
   constructor(db: IORedis.Redis, options?: AccountsRedisOptions) {
