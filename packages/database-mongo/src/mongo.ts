@@ -47,7 +47,7 @@ export interface MongoUser {
   ];
 }
 
-const toMongoID = objectId => {
+const toMongoID = (objectId: string | ObjectID) => {
   if (typeof objectId === 'string') {
     return new ObjectID(objectId);
   }
@@ -64,7 +64,6 @@ const defaultOptions = {
   convertUserIdToMongoObjectId: true,
   convertSessionIdToMongoObjectId: true,
   caseSensitiveUserName: true,
-  idProvider: null,
   dateProvider: (date?: Date) => (date ? date.getTime() : Date.now()),
 };
 
@@ -162,8 +161,7 @@ export class Mongo implements DatabaseInterface {
   }
 
   public async findPasswordHash(userId: string): Promise<string | null> {
-    const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
-    const user = await this.findUserById(id);
+    const user = await this.findUserById(userId);
     if (user) {
       return get(user, 'services.password.bcrypt');
     }

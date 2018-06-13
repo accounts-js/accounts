@@ -19,13 +19,13 @@ export class AccountsOAuthTwitter {
     );
   }
 
-  public authenticate(params) {
+  public authenticate(params: any) {
     return new Promise((resolve, reject) => {
       this.oauth.get(
         'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true',
         params.access_token,
         params.access_token_secret,
-        (err, data) => {
+        (err: any, data: any) => {
           if (err) {
             reject(err);
           } else {

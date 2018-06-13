@@ -91,7 +91,7 @@ Please change it with a strong random token.`);
 
   public async loginWithService(
     serviceName: string,
-    params,
+    params: any,
     infos: ConnectionInformations
   ): Promise<LoginResult> {
     const hooksInfo: any = {

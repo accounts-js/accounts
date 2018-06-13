@@ -59,7 +59,7 @@ export class AccountsOauth implements AuthenticationService {
     return user;
   }
 
-  public async unlink(userId, provider) {
+  public async unlink(userId: string, provider: string) {
     if (!provider || !this.options[provider]) {
       throw new Error('Invalid provider');
     }

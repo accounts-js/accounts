@@ -39,6 +39,7 @@ export class AccountsSession {
         const tokens = this.get(req);
         const user = await this.options.user.resolve(tokens);
 
+        // @ts-ignore
         req[this.options.user.name] = user;
 
         next();

@@ -2,7 +2,7 @@ import { randomBytes } from 'crypto';
 
 const generateRandomToken = (length: number = 43): string => randomBytes(length).toString('hex');
 
-function delay(time) {
+function delay(time: number) {
   return new Promise(resolve => setTimeout(() => resolve(), time));
 }
 
