@@ -3,9 +3,9 @@ import { AccountsServer, ServerHooks } from '@accounts/server';
 import { OAuthOptions } from './types/oauth-options';
 
 export class AccountsOauth implements AuthenticationService {
-  public server: AccountsServer;
+  public server!: AccountsServer;
   public serviceName = 'oauth';
-  private db: DatabaseInterface;
+  private db!: DatabaseInterface;
   private options: OAuthOptions;
 
   constructor(options: OAuthOptions) {

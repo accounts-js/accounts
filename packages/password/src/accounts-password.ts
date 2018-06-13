@@ -68,10 +68,10 @@ const defaultOptions = {
 
 export default class AccountsPassword implements AuthenticationService {
   public serviceName = 'password';
-  public server: AccountsServer;
+  public server!: AccountsServer;
   public twoFactor: TwoFactor;
   private options: AccountsPasswordOptions & typeof defaultOptions;
-  private db: DatabaseInterface;
+  private db!: DatabaseInterface;
 
   constructor(options: AccountsPasswordOptions = {}) {
     this.options = { ...defaultOptions, ...options };

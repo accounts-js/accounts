@@ -12,7 +12,7 @@ const headers: { [key: string]: string } = {
 };
 
 export class RestClient implements TransportInterface {
-  public client: AccountsClient;
+  public client!: AccountsClient;
   private options: OptionsType;
 
   constructor(options: OptionsType) {
