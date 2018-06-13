@@ -1,7 +1,6 @@
 import * as jwtDecode from 'jwt-decode';
 import { AccountsServer } from '../src/accounts-server';
 import { JwtData } from '../src/types/jwt-data';
-import { bcryptPassword, hashPassword, verifyPassword } from '../src/utils/encryption';
 import { ServerHooks } from '../src/utils/server-hooks';
 
 describe('AccountsServer', () => {
@@ -65,7 +64,7 @@ describe('AccountsServer', () => {
       const accountServer = new AccountsServer(
         {
           db: { createSession } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {
           facebook: { authenticate, setStore: jest.fn() },
@@ -78,7 +77,6 @@ describe('AccountsServer', () => {
 
   describe('loginWithUser', () => {
     it('creates a session when given a proper user object', async () => {
-      const hash = bcryptPassword('1234567');
       const user = {
         id: '123',
         username: 'username',
@@ -92,7 +90,7 @@ describe('AccountsServer', () => {
           db: {
             createSession: () => Promise.resolve('sessionId'),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -119,7 +117,7 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(null),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -152,7 +150,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             invalidateSession,
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -182,7 +180,7 @@ describe('AccountsServer', () => {
           db: {
             createSession: () => '123',
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         services
       );
@@ -213,7 +211,7 @@ describe('AccountsServer', () => {
               throw SessionError;
             },
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         services
       );
@@ -253,7 +251,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             invalidateSession,
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -277,7 +275,7 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(null),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -311,7 +309,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             resumeSessionValidator: () => Promise.resolve(user),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -340,7 +338,7 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(user),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
           resumeSessionValidator: () => Promise.resolve(user),
         },
         {}
@@ -370,7 +368,7 @@ describe('AccountsServer', () => {
             findSessionByToken: () => Promise.reject(''),
             findUserById: () => Promise.resolve(user),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
           resumeSessionValidator: () => Promise.resolve(user),
         },
         {}
@@ -398,7 +396,7 @@ describe('AccountsServer', () => {
                 valid: false,
               }),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -432,7 +430,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             updateSession: () => Promise.resolve(),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -454,7 +452,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: db as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -480,7 +478,7 @@ describe('AccountsServer', () => {
             findUserById,
             createSession: () => Promise.resolve('001'),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
           impersonationAuthorize: async (userObject, impersonateToUser) => {
             return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
@@ -527,7 +525,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             updateSession,
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -548,7 +546,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {} as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -563,7 +561,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {} as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -581,7 +579,7 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () => Promise.resolve(null),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -603,7 +601,7 @@ describe('AccountsServer', () => {
                 valid: false,
               }),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -628,7 +626,7 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(null),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -647,7 +645,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {} as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -662,7 +660,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {} as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -679,7 +677,7 @@ describe('AccountsServer', () => {
           db: {
             findSessionByToken: () => Promise.resolve(null),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -700,7 +698,7 @@ describe('AccountsServer', () => {
                 valid: false,
               }),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -720,7 +718,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: { findUserById } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -743,7 +741,7 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(null),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -758,7 +756,7 @@ describe('AccountsServer', () => {
       }
     });
 
-    it('return false if session is not valid', async () => {
+    it('should throw if session is not valid', async () => {
       const user = {
         userId: '123',
         username: 'username',
@@ -774,13 +772,17 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(user),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
-      const { accessToken } = accountsServer.createTokens('456');
-      const ret = await accountsServer.resumeSession(accessToken);
-      expect(ret).not.toBeTruthy();
+      try {
+        const { accessToken } = accountsServer.createTokens('456');
+        const ret = await accountsServer.resumeSession(accessToken);
+      } catch (err) {
+        const { message } = err;
+        expect(message).toEqual('Invalid Session');
+      }
     });
 
     it('return user', async () => {
@@ -799,7 +801,7 @@ describe('AccountsServer', () => {
               }),
             findUserById: () => Promise.resolve(user),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -817,7 +819,7 @@ describe('AccountsServer', () => {
           db: {
             findUserById: () => Promise.resolve(null),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -845,7 +847,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             setProfile,
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -878,7 +880,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             setProfile,
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -900,7 +902,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: db as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -916,7 +918,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {} as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -933,7 +935,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: {} as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -959,7 +961,7 @@ describe('AccountsServer', () => {
           db: {
             findUserById: () => Promise.resolve(null),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -988,7 +990,7 @@ describe('AccountsServer', () => {
             findUserById,
             findUserByUsername: () => Promise.resolve(null),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -1015,7 +1017,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             findUserByUsername: () => Promise.resolve(someUser),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -1038,7 +1040,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
             findUserByUsername: () => Promise.resolve(someUser),
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
           impersonationAuthorize: async (userObject, impersonateToUser) => {
             return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
@@ -1070,7 +1072,7 @@ describe('AccountsServer', () => {
             findUserById,
             createSession,
           } as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
           impersonationAuthorize: async (userObject, impersonateToUser) => {
             return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
@@ -1109,7 +1111,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: db as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
         },
         {}
       );
@@ -1121,7 +1123,7 @@ describe('AccountsServer', () => {
       const accountsServer = new AccountsServer(
         {
           db: db as any,
-          tokenSecret: 'secret',
+          tokenSecret: 'secret1',
           userObjectSanitizer: (user, omit) => omit(user, ['username']),
         },
         {}
