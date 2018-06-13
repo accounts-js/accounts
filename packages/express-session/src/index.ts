@@ -2,6 +2,7 @@ import { AccountsServer } from '@accounts/server';
 import { Tokens, User } from '@accounts/types';
 import { Request, Response, NextFunction } from 'express';
 import * as requestIp from 'request-ip';
+import { merge } from 'lodash';
 import 'express-session';
 import { getUserAgent } from './utils/get-user-agent';
 
@@ -14,21 +15,22 @@ export interface AccountsSessionOptions {
 }
 
 export class AccountsSession {
-  private options: AccountsSessionOptions;
+  private options: Required<AccountsSessionOptions>;
 
   constructor(private accountsServer: AccountsServer, options?: AccountsSessionOptions) {
-    this.options = {
-      name: 'accounts-js-tokens',
-      user: {
-        name: 'user',
-        resolve: async tokens => {
-          const user = await accountsServer.resumeSession(tokens.accessToken);
-
-          return user;
+    this.options = merge(
+      {
+        name: 'accounts-js-tokens',
+        user: {
+          name: 'user',
+          resolve: async (tokens: Tokens) => {
+            const user = await accountsServer.resumeSession(tokens.accessToken);
+            return user;
+          },
         },
       },
-      ...options,
-    };
+      options
+    );
   }
 
   public middleware() {
@@ -37,10 +39,12 @@ export class AccountsSession {
         await this.renew(req);
 
         const tokens = this.get(req);
-        const user = await this.options.user.resolve(tokens);
+        if (tokens) {
+          const user = await this.options.user.resolve(tokens);
 
-        // @ts-ignore
-        req[this.options.user.name] = user;
+          // @ts-ignore
+          req[this.options.user.name] = user;
+        }
 
         next();
       } catch (e) {
@@ -49,7 +53,7 @@ export class AccountsSession {
     };
   }
 
-  public async destroy(req?: Request): Promise<void> {
+  public async destroy(req: Request): Promise<void> {
     const tokens = this.get(req);
 
     if (tokens && tokens.accessToken) {
@@ -58,7 +62,7 @@ export class AccountsSession {
     }
 
     return new Promise<void>((resolve, reject) => {
-      req.session.destroy(err => {
+      req.session!.destroy(err => {
         if (err) {
           reject(err);
         } else {
@@ -108,7 +112,7 @@ export class AccountsSession {
 
   public clear(req: Request): void {
     if (this.get(req)) {
-      req.session[this.options.name] = null;
+      req.session![this.options.name] = null;
     }
   }
 }
