@@ -29,14 +29,14 @@
   },
   "dependencies": {
     "@accounts/types": "^0.1.0-beta.16",
-    "@types/lodash": "^4.14.108",
+    "@types/lodash": "^4.14.109",
     "@types/speakeasy": "2.0.2",
     "lodash": "^4.17.10",
     "speakeasy": "^2.0.0"
   },
   "devDependencies": {
-    "@types/jest": "22.2.3",
+    "@types/jest": "23.0.2",
     "@types/node": "9.6.15",
-    "jest": "22.4.3"
+    "jest": "23.1.0"
   }
 }
