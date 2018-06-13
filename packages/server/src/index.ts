@@ -1,7 +1,8 @@
 import { AccountsServer } from './accounts-server';
-import { generateRandomToken } from './utils/tokens';
-import { getFirstUserEmail } from './utils/get-first-user-email';
-import { ServerHooks } from './utils/server-hooks';
+export { AccountsServerOptions } from './types/accounts-server-options';
+export { generateRandomToken } from './utils/tokens';
+export { getFirstUserEmail } from './utils/get-first-user-email';
+export { ServerHooks } from './utils/server-hooks';
 
 export default AccountsServer;
-export { AccountsServer, ServerHooks, generateRandomToken, getFirstUserEmail };
+export { AccountsServer };

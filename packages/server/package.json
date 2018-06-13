@@ -47,16 +47,14 @@
   "license": "MIT",
   "dependencies": {
     "@accounts/types": "^0.1.0-beta.16",
-    "babel-polyfill": "^6.23.0",
-    "bcryptjs": "^2.4.0",
-    "emittery": "^0.4.0",
-    "jsonwebtoken": "^8.3.0",
-    "jwt-decode": "^2.1.0",
-    "lodash": "^4.16.4"
+    "@types/jsonwebtoken": "7.2.7",
+    "emittery": "0.4.0",
+    "jsonwebtoken": "8.3.0",
+    "jwt-decode": "2.1.0",
+    "lodash": "4.16.4"
   },
   "devDependencies": {
     "@types/jest": "23.0.2",
-    "@types/jsonwebtoken": "7.2.7",
     "@types/jwt-decode": "2.2.1",
     "@types/node": "9.6.15",
     "jest": "23.1.0",

@@ -1,4 +1,4 @@
-import { pick, omit, isString } from 'lodash';
+import { pick, omit, isString, merge } from 'lodash';
 import * as jwt from 'jsonwebtoken';
 import * as Emittery from 'emittery';
 import {
@@ -11,7 +11,6 @@ import {
   DatabaseInterface,
   AuthenticationService,
   ConnectionInformations,
-  TokenRecord,
 } from '@accounts/types';
 
 import { generateAccessToken, generateRefreshToken, generateRandomToken } from './utils/tokens';
@@ -19,7 +18,10 @@ import { generateAccessToken, generateRefreshToken, generateRandomToken } from '
 import { emailTemplates, sendMail } from './utils/email';
 import { ServerHooks } from './utils/server-hooks';
 
-import { AccountsServerOptions } from './types/accounts-server-options';
+import {
+  AccountsServerOptions,
+  AccountsServerPrivateOptions,
+} from './types/accounts-server-options';
 import { JwtData } from './types/jwt-data';
 import { EmailTemplateType } from './types/email-template-type';
 
@@ -40,13 +42,13 @@ const defaultOptions = {
 };
 
 export class AccountsServer {
-  public options: AccountsServerOptions;
+  public options: AccountsServerPrivateOptions;
   private services: { [key: string]: AuthenticationService };
   private db: DatabaseInterface;
   private hooks: Emittery;
 
   constructor(options: AccountsServerOptions, services: any) {
-    this.options = { ...defaultOptions, ...options };
+    this.options = merge(defaultOptions, options);
     if (!this.options.db) {
       throw new Error('A database driver is required');
     }
@@ -322,11 +324,11 @@ Please change it with a strong random token.`);
     const accessToken = generateAccessToken({
       data: jwtData,
       secret: tokenSecret,
-      config: tokenConfigs.accessToken || {},
+      config: tokenConfigs.accessToken,
     });
     const refreshToken = generateRefreshToken({
       secret: tokenSecret,
-      config: tokenConfigs.refreshToken || {},
+      config: tokenConfigs.refreshToken,
     });
     return { accessToken, refreshToken };
   }
@@ -461,10 +463,6 @@ Please change it with a strong random token.`);
       throw new Error('User not found');
     }
     return this.db.setProfile(userId, { ...user.profile, ...profile });
-  }
-
-  public isTokenExpired(tokenRecord: TokenRecord): boolean {
-    return !tokenRecord || Number(tokenRecord.when) + this.options.emailTokensExpiry < Date.now();
   }
 
   public prepareMail(
