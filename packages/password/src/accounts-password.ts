@@ -144,10 +144,10 @@ export default class AccountsPassword implements AuthenticationService {
 
     const verificationTokens = getUserVerificationTokens(user);
     const tokenRecord = find(verificationTokens, (t: TokenRecord) => t.token === token);
-    if (!tokenRecord) {
+    if (this.server.isTokenExpired(tokenRecord)) {
       throw new Error('Verify email link expired');
     }
-    // TODO check time for expiry date
+
     const emailRecord = find(user.emails, (e: EmailRecord) => e.address === tokenRecord.address);
     if (!emailRecord) {
       throw new Error('Verify email link is for unknown address');
@@ -170,7 +170,7 @@ export default class AccountsPassword implements AuthenticationService {
     const resetTokens = getUserResetTokens(user);
     const resetTokenRecord = find(resetTokens, t => t.token === token);
 
-    if (this.server.isTokenExpired(token, resetTokenRecord)) {
+    if (this.server.isTokenExpired(resetTokenRecord)) {
       throw new Error('Reset password link expired');
     }
 
