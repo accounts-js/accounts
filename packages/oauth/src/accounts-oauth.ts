@@ -40,7 +40,7 @@ export class AccountsOauth implements AuthenticationService {
           email: oauthUser.email,
         });
 
-        user = await this.db.findUserById(userId);
+        user = (await this.db.findUserById(userId)) as User;
 
         if (this.server) {
           await this.server.getHooks().emit(ServerHooks.CreateUserSuccess, user);
@@ -64,6 +64,6 @@ export class AccountsOauth implements AuthenticationService {
       throw new Error('Invalid provider');
     }
 
-    await this.db.setService(userId, provider, null);
+    await this.db.setService(userId, provider, null as any);
   }
 }
