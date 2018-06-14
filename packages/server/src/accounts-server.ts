@@ -1,4 +1,4 @@
-import { pick, omit, isString } from 'lodash';
+import { pick, omit, isString, merge } from 'lodash';
 import * as jwt from 'jsonwebtoken';
 import * as Emittery from 'emittery';
 import {
@@ -11,7 +11,6 @@ import {
   DatabaseInterface,
   AuthenticationService,
   ConnectionInformations,
-  TokenRecord,
 } from '@accounts/types';
 
 import { generateAccessToken, generateRefreshToken, generateRandomToken } from './utils/tokens';
@@ -40,13 +39,13 @@ const defaultOptions = {
 };
 
 export class AccountsServer {
-  public options: AccountsServerOptions;
+  public options: AccountsServerOptions & typeof defaultOptions;
   private services: { [key: string]: AuthenticationService };
   private db: DatabaseInterface;
   private hooks: Emittery;
 
   constructor(options: AccountsServerOptions, services: any) {
-    this.options = { ...defaultOptions, ...options };
+    this.options = merge({ ...defaultOptions }, options);
     if (!this.options.db) {
       throw new Error('A database driver is required');
     }
@@ -91,7 +90,7 @@ Please change it with a strong random token.`);
 
   public async loginWithService(
     serviceName: string,
-    params,
+    params: any,
     infos: ConnectionInformations
   ): Promise<LoginResult> {
     const hooksInfo: any = {
@@ -107,7 +106,7 @@ Please change it with a strong random token.`);
         throw new Error(`No service with the name ${serviceName} was registered.`);
       }
 
-      const user: User = await this.services[serviceName].authenticate(params);
+      const user: User | null = await this.services[serviceName].authenticate(params);
       if (!user) {
         throw new Error(`Service ${serviceName} was not able to authenticate user`);
       }
@@ -275,7 +274,7 @@ Please change it with a strong random token.`);
         throw new Error('Tokens are not valid');
       }
 
-      const session: Session = await this.db.findSessionByToken(sessionToken);
+      const session: Session | null = await this.db.findSessionByToken(sessionToken);
       if (!session) {
         throw new Error('Session not found');
       }
@@ -322,11 +321,11 @@ Please change it with a strong random token.`);
     const accessToken = generateAccessToken({
       data: jwtData,
       secret: tokenSecret,
-      config: tokenConfigs.accessToken || {},
+      config: tokenConfigs.accessToken,
     });
     const refreshToken = generateRefreshToken({
       secret: tokenSecret,
-      config: tokenConfigs.refreshToken || {},
+      config: tokenConfigs.refreshToken,
     });
     return { accessToken, refreshToken };
   }
@@ -389,7 +388,7 @@ Please change it with a strong random token.`);
 
       this.hooks.emit(ServerHooks.ResumeSessionError, new Error('Invalid Session'));
 
-      return null;
+      throw new Error('Invalid Session');
     } catch (e) {
       this.hooks.emit(ServerHooks.ResumeSessionError, e);
 
@@ -417,7 +416,7 @@ Please change it with a strong random token.`);
       throw new Error('Tokens are not valid');
     }
 
-    const session: Session = await this.db.findSessionByToken(sessionToken);
+    const session: Session | null = await this.db.findSessionByToken(sessionToken);
     if (!session) {
       throw new Error('Session not found');
     }
@@ -430,7 +429,7 @@ Please change it with a strong random token.`);
    * @param {string} userId - User id.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  public findUserById(userId: string): Promise<User> {
+  public findUserById(userId: string): Promise<User | null> {
     return this.db.findUserById(userId);
   }
 
@@ -461,10 +460,6 @@ Please change it with a strong random token.`);
       throw new Error('User not found');
     }
     return this.db.setProfile(userId, { ...user.profile, ...profile });
-  }
-
-  public isTokenExpired(tokenRecord: TokenRecord): boolean {
-    return !tokenRecord || Number(tokenRecord.when) + this.options.emailTokensExpiry < Date.now();
   }
 
   public prepareMail(

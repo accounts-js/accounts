@@ -42,17 +42,19 @@
     "@accounts/server": "^0.1.0-beta.16",
     "@types/express": "4.16.0",
     "@types/express-session": "1.15.10",
+    "@types/lodash": "4.14.109",
     "@types/request-ip": "0.0.33",
     "express": "4.16.3",
     "express-session": "1.15.6"
   },
   "peerDependencies": {
-    "@accounts/server": "^0.1.0-beta.10",
+    "@accounts/server": "^0.1.0-beta.16",
     "express": "^4.16.3",
     "express-session": "^1.15.6"
   },
   "dependencies": {
     "@accounts/types": "^0.1.0-beta.16",
+    "lodash": "^4.17.10",
     "request-ip": "^2.0.2"
   }
 }

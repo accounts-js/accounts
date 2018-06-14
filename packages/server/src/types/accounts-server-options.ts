@@ -1,3 +1,4 @@
+import * as jwt from 'jsonwebtoken';
 import { User, DatabaseInterface } from '@accounts/types';
 import { EmailTemplatesType } from './email-templates-type';
 import { UserObjectSanitizerFunction } from './user-object-sanitizer-function';
@@ -9,14 +10,9 @@ export interface AccountsServerOptions {
   db: DatabaseInterface;
   tokenSecret: string;
   tokenConfigs?: {
-    accessToken?: {
-      expiresIn?: string;
-    };
-    refreshToken?: {
-      expiresIn?: string;
-    };
+    accessToken?: jwt.SignOptions;
+    refreshToken?: jwt.SignOptions;
   };
-  emailTokensExpiry?: number;
   emailTemplates?: EmailTemplatesType;
   userObjectSanitizer?: UserObjectSanitizerFunction;
   impersonationAuthorize?: (user: User, impersonateToUser: User) => Promise<any>;

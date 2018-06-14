@@ -11,7 +11,7 @@ const defaultOptions = {
 
 export class TwoFactor {
   private options: AccountsTwoFactorOptions;
-  private db: DatabaseInterface;
+  private db!: DatabaseInterface;
   private serviceName = 'two-factor';
 
   constructor(options: AccountsTwoFactorOptions = {}) {

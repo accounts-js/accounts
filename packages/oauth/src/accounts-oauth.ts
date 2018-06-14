@@ -3,9 +3,9 @@ import { AccountsServer, ServerHooks } from '@accounts/server';
 import { OAuthOptions } from './types/oauth-options';
 
 export class AccountsOauth implements AuthenticationService {
-  public server: AccountsServer;
+  public server!: AccountsServer;
   public serviceName = 'oauth';
-  private db: DatabaseInterface;
+  private db!: DatabaseInterface;
   private options: OAuthOptions;
 
   constructor(options: OAuthOptions) {
@@ -40,7 +40,7 @@ export class AccountsOauth implements AuthenticationService {
           email: oauthUser.email,
         });
 
-        user = await this.db.findUserById(userId);
+        user = (await this.db.findUserById(userId)) as User;
 
         if (this.server) {
           await this.server.getHooks().emit(ServerHooks.CreateUserSuccess, user);
@@ -59,11 +59,11 @@ export class AccountsOauth implements AuthenticationService {
     return user;
   }
 
-  public async unlink(userId, provider) {
+  public async unlink(userId: string, provider: string) {
     if (!provider || !this.options[provider]) {
       throw new Error('Invalid provider');
     }
 
-    await this.db.setService(userId, provider, null);
+    await this.db.setService(userId, provider, null as any);
   }
 }
