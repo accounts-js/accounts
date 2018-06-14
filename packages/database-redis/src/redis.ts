@@ -20,7 +20,7 @@ export class RedisSessions implements DatabaseInterfaceSessions {
   private db: IORedis.Redis;
 
   constructor(db: IORedis.Redis, options?: AccountsRedisOptions) {
-    this.options = merge(defaultOptions, options);
+    this.options = merge({ ...defaultOptions }, options);
     if (!db) {
       throw new Error('A database connection is required');
     }

@@ -39,9 +39,7 @@ describe('Mongo', () => {
 
     it('should throw when mongo id is not valid', async () => {
       try {
-        const mongoTmp = new Mongo(databaseTests.db, {
-          convertUserIdToMongoObjectId: true,
-        });
+        const mongoTmp = new Mongo(databaseTests.db);
         await mongoTmp.findUserById('invalid_hex');
         throw new Error();
       } catch (err) {

@@ -45,7 +45,7 @@ export class AccountsServer {
   private hooks: Emittery;
 
   constructor(options: AccountsServerOptions, services: any) {
-    this.options = merge(defaultOptions, options);
+    this.options = merge({ ...defaultOptions }, options);
     if (!this.options.db) {
       throw new Error('A database driver is required');
     }

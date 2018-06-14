@@ -40,7 +40,7 @@ export class Mongo implements DatabaseInterface {
   private sessionCollection: Collection;
 
   constructor(db: any, options?: AccountsMongoOptions) {
-    this.options = merge(defaultOptions, options);
+    this.options = merge({ ...defaultOptions }, options);
     if (!db) {
       throw new Error('A database connection is required');
     }
