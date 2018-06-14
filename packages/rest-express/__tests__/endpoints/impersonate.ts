@@ -21,7 +21,7 @@ describe('impersonate', () => {
 
     const req = {
       body: {
-        username: 'toto',
+        impersonated: 'toto',
         accessToken: 'token',
       },
       headers: {},
