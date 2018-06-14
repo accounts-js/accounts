@@ -6,7 +6,7 @@ describe('AccountsPassword', () => {
 
   describe('config', () => {
     it('should have default options', async () => {
-      expect(password.options.passwordResetTokenExpirationInDays).toBe(3);
+      expect(password.options.passwordEnrollTokenExpiration).toBe(2592000000);
     });
   });
 
@@ -198,9 +198,7 @@ describe('AccountsPassword', () => {
       id: 'id',
     };
     validUserEnroll.emails = [{ address: email }];
-    set(validUserEnroll, 'services.password.reset', [
-      { token, address: email, reason: 'enroll-account' },
-    ]);
+    set(validUserEnroll, 'services.password.reset', [{ token, address: email, reason: 'enroll' }]);
     const invalidUser = { ...validUser };
     invalidUser.emails = [];
 
@@ -217,9 +215,8 @@ describe('AccountsPassword', () => {
 
     it('throws when token is expired', async () => {
       const findUserByResetPasswordToken = jest.fn(() => Promise.resolve(invalidUser));
-      const isTokenExpired = jest.fn(() => true);
+      password.isTokenExpired = jest.fn(() => true);
       password.setStore({ findUserByResetPasswordToken } as any);
-      password.server = { isTokenExpired } as any;
       try {
         await password.resetPassword(token, newPassword);
         throw new Error();
@@ -230,9 +227,8 @@ describe('AccountsPassword', () => {
 
     it('throws when token have invalid email', async () => {
       const findUserByResetPasswordToken = jest.fn(() => Promise.resolve(invalidUser));
-      const isTokenExpired = jest.fn(() => false);
+      password.isTokenExpired = jest.fn(() => false);
       password.setStore({ findUserByResetPasswordToken } as any);
-      password.server = { isTokenExpired } as any;
       try {
         await password.resetPassword(token, newPassword);
         throw new Error();
@@ -243,7 +239,7 @@ describe('AccountsPassword', () => {
 
     it('validate user email if enrolled', async () => {
       const findUserByResetPasswordToken = jest.fn(() => Promise.resolve(validUserEnroll));
-      const isTokenExpired = jest.fn(() => false);
+      password.isTokenExpired = jest.fn(() => false);
       const setResetPassword = jest.fn(() => Promise.resolve());
       const invalidateAllSessions = jest.fn(() => Promise.resolve());
       const verifyEmail = jest.fn(() => Promise.resolve());
@@ -253,7 +249,6 @@ describe('AccountsPassword', () => {
         invalidateAllSessions,
         verifyEmail,
       } as any);
-      password.server = { isTokenExpired } as any;
       await password.resetPassword(token, newPassword);
       expect(setResetPassword.mock.calls.length).toBe(1);
       expect(verifyEmail.mock.calls.length).toBe(1);
