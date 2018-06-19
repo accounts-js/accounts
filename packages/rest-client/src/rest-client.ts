@@ -1,6 +1,12 @@
 import { forIn, isPlainObject } from 'lodash';
 import { TransportInterface, AccountsClient } from '@accounts/client';
-import { User, LoginResult, CreateUser, ImpersonationResult } from '@accounts/types';
+import {
+  User,
+  LoginResult,
+  CreateUser,
+  ImpersonationResult,
+  LoginUserIdentity,
+} from '@accounts/types';
 
 export interface OptionsType {
   apiHost: string;
@@ -66,11 +72,7 @@ export class RestClient implements TransportInterface {
 
   public impersonate(
     accessToken: string,
-    impersonated: {
-      userId?: string;
-      username?: string;
-      email?: string;
-    },
+    impersonated: LoginUserIdentity,
     customHeaders?: object
   ): Promise<ImpersonationResult> {
     const args = {

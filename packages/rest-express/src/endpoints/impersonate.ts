@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as requestIp from 'request-ip';
 import { AccountsServer } from '@accounts/server';
+import { LoginUserIdentity } from '@accounts/types';
 import { getUserAgent } from '../utils/get-user-agent';
 import { sendError } from '../utils/send-error';
 
@@ -9,10 +10,21 @@ export const impersonate = (accountsServer: AccountsServer) => async (
   res: express.Response
 ) => {
   try {
-    const { username, accessToken } = req.body;
+    const {
+      impersonated,
+      accessToken,
+    }: {
+      accessToken: string;
+      impersonated: LoginUserIdentity;
+    } = req.body;
     const userAgent = getUserAgent(req);
     const ip = requestIp.getClientIp(req);
-    const impersonateRes = await accountsServer.impersonate(accessToken, username, ip, userAgent);
+    const impersonateRes = await accountsServer.impersonate(
+      accessToken,
+      impersonated,
+      ip,
+      userAgent
+    );
     res.json(impersonateRes);
   } catch (err) {
     sendError(res, err);

@@ -21,7 +21,7 @@ describe('impersonate', () => {
 
     const req = {
       body: {
-        username: 'toto',
+        impersonated: 'toto',
         accessToken: 'token',
       },
       headers: {},
@@ -46,7 +46,7 @@ describe('impersonate', () => {
     const middleware = impersonate(accountsServer as any);
     const req = {
       body: {
-        username: 'toto',
+        impersonated: 'toto',
         accessToken: 'token',
       },
       headers: {},
