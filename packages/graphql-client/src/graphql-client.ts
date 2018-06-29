@@ -25,7 +25,7 @@ export interface IOptionsType {
 }
 
 export default class GraphQLClient implements TransportInterface {
-  public client: AccountsClient;
+  public client!: AccountsClient;
   private options: IOptionsType;
 
   constructor(options: IOptionsType) {
@@ -56,7 +56,7 @@ export default class GraphQLClient implements TransportInterface {
     });
   }
 
-  public async getUser(accessToken): Promise<User> {
+  public async getUser(accessToken: string): Promise<User> {
     return this.query(getUserQuery, 'getUser', { accessToken });
   }
 
@@ -138,7 +138,7 @@ export default class GraphQLClient implements TransportInterface {
     });
   }
 
-  private async mutate(mutation, resultField, variables) {
+  private async mutate(mutation: any, resultField: any, variables: any) {
     const tokens = (await this.client.refreshSession()) || { accessToken: '' };
 
     try {
@@ -157,7 +157,7 @@ export default class GraphQLClient implements TransportInterface {
     }
   }
 
-  private async query(query, resultField, variables) {
+  private async query(query: any, resultField: any, variables: any) {
     const tokens = (await this.client.refreshSession()) || { accessToken: '' };
 
     try {
