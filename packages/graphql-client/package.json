@@ -7,7 +7,6 @@
   "scripts": {
     "start": "tsc --watch",
     "compile": "tsc",
-    "compile:watch": "tsc --watch",
     "test": "yarn testonly",
     "test-ci": "yarn coverage",
     "testonly": "jest",
@@ -36,10 +35,9 @@
   },
   "homepage": "https://github.com/js-accounts/graphql#readme",
   "devDependencies": {
-    "coveralls": "^2.11.14",
-    "jest": "^18.0.0",
-    "lodash": "^4.16.4",
-    "nock": "^9.0.2"
+    "jest": "18.0.0",
+    "lodash": "4.16.4",
+    "nock": "9.0.2"
   },
   "dependencies": {
     "@accounts/client": "^0.1.0-beta.17",
