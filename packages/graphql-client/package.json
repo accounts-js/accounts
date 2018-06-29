@@ -7,11 +7,7 @@
   "scripts": {
     "start": "tsc --watch",
     "compile": "tsc",
-    "test": "yarn testonly",
-    "test-ci": "yarn coverage",
-    "testonly": "jest",
-    "coverage": "yarn testonly -- --coverage",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "prepublishOnly": "yarn compile"
   },
   "jest": {
     "transform": {
@@ -35,7 +31,6 @@
   },
   "homepage": "https://github.com/js-accounts/graphql#readme",
   "devDependencies": {
-    "jest": "18.0.0",
     "lodash": "4.16.4",
     "nock": "9.0.2"
   },
