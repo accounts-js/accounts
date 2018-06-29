@@ -1,10 +1,20 @@
-export const refreshTokens = Accounts =>
-  (async (_, { accessToken, refreshToken }, context) => {
-    const result = await Accounts.refreshTokens(accessToken, refreshToken);
+import { AccountsServer } from '@accounts/server';
+import { IResolverContext } from '../types/graphql';
 
-    if (result && result.user) {
-      context.user = result.user;
-    }
+export const refreshAccessToken = (accountsServer: AccountsServer) => async (
+  _,
+  args: GQL.IRefreshTokensOnMutationArguments,
+  ctx: IResolverContext
+) => {
+  const { accessToken, refreshToken } = args;
+  const { ip, userAgent } = ctx;
 
-    return result;
-  });
+  const refreshedSession = await accountsServer.refreshTokens(
+    accessToken,
+    refreshToken,
+    ip,
+    userAgent
+  );
+
+  return refreshedSession;
+};

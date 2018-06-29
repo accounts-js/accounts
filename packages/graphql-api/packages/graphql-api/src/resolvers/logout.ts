@@ -1,3 +1,14 @@
-export const logout = Accounts =>
-  (async (_, { accessToken }) =>
-    await Accounts.logout(accessToken));
+import { AccountsServer } from '@accounts/server';
+import { IResolverContext } from '../types/graphql';
+
+export const logout = (accountsServer: AccountsServer) => async (
+  _,
+  args: GQL.ILogoutOnMutationArguments,
+  ctx: IResolverContext
+) => {
+  const { accessToken } = args;
+
+  await accountsServer.logout(accessToken);
+
+  return 'Logged out';
+};

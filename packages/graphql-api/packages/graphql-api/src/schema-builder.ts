@@ -1,32 +1,45 @@
-import { loginWithPassword } from './resolvers/login-with-password';
-import { refreshTokens } from './resolvers/refresh-tokens';
+import { AccountsServer } from '@accounts/server';
+
+import { refreshAccessToken } from './resolvers/refresh-tokens';
 import { impersonate } from './resolvers/impersonate';
-import { me } from './resolvers/me';
+import { getUser } from './resolvers/get-user';
 import { User } from './resolvers/user';
 import { mutations } from './graphql/mutations';
 import { typeDefs } from './graphql/types';
 import { queries } from './graphql/queries';
 import { logout } from './resolvers/logout';
-import { createUser } from './resolvers/create-user';
+import { registerPassword } from './resolvers/register-user';
 import { resetPassword } from './resolvers/reset-password';
 import { sendResetPasswordEmail } from './resolvers/send-reset-password-email';
-import { sendVerificationEmail } from './resolvers/send-verification-email';
-import { verifyEmail } from './resolvers/verify-email';
-import * as merge from 'deepmerge';
+import { verifyEmail, sendVerificationEmail } from './resolvers/verify-email';
+import { serviceAuthenticate } from './resolvers/authenticate';
+import { changePassword } from './resolvers/change-password';
+import { twoFactorSet, twoFactorUnset, twoFactorSecret } from './resolvers/two-factor';
+import { authenticated } from './utils/authenticated-resolver';
 
 export interface SchemaGenerationOptions {
-  rootQueryName: string;
-  rootMutationName: string;
-  extend: boolean;
-  withSchemaDefinition: boolean;
+  rootQueryName?: string;
+  rootMutationName?: string;
+  extend?: boolean;
+  withSchemaDefinition?: boolean;
 }
 
-export const createJSAccountsGraphQL = (Accounts: any, schemaOptions: SchemaGenerationOptions = {
+const defaultSchemaOptions = {
   rootQueryName: 'Query',
   rootMutationName: 'Mutation',
   extend: true,
   withSchemaDefinition: false,
-}) => {
+};
+
+export const createJSAccountsGraphQL = (
+  accountsServer: AccountsServer,
+  schemaOptions?: SchemaGenerationOptions
+) => {
+  schemaOptions = {
+    ...defaultSchemaOptions,
+    ...schemaOptions,
+  };
+
   const schema = `
   ${typeDefs}
 
@@ -38,33 +51,48 @@ export const createJSAccountsGraphQL = (Accounts: any, schemaOptions: SchemaGene
     ${mutations}
   }
 
-  ${schemaOptions.withSchemaDefinition ?
-    `schema {
+  ${
+    schemaOptions.withSchemaDefinition
+      ? `schema {
     query: ${schemaOptions.rootMutationName}
     mutation: ${schemaOptions.rootQueryName}
-  }` : ''}
+  }`
+      : ''
+  }
   `;
 
   const resolvers = {
     User,
     [schemaOptions.rootMutationName]: {
-      loginWithPassword: loginWithPassword(Accounts),
-      refreshTokens: refreshTokens(Accounts),
-      logout: logout(Accounts),
-      impersonate: impersonate(Accounts),
-      createUser: createUser(Accounts),
-      resetPassword: resetPassword(Accounts),
-      sendResetPasswordEmail: sendResetPasswordEmail(Accounts),
-      sendVerificationEmail: sendVerificationEmail(Accounts),
-      verifyEmail: verifyEmail(Accounts),
+      impersonate: impersonate(accountsServer),
+      refreshTokens: refreshAccessToken(accountsServer),
+      logout: logout(accountsServer),
+      // 3rd-party services authentication
+      authenticate: serviceAuthenticate(accountsServer),
+
+      // @accounts/password
+      register: registerPassword(accountsServer),
+      verifyEmail: verifyEmail(accountsServer),
+      resetPassword: resetPassword(accountsServer),
+      sendVerificationEmail: sendVerificationEmail(accountsServer),
+      sendResetPasswordEmail: sendResetPasswordEmail(accountsServer),
+      changePassword: authenticated(accountsServer, changePassword(accountsServer)),
+
+      // Two factor
+      twoFactorSet: authenticated(accountsServer, twoFactorSet(accountsServer)),
+      twoFactorUnset: authenticated(accountsServer, twoFactorUnset(accountsServer)),
+
+      // TODO: OAuth callback endpoint
     },
     [schemaOptions.rootQueryName]: {
-      me: me(Accounts),
+      getUser: getUser(accountsServer),
+      twoFactorSecret: authenticated(accountsServer, twoFactorSecret(accountsServer)),
     },
   };
 
   return {
     schema,
-    extendWithResolvers: resolversObject => merge(resolvers, resolversObject),
+    resolvers,
+    extendWithResolvers: resolversObject => [...resolversObject, resolvers],
   };
 };

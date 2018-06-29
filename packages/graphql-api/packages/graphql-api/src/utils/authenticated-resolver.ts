@@ -1,6 +1,6 @@
-export const authenticated = (Accounts, func) => (async (root, args, context, info) => {
+export const authenticated = (Accounts, func) => async (root, args, context, info) => {
   if (context && context.skipJSAccountsVerification === true) {
-    return await func(root, args, context, info);
+    return func(root, args, context, info);
   }
 
   const authToken = context.authToken;
@@ -17,5 +17,5 @@ export const authenticated = (Accounts, func) => (async (root, args, context, in
 
   context.user = userObject;
 
-  return await func(root, args, context, info);
-});
+  return func(root, args, context, info);
+};

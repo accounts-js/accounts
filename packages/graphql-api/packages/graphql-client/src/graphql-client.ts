@@ -1,115 +1,178 @@
-import gql from 'graphql-tag';
-import {
-  CreateUserType,
-  LoginReturnType,
-  ImpersonateReturnType,
-  PasswordLoginUserIdentityType,
-  PasswordType,
-} from '@accounts/common';
-import {
-  sendResetPasswordEmailMutation,
-  sendVerificationEmailMutation,
-  resetPasswordMutation,
-  logoutMutation,
-  verifyEmailMutation,
-  createUserMutation,
-  defaultUserFieldsFragment,
-  createLoginMutation,
-  createRefreshTokenMutation,
-  createImpersonateMutation,
-} from './graphql';
+import { TransportInterface, AccountsClient } from '@accounts/client';
+import { CreateUser, LoginResult, ImpersonationResult, User } from '@accounts/types';
+import { createUserMutation } from './graphql/create-user.mutation';
+import { loginWithServiceMutation } from './graphql/login-with-service.mutation';
+import { logoutMutation } from './graphql/logout.mutation';
+import { refreshTokensMutation } from './graphql/refresh-tokens.mutation';
+import { verifyEmailMutation } from './graphql/verify-email.mutation';
+import { sendResetPasswordEmailMutation } from './graphql/send-reset-password-email.mutation';
+import { sendVerificationEmailMutation } from './graphql/send-verification-email.mutation';
+import { resetPasswordMutation } from './graphql/reset-password.mutation';
+import { changePasswordMutation } from './graphql/change-password.mutation';
+import { twoFactorSetMutation } from './graphql/two-factor-set.mutation';
+import { getTwoFactorSecretQuery } from './graphql/get-two-factor-secret.query';
+import { twoFactorUnsetMutation } from './graphql/two-factor-unset.mutation';
+import { impersonateMutation } from './graphql/impersonate.mutation';
+import { getUserQuery } from './graphql/get-user.query';
 
-export interface OptionsType {
-  graphQLClient?: any,
-  userFieldsFragment?: string,
-};
+export interface IAuthenticateParams {
+  [key: string]: string | object;
+}
 
-export class GraphQLClient {
-  private options: OptionsType;
+export interface IOptionsType {
+  graphQLClient: any;
+  userFieldsFragment?: string;
+}
 
-  constructor(options: OptionsType = {}) {
-    this.options = {
-      graphQLClient: null,
-      userFieldsFragment: defaultUserFieldsFragment,
-      ...options
-    };
+export default class GraphQLClient implements TransportInterface {
+  public client: AccountsClient;
+  private options: IOptionsType;
 
-    this.options.userFieldsFragment = gql`${this.options.userFieldsFragment}`;
-
-    if (!this.options.graphQLClient ||
-      !this.options.graphQLClient.query ||
-      !this.options.graphQLClient.mutate) {
-      throw new Error('Invalid GraphQL client provided: missing \'query\' and \'mutate\' methods!');
-    }
+  constructor(options: IOptionsType) {
+    this.options = options;
   }
 
-  public async loginWithPassword(user: PasswordLoginUserIdentityType, password: string): Promise<LoginReturnType> {
-    const loginMutation = createLoginMutation(this.options.userFieldsFragment);
-
-    const loginFields: any = { password };
-
-    if (typeof user === 'string') {
-      loginFields.user = user;
-    } else {
-      loginFields.userFields = user;
-    }
-
-    return await this.mutate(loginMutation, 'loginWithPassword', loginFields);
+  /**
+   * Create a user with basic user info
+   *
+   * @param {CreateUser} user user object
+   * @returns {Promise<string>} user's ID
+   * @memberof GraphQLClient
+   */
+  public async createUser(user: CreateUser): Promise<string> {
+    return this.mutate(createUserMutation, 'register', { user });
   }
 
-  public async impersonate(accessToken: string, username: string): Promise<ImpersonateReturnType> {
-    const impersonateMutation = createImpersonateMutation(this.options.userFieldsFragment);
-    return await this.mutate(impersonateMutation, 'impersonate', { accessToken, username });
+  /**
+   * @inheritDoc
+   */
+  public async loginWithService(
+    service: string,
+    authenticateParams: IAuthenticateParams
+  ): Promise<LoginResult> {
+    return this.mutate(loginWithServiceMutation, 'authenticate', {
+      serviceName: service,
+      params: authenticateParams,
+    });
   }
 
-  public async createUser(user: CreateUserType): Promise<string> {
-    return await this.mutate(createUserMutation, 'createUser', { user });
+  public async getUser(accessToken): Promise<User> {
+    return this.query(getUserQuery, 'getUser', { accessToken });
   }
 
-  public async refreshTokens(accessToken: string, refreshToken: string): Promise<LoginReturnType> {
-    const mutation = createRefreshTokenMutation(this.options.userFieldsFragment);
-    return await this.mutate(mutation, 'refreshTokens', { accessToken, refreshToken });
-  }
-
+  /**
+   * @inheritDoc
+   */
   public async logout(accessToken: string): Promise<void> {
-    return await this.mutate(logoutMutation, 'logout', { accessToken });
+    return this.mutate(logoutMutation, 'logout', { accessToken });
   }
 
+  /**
+   * @inheritDoc
+   */
+  public async refreshTokens(accessToken: string, refreshToken: string): Promise<LoginResult> {
+    return this.mutate(refreshTokensMutation, 'refreshTokens', { accessToken, refreshToken });
+  }
+
+  /**
+   * @inheritDoc
+   */
   public async verifyEmail(token: string): Promise<void> {
-    return await this.mutate(verifyEmailMutation, 'verifyEmail', { token });
+    return this.mutate(verifyEmailMutation, 'verifyEmail', { token });
   }
 
-  public async resetPassword(token: string, newPassword: PasswordType): Promise<void> {
-    return await this.mutate(resetPasswordMutation, 'resetPassword', { token, newPassword });
-  }
-
-  public async sendVerificationEmail(email: string): Promise<void> {
-    return await this.mutate(sendVerificationEmailMutation, 'sendVerificationEmail', { email });
-  }
-
+  /**
+   * @inheritDoc
+   */
   public async sendResetPasswordEmail(email: string): Promise<void> {
-    return await this.mutate(sendResetPasswordEmailMutation, 'sendResetPasswordEmail', { email });
+    return this.mutate(sendResetPasswordEmailMutation, 'sendResetPasswordEmail', { email });
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public async sendVerificationEmail(email: string): Promise<void> {
+    return this.mutate(sendVerificationEmailMutation, 'sendVerificationEmail', { email });
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public async resetPassword(token: string, newPassword: string): Promise<void> {
+    return this.mutate(resetPasswordMutation, 'resetPassword', { token, newPassword });
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public async changePassword(oldPassword: string, newPassword: string): Promise<void> {
+    return this.mutate(changePasswordMutation, 'changePassword', { oldPassword, newPassword });
+  }
+
+  public async getTwoFactorSecret(): Promise<any> {
+    return this.query(getTwoFactorSecretQuery, 'twoFactorSecret', {});
+  }
+
+  public async twoFactorSet(secret: any, code: string): Promise<void> {
+    return this.mutate(twoFactorSetMutation, 'twoFactorSet', { secret, code });
+  }
+
+  public async twoFactorUnset(code: string): Promise<void> {
+    return this.mutate(twoFactorUnsetMutation, 'twoFactorUnset', { code });
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public async impersonate(
+    token: string,
+    impersonated: {
+      userId?: string;
+      username?: string;
+      email?: string;
+    }
+  ): Promise<ImpersonationResult> {
+    return this.mutate(impersonateMutation, 'impersonate', {
+      accessToken: token,
+      username: impersonated.username,
+    });
   }
 
   private async mutate(mutation, resultField, variables) {
-    return await this.options.graphQLClient.mutate({
-      mutation,
-      variables,
-    })
-      .then(({ data }) => (data[resultField]))
-      .catch((e) => {
-        throw new Error(e.message);
+    const tokens = (await this.client.refreshSession()) || { accessToken: '' };
+
+    try {
+      const { data } = await this.options.graphQLClient.mutate({
+        mutation,
+        variables,
+        context: {
+          headers: {
+            authorization: tokens.accessToken,
+          },
+        },
       });
+      return data[resultField];
+    } catch (e) {
+      throw new Error(e.message);
+    }
   }
 
   private async query(query, resultField, variables) {
-    return await this.options.graphQLClient.query({
-      query,
-      variables,
-    })
-      .then(({ data }) => (data[resultField]))
-      .catch((e) => {
-        throw new Error(e.message);
+    const tokens = (await this.client.refreshSession()) || { accessToken: '' };
+
+    try {
+      const { data } = await this.options.graphQLClient.query({
+        query,
+        variables,
+        context: {
+          headers: {
+            authorization: tokens.accessToken,
+          },
+        },
       });
+      return data[resultField];
+    } catch (e) {
+      throw new Error(e.message);
+    }
   }
 }

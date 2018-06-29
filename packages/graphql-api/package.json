@@ -19,12 +19,17 @@
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^21.1.5",
-    "@types/node": "^8.0.47",
+    "@types/node": "^8.10.19",
     "lerna": "^2.5.1",
-    "prettier": "^1.7.4",
+    "prettier": "^1.13.5",
     "ts-jest": "^21.1.4",
     "tslint": "^5.8.0",
     "tslint-config-accounts": "^0.0.3",
     "typescript": "^2.4.1"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "printWidth": 100
   }
 }

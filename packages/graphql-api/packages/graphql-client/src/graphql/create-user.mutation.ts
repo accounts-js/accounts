@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
-export const createUserMutation = gql`    
-  mutation($user: CreateUserInput!) {
-    createUser(user: $user)
+export const createUserMutation = gql`
+  mutation register($user: CreateUserInput!) {
+    register(user: $user)
   }
 `;

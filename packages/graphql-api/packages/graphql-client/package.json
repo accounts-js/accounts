@@ -7,6 +7,7 @@
   "scripts": {
     "start": "tsc --watch",
     "compile": "tsc",
+    "compile:watch": "tsc --watch",
     "test": "yarn testonly",
     "test-ci": "yarn coverage",
     "testonly": "jest",
@@ -41,7 +42,9 @@
     "nock": "^9.0.2"
   },
   "dependencies": {
+    "@accounts/client": "^0.1.0-beta.17",
     "@accounts/common": "0.1.0-alpha.58382c10",
+    "@accounts/types": "^0.1.0-beta.17",
     "graphql-tag": "^1.1.2"
   }
 }
