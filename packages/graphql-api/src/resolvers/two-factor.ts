@@ -3,7 +3,7 @@ import AccountsServer from '@accounts/server';
 import { AccountsPassword } from '@accounts/password';
 
 export const twoFactorSecret = (accountsServer: AccountsServer) => async (
-  _,
+  _: null,
   args: {},
   ctx: IResolverContext
 ) => {
@@ -26,7 +26,7 @@ export const twoFactorSecret = (accountsServer: AccountsServer) => async (
 };
 
 export const twoFactorSet = (accountsServer: AccountsServer) => async (
-  _,
+  _: null,
   args: GQL.ITwoFactorSetOnMutationArguments,
   ctx: IResolverContext
 ) => {
@@ -49,7 +49,7 @@ export const twoFactorSet = (accountsServer: AccountsServer) => async (
 };
 
 export const twoFactorUnset = (accountsServer: AccountsServer) => async (
-  _,
+  _: null,
   args: GQL.ITwoFactorUnsetOnMutationArguments,
   ctx: IResolverContext
 ) => {

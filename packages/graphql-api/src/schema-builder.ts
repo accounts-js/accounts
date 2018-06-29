@@ -33,11 +33,11 @@ const defaultSchemaOptions = {
 
 export const createJSAccountsGraphQL = (
   accountsServer: AccountsServer,
-  schemaOptions?: SchemaGenerationOptions
+  schemaOptionsUser?: SchemaGenerationOptions
 ) => {
-  schemaOptions = {
+  const schemaOptions = {
     ...defaultSchemaOptions,
-    ...schemaOptions,
+    ...schemaOptionsUser,
   };
 
   const schema = `
@@ -93,6 +93,6 @@ export const createJSAccountsGraphQL = (
   return {
     schema,
     resolvers,
-    extendWithResolvers: resolversObject => [...resolversObject, resolvers],
+    extendWithResolvers: (resolversObject: any) => [...resolversObject, resolvers],
   };
 };

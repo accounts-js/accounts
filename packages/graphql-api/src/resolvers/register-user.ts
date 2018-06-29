@@ -3,7 +3,7 @@ import { IResolverContext } from '../types/graphql';
 import { AccountsPassword, PasswordCreateUserType } from '@accounts/password';
 
 export const registerPassword = (accountsServer: AccountsServer) => async (
-  _,
+  _: null,
   args: GQL.IRegisterOnMutationArguments,
   ctx: IResolverContext
 ) => {

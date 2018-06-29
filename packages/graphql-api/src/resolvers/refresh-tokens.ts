@@ -2,7 +2,7 @@ import { AccountsServer } from '@accounts/server';
 import { IResolverContext } from '../types/graphql';
 
 export const refreshAccessToken = (accountsServer: AccountsServer) => async (
-  _,
+  _: null,
   args: GQL.IRefreshTokensOnMutationArguments,
   ctx: IResolverContext
 ) => {

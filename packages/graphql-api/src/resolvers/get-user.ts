@@ -2,7 +2,7 @@ import { IResolverContext } from '../types/graphql';
 import AccountsServer from '@accounts/server';
 
 export const getUser = (accountsServer: AccountsServer) => async (
-  _,
+  _: null,
   args: GQL.IGetUserOnQueryArguments,
   ctx: IResolverContext
 ) => {

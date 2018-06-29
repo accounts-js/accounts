@@ -2,7 +2,7 @@ import { AccountsServer } from '@accounts/server';
 import { IResolverContext } from '../types/graphql';
 
 export const logout = (accountsServer: AccountsServer) => async (
-  _,
+  _: null,
   args: GQL.ILogoutOnMutationArguments,
   ctx: IResolverContext
 ) => {

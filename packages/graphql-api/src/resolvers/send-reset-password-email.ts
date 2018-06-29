@@ -3,7 +3,7 @@ import AccountsServer from '@accounts/server';
 import { AccountsPassword } from '@accounts/password';
 
 export const sendResetPasswordEmail = (accountsServer: AccountsServer) => async (
-  _,
+  _: null,
   args: GQL.ISendVerificationEmailOnMutationArguments,
   ctx: IResolverContext
 ) => {

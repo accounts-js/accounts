@@ -8,7 +8,7 @@ const schemaPath = path.join(__dirname, '../graphql/schema.d.ts');
 
 const typescriptTypes = generateNamespace(
   'GQL',
-  createJSAccountsGraphQL(null, {
+  createJSAccountsGraphQL(null as any, {
     rootQueryName: 'Query',
     rootMutationName: 'Mutation',
     extend: false,

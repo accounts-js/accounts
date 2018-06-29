@@ -1,4 +1,11 @@
-export const authenticated = (Accounts, func) => async (root, args, context, info) => {
+import { AccountsServer } from '@accounts/server';
+
+export const authenticated = (Accounts: AccountsServer, func: any) => async (
+  root: any,
+  args: any,
+  context: any,
+  info: any
+) => {
   if (context && context.skipJSAccountsVerification === true) {
     return func(root, args, context, info);
   }

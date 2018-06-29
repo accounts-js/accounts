@@ -3,7 +3,7 @@ import AccountsServer from '@accounts/server';
 import { AccountsPassword } from '@accounts/password';
 
 export const changePassword = (accountsServer: AccountsServer) => async (
-  _,
+  _: null,
   args: GQL.IChangePasswordOnMutationArguments,
   ctx: IResolverContext
 ) => {

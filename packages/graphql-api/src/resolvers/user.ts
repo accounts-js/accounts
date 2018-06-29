@@ -1,4 +1,6 @@
+import { User as UserType } from '@accounts/types';
+
 export const User = {
-  id: user => user.id || user._id,
-  email: user => user.emails && user.emails[0] && user.emails[0].address,
+  id: (user: UserType) => user.id,
+  email: (user: UserType) => user.emails && user.emails[0] && user.emails[0].address,
 };

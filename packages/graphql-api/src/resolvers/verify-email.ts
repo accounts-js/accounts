@@ -3,7 +3,7 @@ import { IResolverContext } from '../types/graphql';
 import { AccountsPassword } from '@accounts/password';
 
 export const verifyEmail = (accountsServer: AccountsServer) => async (
-  _,
+  _: null,
   args: GQL.IVerifyEmailOnMutationArguments,
   ctx: IResolverContext
 ) => {
@@ -19,7 +19,7 @@ export const verifyEmail = (accountsServer: AccountsServer) => async (
 };
 
 export const sendVerificationEmail = (accountsServer: AccountsServer) => async (
-  _,
+  _: null,
   args: GQL.ISendVerificationEmailOnMutationArguments,
   ctx: IResolverContext
 ) => {

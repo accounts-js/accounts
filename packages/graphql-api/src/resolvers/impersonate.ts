@@ -3,7 +3,7 @@ import { ImpersonationResult } from '@accounts/types';
 import { IResolverContext } from '../types/graphql';
 
 export const impersonate = (accountsServer: AccountsServer) => async (
-  _,
+  _: null,
   args: GQL.IImpersonateOnMutationArguments,
   ctx: IResolverContext
 ) => {
@@ -18,7 +18,7 @@ export const impersonate = (accountsServer: AccountsServer) => async (
   );
 
   // So ctx.user can be used in subsequent queries / mutations
-  if (impersonateRes && impersonateRes.user) {
+  if (impersonateRes && impersonateRes.user && impersonateRes.tokens) {
     ctx.user = impersonateRes.user;
     ctx.authToken = impersonateRes.tokens.accessToken;
   }
