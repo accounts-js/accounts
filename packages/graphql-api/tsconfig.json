@@ -2,8 +2,7 @@
   "extends": "../../tsconfig",
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./lib",
-    "lib": ["es2017", "esnext.asynciterable"]
+    "outDir": "./lib"
   },
   "exclude": ["node_modules", "__tests__", "lib"]
 }
