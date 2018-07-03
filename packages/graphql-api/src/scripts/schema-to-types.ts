@@ -25,10 +25,5 @@ const schema = `
 
 const typescriptTypes = generateNamespace('GQL', schema);
 
-const schemaPath = path.join(__dirname, '../graphql/schema.d.ts');
-
-fs.writeFile(schemaPath, typescriptTypes, err => {
-  if (err) {
-    throw err;
-  }
-});
+fs.writeFileSync(path.join(__dirname, '../graphql/schema.d.ts'), typescriptTypes);
+fs.writeFileSync(path.join(__dirname, '../../lib/graphql/schema.d.ts'), typescriptTypes);
