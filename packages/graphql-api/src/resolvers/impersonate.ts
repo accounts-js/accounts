@@ -1,21 +1,14 @@
 import { AccountsServer } from '@accounts/server';
-import { ImpersonationResult } from '@accounts/types';
-import { IResolverContext } from '../types/graphql';
+import { IResolverContext } from '../types';
+import { MutationResolvers } from '../types/graphql';
 
-export const impersonate = (accountsServer: AccountsServer) => async (
-  _: null,
-  args: GQL.IImpersonateOnMutationArguments,
-  ctx: IResolverContext
-) => {
+export const impersonate = (
+  accountsServer: AccountsServer
+): MutationResolvers.ImpersonateResolver => async (_, args, ctx: IResolverContext) => {
   const { accessToken, username } = args;
   const { ip, userAgent } = ctx;
 
-  const impersonateRes: ImpersonationResult = await accountsServer.impersonate(
-    accessToken,
-    { username },
-    ip,
-    userAgent
-  );
+  const impersonateRes = await accountsServer.impersonate(accessToken, { username }, ip, userAgent);
 
   // So ctx.user can be used in subsequent queries / mutations
   if (impersonateRes && impersonateRes.user && impersonateRes.tokens) {

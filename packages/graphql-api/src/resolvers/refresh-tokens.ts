@@ -1,11 +1,10 @@
 import { AccountsServer } from '@accounts/server';
-import { IResolverContext } from '../types/graphql';
+import { IResolverContext } from '../types';
+import { MutationResolvers } from '../types/graphql';
 
-export const refreshAccessToken = (accountsServer: AccountsServer) => async (
-  _: null,
-  args: GQL.IRefreshTokensOnMutationArguments,
-  ctx: IResolverContext
-) => {
+export const refreshAccessToken = (
+  accountsServer: AccountsServer
+): MutationResolvers.RefreshTokensResolver => async (_, args, ctx: IResolverContext) => {
   const { accessToken, refreshToken } = args;
   const { ip, userAgent } = ctx;
 

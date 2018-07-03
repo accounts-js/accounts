@@ -1,12 +1,11 @@
-import { IResolverContext } from '../types/graphql';
 import AccountsServer from '@accounts/server';
 import { AccountsPassword } from '@accounts/password';
+import { IResolverContext } from '../types';
+import { MutationResolvers } from '../types/graphql';
 
-export const changePassword = (accountsServer: AccountsServer) => async (
-  _: null,
-  args: GQL.IChangePasswordOnMutationArguments,
-  ctx: IResolverContext
-) => {
+export const changePassword = (
+  accountsServer: AccountsServer
+): MutationResolvers.ChangePasswordResolver => async (_, args, ctx: IResolverContext) => {
   const { oldPassword, newPassword } = args;
   const { user } = ctx;
 
@@ -21,5 +20,6 @@ export const changePassword = (accountsServer: AccountsServer) => async (
     throw new Error('No service handle password modification.');
   }
 
-  return password.changePassword(userId, oldPassword, newPassword);
+  await password.changePassword(userId, oldPassword, newPassword);
+  return null;
 };

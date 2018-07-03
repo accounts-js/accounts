@@ -1,6 +1,10 @@
-import { generateNamespace } from '@gql2ts/from-schema';
-import * as fs from 'fs';
-import * as path from 'path';
+import { resolve } from 'path';
+import { writeFileSync } from 'fs';
+import { parse, execute } from 'graphql';
+// tslint:disable-next-line
+import { introspectionQuery } from 'graphql/utilities';
+// tslint:disable-next-line
+import { makeExecutableSchema } from 'graphql-tools';
 
 import { mutations } from '../graphql/mutations';
 import { typeDefs } from '../graphql/types';
@@ -23,7 +27,22 @@ const schema = `
   }
 `;
 
-const typescriptTypes = generateNamespace('GQL', schema);
+// Copy from graphql-js library, will be released in new version
+// https://github.com/graphql/graphql-js/blob/master/src/utilities/introspectionFromSchema.js
+async function introspectionFromSchema(schemaT: any /* GraphQLSchema */) {
+  const queryAST = parse(introspectionQuery);
+  const result = await execute(schemaT, queryAST);
+  return result.data; /* IntrospectionQuery */
+}
 
-fs.writeFileSync(path.join(__dirname, '../graphql/schema.d.ts'), typescriptTypes);
-fs.writeFileSync(path.join(__dirname, '../../lib/graphql/schema.d.ts'), typescriptTypes);
+const setup = async () => {
+  const executableSchema = makeExecutableSchema({
+    typeDefs: schema,
+  });
+  const introspection = await introspectionFromSchema(executableSchema);
+  const json = JSON.stringify(introspection, null, 2);
+  // Write down the file
+  writeFileSync(resolve(__dirname, '../../schema.json'), json);
+};
+
+setup();

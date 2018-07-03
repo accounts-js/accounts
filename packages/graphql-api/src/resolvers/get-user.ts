@@ -1,10 +1,9 @@
-import { IResolverContext } from '../types/graphql';
 import AccountsServer from '@accounts/server';
+import { QueryResolvers } from '../types/graphql';
 
-export const getUser = (accountsServer: AccountsServer) => async (
+export const getUser = (accountsServer: AccountsServer): QueryResolvers.GetUserResolver => async (
   _: null,
-  args: GQL.IGetUserOnQueryArguments,
-  ctx: IResolverContext
+  args
 ) => {
   const { accessToken } = args;
 
