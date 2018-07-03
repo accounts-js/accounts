@@ -2,22 +2,28 @@ import { generateNamespace } from '@gql2ts/from-schema';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { createJSAccountsGraphQL } from '../schema-builder';
+import { mutations } from '../graphql/mutations';
+import { typeDefs } from '../graphql/types';
+import { queries } from '../graphql/queries';
 
-const schemaPath = path.join(__dirname, '../graphql/schema.d.ts');
-
-const typescriptTypes = generateNamespace(
-  'GQL',
-  createJSAccountsGraphQL(null as any, {
-    rootQueryName: 'Query',
-    rootMutationName: 'Mutation',
-    extend: false,
-    withSchemaDefinition: true,
-  }).schema
-);
-
-fs.writeFile(schemaPath, typescriptTypes, err => {
-  if (err) {
-    throw err;
+const schema = `
+  type Query {
+    ${queries}
   }
-});
+
+  type Mutation {
+    ${mutations}
+  }
+
+  ${typeDefs}
+
+  schema {
+    query: Query
+    mutation: Mutation
+  }
+`;
+
+const typescriptTypes = generateNamespace('GQL', schema);
+
+fs.writeFileSync(path.join(__dirname, '../graphql/schema.d.ts'), typescriptTypes);
+fs.writeFileSync(path.join(__dirname, '../../lib/graphql/schema.d.ts'), typescriptTypes);

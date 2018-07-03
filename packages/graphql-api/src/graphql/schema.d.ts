@@ -3,7 +3,7 @@
 
 declare namespace GQL {
   interface IGraphQLResponseRoot {
-    data?: IMutation | IQuery;
+    data?: IQuery | IMutation;
     errors?: Array<IGraphQLResponseError>;
   }
 
@@ -18,6 +18,42 @@ declare namespace GQL {
   interface IGraphQLResponseErrorLocation {
     line: number;
     column: number;
+  }
+
+  interface IQuery {
+    __typename: 'Query';
+    getUser: IUser | null;
+    twoFactorSecret: ITwoFactorSecretKey | null;
+  }
+
+  interface IGetUserOnQueryArguments {
+    accessToken: string;
+  }
+
+  interface IUser {
+    __typename: 'User';
+    id: string;
+    email: string | null;
+    emails: Array<IEmailRecord> | null;
+    username: string | null;
+  }
+
+  interface IEmailRecord {
+    __typename: 'EmailRecord';
+    address: string | null;
+    verified: boolean | null;
+  }
+
+  interface ITwoFactorSecretKey {
+    __typename: 'TwoFactorSecretKey';
+    ascii: string | null;
+    base32: string | null;
+    hex: string | null;
+    qr_code_ascii: string | null;
+    qr_code_hex: string | null;
+    qr_code_base32: string | null;
+    google_auth_qr: string | null;
+    otpauth_url: string | null;
   }
 
   interface IMutation {
@@ -82,7 +118,7 @@ declare namespace GQL {
   }
 
   interface ITwoFactorSetOnMutationArguments {
-    secret: string;
+    secret: ITwoFactorSecretKeyInput;
     code: string;
   }
 
@@ -101,19 +137,6 @@ declare namespace GQL {
     __typename: 'Tokens';
     refreshToken: string | null;
     accessToken: string | null;
-  }
-
-  interface IUser {
-    __typename: 'User';
-    id: string;
-    emails: Array<IEmailRecord> | null;
-    username: string | null;
-  }
-
-  interface IEmailRecord {
-    __typename: 'EmailRecord';
-    address: string | null;
-    verified: boolean | null;
   }
 
   interface ILoginResult {
@@ -150,14 +173,15 @@ declare namespace GQL {
     lastName?: string | null;
   }
 
-  interface IQuery {
-    __typename: 'Query';
-    getUser: IUser | null;
-    twoFactorSecret: string | null;
-  }
-
-  interface IGetUserOnQueryArguments {
-    accessToken: string;
+  interface ITwoFactorSecretKeyInput {
+    ascii?: string | null;
+    base32?: string | null;
+    hex?: string | null;
+    qr_code_ascii?: string | null;
+    qr_code_hex?: string | null;
+    qr_code_base32?: string | null;
+    google_auth_qr?: string | null;
+    otpauth_url?: string | null;
   }
 }
 
