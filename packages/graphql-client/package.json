@@ -1,0 +1,43 @@
+{
+  "name": "@accounts/graphql-client",
+  "version": "0.2.3",
+  "description": "GraphQL client transport for accounts",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "start": "tsc --watch",
+    "compile": "tsc",
+    "prepublishOnly": "yarn compile"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "mapCoverage": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/js-accounts/graphql.git"
+  },
+  "author": "David Yahalomi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/js-accounts/graphql/issues"
+  },
+  "homepage": "https://github.com/js-accounts/graphql#readme",
+  "devDependencies": {
+    "lodash": "4.16.4",
+    "nock": "9.0.2"
+  },
+  "dependencies": {
+    "@accounts/client": "^0.1.0-beta.17",
+    "@accounts/common": "0.1.0-alpha.58382c10",
+    "@accounts/types": "^0.1.0-beta.17",
+    "graphql-tag": "^1.1.2"
+  }
+}
