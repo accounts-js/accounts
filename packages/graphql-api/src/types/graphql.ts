@@ -1,6 +1,6 @@
 import { User } from '@accounts/types';
 
-interface IResolverContext {
+export interface IResolverContext {
   user: User;
   authToken: string;
   userAgent: string;
