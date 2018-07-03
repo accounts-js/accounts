@@ -6,9 +6,9 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "start": "tsc --watch",
-    "compile": "tsc",
+    "compile": "yarn gen-schema-types && tsc",
     "gen-schema-types": "ts-node src/scripts/schema-to-types.ts",
-    "prepublishOnly": "yarn gen-schema-types && yarn compile"
+    "prepublishOnly": "yarn compile"
   },
   "repository": {
     "type": "git",
