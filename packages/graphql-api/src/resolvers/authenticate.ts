@@ -1,11 +1,10 @@
 import { AccountsServer } from '@accounts/server';
-import { IResolverContext } from '../types/graphql';
+import { IResolverContext } from '../types';
+import { MutationResolvers } from '../types/graphql';
 
-export const serviceAuthenticate = (accountsServer: AccountsServer) => async (
-  _: null,
-  args: GQL.IAuthenticateOnMutationArguments,
-  ctx: IResolverContext
-) => {
+export const serviceAuthenticate = (
+  accountsServer: AccountsServer
+): MutationResolvers.AuthenticateResolver => async (_, args, ctx: IResolverContext) => {
   const { serviceName, params } = args;
   const { ip, userAgent } = ctx;
 

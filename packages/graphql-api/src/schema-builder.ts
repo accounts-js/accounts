@@ -16,6 +16,7 @@ import { serviceAuthenticate } from './resolvers/authenticate';
 import { changePassword } from './resolvers/change-password';
 import { twoFactorSet, twoFactorUnset, twoFactorSecret } from './resolvers/two-factor';
 import { authenticated } from './utils/authenticated-resolver';
+import { MutationResolvers, QueryResolvers } from './types/graphql';
 
 export interface SchemaGenerationOptions {
   rootQueryName?: string;
@@ -61,33 +62,37 @@ export const createJSAccountsGraphQL = (
   }
   `;
 
+  const queryResolvers: QueryResolvers.Resolvers = {
+    getUser: getUser(accountsServer),
+    twoFactorSecret: authenticated(accountsServer, twoFactorSecret(accountsServer)),
+  };
+
+  const mutationResolvers: MutationResolvers.Resolvers = {
+    impersonate: impersonate(accountsServer),
+    refreshTokens: refreshAccessToken(accountsServer),
+    logout: logout(accountsServer),
+    // 3rd-party services authentication
+    authenticate: serviceAuthenticate(accountsServer),
+
+    // @accounts/password
+    register: registerPassword(accountsServer),
+    verifyEmail: verifyEmail(accountsServer),
+    resetPassword: resetPassword(accountsServer),
+    sendVerificationEmail: sendVerificationEmail(accountsServer),
+    sendResetPasswordEmail: sendResetPasswordEmail(accountsServer),
+    changePassword: authenticated(accountsServer, changePassword(accountsServer)),
+
+    // Two factor
+    twoFactorSet: authenticated(accountsServer, twoFactorSet(accountsServer)),
+    twoFactorUnset: authenticated(accountsServer, twoFactorUnset(accountsServer)),
+
+    // TODO: OAuth callback endpoint
+  };
+
   const resolvers = {
     User,
-    [schemaOptions.rootMutationName]: {
-      impersonate: impersonate(accountsServer),
-      refreshTokens: refreshAccessToken(accountsServer),
-      logout: logout(accountsServer),
-      // 3rd-party services authentication
-      authenticate: serviceAuthenticate(accountsServer),
-
-      // @accounts/password
-      register: registerPassword(accountsServer),
-      verifyEmail: verifyEmail(accountsServer),
-      resetPassword: resetPassword(accountsServer),
-      sendVerificationEmail: sendVerificationEmail(accountsServer),
-      sendResetPasswordEmail: sendResetPasswordEmail(accountsServer),
-      changePassword: authenticated(accountsServer, changePassword(accountsServer)),
-
-      // Two factor
-      twoFactorSet: authenticated(accountsServer, twoFactorSet(accountsServer)),
-      twoFactorUnset: authenticated(accountsServer, twoFactorUnset(accountsServer)),
-
-      // TODO: OAuth callback endpoint
-    },
-    [schemaOptions.rootQueryName]: {
-      getUser: getUser(accountsServer),
-      twoFactorSecret: authenticated(accountsServer, twoFactorSecret(accountsServer)),
-    },
+    [schemaOptions.rootMutationName]: mutationResolvers,
+    [schemaOptions.rootQueryName]: queryResolvers,
   };
 
   return {

@@ -6,9 +6,9 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "start": "tsc --watch",
-    "compile": "tsc",
+    "compile": "yarn gen-schema-types && tsc",
     "gen-schema-types": "ts-node src/scripts/schema-to-types.ts",
-    "prepublishOnly": "yarn gen-schema-types && yarn compile"
+    "prepublishOnly": "yarn compile"
   },
   "repository": {
     "type": "git",
@@ -25,7 +25,9 @@
     "@gql2ts/types": "1.8.0",
     "@types/graphql": "^0.13.1",
     "concurrently": "3.1.0",
-    "gql2ts": "1.7.2",
+    "graphql": "^0.13.2",
+    "graphql-code-generator": "^0.10.0",
+    "graphql-codegen-typescript-template": "^0.10.0",
     "lodash": "4.17.10",
     "nock": "9.0.2",
     "ts-node": "7.0.0"

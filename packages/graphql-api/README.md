@@ -2,20 +2,10 @@
 
 _Schema, Resolvers and Utils for GraphQL server with JSAccounts_
 
-[![npm](https://img.shields.io/npm/v/@accounts/graphql-api.svg?maxAge=2592000)](https://www.npmjs.com/package/@accounts/graphql-api) [![Circle CI](https://circleci.com/gh/js-accounts/graphql-api.svg?style=shield)](https://circleci.com/gh/js-accounts/graphql-api) [![Coverage Status](https://coveralls.io/repos/github/js-accounts/graphql-api/badge.svg?branch=master)](https://coveralls.io/github/js-accounts/graphql-api?branch=master) ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
+[![npm](https://img.shields.io/npm/v/@accounts/graphql-api.svg?maxAge=2592000)](https://www.npmjs.com/package/@accounts/graphql-api)
+![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 > This package does not requires any network interface / express in order to combine with your GraphQL - it's just a collection of GraphQL schema, resolvers and utils!
-
-## Note
-
-> This package is under active development and is just starting to form a structure.
-
-## Start dev server
-
-```bash
-yarn
-yarn start
-```
 
 ## How to use this package?
 
@@ -36,9 +26,9 @@ yarn add @accounts/server @accounts/graphql-api
 Start by configuring your `AccountsServer` as you wish. for example:
 
 ```js
-AccountsServer.config({
-// ... you config here
-}, new Mongo(await getDb()));
+const accountsServer = new AccountsServer({
+  // ... you config here
+});
 ```
 
 Next, import `createJSAccountsGraphQL` method from this package, and run it with your `AccountsServer`:
@@ -46,7 +36,7 @@ Next, import `createJSAccountsGraphQL` method from this package, and run it with
 ```js
 import { createJSAccountsGraphQL } from '@accounts/graphql-api';
 
-const accountsGraphQL = createJSAccountsGraphQL(Accounts);
+const accountsGraphQL = createJSAccountsGraphQL(accountsServer);
 ```
 
 Now, add `accountsGraphQL.schema` to your schema definition (just before using it with `makeExecutableSchema`), and use `accountsGraphQL.extendWithResolvers` to extend your resolvers object, for example:
@@ -144,7 +134,7 @@ These are the available customizations:
 Pass a second object to `createJSAccountsGraphQL`, for example:
 
 ```js
-const myCustomGraphQLAccounts = createSchemaWithAccounts(AccountsServer, {
+const myCustomGraphQLAccounts = createSchemaWithAccounts(accountsServer, {
   rootQueryName: 'RootQuery',
   rootMutationName: 'RootMutation',
 });

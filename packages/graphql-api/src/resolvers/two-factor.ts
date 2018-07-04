@@ -1,12 +1,11 @@
-import { IResolverContext } from '../types/graphql';
 import AccountsServer from '@accounts/server';
 import { AccountsPassword } from '@accounts/password';
+import { IResolverContext } from '../types';
+import { QueryResolvers, MutationResolvers } from '../types/graphql';
 
-export const twoFactorSecret = (accountsServer: AccountsServer) => async (
-  _: null,
-  args: {},
-  ctx: IResolverContext
-) => {
+export const twoFactorSecret = (
+  accountsServer: AccountsServer
+): QueryResolvers.TwoFactorSecretResolver => async (_, args, ctx: IResolverContext) => {
   const { user } = ctx;
 
   // Make sure user is logged in
@@ -14,7 +13,7 @@ export const twoFactorSecret = (accountsServer: AccountsServer) => async (
     throw new Error('Unauthorized');
   }
 
-  const password: any = accountsServer.getServices().password as AccountsPassword;
+  const password = accountsServer.getServices().password as AccountsPassword;
 
   if (!(typeof password.resetPassword === 'function')) {
     throw new Error('No service handle password modification.');
@@ -25,11 +24,9 @@ export const twoFactorSecret = (accountsServer: AccountsServer) => async (
   return secret;
 };
 
-export const twoFactorSet = (accountsServer: AccountsServer) => async (
-  _: null,
-  args: GQL.ITwoFactorSetOnMutationArguments,
-  ctx: IResolverContext
-) => {
+export const twoFactorSet = (
+  accountsServer: AccountsServer
+): MutationResolvers.TwoFactorSetResolver => async (_, args, ctx: IResolverContext) => {
   const { code, secret } = args;
   const { user } = ctx;
 
@@ -48,11 +45,9 @@ export const twoFactorSet = (accountsServer: AccountsServer) => async (
   return password.twoFactor.set(userId, secret, code);
 };
 
-export const twoFactorUnset = (accountsServer: AccountsServer) => async (
-  _: null,
-  args: GQL.ITwoFactorUnsetOnMutationArguments,
-  ctx: IResolverContext
-) => {
+export const twoFactorUnset = (
+  accountsServer: AccountsServer
+): MutationResolvers.TwoFactorUnsetResolver => async (_: null, args, ctx: IResolverContext) => {
   const { code } = args;
   const { user } = ctx;
 
@@ -69,4 +64,5 @@ export const twoFactorUnset = (accountsServer: AccountsServer) => async (
   }
 
   await password.twoFactor.unset(userId, code);
+  return null;
 };

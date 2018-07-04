@@ -1,14 +1,13 @@
 import { AccountsServer } from '@accounts/server';
-import { IResolverContext } from '../types/graphql';
+import { MutationResolvers } from '../types/graphql';
 
-export const logout = (accountsServer: AccountsServer) => async (
+export const logout = (accountsServer: AccountsServer): MutationResolvers.LogoutResolver => async (
   _: null,
-  args: GQL.ILogoutOnMutationArguments,
-  ctx: IResolverContext
+  args
 ) => {
   const { accessToken } = args;
 
   await accountsServer.logout(accessToken);
 
-  return 'Logged out';
+  return null;
 };
