@@ -22,7 +22,7 @@ export const typeDefs = `
 
   type User {
     id: ID!
-    emails: [EmailRecord]
+    emails: [EmailRecord!]
     username: String
   }
 
