@@ -58,13 +58,6 @@ export const typeDefs = `
     username: String
     email: String
     password: String
-    profile: CreateUserProfileInput
-  }
-
-  input CreateUserProfileInput {
-    name: String
-    firstName: String
-    lastName: String
   }
 
   input AuthenticateParamsInput {

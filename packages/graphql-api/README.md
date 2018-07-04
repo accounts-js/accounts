@@ -165,3 +165,20 @@ const UserResolver = {
   lastName: () => 'Simha',
 };
 ```
+
+## Extending `User` during password creation
+
+To extend the user object during the user creation you need to extend the `CreateUserInput` type and add your fields:
+
+```graphql
+extend input CreateUserInput {
+  profile: CreateUserProfileInput!
+}
+
+input CreateUserProfileInput {
+  firstName: String!
+  lastName: String!
+}
+```
+
+The user will be saved in the db with the profile key set.
