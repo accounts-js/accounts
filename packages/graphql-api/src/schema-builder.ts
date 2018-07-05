@@ -33,7 +33,7 @@ const defaultSchemaOptions = {
   withSchemaDefinition: false,
 };
 
-export const createJSAccountsGraphQL = (
+export const createAccountsGraphQL = (
   accountsServer: AccountsServer,
   schemaOptionsUser?: SchemaGenerationOptions
 ) => {
@@ -100,7 +100,7 @@ export const createJSAccountsGraphQL = (
     typeDefs,
     resolvers,
     schemaDirectives: {
-      authenticated: createAuthenticatedDirective(accountsServer),
+      auth: createAuthenticatedDirective(accountsServer),
     },
   };
 };
