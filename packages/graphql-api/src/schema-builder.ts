@@ -5,7 +5,7 @@ import { impersonate } from './resolvers/impersonate';
 import { getUser } from './resolvers/get-user';
 import { User } from './resolvers/user';
 import { mutations } from './graphql/mutations';
-import { typeDefs } from './graphql/types';
+import { typeDefs as accountsTypeDefs } from './graphql/types';
 import { queries } from './graphql/queries';
 import { logout } from './resolvers/logout';
 import { registerPassword } from './resolvers/register-user';
@@ -17,6 +17,7 @@ import { changePassword } from './resolvers/change-password';
 import { twoFactorSet, twoFactorUnset, twoFactorSecret } from './resolvers/two-factor';
 import { authenticated } from './utils/authenticated-resolver';
 import { MutationResolvers, QueryResolvers } from './types/graphql';
+import { createAuthenticatedDirective } from './utils/authenticated-directive';
 
 export interface SchemaGenerationOptions {
   rootQueryName?: string;
@@ -41,8 +42,8 @@ export const createJSAccountsGraphQL = (
     ...schemaOptionsUser,
   };
 
-  const schema = `
-  ${typeDefs}
+  const typeDefs = `
+  ${accountsTypeDefs}
 
   ${schemaOptions.extend ? 'extend ' : ''}type ${schemaOptions.rootQueryName} {
     ${queries}
@@ -96,8 +97,10 @@ export const createJSAccountsGraphQL = (
   };
 
   return {
-    schema,
+    typeDefs,
     resolvers,
-    extendWithResolvers: (resolversObject: any) => [...resolversObject, resolvers],
+    schemaDirectives: {
+      authenticated: createAuthenticatedDirective(accountsServer),
+    },
   };
 };

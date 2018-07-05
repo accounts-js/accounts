@@ -49,11 +49,11 @@ const typeDefs = [
   type Query {
     myQuery: String
   }
-  
+
   type Mutation {
     myMutation: String
   }
-  
+
   schema {
       query: Query,
       mutation: Mutation
