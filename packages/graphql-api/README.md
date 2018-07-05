@@ -31,35 +31,36 @@ const accountsServer = new AccountsServer({
 });
 ```
 
-Next, import `createJSAccountsGraphQL` method from this package, and run it with your `AccountsServer`:
+Next, import `createAccountsGraphQL` method from this package, and run it with your `AccountsServer`:
 
 ```js
-import { createJSAccountsGraphQL } from '@accounts/graphql-api';
+import { createAccountsGraphQL } from '@accounts/graphql-api';
 
-const accountsGraphQL = createJSAccountsGraphQL(accountsServer);
+const accountsGraphQL = createAccountsGraphQL(accountsServer);
 ```
 
-Now, add `accountsGraphQL.schema` to your schema definition (just before using it with `makeExecutableSchema`), and use `accountsGraphQL.extendWithResolvers` to extend your resolvers object, for example:
+Now, add `accountsGraphQL.typeDefs` to your schema definition (just before using it with `makeExecutableSchema`), and extend your resolvers object with `accountsGraphQL.resolvers`, for example:
 
 ```js
 import { makeExecutableSchema } from 'graphql-tools';
+import { merge } from 'lodash';
 
 const typeDefs = [
   `
   type Query {
     myQuery: String
   }
-  
+
   type Mutation {
     myMutation: String
   }
-  
+
   schema {
       query: Query,
       mutation: Mutation
   }
   `,
-  accountsGraphQL.schema,
+  accountsGraphQL.typeDefs,
 ];
 
 let myResolvers = {
@@ -71,10 +72,8 @@ let myResolvers = {
   },
 };
 
-const resolversWithAccounts = accountsGraphQL.extendWithResolvers(myResolvers);
-
 const schema = makeExecutableSchema({
-  resolvers,
+  resolvers: merge(accountsGraphQL.resolvers, myResolvers),
   typeDefs,
 });
 ```
@@ -82,14 +81,17 @@ const schema = makeExecutableSchema({
 The last step is to extend your `graphqlExpress` with a context middleware, that extracts the authentication token from the HTTP request, so AccountsServer will automatically validate it:
 
 ```js
-import { JSAccountsContext } from '@accounts/graphql-api';
+import { accountsContext } from '@accounts/graphql-api';
 
 app.use(
   GRAPHQL_ROUTE,
   bodyParser.json(),
   graphqlExpress(request => {
     return {
-      context: JSAccountsContext(request),
+      context: {
+        ...accountsContext(request),
+        // your context
+      },
       schema,
     };
   })
@@ -131,7 +133,7 @@ These are the available customizations:
 - `extend` (boolean) - whether to add `extend` before the root type declaration, default: `true`.
 - `withSchemaDefinition` (boolean): whether to add `schema { ... }` declaration to the generation schema, default: `false`.
 
-Pass a second object to `createJSAccountsGraphQL`, for example:
+Pass a second object to `createAccountsGraphQL`, for example:
 
 ```js
 const myCustomGraphQLAccounts = createSchemaWithAccounts(accountsServer, {
@@ -140,10 +142,10 @@ const myCustomGraphQLAccounts = createSchemaWithAccounts(accountsServer, {
 });
 ```
 
-Another possible customization is to modify the name of the authentication header, use it with `JSAccountsContext` (the default is `Authorization`):
+Another possible customization is to modify the name of the authentication header, use it with `accountsContext` (the default is `Authorization`):
 
 ```js
-context: JSAccountsContext(request, 'MyCustomHeader');
+context: accountsContext(request, 'MyCustomHeader');
 ```
 
 ## Extending `User`

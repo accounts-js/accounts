@@ -10,7 +10,7 @@ export const getUA = (req: IncomingMessage) => {
   return userAgent;
 };
 
-export const JSAccountsContext = (
+export const accountsContext = (
   request: IncomingMessage,
   headerName = 'accounts-access-token'
 ) => ({
