@@ -15,8 +15,7 @@ export interface Query {
 
 export interface User {
   id: string;
-  email?: string | null;
-  emails?: (EmailRecord | null)[] | null;
+  emails?: EmailRecord[] | null;
   username?: string | null;
 }
 
@@ -86,14 +85,12 @@ export namespace QueryResolvers {
 export namespace UserResolvers {
   export interface Resolvers {
     id?: IdResolver;
-    email?: EmailResolver;
     emails?: EmailsResolver;
     username?: UsernameResolver;
   }
 
   export type IdResolver = Resolver<string>;
-  export type EmailResolver = Resolver<string | null>;
-  export type EmailsResolver = Resolver<(EmailRecord | null)[] | null>;
+  export type EmailsResolver = Resolver<EmailRecord[] | null>;
   export type UsernameResolver = Resolver<string | null>;
 }
 
@@ -263,13 +260,6 @@ export interface CreateUserInput {
   username?: string | null;
   email?: string | null;
   password?: string | null;
-  profile?: CreateUserProfileInput | null;
-}
-
-export interface CreateUserProfileInput {
-  name?: string | null;
-  firstName?: string | null;
-  lastName?: string | null;
 }
 
 export interface TwoFactorSecretKeyInput {

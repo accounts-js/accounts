@@ -3,7 +3,6 @@ import { AccountsServer } from '@accounts/server';
 import { refreshAccessToken } from './resolvers/refresh-tokens';
 import { impersonate } from './resolvers/impersonate';
 import { getUser } from './resolvers/get-user';
-import { User } from './resolvers/user';
 import { mutations } from './graphql/mutations';
 import { typeDefs as accountsTypeDefs } from './graphql/types';
 import { queries } from './graphql/queries';
@@ -91,7 +90,6 @@ export const createAccountsGraphQL = (
   };
 
   const resolvers = {
-    User,
     [schemaOptions.rootMutationName]: mutationResolvers,
     [schemaOptions.rootQueryName]: queryResolvers,
   };
