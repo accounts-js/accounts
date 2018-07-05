@@ -10,7 +10,10 @@ export const getUA = (req: IncomingMessage) => {
   return userAgent;
 };
 
-export const JSAccountsContext = (request: IncomingMessage, headerName = 'Authorization') => ({
+export const JSAccountsContext = (
+  request: IncomingMessage,
+  headerName = 'accounts-access-token'
+) => ({
   authToken: request.headers[headerName] || request.headers[headerName.toLowerCase()],
   userAgent: getUA(request),
   ip: getClientIp(request),
