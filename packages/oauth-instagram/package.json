@@ -1,6 +1,6 @@
 {
   "name": "@accounts/oauth-instagram",
-  "version": "0.3.0-beta.19",
+  "version": "0.3.0-beta.20",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
