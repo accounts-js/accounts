@@ -36,7 +36,6 @@
   },
   "dependencies": {
     "@accounts/client": "^0.3.0-beta.20",
-    "@accounts/common": "0.1.0-alpha.58382c10",
     "@accounts/types": "^0.3.0-beta.20",
     "graphql-tag": "^1.1.2"
   }
