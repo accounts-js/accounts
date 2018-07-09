@@ -15,21 +15,29 @@ import { twoFactorUnsetMutation } from './graphql/two-factor-unset.mutation';
 import { impersonateMutation } from './graphql/impersonate.mutation';
 import { getUserQuery } from './graphql/get-user.query';
 
-export interface IAuthenticateParams {
+export interface AuthenticateParams {
   [key: string]: string | object;
 }
 
-export interface IOptionsType {
-  graphQLClient: any;
+export interface OptionsType {
+  url: string;
+  /**
+   * Additional headers sent with the fetch request to the server
+   */
+  headers?: { [key: string]: any };
   userFieldsFragment?: string;
 }
 
+const defaultOptions = {
+  headers: {},
+};
+
 export default class GraphQLClient implements TransportInterface {
   public client!: AccountsClient;
-  private options: IOptionsType;
+  private options: OptionsType;
 
-  constructor(options: IOptionsType) {
-    this.options = options;
+  constructor(options: OptionsType) {
+    this.options = { ...defaultOptions, ...options };
   }
 
   /**
@@ -40,7 +48,7 @@ export default class GraphQLClient implements TransportInterface {
    * @memberof GraphQLClient
    */
   public async createUser(user: CreateUser): Promise<string> {
-    return this.mutate(createUserMutation, 'register', { user });
+    return this.request(createUserMutation, 'register', { user });
   }
 
   /**
@@ -48,77 +56,77 @@ export default class GraphQLClient implements TransportInterface {
    */
   public async loginWithService(
     service: string,
-    authenticateParams: IAuthenticateParams
+    authenticateParams: AuthenticateParams
   ): Promise<LoginResult> {
-    return this.mutate(loginWithServiceMutation, 'authenticate', {
+    return this.request(loginWithServiceMutation, 'authenticate', {
       serviceName: service,
       params: authenticateParams,
     });
   }
 
   public async getUser(accessToken: string): Promise<User> {
-    return this.query(getUserQuery, 'getUser', { accessToken });
+    return this.request(getUserQuery, 'getUser', { accessToken });
   }
 
   /**
    * @inheritDoc
    */
   public async logout(accessToken: string): Promise<void> {
-    return this.mutate(logoutMutation, 'logout', { accessToken });
+    return this.request(logoutMutation, 'logout', { accessToken });
   }
 
   /**
    * @inheritDoc
    */
   public async refreshTokens(accessToken: string, refreshToken: string): Promise<LoginResult> {
-    return this.mutate(refreshTokensMutation, 'refreshTokens', { accessToken, refreshToken });
+    return this.request(refreshTokensMutation, 'refreshTokens', { accessToken, refreshToken });
   }
 
   /**
    * @inheritDoc
    */
   public async verifyEmail(token: string): Promise<void> {
-    return this.mutate(verifyEmailMutation, 'verifyEmail', { token });
+    return this.request(verifyEmailMutation, 'verifyEmail', { token });
   }
 
   /**
    * @inheritDoc
    */
   public async sendResetPasswordEmail(email: string): Promise<void> {
-    return this.mutate(sendResetPasswordEmailMutation, 'sendResetPasswordEmail', { email });
+    return this.request(sendResetPasswordEmailMutation, 'sendResetPasswordEmail', { email });
   }
 
   /**
    * @inheritDoc
    */
   public async sendVerificationEmail(email: string): Promise<void> {
-    return this.mutate(sendVerificationEmailMutation, 'sendVerificationEmail', { email });
+    return this.request(sendVerificationEmailMutation, 'sendVerificationEmail', { email });
   }
 
   /**
    * @inheritDoc
    */
   public async resetPassword(token: string, newPassword: string): Promise<void> {
-    return this.mutate(resetPasswordMutation, 'resetPassword', { token, newPassword });
+    return this.request(resetPasswordMutation, 'resetPassword', { token, newPassword });
   }
 
   /**
    * @inheritDoc
    */
   public async changePassword(oldPassword: string, newPassword: string): Promise<void> {
-    return this.mutate(changePasswordMutation, 'changePassword', { oldPassword, newPassword });
+    return this.request(changePasswordMutation, 'changePassword', { oldPassword, newPassword });
   }
 
   public async getTwoFactorSecret(): Promise<any> {
-    return this.query(getTwoFactorSecretQuery, 'twoFactorSecret', {});
+    return this.request(getTwoFactorSecretQuery, 'twoFactorSecret', {});
   }
 
   public async twoFactorSet(secret: any, code: string): Promise<void> {
-    return this.mutate(twoFactorSetMutation, 'twoFactorSet', { secret, code });
+    return this.request(twoFactorSetMutation, 'twoFactorSet', { secret, code });
   }
 
   public async twoFactorUnset(code: string): Promise<void> {
-    return this.mutate(twoFactorUnsetMutation, 'twoFactorUnset', { code });
+    return this.request(twoFactorUnsetMutation, 'twoFactorUnset', { code });
   }
 
   /**
@@ -132,52 +140,42 @@ export default class GraphQLClient implements TransportInterface {
       email?: string;
     }
   ): Promise<ImpersonationResult> {
-    return this.mutate(impersonateMutation, 'impersonate', {
+    return this.request(impersonateMutation, 'impersonate', {
       accessToken: token,
       username: impersonated.username,
     });
   }
 
-  private async mutate(mutation: any, resultField: any, variables: any) {
+  private async request(query: string, resultField: string, variables?: { [key: string]: any }) {
     // If we are executiong a refresh token mutation do not call refress session again
     // otherwise it will end up in an infinite loop
     const tokens =
-      mutation === refreshTokensMutation
+      query === refreshTokensMutation
         ? await this.client.getTokens()
         : await this.client.refreshSession();
 
-    try {
-      const { data } = await this.options.graphQLClient.mutate({
-        mutation,
-        variables,
-        context: {
-          headers: {
-            'accounts-access-token': tokens ? tokens.accessToken : '',
-          },
-        },
-      });
-      return data[resultField];
-    } catch (e) {
-      throw new Error(e.message);
-    }
-  }
-
-  private async query(query: any, resultField: any, variables: any) {
-    const tokens = (await this.client.refreshSession()) || { accessToken: '' };
-
-    try {
-      const { data } = await this.options.graphQLClient.query({
+    const response = await fetch(this.options.url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'accounts-access-token': tokens ? tokens.accessToken : '',
+        ...this.options.headers,
+      },
+      body: JSON.stringify({
         query,
-        variables,
-        context: {
-          headers: {
-            'accounts-access-token': tokens.accessToken,
-          },
-        },
-      });
-      return data[resultField];
-    } catch (e) {
-      throw new Error(e.message);
+        variables: variables ? variables : undefined,
+      }),
+    });
+
+    const contentType = response.headers.get('Content-Type');
+    const result =
+      contentType && contentType.startsWith('application/json')
+        ? await response.json()
+        : await response.text();
+    if (response.ok && !result.errors && result.data) {
+      return result.data[resultField];
+    } else {
+      throw new Error(result);
     }
   }
 }
