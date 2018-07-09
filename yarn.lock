@@ -2,12 +2,6 @@
 # yarn lockfile v1
 
 
-"@accounts/common@0.1.0-alpha.58382c10":
-  version "0.1.0-alpha.58382c10"
-  resolved "https://registry.yarnpkg.com/@accounts/common/-/common-0.1.0-alpha.58382c10.tgz#b70db9a29a033fb2f2636d7b5f3bb568ffbae7c8"
-  dependencies:
-    lodash "^4.16.4"
-
 "@accounts/tslint-config-accounts@0.0.9":
   version "0.0.9"
   resolved "https://registry.yarnpkg.com/@accounts/tslint-config-accounts/-/tslint-config-accounts-0.0.9.tgz#a2073361c4127ba7c8662cd72e08a28a794a44df"
@@ -3885,7 +3879,7 @@ lodash@4.16.4:
   version "4.16.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.16.4.tgz#01ce306b9bad1319f2a5528674f88297aeb70127"
 
-lodash@4.17.10, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.16.4, lodash@^4.17.10, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.5.1:
+lodash@4.17.10, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.17.10, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.5.1:
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
 
