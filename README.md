@@ -9,11 +9,6 @@ _Fullstack authentication and accounts-management for GraphQL and REST_
 [![codecov](https://codecov.io/gh/accounts-js/accounts/branch/master/graph/badge.svg)](https://codecov.io/gh/accounts-js/accounts)
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-## Community
-
-- Slack - accounts-js.slack.com
-- [Meeting notes](https://github.com/accounts-js/accounts/blob/master/MEETINGS.md)
-
 ## Note
 
 This package, along with the rest of the packages under the `accounts-js` organization are under active development, expect changes on minor versions.
@@ -44,9 +39,18 @@ npm i -S @accounts/redis
 npm i -S @accounts/sql
 ```
 
+## GraphQL
+
+To get started with AccountsJS with GraphQL, see the [README](https://github.com/accounts-js/accounts/blob/master/packages/graphql-api/README.md) in the @accounts/graphql-api package.
+
 ## Examples
 
 You can find a working examples [here](https://github.com/accounts-js/examples).
+
+## Community
+
+- Slack - accounts-js.slack.com
+- [Meeting notes](https://github.com/accounts-js/accounts/blob/master/MEETINGS.md)
 
 ## Contributors
 
