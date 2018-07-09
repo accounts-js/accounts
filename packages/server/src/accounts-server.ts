@@ -44,7 +44,7 @@ export class AccountsServer {
   private db: DatabaseInterface;
   private hooks: Emittery;
 
-  constructor(options: AccountsServerOptions, services: any) {
+  constructor(options: AccountsServerOptions, services: { [key: string]: AuthenticationService }) {
     this.options = merge({ ...defaultOptions }, options);
     if (!this.options.db) {
       throw new Error('A database driver is required');
