@@ -9,10 +9,6 @@ export const verifyEmail = (
 
   const password = accountsServer.getServices().password as AccountsPassword;
 
-  if (!(typeof password.verifyEmail === 'function')) {
-    throw new Error('No service handle email verification.');
-  }
-
   await password.verifyEmail(token);
   return null;
 };
@@ -23,10 +19,6 @@ export const sendVerificationEmail = (
   const { email } = args;
 
   const password = accountsServer.getServices().password as AccountsPassword;
-
-  if (!(typeof password.sendVerificationEmail === 'function')) {
-    throw new Error('No service handle email verification.');
-  }
 
   await password.sendVerificationEmail(email);
   return null;

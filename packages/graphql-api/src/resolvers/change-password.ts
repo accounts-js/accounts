@@ -16,10 +16,6 @@ export const changePassword = (
   const userId = user.id;
   const password = accountsServer.getServices().password as AccountsPassword;
 
-  if (!(typeof password.changePassword === 'function')) {
-    throw new Error('No service handle password modification.');
-  }
-
   await password.changePassword(userId, oldPassword, newPassword);
   return null;
 };

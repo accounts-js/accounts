@@ -1,4 +1,5 @@
 import { AccountsServer } from '@accounts/server';
+import { AccountsPassword } from '@accounts/password';
 
 import { refreshAccessToken } from './resolvers/refresh-tokens';
 import { impersonate } from './resolvers/impersonate';
@@ -39,6 +40,8 @@ export const createAccountsGraphQL = (
   accountsServer: AccountsServer,
   schemaOptionsUser?: SchemaGenerationOptions
 ) => {
+  const passwordService = accountsServer.getServices().password as AccountsPassword | undefined;
+
   const schemaOptions = {
     ...defaultSchemaOptions,
     ...schemaOptionsUser,
@@ -46,16 +49,16 @@ export const createAccountsGraphQL = (
 
   const typeDefs = `
   ${accountsTypeDefs}
-  ${accountsTypePassword}
+  ${passwordService ? accountsTypePassword : ''}
 
   ${schemaOptions.extend ? 'extend ' : ''}type ${schemaOptions.rootQueryName} {
     ${queries}
-    ${queriesPassword}
+    ${passwordService ? queriesPassword : ''}
   }
 
   ${schemaOptions.extend ? 'extend ' : ''}type ${schemaOptions.rootMutationName} {
     ${mutations}
-    ${mutationsPassword}
+    ${passwordService ? mutationsPassword : ''}
   }
 
   ${
@@ -68,32 +71,41 @@ export const createAccountsGraphQL = (
   }
   `;
 
-  const queryResolvers: QueryResolvers.Resolvers = {
+  let queryResolvers: QueryResolvers.Resolvers = {
     getUser: getUser(accountsServer),
-    twoFactorSecret: authenticated(accountsServer, twoFactorSecret(accountsServer)),
   };
 
-  const mutationResolvers: MutationResolvers.Resolvers = {
+  if (passwordService) {
+    queryResolvers = {
+      ...queryResolvers,
+      twoFactorSecret: authenticated(accountsServer, twoFactorSecret(accountsServer)),
+    };
+  }
+
+  let mutationResolvers: MutationResolvers.Resolvers = {
     impersonate: impersonate(accountsServer),
     refreshTokens: refreshAccessToken(accountsServer),
     logout: logout(accountsServer),
     // 3rd-party services authentication
     authenticate: serviceAuthenticate(accountsServer),
-
-    // @accounts/password
-    register: registerPassword(accountsServer),
-    verifyEmail: verifyEmail(accountsServer),
-    resetPassword: resetPassword(accountsServer),
-    sendVerificationEmail: sendVerificationEmail(accountsServer),
-    sendResetPasswordEmail: sendResetPasswordEmail(accountsServer),
-    changePassword: authenticated(accountsServer, changePassword(accountsServer)),
-
-    // Two factor
-    twoFactorSet: authenticated(accountsServer, twoFactorSet(accountsServer)),
-    twoFactorUnset: authenticated(accountsServer, twoFactorUnset(accountsServer)),
-
     // TODO: OAuth callback endpoint
   };
+
+  if (passwordService) {
+    mutationResolvers = {
+      ...mutationResolvers,
+      register: registerPassword(accountsServer),
+      verifyEmail: verifyEmail(accountsServer),
+      resetPassword: resetPassword(accountsServer),
+      sendVerificationEmail: sendVerificationEmail(accountsServer),
+      sendResetPasswordEmail: sendResetPasswordEmail(accountsServer),
+      changePassword: authenticated(accountsServer, changePassword(accountsServer)),
+
+      // Two factor
+      twoFactorSet: authenticated(accountsServer, twoFactorSet(accountsServer)),
+      twoFactorUnset: authenticated(accountsServer, twoFactorUnset(accountsServer)),
+    };
+  }
 
   const resolvers = {
     [schemaOptions.rootMutationName]: mutationResolvers,
