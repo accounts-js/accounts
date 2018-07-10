@@ -26,6 +26,29 @@ export const typeDefs = `
     username: String
   }
 
+  input UserInput {
+    id: ID
+    email: String
+    username: String
+  }
+
+  input AuthenticateParamsInput {
+    # Twitter, Instagram
+    access_token: String
+    # Twitter
+    access_token_secret: String
+    # OAuth
+    provider: String
+    # Password
+    password: String
+    # Password
+    user: UserInput
+    # Two factor
+    code: String
+  }
+`;
+
+export const typeDefsPassword = `
   type TwoFactorSecretKey {
     ascii: String
     base32: String
@@ -46,12 +69,6 @@ export const typeDefs = `
     qr_code_base32: String
     google_auth_qr: String
     otpauth_url: String
-  }
-
-  input UserInput {
-    id: ID
-    email: String
-    username: String
   }
 
   input CreateUserInput {

@@ -3,9 +3,12 @@ import { AccountsServer } from '@accounts/server';
 import { refreshAccessToken } from './resolvers/refresh-tokens';
 import { impersonate } from './resolvers/impersonate';
 import { getUser } from './resolvers/get-user';
-import { mutations } from './graphql/mutations';
-import { typeDefs as accountsTypeDefs } from './graphql/types';
-import { queries } from './graphql/queries';
+import { mutations, mutationsPassword } from './graphql/mutations';
+import {
+  typeDefs as accountsTypeDefs,
+  typeDefsPassword as accountsTypePassword,
+} from './graphql/types';
+import { queries, queriesPassword } from './graphql/queries';
 import { logout } from './resolvers/logout';
 import { registerPassword } from './resolvers/register-user';
 import { resetPassword } from './resolvers/reset-password';
@@ -43,13 +46,16 @@ export const createAccountsGraphQL = (
 
   const typeDefs = `
   ${accountsTypeDefs}
+  ${accountsTypePassword}
 
   ${schemaOptions.extend ? 'extend ' : ''}type ${schemaOptions.rootQueryName} {
     ${queries}
+    ${queriesPassword}
   }
 
   ${schemaOptions.extend ? 'extend ' : ''}type ${schemaOptions.rootMutationName} {
     ${mutations}
+    ${mutationsPassword}
   }
 
   ${
