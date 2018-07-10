@@ -23,11 +23,26 @@ yarn add @accounts/server @accounts/graphql-api
 
 > This package does not create a transport or anything else, only schema and string and resolvers as object.
 
-Start by configuring your `AccountsServer` as you wish. for example:
+Start by configuring your `AccountsServer` as you wish. For example, using MongoDB:
 
 ```js
+import mongoose from 'mongoose'
+import AccountsServer from '@accounts/server'
+import AccountsPassword from '@accounts/password'
+import MongoDBInterface from '@accounts/mongo'
+
+const db = mongoose.connection
+
+const password = new AccountsPassword()
+
 const accountsServer = new AccountsServer({
-  // ... you config here
+  {
+    db: new MongoDBInterface(db),
+    tokenSecret: 'SECRET',
+  },
+  {
+    password,
+  }
 });
 ```
 
