@@ -9,10 +9,6 @@ export const sendResetPasswordEmail = (
 
   const password = accountsServer.getServices().password as AccountsPassword;
 
-  if (!(typeof password.sendResetPasswordEmail === 'function')) {
-    throw new Error('No service handle password reset.');
-  }
-
   await password.sendResetPasswordEmail(email);
   return null;
 };

@@ -6,7 +6,9 @@ export const mutations = `
   # Example: Login with password
   # authenticate(serviceName: "password", params: {password: "<pw>", user: {email: "<email>"}})
   authenticate(serviceName: String!, params: AuthenticateParamsInput!): LoginResult
+`;
 
+export const mutationsPassword = `
   # register returns the id corresponding db ids, such as number IDs, ObjectIDs or UUIDs
   register(user: CreateUserInput!): ID
   verifyEmail(token: String!): Boolean

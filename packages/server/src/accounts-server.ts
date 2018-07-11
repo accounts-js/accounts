@@ -56,7 +56,7 @@ You are using the default secret "${this.options.tokenSecret}" which is not secu
 Please change it with a strong random token.`);
     }
 
-    this.services = services;
+    this.services = services || {};
     this.db = this.options.db;
 
     // Set the db to all services
