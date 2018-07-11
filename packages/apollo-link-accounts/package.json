@@ -1,0 +1,29 @@
+{
+  "name": "@accounts/apollo-link",
+  "version": "0.3.0-beta.20",
+  "description": "Fullstack authentication and accounts-management",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rimraf lib",
+    "start": "tsc --watch",
+    "precompile": "npm run clean",
+    "compile": "tsc",
+    "prepublishOnly": "npm run compile"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/apollo-link"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@accounts/client": "^0.3.0-beta.20",
+    "rimraf": "2.6.2"
+  },
+  "dependencies": {
+    "apollo-link-context": "1.0.8"
+  }
+}
