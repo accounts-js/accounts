@@ -1,6 +1,6 @@
 {
   "name": "@accounts/redis",
-  "version": "0.3.0-beta.20",
+  "version": "0.3.0-beta.21",
   "description": "Redis adaptor for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -36,7 +36,7 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
-    "@accounts/database-tests": "^0.3.0-beta.20",
+    "@accounts/database-tests": "^0.3.0-beta.21",
     "@types/ioredis": "3.2.8",
     "@types/jest": "23.0.2",
     "@types/lodash": "4.14.109",
@@ -45,7 +45,7 @@
     "jest": "23.1.0"
   },
   "dependencies": {
-    "@accounts/types": "^0.3.0-beta.20",
+    "@accounts/types": "^0.3.0-beta.21",
     "ioredis": "^3.2.2",
     "lodash": "^4.17.4",
     "shortid": "^2.2.8"
