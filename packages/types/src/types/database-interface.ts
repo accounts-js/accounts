@@ -36,7 +36,7 @@ export interface DatabaseInterface extends DatabaseInterfaceSessions {
     userId: string,
     email: string,
     token: string,
-    reason?: string
+    reason: string
   ): Promise<void>;
 
   setResetPassword(

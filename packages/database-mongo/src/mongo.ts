@@ -398,7 +398,7 @@ export class Mongo implements DatabaseInterface {
     userId: string,
     email: string,
     token: string,
-    reason: string = 'reset'
+    reason: string
   ): Promise<void> {
     await this.collection.update(
       { _id: userId },

@@ -419,7 +419,7 @@ describe('AccountsPassword', () => {
       } as any;
       set(password.server, 'options.emailTemplates', {});
       await password.sendResetPasswordEmail(email);
-      expect(addResetPasswordToken.mock.calls[0].length).toBe(3);
+      expect(addResetPasswordToken.mock.calls[0].length).toBe(4);
       expect(prepareMail.mock.calls[0].length).toBe(6);
       expect(sendMail.mock.calls[0].length).toBe(1);
     });
