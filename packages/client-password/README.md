@@ -8,3 +8,13 @@
 ```
 yarn add @accounts/client-password
 ```
+
+## Usage
+
+```js
+import { AccountsClient } from '@accounts/client';
+import { AccountsClientPassword } from '@accounts/client-password';
+
+const accounts = new AccountsClient({}, accountsTransport);
+const accountsPassword = new AccountsClientPassword(accounts);
+```
