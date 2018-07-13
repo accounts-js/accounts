@@ -184,13 +184,9 @@
     "@types/events" "*"
     "@types/node" "*"
 
-"@types/node@*", "@types/node@9.6.15", "@types/node@^9.4.6":
+"@types/node@*", "@types/node@9.6.15", "@types/node@9.6.7", "@types/node@^9.4.6":
   version "9.6.15"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.15.tgz#8a5a313ea0a43a95277235841be5d3f5fb3dfeda"
-
-"@types/node@9.6.7":
-  version "9.6.7"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.7.tgz#5f3816d1db2155edcde1b2e3aa5d0e5c520cb564"
 
 "@types/oauth@0.9.0":
   version "0.9.0"
@@ -374,7 +370,7 @@ apollo-link@1.2.1:
     apollo-utilities "^1.0.0"
     zen-observable-ts "^0.8.6"
 
-apollo-link@^1.2.2:
+apollo-link@1.2.2, apollo-link@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.2.2.tgz#54c84199b18ac1af8d63553a68ca389c05217a03"
   dependencies:
