@@ -3,8 +3,6 @@
 _MongoDB adaptor for accounts_
 
 [![npm](https://img.shields.io/npm/v/@accounts/mongo.svg?maxAge=2592000)](https://www.npmjs.com/package/@accounts/mongo)
-[![Circle CI](https://circleci.com/gh/accounts-js/mongo.svg?style=shield)](https://circleci.com/gh/accounts-js/mongo)
-[![codecov](https://codecov.io/gh/accounts-js/mongo/branch/master/graph/badge.svg)](https://codecov.io/gh/accounts-js/mongo)
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 ## Note
