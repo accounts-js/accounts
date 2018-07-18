@@ -5,10 +5,12 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
+    "clean": "rimraf lib",
     "start": "tsc --watch",
-    "compile": "yarn gen-schema-types && tsc",
-    "gen-schema-types": "ts-node src/scripts/schema-to-types.ts && gql-gen --schema schema.json --template graphql-codegen-typescript-template --out ./src/types/graphql.ts",
-    "prepublishOnly": "yarn compile"
+    "precompile": "yarn clean",
+    "compile": "tsc",
+    "prepublishOnly": "yarn compile",
+    "gen-schema-types": "ts-node src/scripts/schema-to-types.ts && gql-gen --schema schema.json --template graphql-codegen-typescript-template --out ./src/types/graphql.ts"
   },
   "repository": {
     "type": "git",

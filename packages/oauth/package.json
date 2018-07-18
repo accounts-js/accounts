@@ -5,12 +5,13 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
+    "clean": "rimraf lib",
     "start": "tsc --watch",
+    "precompile": "yarn clean",
     "compile": "tsc",
-    "testonly": "jest",
+    "prepublishOnly": "yarn compile",
     "test:watch": "jest --watch",
-    "coverage": "jest --coverage",
-    "prepublishOnly": "yarn compile"
+    "coverage": "jest --coverage"
   },
   "jest": {
     "transform": {
