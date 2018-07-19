@@ -35,6 +35,9 @@
     "nock": "9.0.2",
     "ts-node": "7.0.0"
   },
+  "peerDependencies": {
+    "graphql-tools": "^3.0.0"
+  },
   "dependencies": {
     "@accounts/password": "^0.3.0-beta.21",
     "@accounts/server": "^0.3.0-beta.21",
