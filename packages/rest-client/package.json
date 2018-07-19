@@ -53,7 +53,7 @@
     "node-fetch": "2.1.2"
   },
   "peerDependencies": {
-    "@accounts/client": "^0.1.0-beta.12"
+    "@accounts/client": "^0.3.0-beta.0"
   },
   "dependencies": {
     "@accounts/types": "^0.3.0-beta.21",
