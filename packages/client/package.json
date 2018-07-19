@@ -8,11 +8,11 @@
     "access": "public"
   },
   "scripts": {
-    "start": "webpack -p --config --progress --watch",
     "clean": "rimraf lib",
-    "precompile": "npm run clean",
+    "start": "tsc --watch",
+    "precompile": "yarn clean",
     "compile": "tsc",
-    "prepublishOnly": "npm run compile",
+    "prepublishOnly": "yarn compile",
     "test": "npm run testonly",
     "test-ci": "npm lint && npm coverage",
     "testonly": "jest",

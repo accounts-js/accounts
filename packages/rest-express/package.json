@@ -8,14 +8,15 @@
     "access": "public"
   },
   "scripts": {
+    "clean": "rimraf lib",
     "start": "tsc --watch",
+    "precompile": "yarn clean",
     "compile": "tsc",
-    "prepublishOnly": "npm run compile",
+    "prepublishOnly": "yarn compile",
     "test": "npm run testonly",
     "test:watch": "npm run testonly -- --watch --coverage",
     "testonly": "jest",
-    "coverage": "npm run testonly -- --coverage",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "coverage": "npm run testonly -- --coverage"
   },
   "jest": {
     "testEnvironment": "node",

@@ -8,9 +8,11 @@
     "access": "public"
   },
   "scripts": {
+    "clean": "rimraf lib",
     "start": "tsc --watch",
+    "precompile": "yarn clean",
     "compile": "tsc",
-    "prepublishOnly": "npm run compile",
+    "prepublishOnly": "yarn compile",
     "test": "jest",
     "test:watch": "jest --watch",
     "coverage": "jest --coverage"
