@@ -66,6 +66,21 @@ describe('password', () => {
     });
   });
 
+  describe('resetPassword', () => {
+    it('should throw when wrong token', async () => {
+      try {
+        await server.accountsClientPassword.resetPassword('wrongToken', 'newPassword');
+        throw new Error();
+      } catch (error) {
+        expect(error.message).toMatch('Reset password link expired');
+      }
+    });
+
+    it('should change the user password and be able to login with it', () => {
+      // TODO
+    });
+  });
+
   describe('changePassword', () => {
     it('should throw when wrong password', async () => {
       try {
