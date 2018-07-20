@@ -9,7 +9,7 @@ import { AccountsPassword } from '@accounts/password';
 // TODO rename to AccountsMongo ?
 import { Mongo } from '@accounts/mongo';
 import { createAccountsGraphQL, accountsContext } from '@accounts/graphql-api';
-import { User } from '@accounts/types';
+import { User, DatabaseInterface } from '@accounts/types';
 
 // Client
 import { AccountsClient } from '@accounts/client';
@@ -29,6 +29,10 @@ interface ServerTestInterface {
    * The server password service
    */
   accountsPassword: AccountsPassword;
+  /**
+   * The server database
+   */
+  accountsDatabase: DatabaseInterface;
 
   /**
    * The client
@@ -67,6 +71,7 @@ const convertUrlToToken = (url: string): string => {
 export class ServerTest implements ServerTestInterface {
   public accountsServer: AccountsServer;
   public accountsPassword: AccountsPassword;
+  public accountsDatabase: DatabaseInterface;
 
   public accountsClient: AccountsClient;
   public accountsClientPassword: AccountsClientPassword;
@@ -78,6 +83,7 @@ export class ServerTest implements ServerTestInterface {
 
   constructor() {
     this.accountsMongo = new Mongo(mongoose.connection);
+    this.accountsDatabase = this.accountsMongo;
     this.accountsPassword = new AccountsPassword();
     this.accountsServer = new AccountsServer(
       {

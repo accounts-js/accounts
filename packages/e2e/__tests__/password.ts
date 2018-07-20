@@ -73,7 +73,8 @@ describe('password', () => {
       const data = await server.accountsClientPassword.verifyEmail(token);
       server.emails = [];
       expect(data).toBeNull();
-      // TODO check the email is verified
+      const dbUser = await server.accountsDatabase.findUserByEmail(user.email);
+      expect(dbUser!.emails![0].verified).toBe(true);
     });
   });
 
