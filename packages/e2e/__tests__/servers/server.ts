@@ -8,7 +8,7 @@ import { AccountsServer } from '@accounts/server';
 import { AccountsPassword } from '@accounts/password';
 // TODO rename to AccountsMongo ?
 import { Mongo } from '@accounts/mongo';
-import { createAccountsGraphQL } from '@accounts/graphql-api';
+import { createAccountsGraphQL, accountsContext } from '@accounts/graphql-api';
 
 // Client
 import { AccountsClient } from '@accounts/client';
@@ -91,6 +91,9 @@ export class ServerTest implements ServerTestInterface {
     this.apolloServer = new ApolloServer({
       typeDefs: [gql(accountsGraphQL.typeDefs), typeDefs],
       resolvers: merge(accountsGraphQL.resolvers),
+      context: ({ req }: any) => ({
+        ...accountsContext(req),
+      }),
     });
 
     const apolloClient = new ApolloClient({ uri: urlString });

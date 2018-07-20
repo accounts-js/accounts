@@ -66,6 +66,34 @@ describe('password', () => {
     });
   });
 
+  describe('changePassword', () => {
+    it('should throw when wrong password', async () => {
+      try {
+        await server.accountsClientPassword.changePassword('wrongPassword', 'newPassword');
+        throw new Error();
+      } catch (error) {
+        expect(error.message).toMatch('Incorrect password');
+      }
+    });
+
+    it('should change the user password and be able to login with it', async () => {
+      const newPassword = 'newPasswordTest';
+      const data = await server.accountsClientPassword.changePassword(user.password, newPassword);
+      expect(data).toBeNull();
+      user.password = newPassword;
+
+      const loginResult = await server.accountsClientPassword.login({
+        user: {
+          email: user.email,
+        },
+        password: user.password,
+      });
+      expect(loginResult.sessionId).toBeTruthy();
+      expect(loginResult.tokens.accessToken).toBeTruthy();
+      expect(loginResult.tokens.refreshToken).toBeTruthy();
+    });
+  });
+
   afterAll(async () => {
     await server.stop();
   });
