@@ -74,8 +74,10 @@ export class AccountsClientPassword {
    * @param {string} newPassword - A new password for the user.
    */
   public changePassword(oldPassword: string, newPassword: string): Promise<void> {
-    const hashedPassword = this.hashPassword(newPassword);
-    return this.client.transport.changePassword(oldPassword, hashedPassword);
+    return this.client.transport.changePassword(
+      this.hashPassword(oldPassword),
+      this.hashPassword(newPassword)
+    );
   }
 
   /**
