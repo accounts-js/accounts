@@ -3,7 +3,8 @@ import { ServerTest } from './servers/server';
 const server = new ServerTest();
 
 const user = {
-  email: 'johnDoe@gmail.com',
+  // TODO test with upercase email
+  email: 'johndoe@gmail.com',
   password: 'notSecure',
 };
 let userId: string;
@@ -13,7 +14,7 @@ describe('password', () => {
     await server.start();
   });
 
-  describe('createUser', () => {
+  describe('create a new user', () => {
     it('should create a new user with email and password', async () => {
       userId = await server.accountsClientPassword.createUser({
         email: user.email,
@@ -51,7 +52,7 @@ describe('password', () => {
     });
   });
 
-  describe('verifyEmail', () => {
+  describe('verify user email', () => {
     it('should throw when wrong token', async () => {
       try {
         await server.accountsClientPassword.verifyEmail('wrongToken');
@@ -61,12 +62,22 @@ describe('password', () => {
       }
     });
 
-    it('should verify the user email', () => {
-      // TODO
+    it('should request a new token for the user', async () => {
+      const data = await server.accountsClientPassword.requestVerificationEmail(user.email);
+      expect(data).toBeNull();
+      expect(server.emails.length).toBe(1);
+    });
+
+    it('should verify the user email', async () => {
+      const token = server.emails[0].text;
+      const data = await server.accountsClientPassword.verifyEmail(token);
+      server.emails = [];
+      expect(data).toBeNull();
+      // TODO check the email is verified
     });
   });
 
-  describe('resetPassword', () => {
+  describe('reset user password', () => {
     it('should throw when wrong token', async () => {
       try {
         await server.accountsClientPassword.resetPassword('wrongToken', 'newPassword');
@@ -76,12 +87,32 @@ describe('password', () => {
       }
     });
 
-    it('should change the user password and be able to login with it', () => {
-      // TODO
+    it('should request a new token for the user', async () => {
+      const data = await server.accountsClientPassword.requestPasswordReset(user.email);
+      expect(data).toBeNull();
+      expect(server.emails.length).toBe(1);
+    });
+
+    it('should change the user password and be able to login with it', async () => {
+      const token = server.emails[0].text;
+      const newPassword = 'newPasswordTest';
+      const data = await server.accountsClientPassword.resetPassword(token, newPassword);
+      user.password = newPassword;
+      expect(data).toBeNull();
+
+      const loginResult = await server.accountsClientPassword.login({
+        user: {
+          email: user.email,
+        },
+        password: user.password,
+      });
+      expect(loginResult.sessionId).toBeTruthy();
+      expect(loginResult.tokens.accessToken).toBeTruthy();
+      expect(loginResult.tokens.refreshToken).toBeTruthy();
     });
   });
 
-  describe('changePassword', () => {
+  describe('change password when user is logged in', () => {
     it('should throw when wrong password', async () => {
       try {
         await server.accountsClientPassword.changePassword('wrongPassword', 'newPassword');
@@ -94,8 +125,8 @@ describe('password', () => {
     it('should change the user password and be able to login with it', async () => {
       const newPassword = 'newPasswordTest';
       const data = await server.accountsClientPassword.changePassword(user.password, newPassword);
-      expect(data).toBeNull();
       user.password = newPassword;
+      expect(data).toBeNull();
 
       const loginResult = await server.accountsClientPassword.login({
         user: {

@@ -9,6 +9,7 @@ import { AccountsPassword } from '@accounts/password';
 // TODO rename to AccountsMongo ?
 import { Mongo } from '@accounts/mongo';
 import { createAccountsGraphQL, accountsContext } from '@accounts/graphql-api';
+import { User } from '@accounts/types';
 
 // Client
 import { AccountsClient } from '@accounts/client';
@@ -38,6 +39,8 @@ interface ServerTestInterface {
    */
   accountsClientPassword: AccountsClientPassword;
 
+  emails: any[];
+
   /**
    * - create server
    * - setup databases connections
@@ -56,12 +59,19 @@ interface ServerTestInterface {
 const connectionString = 'mongodb://localhost/accounts-js-tests-e2e';
 const urlString = 'http://localhost:4000';
 
+const convertUrlToToken = (url: string): string => {
+  const split = url.split('/');
+  return split[split.length - 1];
+};
+
 export class ServerTest implements ServerTestInterface {
   public accountsServer: AccountsServer;
   public accountsPassword: AccountsPassword;
 
   public accountsClient: AccountsClient;
   public accountsClientPassword: AccountsClientPassword;
+
+  public emails: any[];
 
   private accountsMongo: Mongo;
   private apolloServer: ApolloServer;
@@ -73,6 +83,24 @@ export class ServerTest implements ServerTestInterface {
       {
         db: this.accountsMongo,
         tokenSecret: 'test',
+        emailTemplates: {
+          from: 'accounts-js <no-reply@accounts-js.com>',
+          verifyEmail: {
+            subject: () => 'Verify your account email',
+            text: (user: User, url: string) => convertUrlToToken(url),
+          },
+          resetPassword: {
+            subject: () => 'Reset your password',
+            text: (user: User, url: string) => convertUrlToToken(url),
+          },
+          enrollAccount: {
+            subject: () => 'Set your password',
+            text: (user: User, url: string) => convertUrlToToken(url),
+          },
+        },
+        sendMail: async mail => {
+          this.emails.push(mail);
+        },
       },
       {
         password: this.accountsPassword,
@@ -103,6 +131,7 @@ export class ServerTest implements ServerTestInterface {
     });
     this.accountsClient = new AccountsClient({}, accountsClientGraphQL);
     this.accountsClientPassword = new AccountsClientPassword(this.accountsClient);
+    this.emails = [];
   }
 
   public async start() {
