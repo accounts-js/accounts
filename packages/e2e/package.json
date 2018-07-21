@@ -1,10 +1,12 @@
 {
   "name": "@accounts/e2e",
   "private": true,
-  "version": "0.3.0-beta.21",
+  "version": "0.3.0-beta.22",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
-  "scripts": {},
+  "scripts": {
+    "test": "yarn jest --forceExit"
+  },
   "jest": {
     "setupFiles": ["jest-localstorage-mock"],
     "transform": {
@@ -28,14 +30,14 @@
     "jest-localstorage-mock": "^2.2.0"
   },
   "dependencies": {
-    "@accounts/client": "^0.3.0-beta.21",
-    "@accounts/client-password": "^0.3.0-beta.21",
-    "@accounts/graphql-api": "^0.3.0-beta.21",
-    "@accounts/graphql-client": "^0.3.0-beta.21",
-    "@accounts/mongo": "^0.3.0-beta.21",
-    "@accounts/password": "^0.3.0-beta.21",
-    "@accounts/server": "^0.3.0-beta.21",
-    "@accounts/types": "^0.3.0-beta.21",
+    "@accounts/client": "^0.3.0-beta.22",
+    "@accounts/client-password": "^0.3.0-beta.22",
+    "@accounts/graphql-api": "^0.3.0-beta.22",
+    "@accounts/graphql-client": "^0.3.0-beta.22",
+    "@accounts/mongo": "^0.3.0-beta.22",
+    "@accounts/password": "^0.3.0-beta.22",
+    "@accounts/server": "^0.3.0-beta.22",
+    "@accounts/types": "^0.3.0-beta.22",
     "@types/lodash": "^4.14.111",
     "@types/mongoose": "^5.2.0",
     "@types/node-fetch": "^2.1.1",
