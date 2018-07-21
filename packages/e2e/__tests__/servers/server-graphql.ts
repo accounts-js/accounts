@@ -1,22 +1,22 @@
-import * as mongoose from 'mongoose';
 import { ApolloServer, gql } from 'apollo-server';
 import { merge } from 'lodash';
 import fetch from 'node-fetch';
 
 // Server
-import { AccountsServer } from '../../../server/lib';
-import { AccountsPassword } from '../../../password/lib';
-// TODO rename to AccountsMongo ?
-import { Mongo } from '../../../database-mongo/lib';
-import { createAccountsGraphQL, accountsContext } from '../../../graphql-api/lib';
-import { User, DatabaseInterface } from '../../../types/lib';
+import { AccountsServer } from '@accounts/server';
+import { AccountsPassword } from '@accounts/password';
+import { createAccountsGraphQL, accountsContext } from '@accounts/graphql-api';
+import { User, DatabaseInterface } from '@accounts/types';
 
 // Client
-import { AccountsClient } from '../../../client/lib';
-import { AccountsClientPassword } from '../../../client-password/lib';
-import { AccountsGraphQLClient } from '../../../graphql-client/lib';
+import { AccountsClient } from '@accounts/client';
+import { AccountsClientPassword } from '@accounts/client-password';
+import { AccountsGraphQLClient } from '@accounts/graphql-client';
 
 import ApolloClient from 'apollo-boost';
+
+import { DatabaseTestInterface } from '../databases';
+import { DatabaseTest } from '../databases/mongo';
 
 (global as any).fetch = fetch;
 
@@ -78,16 +78,16 @@ export class ServerTest implements ServerTestInterface {
 
   public emails: any[];
 
-  private accountsMongo: Mongo;
   private apolloServer: ApolloServer;
+  private databaseTest: DatabaseTestInterface;
 
   constructor() {
-    this.accountsMongo = new Mongo(mongoose.connection);
-    this.accountsDatabase = this.accountsMongo;
+    this.databaseTest = new DatabaseTest();
+    this.accountsDatabase = this.databaseTest.accountsDatabase;
     this.accountsPassword = new AccountsPassword();
     this.accountsServer = new AccountsServer(
       {
-        db: this.accountsMongo,
+        db: this.accountsDatabase,
         tokenSecret: 'test',
         emailTemplates: {
           from: 'accounts-js <no-reply@accounts-js.com>',
@@ -142,13 +142,11 @@ export class ServerTest implements ServerTestInterface {
 
   public async start() {
     await this.apolloServer.listen();
-    (mongoose as any).Promise = global.Promise;
-    await mongoose.connect(connectionString);
-    await mongoose.connection.dropDatabase();
+    await this.databaseTest.start();
   }
 
   public async stop() {
     await this.apolloServer.stop();
-    await mongoose.connection.close();
+    await this.databaseTest.stop();
   }
 }

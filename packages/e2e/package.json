@@ -18,6 +18,7 @@
       "js"
     ],
     "testPathIgnorePatterns": [
+      "<rootDir>/__tests__/databases",
       "<rootDir>/__tests__/servers"
     ]
   },
