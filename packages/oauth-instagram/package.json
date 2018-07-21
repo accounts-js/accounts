@@ -1,11 +1,13 @@
 {
   "name": "@accounts/oauth-instagram",
-  "version": "0.3.0-beta.21",
+  "version": "0.3.0-beta.22",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
+    "clean": "rimraf lib",
     "start": "tsc --watch",
+    "precompile": "yarn clean",
     "compile": "tsc",
     "prepublishOnly": "yarn compile",
     "testonly": "jest",

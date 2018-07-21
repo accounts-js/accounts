@@ -100,7 +100,7 @@ describe('AccountsClientPassword', () => {
     it('should hash password and call transport', async () => {
       const newPassword = 'newPasswordTest';
       await accountsPassword.changePassword(user.password, newPassword);
-      expect(mockedClient.transport.changePassword.mock.calls[0][0]).toBe(user.password);
+      expect(mockedClient.transport.changePassword.mock.calls[0][0]).not.toBe(user.password);
       expect(mockedClient.transport.changePassword.mock.calls[0][1]).not.toBe(newPassword);
     });
   });

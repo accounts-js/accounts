@@ -1,15 +1,15 @@
 {
   "name": "@accounts/password",
-  "version": "0.3.0-beta.21",
+  "version": "0.3.0-beta.22",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf lib",
     "start": "tsc --watch",
-    "precompile": "npm run clean",
+    "precompile": "yarn clean",
     "compile": "tsc",
-    "prepublishOnly": "npm run compile",
+    "prepublishOnly": "yarn compile",
     "testonly": "jest --coverage",
     "coverage": "jest --coverage"
   },
@@ -24,13 +24,13 @@
     ]
   },
   "dependencies": {
-    "@accounts/two-factor": "^0.3.0-beta.21",
+    "@accounts/two-factor": "^0.3.0-beta.22",
     "bcryptjs": "^2.4.3",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
-    "@accounts/server": "^0.3.0-beta.21",
-    "@accounts/types": "^0.3.0-beta.21",
+    "@accounts/server": "^0.3.0-beta.22",
+    "@accounts/types": "^0.3.0-beta.22",
     "@types/bcryptjs": "2.4.1",
     "@types/jest": "23.0.2",
     "@types/lodash": "4.14.109",
@@ -39,6 +39,6 @@
     "rimraf": "2.6.2"
   },
   "peerDependencies": {
-    "@accounts/server": "^0.1.0-beta.0"
+    "@accounts/server": "^0.3.0-beta.0"
   }
 }

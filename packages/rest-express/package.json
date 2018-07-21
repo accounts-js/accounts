@@ -1,6 +1,6 @@
 {
   "name": "@accounts/rest-express",
-  "version": "0.3.0-beta.21",
+  "version": "0.3.0-beta.22",
   "description": "Server side REST express middleware for accounts",
   "main": "lib/index",
   "typings": "lib/index",
@@ -8,14 +8,15 @@
     "access": "public"
   },
   "scripts": {
+    "clean": "rimraf lib",
     "start": "tsc --watch",
+    "precompile": "yarn clean",
     "compile": "tsc",
-    "prepublishOnly": "npm run compile",
+    "prepublishOnly": "yarn compile",
     "test": "npm run testonly",
     "test:watch": "npm run testonly -- --watch --coverage",
     "testonly": "jest",
-    "coverage": "npm run testonly -- --coverage",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "coverage": "npm run testonly -- --coverage"
   },
   "jest": {
     "testEnvironment": "node",
@@ -41,7 +42,7 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
-    "@accounts/server": "^0.3.0-beta.21",
+    "@accounts/server": "^0.3.0-beta.22",
     "@types/express": "4.16.0",
     "@types/jest": "23.0.2",
     "@types/lodash": "4.14.109",
@@ -50,10 +51,10 @@
     "jest": "23.1.0"
   },
   "peerDependencies": {
-    "@accounts/server": "^0.1.0-beta.16"
+    "@accounts/server": "^0.3.0-beta.0"
   },
   "dependencies": {
-    "@accounts/types": "^0.3.0-beta.21",
+    "@accounts/types": "^0.3.0-beta.22",
     "express": "^4.16.2",
     "lodash": "^4.17.4",
     "request-ip": "^2.0.2"

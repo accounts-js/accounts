@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client-password",
-  "version": "0.3.0-beta.21",
+  "version": "0.3.0-beta.22",
   "description": "@accounts/client-password",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -36,15 +36,15 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
-    "@types/crypto-js": "3.1.40",
+    "@types/crypto-js": "3.1.41",
     "@types/jest": "23.0.2",
     "@types/node": "9.6.15",
     "jest": "23.1.0",
     "rimraf": "2.6.2"
   },
   "dependencies": {
-    "@accounts/client": "^0.3.0-beta.21",
-    "@accounts/types": "^0.3.0-beta.21",
+    "@accounts/client": "^0.3.0-beta.22",
+    "@accounts/types": "^0.3.0-beta.22",
     "crypto-js": "^3.1.9-1"
   }
 }

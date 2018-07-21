@@ -167,9 +167,9 @@
   dependencies:
     "@types/express" "*"
 
-"@types/crypto-js@3.1.40":
-  version "3.1.40"
-  resolved "https://registry.yarnpkg.com/@types/crypto-js/-/crypto-js-3.1.40.tgz#4ce5f484af057b3013798bc28cd0516deba950d1"
+"@types/crypto-js@3.1.41":
+  version "3.1.41"
+  resolved "https://registry.yarnpkg.com/@types/crypto-js/-/crypto-js-3.1.41.tgz#50727bd54f13991288d1aff66d1f6b6e68f7b2f3"
 
 "@types/events@*":
   version "1.2.0"
@@ -209,17 +209,17 @@
   version "0.12.6"
   resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.12.6.tgz#3d619198585fcabe5f4e1adfb5cf5f3388c66c13"
 
-"@types/graphql@0.13.1":
-  version "0.13.1"
-  resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.13.1.tgz#7d39750355c9ecb921816d6f76c080405b5f6bea"
+"@types/graphql@0.13.3":
+  version "0.13.3"
+  resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.13.3.tgz#23af65796d341f93ef5b485138bd52c67786452d"
 
 "@types/handlebars@4.0.38":
   version "4.0.38"
   resolved "https://registry.yarnpkg.com/@types/handlebars/-/handlebars-4.0.38.tgz#d0ebec1934c0bba97f99a0cb703fe2ef8c4a662f"
 
-"@types/ioredis@3.2.8":
-  version "3.2.8"
-  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-3.2.8.tgz#ea2dda6ee379efa5f8dabd477f04dce4bed91815"
+"@types/ioredis@3.2.13":
+  version "3.2.13"
+  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-3.2.13.tgz#12c929d6e790e6920129d0d3b7dac34ea143373e"
   dependencies:
     "@types/bluebird" "*"
     "@types/node" "*"

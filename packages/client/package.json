@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client",
-  "version": "0.3.0-beta.21",
+  "version": "0.3.0-beta.22",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -8,11 +8,11 @@
     "access": "public"
   },
   "scripts": {
-    "start": "webpack -p --config --progress --watch",
     "clean": "rimraf lib",
-    "precompile": "npm run clean",
+    "start": "tsc --watch",
+    "precompile": "yarn clean",
     "compile": "tsc",
-    "prepublishOnly": "npm run compile",
+    "prepublishOnly": "yarn compile",
     "test": "npm run testonly",
     "test-ci": "npm lint && npm coverage",
     "testonly": "jest",
@@ -60,7 +60,7 @@
     "rimraf": "2.6.2"
   },
   "dependencies": {
-    "@accounts/types": "^0.3.0-beta.21",
+    "@accounts/types": "^0.3.0-beta.22",
     "jwt-decode": "2.2.0"
   }
 }
