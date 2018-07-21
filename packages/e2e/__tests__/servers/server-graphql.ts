@@ -4,17 +4,17 @@ import { merge } from 'lodash';
 import fetch from 'node-fetch';
 
 // Server
-import { AccountsServer } from '@accounts/server';
-import { AccountsPassword } from '@accounts/password';
+import { AccountsServer } from '../../../server/lib';
+import { AccountsPassword } from '../../../password/lib';
 // TODO rename to AccountsMongo ?
-import { Mongo } from '@accounts/mongo';
-import { createAccountsGraphQL, accountsContext } from '@accounts/graphql-api';
-import { User, DatabaseInterface } from '@accounts/types';
+import { Mongo } from '../../../database-mongo/lib';
+import { createAccountsGraphQL, accountsContext } from '../../../graphql-api/lib';
+import { User, DatabaseInterface } from '../../../types/lib';
 
 // Client
-import { AccountsClient } from '@accounts/client';
-import { AccountsClientPassword } from '@accounts/client-password';
-import { AccountsGraphQLClient } from '@accounts/graphql-client';
+import { AccountsClient } from '../../../client/lib';
+import { AccountsClientPassword } from '../../../client-password/lib';
+import { AccountsGraphQLClient } from '../../../graphql-client/lib';
 
 import ApolloClient from 'apollo-boost';
 

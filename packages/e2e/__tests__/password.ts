@@ -1,4 +1,4 @@
-import { ServerTest } from './servers/server';
+import { ServerTest } from './servers/server-graphql';
 
 const server = new ServerTest();
 
