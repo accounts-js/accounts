@@ -1,0 +1,45 @@
+import { AccountsServer } from '@accounts/server';
+import { AccountsPassword } from '@accounts/password';
+import { DatabaseInterface } from '@accounts/types';
+import { AccountsClient } from '@accounts/client';
+import { AccountsClientPassword } from '@accounts/client-password';
+
+export interface ServerTestInterface {
+  /**
+   * The server
+   */
+  accountsServer: AccountsServer;
+  /**
+   * The server password service
+   */
+  accountsPassword: AccountsPassword;
+  /**
+   * The server database
+   */
+  accountsDatabase: DatabaseInterface;
+
+  /**
+   * The client
+   */
+  accountsClient: AccountsClient;
+  /**
+   * The client password service
+   */
+  accountsClientPassword: AccountsClientPassword;
+
+  emails: any[];
+
+  /**
+   * - create server
+   * - setup databases connections
+   * - cleanup database
+   * - initiate the accounts-js server and the services
+   */
+  start: () => Promise<void>;
+  /**
+   * - stop server
+   * - stop databases connection
+   * - cleanup database
+   */
+  stop: () => Promise<void>;
+}

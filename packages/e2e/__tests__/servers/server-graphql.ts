@@ -17,48 +17,9 @@ import ApolloClient from 'apollo-boost';
 
 import { DatabaseTestInterface } from '../databases';
 import { DatabaseTest } from '../databases/mongo';
+import { ServerTestInterface } from './index';
 
 (global as any).fetch = fetch;
-
-interface ServerTestInterface {
-  /**
-   * The server
-   */
-  accountsServer: AccountsServer;
-  /**
-   * The server password service
-   */
-  accountsPassword: AccountsPassword;
-  /**
-   * The server database
-   */
-  accountsDatabase: DatabaseInterface;
-
-  /**
-   * The client
-   */
-  accountsClient: AccountsClient;
-  /**
-   * The client password service
-   */
-  accountsClientPassword: AccountsClientPassword;
-
-  emails: any[];
-
-  /**
-   * - create server
-   * - setup databases connections
-   * - cleanup database
-   * - initiate the accounts-js server and the services
-   */
-  start: () => Promise<void>;
-  /**
-   * - stop server
-   * - stop databases connection
-   * - cleanup database
-   */
-  stop: () => Promise<void>;
-}
 
 const urlString = 'http://localhost:4000';
 
