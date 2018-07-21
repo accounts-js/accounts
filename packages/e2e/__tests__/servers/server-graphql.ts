@@ -60,7 +60,6 @@ interface ServerTestInterface {
   stop: () => Promise<void>;
 }
 
-const connectionString = 'mongodb://localhost/accounts-js-tests-e2e';
 const urlString = 'http://localhost:4000';
 
 const convertUrlToToken = (url: string): string => {
