@@ -24,7 +24,7 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "23.0.2",
+    "@types/jest": "23.3.0",
     "@types/node": "9.6.7",
     "jest": "23.1.0"
   },
