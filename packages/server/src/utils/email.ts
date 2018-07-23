@@ -15,13 +15,15 @@ export const emailTemplates: EmailTemplatesType = {
   resetPassword: {
     subject: () => 'Reset your password',
     text: (user: User, url: string) => `To reset your password please click on this link: ${url}`,
-    html: (user: User, url: string) => `To reset your password please <a href="${url}">click here</a>.`,
+    html: (user: User, url: string) =>
+      `To reset your password please <a href="${url}">click here</a>.`,
   },
 
   enrollAccount: {
     subject: () => 'Set your password',
     text: (user: User, url: string) => `To set your password please click on this link: ${url}`,
-    html: (user: User, url: string) => `To set your password please <a href="${url}">click here</a>.`,
+    html: (user: User, url: string) =>
+      `To set your password please <a href="${url}">click here</a>.`,
   },
 };
 
