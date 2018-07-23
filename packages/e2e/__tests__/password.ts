@@ -1,7 +1,7 @@
 import { servers } from './servers';
 
 const user = {
-  // TODO test with upercase email
+  // TODO test with uppercase email
   email: 'johndoe@gmail.com',
   password: 'notSecure',
 };
@@ -25,7 +25,7 @@ Object.keys(servers).forEach(key => {
     });
 
     describe('login', () => {
-      it('should throw when wrong creadentials', async () => {
+      it('should throw when wrong credentials', async () => {
         try {
           await server.accountsClientPassword.login({
             user: {
