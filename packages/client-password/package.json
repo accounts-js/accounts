@@ -36,7 +36,7 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
-    "@types/crypto-js": "3.1.41",
+    "@types/crypto-js": "3.1.42",
     "@types/jest": "23.3.0",
     "@types/node": "9.6.15",
     "jest": "23.1.0",
