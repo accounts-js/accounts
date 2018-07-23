@@ -154,9 +154,9 @@
     "@types/bluebird" "*"
     "@types/node" "*"
 
-"@types/jest@23.0.2":
-  version "23.0.2"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.0.2.tgz#f03f9e6dd2206cc2a2e8fd033161b0b7cf905db6"
+"@types/jest@23.3.0":
+  version "23.3.0"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.0.tgz#5dd70033b616a6228042244ebd992f6426808810"
 
 "@types/jsonwebtoken@7.2.7":
   version "7.2.7"
