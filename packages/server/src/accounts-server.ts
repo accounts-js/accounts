@@ -500,7 +500,7 @@ Please change it with a strong random token.`);
       to,
       subject: emailTemplate.subject(user),
       text: emailTemplate.text(user, tokenizedUrl),
-      html: emailTemplate.html(user, tokenizedUrl),
+      html: emailTemplate.html && emailTemplate.html(user, tokenizedUrl),
     };
   }
 
