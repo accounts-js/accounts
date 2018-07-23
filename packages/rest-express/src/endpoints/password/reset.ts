@@ -10,7 +10,7 @@ export const resetPassword = (accountsServer: AccountsServer) => async (
     const { token, newPassword } = req.body;
     const password: any = accountsServer.getServices().password;
     await password.resetPassword(token, newPassword);
-    res.json({ message: 'Password changed' });
+    res.json(null);
   } catch (err) {
     sendError(res, err);
   }
@@ -24,7 +24,7 @@ export const sendResetPasswordEmail = (accountsServer: AccountsServer) => async 
     const { email } = req.body;
     const password: any = accountsServer.getServices().password;
     await password.sendResetPasswordEmail(email);
-    res.json({ message: 'Email sent' });
+    res.json(null);
   } catch (err) {
     sendError(res, err);
   }
