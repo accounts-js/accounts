@@ -97,9 +97,9 @@
   dependencies:
     "@types/node" "*"
 
-"@types/crypto-js@3.1.41":
-  version "3.1.41"
-  resolved "https://registry.yarnpkg.com/@types/crypto-js/-/crypto-js-3.1.41.tgz#50727bd54f13991288d1aff66d1f6b6e68f7b2f3"
+"@types/crypto-js@3.1.42":
+  version "3.1.42"
+  resolved "https://registry.yarnpkg.com/@types/crypto-js/-/crypto-js-3.1.42.tgz#00f6b6a037693c2dc5e8dcf303e7e682751bb282"
 
 "@types/events@*":
   version "1.2.0"
