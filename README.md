@@ -25,7 +25,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md)
 ## Thank you
 
 This project exists thanks to all the people who contribute:
-<a href="graphs/contributors"><img src="https://opencollective.com/accounts-js/contributors.svg?width=890" /></a>
+<a href="https://github.com/accounts-js/accounts/graphs/contributors"><img src="https://opencollective.com/accounts-js/contributors.svg?width=890" /></a>
 
 ### Backers
 
