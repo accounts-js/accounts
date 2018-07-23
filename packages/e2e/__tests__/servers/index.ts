@@ -3,6 +3,15 @@ import { AccountsPassword } from '@accounts/password';
 import { DatabaseInterface } from '@accounts/types';
 import { AccountsClient } from '@accounts/client';
 import { AccountsClientPassword } from '@accounts/client-password';
+import { ServerGraphqlTest } from './server-graphql';
+import { ServerRestTest } from './server-rest';
+
+export const servers: {
+  [key: string]: ServerTestInterface;
+} = {
+  'server-graphql': new ServerGraphqlTest(),
+  'server-rest': new ServerRestTest(),
+};
 
 export interface ServerTestInterface {
   /**

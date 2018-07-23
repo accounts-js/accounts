@@ -1,19 +1,18 @@
-import { ApolloServer, gql } from 'apollo-server';
-import { merge } from 'lodash';
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import * as http from 'http';
 import fetch from 'node-fetch';
 
 // Server
 import { AccountsServer } from '@accounts/server';
 import { AccountsPassword } from '@accounts/password';
-import { createAccountsGraphQL, accountsContext } from '@accounts/graphql-api';
+import accountsExpress from '@accounts/rest-express';
 import { User, DatabaseInterface } from '@accounts/types';
 
 // Client
 import { AccountsClient } from '@accounts/client';
 import { AccountsClientPassword } from '@accounts/client-password';
-import { AccountsGraphQLClient } from '@accounts/graphql-client';
-
-import ApolloClient from 'apollo-boost';
+import { RestClient } from '@accounts/rest-client';
 
 import { DatabaseTestInterface } from '../databases';
 import { DatabaseTest } from '../databases/mongo';
@@ -21,14 +20,14 @@ import { ServerTestInterface } from './index';
 
 (global as any).fetch = fetch;
 
-const urlString = 'http://localhost:4000';
+const port = 3000;
 
 const convertUrlToToken = (url: string): string => {
   const split = url.split('/');
   return split[split.length - 1];
 };
 
-export class ServerGraphqlTest implements ServerTestInterface {
+export class ServerRestTest implements ServerTestInterface {
   public accountsServer: AccountsServer;
   public accountsPassword: AccountsPassword;
   public accountsDatabase: DatabaseInterface;
@@ -38,8 +37,9 @@ export class ServerGraphqlTest implements ServerTestInterface {
 
   public emails: any[];
 
-  private apolloServer: ApolloServer;
   private databaseTest: DatabaseTestInterface;
+  private app: express.Express;
+  private server?: http.Server;
 
   constructor() {
     this.databaseTest = new DatabaseTest();
@@ -72,41 +72,41 @@ export class ServerGraphqlTest implements ServerTestInterface {
         password: this.accountsPassword,
       }
     );
-    const accountsGraphQL = createAccountsGraphQL(this.accountsServer);
 
-    const typeDefs = gql`
-      type Query {
-        _: Boolean
-      }
-      type Mutation {
-        _: Boolean
-      }
-    `;
-    this.apolloServer = new ApolloServer({
-      typeDefs: [gql(accountsGraphQL.typeDefs), typeDefs],
-      resolvers: merge(accountsGraphQL.resolvers),
-      context: ({ req }: any) => ({
-        ...accountsContext(req),
-      }),
+    /**
+     * Setup express
+     */
+    this.app = express();
+    this.app.use(bodyParser.json());
+    this.app.use(bodyParser.urlencoded({ extended: true }));
+    this.app.use(accountsExpress(this.accountsServer));
+
+    const accountsRest = new RestClient({
+      apiHost: `http://localhost:${port}`,
+      rootPath: '/accounts',
     });
-
-    const apolloClient = new ApolloClient({ uri: urlString });
-
-    const accountsClientGraphQL = new AccountsGraphQLClient({
-      graphQLClient: apolloClient,
-    });
-    this.accountsClient = new AccountsClient({}, accountsClientGraphQL);
+    this.accountsClient = new AccountsClient({}, accountsRest);
     this.accountsClientPassword = new AccountsClientPassword(this.accountsClient);
     this.emails = [];
   }
 
   public async start() {
-    await this.apolloServer.listen();
+    await new Promise((resolve, reject) => {
+      this.server = this.app.listen(port, (err: Error) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve();
+      });
+    });
     await this.databaseTest.start();
   }
 
   public async stop() {
-    await this.apolloServer.stop();
+    if (this.server) {
+      await new Promise(resolve => this.server!.close(resolve));
+    }
     await this.databaseTest.stop();
   }
 }
