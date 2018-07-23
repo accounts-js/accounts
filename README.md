@@ -1,6 +1,6 @@
 # accounts
 
-_Fullstack authentication and accounts-management for GraphQL and REST_
+Fullstack authentication and accounts-management for GraphQL and REST
 
 [![Backers on Open Collective](https://opencollective.com/accounts-js/backers/badge.svg)](#backers)
 [![Sponsors on Open Collective](https://opencollective.com/accounts-js/sponsors/badge.svg)](#sponsors)
@@ -9,63 +9,35 @@ _Fullstack authentication and accounts-management for GraphQL and REST_
 [![codecov](https://codecov.io/gh/accounts-js/accounts/branch/master/graph/badge.svg)](https://codecov.io/gh/accounts-js/accounts)
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-## Note
+_Note: This package, along with the rest of the packages under the `accounts-js` organization are under active development—expect breaking changes with minor version updates._
 
-This package, along with the rest of the packages under the `accounts-js` organization are under active development, expect changes on minor versions.
+**[Documentation](https://accounts-js.netlify.com/docs/introduction/)**
 
-## Getting Started
+**[Examples](https://accounts-js.netlify.com/examples/)**
 
-Install the core package.
+## Contributing
 
-```
-npm i -S @accounts/server
-```
-
-Next install the package based on the the type of transport and the web framework you are using. We support GraphQL and REST for the transport and Express.
-
-```
-npm i -S @accounts/rest-express
-```
-
-Finally you'll need a data store adapter. We support the following data stores.
-
-- [x] [Mongo](https://github.com/accounts-js/mongo)
-- [x] [Redis](https://github.com/accounts-js/redis)
-- [ ] [SQL](https://github.com/accounts-js/sql) with [sequelize](http://docs.sequelizejs.com/en/v3/)
-
-```
-npm i -S @accounts/mongo
-npm i -S @accounts/redis
-npm i -S @accounts/sql
-```
-
-## GraphQL
-
-To get started with AccountsJS with GraphQL, see the [README](https://github.com/accounts-js/accounts/blob/master/packages/graphql-api/README.md) in the @accounts/graphql-api package.
-
-## Examples
-
-You can find a working examples [here](https://github.com/accounts-js/examples).
-
-## Community
+See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 - Slack - accounts-js.slack.com
 - [Meeting notes](https://github.com/accounts-js/accounts/blob/master/MEETINGS.md)
 
-## Contributors
+## Thank you
 
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="graphs/contributors"><img src="https://opencollective.com/accounts-js/contributors.svg?width=890" /></a>
+This project exists thanks to all the people who contribute:
+<a href="https://github.com/accounts-js/accounts/graphs/contributors"><img src="https://opencollective.com/accounts-js/contributors.svg?width=890" /></a>
 
-## Backers
+### Backers
 
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/accounts-js#backer)]
+Thank you to all our backers! 🙏
 
 <a href="https://opencollective.com/accounts-js#backers" target="_blank"><img src="https://opencollective.com/accounts-js/backers.svg?width=890"></a>
 
-## Sponsors
+### Sponsors
 
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/accounts-js#sponsor)]
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website.
+
+[Become a sponsor](https://opencollective.com/accounts-js#sponsor)
 
 <a href="https://opencollective.com/accounts-js/sponsor/0/website" target="_blank"><img src="https://opencollective.com/accounts-js/sponsor/0/avatar.svg"></a>
 <a href="https://opencollective.com/accounts-js/sponsor/1/website" target="_blank"><img src="https://opencollective.com/accounts-js/sponsor/1/avatar.svg"></a>

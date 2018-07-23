@@ -167,9 +167,9 @@
   dependencies:
     "@types/express" "*"
 
-"@types/crypto-js@3.1.41":
-  version "3.1.41"
-  resolved "https://registry.yarnpkg.com/@types/crypto-js/-/crypto-js-3.1.41.tgz#50727bd54f13991288d1aff66d1f6b6e68f7b2f3"
+"@types/crypto-js@3.1.42":
+  version "3.1.42"
+  resolved "https://registry.yarnpkg.com/@types/crypto-js/-/crypto-js-3.1.42.tgz#00f6b6a037693c2dc5e8dcf303e7e682751bb282"
 
 "@types/events@*":
   version "1.2.0"
@@ -228,6 +228,10 @@
   version "23.0.2"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.0.2.tgz#f03f9e6dd2206cc2a2e8fd033161b0b7cf905db6"
 
+"@types/jest@23.3.0":
+  version "23.3.0"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.0.tgz#5dd70033b616a6228042244ebd992f6426808810"
+
 "@types/jsonwebtoken@7.2.7":
   version "7.2.7"
   resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-7.2.7.tgz#5dd62e0c0a0c6f211c3c1d13d322360894625b47"
@@ -238,7 +242,11 @@
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@types/jwt-decode/-/jwt-decode-2.2.1.tgz#afdf5c527fcfccbd4009b5fd02d1e18241f2d2f2"
 
-"@types/lodash@4.14.109", "@types/lodash@^4.14.109":
+"@types/lodash@4.14.112":
+  version "4.14.112"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.112.tgz#4a8d8e5716b97a1ac01fe1931ad1e4cba719de5a"
+
+"@types/lodash@^4.14.109":
   version "4.14.109"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.109.tgz#b1c4442239730bf35cabaf493c772b18c045886d"
 
