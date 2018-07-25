@@ -105,32 +105,6 @@ describe('AccountsServer', () => {
   });
 
   describe('logout', () => {
-    it('throws error if user is not found', async () => {
-      const accountsServer = new AccountsServer(
-        {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                id: '456',
-                valid: true,
-                userId: '123',
-              }),
-            findUserById: () => Promise.resolve(null),
-          } as any,
-          tokenSecret: 'secret1',
-        },
-        {}
-      );
-      try {
-        const { accessToken } = accountsServer.createTokens('456');
-        await accountsServer.logout(accessToken);
-        throw new Error();
-      } catch (err) {
-        const { message } = err;
-        expect(message).toEqual('User not found');
-      }
-    });
-
     it('invalidates session', async () => {
       const invalidateSession = jest.fn(() => Promise.resolve());
       const user = {
@@ -147,7 +121,6 @@ describe('AccountsServer', () => {
                 valid: true,
                 userId: '123',
               }),
-            findUserById: () => Promise.resolve(user),
             invalidateSession,
           } as any,
           tokenSecret: 'secret1',
