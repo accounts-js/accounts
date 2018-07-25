@@ -340,15 +340,8 @@ Please change it with a strong random token.`);
       const session: Session = await this.findSessionByAccessToken(accessToken);
 
       if (session.valid) {
-        const user = await this.db.findUserById(session.userId);
-
-        if (!user) {
-          throw new Error('User not found');
-        }
-
         await this.db.invalidateSession(session.id);
         this.hooks.emit(ServerHooks.LogoutSuccess, {
-          user: this.sanitizeUser(user),
           session,
           accessToken,
         });
