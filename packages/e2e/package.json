@@ -27,12 +27,12 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
-    "@types/body-parser": "^1.17.0",
-    "@types/express": "^4.16.0",
+    "@types/body-parser": "1.17.0",
+    "@types/express": "4.16.0",
     "@types/jest": "23.0.2",
     "@types/node": "9.6.7",
     "jest": "23.1.0",
-    "jest-localstorage-mock": "^2.2.0"
+    "jest-localstorage-mock": "2.2.0"
   },
   "dependencies": {
     "@accounts/client": "^0.3.0-beta.22",
@@ -45,16 +45,16 @@
     "@accounts/rest-express": "^0.3.0-beta.22",
     "@accounts/server": "^0.3.0-beta.22",
     "@accounts/types": "^0.3.0-beta.22",
-    "@types/lodash": "^4.14.111",
-    "@types/mongoose": "^5.2.0",
-    "@types/node-fetch": "^2.1.1",
-    "apollo-boost": "^0.1.10",
-    "apollo-server": "^2.0.0-rc.7",
-    "body-parser": "^1.18.3",
-    "express": "^4.16.3",
-    "graphql": "^0.13.2",
-    "lodash": "^4.17.10",
-    "mongoose": "^5.2.3",
-    "node-fetch": "^2.1.2"
+    "@types/lodash": "4.14.111",
+    "@types/mongoose": "5.2.0",
+    "@types/node-fetch": "2.1.1",
+    "apollo-boost": "0.1.10",
+    "apollo-server": "2.0.0-rc.7",
+    "body-parser": "1.18.3",
+    "express": "4.16.3",
+    "graphql": "0.13.2",
+    "lodash": "4.17.10",
+    "mongoose": "5.2.3",
+    "node-fetch": "2.1.2"
   }
 }
