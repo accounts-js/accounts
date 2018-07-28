@@ -12,6 +12,7 @@ describe('verifyEmail', () => {
 
   describe('verifyEmail', () => {
     it('calls password.verifyEmail and returns a message', async () => {
+      const message = 'Email verified';
       const passwordService = {
         verifyEmail: jest.fn(() => null),
       };
@@ -34,7 +35,7 @@ describe('verifyEmail', () => {
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.verifyEmail).toBeCalledWith('token');
-      expect(res.json).toBeCalledWith(null);
+      expect(res.json).toBeCalledWith({ message });
       expect(res.status).not.toBeCalled();
     });
 
@@ -70,6 +71,7 @@ describe('verifyEmail', () => {
 
   describe('sendVerificationEmail', () => {
     it('calls password.sendVerificationEmail and returns a message', async () => {
+      const message = 'Email sent';
       const passwordService = {
         sendVerificationEmail: jest.fn(() => null),
       };
@@ -92,7 +94,7 @@ describe('verifyEmail', () => {
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.sendVerificationEmail).toBeCalledWith('email');
-      expect(res.json).toBeCalledWith(null);
+      expect(res.json).toBeCalledWith({ message });
       expect(res.status).not.toBeCalled();
     });
 

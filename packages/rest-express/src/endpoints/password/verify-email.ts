@@ -10,7 +10,7 @@ export const verifyEmail = (accountsServer: AccountsServer) => async (
     const { token } = req.body;
     const password: any = accountsServer.getServices().password;
     await password.verifyEmail(token);
-    res.json(null);
+    res.json({ message: 'Email verified' });
   } catch (err) {
     sendError(res, err);
   }
@@ -24,7 +24,7 @@ export const sendVerificationEmail = (accountsServer: AccountsServer) => async (
     const { email } = req.body;
     const password: any = accountsServer.getServices().password;
     await password.sendVerificationEmail(email);
-    res.json(null);
+    res.json({ message: 'Email sent' });
   } catch (err) {
     sendError(res, err);
   }

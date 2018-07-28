@@ -15,7 +15,7 @@ export const changePassword = (accountsServer: AccountsServer) => async (
     const { oldPassword, newPassword } = req.body;
     const password: any = accountsServer.getServices().password;
     await password.changePassword((req as any).userId, oldPassword, newPassword);
-    res.json(null);
+    res.json({ message: 'Password changed' });
   } catch (err) {
     sendError(res, err);
   }
