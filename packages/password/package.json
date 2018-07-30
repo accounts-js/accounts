@@ -33,9 +33,9 @@
     "@accounts/types": "^0.3.0-beta.22",
     "@types/bcryptjs": "2.4.1",
     "@types/jest": "23.3.1",
-    "@types/lodash": "4.14.112",
+    "@types/lodash": "4.14.115",
     "@types/node": "9.6.15",
-    "jest": "23.1.0",
+    "jest": "23.4.2",
     "rimraf": "2.6.2"
   },
   "peerDependencies": {
