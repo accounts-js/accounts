@@ -24,7 +24,7 @@
   "homepage": "https://github.com/js-accounts/graphql-api",
   "devDependencies": {
     "@gql2ts/from-schema": "1.8.0",
-    "@gql2ts/types": "1.8.0",
+    "@gql2ts/types": "1.8.1",
     "@types/graphql": "0.13.3",
     "concurrently": "3.1.0",
     "graphql": "0.13.2",

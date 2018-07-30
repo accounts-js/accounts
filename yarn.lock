@@ -40,15 +40,19 @@
     humps "^2.0.0"
     typescript "^2.2.2"
 
-"@gql2ts/types@1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@gql2ts/types/-/types-1.8.0.tgz#ee20fa55b157352b4a96ba647c1d3e1c0b0b4184"
+"@gql2ts/types@1.8.1":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@gql2ts/types/-/types-1.8.1.tgz#7e132abe07d612e53f543a5dc607aa7e2391d160"
   dependencies:
-    "@gql2ts/util" "^1.8.0"
+    "@gql2ts/util" "^1.8.1"
 
 "@gql2ts/util@^1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.8.0.tgz#23612425b43ba1a6534e7783137276f4f567a417"
+
+"@gql2ts/util@^1.8.1":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.8.1.tgz#a1260a741084a2232b45daee2b274fb64da332df"
 
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
