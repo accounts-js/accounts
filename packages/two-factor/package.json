@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@types/jest": "23.3.1",
-    "@types/node": "9.6.15",
+    "@types/node": "10.5.4",
     "jest": "23.4.2"
   }
 }
