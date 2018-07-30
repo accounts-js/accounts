@@ -3,11 +3,13 @@ import { MutationResolvers } from '../types/graphql';
 
 export const logout = (accountsServer: AccountsServer): MutationResolvers.LogoutResolver => async (
   _: null,
-  args
+  args,
+  context
 ) => {
   const { accessToken } = args;
+  const { authToken } = context;
 
-  await accountsServer.logout(accessToken);
+  await accountsServer.logout(accessToken || authToken);
 
   return null;
 };
