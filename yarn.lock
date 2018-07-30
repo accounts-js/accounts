@@ -23,20 +23,20 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-"@gql2ts/from-schema@1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@gql2ts/from-schema/-/from-schema-1.8.0.tgz#12f2b860c0a7948d048e1155845fdba5a2be4a1d"
+"@gql2ts/from-schema@1.8.1":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@gql2ts/from-schema/-/from-schema-1.8.1.tgz#642637b0f26bdbb41ea42f16f6a9d873647ace49"
   dependencies:
-    "@gql2ts/language-typescript" "^1.8.0"
-    "@gql2ts/util" "^1.8.0"
+    "@gql2ts/language-typescript" "^1.8.1"
+    "@gql2ts/util" "^1.8.1"
     dedent "^0.7.0"
     graphql ">= 0.10 <1.0.0"
 
-"@gql2ts/language-typescript@^1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@gql2ts/language-typescript/-/language-typescript-1.8.0.tgz#af61acd14f789c3175198426bef7fbf0a2954a4a"
+"@gql2ts/language-typescript@^1.8.1":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@gql2ts/language-typescript/-/language-typescript-1.8.1.tgz#d194a9b6f2023583e6ba738a45ac47529bb2595f"
   dependencies:
-    "@gql2ts/util" "^1.8.0"
+    "@gql2ts/util" "^1.8.1"
     humps "^2.0.0"
     typescript "^2.2.2"
 
@@ -45,10 +45,6 @@
   resolved "https://registry.yarnpkg.com/@gql2ts/types/-/types-1.8.1.tgz#7e132abe07d612e53f543a5dc607aa7e2391d160"
   dependencies:
     "@gql2ts/util" "^1.8.1"
-
-"@gql2ts/util@^1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.8.0.tgz#23612425b43ba1a6534e7783137276f4f567a417"
 
 "@gql2ts/util@^1.8.1":
   version "1.8.1"
