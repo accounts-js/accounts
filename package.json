@@ -4,6 +4,7 @@
     "setup": "lerna bootstrap",
     "start": "lerna exec -- yarn start",
     "link": "lerna exec -- yarn link",
+    "unlink": "lerna exec -- yarn unlink",
     "clean": "lerna run clean",
     "compile": "lerna run compile",
     "lint": "tslint packages/*/{src,__tests__}/**/*.ts",
