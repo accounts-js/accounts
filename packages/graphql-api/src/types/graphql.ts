@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { GraphQLResolveInfo } from 'graphql';
 
-type Resolver<Result, Args = any> = (
+export type Resolver<Result, Args = any> = (
   parent: any,
   args: Args,
   context: any,
@@ -66,179 +66,6 @@ export interface Tokens {
 export interface LoginResult {
   sessionId?: string | null;
   tokens?: Tokens | null;
-}
-
-export namespace QueryResolvers {
-  export interface Resolvers {
-    getUser?: GetUserResolver;
-    twoFactorSecret?: TwoFactorSecretResolver;
-  }
-
-  export type GetUserResolver = Resolver<User | null, GetUserArgs>;
-  export interface GetUserArgs {
-    accessToken: string;
-  }
-
-  export type TwoFactorSecretResolver = Resolver<TwoFactorSecretKey | null>;
-}
-
-export namespace UserResolvers {
-  export interface Resolvers {
-    id?: IdResolver;
-    emails?: EmailsResolver;
-    username?: UsernameResolver;
-  }
-
-  export type IdResolver = Resolver<string>;
-  export type EmailsResolver = Resolver<EmailRecord[] | null>;
-  export type UsernameResolver = Resolver<string | null>;
-}
-
-export namespace EmailRecordResolvers {
-  export interface Resolvers {
-    address?: AddressResolver;
-    verified?: VerifiedResolver;
-  }
-
-  export type AddressResolver = Resolver<string | null>;
-  export type VerifiedResolver = Resolver<boolean | null>;
-}
-
-export namespace TwoFactorSecretKeyResolvers {
-  export interface Resolvers {
-    ascii?: AsciiResolver;
-    base32?: Base32Resolver;
-    hex?: HexResolver;
-    qr_code_ascii?: Qr_code_asciiResolver;
-    qr_code_hex?: Qr_code_hexResolver;
-    qr_code_base32?: Qr_code_base32Resolver;
-    google_auth_qr?: Google_auth_qrResolver;
-    otpauth_url?: Otpauth_urlResolver;
-  }
-
-  export type AsciiResolver = Resolver<string | null>;
-  export type Base32Resolver = Resolver<string | null>;
-  export type HexResolver = Resolver<string | null>;
-  export type Qr_code_asciiResolver = Resolver<string | null>;
-  export type Qr_code_hexResolver = Resolver<string | null>;
-  export type Qr_code_base32Resolver = Resolver<string | null>;
-  export type Google_auth_qrResolver = Resolver<string | null>;
-  export type Otpauth_urlResolver = Resolver<string | null>;
-}
-
-export namespace MutationResolvers {
-  export interface Resolvers {
-    impersonate?: ImpersonateResolver;
-    refreshTokens?: RefreshTokensResolver;
-    logout?: LogoutResolver;
-    authenticate?: AuthenticateResolver /** Example: Login with passwordauthenticate(serviceName: "password", params: {password: "<pw>", user: {email: "<email>"}}) */;
-    register?: RegisterResolver /** register returns the id corresponding db ids, such as number IDs, ObjectIDs or UUIDs */;
-    verifyEmail?: VerifyEmailResolver;
-    resetPassword?: ResetPasswordResolver;
-    sendVerificationEmail?: SendVerificationEmailResolver;
-    sendResetPasswordEmail?: SendResetPasswordEmailResolver;
-    changePassword?: ChangePasswordResolver;
-    twoFactorSet?: TwoFactorSetResolver;
-    twoFactorUnset?: TwoFactorUnsetResolver;
-  }
-
-  export type ImpersonateResolver = Resolver<ImpersonateReturn | null, ImpersonateArgs>;
-  export interface ImpersonateArgs {
-    accessToken: string;
-    username: string;
-  }
-
-  export type RefreshTokensResolver = Resolver<LoginResult | null, RefreshTokensArgs>;
-  export interface RefreshTokensArgs {
-    accessToken: string;
-    refreshToken: string;
-  }
-
-  export type LogoutResolver = Resolver<boolean | null, LogoutArgs>;
-  export interface LogoutArgs {
-    accessToken: string;
-  }
-
-  export type AuthenticateResolver = Resolver<LoginResult | null, AuthenticateArgs>;
-  export interface AuthenticateArgs {
-    serviceName: string;
-    params: AuthenticateParamsInput;
-  }
-
-  export type RegisterResolver = Resolver<string | null, RegisterArgs>;
-  export interface RegisterArgs {
-    user: CreateUserInput;
-  }
-
-  export type VerifyEmailResolver = Resolver<boolean | null, VerifyEmailArgs>;
-  export interface VerifyEmailArgs {
-    token: string;
-  }
-
-  export type ResetPasswordResolver = Resolver<boolean | null, ResetPasswordArgs>;
-  export interface ResetPasswordArgs {
-    token: string;
-    newPassword: string;
-  }
-
-  export type SendVerificationEmailResolver = Resolver<boolean | null, SendVerificationEmailArgs>;
-  export interface SendVerificationEmailArgs {
-    email: string;
-  }
-
-  export type SendResetPasswordEmailResolver = Resolver<boolean | null, SendResetPasswordEmailArgs>;
-  export interface SendResetPasswordEmailArgs {
-    email: string;
-  }
-
-  export type ChangePasswordResolver = Resolver<boolean | null, ChangePasswordArgs>;
-  export interface ChangePasswordArgs {
-    oldPassword: string;
-    newPassword: string;
-  }
-
-  export type TwoFactorSetResolver = Resolver<boolean | null, TwoFactorSetArgs>;
-  export interface TwoFactorSetArgs {
-    secret: TwoFactorSecretKeyInput;
-    code: string;
-  }
-
-  export type TwoFactorUnsetResolver = Resolver<boolean | null, TwoFactorUnsetArgs>;
-  export interface TwoFactorUnsetArgs {
-    code: string;
-  }
-}
-
-export namespace ImpersonateReturnResolvers {
-  export interface Resolvers {
-    authorized?: AuthorizedResolver;
-    tokens?: TokensResolver;
-    user?: UserResolver;
-  }
-
-  export type AuthorizedResolver = Resolver<boolean | null>;
-  export type TokensResolver = Resolver<Tokens | null>;
-  export type UserResolver = Resolver<User | null>;
-}
-
-export namespace TokensResolvers {
-  export interface Resolvers {
-    refreshToken?: RefreshTokenResolver;
-    accessToken?: AccessTokenResolver;
-  }
-
-  export type RefreshTokenResolver = Resolver<string | null>;
-  export type AccessTokenResolver = Resolver<string | null>;
-}
-
-export namespace LoginResultResolvers {
-  export interface Resolvers {
-    sessionId?: SessionIdResolver;
-    tokens?: TokensResolver;
-  }
-
-  export type SessionIdResolver = Resolver<string | null>;
-  export type TokensResolver = Resolver<Tokens | null>;
 }
 
 export interface AuthenticateParamsInput {
@@ -316,4 +143,183 @@ export interface TwoFactorSetMutationArgs {
 }
 export interface TwoFactorUnsetMutationArgs {
   code: string;
+}
+
+export namespace QueryResolvers {
+  export interface Resolvers {
+    getUser?: GetUserResolver;
+    twoFactorSecret?: TwoFactorSecretResolver;
+  }
+
+  export type GetUserResolver<R = User | null> = Resolver<R, GetUserArgs>;
+  export interface GetUserArgs {
+    accessToken: string;
+  }
+
+  export type TwoFactorSecretResolver<R = TwoFactorSecretKey | null> = Resolver<R>;
+}
+
+export namespace UserResolvers {
+  export interface Resolvers {
+    id?: IdResolver;
+    emails?: EmailsResolver;
+    username?: UsernameResolver;
+  }
+
+  export type IdResolver<R = string> = Resolver<R>;
+  export type EmailsResolver<R = EmailRecord[] | null> = Resolver<R>;
+  export type UsernameResolver<R = string | null> = Resolver<R>;
+}
+
+export namespace EmailRecordResolvers {
+  export interface Resolvers {
+    address?: AddressResolver;
+    verified?: VerifiedResolver;
+  }
+
+  export type AddressResolver<R = string | null> = Resolver<R>;
+  export type VerifiedResolver<R = boolean | null> = Resolver<R>;
+}
+
+export namespace TwoFactorSecretKeyResolvers {
+  export interface Resolvers {
+    ascii?: AsciiResolver;
+    base32?: Base32Resolver;
+    hex?: HexResolver;
+    qr_code_ascii?: QrCodeAsciiResolver;
+    qr_code_hex?: QrCodeHexResolver;
+    qr_code_base32?: QrCodeBase32Resolver;
+    google_auth_qr?: GoogleAuthQrResolver;
+    otpauth_url?: OtpauthUrlResolver;
+  }
+
+  export type AsciiResolver<R = string | null> = Resolver<R>;
+  export type Base32Resolver<R = string | null> = Resolver<R>;
+  export type HexResolver<R = string | null> = Resolver<R>;
+  export type QrCodeAsciiResolver<R = string | null> = Resolver<R>;
+  export type QrCodeHexResolver<R = string | null> = Resolver<R>;
+  export type QrCodeBase32Resolver<R = string | null> = Resolver<R>;
+  export type GoogleAuthQrResolver<R = string | null> = Resolver<R>;
+  export type OtpauthUrlResolver<R = string | null> = Resolver<R>;
+}
+
+export namespace MutationResolvers {
+  export interface Resolvers {
+    impersonate?: ImpersonateResolver;
+    refreshTokens?: RefreshTokensResolver;
+    logout?: LogoutResolver;
+    authenticate?: AuthenticateResolver /** Example: Login with passwordauthenticate(serviceName: "password", params: {password: "<pw>", user: {email: "<email>"}}) */;
+    register?: RegisterResolver /** register returns the id corresponding db ids, such as number IDs, ObjectIDs or UUIDs */;
+    verifyEmail?: VerifyEmailResolver;
+    resetPassword?: ResetPasswordResolver;
+    sendVerificationEmail?: SendVerificationEmailResolver;
+    sendResetPasswordEmail?: SendResetPasswordEmailResolver;
+    changePassword?: ChangePasswordResolver;
+    twoFactorSet?: TwoFactorSetResolver;
+    twoFactorUnset?: TwoFactorUnsetResolver;
+  }
+
+  export type ImpersonateResolver<R = ImpersonateReturn | null> = Resolver<R, ImpersonateArgs>;
+  export interface ImpersonateArgs {
+    accessToken: string;
+    username: string;
+  }
+
+  export type RefreshTokensResolver<R = LoginResult | null> = Resolver<R, RefreshTokensArgs>;
+  export interface RefreshTokensArgs {
+    accessToken: string;
+    refreshToken: string;
+  }
+
+  export type LogoutResolver<R = boolean | null> = Resolver<R, LogoutArgs>;
+  export interface LogoutArgs {
+    accessToken: string;
+  }
+
+  export type AuthenticateResolver<R = LoginResult | null> = Resolver<R, AuthenticateArgs>;
+  export interface AuthenticateArgs {
+    serviceName: string;
+    params: AuthenticateParamsInput;
+  }
+
+  export type RegisterResolver<R = string | null> = Resolver<R, RegisterArgs>;
+  export interface RegisterArgs {
+    user: CreateUserInput;
+  }
+
+  export type VerifyEmailResolver<R = boolean | null> = Resolver<R, VerifyEmailArgs>;
+  export interface VerifyEmailArgs {
+    token: string;
+  }
+
+  export type ResetPasswordResolver<R = boolean | null> = Resolver<R, ResetPasswordArgs>;
+  export interface ResetPasswordArgs {
+    token: string;
+    newPassword: string;
+  }
+
+  export type SendVerificationEmailResolver<R = boolean | null> = Resolver<
+    R,
+    SendVerificationEmailArgs
+  >;
+  export interface SendVerificationEmailArgs {
+    email: string;
+  }
+
+  export type SendResetPasswordEmailResolver<R = boolean | null> = Resolver<
+    R,
+    SendResetPasswordEmailArgs
+  >;
+  export interface SendResetPasswordEmailArgs {
+    email: string;
+  }
+
+  export type ChangePasswordResolver<R = boolean | null> = Resolver<R, ChangePasswordArgs>;
+  export interface ChangePasswordArgs {
+    oldPassword: string;
+    newPassword: string;
+  }
+
+  export type TwoFactorSetResolver<R = boolean | null> = Resolver<R, TwoFactorSetArgs>;
+  export interface TwoFactorSetArgs {
+    secret: TwoFactorSecretKeyInput;
+    code: string;
+  }
+
+  export type TwoFactorUnsetResolver<R = boolean | null> = Resolver<R, TwoFactorUnsetArgs>;
+  export interface TwoFactorUnsetArgs {
+    code: string;
+  }
+}
+
+export namespace ImpersonateReturnResolvers {
+  export interface Resolvers {
+    authorized?: AuthorizedResolver;
+    tokens?: TokensResolver;
+    user?: UserResolver;
+  }
+
+  export type AuthorizedResolver<R = boolean | null> = Resolver<R>;
+  export type TokensResolver<R = Tokens | null> = Resolver<R>;
+  export type UserResolver<R = User | null> = Resolver<R>;
+}
+
+export namespace TokensResolvers {
+  export interface Resolvers {
+    refreshToken?: RefreshTokenResolver;
+    accessToken?: AccessTokenResolver;
+  }
+
+  export type RefreshTokenResolver<R = string | null> = Resolver<R>;
+  export type AccessTokenResolver<R = string | null> = Resolver<R>;
+}
+
+export namespace LoginResultResolvers {
+  export interface Resolvers {
+    sessionId?: SessionIdResolver;
+    tokens?: TokensResolver;
+  }
+
+  export type SessionIdResolver<R = string | null> = Resolver<R>;
+  export type TokensResolver<R = Tokens | null> = Resolver<R>;
 }
