@@ -9,7 +9,7 @@ export const getUser = (accountsServer: AccountsServer): QueryResolvers.GetUserR
   const { accessToken } = args;
   const { authToken } = context;
 
-  const { token } = accessToken || authToken;
+  const token = accessToken || authToken;
 
   return token && accountsServer.resumeSession(token);
 };
