@@ -41,15 +41,15 @@
     "@accounts/database-tests": "^0.3.0-beta.22",
     "@types/ioredis": "3.2.13",
     "@types/jest": "23.3.1",
-    "@types/lodash": "4.14.112",
-    "@types/node": "9.6.7",
+    "@types/lodash": "4.14.115",
+    "@types/node": "10.5.4",
     "@types/shortid": "0.0.29",
-    "jest": "23.1.0"
+    "jest": "23.4.2"
   },
   "dependencies": {
     "@accounts/types": "^0.3.0-beta.22",
     "ioredis": "^3.2.2",
     "lodash": "^4.17.4",
-    "shortid": "^2.2.8"
+    "shortid": "^2.2.12"
   }
 }
