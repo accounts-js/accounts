@@ -1,5 +1,5 @@
 export const queries = `
-  getUser(accessToken: String!): User
+  getUser(accessToken: String): User
 `;
 
 export const queriesPassword = `
