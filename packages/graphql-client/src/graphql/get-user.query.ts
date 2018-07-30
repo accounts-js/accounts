@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const getUserQuery = gql`
-  query($accessToken: String!) {
+  query($accessToken: String) {
     getUser(accessToken: $accessToken) {
       id
       emails {

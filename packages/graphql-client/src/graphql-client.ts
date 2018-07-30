@@ -56,14 +56,14 @@ export default class GraphQLClient implements TransportInterface {
     });
   }
 
-  public async getUser(accessToken: string): Promise<User> {
+  public async getUser(accessToken?: string): Promise<User> {
     return this.query(getUserQuery, 'getUser', { accessToken });
   }
 
   /**
    * @inheritDoc
    */
-  public async logout(accessToken: string): Promise<void> {
+  public async logout(accessToken?: string): Promise<void> {
     return this.mutate(logoutMutation, 'logout', { accessToken });
   }
 
