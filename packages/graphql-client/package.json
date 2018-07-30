@@ -1,11 +1,13 @@
 {
   "name": "@accounts/graphql-client",
-  "version": "0.3.0-beta.20",
+  "version": "0.3.0-beta.23",
   "description": "GraphQL client transport for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
+    "clean": "rimraf lib",
     "start": "tsc --watch",
+    "precompile": "yarn clean",
     "compile": "tsc",
     "prepublishOnly": "yarn compile"
   },
@@ -31,13 +33,12 @@
   },
   "homepage": "https://github.com/js-accounts/graphql#readme",
   "devDependencies": {
-    "lodash": "4.16.4",
-    "nock": "9.0.2"
+    "lodash": "4.17.10",
+    "nock": "9.4.3"
   },
   "dependencies": {
-    "@accounts/client": "^0.3.0-beta.20",
-    "@accounts/common": "0.1.0-alpha.58382c10",
-    "@accounts/types": "^0.3.0-beta.20",
+    "@accounts/client": "^0.3.0-beta.23",
+    "@accounts/types": "^0.3.0-beta.23",
     "graphql-tag": "^1.1.2"
   }
 }

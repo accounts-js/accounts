@@ -1,16 +1,18 @@
 {
   "name": "@accounts/mongo",
-  "version": "0.3.0-beta.20",
+  "version": "0.3.0-beta.23",
   "description": "MongoDB adaptor for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
+    "clean": "rimraf lib",
     "start": "tsc --watch",
+    "precompile": "yarn clean",
     "compile": "tsc",
+    "prepublishOnly": "yarn compile",
     "testonly": "jest",
     "test:watch": "jest --watch",
-    "coverage": "yarn testonly --coverage",
-    "prepublishOnly": "yarn compile"
+    "coverage": "yarn testonly --coverage"
   },
   "files": [
     "src",
@@ -33,16 +35,16 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
-    "@accounts/database-tests": "^0.3.0-beta.20",
-    "@types/jest": "23.0.2",
-    "@types/lodash": "4.14.109",
-    "@types/mongodb": "3.0.19",
-    "@types/node": "9.6.15",
-    "jest": "23.1.0"
+    "@accounts/database-tests": "^0.3.0-beta.23",
+    "@types/jest": "23.3.1",
+    "@types/lodash": "4.14.115",
+    "@types/mongodb": "3.1.2",
+    "@types/node": "10.5.4",
+    "jest": "23.4.2"
   },
   "dependencies": {
-    "@accounts/types": "^0.3.0-beta.20",
+    "@accounts/types": "^0.3.0-beta.23",
     "lodash": "^4.17.4",
-    "mongodb": "^3.0.10"
+    "mongodb": "^3.1.1"
   }
 }

@@ -15,10 +15,6 @@ export const twoFactorSecret = (
 
   const password = accountsServer.getServices().password as AccountsPassword;
 
-  if (!(typeof password.resetPassword === 'function')) {
-    throw new Error('No service handle password modification.');
-  }
-
   // https://github.com/speakeasyjs/speakeasy/blob/master/index.js#L517
   const secret = password.twoFactor.getNewAuthSecret();
   return secret;
@@ -36,13 +32,10 @@ export const twoFactorSet = (
   }
 
   const userId = user.id;
-  const password: any = accountsServer.getServices().password as AccountsPassword;
+  const password = accountsServer.getServices().password as AccountsPassword;
 
-  if (!(password && password.twoFactor && typeof password.twoFactor.set === 'function')) {
-    throw new Error('No service handle set two factor.');
-  }
-
-  return password.twoFactor.set(userId, secret, code);
+  await password.twoFactor.set(userId, secret as any, code);
+  return null;
 };
 
 export const twoFactorUnset = (
@@ -57,11 +50,7 @@ export const twoFactorUnset = (
   }
 
   const userId = user.id;
-  const password: any = accountsServer.getServices().password as AccountsPassword;
-
-  if (!(password && password.twoFactor && typeof password.twoFactor.unset === 'function')) {
-    throw new Error('No service handle two factor.');
-  }
+  const password = accountsServer.getServices().password as AccountsPassword;
 
   await password.twoFactor.unset(userId, code);
   return null;

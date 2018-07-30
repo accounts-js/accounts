@@ -8,3 +8,14 @@
 ```
 yarn add @accounts/client
 ```
+
+## Usage
+
+```js
+import { AccountsClient } from '@accounts/client';
+
+const accountsTransport = // my accounts-js transport, rest or graphql
+const accounts = new AccountsClient({
+  // options
+}, accountsTransport);
+```

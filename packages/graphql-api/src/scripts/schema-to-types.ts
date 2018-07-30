@@ -6,20 +6,23 @@ import { introspectionQuery } from 'graphql/utilities';
 // tslint:disable-next-line
 import { makeExecutableSchema } from 'graphql-tools';
 
-import { mutations } from '../graphql/mutations';
-import { typeDefs } from '../graphql/types';
-import { queries } from '../graphql/queries';
+import { typeDefs, typeDefsPassword } from '../graphql/types';
+import { queries, queriesPassword } from '../graphql/queries';
+import { mutations, mutationsPassword } from '../graphql/mutations';
 
 const schema = `
+  ${typeDefs}
+  ${typeDefsPassword}
+
   type Query {
     ${queries}
+    ${queriesPassword}
   }
 
   type Mutation {
     ${mutations}
+    ${mutationsPassword}
   }
-
-  ${typeDefs}
 
   schema {
     query: Query

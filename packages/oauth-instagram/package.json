@@ -1,11 +1,13 @@
 {
   "name": "@accounts/oauth-instagram",
-  "version": "0.3.0-beta.20",
+  "version": "0.3.0-beta.23",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
+    "clean": "rimraf lib",
     "start": "tsc --watch",
+    "precompile": "yarn clean",
     "compile": "tsc",
     "prepublishOnly": "yarn compile",
     "testonly": "jest",
@@ -26,9 +28,9 @@
     "request-promise": "^4.2.1"
   },
   "devDependencies": {
-    "@types/jest": "23.0.2",
-    "@types/node": "9.6.15",
-    "@types/request-promise": "^4.1.41",
-    "jest": "23.1.0"
+    "@types/jest": "23.3.1",
+    "@types/node": "10.5.4",
+    "@types/request-promise": "4.1.42",
+    "jest": "23.4.2"
   }
 }

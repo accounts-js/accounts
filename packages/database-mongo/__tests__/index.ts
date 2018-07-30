@@ -733,7 +733,7 @@ describe('Mongo', () => {
   describe('addResetPasswordToken', () => {
     it('should add a token', async () => {
       const userId = await databaseTests.database.createUser(user);
-      await databaseTests.database.addResetPasswordToken(userId, 'john@doe.com', 'token');
+      await databaseTests.database.addResetPasswordToken(userId, 'john@doe.com', 'token', 'reset');
       const retUser = await databaseTests.database.findUserById(userId);
       expect(retUser.services.password.reset.length).toEqual(1);
       expect(retUser.services.password.reset[0].address).toEqual('john@doe.com');

@@ -1,11 +1,15 @@
 import { AccountsServer } from '@accounts/server';
+import { AccountsPassword } from '@accounts/password';
 
 import { refreshAccessToken } from './resolvers/refresh-tokens';
 import { impersonate } from './resolvers/impersonate';
 import { getUser } from './resolvers/get-user';
-import { mutations } from './graphql/mutations';
-import { typeDefs as accountsTypeDefs } from './graphql/types';
-import { queries } from './graphql/queries';
+import { mutations, mutationsPassword } from './graphql/mutations';
+import {
+  typeDefs as accountsTypeDefs,
+  typeDefsPassword as accountsTypePassword,
+} from './graphql/types';
+import { queries, queriesPassword } from './graphql/queries';
 import { logout } from './resolvers/logout';
 import { registerPassword } from './resolvers/register-user';
 import { resetPassword } from './resolvers/reset-password';
@@ -36,6 +40,8 @@ export const createAccountsGraphQL = (
   accountsServer: AccountsServer,
   schemaOptionsUser?: SchemaGenerationOptions
 ) => {
+  const passwordService = accountsServer.getServices().password as AccountsPassword | undefined;
+
   const schemaOptions = {
     ...defaultSchemaOptions,
     ...schemaOptionsUser,
@@ -43,13 +49,16 @@ export const createAccountsGraphQL = (
 
   const typeDefs = `
   ${accountsTypeDefs}
+  ${passwordService ? accountsTypePassword : ''}
 
   ${schemaOptions.extend ? 'extend ' : ''}type ${schemaOptions.rootQueryName} {
     ${queries}
+    ${passwordService ? queriesPassword : ''}
   }
 
   ${schemaOptions.extend ? 'extend ' : ''}type ${schemaOptions.rootMutationName} {
     ${mutations}
+    ${passwordService ? mutationsPassword : ''}
   }
 
   ${
@@ -62,32 +71,41 @@ export const createAccountsGraphQL = (
   }
   `;
 
-  const queryResolvers: QueryResolvers.Resolvers = {
+  let queryResolvers: QueryResolvers.Resolvers = {
     getUser: getUser(accountsServer),
-    twoFactorSecret: authenticated(accountsServer, twoFactorSecret(accountsServer)),
   };
 
-  const mutationResolvers: MutationResolvers.Resolvers = {
+  if (passwordService) {
+    queryResolvers = {
+      ...queryResolvers,
+      twoFactorSecret: authenticated(accountsServer, twoFactorSecret(accountsServer)),
+    };
+  }
+
+  let mutationResolvers: MutationResolvers.Resolvers = {
     impersonate: impersonate(accountsServer),
     refreshTokens: refreshAccessToken(accountsServer),
     logout: logout(accountsServer),
     // 3rd-party services authentication
     authenticate: serviceAuthenticate(accountsServer),
-
-    // @accounts/password
-    register: registerPassword(accountsServer),
-    verifyEmail: verifyEmail(accountsServer),
-    resetPassword: resetPassword(accountsServer),
-    sendVerificationEmail: sendVerificationEmail(accountsServer),
-    sendResetPasswordEmail: sendResetPasswordEmail(accountsServer),
-    changePassword: authenticated(accountsServer, changePassword(accountsServer)),
-
-    // Two factor
-    twoFactorSet: authenticated(accountsServer, twoFactorSet(accountsServer)),
-    twoFactorUnset: authenticated(accountsServer, twoFactorUnset(accountsServer)),
-
     // TODO: OAuth callback endpoint
   };
+
+  if (passwordService) {
+    mutationResolvers = {
+      ...mutationResolvers,
+      register: registerPassword(accountsServer),
+      verifyEmail: verifyEmail(accountsServer),
+      resetPassword: resetPassword(accountsServer),
+      sendVerificationEmail: sendVerificationEmail(accountsServer),
+      sendResetPasswordEmail: sendResetPasswordEmail(accountsServer),
+      changePassword: authenticated(accountsServer, changePassword(accountsServer)),
+
+      // Two factor
+      twoFactorSet: authenticated(accountsServer, twoFactorSet(accountsServer)),
+      twoFactorUnset: authenticated(accountsServer, twoFactorUnset(accountsServer)),
+    };
+  }
 
   const resolvers = {
     [schemaOptions.rootMutationName]: mutationResolvers,

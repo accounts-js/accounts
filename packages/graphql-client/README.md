@@ -1,9 +1,27 @@
-# @accounts/graphql
+# @accounts/graphql-client
 
 _Client side graphql transport for accounts suite_
 
-[![npm](https://img.shields.io/npm/v/@accounts/graphql.svg?maxAge=2592000)](https://www.npmjs.com/package/@accounts/graphql) [![Circle CI](https://circleci.com/gh/js-accounts/graphql.svg?style=shield)](https://circleci.com/gh/js-accounts/graphql) [![Coverage Status](https://coveralls.io/repos/github/js-accounts/graphql/badge.svg?branch=master)](https://coveralls.io/github/js-accounts/graphql?branch=master) ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
+[![npm](https://img.shields.io/npm/v/@accounts/graphql-client.svg?maxAge=2592000)](https://www.npmjs.com/package/@accounts/graphql-client) ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-## Note
+## Install
 
-This package is under active development and just starting to take shape.
+```
+yarn add @accounts/graphql-client
+```
+
+## Usage
+
+```js
+import { ApolloClient } from 'apollo-client';
+import { AccountsGraphQLClient } from '@accounts/graphql-client';
+
+const apolloClient = new ApolloClient({
+  // apollo options
+});
+
+const accountsGraphQL = new GraphQLClient({
+  graphQLClient: apolloClient,
+  // other options
+});
+```

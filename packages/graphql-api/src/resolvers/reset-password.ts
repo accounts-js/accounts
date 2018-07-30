@@ -9,10 +9,6 @@ export const resetPassword = (
 
   const password = accountsServer.getServices().password as AccountsPassword;
 
-  if (!(typeof password.resetPassword === 'function')) {
-    throw new Error('No service handle password reset.');
-  }
-
   await password.resetPassword(token, newPassword);
   return null;
 };

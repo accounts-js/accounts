@@ -44,7 +44,7 @@ export class AccountsServer {
   private db: DatabaseInterface;
   private hooks: Emittery;
 
-  constructor(options: AccountsServerOptions, services: any) {
+  constructor(options: AccountsServerOptions, services: { [key: string]: AuthenticationService }) {
     this.options = merge({ ...defaultOptions }, options);
     if (!this.options.db) {
       throw new Error('A database driver is required');
@@ -56,7 +56,7 @@ You are using the default secret "${this.options.tokenSecret}" which is not secu
 Please change it with a strong random token.`);
     }
 
-    this.services = services;
+    this.services = services || {};
     this.db = this.options.db;
 
     // Set the db to all services
@@ -340,15 +340,8 @@ Please change it with a strong random token.`);
       const session: Session = await this.findSessionByAccessToken(accessToken);
 
       if (session.valid) {
-        const user = await this.db.findUserById(session.userId);
-
-        if (!user) {
-          throw new Error('User not found');
-        }
-
         await this.db.invalidateSession(session.id);
         this.hooks.emit(ServerHooks.LogoutSuccess, {
-          user: this.sanitizeUser(user),
           session,
           accessToken,
         });
@@ -500,6 +493,7 @@ Please change it with a strong random token.`);
       to,
       subject: emailTemplate.subject(user),
       text: emailTemplate.text(user, tokenizedUrl),
+      html: emailTemplate.html && emailTemplate.html(user, tokenizedUrl),
     };
   }
 

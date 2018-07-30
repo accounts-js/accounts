@@ -139,7 +139,12 @@ export default class GraphQLClient implements TransportInterface {
   }
 
   private async mutate(mutation: any, resultField: any, variables: any) {
-    const tokens = (await this.client.refreshSession()) || { accessToken: '' };
+    // If we are executiong a refresh token mutation do not call refress session again
+    // otherwise it will end up in an infinite loop
+    const tokens =
+      mutation === refreshTokensMutation
+        ? await this.client.getTokens()
+        : await this.client.refreshSession();
 
     try {
       const { data } = await this.options.graphQLClient.mutate({
@@ -147,7 +152,7 @@ export default class GraphQLClient implements TransportInterface {
         variables,
         context: {
           headers: {
-            'accounts-access-token': tokens.accessToken,
+            'accounts-access-token': tokens ? tokens.accessToken : '',
           },
         },
       });

@@ -1,6 +1,6 @@
 {
   "name": "@accounts/rest-client",
-  "version": "0.3.0-beta.20",
+  "version": "0.3.0-beta.23",
   "description": "REST client for accounts",
   "main": "lib/index",
   "typings": "lib/index",
@@ -8,14 +8,14 @@
     "access": "public"
   },
   "scripts": {
+    "clean": "rimraf lib",
     "start": "tsc --watch",
-    "precompile": "rimraf ./lib",
+    "precompile": "yarn clean",
     "compile": "tsc",
-    "prepublishOnly": "npm run compile",
+    "prepublishOnly": "yarn compile",
     "test": "npm run testonly",
     "testonly": "jest",
-    "coverage": "npm run testonly -- --coverage",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "coverage": "npm run testonly -- --coverage"
   },
   "jest": {
     "testEnvironment": "jsdom",
@@ -45,18 +45,18 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
-    "@accounts/client": "^0.3.0-beta.20",
-    "@types/jest": "23.0.2",
-    "@types/lodash": "4.14.109",
-    "@types/node": "9.6.15",
-    "jest": "23.1.0",
-    "node-fetch": "2.1.2"
+    "@accounts/client": "^0.3.0-beta.23",
+    "@types/jest": "23.3.1",
+    "@types/lodash": "4.14.115",
+    "@types/node": "10.5.4",
+    "jest": "23.4.2",
+    "node-fetch": "2.2.0"
   },
   "peerDependencies": {
-    "@accounts/client": "^0.1.0-beta.12"
+    "@accounts/client": "^0.3.0-beta.0"
   },
   "dependencies": {
-    "@accounts/types": "^0.3.0-beta.20",
+    "@accounts/types": "^0.3.0-beta.23",
     "lodash": "^4.17.4"
   }
 }

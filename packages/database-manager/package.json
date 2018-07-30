@@ -1,6 +1,6 @@
 {
   "name": "@accounts/database-manager",
-  "version": "0.3.0-beta.20",
+  "version": "0.3.0-beta.23",
   "description": "Accounts Database Manager, allow the use of separate databases for session and user",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -10,9 +10,9 @@
   "scripts": {
     "clean": "rimraf lib",
     "start": "tsc --watch",
-    "precompile": "npm run clean",
+    "precompile": "yarn clean",
     "compile": "tsc",
-    "prepublishOnly": "npm run compile",
+    "prepublishOnly": "yarn compile",
     "test": "npm run test",
     "testonly": "jest --coverage",
     "coverage": "jest --coverage"
@@ -41,12 +41,12 @@
   "author": "Elies Lou (Aetherall)",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "23.0.2",
-    "@types/node": "9.6.15",
-    "jest": "23.1.0",
+    "@types/jest": "23.3.1",
+    "@types/node": "10.5.4",
+    "jest": "23.4.2",
     "rimraf": "2.6.2"
   },
   "dependencies": {
-    "@accounts/types": "^0.3.0-beta.20"
+    "@accounts/types": "^0.3.0-beta.23"
   }
 }

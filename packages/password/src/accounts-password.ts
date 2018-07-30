@@ -294,7 +294,7 @@ export default class AccountsPassword implements AuthenticationService {
     }
     address = getFirstUserEmail(user, address);
     const token = generateRandomToken();
-    await this.db.addResetPasswordToken(user.id, address, token);
+    await this.db.addResetPasswordToken(user.id, address, token, 'reset');
 
     const resetPasswordMail = this.server.prepareMail(
       address,
