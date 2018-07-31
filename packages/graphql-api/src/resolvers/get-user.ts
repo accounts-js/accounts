@@ -3,13 +3,10 @@ import { QueryResolvers } from '../types/graphql';
 
 export const getUser = (accountsServer: AccountsServer): QueryResolvers.GetUserResolver => async (
   _: null,
-  args,
+  __: null,
   context
 ) => {
-  const { accessToken } = args;
   const { authToken } = context;
 
-  const token = accessToken || authToken;
-
-  return token && accountsServer.resumeSession(token);
+  return authToken && accountsServer.resumeSession(authToken);
 };

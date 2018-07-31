@@ -1,7 +1,7 @@
 export const mutations = `
   impersonate(accessToken: String!, username: String!): ImpersonateReturn
   refreshTokens(accessToken: String!, refreshToken: String!): LoginResult
-  logout(accessToken: String): Boolean
+  logout: Boolean
 
   # Example: Login with password
   # authenticate(serviceName: "password", params: {password: "<pw>", user: {email: "<email>"}})

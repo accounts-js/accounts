@@ -151,10 +151,7 @@ export namespace QueryResolvers {
     twoFactorSecret?: TwoFactorSecretResolver;
   }
 
-  export type GetUserResolver<R = User | null> = Resolver<R, GetUserArgs>;
-  export interface GetUserArgs {
-    accessToken: string;
-  }
+  export type GetUserResolver<R = User | null> = Resolver<R>;
 
   export type TwoFactorSecretResolver<R = TwoFactorSecretKey | null> = Resolver<R>;
 }
@@ -231,10 +228,7 @@ export namespace MutationResolvers {
     refreshToken: string;
   }
 
-  export type LogoutResolver<R = boolean | null> = Resolver<R, LogoutArgs>;
-  export interface LogoutArgs {
-    accessToken: string;
-  }
+  export type LogoutResolver<R = boolean | null> = Resolver<R>;
 
   export type AuthenticateResolver<R = LoginResult | null> = Resolver<R, AuthenticateArgs>;
   export interface AuthenticateArgs {
