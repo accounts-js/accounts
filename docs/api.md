@@ -1,5 +1,5 @@
 ---
-id: api  
+id: api
 title: API
 ---
 
