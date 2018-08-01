@@ -1,4 +1,4 @@
-import { trim, isEmpty, isFunction, isString, isPlainObject, find, includes } from 'lodash';
+import { trim, isEmpty, isFunction, isString, isPlainObject, find, includes, defer } from 'lodash';
 import {
   CreateUser,
   User,
@@ -10,7 +10,12 @@ import {
   HashAlgorithm,
 } from '@accounts/types';
 import { TwoFactor, AccountsTwoFactorOptions, getUserTwoFactorService } from '@accounts/two-factor';
-import { AccountsServer, generateRandomToken, getFirstUserEmail } from '@accounts/server';
+import {
+  AccountsServer,
+  ServerHooks,
+  generateRandomToken,
+  getFirstUserEmail,
+} from '@accounts/server';
 import {
   getUserResetTokens,
   getUserVerificationTokens,
@@ -375,7 +380,19 @@ export default class AccountsPassword implements AuthenticationService {
       throw new Error('User invalid');
     }
 
-    return this.db.createUser(proposedUserObject);
+    try {
+      const userId = await this.db.createUser(proposedUserObject);
+
+      defer(async () => {
+        const userRecord = (await this.db.findUserById(userId)) as User;
+        this.server.getHooks().emit(ServerHooks.CreateUserSuccess, userRecord);
+      });
+
+      return userId;
+    } catch (e) {
+      await this.server.getHooks().emit(ServerHooks.CreateUserError, proposedUserObject);
+      throw e;
+    }
   }
 
   public isTokenExpired(tokenRecord: TokenRecord, expiryDate: number): boolean {
