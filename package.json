@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "setup": "lerna bootstrap",
+    "setup": "lerna bootstrap; yarn run link",
     "start": "lerna exec -- yarn start",
     "link": "lerna exec -- yarn link",
     "clean": "lerna run clean",
