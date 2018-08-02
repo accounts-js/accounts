@@ -19,11 +19,9 @@ The Accounts project was intended - since its inception - to be a community main
 #### Useful Commands:
 
 - Install project dependencies: `yarn`
-- Link together all packages: `yarn lerna bootstrap`
+- Link together all the packages: `yarn setup`
 - Watch the packages for changes and recompile: `yarn start`
-- If you want to use the Account project in your own project, use `yarn link`:
-  1.  In your cloned directory: `yarn link`
-  2.  In your app / project: `yarn start` followed by `yarn link @accounts/accounts`
+- If you want to use the accounts project in your own project, use `yarn link @accounts/<name of package>` within your project.
 
 ## Pull Requests
 

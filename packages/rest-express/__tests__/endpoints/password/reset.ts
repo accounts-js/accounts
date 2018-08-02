@@ -12,7 +12,6 @@ describe('resetPassword', () => {
 
   describe('resetPassword', () => {
     it('calls password.resetPassword and returns a message', async () => {
-      const message = 'Password changed';
       const passwordService = {
         resetPassword: jest.fn(() => null),
       };
@@ -39,7 +38,7 @@ describe('resetPassword', () => {
         'token',
         'new-password'
       );
-      expect(res.json).toBeCalledWith({ message });
+      expect(res.json).toBeCalledWith(null);
       expect(res.status).not.toBeCalled();
     });
 
@@ -79,7 +78,6 @@ describe('resetPassword', () => {
 
   describe('sendResetPasswordEmail', () => {
     it('calls password.sendResetPasswordEmail and returns a message', async () => {
-      const message = 'Email sent';
       const passwordService = {
         sendResetPasswordEmail: jest.fn(() => null),
       };
@@ -102,7 +100,7 @@ describe('resetPassword', () => {
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.sendResetPasswordEmail).toBeCalledWith('email');
-      expect(res.json).toBeCalledWith({ message });
+      expect(res.json).toBeCalledWith(null);
       expect(res.status).not.toBeCalled();
     });
 
