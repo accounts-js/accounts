@@ -1,7 +1,7 @@
 {
   "name": "@accounts/database-tests",
   "private": true,
-  "version": "0.3.0-beta.24",
+  "version": "0.3.0-beta.25",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
@@ -29,6 +29,6 @@
     "jest": "23.4.2"
   },
   "dependencies": {
-    "@accounts/types": "^0.3.0-beta.24"
+    "@accounts/types": "^0.3.0-beta.25"
   }
 }
