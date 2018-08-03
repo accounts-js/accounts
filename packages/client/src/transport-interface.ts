@@ -10,7 +10,7 @@ export interface TransportInterface {
       [key: string]: string | object;
     }
   ): Promise<LoginResult>;
-  logout(accessToken: string): Promise<void>;
+  logout(): Promise<void>;
   refreshTokens(accessToken: string, refreshToken: string): Promise<LoginResult>;
   verifyEmail(token: string): Promise<void>;
   sendResetPasswordEmail(email: string): Promise<void>;

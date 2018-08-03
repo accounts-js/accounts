@@ -100,24 +100,20 @@ export class RestClient implements TransportInterface {
     return this.fetch('refreshTokens', args, customHeaders);
   }
 
-  public logout(accessToken: string, customHeaders?: object): Promise<void> {
+  public logout(customHeaders?: object): Promise<void> {
     const args = {
       method: 'POST',
-      body: JSON.stringify({
-        accessToken,
-      }),
+      body: JSON.stringify({}),
     };
-    return this.fetch('logout', args, customHeaders);
+    return this.authFetch('logout', args, customHeaders);
   }
 
   public async getUser(accessToken: string, customHeaders?: object): Promise<User> {
     const args = {
       method: 'POST',
-      body: JSON.stringify({
-        accessToken,
-      }),
+      body: JSON.stringify({}),
     };
-    return this.fetch('user', args, customHeaders);
+    return this.authFetch('user', args, customHeaders);
   }
 
   public async createUser(user: CreateUser, customHeaders?: object): Promise<string> {

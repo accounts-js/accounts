@@ -174,7 +174,7 @@ export class AccountsClient {
   public async logout(): Promise<void> {
     const tokens = await this.getTokens();
     if (tokens) {
-      await this.transport.logout(tokens.accessToken);
+      await this.transport.logout();
     }
     await this.clearTokens();
   }
