@@ -1,6 +1,6 @@
 {
   "name": "@accounts/oauth",
-  "version": "0.3.0-beta.25",
+  "version": "0.3.0-beta.26",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -24,11 +24,11 @@
     ]
   },
   "dependencies": {
-    "@accounts/types": "^0.3.0-beta.25",
+    "@accounts/types": "^0.3.0-beta.26",
     "request-promise": "^4.2.1"
   },
   "devDependencies": {
-    "@accounts/server": "^0.3.0-beta.25",
+    "@accounts/server": "^0.3.0-beta.26",
     "@types/jest": "23.3.1",
     "@types/node": "10.5.4",
     "jest": "23.4.2"
