@@ -10,20 +10,8 @@ export const authenticated = (Accounts: AccountsServer, func: any) => async (
     return func(root, args, context, info);
   }
 
-  const authToken = context.authToken;
-
-  if (!authToken || authToken === '' || authToken === null) {
-    throw new Error('Unable to find authorization token in request');
-  }
-
-  if (!context.user) {
-    const userObject = await Accounts.resumeSession(authToken);
-
-    if (userObject === null) {
-      throw new Error('Invalid or expired token!');
-    }
-
-    context.user = userObject;
+  if (!context.userId && !context.user) {
+    throw new Error('Unauthorized');
   }
 
   return func(root, args, context, info);
