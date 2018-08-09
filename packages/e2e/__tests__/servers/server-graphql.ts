@@ -85,11 +85,10 @@ export class ServerGraphqlTest implements ServerTestInterface {
     this.apolloServer = new ApolloServer({
       typeDefs: [gql(accountsGraphQL.typeDefs), typeDefs],
       resolvers: merge(accountsGraphQL.resolvers),
-      context: async ({ req }: any) => ({
-        ...(await accountsContext(req, {
+      context: ({ req }: any) =>
+        accountsContext(req, {
           accountsServer: this.accountsServer,
-        })),
-      }),
+        }),
     });
 
     const apolloClient = new ApolloClient({ uri: urlString });
