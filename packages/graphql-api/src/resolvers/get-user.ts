@@ -6,7 +6,5 @@ export const getUser = (accountsServer: AccountsServer): QueryResolvers.GetUserR
   __: null,
   context
 ) => {
-  const { authToken } = context;
-
-  return authToken && accountsServer.resumeSession(authToken);
+  return context.user;
 };
