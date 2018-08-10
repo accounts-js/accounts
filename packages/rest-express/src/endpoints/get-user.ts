@@ -7,9 +7,7 @@ export const getUser = (accountsServer: AccountsServer) => async (
   res: express.Response
 ) => {
   try {
-    const { accessToken } = req.body;
-    const user = await accountsServer.resumeSession(accessToken);
-    res.json(user);
+    res.json((req as any).user);
   } catch (err) {
     sendError(res, err);
   }

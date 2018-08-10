@@ -7,9 +7,9 @@ export const logout = (accountsServer: AccountsServer) => async (
   res: express.Response
 ) => {
   try {
-    const { accessToken } = req.body;
-    await accountsServer.logout(accessToken);
-    res.json({ message: 'Logged out' });
+    const { authToken } = req as any;
+    await accountsServer.logout(authToken);
+    res.json();
   } catch (err) {
     sendError(res, err);
   }
