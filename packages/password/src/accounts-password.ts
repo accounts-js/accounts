@@ -1,6 +1,5 @@
 import { trim, isEmpty, pick, isString, isPlainObject, find, includes, defer } from 'lodash';
 import {
-  CreateUser,
   User,
   LoginUserIdentity,
   EmailRecord,
