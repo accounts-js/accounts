@@ -42,7 +42,9 @@ export interface AccountsPasswordOptions {
    */
   passwordEnrollTokenExpiration?: number;
   minimumPasswordLength?: number;
-  validateNewUser?: (user: CreateUser) => Promise<PasswordCreateUserType>;
+  validateNewUser?: (
+    user: PasswordCreateUserType
+  ) => Promise<PasswordCreateUserType> | PasswordCreateUserType;
   validateEmail?(email?: string): boolean;
   validatePassword?(password?: PasswordType): boolean;
   validateUsername?(username?: string): boolean;

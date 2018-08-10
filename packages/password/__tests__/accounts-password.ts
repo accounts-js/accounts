@@ -2,7 +2,17 @@ import { set } from 'lodash';
 import { AccountsPassword } from '../src';
 
 describe('AccountsPassword', () => {
+  const server: any = {
+    getHooks: () => ({
+      emit: jest.fn(),
+    }),
+  };
   const password = new AccountsPassword({});
+  password.server = server;
+
+  afterEach(() => {
+    password.server = server;
+  });
 
   describe('config', () => {
     it('should have default options', async () => {
@@ -504,27 +514,52 @@ describe('AccountsPassword', () => {
       }
     });
 
-    it('throws if validateNewUser does not pass', async () => {
+    it('validateNewUser allow more fields', async () => {
       const tmpAccountsPassword = new AccountsPassword({
-        validateNewUser: () => Promise.resolve(false),
+        validateNewUser: user => {
+          user.additionalField = 'test';
+          return user;
+        },
       });
+      tmpAccountsPassword.server = server;
       const findUserByEmail = jest.fn(() => Promise.resolve());
-      tmpAccountsPassword.setStore({ findUserByEmail } as any);
-      try {
-        await tmpAccountsPassword.createUser({
-          password: '123456',
-          email: 'email1@email.com',
-        });
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toMatchSnapshot();
-      }
+      const findUserById = jest.fn(() => Promise.resolve());
+      const createUser = jest.fn(() => Promise.resolve());
+      tmpAccountsPassword.setStore({ findUserByEmail, findUserById, createUser } as any);
+      await tmpAccountsPassword.createUser({
+        password: '123456',
+        email: 'email1@email.com',
+      });
+      expect(findUserByEmail.mock.calls.length).toBe(1);
+      expect(createUser.mock.calls[0][0]).toEqual({
+        email: 'email1@email.com',
+        password: expect.any(String),
+        additionalField: 'test',
+      });
+    });
+
+    it('create user should only allow some fields', async () => {
+      const findUserByEmail = jest.fn(() => Promise.resolve());
+      const findUserById = jest.fn(() => Promise.resolve());
+      const createUser = jest.fn(() => Promise.resolve());
+      password.setStore({ findUserByEmail, findUserById, createUser } as any);
+      await password.createUser({
+        password: '123456',
+        email: 'email1@email.com',
+        additionalField: 'not allowed',
+      });
+      expect(findUserByEmail.mock.calls.length).toBe(1);
+      expect(createUser.mock.calls[0][0]).toEqual({
+        email: 'email1@email.com',
+        password: expect.any(String),
+      });
     });
 
     it('create user', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
+      const findUserById = jest.fn(() => Promise.resolve());
       const createUser = jest.fn(() => Promise.resolve());
-      password.setStore({ findUserByEmail, createUser } as any);
+      password.setStore({ findUserByEmail, createUser, findUserById } as any);
       await password.createUser({
         password: '123456',
         email: 'email1@email.com',
