@@ -1,4 +1,4 @@
-import { trim, isEmpty, isFunction, isString, isPlainObject, find, includes, defer } from 'lodash';
+import { trim, isEmpty, pick, isString, isPlainObject, find, includes, defer } from 'lodash';
 import {
   CreateUser,
   User,
@@ -42,7 +42,7 @@ export interface AccountsPasswordOptions {
    */
   passwordEnrollTokenExpiration?: number;
   minimumPasswordLength?: number;
-  validateNewUser?: (user: CreateUser) => Promise<boolean>;
+  validateNewUser?: (user: CreateUser) => Promise<PasswordCreateUserType>;
   validateEmail?(email?: string): boolean;
   validatePassword?(password?: PasswordType): boolean;
   validateUsername?(username?: string): boolean;
@@ -360,28 +360,20 @@ export default class AccountsPassword implements AuthenticationService {
       throw new Error('Email already exists');
     }
 
-    let password;
     if (user.password) {
       if (!this.options.validatePassword(user.password)) {
         throw new Error('Invalid password');
       }
-      password = await this.hashAndBcryptPassword(user.password);
+      user.password = await this.hashAndBcryptPassword(user.password);
     }
 
-    const proposedUserObject = {
-      username: user.username,
-      email: user.email && user.email.toLowerCase(),
-      password,
-      profile: user.profile,
-    };
-
-    const { validateNewUser } = this.options;
-    if (isFunction(validateNewUser) && !(await validateNewUser(proposedUserObject))) {
-      throw new Error('User invalid');
-    }
+    // If user does not provide the validate function only allow some fields
+    user = this.options.validateNewUser
+      ? await this.options.validateNewUser(user)
+      : pick(user, ['username', 'email', 'password']);
 
     try {
-      const userId = await this.db.createUser(proposedUserObject);
+      const userId = await this.db.createUser(user);
 
       defer(async () => {
         const userRecord = (await this.db.findUserById(userId)) as User;
@@ -390,7 +382,7 @@ export default class AccountsPassword implements AuthenticationService {
 
       return userId;
     } catch (e) {
-      await this.server.getHooks().emit(ServerHooks.CreateUserError, proposedUserObject);
+      await this.server.getHooks().emit(ServerHooks.CreateUserError, user);
       throw e;
     }
   }

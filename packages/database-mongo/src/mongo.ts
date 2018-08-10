@@ -64,24 +64,26 @@ export class Mongo implements DatabaseInterface {
     });
   }
 
-  public async createUser(options: CreateUser): Promise<string> {
+  public async createUser({
+    password,
+    username,
+    email,
+    ...cleanUser
+  }: CreateUser): Promise<string> {
     const user: MongoUser = {
+      ...cleanUser,
       services: {},
-      profile: {},
       [this.options.timestamps.createdAt]: this.options.dateProvider(),
       [this.options.timestamps.updatedAt]: this.options.dateProvider(),
     };
-    if (options.password) {
-      user.services.password = { bcrypt: options.password };
+    if (password) {
+      user.services.password = { bcrypt: password };
     }
-    if (options.username) {
-      user.username = options.username;
+    if (username) {
+      user.username = username;
     }
-    if (options.email) {
-      user.emails = [{ address: options.email.toLowerCase(), verified: false }];
-    }
-    if (options.profile) {
-      user.profile = options.profile;
+    if (email) {
+      user.emails = [{ address: email.toLowerCase(), verified: false }];
     }
     if (this.options.idProvider) {
       user._id = this.options.idProvider();
