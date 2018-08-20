@@ -287,7 +287,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@10.5.4", "@types/node@10.7.1", "@types/node@9.6.7", "@types/node@^10.1.0":
+"@types/node@*", "@types/node@10.5.4", "@types/node@10.7.1", "@types/node@9.6.28", "@types/node@^10.1.0":
   version "10.5.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.4.tgz#6eccc158504357d1da91434d75e86acde94bb10b"
 
