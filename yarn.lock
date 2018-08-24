@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@accounts/tslint-config-accounts@0.0.9":
+"@accounts/tslint-config-accounts@0.0.9", "@accounts/tslint-config-accounts@^0.0.9":
   version "0.0.9"
   resolved "https://registry.yarnpkg.com/@accounts/tslint-config-accounts/-/tslint-config-accounts-0.0.9.tgz#a2073361c4127ba7c8662cd72e08a28a794a44df"
   dependencies:
@@ -2114,6 +2114,10 @@ encoding@^0.1.11:
   dependencies:
     iconv-lite "~0.4.13"
 
+error-class@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/error-class/-/error-class-2.0.1.tgz#659a6c5cf38c969da2a1b1b09a87725ae71382e7"
+
 error-ex@^1.2.0, error-ex@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/error-ex/-/error-ex-1.3.1.tgz#f855a86ce61adc4e8621c3cda21e7a7612c3a8dc"
@@ -2252,6 +2256,10 @@ esutils@^2.0.2:
 etag@~1.8.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
+
+event-lite@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/event-lite/-/event-lite-0.1.1.tgz#47cf08a8d37d0b694cdb7b3b17b51faac6576086"
 
 eventemitter3@^3.1.0:
   version "3.1.0"
@@ -2596,6 +2604,13 @@ form-data@~2.3.1:
     asynckit "^0.4.0"
     combined-stream "1.0.6"
     mime-types "^2.1.12"
+
+fortune@^5.4.5:
+  version "5.4.5"
+  resolved "https://registry.yarnpkg.com/fortune/-/fortune-5.4.5.tgz#4981b5c53257d9186d5c97df2899d72775edd81d"
+  dependencies:
+    error-class "^2.0.1"
+    event-lite "^0.1.1"
 
 forwarded@~0.1.2:
   version "0.1.2"
@@ -6535,7 +6550,7 @@ tslint-eslint-rules@^4.1.1:
     tslib "^1.0.0"
     tsutils "^1.4.0"
 
-tslint@5.11.0:
+tslint@5.11.0, tslint@^5.11.0:
   version "5.11.0"
   resolved "https://registry.yarnpkg.com/tslint/-/tslint-5.11.0.tgz#98f30c02eae3cde7006201e4c33cb08b48581eed"
   dependencies:
