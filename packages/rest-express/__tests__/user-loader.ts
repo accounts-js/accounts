@@ -36,7 +36,7 @@ describe('userLoader', () => {
     await provider(req, res, next);
 
     expect(accountsServer.resumeSession).toHaveBeenCalledWith('token');
-    expect(req).toEqual({ ...reqCopy, user, userId: user.id });
+    expect(req).toEqual({ ...reqCopy, authToken: 'token', user, userId: user.id });
     expect(res).toEqual({});
     expect(next).toHaveBeenCalledTimes(1);
   });
@@ -54,7 +54,7 @@ describe('userLoader', () => {
     await provider(req, res, next);
 
     expect(accountsServer.resumeSession).toHaveBeenCalledWith('token');
-    expect(req).toEqual({ ...reqCopy, user, userId: user.id });
+    expect(req).toEqual({ ...reqCopy, authToken: 'token', user, userId: user.id });
     expect(res).toEqual({});
     expect(next).toHaveBeenCalledTimes(1);
   });

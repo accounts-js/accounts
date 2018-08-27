@@ -17,9 +17,7 @@ describe('logout', () => {
     const middleware = logout(accountsServer as any);
 
     const req = {
-      body: {
-        accessToken: 'token',
-      },
+      authToken: 'token',
     };
     const reqCopy = { ...req };
 
@@ -27,7 +25,7 @@ describe('logout', () => {
 
     expect(req).toEqual(reqCopy);
     expect(accountsServer.logout).toBeCalledWith('token');
-    expect(res.json).toBeCalledWith({ message: 'Logged out' });
+    expect(res.json).toBeCalledWith(null);
     expect(res.status).not.toBeCalled();
   });
 
@@ -40,9 +38,7 @@ describe('logout', () => {
     };
     const middleware = logout(accountsServer as any);
     const req = {
-      body: {
-        accessToken: 'token',
-      },
+      authToken: 'token',
     };
     const reqCopy = { ...req };
 
