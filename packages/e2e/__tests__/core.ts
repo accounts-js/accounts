@@ -35,7 +35,6 @@ Object.keys(servers).forEach(key => {
     describe('logout user', () => {
       it('should logout and not get the user infos', async () => {
         await server.accountsClient.logout();
-        console.log(await server.accountsClient.getTokens());
         const userInfos = await server.accountsClient.getUser();
         expect(userInfos).toBeNull();
         await server.accountsClientPassword.login({
