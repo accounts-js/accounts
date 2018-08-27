@@ -216,9 +216,9 @@
   version "4.0.39"
   resolved "https://registry.yarnpkg.com/@types/handlebars/-/handlebars-4.0.39.tgz#961fb54db68030890942e6aeffe9f93a957807bd"
 
-"@types/ioredis@3.2.14":
-  version "3.2.14"
-  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-3.2.14.tgz#c7594cedc2b3618bb1b1358e635c9271b8cb3666"
+"@types/ioredis@3.2.15":
+  version "3.2.15"
+  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-3.2.15.tgz#e36d5f67edd6fe6815bb0a0ef0e6343bf35f4ca5"
   dependencies:
     "@types/bluebird" "*"
     "@types/node" "*"
