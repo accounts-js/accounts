@@ -33,7 +33,7 @@ const accountsExpress = (
 
   router.post(`${path}/refreshTokens`, refreshAccessToken(accountsServer));
 
-  router.post(`${path}/logout`, logout(accountsServer));
+  router.post(`${path}/logout`, userLoader(accountsServer), logout(accountsServer));
 
   router.post(`${path}/:service/authenticate`, serviceAuthenticate(accountsServer));
 

@@ -10,7 +10,7 @@ export const servers: {
   [key: string]: ServerTestInterface;
 } = {
   'server-graphql': new ServerGraphqlTest(),
-  // 'server-rest': new ServerRestTest(),
+  'server-rest': new ServerRestTest(),
 };
 
 export interface ServerTestInterface {

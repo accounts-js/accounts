@@ -7,7 +7,7 @@ export const getUser = (accountsServer: AccountsServer) => async (
   res: express.Response
 ) => {
   try {
-    res.json((req as any).user);
+    res.json((req as any).user || null);
   } catch (err) {
     sendError(res, err);
   }
