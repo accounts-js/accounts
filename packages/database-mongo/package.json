@@ -39,7 +39,7 @@
     "@types/jest": "23.3.1",
     "@types/lodash": "4.14.116",
     "@types/mongodb": "3.1.4",
-    "@types/node": "10.9.2",
+    "@types/node": "10.9.4",
     "jest": "23.4.2"
   },
   "dependencies": {
