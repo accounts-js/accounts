@@ -26,14 +26,14 @@
     "@gql2ts/from-schema": "1.8.2",
     "@gql2ts/types": "1.8.1",
     "@types/graphql": "0.13.4",
-    "concurrently": "3.6.1",
+    "concurrently": "4.0.1",
     "graphql": "0.13.2",
-    "graphql-code-generator": "0.10.5",
-    "graphql-codegen-typescript-template": "0.10.5",
-    "graphql-tools": "3.0.5",
+    "graphql-code-generator": "0.11.0",
+    "graphql-codegen-typescript-template": "0.11.0",
+    "graphql-tools": "3.1.1",
     "lodash": "4.17.10",
-    "nock": "9.4.3",
-    "ts-node": "7.0.0"
+    "nock": "9.6.1",
+    "ts-node": "7.0.1"
   },
   "peerDependencies": {
     "graphql-tools": "^3.0.0"
