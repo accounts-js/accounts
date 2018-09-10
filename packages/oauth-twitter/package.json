@@ -30,6 +30,6 @@
     "@types/jest": "23.3.2",
     "@types/node": "10.9.4",
     "@types/oauth": "0.9.0",
-    "jest": "23.5.0"
+    "jest": "23.6.0"
   }
 }
