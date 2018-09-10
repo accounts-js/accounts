@@ -1,6 +1,6 @@
 {
   "name": "@accounts/graphql-api",
-  "version": "0.3.0-beta.26",
+  "version": "0.3.0-beta.28",
   "description": "Server side GraphQL transport for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -39,9 +39,9 @@
     "graphql-tools": "^3.0.0"
   },
   "dependencies": {
-    "@accounts/password": "^0.3.0-beta.26",
-    "@accounts/server": "^0.3.0-beta.26",
-    "@accounts/types": "^0.3.0-beta.26",
+    "@accounts/password": "^0.3.0-beta.28",
+    "@accounts/server": "^0.3.0-beta.28",
+    "@accounts/types": "^0.3.0-beta.28",
     "@types/request-ip": "0.0.33",
     "deepmerge": "2.1.1",
     "request-ip": "2.1.1"
