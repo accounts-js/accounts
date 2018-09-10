@@ -54,10 +54,10 @@
     "lodash": "4.17.10"
   },
   "devDependencies": {
-    "@types/jest": "23.3.1",
+    "@types/jest": "23.3.2",
     "@types/jwt-decode": "2.2.1",
     "@types/node": "10.9.4",
-    "jest": "23.4.2",
+    "jest": "23.5.0",
     "rimraf": "2.6.2"
   }
 }

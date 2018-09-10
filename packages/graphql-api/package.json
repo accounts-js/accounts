@@ -32,8 +32,8 @@
     "graphql-codegen-typescript-template": "0.10.5",
     "graphql-tools": "3.0.5",
     "lodash": "4.17.10",
-    "nock": "9.4.3",
-    "ts-node": "7.0.0"
+    "nock": "9.6.1",
+    "ts-node": "7.0.1"
   },
   "peerDependencies": {
     "graphql-tools": "^3.0.0"
