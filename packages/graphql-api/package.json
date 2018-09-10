@@ -30,7 +30,7 @@
     "graphql": "0.13.2",
     "graphql-code-generator": "0.10.5",
     "graphql-codegen-typescript-template": "0.10.5",
-    "graphql-tools": "3.0.5",
+    "graphql-tools": "3.1.1",
     "lodash": "4.17.10",
     "nock": "9.6.1",
     "ts-node": "7.0.1"
