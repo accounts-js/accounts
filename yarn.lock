@@ -182,9 +182,9 @@
     "@types/node" "*"
     "@types/range-parser" "*"
 
-"@types/express-session@1.15.10":
-  version "1.15.10"
-  resolved "https://registry.yarnpkg.com/@types/express-session/-/express-session-1.15.10.tgz#d0ae7d3d2fee26512574306333ac272a37430c86"
+"@types/express-session@1.15.11":
+  version "1.15.11"
+  resolved "https://registry.yarnpkg.com/@types/express-session/-/express-session-1.15.11.tgz#49bca7a8fb5c00402907e8ec0d3546ee28de2c41"
   dependencies:
     "@types/events" "*"
     "@types/express" "*"
