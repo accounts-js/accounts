@@ -46,7 +46,7 @@
   "author": "Elies Lou (Aetherall)",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "23.3.1",
+    "@types/jest": "23.3.2",
     "@types/node": "10.9.4",
     "jest": "23.4.2",
     "rimraf": "2.6.2"
