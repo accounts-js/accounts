@@ -39,6 +39,6 @@
   "dependencies": {
     "@accounts/client": "^0.3.0-beta.26",
     "@accounts/types": "^0.3.0-beta.26",
-    "graphql-tag": "^1.1.2"
+    "graphql-tag": "^2.9.2"
   }
 }
