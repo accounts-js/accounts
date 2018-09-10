@@ -1,6 +1,6 @@
 {
   "name": "@accounts/database-manager",
-  "version": "0.3.0-beta.26",
+  "version": "0.3.0-beta.27",
   "description": "Accounts Database Manager, allow the use of separate databases for session and user",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -47,6 +47,6 @@
     "rimraf": "2.6.2"
   },
   "dependencies": {
-    "@accounts/types": "^0.3.0-beta.26"
+    "@accounts/types": "^0.3.0-beta.27"
   }
 }
