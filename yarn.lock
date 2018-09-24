@@ -57,15 +57,11 @@
     "@gql2ts/util" "^1.9.0"
     humps "^2.0.0"
 
-"@gql2ts/types@1.8.1":
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/@gql2ts/types/-/types-1.8.1.tgz#7e132abe07d612e53f543a5dc607aa7e2391d160"
+"@gql2ts/types@1.9.0":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@gql2ts/types/-/types-1.9.0.tgz#f6725aa2beda33b6f1948e046be260e34d0b3405"
   dependencies:
-    "@gql2ts/util" "^1.8.1"
-
-"@gql2ts/util@^1.8.1":
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.8.1.tgz#a1260a741084a2232b45daee2b274fb64da332df"
+    "@gql2ts/util" "^1.9.0"
 
 "@gql2ts/util@^1.9.0":
   version "1.9.0"
