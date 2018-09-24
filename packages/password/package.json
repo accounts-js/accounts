@@ -31,7 +31,7 @@
   "devDependencies": {
     "@accounts/server": "^0.3.0-beta.28",
     "@accounts/types": "^0.3.0-beta.28",
-    "@types/bcryptjs": "2.4.1",
+    "@types/bcryptjs": "2.4.2",
     "@types/jest": "23.3.2",
     "@types/lodash": "4.14.116",
     "@types/node": "10.9.4",
