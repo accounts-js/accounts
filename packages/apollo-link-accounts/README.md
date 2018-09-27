@@ -6,7 +6,7 @@
 ## Install
 
 ```
-yarn add @accounts/apollo-link @accounts/client;
+yarn add @accounts/apollo-link @accounts/client
 ```
 
 ## Usage
