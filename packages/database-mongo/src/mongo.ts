@@ -164,7 +164,7 @@ export class Mongo implements DatabaseInterface {
 
   public async addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
     const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
-    const ret = await this.collection.update(
+    const ret = await this.collection.updateOne(
       { _id: id },
       {
         $addToSet: {
@@ -185,7 +185,7 @@ export class Mongo implements DatabaseInterface {
 
   public async removeEmail(userId: string, email: string): Promise<void> {
     const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
-    const ret = await this.collection.update(
+    const ret = await this.collection.updateOne(
       { _id: id },
       {
         $pull: { emails: { address: email.toLowerCase() } },
@@ -201,7 +201,7 @@ export class Mongo implements DatabaseInterface {
 
   public async verifyEmail(userId: string, email: string): Promise<void> {
     const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
-    const ret = await this.collection.update(
+    const ret = await this.collection.updateOne(
       { _id: id, 'emails.address': email },
       {
         $set: {
@@ -218,7 +218,7 @@ export class Mongo implements DatabaseInterface {
 
   public async setUsername(userId: string, newUsername: string): Promise<void> {
     const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
-    const ret = await this.collection.update(
+    const ret = await this.collection.updateOne(
       { _id: id },
       {
         $set: {
@@ -234,7 +234,7 @@ export class Mongo implements DatabaseInterface {
 
   public async setPassword(userId: string, newPassword: string): Promise<void> {
     const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
-    const ret = await this.collection.update(
+    const ret = await this.collection.updateOne(
       { _id: id },
       {
         $set: {
@@ -253,7 +253,7 @@ export class Mongo implements DatabaseInterface {
 
   public async setProfile(userId: string, profile: object): Promise<object> {
     const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
-    await this.collection.update(
+    await this.collection.updateOne(
       { _id: id },
       {
         $set: {
@@ -267,7 +267,7 @@ export class Mongo implements DatabaseInterface {
 
   public async setService(userId: string, serviceName: string, service: object): Promise<void> {
     const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
-    await this.collection.update(
+    await this.collection.updateOne(
       { _id: id },
       {
         $set: {
@@ -280,7 +280,7 @@ export class Mongo implements DatabaseInterface {
 
   public async unsetService(userId: string, serviceName: string): Promise<void> {
     const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
-    await this.collection.update(
+    await this.collection.updateOne(
       { _id: id },
       {
         $set: {
@@ -321,7 +321,7 @@ export class Mongo implements DatabaseInterface {
   public async updateSession(sessionId: string, connection: ConnectionInformations): Promise<void> {
     // tslint:disable-next-line variable-name
     const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
-    await this.sessionCollection.update(
+    await this.sessionCollection.updateOne(
       { _id },
       {
         $set: {
@@ -336,7 +336,7 @@ export class Mongo implements DatabaseInterface {
   public async invalidateSession(sessionId: string): Promise<void> {
     // tslint:disable-next-line variable-name
     const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
-    await this.sessionCollection.update(
+    await this.sessionCollection.updateOne(
       { _id },
       {
         $set: {
@@ -382,7 +382,7 @@ export class Mongo implements DatabaseInterface {
     email: string,
     token: string
   ): Promise<void> {
-    await this.collection.update(
+    await this.collection.updateOne(
       { _id: userId },
       {
         $push: {
@@ -402,7 +402,7 @@ export class Mongo implements DatabaseInterface {
     token: string,
     reason: string
   ): Promise<void> {
-    await this.collection.update(
+    await this.collection.updateOne(
       { _id: userId },
       {
         $push: {
