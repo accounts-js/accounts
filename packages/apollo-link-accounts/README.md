@@ -6,15 +6,18 @@
 ## Install
 
 ```
-yarn add @accounts/apollo-link
+yarn add @accounts/apollo-link @accounts/client
 ```
 
 ## Usage
 
 ```js
 import { accountsLink } from '@accounts/apollo-link';
+import { AccountsClient } from '@accounts/client';
 
-const accountsClient = new AccountsClient( ... );
+const accountsClient = new AccountsClient( {
+  //options
+}, 'graphql' );
 const authLink = accountsLink(accountsClient);
 
 export const apolloClient = new ApolloClient({
