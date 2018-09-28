@@ -1,0 +1,40 @@
+{
+  "name": "react-typescript",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "yarn build",
+    "testonly": "react-scripts-ts test --env=jsdom && ",
+    "eject": "react-scripts-ts eject",
+    "lint": "tslint -c tslint.json -p tsconfig.json -e 'node_modules/**/*.{j,t}s'"
+  },
+  "dependencies": {
+    "@accounts/client": "0.3.0-beta.20",
+    "@accounts/client-password": "0.3.0-beta.20",
+    "@accounts/graphql-client": "0.3.0-beta.20",
+    "@accounts/rest-client": "0.3.0-beta.20",
+    "@material-ui/core": "1.2.3",
+    "apollo-boost": "0.1.10",
+    "graphql": "0.13.2",
+    "qrcode.react": "0.8.0",
+    "react": "16.4.1",
+    "react-apollo": "2.1.6",
+    "react-dom": "16.4.1",
+    "react-router-dom": "4.3.1",
+    "react-scripts-ts": "2.16.0"
+  },
+  "devDependencies": {
+    "@types/async": "2.0.49",
+    "@types/jest": "23.3.1",
+    "@types/node": "10.5.4",
+    "@types/qrcode.react": "0.8.0",
+    "@types/react": "16.4.2",
+    "@types/react-dom": "16.0.6",
+    "@types/react-router": "4.0.29",
+    "@types/react-router-dom": "4.2.7",
+    "jest": "23.4.2",
+    "typescript": "2.9.2"
+  }
+}

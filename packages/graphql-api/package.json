@@ -6,8 +6,8 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf lib",
-    "start": "tsc --watch",
-    "precompile": "yarn clean",
+    "start": "yarn gen-schema-types && tsc --watch",
+    "precompile": "yarn clean && yarn gen-schema-types",
     "compile": "tsc",
     "prepublishOnly": "yarn compile",
     "gen-schema-types": "ts-node src/scripts/schema-to-types.ts && gql-gen --schema schema.json --template graphql-codegen-typescript-template --out ./src/types/graphql.ts"

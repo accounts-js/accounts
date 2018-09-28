@@ -5,7 +5,7 @@
     "start": "lerna exec -- yarn start",
     "link": "lerna exec -- yarn link",
     "unlink": "lerna exec -- yarn unlink",
-    "clean": "lerna run clean",
+    "clean": "lerna run clean; rm -rf node_modules; rm -rf packages/**/node_modules",
     "compile": "lerna run compile",
     "lint": "tslint packages/*/{src,__tests__}/**/*.ts",
     "postinstall": "opencollective postinstall",
@@ -18,9 +18,11 @@
     "coverage": "lerna run coverage",
     "codecov": "codecov"
   },
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"

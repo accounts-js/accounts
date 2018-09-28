@@ -1,0 +1,35 @@
+{
+  "name": "react-typescript",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "yarn build",
+    "testonly": "react-scripts-ts test --env=jsdom && ",
+    "eject": "react-scripts-ts eject"
+  },
+  "dependencies": {
+    "@accounts/client": "0.3.0-beta.20",
+    "@accounts/client-password": "0.3.0-beta.20",
+    "@accounts/common": "0.1.0-beta.14",
+    "@accounts/rest-client": "0.3.0-beta.20",
+    "@material-ui/core": "1.3.1",
+    "qrcode.react": "0.8.0",
+    "react": "16.4.1",
+    "react-dom": "16.4.1",
+    "react-router-dom": "4.3.1",
+    "react-scripts-ts": "2.16.0"
+  },
+  "devDependencies": {
+    "@types/jest": "23.3.1",
+    "@types/node": "10.5.4",
+    "@types/qrcode.react": "0.8.0",
+    "@types/react": "16.4.0",
+    "@types/react-dom": "16.0.6",
+    "@types/react-router": "4.0.29",
+    "@types/react-router-dom": "4.2.7",
+    "jest": "23.4.2",
+    "typescript": "2.9.2"
+  }
+}
