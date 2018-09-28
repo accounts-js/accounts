@@ -1,6 +1,4 @@
-import { AccountsServer } from '@accounts/server';
-
-export const authenticated = (Accounts: AccountsServer, func: any) => async (
+export const authenticated = (func: any) => async (
   root: any,
   args: any,
   context: any,

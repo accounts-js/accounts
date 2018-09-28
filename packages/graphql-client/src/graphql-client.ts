@@ -40,7 +40,7 @@ export default class GraphQLClient implements TransportInterface {
    * @memberof GraphQLClient
    */
   public async createUser(user: CreateUser): Promise<string> {
-    return this.mutate(createUserMutation, 'register', { user });
+    return this.mutate(createUserMutation, 'createUser', { user });
   }
 
   /**

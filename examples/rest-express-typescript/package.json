@@ -5,29 +5,22 @@
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon -w src -x ts-node src/index.ts",
+    "start": "ts-node src/index.ts",
     "build": "tsc",
     "test": "yarn build"
   },
   "dependencies": {
-    "@accounts/mongo": "0.3.0-beta.29",
-    "@accounts/password": "0.3.0-beta.29",
-    "@accounts/rest-express": "0.3.0-beta.29",
-    "@accounts/server": "0.3.0-beta.29",
+    "@accounts/mongo": "0.3.0-beta.20",
+    "@accounts/password": "0.3.0-beta.20",
+    "@accounts/rest-express": "0.3.0-beta.20",
+    "@accounts/server": "0.3.0-beta.20",
     "body-parser": "1.18.3",
     "cors": "2.8.4",
     "express": "4.16.3",
-    "lodash": "4.17.11",
-    "mongoose": "5.3.1"
+    "mongoose": "5.1.6"
   },
   "devDependencies": {
-    "@types/body-parser": "1.17.0",
-    "@types/cors": "2.8.4",
-    "@types/express": "4.16.0",
-    "@types/lodash": "4.14.116",
-    "@types/mongoose": "5.2.17",
-    "@types/node": "10.10.3",
-    "nodemon": "1.18.4",
+    "@types/node": "10.5.4",
     "ts-node": "6.2.0",
     "typescript": "2.9.2"
   }
