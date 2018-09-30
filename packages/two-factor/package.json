@@ -31,7 +31,7 @@
     "@accounts/types": "^0.3.0-beta.28",
     "@types/lodash": "^4.14.116",
     "@types/speakeasy": "2.0.2",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.11",
     "speakeasy": "^2.0.0"
   },
   "devDependencies": {

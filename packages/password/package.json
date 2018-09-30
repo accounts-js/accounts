@@ -26,7 +26,7 @@
   "dependencies": {
     "@accounts/two-factor": "^0.3.0-beta.28",
     "bcryptjs": "^2.4.3",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
     "@accounts/server": "^0.3.0-beta.28",

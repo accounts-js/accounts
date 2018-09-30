@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/js-accounts/graphql#readme",
   "devDependencies": {
-    "lodash": "4.17.10",
+    "lodash": "4.17.11",
     "nock": "9.6.1"
   },
   "dependencies": {
