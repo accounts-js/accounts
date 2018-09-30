@@ -6,9 +6,11 @@ import { ApolloLink } from 'apollo-link';
 import { onError } from 'apollo-link-error';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { AccountsClientPasswordOptions } from '@accounts/client-password';
 
 export interface AccountsApolloOptions extends AccountsClientOptions {
   uri: string;
+  password?: AccountsClientPasswordOptions;
 }
 
 export const accountsApollo = (options: AccountsApolloOptions) => {
@@ -43,7 +45,7 @@ export const accountsApollo = (options: AccountsApolloOptions) => {
   let accountsPassword;
   if (require.resolve('@accounts/client-password')) {
     const AccountsClientPassword = require('@accounts/client-password').AccountsClientPassword; // tslint:disable-line no-implicit-dependencies
-    accountsPassword = new AccountsClientPassword(accountsClient);
+    accountsPassword = new AccountsClientPassword(accountsClient, options.password);
   }
 
   return {
