@@ -59,7 +59,7 @@
     "@accounts/tslint-config-accounts": "0.0.9",
     "codecov": "3.1.0",
     "husky": "1.0.1",
-    "lerna": "3.4.0",
+    "lerna": "2.11.0",
     "lint-staged": "7.3.0",
     "opencollective": "1.0.3",
     "prettier": "1.14.3",
