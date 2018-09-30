@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": false,
+    "allowSyntheticDefaultImports": true,
     "declaration": true,
     "experimentalDecorators": true,
     "jsx": "react",
@@ -13,7 +13,7 @@
     "removeComments": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "strict": true,
+    "strict": false,
     "target": "es5"
   },
   "include": ["./typings/**/*", "./src/**/*", "./test/**/*"],
