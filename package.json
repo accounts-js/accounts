@@ -38,7 +38,7 @@
     "printWidth": 100
   },
   "resolutions": {
-    "@types/node": "10.9.4"
+    "@types/node": "10.11.3"
   },
   "renovate": {
     "extends": [
