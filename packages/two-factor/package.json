@@ -31,12 +31,12 @@
     "@accounts/types": "^0.3.0-beta.28",
     "@types/lodash": "^4.14.116",
     "@types/speakeasy": "2.0.2",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.11",
     "speakeasy": "^2.0.0"
   },
   "devDependencies": {
     "@types/jest": "23.3.2",
-    "@types/node": "10.9.4",
+    "@types/node": "10.11.3",
     "jest": "23.6.0"
   }
 }

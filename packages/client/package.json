@@ -52,7 +52,7 @@
   "devDependencies": {
     "@types/jest": "23.3.2",
     "@types/jwt-decode": "2.2.1",
-    "@types/node": "10.9.4",
+    "@types/node": "10.11.3",
     "jest": "23.6.0",
     "jest-localstorage-mock": "2.2.0",
     "jsonwebtoken": "8.3.0",

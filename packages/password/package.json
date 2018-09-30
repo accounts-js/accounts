@@ -26,7 +26,7 @@
   "dependencies": {
     "@accounts/two-factor": "^0.3.0-beta.28",
     "bcryptjs": "^2.4.3",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
     "@accounts/server": "^0.3.0-beta.28",
@@ -34,7 +34,7 @@
     "@types/bcryptjs": "2.4.2",
     "@types/jest": "23.3.2",
     "@types/lodash": "4.14.116",
-    "@types/node": "10.9.4",
+    "@types/node": "10.11.3",
     "jest": "23.6.0",
     "rimraf": "2.6.2"
   },

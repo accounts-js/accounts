@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@types/jest": "23.3.2",
-    "@types/node": "10.9.4",
+    "@types/node": "10.11.3",
     "@types/request-promise": "4.1.42",
     "jest": "23.6.0"
   }
