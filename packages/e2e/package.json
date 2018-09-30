@@ -48,13 +48,13 @@
     "@accounts/rest-express": "^0.3.0-beta.28",
     "@accounts/server": "^0.3.0-beta.28",
     "@accounts/types": "^0.3.0-beta.28",
-    "apollo-boost": "0.1.15",
-    "apollo-server": "2.0.7",
+    "apollo-boost": "0.1.16",
+    "apollo-server": "2.1.0",
     "body-parser": "1.18.3",
     "express": "4.16.3",
     "graphql": "0.13.2",
     "lodash": "4.17.11",
-    "mongoose": "5.2.17",
+    "mongoose": "5.3.0",
     "node-fetch": "2.2.0"
   }
 }
