@@ -2,7 +2,8 @@ import * as React from 'react';
 import './App.css';
 
 import { accountsApollo } from '@accounts/apollo';
-import { Accounts, AccountsProvider } from '@accounts/react';
+import { AccountsProvider } from '@accounts/react';
+import { Accounts } from '@accounts/react-material-ui';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
@@ -37,11 +38,7 @@ const client = new ApolloClient({
 const App = () => (
   <div>
     <ApolloProvider client={client}>
-      <AccountsProvider
-        accountsClient={accountsClient}
-        accountsPassword={accountsPassword}
-        theme="material-ui"
-      >
+      <AccountsProvider accountsClient={accountsClient} accountsPassword={accountsPassword}>
         <Accounts />
       </AccountsProvider>
     </ApolloProvider>
