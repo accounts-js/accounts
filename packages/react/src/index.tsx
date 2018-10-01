@@ -8,6 +8,7 @@ const defaultLabels = {
   password: 'Password',
   login: 'Login',
   signup: 'Signup',
+  loginInstead: 'Login instead',
 };
 
 let AccountsProvider: React.SFC<any> = ({

@@ -69,6 +69,43 @@ export const LoginForm = withStyles(theme => ({
   </AccountsConsumer>
 ));
 
+export const SignupForm = withStyles(theme => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  actions: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: theme.spacing.unit * 4,
+    marginBottom: theme.spacing.unit * 2,
+  },
+  button: {},
+}))(({ classes }) => (
+  <AccountsConsumer>
+    {({ accountsLabels, handleChangeView }) => (
+      <div className={classes.root}>
+        <UserField />
+        <PasswordField />
+        <div className={classes.actions}>
+          <Button
+            color="secondary"
+            variant="outlined"
+            className={classes.button}
+            onClick={() => handleChangeView('login')}
+          >
+            {accountsLabels.loginInstead}
+          </Button>
+          <Button variant="contained" color="primary" className={classes.button}>
+            {accountsLabels.signup}
+          </Button>
+        </div>
+      </div>
+    )}
+  </AccountsConsumer>
+));
+
 export const Accounts = withStyles(theme => ({
   root: {
     maxWidth: theme.spacing.unit * 56,
@@ -83,15 +120,14 @@ export const Accounts = withStyles(theme => ({
 }))(({ classes }) => (
   <AccountsConsumer>
     {({ view }) => {
-      if (view === 'login') {
-        return (
-          <div className={classes.root}>
-            <Paper className={classes.paper}>
-              <LoginForm />
-            </Paper>
-          </div>
-        );
-      }
+      return (
+        <div className={classes.root}>
+          <Paper className={classes.paper}>
+            {view === 'login' && <LoginForm />}
+            {view === 'signup' && <SignupForm />}
+          </Paper>
+        </div>
+      );
     }}
   </AccountsConsumer>
 ));
