@@ -106,7 +106,7 @@ export const SignupForm = withStyles(theme => ({
   </AccountsConsumer>
 ));
 
-export const Accounts = withStyles(theme => ({
+export const Wrapper = withStyles(theme => ({
   root: {
     maxWidth: theme.spacing.unit * 56,
     margin: '0 auto',
@@ -117,17 +117,21 @@ export const Accounts = withStyles(theme => ({
     margin: theme.spacing.unit * 2,
     flexDirection: 'column',
   },
-}))(({ classes }) => (
+}))(({ classes, children }) => (
+  <div className={classes.root}>
+    <Paper className={classes.paper}>{children}</Paper>
+  </div>
+));
+
+export const Accounts = () => (
   <AccountsConsumer>
     {({ view }) => {
       return (
-        <div className={classes.root}>
-          <Paper className={classes.paper}>
-            {view === 'login' && <LoginForm />}
-            {view === 'signup' && <SignupForm />}
-          </Paper>
-        </div>
+        <Wrapper>
+          {view === 'login' && <LoginForm />}
+          {view === 'signup' && <SignupForm />}
+        </Wrapper>
       );
     }}
   </AccountsConsumer>
-));
+);
