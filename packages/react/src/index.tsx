@@ -4,11 +4,22 @@ import { compose, withStateHandlers } from 'recompose';
 const AccountsContext = React.createContext('accounts');
 
 const defaultLabels = {
-  username: 'Username',
-  password: 'Password',
-  login: 'Login',
-  signup: 'Signup',
-  loginInstead: 'Login instead',
+  login: {
+    username: 'Username',
+    password: 'Password',
+    login: 'Login',
+    signup: 'Signup',
+  },
+  signup: {
+    username: 'Username',
+    password: 'Password',
+    signup: 'Signup',
+    loginInstead: 'Login instead',
+  },
+};
+
+const defaultComponents = {
+  Wrapper: ({ children }) => children,
 };
 
 let AccountsProvider: React.SFC<any> = ({
@@ -16,10 +27,12 @@ let AccountsProvider: React.SFC<any> = ({
   accountsClient,
   accountsPassword,
   accountsLabels = {},
+  accountsComponents,
   view,
   handleChangeView,
 }) => {
   const labels = { ...defaultLabels, ...accountsLabels };
+  const components = { ...defaultComponents, ...accountsComponents };
 
   return (
     <AccountsContext.Provider
@@ -27,7 +40,8 @@ let AccountsProvider: React.SFC<any> = ({
         {
           accountsClient,
           accountsPassword,
-          accountsLabels: labels,
+          components,
+          labels,
           view,
           handleChangeView,
         } as any
@@ -54,3 +68,16 @@ AccountsProvider = compose(
 export { AccountsProvider };
 
 export const AccountsConsumer = AccountsContext.Consumer;
+
+export const Accounts = () => (
+  <AccountsConsumer>
+    {({ view, components }) => {
+      return (
+        <components.Wrapper>
+          {view === 'login' && <components.login.LoginForm />}
+          {view === 'signup' && <components.signup.SignupForm />}
+        </components.Wrapper>
+      );
+    }}
+  </AccountsConsumer>
+);

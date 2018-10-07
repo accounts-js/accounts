@@ -1,38 +1,111 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
-import { AccountsConsumer } from '@accounts/react';
+import { AccountsConsumer, AccountsProvider as BaseAccountsProvider } from '@accounts/react';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import { compose, withProps, withStateHandlers } from 'recompose';
 
-export const UserField = ({ handleChange }) => (
+const LoginFormUserField = ({ handleChange }) => (
   <AccountsConsumer>
-    {({ accountsLabels }: any) => (
+    {({ labels }: any) => (
       <TextField
         className="accounts-user-field"
         onChange={handleChange}
         margin="normal"
-        label={accountsLabels.username}
+        label={labels.login.username}
       />
     )}
   </AccountsConsumer>
 );
 
-export const PasswordField = ({ handleChange }) => (
+const LoginFormPasswordField = ({ handleChange }) => (
   <AccountsConsumer>
-    {({ accountsLabels }: any) => (
+    {({ labels }: any) => (
       <TextField
         className="accounts-password-field"
         onChange={handleChange}
         margin="normal"
-        label={accountsLabels.password}
+        label={labels.login.password}
       />
     )}
   </AccountsConsumer>
 );
 
-export const LoginForm = withStyles(theme => ({
+const LoginForm = withStyles(theme => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  actions: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: theme.spacing.unit * 4,
+    marginBottom: theme.spacing.unit * 2,
+  },
+}))(({ classes }) => (
+  <AccountsConsumer>
+    {({ labels, components, handleChangeView }) => (
+      <div className={classes.root}>
+        <components.login.UserField />
+        <components.login.PasswordField />
+        <div className={classes.actions}>
+          <components.login.SignupButton />
+          <components.login.LoginButton />
+        </div>
+      </div>
+    )}
+  </AccountsConsumer>
+));
+
+const LoginFormLoginButton = () => (
+  <AccountsConsumer>
+    {({ labels }) => (
+      <Button variant="contained" color="primary">
+        {labels.login.login}
+      </Button>
+    )}
+  </AccountsConsumer>
+);
+
+const LoginFormSignupButton = () => (
+  <AccountsConsumer>
+    {({ labels, handleChangeView }) => (
+      <Button variant="outlined" color="secondary" onClick={() => handleChangeView('signup')}>
+        {labels.login.signup}
+      </Button>
+    )}
+  </AccountsConsumer>
+);
+
+const SignupFormUserField = ({ handleChange }) => (
+  <AccountsConsumer>
+    {({ labels }: any) => (
+      <TextField
+        className="accounts-user-field"
+        onChange={handleChange}
+        margin="normal"
+        label={labels.signup.username}
+      />
+    )}
+  </AccountsConsumer>
+);
+
+const SignupFormPasswordField = ({ handleChange }) => (
+  <AccountsConsumer>
+    {({ labels }: any) => (
+      <TextField
+        className="accounts-password-field"
+        onChange={handleChange}
+        margin="normal"
+        label={labels.signup.password}
+      />
+    )}
+  </AccountsConsumer>
+);
+
+const SignupForm = withStyles(theme => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
@@ -47,66 +120,40 @@ export const LoginForm = withStyles(theme => ({
   button: {},
 }))(({ classes }) => (
   <AccountsConsumer>
-    {({ accountsLabels, handleChangeView }) => (
+    {({ labels, handleChangeView, components }) => (
       <div className={classes.root}>
-        <UserField />
-        <PasswordField />
+        <components.signup.UserField />
+        <components.signup.PasswordField />
         <div className={classes.actions}>
-          <Button
-            color="secondary"
-            variant="outlined"
-            className={classes.button}
-            onClick={() => handleChangeView('signup')}
-          >
-            {accountsLabels.signup}
-          </Button>
-          <Button variant="contained" color="primary" className={classes.button}>
-            {accountsLabels.login}
-          </Button>
+          <components.signup.LoginButton />
+          <components.signup.SignupButton />
         </div>
       </div>
     )}
   </AccountsConsumer>
 ));
 
-export const SignupForm = withStyles(theme => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  actions: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: theme.spacing.unit * 4,
-    marginBottom: theme.spacing.unit * 2,
-  },
-  button: {},
-}))(({ classes }) => (
+const SignupFormLoginButton = () => (
   <AccountsConsumer>
-    {({ accountsLabels, handleChangeView }) => (
-      <div className={classes.root}>
-        <UserField />
-        <PasswordField />
-        <div className={classes.actions}>
-          <Button
-            color="secondary"
-            variant="outlined"
-            className={classes.button}
-            onClick={() => handleChangeView('login')}
-          >
-            {accountsLabels.loginInstead}
-          </Button>
-          <Button variant="contained" color="primary" className={classes.button}>
-            {accountsLabels.signup}
-          </Button>
-        </div>
-      </div>
+    {({ labels, handleChangeView }) => (
+      <Button variant="outlined" color="secondary" onClick={() => handleChangeView('login')}>
+        {labels.signup.loginInstead}
+      </Button>
     )}
   </AccountsConsumer>
-));
+);
 
-export const Wrapper = withStyles(theme => ({
+const SignupFormSignupButton = () => (
+  <AccountsConsumer>
+    {({ labels }) => (
+      <Button variant="contained" color="primary">
+        {labels.signup.signup}
+      </Button>
+    )}
+  </AccountsConsumer>
+);
+
+const Wrapper = withStyles(theme => ({
   root: {
     maxWidth: theme.spacing.unit * 56,
     margin: '0 auto',
@@ -123,15 +170,20 @@ export const Wrapper = withStyles(theme => ({
   </div>
 ));
 
-export const Accounts = () => (
-  <AccountsConsumer>
-    {({ view }) => {
-      return (
-        <Wrapper>
-          {view === 'login' && <LoginForm />}
-          {view === 'signup' && <SignupForm />}
-        </Wrapper>
-      );
-    }}
-  </AccountsConsumer>
-);
+export default {
+  Wrapper,
+  login: {
+    LoginForm,
+    UserField: LoginFormUserField,
+    PasswordField: LoginFormPasswordField,
+    SignupButton: LoginFormSignupButton,
+    LoginButton: LoginFormLoginButton,
+  },
+  signup: {
+    SignupForm,
+    UserField: SignupFormUserField,
+    PasswordField: SignupFormPasswordField,
+    SignupButton: SignupFormSignupButton,
+    LoginButton: SignupFormLoginButton,
+  },
+};
