@@ -21,6 +21,7 @@ import { twoFactorSet, twoFactorUnset, twoFactorSecret } from './resolvers/two-f
 import { authenticated } from './utils/authenticated-resolver';
 import { MutationResolvers, QueryResolvers } from './types/graphql';
 import { createAuthenticatedDirective } from './utils/authenticated-directive';
+import { getAccountsOptions } from './resolvers/get-accounts-options';
 
 export interface SchemaGenerationOptions {
   rootQueryName?: string;
@@ -73,6 +74,7 @@ export const createAccountsGraphQL = (
 
   let queryResolvers: QueryResolvers.Resolvers = {
     getUser: getUser(accountsServer),
+    getAccountsOptions: getAccountsOptions(accountsServer),
   };
 
   if (passwordService) {

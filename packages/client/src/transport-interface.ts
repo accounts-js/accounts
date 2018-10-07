@@ -1,4 +1,4 @@
-import { LoginResult, ImpersonationResult, CreateUser } from '@accounts/types';
+import { LoginResult, ImpersonationResult, CreateUser, AccountsOptions } from '@accounts/types';
 import { AccountsClient } from './accounts-client';
 
 export interface TransportInterface {
@@ -25,4 +25,5 @@ export interface TransportInterface {
       email?: string;
     }
   ): Promise<ImpersonationResult>;
+  getAccountsOptions(): Promise<AccountsOptions>;
 }

@@ -1,5 +1,7 @@
 import React from 'react';
-import { compose, withStateHandlers } from 'recompose';
+import PropTypes from 'prop-types';
+
+import { compose, withStateHandlers, lifecycle, branch, renderNothing } from 'recompose';
 
 const AccountsContext = React.createContext('accounts');
 
@@ -28,6 +30,7 @@ let AccountsProvider: React.SFC<any> = ({
   accountsPassword,
   accountsLabels = {},
   accountsComponents,
+  accountsOptions,
   view,
   handleChangeView,
 }) => {
@@ -40,6 +43,7 @@ let AccountsProvider: React.SFC<any> = ({
         {
           accountsClient,
           accountsPassword,
+          options: accountsOptions,
           components,
           labels,
           view,
@@ -56,20 +60,35 @@ AccountsProvider = compose(
   withStateHandlers(
     props => ({
       view: props.view || 'login',
+      accountsOptions: props.accountsOptions,
     }),
     {
       handleChangeView: () => view => ({
         view,
       }),
+      setAccountsOptions: () => accountsOptions => ({
+        accountsOptions,
+      }),
     }
-  )
+  ),
+  branch(
+    props => !props.accountsOptions,
+    lifecycle({
+      async componentDidMount() {
+        const { accountsClient, setAccountsOptions } = this.props;
+        const accountsOptions = await accountsClient.getAccountsOptions();
+        setAccountsOptions(accountsOptions);
+      },
+    })
+  ),
+  branch(props => !props.accountsOptions, renderNothing)
 )(AccountsProvider);
 
 export { AccountsProvider };
 
 export const AccountsConsumer = AccountsContext.Consumer;
 
-export const Accounts = () => (
+export const Accounts: React.SFC<any> = () => (
   <AccountsConsumer>
     {({ view, components }) => {
       return (
@@ -81,3 +100,7 @@ export const Accounts = () => (
     }}
   </AccountsConsumer>
 );
+
+Accounts.propTypes = {
+  title: PropTypes.string,
+};

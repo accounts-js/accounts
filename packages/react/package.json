@@ -24,6 +24,7 @@
     ]
   },
   "dependencies": {
+    "prop-types": "^15.6.2",
     "recompose": "^0.30.0"
   },
   "peerDependencies": {

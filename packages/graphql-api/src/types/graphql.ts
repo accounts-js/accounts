@@ -23,8 +23,13 @@ export type SubscriptionResolver<Result, Parent = any, Context = any, Args = any
   ): R | Result | Promise<R | Result>;
 };
 
+export interface Service {
+  name: string;
+}
+
 export interface Query {
   getUser?: User | null;
+  getAccountsOptions?: AccountsOptions | null;
   twoFactorSecret?: TwoFactorSecretKey | null;
 }
 
@@ -37,6 +42,12 @@ export interface User {
 export interface EmailRecord {
   address?: string | null;
   verified?: boolean | null;
+}
+
+export interface AccountsOptions {
+  services?: (Service | null)[] | null;
+  siteTitle?: string | null;
+  siteUrl?: string | null;
 }
 
 export interface TwoFactorSecretKey {
@@ -81,6 +92,10 @@ export interface Tokens {
 export interface LoginResult {
   sessionId?: string | null;
   tokens?: Tokens | null;
+}
+
+export interface PasswordService {
+  name: string;
 }
 
 export interface AuthenticateParamsInput {
@@ -157,6 +172,7 @@ export interface TwoFactorUnsetMutationArgs {
 export namespace QueryResolvers {
   export interface Resolvers<Context = any> {
     getUser?: GetUserResolver<User | null, any, Context>;
+    getAccountsOptions?: GetAccountsOptionsResolver<AccountsOptions | null, any, Context>;
     twoFactorSecret?: TwoFactorSecretResolver<TwoFactorSecretKey | null, any, Context>;
   }
 
@@ -165,6 +181,11 @@ export namespace QueryResolvers {
     Parent,
     Context
   >;
+  export type GetAccountsOptionsResolver<
+    R = AccountsOptions | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
   export type TwoFactorSecretResolver<
     R = TwoFactorSecretKey | null,
     Parent = any,
@@ -204,6 +225,30 @@ export namespace EmailRecordResolvers {
     Context
   >;
   export type VerifiedResolver<R = boolean | null, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+}
+
+export namespace AccountsOptionsResolvers {
+  export interface Resolvers<Context = any> {
+    services?: ServicesResolver<(Service | null)[] | null, any, Context>;
+    siteTitle?: SiteTitleResolver<string | null, any, Context>;
+    siteUrl?: SiteUrlResolver<string | null, any, Context>;
+  }
+
+  export type ServicesResolver<
+    R = (Service | null)[] | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type SiteTitleResolver<R = string | null, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type SiteUrlResolver<R = string | null, Parent = any, Context = any> = Resolver<
     R,
     Parent,
     Context
@@ -465,4 +510,12 @@ export namespace LoginResultResolvers {
     Parent,
     Context
   >;
+}
+
+export namespace PasswordServiceResolvers {
+  export interface Resolvers<Context = any> {
+    name?: NameResolver<string, any, Context>;
+  }
+
+  export type NameResolver<R = string, Parent = any, Context = any> = Resolver<R, Parent, Context>;
 }

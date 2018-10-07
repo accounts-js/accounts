@@ -46,6 +46,17 @@ export const typeDefs = `
     # Two factor
     code: String
   }
+
+  type Service {
+    name: String!
+    options: String
+  }
+
+  type AccountsOptions {
+    services: [Service]
+    siteTitle: String
+    siteUrl: String
+  }
 `;
 
 export const typeDefsPassword = `
