@@ -9,12 +9,7 @@ import {
   HashAlgorithm,
 } from '@accounts/types';
 import { TwoFactor, AccountsTwoFactorOptions, getUserTwoFactorService } from '@accounts/two-factor';
-import {
-  AccountsServer,
-  ServerHooks,
-  generateRandomToken,
-  getFirstUserEmail,
-} from '@accounts/server';
+import { AccountsServer, ServerHooks, generateRandomToken } from '@accounts/server';
 import {
   getUserResetTokens,
   getUserVerificationTokens,
@@ -259,15 +254,10 @@ export default class AccountsPassword implements AuthenticationService {
     if (!address || !isString(address)) {
       throw new Error('Invalid email');
     }
+
     const user = await this.db.findUserByEmail(address);
-    address = address.toLowerCase();
     if (!user) {
       throw new Error('User not found');
-    }
-    // Make sure the address is valid
-    const emails = user.emails || [];
-    if (!includes(emails.map(email => email.address), address)) {
-      throw new Error('No such email address for user');
     }
     const token = generateRandomToken();
     await this.db.addEmailVerificationToken(user.id, address, token);
@@ -295,12 +285,11 @@ export default class AccountsPassword implements AuthenticationService {
     if (!address || !isString(address)) {
       throw new Error('Invalid email');
     }
+
     const user = await this.db.findUserByEmail(address);
-    address = address.toLowerCase();
     if (!user) {
       throw new Error('User not found');
     }
-    address = getFirstUserEmail(user, address);
     const token = generateRandomToken();
     await this.db.addResetPasswordToken(user.id, address, token, 'reset');
 
@@ -325,11 +314,14 @@ export default class AccountsPassword implements AuthenticationService {
    * @returns {Promise<void>} - Return a Promise.
    */
   public async sendEnrollmentEmail(address: string): Promise<void> {
+    if (!address || !isString(address)) {
+      throw new Error('Invalid email');
+    }
+
     const user = await this.db.findUserByEmail(address);
     if (!user) {
       throw new Error('User not found');
     }
-    address = getFirstUserEmail(user, address);
     const token = generateRandomToken();
     await this.db.addResetPasswordToken(user.id, address, token, 'enroll');
 
