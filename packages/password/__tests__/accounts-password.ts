@@ -339,17 +339,6 @@ describe('AccountsPassword', () => {
       }
     });
 
-    it('throws when invalid address', async () => {
-      const findUserByEmail = jest.fn(() => Promise.resolve(invalidUser));
-      password.setStore({ findUserByEmail } as any);
-      try {
-        await password.sendVerificationEmail(email);
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toMatchSnapshot();
-      }
-    });
-
     it('send email to first unverified email', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve(validUser));
       const addEmailVerificationToken = jest.fn(() => Promise.resolve());
