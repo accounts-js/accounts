@@ -1,8 +1,7 @@
 import { servers } from './servers';
 
 const user = {
-  // TODO test with uppercase email
-  email: 'johndoe@gmail.com',
+  email: 'johnDoe@gmail.com',
   password: 'notSecure',
 };
 let userId: string;
