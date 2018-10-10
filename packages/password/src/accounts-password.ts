@@ -256,16 +256,17 @@ export default class AccountsPassword implements AuthenticationService {
    * @returns {Promise<void>} - Return a Promise.
    */
   public async sendVerificationEmail(address: string): Promise<void> {
-    if (!address) {
+    if (!address || !isString(address)) {
       throw new Error('Invalid email');
     }
     const user = await this.db.findUserByEmail(address);
+    address = address.toLowerCase();
     if (!user) {
       throw new Error('User not found');
     }
     // Make sure the address is valid
     const emails = user.emails || [];
-    if (!address || !includes(emails.map(email => email.address), address)) {
+    if (!includes(emails.map(email => email.address), address)) {
       throw new Error('No such email address for user');
     }
     const token = generateRandomToken();
@@ -291,10 +292,11 @@ export default class AccountsPassword implements AuthenticationService {
    * @returns {Promise<void>} - Return a Promise.
    */
   public async sendResetPasswordEmail(address: string): Promise<void> {
-    if (!address) {
+    if (!address || !isString(address)) {
       throw new Error('Invalid email');
     }
     const user = await this.db.findUserByEmail(address);
+    address = address.toLowerCase();
     if (!user) {
       throw new Error('User not found');
     }
