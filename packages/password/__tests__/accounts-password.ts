@@ -428,6 +428,15 @@ describe('AccountsPassword', () => {
     const email = 'john.doe@gmail.com';
     const validUser = { emails: [{ address: email }] };
 
+    it('throws if email is empty', async () => {
+      try {
+        await password.sendEnrollmentEmail('');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
     it('throws if user is not found', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
       password.setStore({ findUserByEmail } as any);
