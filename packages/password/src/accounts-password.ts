@@ -58,12 +58,10 @@ const defaultOptions = {
   // 30 days - 30 * 24 * 60 * 60 * 1000
   passwordEnrollTokenExpiration: 2592000000,
   validateEmail(email?: string): boolean {
-    const isValid = !isEmpty(trim(email || '')) && isEmail(email);
-    return Boolean(isValid);
+    return !isEmpty(trim(email)) && isEmail(email);
   },
   validatePassword(password?: PasswordType): boolean {
-    const isValid = !isEmpty(password);
-    return isValid;
+    return !isEmpty(password);
   },
   validateUsername(username?: string): boolean {
     const usernameRegex = /^[a-zA-Z][a-zA-Z0-9]*$/;
@@ -128,6 +126,7 @@ export default class AccountsPassword implements AuthenticationService {
 
   /**
    * @description Add an email address for a user.
+   * It will trigger the `validateEmail` option and throw if email is invalid.
    * Use this instead of directly updating the database.
    * @param {string} userId - User id.
    * @param {string} newEmail - A new email address for the user.
@@ -136,7 +135,9 @@ export default class AccountsPassword implements AuthenticationService {
    * @returns {Promise<void>} - Return a Promise.
    */
   public addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
-    // TODO use this.options.verifyEmail before
+    if (!this.options.validateEmail(newEmail)) {
+      throw new Error('Invalid email');
+    }
     return this.db.addEmail(userId, newEmail, verified);
   }
 

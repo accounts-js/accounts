@@ -118,10 +118,19 @@ describe('AccountsPassword', () => {
   });
 
   describe('addEmail', () => {
+    it('throws on invalid email', async () => {
+      try {
+        await password.addEmail('id', 'email', true);
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
     it('call this.db.addEmail', async () => {
       const addEmail = jest.fn(() => Promise.resolve());
       password.setStore({ addEmail } as any);
-      await password.addEmail('id', 'email', true);
+      await password.addEmail('id', 'john.doe@gmail.com', true);
       expect(addEmail.mock.calls[0]).toMatchSnapshot();
     });
   });
