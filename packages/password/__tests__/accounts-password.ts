@@ -153,6 +153,15 @@ describe('AccountsPassword', () => {
     const invalidUser = { ...validUser };
     invalidUser.emails = [];
 
+    it('throws on invalid token', async () => {
+      try {
+        await password.verifyEmail('');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
     it('throws when no user is found', async () => {
       const findUserByEmailVerificationToken = jest.fn(() => Promise.resolve());
       password.setStore({ findUserByEmailVerificationToken } as any);
@@ -220,6 +229,24 @@ describe('AccountsPassword', () => {
     set(validUserEnroll, 'services.password.reset', [{ token, address: email, reason: 'enroll' }]);
     const invalidUser = { ...validUser };
     invalidUser.emails = [];
+
+    it('throws on invalid token', async () => {
+      try {
+        await password.resetPassword('', '');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('throws on invalid password', async () => {
+      try {
+        await password.resetPassword(token, '');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
 
     it('throws when token not found', async () => {
       const findUserByResetPasswordToken = jest.fn(() => Promise.resolve());
