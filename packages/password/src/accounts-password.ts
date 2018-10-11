@@ -153,6 +153,10 @@ export default class AccountsPassword implements AuthenticationService {
    * @returns {Promise<void>} - Return a Promise.
    */
   public async verifyEmail(token: string): Promise<void> {
+    if (!token || !isString(token)) {
+      throw new Error('Invalid token');
+    }
+
     const user = await this.db.findUserByEmailVerificationToken(token);
     if (!user) {
       throw new Error('Verify email link expired');
@@ -178,6 +182,13 @@ export default class AccountsPassword implements AuthenticationService {
    * @returns {Promise<void>} - Return a Promise.
    */
   public async resetPassword(token: string, newPassword: PasswordType): Promise<void> {
+    if (!token || !isString(token)) {
+      throw new Error('Invalid token');
+    }
+    if (!newPassword || !isString(newPassword)) {
+      throw new Error('Invalid new password');
+    }
+
     const user = await this.db.findUserByResetPasswordToken(token);
     if (!user) {
       throw new Error('Reset password link expired');
