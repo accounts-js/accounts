@@ -108,10 +108,10 @@ export class RestClient implements TransportInterface {
     return this.authFetch('logout', args, customHeaders);
   }
 
-  public async getUser(accessToken: string, customHeaders?: object): Promise<User> {
+  public async getUser(tokens?: any, customHeaders?: object): Promise<User> {
     const args = {
       method: 'POST',
-      body: JSON.stringify({}),
+      body: JSON.stringify(tokens || {}),
     };
     return this.authFetch('user', args, customHeaders);
   }
