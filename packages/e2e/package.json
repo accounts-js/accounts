@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "coverage": "yarn jest --forceExit"
+    "coverage": "yarn jest --forceExit --runInBand"
   },
   "jest": {
     "setupFiles": [
