@@ -58,6 +58,19 @@ describe('AccountsServer', () => {
       }
     });
 
+    it('throws when user is deactivated', async () => {
+      const authenticate = jest.fn(() => Promise.resolve({ id: 'userId', deactivated: true }));
+      try {
+        const accountServer = new AccountsServer({ db: {} } as any, {
+          facebook: { authenticate, setStore: jest.fn() },
+        });
+        await accountServer.loginWithService('facebook', {}, {});
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
     it('should return tokens', async () => {
       const authenticate = jest.fn(() => Promise.resolve({ id: 'userId' }));
       const createSession = jest.fn(() => Promise.resolve('sessionId'));
