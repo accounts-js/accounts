@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client-password",
-  "version": "0.3.0-beta.26",
+  "version": "0.3.0-beta.29",
   "description": "@accounts/client-password",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -37,14 +37,14 @@
   "license": "MIT",
   "devDependencies": {
     "@types/crypto-js": "3.1.43",
-    "@types/jest": "23.3.1",
-    "@types/node": "10.5.4",
-    "jest": "23.4.2",
+    "@types/jest": "23.3.2",
+    "@types/node": "10.11.3",
+    "jest": "23.6.0",
     "rimraf": "2.6.2"
   },
   "dependencies": {
-    "@accounts/client": "^0.3.0-beta.26",
-    "@accounts/types": "^0.3.0-beta.26",
+    "@accounts/client": "^0.3.0-beta.29",
+    "@accounts/types": "^0.3.0-beta.29",
     "crypto-js": "^3.1.9-1"
   }
 }

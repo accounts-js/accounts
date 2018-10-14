@@ -1,6 +1,6 @@
 {
   "name": "@accounts/graphql-client",
-  "version": "0.3.0-beta.26",
+  "version": "0.3.0-beta.29",
   "description": "GraphQL client transport for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -33,12 +33,12 @@
   },
   "homepage": "https://github.com/js-accounts/graphql#readme",
   "devDependencies": {
-    "lodash": "4.17.10",
-    "nock": "9.4.3"
+    "lodash": "4.17.11",
+    "nock": "9.6.1"
   },
   "dependencies": {
-    "@accounts/client": "^0.3.0-beta.26",
-    "@accounts/types": "^0.3.0-beta.26",
-    "graphql-tag": "^1.1.2"
+    "@accounts/client": "^0.3.0-beta.29",
+    "@accounts/types": "^0.3.0-beta.29",
+    "graphql-tag": "^2.9.2"
   }
 }

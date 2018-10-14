@@ -8,3 +8,4 @@ yarn-error.log
 .vscode
 packages/*/package-lock.json
 schema.json
+build/
