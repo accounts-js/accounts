@@ -293,6 +293,18 @@ export class Mongo implements DatabaseInterface {
     );
   }
 
+  public async setUserDeactivated(userId: string, deactivated: boolean): Promise<void> {
+    const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
+    await this.collection.updateOne(
+      { _id: id },
+      {
+        $set: {
+          deactivated,
+        },
+      }
+    );
+  }
+
   public async createSession(
     userId: string,
     token: string,

@@ -107,10 +107,13 @@ Please change it with a strong random token.`);
       }
 
       const user: User | null = await this.services[serviceName].authenticate(params);
+      hooksInfo.user = user;
       if (!user) {
         throw new Error(`Service ${serviceName} was not able to authenticate user`);
       }
-      hooksInfo.user = user;
+      if (user.deactivated) {
+        throw new Error('Your account has been deactivated');
+      }
 
       // Let the user validate the login attempt
       await this.hooks.emitSerial(ServerHooks.ValidateLogin, hooksInfo);
@@ -453,6 +456,24 @@ Please change it with a strong random token.`);
       throw new Error('User not found');
     }
     return this.db.setProfile(userId, { ...user.profile, ...profile });
+  }
+
+  /**
+   * @description Deactivate a user, the user will not be able to login until his account is reactivated.
+   * @param {string} userId - User id.
+   * @returns {Promise<void>} - Return a Promise.
+   */
+  public async deactivateUser(userId: string): Promise<void> {
+    return this.db.setUserDeactivated(userId, true);
+  }
+
+  /**
+   * @description Activate a user.
+   * @param {string} userId - User id.
+   * @returns {Promise<void>} - Return a Promise.
+   */
+  public async activateUser(userId: string): Promise<void> {
+    return this.db.setUserDeactivated(userId, false);
   }
 
   public prepareMail(
