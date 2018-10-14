@@ -300,6 +300,7 @@ export class Mongo implements DatabaseInterface {
       {
         $set: {
           deactivated,
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
         },
       }
     );

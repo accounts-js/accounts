@@ -782,4 +782,15 @@ describe('Mongo', () => {
       expect(retUser.createdAt).not.toEqual(retUser.updatedAt);
     });
   });
+
+  describe('setUserDeactivated', () => {
+    it('should deactivate user', async () => {
+      const userId = await databaseTests.database.createUser(user);
+      await delay(10);
+      await databaseTests.database.setUserDeactivated(userId, true);
+      const retUser = await databaseTests.database.findUserById(userId);
+      expect(retUser.deactivated).toBeTruthy();
+      expect(retUser.createdAt).not.toEqual(retUser.updatedAt);
+    });
+  });
 });
