@@ -866,6 +866,36 @@ describe('AccountsServer', () => {
     });
   });
 
+  describe('deactivateUser', () => {
+    it('call this.db.setUserDeactivated', async () => {
+      const setUserDeactivated = jest.fn(() => Promise.resolve('user'));
+      const accountsServer = new AccountsServer(
+        {
+          db: { setUserDeactivated } as any,
+          tokenSecret: 'secret1',
+        },
+        {}
+      );
+      await accountsServer.deactivateUser('id');
+      expect(setUserDeactivated.mock.calls[0]).toEqual(['id', true]);
+    });
+  });
+
+  describe('activateUser', () => {
+    it('call this.db.setUserDeactivated', async () => {
+      const setUserDeactivated = jest.fn(() => Promise.resolve('user'));
+      const accountsServer = new AccountsServer(
+        {
+          db: { setUserDeactivated } as any,
+          tokenSecret: 'secret1',
+        },
+        {}
+      );
+      await accountsServer.activateUser('id');
+      expect(setUserDeactivated.mock.calls[0]).toEqual(['id', false]);
+    });
+  });
+
   describe('impersonate', () => {
     const user = { username: 'myUser', id: '123' };
     const impersonatedUser = { username: 'impUser', id: '456' };
