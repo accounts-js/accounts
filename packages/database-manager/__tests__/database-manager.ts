@@ -106,6 +106,10 @@ export default class Database {
   public setResetPassword() {
     return this.name;
   }
+
+  public setUserDeactivated() {
+    return this.name;
+  }
 }
 
 const databaseManager = new DatabaseManager({
@@ -235,5 +239,9 @@ describe('DatabaseManager', () => {
 
   it('setResetPassword should be called on sessionStorage', () => {
     expect(databaseManager.setResetPassword()).toBe('userStorage');
+  });
+
+  it('setUserDeactivated should be called on sessionStorage', () => {
+    expect(databaseManager.setUserDeactivated('userId', true)).toBe('userStorage');
   });
 });

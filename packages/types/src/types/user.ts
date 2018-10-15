@@ -6,4 +6,5 @@ export interface User {
   id: string;
   profile?: object;
   services?: object;
+  deactivated: boolean;
 }
