@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "coverage": "yarn jest --forceExit"
+    "coverage": "yarn jest --forceExit --runInBand"
   },
   "jest": {
     "setupFiles": [
@@ -48,6 +48,9 @@
     "@accounts/rest-express": "^0.3.0-beta.29",
     "@accounts/server": "^0.3.0-beta.29",
     "@accounts/types": "^0.3.0-beta.29",
+    "@types/lodash": "4.14.115",
+    "@types/mongoose": "5.2.3",
+    "@types/node-fetch": "2.1.2",
     "apollo-boost": "0.1.16",
     "apollo-server": "2.1.0",
     "body-parser": "1.18.3",

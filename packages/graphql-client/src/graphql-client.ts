@@ -169,6 +169,7 @@ export default class GraphQLClient implements TransportInterface {
       const { data } = await this.options.graphQLClient.query({
         query,
         variables,
+        fetchPolicy: 'network-only',
         context: {
           headers: {
             'accounts-access-token': tokens.accessToken,

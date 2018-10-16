@@ -293,6 +293,11 @@
   resolved "https://registry.yarnpkg.com/@types/jwt-decode/-/jwt-decode-2.2.1.tgz#afdf5c527fcfccbd4009b5fd02d1e18241f2d2f2"
   integrity sha512-aWw2YTtAdT7CskFyxEX2K21/zSDStuf/ikI3yBqmwpwJF0pS+/IX5DWv+1UFffZIbruP6cnT9/LAJV1gFwAT1A==
 
+"@types/lodash@4.14.115":
+  version "4.14.115"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.115.tgz#54d171b2ce12c058742443b5f6754760f701b8f9"
+  integrity sha512-9K/P4XMQxk61omAzQh3bbbFiqnG17eLcFysjlAYz0aPcYrVo8T+ujaCeIeY0Gpzux7x1YbxtEtLKB7ZWf79qdg==
+
 "@types/lodash@4.14.116", "@types/lodash@^4.14.116":
   version "4.14.116"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.116.tgz#5ccf215653e3e8c786a58390751033a9adca0eb9"
@@ -317,10 +322,10 @@
     "@types/events" "*"
     "@types/node" "*"
 
-"@types/mongoose@5.2.17":
-  version "5.2.17"
-  resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.2.17.tgz#cea448667810f4e27cd1e27067ee2e534018d227"
-  integrity sha512-+sZWg0RGI9BrUjayOsRyc4+TxJ7N0qBW5J5ic/GNL0clwv31WmeXki8UhcU0+71XtQR/wRNpEsf8jbRe9rXbEg==
+"@types/mongoose@5.2.3":
+  version "5.2.3"
+  resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.2.3.tgz#0336876383d8e37bb19309ee40774ee681f163bb"
+  integrity sha512-lVf/qAn6/ttZdXzVrHf0PQXMC/VGpHSb6q+jKwql6V2725k9UQQSIVvBEWblR33axQ0DIrjmCvv/6nt+Vr6LFg==
   dependencies:
     "@types/events" "*"
     "@types/mongodb" "*"

@@ -29,11 +29,11 @@ const accountsExpress = (
 
   router.post(`${path}/impersonate`, impersonate(accountsServer));
 
-  router.post(`${path}/user`, getUser(accountsServer));
+  router.post(`${path}/user`, userLoader(accountsServer), getUser(accountsServer));
 
   router.post(`${path}/refreshTokens`, refreshAccessToken(accountsServer));
 
-  router.post(`${path}/logout`, logout(accountsServer));
+  router.post(`${path}/logout`, userLoader(accountsServer), logout(accountsServer));
 
   router.post(`${path}/:service/authenticate`, serviceAuthenticate(accountsServer));
 

@@ -20,14 +20,14 @@ import { ServerTestInterface } from './index';
 
 (global as any).fetch = fetch;
 
-const port = 3000;
-
 const convertUrlToToken = (url: string): string => {
   const split = url.split('/');
   return split[split.length - 1];
 };
 
 export class ServerRestTest implements ServerTestInterface {
+  public port = 3000;
+
   public accountsServer: AccountsServer;
   public accountsPassword: AccountsPassword;
   public accountsDatabase: DatabaseInterface;
@@ -82,7 +82,7 @@ export class ServerRestTest implements ServerTestInterface {
     this.app.use(accountsExpress(this.accountsServer));
 
     const accountsRest = new RestClient({
-      apiHost: `http://localhost:${port}`,
+      apiHost: `http://localhost:${this.port}`,
       rootPath: '/accounts',
     });
     this.accountsClient = new AccountsClient({}, accountsRest);
@@ -91,8 +91,9 @@ export class ServerRestTest implements ServerTestInterface {
   }
 
   public async start() {
+    await new Promise(resolve => setTimeout(resolve, 3000));
     await new Promise((resolve, reject) => {
-      this.server = this.app.listen(port, (err: Error) => {
+      this.server = this.app.listen(this.port, (err: Error) => {
         if (err) {
           reject(err);
           return;
