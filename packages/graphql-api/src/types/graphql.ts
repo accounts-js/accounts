@@ -55,9 +55,9 @@ export interface Mutation {
   refreshTokens?: LoginResult | null;
   logout?: boolean | null;
   authenticate?: LoginResult | null /** Example: Login with passwordauthenticate(serviceName: "password", params: {password: "<pw>", user: {email: "<email>"}}) */;
-  register?:
+  createUser?:
     | string
-    | null /** register returns the id corresponding db ids, such as number IDs, ObjectIDs or UUIDs */;
+    | null /** Creates a user with a password, returns the id corresponding db ids, such as number IDs, ObjectIDs or UUIDs */;
   verifyEmail?: boolean | null;
   resetPassword?: boolean | null;
   sendVerificationEmail?: boolean | null;
@@ -126,7 +126,7 @@ export interface AuthenticateMutationArgs {
   serviceName: string;
   params: AuthenticateParamsInput;
 }
-export interface RegisterMutationArgs {
+export interface CreateUserMutationArgs {
   user: CreateUserInput;
 }
 export interface VerifyEmailMutationArgs {
@@ -274,11 +274,11 @@ export namespace MutationResolvers {
       any,
       Context
     > /** Example: Login with passwordauthenticate(serviceName: "password", params: {password: "<pw>", user: {email: "<email>"}}) */;
-    register?: RegisterResolver<
+    createUser?: CreateUserResolver<
       string | null,
       any,
       Context
-    > /** register returns the id corresponding db ids, such as number IDs, ObjectIDs or UUIDs */;
+    > /** Creates a user with a password, returns the id corresponding db ids, such as number IDs, ObjectIDs or UUIDs */;
     verifyEmail?: VerifyEmailResolver<boolean | null, any, Context>;
     resetPassword?: ResetPasswordResolver<boolean | null, any, Context>;
     sendVerificationEmail?: SendVerificationEmailResolver<boolean | null, any, Context>;
@@ -325,13 +325,13 @@ export namespace MutationResolvers {
     params: AuthenticateParamsInput;
   }
 
-  export type RegisterResolver<R = string | null, Parent = any, Context = any> = Resolver<
+  export type CreateUserResolver<R = string | null, Parent = any, Context = any> = Resolver<
     R,
     Parent,
     Context,
-    RegisterArgs
+    CreateUserArgs
   >;
-  export interface RegisterArgs {
+  export interface CreateUserArgs {
     user: CreateUserInput;
   }
 

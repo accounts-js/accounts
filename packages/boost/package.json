@@ -1,0 +1,36 @@
+{
+  "name": "@accounts/boost",
+  "version": "0.3.0-beta.30",
+  "description": "Ready to use GraphQL accounts server",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rimraf lib",
+    "start": "tsc --watch",
+    "precompile": "yarn clean",
+    "compile": "tsc",
+    "prepublishOnly": "yarn compile"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/boost"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@accounts/database-manager": "^0.3.0-beta.30",
+    "@accounts/graphql-api": "^0.3.0-beta.30",
+    "@accounts/server": "^0.3.0-beta.30",
+    "@accounts/types": "^0.3.0-beta.30",
+    "rimraf": "2.6.2"
+  },
+  "dependencies": {
+    "apollo-server": "^2.0.0",
+    "graphql": "^0.13.2",
+    "graphql-tools": "^3.1.1",
+    "jsonwebtoken": "^8.3.0",
+    "lodash": "^4.17.10"
+  }
+}

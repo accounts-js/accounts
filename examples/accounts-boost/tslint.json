@@ -1,0 +1,6 @@
+{
+  "extends": ["@accounts/tslint-config-accounts"],
+  "rules": {
+    "no-console": false
+  }
+}
