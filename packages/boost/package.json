@@ -1,6 +1,6 @@
 {
   "name": "@accounts/boost",
-  "version": "0.3.0-beta.30",
+  "version": "0.4.0-alpha.0",
   "description": "Ready to use GraphQL accounts server",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -20,10 +20,10 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@accounts/database-manager": "^0.3.0-beta.30",
-    "@accounts/graphql-api": "^0.3.0-beta.30",
-    "@accounts/server": "^0.3.0-beta.30",
-    "@accounts/types": "^0.3.0-beta.30",
+    "@accounts/database-manager": "^0.4.0-alpha.0",
+    "@accounts/graphql-api": "^0.4.0-alpha.0",
+    "@accounts/server": "^0.4.0-alpha.0",
+    "@accounts/types": "^0.4.0-alpha.0",
     "rimraf": "2.6.2"
   },
   "dependencies": {
