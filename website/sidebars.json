@@ -1,5 +1,6 @@
 {
   "docs": {
-    "Getting started": ["usage", "rest", "graphql"]
+    "Strategies": ["rest", "graphql"],
+    "Databases": ["mongo", "redis"]
   }
 }
