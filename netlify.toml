@@ -1,6 +1,6 @@
 [build]
   base    = "website"
-  publish = "build/accounts-js"
+  publish = "website/build/accounts-js"
   command = "yarn build"
 
 [build.environment]
