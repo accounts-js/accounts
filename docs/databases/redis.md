@@ -1,6 +1,6 @@
 ---
 id: redis
-title: 'Redis'
+title: Redis
 sidebar_label: Redis
 ---
 

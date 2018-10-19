@@ -1,6 +1,6 @@
 ---
 id: rest
-title: REST
+title: Rest
 sidebar_label: Rest
 ---
 

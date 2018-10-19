@@ -1,6 +1,7 @@
 {
   "docs": {
-    "Strategies": ["rest", "graphql"],
-    "Databases": ["mongo", "redis"]
+    "Getting started": ["getting-started"],
+    "Transports": ["transports/graphql", "transports/rest"],
+    "Databases": ["databases/mongo", "databases/redis"]
   }
 }

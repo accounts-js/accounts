@@ -45,7 +45,7 @@ const siteConfig = {
       label: 'Getting Started',
     },
     {
-      doc: 'graphql',
+      doc: 'transports/graphql',
       label: 'GraphQL',
     },
     {

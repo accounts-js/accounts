@@ -1,6 +1,6 @@
 ---
 id: mongo
-title: 'Mongo'
+title: Mongo
 sidebar_label: Mongo
 ---
 
