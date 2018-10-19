@@ -1,5 +1,13 @@
 {
   "docs": {
-    "Getting started": ["usage", "rest", "graphql"]
+    "Getting started": ["getting-started"],
+    "Transports": ["transports/graphql", "transports/rest"],
+    "Databases": ["databases/mongo", "databases/redis"],
+    "Strategies": [
+      "strategies/password",
+      "strategies/facebook",
+      "strategies/oauth",
+      "strategies/twitter"
+    ]
   }
 }

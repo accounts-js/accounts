@@ -1,3 +1,9 @@
+---
+id: getting-started
+title: Getting started
+sidebar_label: @accounts/boost
+---
+
 # accounts
 
 ## About
