@@ -1,0 +1,39 @@
+{
+  "name": "@accounts/apollo",
+  "version": "0.4.0-alpha.1",
+  "description": "Apollo interegration for account-js",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rimraf lib",
+    "start": "tsc --watch",
+    "precompile": "yarn clean",
+    "compile": "tsc",
+    "prepublishOnly": "yarn compile"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/apollo"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "rimraf": "2.6.2"
+  },
+  "dependencies": {
+    "@accounts/apollo-link": "^0.4.0-alpha.1",
+    "@accounts/client": "^0.4.0-alpha.1",
+    "@accounts/client-password": "^0.4.0-alpha.1",
+    "@accounts/graphql-client": "^0.4.0-alpha.1",
+    "apollo-link": "^1.2.3",
+    "apollo-link-context": "1.0.9",
+    "apollo-link-error": "^1.1.1",
+    "apollo-link-http": "^1.5.5"
+  },
+  "peerDependencies": {
+    "apollo-cache-inmemory": "^1.3.0",
+    "apollo-client": "^2.4.2"
+  }
+}
