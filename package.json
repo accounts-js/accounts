@@ -16,7 +16,9 @@
     "prettier": "prettier --write '**/*.{json,md,js,ts}'",
     "test:prettier": "prettier --list-different '**/*.{json,md,js,ts}'",
     "coverage": "lerna run coverage",
-    "codecov": "codecov"
+    "codecov": "codecov",
+    "changelog": "conventional-changelog -i CHANGELOG.md -s",
+    "commit": "yarn git-cz"
   },
   "workspaces": {
     "packages": [
@@ -60,6 +62,7 @@
   "devDependencies": {
     "@accounts/tslint-config-accounts": "0.0.9",
     "codecov": "3.1.0",
+    "git-cz": "^1.7.1",
     "husky": "1.0.1",
     "lerna": "2.11.0",
     "lint-staged": "7.3.0",
@@ -73,5 +76,6 @@
     "type": "opencollective",
     "url": "https://opencollective.com/accounts-js",
     "logo": "https://opencollective.com/accounts-js/logo.txt"
-  }
+  },
+  "version": null
 }
