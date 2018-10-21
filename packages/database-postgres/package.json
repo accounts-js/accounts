@@ -1,0 +1,49 @@
+{
+  "name": "@accounts/postgres",
+  "version": "0.4.0-alpha.1",
+  "description": "Postgres adaptor for accounts",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib",
+    "start": "tsc --watch",
+    "precompile": "yarn clean",
+    "compile": "tsc",
+    "prepublishOnly": "yarn compile",
+    "testonly": "jest",
+    "test:watch": "jest --watch",
+    "coverage": "yarn testonly --coverage"
+  },
+  "files": [
+    "src",
+    "lib"
+  ],
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "./__tests__/.*.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/database-postgres"
+  },
+  "author": "Tim Mikeladze <tim.mikeladze@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@accounts/database-tests": "^0.4.0-alpha.1",
+    "@types/jest": "23.3.2",
+    "@types/lodash": "4.14.116",
+    "@types/node": "10.11.3",
+    "jest": "23.6.0"
+  },
+  "dependencies": {
+    "@accounts/types": "^0.4.0-alpha.1",
+    "lodash": "^4.17.11",
+    "pg-promise": "^8.5.1"
+  }
+}

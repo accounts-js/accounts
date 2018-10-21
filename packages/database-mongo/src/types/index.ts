@@ -1,4 +1,5 @@
-export interface AccountsMongoOptions {
+import * as bcrypt from 'bcryptjs';
+export interface AccountsPostgresOptions {
   /**
    * The users collection name, default 'users'.
    */
@@ -15,18 +16,6 @@ export interface AccountsMongoOptions {
     updatedAt: string;
   };
   /**
-   * Should the user collection use _id as string or ObjectId, default 'true'.
-   */
-  convertUserIdToMongoObjectId?: boolean;
-  /**
-   * Should the session collection use _id as string or ObjectId, default 'true'.
-   */
-  convertSessionIdToMongoObjectId?: boolean;
-  /**
-   * Perform case intensitive query for user name, default 'true'.
-   */
-  caseSensitiveUserName?: boolean;
-  /**
    * Function that generate the id for new objects.
    */
   idProvider?: () => string | object;
@@ -36,20 +25,16 @@ export interface AccountsMongoOptions {
   dateProvider?: (date?: Date) => any;
 }
 
-export interface MongoUser {
-  _id?: string | object;
+export interface PostgresUser {
+  id?: string;
   username?: string;
-  profile?: object;
-  services: {
-    password?: {
-      bcrypt: string;
-    };
-  };
-  emails?: [
-    {
-      address: string;
-      verified: boolean;
-    }
-  ];
+  profile?: string;
+}
+
+export interface PostgresSession {
   [key: string]: any;
+}
+
+export interface PostgressSessionPassword extends PostgresSession {
+  bcrypt?: string;
 }
