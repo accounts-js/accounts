@@ -13,12 +13,12 @@
     "test": "yarn build"
   },
   "dependencies": {
-    "@accounts/database-manager": "0.3.0-beta.20",
-    "@accounts/graphql-api": "0.3.0-beta.20",
-    "@accounts/mongo": "0.3.0-beta.20",
-    "@accounts/password": "0.3.0-beta.20",
-    "@accounts/rest-express": "0.3.0-beta.20",
-    "@accounts/server": "0.3.0-beta.20",
+    "@accounts/database-manager": "0.4.0-alpha.1",
+    "@accounts/graphql-api": "0.4.0-alpha.1",
+    "@accounts/mongo": "0.4.0-alpha.1",
+    "@accounts/password": "0.4.0-alpha.1",
+    "@accounts/rest-express": "0.4.0-alpha.1",
+    "@accounts/server": "0.4.0-alpha.1",
     "@types/mongoose": "5.2.0",
     "apollo-server": "2.0.0-rc.5",
     "cors": "2.8.4",

@@ -20,7 +20,7 @@ class Home extends React.Component<RouteComponentProps<{}>, IState> {
       this.props.history.push('/login');
       return;
     }
-    const user = await accountsGraphQL.getUser(tokens ? tokens.accessToken : '');
+    const user = await accountsGraphQL.getUser();
     await this.setState({ user });
   }
 
