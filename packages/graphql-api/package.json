@@ -43,7 +43,7 @@
     "@accounts/server": "^0.4.0-alpha.1",
     "@accounts/types": "^0.4.0-alpha.1",
     "@types/request-ip": "0.0.33",
-    "deepmerge": "2.1.1",
+    "deepmerge": "2.2.1",
     "request-ip": "2.1.1"
   }
 }

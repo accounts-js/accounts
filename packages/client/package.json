@@ -50,11 +50,11 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "23.3.2",
+    "@types/jest": "23.3.7",
     "@types/jwt-decode": "2.2.1",
-    "@types/node": "10.11.3",
+    "@types/node": "10.12.0",
     "jest": "23.6.0",
-    "jest-localstorage-mock": "2.2.0",
+    "jest-localstorage-mock": "2.3.0",
     "jsonwebtoken": "8.3.0",
     "localstorage-polyfill": "1.0.1",
     "rimraf": "2.6.2"

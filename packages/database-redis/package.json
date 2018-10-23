@@ -39,16 +39,16 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/database-tests": "^0.4.0-alpha.1",
-    "@types/ioredis": "4.0.1",
-    "@types/jest": "23.3.2",
-    "@types/lodash": "4.14.116",
-    "@types/node": "10.11.3",
+    "@types/ioredis": "4.0.3",
+    "@types/jest": "23.3.7",
+    "@types/lodash": "4.14.117",
+    "@types/node": "10.12.0",
     "@types/shortid": "0.0.29",
     "jest": "23.6.0"
   },
   "dependencies": {
     "@accounts/types": "^0.4.0-alpha.1",
-    "ioredis": "^4.0.0",
+    "ioredis": "^4.2.0",
     "lodash": "^4.17.11",
     "shortid": "^2.2.13"
   }
