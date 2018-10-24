@@ -1,4 +1,4 @@
-import { ErrorMessages } from './types/options';
+import { ErrorMessages } from './types/error-messages';
 
 export const errors: ErrorMessages = {
   userNotFound: 'User not found',
