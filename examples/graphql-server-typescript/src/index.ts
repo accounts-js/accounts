@@ -71,7 +71,7 @@ const start = async () => {
   // Create the Apollo Server that takes a schema and configures internal stuff
   const server = new ApolloServer({
     schema,
-    context: ({ req }) => accountsContext(req),
+    context: ({ req }) => accountsContext(req, { accountsServer }),
   });
 
   server.listen(4000).then(({ url }) => {
