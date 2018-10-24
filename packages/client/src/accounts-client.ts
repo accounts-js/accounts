@@ -1,4 +1,4 @@
-import { LoginResult, Tokens, ImpersonationResult } from '@accounts/types';
+import { LoginResult, Tokens, ImpersonationResult, User } from '@accounts/types';
 import { TransportInterface } from './transport-interface';
 import { TokenStorage, AccountsClientOptions } from './types';
 import { tokenStorageLocal } from './token-storage-local';
@@ -167,6 +167,13 @@ export class AccountsClient {
   }
 
   /**
+   * Get the user infos
+   */
+  public async getUser(): Promise<User> {
+    return this.transport.getUser();
+  }
+
+  /**
    * Logout the user
    * Call the server to invalidate the tokens
    * Clean user local storage
@@ -174,7 +181,7 @@ export class AccountsClient {
   public async logout(): Promise<void> {
     const tokens = await this.getTokens();
     if (tokens) {
-      await this.transport.logout(tokens.accessToken);
+      await this.transport.logout();
     }
     await this.clearTokens();
   }

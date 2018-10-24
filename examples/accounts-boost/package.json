@@ -1,0 +1,32 @@
+{
+  "name": "accounts-boost",
+  "private": true,
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "scripts": {
+    "start:micro": "NODE_ENV=development nodemon -w src -x ts-node src/microservice/accounts-microservice.ts & sleep 2 && nodemon -w src -x ts-node src/microservice/app-server.ts",
+    "start:mono": "NODE_ENV=development nodemon -w src -x ts-node src/monolithic/app-server.ts",
+    "start-services": "docker-compose up -d",
+    "prestart": "yarn start-services",
+    "build": "tsc",
+    "test": "yarn build"
+  },
+  "dependencies": {
+    "apollo-link-context": "^1.0.8",
+    "apollo-link-http": "^1.5.4",
+    "apollo-server": "^2.0.0",
+    "graphql": "^0.13.2",
+    "graphql-tools": "^3.1.1",
+    "lodash": "^4.17.10",
+    "node-fetch": "^2.2.0"
+  },
+  "devDependencies": {
+    "@accounts/tslint-config-accounts": "^0.0.9",
+    "@types/node": "10.5.4",
+    "nodemon": "1.17.5",
+    "ts-node": "7.0.0",
+    "tslint": "^5.11.0",
+    "typescript": "2.9.2"
+  }
+}

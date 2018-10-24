@@ -58,6 +58,19 @@ describe('AccountsServer', () => {
       }
     });
 
+    it('throws when user is deactivated', async () => {
+      const authenticate = jest.fn(() => Promise.resolve({ id: 'userId', deactivated: true }));
+      try {
+        const accountServer = new AccountsServer({ db: {} } as any, {
+          facebook: { authenticate, setStore: jest.fn() },
+        });
+        await accountServer.loginWithService('facebook', {}, {});
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
     it('should return tokens', async () => {
       const authenticate = jest.fn(() => Promise.resolve({ id: 'userId' }));
       const createSession = jest.fn(() => Promise.resolve('sessionId'));
@@ -105,32 +118,6 @@ describe('AccountsServer', () => {
   });
 
   describe('logout', () => {
-    it('throws error if user is not found', async () => {
-      const accountsServer = new AccountsServer(
-        {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                id: '456',
-                valid: true,
-                userId: '123',
-              }),
-            findUserById: () => Promise.resolve(null),
-          } as any,
-          tokenSecret: 'secret1',
-        },
-        {}
-      );
-      try {
-        const { accessToken } = accountsServer.createTokens('456');
-        await accountsServer.logout(accessToken);
-        throw new Error();
-      } catch (err) {
-        const { message } = err;
-        expect(message).toEqual('User not found');
-      }
-    });
-
     it('invalidates session', async () => {
       const invalidateSession = jest.fn(() => Promise.resolve());
       const user = {
@@ -147,7 +134,6 @@ describe('AccountsServer', () => {
                 valid: true,
                 userId: '123',
               }),
-            findUserById: () => Promise.resolve(user),
             invalidateSession,
           } as any,
           tokenSecret: 'secret1',
@@ -890,6 +876,36 @@ describe('AccountsServer', () => {
       expect(setProfile.mock.calls[0][0]).toEqual('123');
       expect(setProfile.mock.calls[0][1]).toEqual(mergedProfile);
       expect(res).toEqual(mergedProfile);
+    });
+  });
+
+  describe('deactivateUser', () => {
+    it('call this.db.setUserDeactivated', async () => {
+      const setUserDeactivated = jest.fn(() => Promise.resolve('user'));
+      const accountsServer = new AccountsServer(
+        {
+          db: { setUserDeactivated } as any,
+          tokenSecret: 'secret1',
+        },
+        {}
+      );
+      await accountsServer.deactivateUser('id');
+      expect(setUserDeactivated.mock.calls[0]).toEqual(['id', true]);
+    });
+  });
+
+  describe('activateUser', () => {
+    it('call this.db.setUserDeactivated', async () => {
+      const setUserDeactivated = jest.fn(() => Promise.resolve('user'));
+      const accountsServer = new AccountsServer(
+        {
+          db: { setUserDeactivated } as any,
+          tokenSecret: 'secret1',
+        },
+        {}
+      );
+      await accountsServer.activateUser('id');
+      expect(setUserDeactivated.mock.calls[0]).toEqual(['id', false]);
     });
   });
 

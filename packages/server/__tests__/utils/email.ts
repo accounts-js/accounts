@@ -15,5 +15,13 @@ describe('email', () => {
       expect(emailTemplates.resetPassword.text(user, url)).toMatchSnapshot();
       expect(emailTemplates.enrollAccount.text(user, url)).toMatchSnapshot();
     });
+
+    it('should return default html', () => {
+      const user: any = {};
+      const url = 'url';
+      expect(emailTemplates.verifyEmail.html(user, url)).toMatchSnapshot();
+      expect(emailTemplates.resetPassword.html(user, url)).toMatchSnapshot();
+      expect(emailTemplates.enrollAccount.html(user, url)).toMatchSnapshot();
+    });
   });
 });

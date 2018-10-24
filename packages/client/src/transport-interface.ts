@@ -1,4 +1,4 @@
-import { LoginResult, ImpersonationResult, CreateUser } from '@accounts/types';
+import { LoginResult, ImpersonationResult, CreateUser, User } from '@accounts/types';
 import { AccountsClient } from './accounts-client';
 
 export interface TransportInterface {
@@ -10,7 +10,8 @@ export interface TransportInterface {
       [key: string]: string | object;
     }
   ): Promise<LoginResult>;
-  logout(accessToken: string): Promise<void>;
+  logout(): Promise<void>;
+  getUser(): Promise<User>;
   refreshTokens(accessToken: string, refreshToken: string): Promise<LoginResult>;
   verifyEmail(token: string): Promise<void>;
   sendResetPasswordEmail(email: string): Promise<void>;

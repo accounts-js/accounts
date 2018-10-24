@@ -1,6 +1,6 @@
 {
   "name": "@accounts/two-factor",
-  "version": "0.3.0-beta.22",
+  "version": "0.4.0-alpha.1",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -28,15 +28,15 @@
     ]
   },
   "dependencies": {
-    "@accounts/types": "^0.3.0-beta.22",
-    "@types/lodash": "^4.14.109",
+    "@accounts/types": "^0.4.0-alpha.1",
+    "@types/lodash": "^4.14.116",
     "@types/speakeasy": "2.0.2",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.11",
     "speakeasy": "^2.0.0"
   },
   "devDependencies": {
-    "@types/jest": "23.0.2",
-    "@types/node": "9.6.15",
-    "jest": "23.1.0"
+    "@types/jest": "23.3.2",
+    "@types/node": "10.11.3",
+    "jest": "23.6.0"
   }
 }

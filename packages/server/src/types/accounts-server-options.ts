@@ -7,7 +7,7 @@ import { PrepareMailFunction } from './prepare-mail-function';
 import { SendMailType } from './send-mail-type';
 
 export interface AccountsServerOptions {
-  db: DatabaseInterface;
+  db?: DatabaseInterface;
   tokenSecret: string;
   tokenConfigs?: {
     accessToken?: jwt.SignOptions;

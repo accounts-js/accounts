@@ -13,7 +13,6 @@ const user = {
   username: 'johndoe',
   email: 'john@doe.com',
   password: 'toto',
-  profile: {},
 };
 const session = {
   userId: '123',
@@ -102,39 +101,67 @@ describe('Mongo', () => {
     it('should create a new user', async () => {
       const userId = await databaseTests.database.createUser(user);
       const ret = await databaseTests.database.findUserById(userId);
-      expect(ret._id).toBeTruthy();
-      expect(ret.emails[0].address).toBe(user.email);
-      expect(ret.emails[0].verified).toBe(false);
-      expect(ret.createdAt).toBeTruthy();
-      expect(ret.updatedAt).toBeTruthy();
+      expect(userId).toBeTruthy();
+      expect(ret).toEqual({
+        _id: expect.any(ObjectID),
+        id: expect.any(ObjectID),
+        username: 'johndoe',
+        emails: [
+          {
+            address: user.email,
+            verified: false,
+          },
+        ],
+        services: {
+          password: {
+            bcrypt: 'toto',
+          },
+        },
+        createdAt: expect.any(Number),
+        updatedAt: expect.any(Number),
+      });
+    });
+
+    it('should not overwrite service', async () => {
+      const userId = await databaseTests.database.createUser({
+        ...user,
+        services: 'test',
+      });
+      const ret = await databaseTests.database.findUserById(userId);
+      expect(userId).toBeTruthy();
+      expect(ret!.services).toEqual({
+        password: {
+          bcrypt: 'toto',
+        },
+      });
     });
 
     it('should not set password', async () => {
       const userId = await databaseTests.database.createUser({ email: user.email });
       const ret = await databaseTests.database.findUserById(userId);
-      expect(ret._id).toBeTruthy();
-      expect(ret.services.password).not.toBeTruthy();
+      expect(ret!.id).toBeTruthy();
+      expect(ret!.services!.password).not.toBeTruthy();
     });
 
     it('should not set username', async () => {
       const userId = await databaseTests.database.createUser({ email: user.email });
       const ret = await databaseTests.database.findUserById(userId);
-      expect(ret._id).toBeTruthy();
-      expect(ret.username).not.toBeTruthy();
+      expect(ret!.id).toBeTruthy();
+      expect(ret!.username).not.toBeTruthy();
     });
 
     it('should not set email', async () => {
       const userId = await databaseTests.database.createUser({ username: user.username });
       const ret = await databaseTests.database.findUserById(userId);
-      expect(ret._id).toBeTruthy();
-      expect(ret.emails).not.toBeTruthy();
+      expect(ret!.id).toBeTruthy();
+      expect(ret!.emails).not.toBeTruthy();
     });
 
     it('email should be lowercase', async () => {
       const userId = await databaseTests.database.createUser({ email: 'JohN@doe.com' });
       const ret = await databaseTests.database.findUserById(userId);
-      expect(ret._id).toBeTruthy();
-      expect(ret.emails[0].address).toEqual('john@doe.com');
+      expect(ret!.id).toBeTruthy();
+      expect(ret!.emails![0].address).toEqual('john@doe.com');
     });
 
     it('call options.idProvider', async () => {
@@ -145,8 +172,8 @@ describe('Mongo', () => {
       const userId = await mongoOptions.createUser({ email: 'JohN@doe.com' });
       const ret = await mongoOptions.findUserById(userId);
       expect(userId).toBe('toto');
-      expect(ret._id).toBeTruthy();
-      expect(ret.emails[0].address).toEqual('john@doe.com');
+      expect(ret!.id).toBeTruthy();
+      expect(ret!.emails![0].address).toEqual('john@doe.com');
     });
   });
 
@@ -514,13 +541,13 @@ describe('Mongo', () => {
 
   describe('unsetService', () => {
     it('should not convert id', async () => {
-      const collection: any = { update: jest.fn() };
+      const collection: any = { updateOne: jest.fn() };
       const mockDb: any = { collection: () => collection };
       const mongoOptions = new Mongo(mockDb, {
         convertUserIdToMongoObjectId: false,
       });
       await mongoOptions.unsetService('toto', 'twitter');
-      expect(collection.update.mock.calls[0][0]._id).toBe('toto');
+      expect(collection.updateOne.mock.calls[0][0]._id).toBe('toto');
     });
 
     it('should unset service', async () => {
@@ -752,6 +779,17 @@ describe('Mongo', () => {
       const retUser = await databaseTests.database.findUserById(userId);
       expect(retUser.services.password.bcrypt).toBeTruthy();
       expect(retUser.services.password.bcrypt).toEqual(newPassword);
+      expect(retUser.createdAt).not.toEqual(retUser.updatedAt);
+    });
+  });
+
+  describe('setUserDeactivated', () => {
+    it('should deactivate user', async () => {
+      const userId = await databaseTests.database.createUser(user);
+      await delay(10);
+      await databaseTests.database.setUserDeactivated(userId, true);
+      const retUser = await databaseTests.database.findUserById(userId);
+      expect(retUser.deactivated).toBeTruthy();
       expect(retUser.createdAt).not.toEqual(retUser.updatedAt);
     });
   });

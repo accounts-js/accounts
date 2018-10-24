@@ -1,13 +1,13 @@
 {
   "name": "@accounts/graphql-api",
-  "version": "0.3.0-beta.22",
+  "version": "0.4.0-alpha.1",
   "description": "Server side GraphQL transport for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf lib",
-    "start": "tsc --watch",
-    "precompile": "yarn clean",
+    "start": "yarn gen-schema-types && tsc --watch",
+    "precompile": "yarn clean && yarn gen-schema-types",
     "compile": "tsc",
     "prepublishOnly": "yarn compile",
     "gen-schema-types": "ts-node src/scripts/schema-to-types.ts && gql-gen --schema schema.json --template graphql-codegen-typescript-template --out ./src/types/graphql.ts"
@@ -23,27 +23,27 @@
   },
   "homepage": "https://github.com/js-accounts/graphql-api",
   "devDependencies": {
-    "@gql2ts/from-schema": "1.8.0",
-    "@gql2ts/types": "1.8.0",
-    "@types/graphql": "0.13.3",
-    "concurrently": "3.1.0",
+    "@gql2ts/from-schema": "1.10.1",
+    "@gql2ts/types": "1.9.0",
+    "@types/graphql": "0.13.4",
+    "concurrently": "4.0.1",
     "graphql": "0.13.2",
-    "graphql-code-generator": "0.10.0",
-    "graphql-codegen-typescript-template": "0.10.0",
-    "graphql-tools": "3.0.4",
-    "lodash": "4.17.10",
-    "nock": "9.0.2",
-    "ts-node": "7.0.0"
+    "graphql-code-generator": "0.11.0",
+    "graphql-codegen-typescript-template": "0.11.0",
+    "graphql-tools": "3.1.1",
+    "lodash": "4.17.11",
+    "nock": "9.6.1",
+    "ts-node": "7.0.1"
   },
   "peerDependencies": {
     "graphql-tools": "^3.0.0"
   },
   "dependencies": {
-    "@accounts/password": "^0.3.0-beta.22",
-    "@accounts/server": "^0.3.0-beta.22",
-    "@accounts/types": "^0.3.0-beta.22",
+    "@accounts/password": "^0.4.0-alpha.1",
+    "@accounts/server": "^0.4.0-alpha.1",
+    "@accounts/types": "^0.4.0-alpha.1",
     "@types/request-ip": "0.0.33",
     "deepmerge": "2.1.1",
-    "request-ip": "2.0.2"
+    "request-ip": "2.1.1"
   }
 }

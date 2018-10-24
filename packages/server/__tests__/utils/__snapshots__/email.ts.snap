@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`email emailTemplates should return default html 1`] = `"To verify your account email please <a href=\\"url\\">click here</a>."`;
+
+exports[`email emailTemplates should return default html 2`] = `"To reset your password please <a href=\\"url\\">click here</a>."`;
+
+exports[`email emailTemplates should return default html 3`] = `"To set your password please <a href=\\"url\\">click here</a>."`;
+
 exports[`email emailTemplates should return default subject 1`] = `"Verify your account email"`;
 
 exports[`email emailTemplates should return default subject 2`] = `"Reset your password"`;

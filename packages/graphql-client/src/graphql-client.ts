@@ -40,7 +40,7 @@ export default class GraphQLClient implements TransportInterface {
    * @memberof GraphQLClient
    */
   public async createUser(user: CreateUser): Promise<string> {
-    return this.mutate(createUserMutation, 'register', { user });
+    return this.mutate(createUserMutation, 'createUser', { user });
   }
 
   /**
@@ -56,15 +56,15 @@ export default class GraphQLClient implements TransportInterface {
     });
   }
 
-  public async getUser(accessToken: string): Promise<User> {
-    return this.query(getUserQuery, 'getUser', { accessToken });
+  public async getUser(): Promise<User> {
+    return this.query(getUserQuery, 'getUser');
   }
 
   /**
    * @inheritDoc
    */
-  public async logout(accessToken: string): Promise<void> {
-    return this.mutate(logoutMutation, 'logout', { accessToken });
+  public async logout(): Promise<void> {
+    return this.mutate(logoutMutation, 'logout');
   }
 
   /**
@@ -138,7 +138,7 @@ export default class GraphQLClient implements TransportInterface {
     });
   }
 
-  private async mutate(mutation: any, resultField: any, variables: any) {
+  private async mutate(mutation: any, resultField: any, variables: any = {}) {
     // If we are executiong a refresh token mutation do not call refress session again
     // otherwise it will end up in an infinite loop
     const tokens =
@@ -162,13 +162,14 @@ export default class GraphQLClient implements TransportInterface {
     }
   }
 
-  private async query(query: any, resultField: any, variables: any) {
+  private async query(query: any, resultField: any, variables: any = {}) {
     const tokens = (await this.client.refreshSession()) || { accessToken: '' };
 
     try {
       const { data } = await this.options.graphQLClient.query({
         query,
         variables,
+        fetchPolicy: 'network-only',
         context: {
           headers: {
             'accounts-access-token': tokens.accessToken,

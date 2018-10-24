@@ -11,7 +11,7 @@ import {
 } from './graphql/types';
 import { queries, queriesPassword } from './graphql/queries';
 import { logout } from './resolvers/logout';
-import { registerPassword } from './resolvers/register-user';
+import { createUser } from './resolvers/create-user';
 import { resetPassword } from './resolvers/reset-password';
 import { sendResetPasswordEmail } from './resolvers/send-reset-password-email';
 import { verifyEmail, sendVerificationEmail } from './resolvers/verify-email';
@@ -78,7 +78,7 @@ export const createAccountsGraphQL = (
   if (passwordService) {
     queryResolvers = {
       ...queryResolvers,
-      twoFactorSecret: authenticated(accountsServer, twoFactorSecret(accountsServer)),
+      twoFactorSecret: authenticated(twoFactorSecret(accountsServer)),
     };
   }
 
@@ -94,16 +94,16 @@ export const createAccountsGraphQL = (
   if (passwordService) {
     mutationResolvers = {
       ...mutationResolvers,
-      register: registerPassword(accountsServer),
+      createUser: createUser(accountsServer),
       verifyEmail: verifyEmail(accountsServer),
       resetPassword: resetPassword(accountsServer),
       sendVerificationEmail: sendVerificationEmail(accountsServer),
       sendResetPasswordEmail: sendResetPasswordEmail(accountsServer),
-      changePassword: authenticated(accountsServer, changePassword(accountsServer)),
+      changePassword: authenticated(changePassword(accountsServer)),
 
       // Two factor
-      twoFactorSet: authenticated(accountsServer, twoFactorSet(accountsServer)),
-      twoFactorUnset: authenticated(accountsServer, twoFactorUnset(accountsServer)),
+      twoFactorSet: authenticated(twoFactorSet(accountsServer)),
+      twoFactorUnset: authenticated(twoFactorUnset(accountsServer)),
     };
   }
 
