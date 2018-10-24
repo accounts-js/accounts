@@ -27,7 +27,7 @@ const accountsServer = new AccountsServer(
 app.use(accountsExpress(accountsServer));
 
 app.get('/user', userLoader(accountsServer), (req, res) => {
-  res.json({ user: req.user });
+  res.json({ user: (req as any).user });
 });
 
 app.listen(4000, () => {
