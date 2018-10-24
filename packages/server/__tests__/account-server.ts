@@ -3,6 +3,8 @@ import { AccountsServer } from '../src/accounts-server';
 import { JwtData } from '../src/types/jwt-data';
 import { ServerHooks } from '../src/utils/server-hooks';
 
+const delay = (timeout: number) => new Promise(resolve => setTimeout(resolve, timeout));
+
 describe('AccountsServer', () => {
   const db = {
     findUserByUsername: () => Promise.resolve(),
@@ -172,6 +174,7 @@ describe('AccountsServer', () => {
       );
       accountsServer.on(ServerHooks.LoginSuccess, hookSpy);
       await accountsServer.loginWithService('password', { key: 'value' }, connectionInfo);
+      await delay(10);
       expect(hookSpy).toHaveBeenCalledWith({
         service: 'password',
         connection: connectionInfo,
@@ -208,6 +211,7 @@ describe('AccountsServer', () => {
       } catch (e) {
         // nothing to do
       }
+      await delay(10);
       expect(hookSpy).toHaveBeenCalledWith({
         service: 'password',
         connection: connectionInfo,
@@ -245,6 +249,7 @@ describe('AccountsServer', () => {
 
       const { accessToken } = accountsServer.createTokens('456');
       await accountsServer.logout(accessToken);
+      await delay(10);
       expect(hookSpy).toBeCalled();
     });
 
@@ -273,7 +278,7 @@ describe('AccountsServer', () => {
       } catch (err) {
         // nothing to do
       }
-
+      await delay(10);
       expect(hookSpy).toBeCalled();
     });
 
@@ -303,7 +308,7 @@ describe('AccountsServer', () => {
 
       const { accessToken } = accountsServer.createTokens('456');
       await accountsServer.resumeSession(accessToken);
-
+      await delay(10);
       expect(hookSpy).toBeCalled();
     });
 
@@ -338,7 +343,7 @@ describe('AccountsServer', () => {
       } catch (e) {
         // nothing to do
       }
-
+      await delay(10);
       expect(hookSpy).toBeCalled();
     });
 
@@ -368,7 +373,7 @@ describe('AccountsServer', () => {
       } catch (e) {
         // nothing to do
       }
-
+      await delay(10);
       expect(hookSpy).toBeCalled();
     });
 
@@ -389,12 +394,12 @@ describe('AccountsServer', () => {
       accountsServer.on(ServerHooks.RefreshTokensError, hookSpy);
 
       try {
-        const { accessToken, refreshToken } = accountsServer.createTokens(null);
+        const { accessToken, refreshToken } = accountsServer.createTokens({});
         await accountsServer.refreshTokens(accessToken, refreshToken, null, null);
       } catch (err) {
         // nothing to do
       }
-
+      await delay(10);
       expect(hookSpy).toBeCalled();
     });
 
@@ -429,7 +434,7 @@ describe('AccountsServer', () => {
       });
 
       await accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
-
+      await delay(10);
       expect(hookSpy).toBeCalled();
     });
 
@@ -449,7 +454,7 @@ describe('AccountsServer', () => {
       } catch (err) {
         // nothing to do
       }
-
+      await delay(10);
       expect(hookSpy).toBeCalled();
     });
 
@@ -487,7 +492,7 @@ describe('AccountsServer', () => {
         } as any);
 
       await accountsServer.impersonate(accessToken, { userId: 'userId' }, null, null);
-
+      await delay(10);
       expect(hookSpy).toBeCalled();
     });
   });
@@ -570,7 +575,7 @@ describe('AccountsServer', () => {
         {}
       );
       try {
-        const { accessToken, refreshToken } = accountsServer.createTokens(null);
+        const { accessToken, refreshToken } = accountsServer.createTokens({});
         await accountsServer.refreshTokens(accessToken, refreshToken, null, null);
         throw new Error();
       } catch (err) {
@@ -592,7 +597,7 @@ describe('AccountsServer', () => {
         {}
       );
       try {
-        const { accessToken, refreshToken } = accountsServer.createTokens(null);
+        const { accessToken, refreshToken } = accountsServer.createTokens({});
         await accountsServer.refreshTokens(accessToken, refreshToken, null, null);
         throw new Error();
       } catch (err) {
@@ -617,7 +622,7 @@ describe('AccountsServer', () => {
         {}
       );
       try {
-        const { accessToken, refreshToken } = accountsServer.createTokens(null);
+        const { accessToken, refreshToken } = accountsServer.createTokens({});
         await accountsServer.refreshTokens(accessToken, refreshToken, null, null);
         throw new Error();
       } catch (err) {
@@ -668,7 +673,7 @@ describe('AccountsServer', () => {
         {}
       );
       try {
-        const { accessToken } = accountsServer.createTokens(null);
+        const { accessToken } = accountsServer.createTokens({});
         await accountsServer.logout(accessToken);
         throw new Error();
       } catch (err) {
@@ -689,7 +694,7 @@ describe('AccountsServer', () => {
         {}
       );
       try {
-        const { accessToken } = accountsServer.createTokens(null);
+        const { accessToken } = accountsServer.createTokens({});
         await accountsServer.logout(accessToken);
         throw new Error();
       } catch (err) {
@@ -1095,23 +1100,23 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken } = accountsServer.createTokens('555');
+      const { accessToken } = accountsServer.createTokens({ token: '555' });
 
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
           valid: true,
           userId: '123',
         } as any);
-      accountsServer.createTokens = (sessionId, isImpersonated) =>
+      accountsServer.createTokens = ({ token, isImpersonated = false, userId }) =>
         ({
-          sessionId,
+          token,
           isImpersonated,
         } as any);
 
       const res = await accountsServer.impersonate(accessToken, { userId: 'userId' }, null, null);
       expect(res).toEqual({
         authorized: true,
-        tokens: { sessionId: '001', isImpersonated: true },
+        tokens: { token: '001', isImpersonated: true },
         user: impersonatedUser,
       });
       expect(createSession.mock.calls[0][3]).toEqual({
