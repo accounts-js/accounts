@@ -90,7 +90,9 @@ export class RedisSessions implements DatabaseInterfaceSessions {
   public async findSessionByToken(token: string): Promise<Session | null> {
     if (await this.db.exists(`${this.options.sessionCollectionName}:token:${token}`)) {
       const sessionId = await this.db.get(`${this.options.sessionCollectionName}:token:${token}`);
-      return this.findSessionById(sessionId);
+      if (sessionId) {
+        return this.findSessionById(sessionId);
+      }
     }
     return null;
   }

@@ -44,13 +44,13 @@
     "@accounts/server": "^0.4.0-alpha.1",
     "@types/express": "4.16.0",
     "@types/express-session": "1.15.11",
-    "@types/lodash": "4.14.116",
+    "@types/lodash": "4.14.117",
     "@types/request-ip": "0.0.33",
-    "express": "4.16.3",
+    "express": "4.16.4",
     "express-session": "1.15.6"
   },
   "peerDependencies": {
-    "@accounts/server": "^0.3.0-beta.0",
+    "@accounts/server": "^0.4.0-alpha.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6"
   },
