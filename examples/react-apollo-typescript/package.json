@@ -1,0 +1,45 @@
+{
+  "name": "react-apollo-typescript",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "yarn build",
+    "testonly": "react-scripts-ts test --env=jsdom && ",
+    "eject": "react-scripts-ts eject",
+    "lint": "tslint -c tslint.json -p tsconfig.json -e 'node_modules/**/*.{j,t}s'"
+  },
+  "dependencies": {
+    "@accounts/client": "0.4.0-alpha.1",
+    "@accounts/client-password": "^0.4.0-alpha.1",
+    "@accounts/graphql-client": "0.4.0-alpha.1",
+    "@accounts/rest-client": "0.4.0-alpha.1",
+    "@material-ui/core": "^3.3.1",
+    "apollo-boost": "0.1.17",
+    "apollo-cache-inmemory": "^1.3.6",
+    "apollo-client": "^2.4.3",
+    "apollo-link": "^1.2.3",
+    "apollo-link-error": "^1.1.1",
+    "apollo-link-http": "^1.5.5",
+    "graphql": "14.0.2",
+    "qrcode.react": "0.8.0",
+    "react": "16.6.0",
+    "react-apollo": "2.2.4",
+    "react-dom": "16.6.0",
+    "react-router-dom": "4.3.1",
+    "react-scripts-ts": "3.1.0"
+  },
+  "devDependencies": {
+    "@types/async": "2.0.50",
+    "@types/jest": "23.3.7",
+    "@types/node": "10.12.0",
+    "@types/qrcode.react": "0.8.1",
+    "@types/react": "16.4.18",
+    "@types/react-dom": "16.0.9",
+    "@types/react-router": "4.0.32",
+    "@types/react-router-dom": "4.3.1",
+    "jest": "23.6.0",
+    "typescript": "3.1.3"
+  }
+}

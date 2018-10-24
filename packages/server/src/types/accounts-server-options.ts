@@ -18,6 +18,7 @@ export interface AccountsServerOptions {
   impersonationAuthorize?: (user: User, impersonateToUser: User) => Promise<any>;
   resumeSessionValidator?: ResumeSessionValidator;
   siteUrl?: string;
+  siteTitle?: string;
   prepareMail?: PrepareMailFunction;
   sendMail?: SendMailType;
 }

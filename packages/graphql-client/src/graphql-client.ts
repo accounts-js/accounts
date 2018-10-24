@@ -1,5 +1,11 @@
 import { TransportInterface, AccountsClient } from '@accounts/client';
-import { CreateUser, LoginResult, ImpersonationResult, User } from '@accounts/types';
+import {
+  CreateUser,
+  LoginResult,
+  ImpersonationResult,
+  User,
+  AccountsOptions,
+} from '@accounts/types';
 import { createUserMutation } from './graphql/create-user.mutation';
 import { loginWithServiceMutation } from './graphql/login-with-service.mutation';
 import { logoutMutation } from './graphql/logout.mutation';
@@ -14,6 +20,7 @@ import { getTwoFactorSecretQuery } from './graphql/get-two-factor-secret.query';
 import { twoFactorUnsetMutation } from './graphql/two-factor-unset.mutation';
 import { impersonateMutation } from './graphql/impersonate.mutation';
 import { getUserQuery } from './graphql/get-user.query';
+import { getAccountsOptionsQuery } from './graphql/get-accounts-options.query';
 
 export interface IAuthenticateParams {
   [key: string]: string | object;
@@ -60,6 +67,9 @@ export default class GraphQLClient implements TransportInterface {
     return this.query(getUserQuery, 'getUser');
   }
 
+  public async getAccountsOptions(): Promise<AccountsOptions> {
+    return this.query(getAccountsOptionsQuery, 'getAccountsOptions');
+  }
   /**
    * @inheritDoc
    */
