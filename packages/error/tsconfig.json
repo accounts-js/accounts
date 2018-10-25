@@ -2,8 +2,7 @@
   "extends": "../../tsconfig",
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./lib",
-    "typeRoots": ["node_modules/@types"]
+    "outDir": "./lib"
   },
   "exclude": ["node_modules", "__tests__", "lib"]
 }
