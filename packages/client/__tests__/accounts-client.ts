@@ -1,9 +1,6 @@
-import * as crypto from 'crypto';
-import * as jwt from 'jsonwebtoken';
 import { isTokenExpired } from '../src/utils';
 import { TransportInterface } from '../src';
 import { AccountsClient } from '../src/accounts-client';
-import { ENGINE_METHOD_PKEY_METHS } from 'constants';
 
 jest.mock('../src/utils');
 
@@ -25,7 +22,7 @@ const tokens = {
   refreshToken: 'refreshTokenTest',
 };
 
-const mockTransport: TransportInterface = {
+const mockTransport = {
   loginWithService: jest.fn(() => Promise.resolve(loggedInResponse)),
   logout: jest.fn(() => Promise.resolve()),
   refreshTokens: jest.fn(() => Promise.resolve(loggedInResponse)),
@@ -36,7 +33,7 @@ const mockTransport: TransportInterface = {
 };
 
 describe('Accounts', () => {
-  const accountsClient = new AccountsClient({}, mockTransport);
+  const accountsClient = new AccountsClient({}, mockTransport as any);
 
   afterEach(() => {
     jest.clearAllMocks();

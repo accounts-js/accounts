@@ -16,7 +16,7 @@ describe('AccountsPassword', () => {
 
   describe('config', () => {
     it('should have default options', async () => {
-      expect(password.options.passwordEnrollTokenExpiration).toBe(2592000000);
+      expect((password as any).options.passwordEnrollTokenExpiration).toBe(2592000000);
     });
   });
 
@@ -44,7 +44,7 @@ describe('AccountsPassword', () => {
         services: {},
       };
       const tmpAccountsPassword = new AccountsPassword({});
-      tmpAccountsPassword.passwordAuthenticator = jest.fn(() => Promise.resolve(user));
+      (tmpAccountsPassword as any).passwordAuthenticator = jest.fn(() => Promise.resolve(user));
       const ret = await tmpAccountsPassword.authenticate({
         user: 'toto',
         password: 'toto',
@@ -336,14 +336,14 @@ describe('AccountsPassword', () => {
       const setPassword = jest.fn(() => Promise.resolve('user'));
       password.setStore({ setPassword } as any);
       const passwordAuthenticator = jest
-        .spyOn(password, 'passwordAuthenticator')
+        .spyOn(password, 'passwordAuthenticator' as any)
         .mockImplementation(() => Promise.resolve({}));
       await password.changePassword(userId, 'old-password', 'new-password');
       expect(passwordAuthenticator.mock.calls[0][0]).toEqual({ id: userId });
       expect(passwordAuthenticator.mock.calls[0][1]).toEqual('old-password');
       expect(setPassword.mock.calls[0][0]).toEqual(userId);
       expect(setPassword.mock.calls[0][1]).toBeTruthy();
-      password.passwordAuthenticator.mockRestore();
+      (password as any).passwordAuthenticator.mockRestore();
     });
   });
 
@@ -353,7 +353,6 @@ describe('AccountsPassword', () => {
     const validUser = {
       emails: [{ address: email }, { address: verifiedEmail, verified: true }],
     };
-    const invalidUser = {};
 
     it('throws if email is empty', async () => {
       try {

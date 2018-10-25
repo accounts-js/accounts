@@ -1,12 +1,11 @@
-import { User, DatabaseInterface } from '@accounts/types';
 import { AccountsOauth } from '../src';
 
-const user: User = {
+const user = {
   id: '1',
   username: 'neo',
   email: 't1@matrix.com',
 };
-const mockStore: DatabaseInterface = {
+const mockStore = {
   findUserByServiceId: jest.fn(() => user),
   findUserByEmail: jest.fn(),
   findUserByUsername: jest.fn(),
@@ -50,9 +49,10 @@ describe('AccountsOauth', () => {
     });
 
     it('should throw invalid provider if user provider was not supplied', async () => {
-      const oauth = new AccountsOauth({
+      const options = {
         facebook: {},
-      });
+      };
+      const oauth = new AccountsOauth(options as any);
       try {
         await oauth.authenticate({
           provider: 'facebook',
@@ -73,7 +73,7 @@ describe('AccountsOauth', () => {
           authenticate: authSpy,
         },
       });
-      oauth.setStore(mockStore);
+      oauth.setStore(mockStore as any);
 
       const params = {
         provider: 'facebook',
@@ -99,7 +99,7 @@ describe('AccountsOauth', () => {
         findUserByServiceId: jest.fn(),
         findUserByEmail: jest.fn(() => user),
       };
-      oauth.setStore(store);
+      oauth.setStore(store as any);
 
       const params = {
         provider: 'facebook',
@@ -133,7 +133,7 @@ describe('AccountsOauth', () => {
           email: user2.email,
         })),
       };
-      oauth.setStore(store);
+      oauth.setStore(store as any);
 
       const params = {
         provider: 'facebook',
@@ -164,7 +164,7 @@ describe('AccountsOauth', () => {
         authenticate: authSpy,
       },
     });
-    oauth.setStore(mockStore);
+    oauth.setStore(mockStore as any);
 
     const params = {
       provider: 'facebook',
@@ -184,7 +184,7 @@ describe('unlink', () => {
       authenticate: jest.fn(),
     },
   });
-  oauth.setStore(mockStore);
+  oauth.setStore(mockStore as any);
 
   it('should throw if given wrong provider', async () => {
     try {
