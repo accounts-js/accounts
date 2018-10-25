@@ -40,15 +40,11 @@ const client = new ApolloClient({
 const App = () => (
   <div>
     <ApolloProvider client={client}>
-      <AccountsProvider
-        client={accounts.client}
-        password={accounts.password}
-        components={accountsComponents}
-      >
+      <AccountsProvider accounts={accounts} components={accountsComponents}>
         <Accounts />
       </AccountsProvider>
       <Auth>
-        {user => {
+        {({ user }) => {
           console.log(user);
         }}
       </Auth>
