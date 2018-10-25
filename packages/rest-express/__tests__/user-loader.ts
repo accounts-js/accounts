@@ -15,7 +15,7 @@ describe('userLoader', () => {
     const req = {};
     const res = {};
     const next = jest.fn();
-    await provider(req, res, next);
+    await provider(req as any, res as any, next);
 
     expect(accountsServer.resumeSession).not.toHaveBeenCalled();
     expect(req).toEqual({});
@@ -33,7 +33,7 @@ describe('userLoader', () => {
     const reqCopy = { ...req };
     const res = {};
     const next = jest.fn();
-    await provider(req, res, next);
+    await provider(req as any, res as any, next);
 
     expect(accountsServer.resumeSession).toHaveBeenCalledWith('token');
     expect(req).toEqual({ ...reqCopy, authToken: 'token', user, userId: user.id });
@@ -51,7 +51,7 @@ describe('userLoader', () => {
     const reqCopy = { ...req };
     const res = {};
     const next = jest.fn();
-    await provider(req, res, next);
+    await provider(req as any, res as any, next);
 
     expect(accountsServer.resumeSession).toHaveBeenCalledWith('token');
     expect(req).toEqual({ ...reqCopy, authToken: 'token', user, userId: user.id });

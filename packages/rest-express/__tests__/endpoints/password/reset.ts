@@ -31,7 +31,7 @@ describe('resetPassword', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.resetPassword).toBeCalledWith(
@@ -64,7 +64,7 @@ describe('resetPassword', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.resetPassword).toBeCalledWith(
@@ -96,7 +96,7 @@ describe('resetPassword', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.sendResetPasswordEmail).toBeCalledWith('email');
@@ -125,7 +125,7 @@ describe('resetPassword', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.sendResetPasswordEmail).toBeCalledWith('email');

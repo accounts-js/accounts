@@ -31,7 +31,7 @@ describe('changePassword', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.changePassword).toBeCalledWith(
@@ -73,7 +73,7 @@ describe('changePassword', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.changePassword).toBeCalledWith(

@@ -30,7 +30,7 @@ describe('verifyEmail', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.verifyEmail).toBeCalledWith('token');
@@ -59,7 +59,7 @@ describe('verifyEmail', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.verifyEmail).toBeCalledWith('token');
@@ -88,7 +88,7 @@ describe('verifyEmail', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.sendVerificationEmail).toBeCalledWith('email');
@@ -117,7 +117,7 @@ describe('verifyEmail', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.sendVerificationEmail).toBeCalledWith('email');

@@ -1,6 +1,6 @@
 import { serviceAuthenticate } from '../../src/endpoints/service-authenticate';
 
-const res = {
+const res: any = {
   json: jest.fn(),
   status: jest.fn(() => res),
 };
@@ -27,7 +27,7 @@ describe('serviceAuthenticate', () => {
     };
     const reqCopy = { ...req };
 
-    await middleware(req, res);
+    await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
     expect(accountsServer.loginWithService).toBeCalledWith('sms', undefined, {
@@ -54,7 +54,7 @@ describe('serviceAuthenticate', () => {
     };
     const reqCopy = { ...req };
 
-    await middleware(req, res);
+    await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
     expect(accountsServer.loginWithService).toBeCalledWith('sms', undefined, {

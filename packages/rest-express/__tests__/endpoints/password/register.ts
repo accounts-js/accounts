@@ -33,7 +33,7 @@ describe('registerPassword', () => {
     };
     const reqCopy = { ...req };
 
-    await middleware(req, res);
+    await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
     expect(accountsServer.getServices().password.createUser).toBeCalledWith({
@@ -67,7 +67,7 @@ describe('registerPassword', () => {
     };
     const reqCopy = { ...req };
 
-    await middleware(req, res);
+    await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
     expect(accountsServer.getServices().password.createUser).toBeCalledWith({

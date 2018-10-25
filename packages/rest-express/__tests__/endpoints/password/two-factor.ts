@@ -35,7 +35,7 @@ describe('twoFactor', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.twoFactor.getNewAuthSecret).toBeCalled();
@@ -66,7 +66,7 @@ describe('twoFactor', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.twoFactor.getNewAuthSecret).toBeCalled();
@@ -99,7 +99,7 @@ describe('twoFactor', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.twoFactor.set).toBeCalledWith(
@@ -143,7 +143,7 @@ describe('twoFactor', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.twoFactor.set).toBeCalledWith(
@@ -179,7 +179,7 @@ describe('twoFactor', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.twoFactor.unset).toBeCalledWith(
@@ -221,7 +221,7 @@ describe('twoFactor', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.twoFactor.unset).toBeCalledWith(

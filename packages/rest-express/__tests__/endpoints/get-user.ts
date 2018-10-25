@@ -25,7 +25,7 @@ describe('getUser', () => {
     };
     const reqCopy = { ...req };
 
-    await middleware(req, res);
+    await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
     expect(res.json).toBeCalledWith(user);
