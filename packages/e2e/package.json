@@ -49,7 +49,7 @@
     "@accounts/server": "^0.4.0-alpha.1",
     "@accounts/types": "^0.4.0-alpha.1",
     "@types/lodash": "4.14.117",
-    "@types/mongoose": "5.2.19",
+    "@types/mongoose": "5.2.20",
     "@types/node-fetch": "2.1.2",
     "apollo-boost": "0.1.17",
     "apollo-server": "2.1.0",
