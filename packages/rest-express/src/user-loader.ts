@@ -11,6 +11,7 @@ export const userLoader = (accountsServer: AccountsServer) => async (
     get(req.headers, 'accounts-access-token') || get(req.body, 'accessToken', undefined);
   if (!isEmpty(accessToken)) {
     try {
+      (req as any).authToken = accessToken;
       const user = await accountsServer.resumeSession(accessToken);
       (req as any).user = user;
       (req as any).userId = user.id;

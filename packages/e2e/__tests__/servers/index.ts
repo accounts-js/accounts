@@ -14,6 +14,7 @@ export const servers: {
 };
 
 export interface ServerTestInterface {
+  port: number;
   /**
    * The server
    */

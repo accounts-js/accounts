@@ -51,4 +51,5 @@ export interface MongoUser {
       verified: boolean;
     }
   ];
+  [key: string]: any;
 }

@@ -21,14 +21,14 @@ import { ServerTestInterface } from './index';
 
 (global as any).fetch = fetch;
 
-const urlString = 'http://localhost:4000';
-
 const convertUrlToToken = (url: string): string => {
   const split = url.split('/');
   return split[split.length - 1];
 };
 
 export class ServerGraphqlTest implements ServerTestInterface {
+  public port = 5000;
+
   public accountsServer: AccountsServer;
   public accountsPassword: AccountsPassword;
   public accountsDatabase: DatabaseInterface;
@@ -85,12 +85,13 @@ export class ServerGraphqlTest implements ServerTestInterface {
     this.apolloServer = new ApolloServer({
       typeDefs: [gql(accountsGraphQL.typeDefs), typeDefs],
       resolvers: merge(accountsGraphQL.resolvers),
-      context: ({ req }: any) => ({
-        ...accountsContext(req),
-      }),
+      context: ({ req }: any) =>
+        accountsContext(req, {
+          accountsServer: this.accountsServer,
+        }),
     });
 
-    const apolloClient = new ApolloClient({ uri: urlString });
+    const apolloClient = new ApolloClient({ uri: `http://localhost:${this.port}` });
 
     const accountsClientGraphQL = new AccountsGraphQLClient({
       graphQLClient: apolloClient,
@@ -101,7 +102,8 @@ export class ServerGraphqlTest implements ServerTestInterface {
   }
 
   public async start() {
-    await this.apolloServer.listen();
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    await this.apolloServer.listen({ port: this.port });
     await this.databaseTest.start();
   }
 

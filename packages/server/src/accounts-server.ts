@@ -107,10 +107,13 @@ Please change it with a strong random token.`);
       }
 
       const user: User | null = await this.services[serviceName].authenticate(params);
+      hooksInfo.user = user;
       if (!user) {
         throw new Error(`Service ${serviceName} was not able to authenticate user`);
       }
-      hooksInfo.user = user;
+      if (user.deactivated) {
+        throw new Error('Your account has been deactivated');
+      }
 
       // Let the user validate the login attempt
       await this.hooks.emitSerial(ServerHooks.ValidateLogin, hooksInfo);
@@ -139,7 +142,10 @@ Please change it with a strong random token.`);
       ip,
       userAgent,
     });
-    const { accessToken, refreshToken } = this.createTokens(token);
+    const { accessToken, refreshToken } = this.createTokens({
+      token,
+      userId: user.id,
+    });
 
     return {
       sessionId,
@@ -224,7 +230,11 @@ Please change it with a strong random token.`);
         },
         { impersonatorUserId: user.id }
       );
-      const impersonationTokens = this.createTokens(newSessionId, true);
+      const impersonationTokens = this.createTokens({
+        token: newSessionId,
+        isImpersonated: true,
+        userId: user.id,
+      });
       const impersonationResult = {
         authorized: true,
         tokens: impersonationTokens,
@@ -284,7 +294,7 @@ Please change it with a strong random token.`);
         if (!user) {
           throw new Error('User not found');
         }
-        const tokens = this.createTokens(sessionToken);
+        const tokens = this.createTokens({ token: sessionToken, userId: user.id });
         await this.db.updateSession(session.id, { ip, userAgent });
 
         const result = {
@@ -312,11 +322,20 @@ Please change it with a strong random token.`);
    * @param {boolean} isImpersonated - Should be true if impersonating another user.
    * @returns {Promise<Object>} - Return a new accessToken and refreshToken.
    */
-  public createTokens(token: string, isImpersonated: boolean = false): Tokens {
+  public createTokens({
+    token,
+    isImpersonated = false,
+    userId,
+  }: {
+    token: string;
+    isImpersonated?: boolean;
+    userId: string;
+  }): Tokens {
     const { tokenSecret, tokenConfigs } = this.options;
     const jwtData: JwtData = {
       token,
       isImpersonated,
+      userId,
     };
     const accessToken = generateAccessToken({
       data: jwtData,
@@ -453,6 +472,24 @@ Please change it with a strong random token.`);
       throw new Error('User not found');
     }
     return this.db.setProfile(userId, { ...user.profile, ...profile });
+  }
+
+  /**
+   * @description Deactivate a user, the user will not be able to login until his account is reactivated.
+   * @param {string} userId - User id.
+   * @returns {Promise<void>} - Return a Promise.
+   */
+  public async deactivateUser(userId: string): Promise<void> {
+    return this.db.setUserDeactivated(userId, true);
+  }
+
+  /**
+   * @description Activate a user.
+   * @param {string} userId - User id.
+   * @returns {Promise<void>} - Return a Promise.
+   */
+  public async activateUser(userId: string): Promise<void> {
+    return this.db.setUserDeactivated(userId, false);
   }
 
   public prepareMail(

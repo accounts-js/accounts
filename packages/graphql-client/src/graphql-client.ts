@@ -40,7 +40,7 @@ export default class GraphQLClient implements TransportInterface {
    * @memberof GraphQLClient
    */
   public async createUser(user: CreateUser): Promise<string> {
-    return this.mutate(createUserMutation, 'register', { user });
+    return this.mutate(createUserMutation, 'createUser', { user });
   }
 
   /**
@@ -169,6 +169,7 @@ export default class GraphQLClient implements TransportInterface {
       const { data } = await this.options.graphQLClient.query({
         query,
         variables,
+        fetchPolicy: 'network-only',
         context: {
           headers: {
             'accounts-access-token': tokens.accessToken,

@@ -1,4 +1,4 @@
-import { LoginResult, Tokens, ImpersonationResult } from '@accounts/types';
+import { LoginResult, Tokens, ImpersonationResult, User } from '@accounts/types';
 import { TransportInterface } from './transport-interface';
 import { TokenStorage, AccountsClientOptions } from './types';
 import { tokenStorageLocal } from './token-storage-local';
@@ -164,6 +164,13 @@ export class AccountsClient {
       await this.setTokens(tokens);
       await this.clearTokens(true);
     }
+  }
+
+  /**
+   * Get the user infos
+   */
+  public async getUser(): Promise<User> {
+    return this.transport.getUser();
   }
 
   /**

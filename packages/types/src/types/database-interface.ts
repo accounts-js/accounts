@@ -56,6 +56,8 @@ export interface DatabaseInterface extends DatabaseInterfaceSessions {
   verifyEmail(userId: string, email: string): Promise<void>;
 
   addEmailVerificationToken(userId: string, email: string, token: string): Promise<void>;
+
+  setUserDeactivated(userId: string, deactivated: boolean): Promise<void>;
 }
 
 export interface DatabaseInterfaceSessions {

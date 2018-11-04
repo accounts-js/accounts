@@ -9,8 +9,8 @@ export const mutations = `
 `;
 
 export const mutationsPassword = `
-  # register returns the id corresponding db ids, such as number IDs, ObjectIDs or UUIDs
-  register(user: CreateUserInput!): ID
+  # Creates a user with a password, returns the id corresponding db ids, such as number IDs, ObjectIDs or UUIDs
+  createUser(user: CreateUserInput!): ID
   verifyEmail(token: String!): Boolean
   resetPassword(token: String!, newPassword: String!): Boolean
   sendVerificationEmail(email: String!): Boolean

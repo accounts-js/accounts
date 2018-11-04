@@ -1,6 +1,6 @@
 {
   "name": "@accounts/password",
-  "version": "0.3.0-beta.26",
+  "version": "0.4.0-alpha.1",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -24,21 +24,21 @@
     ]
   },
   "dependencies": {
-    "@accounts/two-factor": "^0.3.0-beta.26",
+    "@accounts/two-factor": "^0.4.0-alpha.1",
     "bcryptjs": "^2.4.3",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "@accounts/server": "^0.3.0-beta.26",
-    "@accounts/types": "^0.3.0-beta.26",
-    "@types/bcryptjs": "2.4.1",
-    "@types/jest": "23.3.1",
-    "@types/lodash": "4.14.115",
-    "@types/node": "10.5.4",
-    "jest": "23.4.2",
+    "@accounts/server": "^0.4.0-alpha.1",
+    "@accounts/types": "^0.4.0-alpha.1",
+    "@types/bcryptjs": "2.4.2",
+    "@types/jest": "23.3.7",
+    "@types/lodash": "4.14.117",
+    "@types/node": "10.12.0",
+    "jest": "23.6.0",
     "rimraf": "2.6.2"
   },
   "peerDependencies": {
-    "@accounts/server": "^0.3.0-beta.0"
+    "@accounts/server": "^0.4.0-alpha.1"
   }
 }

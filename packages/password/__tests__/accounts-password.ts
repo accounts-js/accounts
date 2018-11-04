@@ -2,7 +2,17 @@ import { set } from 'lodash';
 import { AccountsPassword } from '../src';
 
 describe('AccountsPassword', () => {
+  const server: any = {
+    getHooks: () => ({
+      emit: jest.fn(),
+    }),
+  };
   const password = new AccountsPassword({});
+  password.server = server;
+
+  afterEach(() => {
+    password.server = server;
+  });
 
   describe('config', () => {
     it('should have default options', async () => {
@@ -108,10 +118,19 @@ describe('AccountsPassword', () => {
   });
 
   describe('addEmail', () => {
+    it('throws on invalid email', async () => {
+      try {
+        await password.addEmail('id', 'email', true);
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
     it('call this.db.addEmail', async () => {
       const addEmail = jest.fn(() => Promise.resolve());
       password.setStore({ addEmail } as any);
-      await password.addEmail('id', 'email', true);
+      await password.addEmail('id', 'john.doe@gmail.com', true);
       expect(addEmail.mock.calls[0]).toMatchSnapshot();
     });
   });
@@ -133,6 +152,15 @@ describe('AccountsPassword', () => {
     validUser.emails = [{ address: email }];
     const invalidUser = { ...validUser };
     invalidUser.emails = [];
+
+    it('throws on invalid token', async () => {
+      try {
+        await password.verifyEmail('');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
 
     it('throws when no user is found', async () => {
       const findUserByEmailVerificationToken = jest.fn(() => Promise.resolve());
@@ -201,6 +229,24 @@ describe('AccountsPassword', () => {
     set(validUserEnroll, 'services.password.reset', [{ token, address: email, reason: 'enroll' }]);
     const invalidUser = { ...validUser };
     invalidUser.emails = [];
+
+    it('throws on invalid token', async () => {
+      try {
+        await password.resetPassword('', '');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('throws on invalid password', async () => {
+      try {
+        await password.resetPassword(token, '');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
 
     it('throws when token not found', async () => {
       const findUserByResetPasswordToken = jest.fn(() => Promise.resolve());
@@ -329,17 +375,6 @@ describe('AccountsPassword', () => {
       }
     });
 
-    it('throws when invalid address', async () => {
-      const findUserByEmail = jest.fn(() => Promise.resolve(invalidUser));
-      password.setStore({ findUserByEmail } as any);
-      try {
-        await password.sendVerificationEmail(email);
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toMatchSnapshot();
-      }
-    });
-
     it('send email to first unverified email', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve(validUser));
       const addEmailVerificationToken = jest.fn(() => Promise.resolve());
@@ -429,6 +464,15 @@ describe('AccountsPassword', () => {
     const email = 'john.doe@gmail.com';
     const validUser = { emails: [{ address: email }] };
 
+    it('throws if email is empty', async () => {
+      try {
+        await password.sendEnrollmentEmail('');
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
     it('throws if user is not found', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
       password.setStore({ findUserByEmail } as any);
@@ -504,27 +548,52 @@ describe('AccountsPassword', () => {
       }
     });
 
-    it('throws if validateNewUser does not pass', async () => {
+    it('validateNewUser allow more fields', async () => {
       const tmpAccountsPassword = new AccountsPassword({
-        validateNewUser: () => Promise.resolve(false),
+        validateNewUser: user => {
+          user.additionalField = 'test';
+          return user;
+        },
       });
+      tmpAccountsPassword.server = server;
       const findUserByEmail = jest.fn(() => Promise.resolve());
-      tmpAccountsPassword.setStore({ findUserByEmail } as any);
-      try {
-        await tmpAccountsPassword.createUser({
-          password: '123456',
-          email: 'email1@email.com',
-        });
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toMatchSnapshot();
-      }
+      const findUserById = jest.fn(() => Promise.resolve());
+      const createUser = jest.fn(() => Promise.resolve());
+      tmpAccountsPassword.setStore({ findUserByEmail, findUserById, createUser } as any);
+      await tmpAccountsPassword.createUser({
+        password: '123456',
+        email: 'email1@email.com',
+      });
+      expect(findUserByEmail.mock.calls.length).toBe(1);
+      expect(createUser.mock.calls[0][0]).toEqual({
+        email: 'email1@email.com',
+        password: expect.any(String),
+        additionalField: 'test',
+      });
+    });
+
+    it('create user should only allow some fields', async () => {
+      const findUserByEmail = jest.fn(() => Promise.resolve());
+      const findUserById = jest.fn(() => Promise.resolve());
+      const createUser = jest.fn(() => Promise.resolve());
+      password.setStore({ findUserByEmail, findUserById, createUser } as any);
+      await password.createUser({
+        password: '123456',
+        email: 'email1@email.com',
+        additionalField: 'not allowed',
+      });
+      expect(findUserByEmail.mock.calls.length).toBe(1);
+      expect(createUser.mock.calls[0][0]).toEqual({
+        email: 'email1@email.com',
+        password: expect.any(String),
+      });
     });
 
     it('create user', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
+      const findUserById = jest.fn(() => Promise.resolve());
       const createUser = jest.fn(() => Promise.resolve());
-      password.setStore({ findUserByEmail, createUser } as any);
+      password.setStore({ findUserByEmail, createUser, findUserById } as any);
       await password.createUser({
         password: '123456',
         email: 'email1@email.com',
