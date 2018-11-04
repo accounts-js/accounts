@@ -9,7 +9,7 @@ Fullstack authentication and accounts-management for GraphQL and REST
 [![codecov](https://codecov.io/gh/accounts-js/accounts/branch/master/graph/badge.svg)](https://codecov.io/gh/accounts-js/accounts)
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-_Note: This package, along with the rest of the packages under the `accounts-js` organization are under active development—expect breaking changes with minor version updates._
+_Note: The packages within this repo are under active development — expect breaking changes with minor version updates._
 
 **[Documentation](https://accounts-js.netlify.com/docs/introduction/)**
 

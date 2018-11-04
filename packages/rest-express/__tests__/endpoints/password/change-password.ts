@@ -12,7 +12,6 @@ describe('changePassword', () => {
 
   describe('changePassword', () => {
     it('calls password.changePassword', async () => {
-      const message = 'Email verified';
       const passwordService = {
         changePassword: jest.fn(() => null),
       };

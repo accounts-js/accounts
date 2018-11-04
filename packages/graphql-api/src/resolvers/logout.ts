@@ -8,7 +8,9 @@ export const logout = (accountsServer: AccountsServer): MutationResolvers.Logout
 ) => {
   const { authToken } = context;
 
-  await accountsServer.logout(authToken);
+  if (authToken) {
+    await accountsServer.logout(authToken);
+  }
 
   return null;
 };
