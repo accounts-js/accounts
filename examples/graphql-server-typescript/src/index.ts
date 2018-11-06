@@ -1,10 +1,10 @@
 import * as mongoose from 'mongoose';
-import { merge } from 'lodash';
+import { mergeResolvers, mergeGraphQLSchemas } from '@graphql-modules/epoxy';
 import { AccountsServer } from '@accounts/server';
 import { AccountsPassword } from '@accounts/password';
 import { ApolloServer, makeExecutableSchema } from 'apollo-server';
 import MongoDBInterface from '@accounts/mongo';
-import { createAccountsGraphQL, accountsContext } from '@accounts/graphql-api';
+import { AccountsModule } from '@accounts/graphql-api';
 import { DatabaseManager } from '@accounts/database-manager';
 
 const start = async () => {
@@ -29,10 +29,9 @@ const start = async () => {
   );
 
   // Creates resolvers, type definitions, and schema directives used by accounts-js
-  const accountsGraphQL = createAccountsGraphQL(
+  const accountsGraphQL = AccountsModule.forRoot({
     accountsServer,
-    { extend: true } // Extends root query and mutations instead of creating new ones
-  );
+  });
 
   const typeDefs = `
   type PrivateType @auth {
@@ -61,8 +60,8 @@ const start = async () => {
   };
 
   const schema = makeExecutableSchema({
-    typeDefs: [typeDefs, accountsGraphQL.typeDefs],
-    resolvers: merge(accountsGraphQL.resolvers, resolvers),
+    typeDefs: mergeGraphQLSchemas([typeDefs, accountsGraphQL.typeDefs]),
+    resolvers: mergeResolvers([accountsGraphQL.resolvers, resolvers]) as any,
     schemaDirectives: {
       ...accountsGraphQL.schemaDirectives,
     },
@@ -71,10 +70,11 @@ const start = async () => {
   // Create the Apollo Server that takes a schema and configures internal stuff
   const server = new ApolloServer({
     schema,
-    context: ({ req }) => accountsContext(req, { accountsServer }),
+    context: accountsGraphQL.context,
   });
 
   server.listen(4000).then(({ url }) => {
+    // tslint:disable-next-line:no-console
     console.log(`🚀  Server ready at ${url}`);
   });
 };

@@ -46,19 +46,21 @@ const accountsServer = new AccountsServer({
 });
 ```
 
-Next, import `createAccountsGraphQL` method from this package, and run it with your `AccountsServer`:
+Next, import `AccountsModule` from this package, and run it with your `AccountsServer`:
 
 ```js
-import { createAccountsGraphQL } from '@accounts/graphql-api';
+import { AccountsModule } from '@accounts/graphql-api';
 
-const accountsGraphQL = createAccountsGraphQL(accountsServer);
+const accountsGraphQL = AccountsModule.forRoot({
+  accountsServer,
+});
 ```
 
-Now, add `accountsGraphQL.typeDefs` to your schema definition (just before using it with `makeExecutableSchema`), and extend your resolvers object with `accountsGraphQL.resolvers`, for example:
+Now, add `accountsGraphQL.typeDefs` to your schema definition (just before using it with `makeExecutableSchema`), and merge your resolvers object with `accountsGraphQL.resolvers` by using `@graphql-tools/epoxy`, for example:
 
 ```js
 import { makeExecutableSchema } from 'graphql-tools';
-import { merge } from 'lodash';
+import { mergeGraphQLSchemas, mergeResolvers } from '@graphql-tools/epoxy;';
 
 const typeDefs = [
   `
@@ -88,23 +90,21 @@ let myResolvers = {
 };
 
 const schema = makeExecutableSchema({
-  resolvers: merge(accountsGraphQL.resolvers, myResolvers),
-  typeDefs,
+  resolvers: mergeResolvers([accountsGraphQL.resolvers, myResolvers]),
+  typeDefs: mergeGraphQLSchemas([typeDefs]),
 });
 ```
 
 The last step is to extend your `graphqlExpress` with a context middleware, that extracts the authentication token from the HTTP request, so AccountsServer will automatically validate it:
 
 ```js
-import { accountsContext } from '@accounts/graphql-api';
-
 app.use(
   GRAPHQL_ROUTE,
   bodyParser.json(),
   graphqlExpress(request => {
     return {
       context: {
-        ...accountsContext(request),
+        ...accountsGraphQL(request),
         // your context
       },
       schema,
@@ -150,17 +150,15 @@ These are the available customizations:
 
 Pass a second object to `createAccountsGraphQL`, for example:
 
-```js
-const myCustomGraphQLAccounts = createSchemaWithAccounts(accountsServer, {
-  rootQueryName: 'RootQuery',
-  rootMutationName: 'RootMutation',
-});
-```
-
 Another possible customization is to modify the name of the authentication header, use it with `accountsContext` (the default is `Authorization`):
 
 ```js
-context: accountsContext(request, 'MyCustomHeader');
+const myCustomGraphQLAccounts = AccountsModule.forRoot({
+  accountsServer,
+  rootQueryName: 'RootQuery',
+  rootMutationName: 'RootMutation',
+  headerName: 'MyCustomHeader',
+});
 ```
 
 ## Extending `User`

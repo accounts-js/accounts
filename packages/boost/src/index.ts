@@ -1,14 +1,12 @@
 import { AccountsServer, AccountsServerOptions } from '@accounts/server';
 import { AuthenticationService } from '@accounts/types';
 import { ApolloServer } from 'apollo-server';
-import { createAccountsGraphQL, accountsContext, authenticated } from '@accounts/graphql-api';
-import { makeExecutableSchema } from 'graphql-tools';
-import { GraphQLSchema } from 'graphql';
+import { AccountsModule } from '@accounts/graphql-api';
 import { merge, get, isString } from 'lodash';
 import { DatabaseManager } from '@accounts/database-manager';
 import { verify } from 'jsonwebtoken';
 
-export { accountsContext };
+export { AccountsModule };
 
 export { AccountsServerOptions };
 
@@ -26,19 +24,6 @@ const defaultAccountsBoostOptions = {
     name: 'accounts-js',
   },
 };
-
-export interface AccountsGraphQL {
-  schema: GraphQLSchema;
-  typeDefs: string;
-  resolvers: {
-    [x: string]: any;
-  };
-  schemaDirectives: {
-    auth: any;
-  };
-  context: any;
-  auth: any;
-}
 
 const requirePackage = (packageName: string) => {
   if (require.resolve(packageName)) {
@@ -118,20 +103,21 @@ const defaultAccountsBoostListenOptions: AccountsBoostListenOptions = {
 export class AccountsBoost {
   public accountsServer: AccountsServer;
   public apolloServer: ApolloServer;
-  private accountsGraphQL: AccountsGraphQL | undefined;
+  private accountsGraphQL: typeof AccountsModule;
   private options: AccountsBoostOptions;
 
   constructor(options: AccountsBoostOptions, services: { [key: string]: AuthenticationService }) {
     this.accountsServer = new AccountsServer(options, services);
     this.options = options;
+    this.accountsGraphQL = AccountsModule.forRoot({
+      accountsServer: this.accountsServer,
+    });
+
+    const { schema, context } = this.accountsGraphQL;
 
     this.apolloServer = new ApolloServer({
-      schema: this.graphql().schema,
-      context: ({ req }: any) => {
-        return accountsContext(req, {
-          accountsServer: this.accountsServer,
-        });
-      },
+      schema,
+      context,
     });
   }
 
@@ -146,57 +132,33 @@ export class AccountsBoost {
     return res;
   }
 
-  public graphql(): AccountsGraphQL {
+  public graphql() {
     // Cache `this.accountsGraphQL` to avoid regenerating the schema if the user calls `accountsBoost.graphql()` multple times.
     if (this.accountsGraphQL) {
       return this.accountsGraphQL;
     }
 
-    const accountsGraphQL = createAccountsGraphQL(this.accountsServer, { extend: true });
+    if (this.options.micro) {
+      this.accountsServer.resumeSession = async (accessToken: string) => {
+        let decoded: any;
 
-    const schema = makeExecutableSchema({
-      typeDefs: [createAccountsGraphQL(this.accountsServer, { extend: false }).typeDefs],
-      resolvers: merge(accountsGraphQL.resolvers),
-      schemaDirectives: {
-        ...accountsGraphQL.schemaDirectives,
-      },
-    });
-
-    this.accountsGraphQL = {
-      ...accountsGraphQL,
-      schema,
-      auth: authenticated,
-      context: (req: any) => {
-        if (this.options.micro) {
-          return accountsContext(req, {
-            accountsServer: {
-              resumeSession: (accessToken: string) => {
-                let decoded: any;
-
-                if (!isString(accessToken)) {
-                  throw new Error('An access token is required');
-                }
-
-                try {
-                  decoded = verify(accessToken, this.options.tokenSecret);
-                } catch (err) {
-                  throw new Error('Access token is not valid');
-                }
-
-                return {
-                  id: decoded.data.userId,
-                };
-              },
-            } as any,
-          });
+        if (!isString(accessToken)) {
+          throw new Error('An access token is required');
         }
-        return accountsContext(req, {
-          accountsServer: this.accountsServer,
-        });
-      },
-    };
 
-    return this.accountsGraphQL as AccountsGraphQL;
+        try {
+          decoded = verify(accessToken, this.options.tokenSecret);
+        } catch (err) {
+          throw new Error('Access token is not valid');
+        }
+
+        return {
+          id: decoded.data.userId,
+        } as any;
+      };
+    }
+
+    return this.accountsGraphQL;
   }
 }
 

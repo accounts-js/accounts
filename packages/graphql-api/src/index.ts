@@ -1,8 +1,5 @@
-import { createAccountsGraphQL } from './schema-builder';
-import { authenticated } from './utils/authenticated-resolver';
-import { accountsContext } from './utils/context-builder';
+import 'reflect-metadata';
+export * from './utils';
 
-export { createAccountsGraphQL, authenticated, accountsContext };
-
-export * from './types/graphql';
 export * from './types';
+export * from './modules';

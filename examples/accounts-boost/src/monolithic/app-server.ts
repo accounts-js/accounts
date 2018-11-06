@@ -1,6 +1,6 @@
 import accountsBoost from '@accounts/boost';
 import { ApolloServer } from 'apollo-server';
-import { merge } from 'lodash';
+import { mergeResolvers, mergeGraphQLSchemas } from '@graphql-modules/epoxy';
 
 (async () => {
   const accounts = (await accountsBoost({
@@ -44,13 +44,13 @@ import { merge } from 'lodash';
   };
 
   const apolloServer = new ApolloServer({
-    typeDefs: [typeDefs, accounts.typeDefs],
-    resolvers: merge(accounts.resolvers, resolvers),
+    typeDefs: mergeGraphQLSchemas([typeDefs, accounts.typeDefs]),
+    resolvers: mergeResolvers([accounts.resolvers, resolvers]),
     schemaDirectives: {
       // In order for the `@auth` directive to work
       ...accounts.schemaDirectives,
     },
-    context: ({ req }) => accounts.context(req),
+    context: req => accounts.context(req),
   } as any)
     .listen()
     .then(res => {

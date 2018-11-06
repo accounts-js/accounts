@@ -58,6 +58,7 @@
     "graphql": "0.13.2",
     "lodash": "4.17.11",
     "mongoose": "5.3.6",
-    "node-fetch": "2.2.0"
+    "node-fetch": "2.2.0",
+    "@graphql-modules/epoxy": "0.2.0"
   }
 }
