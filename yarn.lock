@@ -287,10 +287,10 @@
   resolved "https://registry.yarnpkg.com/@types/handlebars/-/handlebars-4.0.39.tgz#961fb54db68030890942e6aeffe9f93a957807bd"
   integrity sha512-vjaS7Q0dVqFp85QhyPSZqDKnTTCemcSHNHFvDdalO1s0Ifz5KuE64jQD5xoUkfdWwF4WpqdJEl7LsWH8rzhKJA==
 
-"@types/ioredis@4.0.3":
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-4.0.3.tgz#afe760593c8095cbc31cf0751937c102d937d7a3"
-  integrity sha512-ZujCHXjGZ8oDl/lXTOy6wOZHmxYP5CBM+0b2jk9UFHMSe9ntoxI8/C80ifIgY5z/W3OECVyM+JDxtxx4ZitXDQ==
+"@types/ioredis@4.0.4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-4.0.4.tgz#c0a809064c05e4c2663803128d46042e73c92558"
+  integrity sha512-QdJTMFrmKkphjoGIxItTMhP++8/6INLbgSIxB8kd9N+3OuiuiaZ2knt+OR4gFQrloac/ctwaQA1PCzISmD9afQ==
   dependencies:
     "@types/node" "*"
 
