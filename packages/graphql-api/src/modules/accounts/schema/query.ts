@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
-import { IAccountsModuleConfig } from '..';
+import { AccountsModuleConfig } from '..';
 
-export default (config: IAccountsModuleConfig) => gql`
+export default (config: AccountsModuleConfig) => gql`
     ${config.extendTypeDefs ? 'extend' : ''} type ${config.rootQueryName || 'Query'}  {
         getUser: User
     }

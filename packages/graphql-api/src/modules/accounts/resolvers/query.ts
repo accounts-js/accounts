@@ -1,8 +1,8 @@
 import { QueryResolvers } from '../../../types';
 import { ModuleContext } from '@graphql-modules/core';
-import { IAccountsModuleContext } from '..';
+import { AccountsModuleContext } from '..';
 
-export const Query: QueryResolvers.Resolvers<ModuleContext<IAccountsModuleContext>> = {
+export const Query: QueryResolvers.Resolvers<ModuleContext<AccountsModuleContext>> = {
   getUser: async (_, __, context) => {
     return context.user as any;
   },

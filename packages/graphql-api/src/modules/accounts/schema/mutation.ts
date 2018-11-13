@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
-import { IAccountsModuleConfig } from '..';
+import { AccountsModuleConfig } from '..';
 
-export default (config: IAccountsModuleConfig) => gql`
+export default (config: AccountsModuleConfig) => gql`
   ${config.extendTypeDefs ? 'extend' : ''} type ${config.rootMutationName || 'Mutation'} {
     impersonate(accessToken: String!, username: String!): ImpersonateReturn
     refreshTokens(accessToken: String!, refreshToken: String!): LoginResult

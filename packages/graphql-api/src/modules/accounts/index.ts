@@ -14,11 +14,11 @@ import { AccountsPasswordModule } from '../accounts-password';
 import AccountsPassword from '@accounts/password';
 import { AuthenticatedDirective } from '../../utils/authenticated-directive';
 
-export interface IAccountsRequest {
+export interface AccountsRequest {
   req: IncomingMessage;
 }
 
-export interface IAccountsModuleConfig {
+export interface AccountsModuleConfig {
   accountsServer: AccountsServer;
   rootQueryName?: string;
   rootMutationName?: string;
@@ -27,7 +27,7 @@ export interface IAccountsModuleConfig {
   headerName?: string;
 }
 
-export interface IAccountsModuleContext {
+export interface AccountsModuleContext {
   authToken?: string;
   userAgent: string;
   ip: string;
@@ -38,9 +38,9 @@ export interface IAccountsModuleContext {
 // You can see the below. It is really easy to create a reusable GraphQL-Module with different configurations
 
 export const AccountsModule = new GraphQLModule<
-  IAccountsModuleConfig,
-  IAccountsRequest,
-  IAccountsModuleContext
+  AccountsModuleConfig,
+  AccountsRequest,
+  AccountsModuleContext
 >({
   name: 'accounts',
   typeDefs: ({ config }) =>

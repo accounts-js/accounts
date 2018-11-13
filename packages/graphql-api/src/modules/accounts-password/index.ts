@@ -6,10 +6,10 @@ import getMutationTypeDefs from './schema/mutation';
 import getSchemaDef from './schema/schema-def';
 import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
-import { IAccountsRequest } from '../accounts';
+import { AccountsRequest } from '../accounts';
 import { mergeGraphQLSchemas } from '@graphql-modules/epoxy';
 
-export interface IAccountsPasswordModuleConfig {
+export interface AccountsPasswordModuleConfig {
   accountsPassword: AccountsPassword;
   rootQueryName?: string;
   rootMutationName?: string;
@@ -18,8 +18,8 @@ export interface IAccountsPasswordModuleConfig {
 }
 
 export const AccountsPasswordModule = new GraphQLModule<
-  IAccountsPasswordModuleConfig,
-  IAccountsRequest
+  AccountsPasswordModuleConfig,
+  AccountsRequest
 >({
   name: 'accounts-password',
   typeDefs: ({ config }) =>

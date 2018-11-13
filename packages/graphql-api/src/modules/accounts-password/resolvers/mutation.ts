@@ -1,9 +1,9 @@
 import { MutationResolvers } from '../../../types';
 import { ModuleContext } from '@graphql-modules/core';
-import { IAccountsModuleContext } from '../../accounts';
+import { AccountsModuleContext } from '../../accounts';
 import { AccountsPassword, PasswordCreateUserType } from '@accounts/password';
 
-export const Mutation: MutationResolvers.Resolvers<ModuleContext<IAccountsModuleContext>> = {
+export const Mutation: MutationResolvers.Resolvers<ModuleContext<AccountsModuleContext>> = {
   changePassword: async (_, { oldPassword, newPassword }, { user, injector }) => {
     if (!(user && user.id)) {
       throw new Error('Unauthorized');

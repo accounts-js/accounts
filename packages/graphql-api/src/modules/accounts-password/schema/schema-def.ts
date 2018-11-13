@@ -1,7 +1,7 @@
-import { IAccountsPasswordModuleConfig } from '..';
+import { AccountsPasswordModuleConfig } from '..';
 import gql from 'graphql-tag';
 
-export default (config: IAccountsPasswordModuleConfig) => gql`
+export default (config: AccountsPasswordModuleConfig) => gql`
     schema {
         query: ${config.rootMutationName}
         mutation: ${config.rootQueryName}
