@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { AccountsModule } from './modules';
 import { makeExecutableSchema } from 'graphql-tools';
 
