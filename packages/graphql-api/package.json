@@ -44,6 +44,7 @@
     "@accounts/server": "^0.4.0-alpha.1",
     "@accounts/types": "^0.4.0-alpha.1",
     "@graphql-modules/core": "0.3.0-alpha.f1bc4fc0",
+    "@graphql-modules/di": "0.3.0-alpha.f1bc4fc0",
     "@graphql-modules/epoxy": "0.2.1",
     "@types/request-ip": "0.0.33",
     "deepmerge": "2.2.1",

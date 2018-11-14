@@ -60,7 +60,7 @@ Now, add `accountsGraphQL.typeDefs` to your schema definition (just before using
 
 ```js
 import { makeExecutableSchema } from 'graphql-tools';
-import { mergeGraphQLSchemas, mergeResolvers } from '@graphql-tools/epoxy;';
+import { mergeGraphQLSchemas, mergeResolvers } from '@graphql-tools/epoxy';
 
 const typeDefs = [
   `
