@@ -1,5 +1,6 @@
 import { GraphQLModule } from '@graphql-modules/core';
 import { AccountsPassword } from '@accounts/password';
+import { AccountsServer } from '@accounts/server';
 import TypesTypeDefs from './schema/types';
 import getQueryTypeDefs from './schema/query';
 import getMutationTypeDefs from './schema/mutation';
@@ -10,6 +11,7 @@ import { AccountsRequest } from '../accounts';
 import { mergeGraphQLSchemas } from '@graphql-modules/epoxy';
 
 export interface AccountsPasswordModuleConfig {
+  accountsServer: AccountsServer;
   accountsPassword: AccountsPassword;
   rootQueryName?: string;
   rootMutationName?: string;
@@ -35,6 +37,10 @@ export const AccountsPasswordModule = new GraphQLModule<
       [config.rootMutationName || 'Mutation']: Mutation,
     } as any),
   providers: ({ config }) => [
+    {
+      provide: AccountsServer,
+      useValue: config.accountsServer,
+    },
     {
       provide: AccountsPassword,
       useValue: config.accountsPassword,
