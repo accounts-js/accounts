@@ -76,7 +76,7 @@ These variables should then be referenced when creating your GraphQL server.
 ```javascript
 import accountsBoost from '@accounts/boost';
 import { ApolloServer } from 'apollo-server';
-import { merge } from 'lodash';
+import { mergeGraphQLSchemas, mergeResolvers } from '@graphql-modules/epoxy';
 
 (async () => {
   const accounts = (await accountsBoost({
@@ -120,13 +120,13 @@ import { merge } from 'lodash';
   };
 
   const apolloServer = new ApolloServer({
-    typeDefs: [typeDefs, accounts.typeDefs],
-    resolvers: merge(accounts.resolvers, resolvers),
+    typeDefs: mergeGraphQLModules([typeDefs, accounts.typeDefs]),
+    resolvers: mergeResolvers([accounts.resolvers, resolvers]),
     schemaDirectives: {
       // In order for the `@auth` directive to work
       ...accounts.schemaDirectives,
     },
-    context: ({ req }) => accounts.context(req),
+    context: req => accounts.context(req),
   } as any)
     .listen()
     .then(res => {
@@ -244,7 +244,7 @@ const accountsServerUri = 'http://localhost:4003/';
         ...accounts.schemaDirectives,
       },
     }),
-    context: ({ req }) => accounts.context(req),
+    context: req => accounts.context(req),
   }).listen();
 
   console.log(`GraphQL server running at ${apolloServer.url}`);
