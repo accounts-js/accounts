@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { ApolloServer, gql } from 'apollo-server';
 import { mergeGraphQLSchemas } from '@graphql-modules/epoxy';
 import fetch from 'node-fetch';

@@ -48,6 +48,7 @@
     "@accounts/rest-express": "^0.5.0-alpha.1",
     "@accounts/server": "^0.5.0-alpha.1",
     "@accounts/types": "^0.5.0-alpha.1",
+    "reflect-metadata": "0.1.12",
     "@graphql-modules/epoxy": "0.2.0",
     "@types/lodash": "4.14.117",
     "@types/mongoose": "5.2.19",
