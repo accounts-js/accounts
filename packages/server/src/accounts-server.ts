@@ -23,6 +23,7 @@ import { JwtData } from './types/jwt-data';
 import { EmailTemplateType } from './types/email-template-type';
 
 const defaultOptions = {
+  ambiguousErrorMessages: true,
   tokenSecret: 'secret',
   tokenConfigs: {
     accessToken: {

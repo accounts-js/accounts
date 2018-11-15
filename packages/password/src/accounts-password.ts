@@ -22,10 +22,6 @@ import { PasswordCreateUserType, PasswordLoginType, PasswordType, ErrorMessages 
 import { errors } from './errors';
 
 export interface AccountsPasswordOptions {
-  /**
-   * Return ambiguous error messages from login failures to prevent user enumeration. Defaults to true.
-   */
-  ambiguousErrorMessages?: boolean;
   twoFactor?: AccountsTwoFactorOptions;
   passwordHashAlgorithm?: HashAlgorithm;
   /**
@@ -54,7 +50,6 @@ export interface AccountsPasswordOptions {
 }
 
 const defaultOptions = {
-  ambiguousErrorMessages: true,
   minimumPasswordLength: 7,
   // 3 days - 3 * 24 * 60 * 60 * 1000
   verifyEmailTokenExpiration: 259200000,
@@ -281,7 +276,7 @@ export default class AccountsPassword implements AuthenticationService {
     const user = await this.db.findUserByEmail(address);
     if (!user) {
       // To prevent user enumeration we fail silently
-      if (this.options.ambiguousErrorMessages) {
+      if (this.server.options.ambiguousErrorMessages) {
         return;
       }
       throw new Error(this.options.errors.userNotFound);
@@ -316,7 +311,7 @@ export default class AccountsPassword implements AuthenticationService {
     const user = await this.db.findUserByEmail(address);
     if (!user) {
       // To prevent user enumeration we fail silently
-      if (this.options.ambiguousErrorMessages) {
+      if (this.server.options.ambiguousErrorMessages) {
         return;
       }
       throw new Error(this.options.errors.userNotFound);
@@ -441,7 +436,7 @@ export default class AccountsPassword implements AuthenticationService {
     // @ts-ignore
     if (!foundUser) {
       throw new Error(
-        this.options.ambiguousErrorMessages
+        this.server.options.ambiguousErrorMessages
           ? this.options.errors.invalidCredentials
           : this.options.errors.userNotFound
       );

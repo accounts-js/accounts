@@ -1,7 +1,8 @@
-import { MutationResolvers } from '../../../types';
 import { ModuleContext } from '@graphql-modules/core';
-import { AccountsModuleContext } from '../../accounts';
 import { AccountsPassword, PasswordCreateUserType } from '@accounts/password';
+import { AccountsServer } from '@accounts/server';
+import { AccountsModuleContext } from '../../accounts';
+import { MutationResolvers } from '../../../types';
 
 export const Mutation: MutationResolvers.Resolvers<ModuleContext<AccountsModuleContext>> = {
   changePassword: async (_, { oldPassword, newPassword }, { user, injector }) => {
@@ -15,7 +16,7 @@ export const Mutation: MutationResolvers.Resolvers<ModuleContext<AccountsModuleC
   },
   createUser: async (_: null, { user }, { injector }) => {
     const userId = await injector.get(AccountsPassword).createUser(user as PasswordCreateUserType);
-    return userId;
+    return injector.get(AccountsServer).options.ambiguousErrorMessages ? null : userId;
   },
   twoFactorSet: async (_, { code, secret }, { user, injector }) => {
     // Make sure user is logged in
