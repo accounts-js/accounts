@@ -13,7 +13,7 @@ export const errors: ErrorMessages = {
   verifyEmailLinkExpired: 'Verify email link expired',
   verifyEmailLinkUnknownAddress: 'Verify email link is for unknown address',
   resetPasswordLinkExpired: 'Reset password link expired',
-  resetPasswordLinkUnknownAddress: 'Verify email link is for unknown address',
+  resetPasswordLinkUnknownAddress: 'Reset password link is for unknown address',
   usernameAlreadyExists: 'Username already exists',
   emailAlreadyExists: 'Email already exists',
   usernameOrEmailRequired: 'Username or Email is required',
