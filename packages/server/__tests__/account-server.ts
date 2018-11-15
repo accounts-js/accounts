@@ -1056,6 +1056,7 @@ describe('AccountsServer', () => {
             findUserByUsername: () => Promise.resolve(null),
           } as any,
           tokenSecret: 'secret1',
+          ambiguousErrorMessages: false,
         },
         {}
       );
