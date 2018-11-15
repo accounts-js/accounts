@@ -50,12 +50,12 @@ const accountsServer = new AccountsServer({
 });
 ```
 
-Next, import `createAccountsGraphQL` method from this package, and run it with your `AccountsServer`:
+Next, import `AccountsModule` method from this package, and run it with your `AccountsServer`:
 
 ```js
-import { createAccountsGraphQL } from '@accounts/graphql-api';
+import { AccountsModule } from '@accounts/graphql-api';
 
-const accountsGraphQL = createAccountsGraphQL(accountsServer);
+const accountsGraphQL = AccountsModule.forRoot({ accountsServer });
 ```
 
 Now, add `accountsGraphQL.typeDefs` to your schema definition (just before using it with `makeExecutableSchema`), and extend your resolvers object with `accountsGraphQL.resolvers`, for example:
@@ -108,7 +108,7 @@ app.use(
   graphqlExpress(request => {
     return {
       context: {
-        ...accountsContext(request),
+        ...accountsGraphQL.context(request),
         // your context
       },
       schema,
@@ -152,10 +152,11 @@ These are the available customizations:
 - `extend` (boolean) - whether to add `extend` before the root type declaration, default: `true`.
 - `withSchemaDefinition` (boolean): whether to add `schema { ... }` declaration to the generation schema, default: `false`.
 
-Pass a second object to `createAccountsGraphQL`, for example:
+Pass a second object to `AccountsModule`, for example:
 
 ```js
-const myCustomGraphQLAccounts = createSchemaWithAccounts(accountsServer, {
+const myCustomGraphQLAccounts = AccountsModule.forRoot({
+  accountsServer,
   rootQueryName: 'RootQuery',
   rootMutationName: 'RootMutation',
 });
@@ -164,7 +165,7 @@ const myCustomGraphQLAccounts = createSchemaWithAccounts(accountsServer, {
 Another possible customization is to modify the name of the authentication header, use it with `accountsContext` (the default is `Authorization`):
 
 ```js
-context: accountsContext(request, 'MyCustomHeader');
+headerName: 'MyCustomHeader';
 ```
 
 ## Extending `User`
