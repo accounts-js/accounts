@@ -208,6 +208,9 @@ Please change it with a strong random token.`);
       }
 
       if (!impersonatedUser) {
+        if (this.options.ambiguousErrorMessages) {
+          return { authorized: false };
+        }
         throw new Error(`Impersonated user not found`);
       }
 
