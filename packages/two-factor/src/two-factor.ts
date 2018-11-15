@@ -7,10 +7,11 @@ import { getUserTwoFactorService } from './utils';
 const defaultOptions = {
   secretLength: 20,
   window: 0,
+  errors,
 };
 
 export class TwoFactor {
-  private options: AccountsTwoFactorOptions;
+  private options: AccountsTwoFactorOptions & typeof defaultOptions;
   private db!: DatabaseInterface;
   private serviceName = 'two-factor';
 
@@ -30,13 +31,13 @@ export class TwoFactor {
    */
   public async authenticate(user: User, code: string): Promise<void> {
     if (!code) {
-      throw new Error(errors.codeRequired);
+      throw new Error(this.options.errors.codeRequired);
     }
 
     const twoFactorService = getUserTwoFactorService(user);
     // If user does not have 2fa set return error
     if (!twoFactorService) {
-      throw new Error(errors.userTwoFactorNotSet);
+      throw new Error(this.options.errors.userTwoFactorNotSet);
     }
     if (
       !speakeasy.totp.verify({
@@ -46,7 +47,7 @@ export class TwoFactor {
         window: this.options.window,
       })
     ) {
-      throw new Error(errors.codeDidNotMatch);
+      throw new Error(this.options.errors.codeDidNotMatch);
     }
   }
 
@@ -67,17 +68,17 @@ export class TwoFactor {
    */
   public async set(userId: string, secret: speakeasy.Key, code: string): Promise<void> {
     if (!code) {
-      throw new Error(errors.codeRequired);
+      throw new Error(this.options.errors.codeRequired);
     }
 
     const user = await this.db.findUserById(userId);
     if (!user) {
-      throw new Error(errors.userNotFound);
+      throw new Error(this.options.errors.userNotFound);
     }
     let twoFactorService = getUserTwoFactorService(user);
     // If user already have 2fa return error
     if (twoFactorService) {
-      throw new Error(errors.userTwoFactorAlreadySet);
+      throw new Error(this.options.errors.userTwoFactorAlreadySet);
     }
 
     if (
@@ -93,7 +94,7 @@ export class TwoFactor {
       };
       await this.db.setService(userId, this.serviceName, twoFactorService);
     } else {
-      throw new Error(errors.codeDidNotMatch);
+      throw new Error(this.options.errors.codeDidNotMatch);
     }
   }
 
@@ -102,17 +103,17 @@ export class TwoFactor {
    */
   public async unset(userId: string, code: string): Promise<void> {
     if (!code) {
-      throw new Error(errors.codeRequired);
+      throw new Error(this.options.errors.codeRequired);
     }
 
     const user = await this.db.findUserById(userId);
     if (!user) {
-      throw new Error(errors.userNotFound);
+      throw new Error(this.options.errors.userNotFound);
     }
     const twoFactorService = getUserTwoFactorService(user);
     // If user does not have 2fa set return error
     if (!twoFactorService) {
-      throw new Error(errors.userTwoFactorNotSet);
+      throw new Error(this.options.errors.userTwoFactorNotSet);
     }
     if (
       speakeasy.totp.verify({
@@ -124,7 +125,7 @@ export class TwoFactor {
     ) {
       this.db.unsetService(userId, this.serviceName);
     } else {
-      throw new Error(errors.codeDidNotMatch);
+      throw new Error(this.options.errors.codeDidNotMatch);
     }
   }
 }
