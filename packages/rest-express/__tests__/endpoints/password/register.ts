@@ -40,7 +40,7 @@ describe('registerPassword', () => {
     expect(accountsServer.getServices().password.createUser).toBeCalledWith({
       username: 'toto',
     });
-    expect(res.json).toBeCalledWith({ userId: '1' });
+    expect(res.json).toBeCalledWith('1');
     expect(res.status).not.toBeCalled();
   });
 
@@ -74,7 +74,7 @@ describe('registerPassword', () => {
     expect(accountsServer.getServices().password.createUser).toBeCalledWith({
       username: 'toto',
     });
-    expect(res.json).toBeCalledWith({ userId: null });
+    expect(res.json).toBeCalledWith(null);
     expect(res.status).not.toBeCalled();
   });
 
