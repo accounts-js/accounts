@@ -7,6 +7,7 @@ import getSchemaDef from './schema/schema-def';
 import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
 import { AccountsRequest } from '../accounts';
+// tslint:disable-next-line:no-implicit-dependencies
 import { mergeGraphQLSchemas } from '@graphql-modules/epoxy';
 
 export interface AccountsPasswordModuleConfig {
@@ -22,22 +23,22 @@ export const AccountsPasswordModule = new GraphQLModule<
   AccountsRequest
 >({
   name: 'accounts-password',
-  typeDefs: ({ config }) =>
+  typeDefs: ({ _moduleConfig }) =>
     mergeGraphQLSchemas([
       TypesTypeDefs,
-      getQueryTypeDefs(config),
-      getMutationTypeDefs(config),
-      ...(config.withSchemaDefinition ? [getSchemaDef(config)] : []),
+      getQueryTypeDefs(_moduleConfig),
+      getMutationTypeDefs(_moduleConfig),
+      ...(_moduleConfig.withSchemaDefinition ? [getSchemaDef(_moduleConfig)] : []),
     ]),
-  resolvers: ({ config }) =>
+  resolvers: ({ _moduleConfig }) =>
     ({
-      [config.rootQueryName || 'Query']: Query,
-      [config.rootMutationName || 'Mutation']: Mutation,
+      [_moduleConfig.rootQueryName || 'Query']: Query,
+      [_moduleConfig.rootMutationName || 'Mutation']: Mutation,
     } as any),
-  providers: ({ config }) => [
+  providers: ({ _moduleConfig }) => [
     {
       provide: AccountsPassword,
-      useValue: config.accountsPassword,
+      useValue: _moduleConfig.accountsPassword,
     },
   ],
 });

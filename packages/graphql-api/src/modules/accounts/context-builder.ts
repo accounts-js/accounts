@@ -2,7 +2,6 @@ import { getClientIp } from 'request-ip';
 import { IncomingMessage } from 'http';
 import { ModuleConfig, ModuleContext } from '@graphql-modules/core';
 import { AccountsModuleContext, AccountsModuleConfig, AccountsModule, AccountsRequest } from '.';
-import { Injector } from '@graphql-modules/di';
 
 export const getUA = (req: IncomingMessage) => {
   let userAgent: string = (req.headers['user-agent'] as string) || '';
@@ -16,7 +15,7 @@ export const getUA = (req: IncomingMessage) => {
 export const contextBuilder = async (
   { req }: AccountsRequest,
   currentContext: ModuleContext<AccountsModuleContext>,
-  injector: Injector
+  injector: any
 ) => {
   const config: AccountsModuleConfig = injector.get(ModuleConfig(AccountsModule));
   const headerName = config.headerName || 'accounts-access-token';

@@ -15,10 +15,10 @@ Start by installing it from NPM / Yarn:
 
 ```bash
 // Npm
-npm install --save @accounts/server @accounts/graphql-api
+npm install --save @accounts/server @accounts/graphql-api @graphql-modules/core reflect-metadata
 
 // Yarn
-yarn add @accounts/server @accounts/graphql-api
+yarn add @accounts/server @accounts/graphql-api @graphql-modules/core reflect-metadata
 ```
 
 > This package does not create a transport or anything else, only schema and string and resolvers as object.
@@ -26,6 +26,7 @@ yarn add @accounts/server @accounts/graphql-api
 Start by configuring your `AccountsServer` as you wish. For example, using MongoDB:
 
 ```js
+import 'reflect-metadata';
 import mongoose from 'mongoose'
 import AccountsServer from '@accounts/server'
 import AccountsPassword from '@accounts/password'

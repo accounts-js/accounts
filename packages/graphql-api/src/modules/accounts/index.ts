@@ -9,10 +9,11 @@ import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
 import { User } from '@accounts/types';
 import { contextBuilder } from './context-builder';
-import { mergeGraphQLSchemas } from '@graphql-modules/epoxy';
 import { AccountsPasswordModule } from '../accounts-password';
 import AccountsPassword from '@accounts/password';
 import { AuthenticatedDirective } from '../../utils/authenticated-directive';
+// tslint:disable-next-line:no-implicit-dependencies
+import { mergeGraphQLSchemas } from '@graphql-modules/epoxy';
 
 export interface AccountsRequest {
   req: IncomingMessage;
@@ -43,32 +44,33 @@ export const AccountsModule = new GraphQLModule<
   AccountsModuleContext
 >({
   name: 'accounts',
-  typeDefs: ({ config }) =>
+  typeDefs: ({ _moduleConfig }) =>
     mergeGraphQLSchemas([
       TypesTypeDefs,
-      getQueryTypeDefs(config),
-      getMutationTypeDefs(config),
-      ...(config.withSchemaDefinition ? [getSchemaDef(config)] : []),
+      getQueryTypeDefs(_moduleConfig),
+      getMutationTypeDefs(_moduleConfig),
+      ...(_moduleConfig.withSchemaDefinition ? [getSchemaDef(_moduleConfig)] : []),
     ]),
-  resolvers: ({ config }) =>
+  resolvers: ({ _moduleConfig }) =>
     ({
-      [config.rootQueryName || 'Query']: Query,
-      [config.rootMutationName || 'Mutation']: Mutation,
+      [_moduleConfig.rootQueryName || 'Query']: Query,
+      [_moduleConfig.rootMutationName || 'Mutation']: Mutation,
     } as any),
   // If necessary, import AccountsPasswordModule together with this module
-  imports: ({ config }) =>
-    config.accountsServer.getServices().password
+  imports: ({ _moduleConfig }) =>
+    _moduleConfig.accountsServer.getServices().password
       ? [
           AccountsPasswordModule.forRoot({
-            accountsPassword: config.accountsServer.getServices().password as AccountsPassword,
-            ...config,
+            accountsPassword: _moduleConfig.accountsServer.getServices()
+              .password as AccountsPassword,
+            ..._moduleConfig,
           }),
         ]
       : [],
-  providers: ({ config }) => [
+  providers: ({ _moduleConfig }) => [
     {
       provide: AccountsServer,
-      useValue: config.accountsServer,
+      useValue: _moduleConfig.accountsServer,
     },
   ],
   contextBuilder,
