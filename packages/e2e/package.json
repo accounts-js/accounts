@@ -1,7 +1,7 @@
 {
   "name": "@accounts/e2e",
   "private": true,
-  "version": "0.4.0-alpha.1",
+  "version": "0.5.0-alpha.1",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
@@ -38,16 +38,17 @@
     "jest-localstorage-mock": "2.3.0"
   },
   "dependencies": {
-    "@accounts/client": "^0.4.0-alpha.1",
-    "@accounts/client-password": "^0.4.0-alpha.1",
-    "@accounts/graphql-api": "^0.4.0-alpha.1",
-    "@accounts/graphql-client": "^0.4.0-alpha.1",
-    "@accounts/mongo": "^0.4.0-alpha.1",
-    "@accounts/password": "^0.4.0-alpha.1",
-    "@accounts/rest-client": "^0.4.0-alpha.1",
-    "@accounts/rest-express": "^0.4.0-alpha.1",
-    "@accounts/server": "^0.4.0-alpha.1",
-    "@accounts/types": "^0.4.0-alpha.1",
+    "@accounts/client": "^0.5.0-alpha.1",
+    "@accounts/client-password": "^0.5.0-alpha.1",
+    "@accounts/graphql-api": "^0.5.0-alpha.1",
+    "@accounts/graphql-client": "^0.5.0-alpha.1",
+    "@accounts/mongo": "^0.5.0-alpha.1",
+    "@accounts/password": "^0.5.0-alpha.1",
+    "@accounts/rest-client": "^0.5.0-alpha.1",
+    "@accounts/rest-express": "^0.5.0-alpha.1",
+    "@accounts/server": "^0.5.0-alpha.1",
+    "@accounts/types": "^0.5.0-alpha.1",
+    "@graphql-modules/epoxy": "0.2.0",
     "@types/lodash": "4.14.117",
     "@types/mongoose": "5.2.19",
     "@types/node-fetch": "2.1.2",
@@ -58,7 +59,6 @@
     "graphql": "0.13.2",
     "lodash": "4.17.11",
     "mongoose": "5.3.6",
-    "node-fetch": "2.2.0",
-    "@graphql-modules/epoxy": "0.2.0"
+    "node-fetch": "2.2.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@accounts/express-session",
-  "version": "0.4.0-alpha.1",
+  "version": "0.5.0-alpha.1",
   "description": "",
   "main": "lib/index",
   "typings": "lib/index",
@@ -41,7 +41,7 @@
   "author": "Kamil Kisiela",
   "license": "MIT",
   "devDependencies": {
-    "@accounts/server": "^0.4.0-alpha.1",
+    "@accounts/server": "^0.5.0-alpha.1",
     "@types/express": "4.16.0",
     "@types/express-session": "1.15.11",
     "@types/lodash": "4.14.117",
@@ -55,7 +55,7 @@
     "express-session": "^1.15.6"
   },
   "dependencies": {
-    "@accounts/types": "^0.4.0-alpha.1",
+    "@accounts/types": "^0.5.0-alpha.1",
     "lodash": "^4.17.11",
     "request-ip": "^2.1.1"
   }
