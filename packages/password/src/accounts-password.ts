@@ -280,6 +280,10 @@ export default class AccountsPassword implements AuthenticationService {
 
     const user = await this.db.findUserByEmail(address);
     if (!user) {
+      // To prevent user enumeration we fail silently
+      if (this.options.ambiguousErrorMessages) {
+        return;
+      }
       throw new Error(this.options.errors.userNotFound);
     }
     const token = generateRandomToken();
@@ -311,6 +315,10 @@ export default class AccountsPassword implements AuthenticationService {
 
     const user = await this.db.findUserByEmail(address);
     if (!user) {
+      // To prevent user enumeration we fail silently
+      if (this.options.ambiguousErrorMessages) {
+        return;
+      }
       throw new Error(this.options.errors.userNotFound);
     }
     const token = generateRandomToken();
