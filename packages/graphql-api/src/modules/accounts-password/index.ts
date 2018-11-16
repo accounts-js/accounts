@@ -7,6 +7,7 @@ import getSchemaDef from './schema/schema-def';
 import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
 import { AccountsRequest } from '../accounts';
+// tslint:disable-next-line:no-implicit-dependencies
 import { mergeGraphQLSchemas } from '@graphql-modules/epoxy';
 
 export interface AccountsPasswordModuleConfig {

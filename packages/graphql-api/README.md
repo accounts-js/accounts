@@ -15,10 +15,10 @@ Start by installing it from NPM / Yarn:
 
 ```bash
 // Npm
-npm install --save @accounts/server @accounts/graphql-api
+npm install --save @accounts/server @accounts/graphql-api @graphql-modules/core
 
 // Yarn
-yarn add @accounts/server @accounts/graphql-api
+yarn add @accounts/server @accounts/graphql-api @graphql-modules/core
 ```
 
 > This package does not create a transport or anything else, only schema and string and resolvers as object.

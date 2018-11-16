@@ -103,7 +103,7 @@ const defaultAccountsBoostListenOptions: AccountsBoostListenOptions = {
 export class AccountsBoost {
   public accountsServer: AccountsServer;
   public apolloServer: ApolloServer;
-  private accountsGraphQL: typeof AccountsModule;
+  public accountsGraphQL: typeof AccountsModule;
   private options: AccountsBoostOptions;
 
   constructor(options: AccountsBoostOptions, services: { [key: string]: AuthenticationService }) {

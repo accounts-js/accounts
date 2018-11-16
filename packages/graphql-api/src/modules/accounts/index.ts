@@ -9,10 +9,11 @@ import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
 import { User } from '@accounts/types';
 import { contextBuilder } from './context-builder';
-import { mergeGraphQLSchemas } from '@graphql-modules/epoxy';
 import { AccountsPasswordModule } from '../accounts-password';
 import AccountsPassword from '@accounts/password';
 import { AuthenticatedDirective } from '../../utils/authenticated-directive';
+// tslint:disable-next-line:no-implicit-dependencies
+import { mergeGraphQLSchemas } from '@graphql-modules/epoxy';
 
 export interface AccountsRequest {
   req: IncomingMessage;
