@@ -7,6 +7,10 @@ import { PrepareMailFunction } from './prepare-mail-function';
 import { SendMailType } from './send-mail-type';
 
 export interface AccountsServerOptions {
+  /**
+   * Return ambiguous error messages from login failures to prevent user enumeration. Defaults to true.
+   */
+  ambiguousErrorMessages?: boolean;
   db?: DatabaseInterface;
   tokenSecret: string;
   tokenConfigs?: {

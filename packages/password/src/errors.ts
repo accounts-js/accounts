@@ -10,6 +10,7 @@ export const errors: ErrorMessages = {
   invalidPassword: 'Invalid password',
   invalidNewPassword: 'Invalid new password',
   invalidToken: 'Invalid token',
+  invalidCredentials: 'Invalid credentials',
   verifyEmailLinkExpired: 'Verify email link expired',
   verifyEmailLinkUnknownAddress: 'Verify email link is for unknown address',
   resetPasswordLinkExpired: 'Reset password link expired',

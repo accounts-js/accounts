@@ -16,6 +16,7 @@ describe('registerPassword', () => {
       createUser: jest.fn(() => userId),
     };
     const accountsServer = {
+      options: {},
       getServices: () => ({
         password: passwordService,
       }),
@@ -39,7 +40,41 @@ describe('registerPassword', () => {
     expect(accountsServer.getServices().password.createUser).toBeCalledWith({
       username: 'toto',
     });
-    expect(res.json).toBeCalledWith({ userId: '1' });
+    expect(res.json).toBeCalledWith('1');
+    expect(res.status).not.toBeCalled();
+  });
+
+  it('calls password.createUser and returns null if server have ambiguousErrorMessages', async () => {
+    const userId = '1';
+    const passwordService = {
+      createUser: jest.fn(() => userId),
+    };
+    const accountsServer = {
+      options: { ambiguousErrorMessages: true },
+      getServices: () => ({
+        password: passwordService,
+      }),
+    };
+    const middleware = registerPassword(accountsServer as any);
+
+    const req = {
+      body: {
+        user: {
+          username: 'toto',
+        },
+        extraFieldThatShouldNotBePassed: 'hey',
+      },
+      headers: {},
+    };
+    const reqCopy = { ...req };
+
+    await middleware(req, res);
+
+    expect(req).toEqual(reqCopy);
+    expect(accountsServer.getServices().password.createUser).toBeCalledWith({
+      username: 'toto',
+    });
+    expect(res.json).toBeCalledWith(null);
     expect(res.status).not.toBeCalled();
   });
 

@@ -32,6 +32,10 @@ export interface ErrorMessages {
    */
   invalidNewPassword: string;
   /**
+   * Default to 'Invalid credentials'
+   */
+  invalidCredentials: string;
+  /**
    * Default to 'Invalid token'
    */
   invalidToken: string;
