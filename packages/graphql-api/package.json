@@ -1,6 +1,6 @@
 {
   "name": "@accounts/graphql-api",
-  "version": "0.5.0-alpha.1",
+  "version": "0.5.1-alpha.1",
   "description": "Server side GraphQL transport for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -25,6 +25,7 @@
   "devDependencies": {
     "@gql2ts/from-schema": "1.10.1",
     "@gql2ts/types": "1.9.0",
+    "@graphql-modules/core": "0.2.3",
     "@types/graphql": "0.13.4",
     "concurrently": "4.0.1",
     "graphql": "0.13.2",
@@ -34,17 +35,16 @@
     "graphql-tools": "4.0.3",
     "lodash": "4.17.11",
     "nock": "10.0.1",
-    "ts-node": "7.0.1",
-    "@graphql-modules/core": "0.2.3"
+    "ts-node": "7.0.1"
   },
   "peerDependencies": {
-    "graphql-tools": "^4.0.3",
-    "@graphql-modules/core": "^0.2.3"
+    "@graphql-modules/core": "^0.2.3",
+    "graphql-tools": "^4.0.3"
   },
   "dependencies": {
-    "@accounts/password": "^0.5.0-alpha.1",
-    "@accounts/server": "^0.5.0-alpha.1",
-    "@accounts/types": "^0.5.0-alpha.1",
+    "@accounts/password": "^0.5.1-alpha.1",
+    "@accounts/server": "^0.5.1-alpha.1",
+    "@accounts/types": "^0.5.1-alpha.1",
     "@types/request-ip": "0.0.33",
     "deepmerge": "2.2.1",
     "graphql-tag": "^2.10.0",
