@@ -44,33 +44,32 @@ export const AccountsModule = new GraphQLModule<
   AccountsModuleContext
 >({
   name: 'accounts',
-  typeDefs: ({ _moduleConfig }) =>
+  typeDefs: ({ config }) =>
     mergeGraphQLSchemas([
       TypesTypeDefs,
-      getQueryTypeDefs(_moduleConfig),
-      getMutationTypeDefs(_moduleConfig),
-      ...(_moduleConfig.withSchemaDefinition ? [getSchemaDef(_moduleConfig)] : []),
+      getQueryTypeDefs(config),
+      getMutationTypeDefs(config),
+      ...(config.withSchemaDefinition ? [getSchemaDef(config)] : []),
     ]),
-  resolvers: ({ _moduleConfig }) =>
+  resolvers: ({ config }) =>
     ({
-      [_moduleConfig.rootQueryName || 'Query']: Query,
-      [_moduleConfig.rootMutationName || 'Mutation']: Mutation,
+      [config.rootQueryName || 'Query']: Query,
+      [config.rootMutationName || 'Mutation']: Mutation,
     } as any),
   // If necessary, import AccountsPasswordModule together with this module
-  imports: ({ _moduleConfig }) =>
-    _moduleConfig.accountsServer.getServices().password
+  imports: ({ config }) =>
+    config.accountsServer.getServices().password
       ? [
           AccountsPasswordModule.forRoot({
-            accountsPassword: _moduleConfig.accountsServer.getServices()
-              .password as AccountsPassword,
-            ..._moduleConfig,
+            accountsPassword: config.accountsServer.getServices().password as AccountsPassword,
+            ...config,
           }),
         ]
       : [],
-  providers: ({ _moduleConfig }) => [
+  providers: ({ config }) => [
     {
       provide: AccountsServer,
-      useValue: _moduleConfig.accountsServer,
+      useValue: config.accountsServer,
     },
   ],
   contextBuilder,

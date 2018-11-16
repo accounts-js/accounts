@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { AccountsModule } from './modules';
 
 export default AccountsModule.forRoot({

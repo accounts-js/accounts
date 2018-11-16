@@ -77,14 +77,14 @@
   resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.9.0.tgz#d07a54832757d2f2d1fc9891e5b0e3e3b4886c6a"
   integrity sha512-mkHar7AdyShUFJE6Mlke1tUbb+lPCK1EozZeAhCuRrhQ5aCCBAG6RxzNUYX1Q2jeGeyU0WRAtQu1oE/GoIsNXA==
 
-"@graphql-modules/core@0.2.1", "@graphql-modules/core@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.2.1.tgz#6a9ded5cbd93d93e1f9aab528ca43f9bf47b17bf"
-  integrity sha512-JqdKBhoDMAidBM7ItVpONPbAqgdcFkhu0i+D/yiiodghUewMx+yxqlmyqh/GJXvrpWQSt1rxLXoMcK2U3WIOUw==
+"@graphql-modules/core@0.2.3", "@graphql-modules/core@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.2.3.tgz#40064f1c970a9823f90ff0b0d1e6085231c30b85"
+  integrity sha512-9prfM5hD3+xFgOhcDdvASCiZL0la2XrguHbuNr94vXJQB4wvZ1epvnwgMtfXTREM+Hd2PzMKVRNDcrcGwBHQhQ==
   dependencies:
-    "@graphql-modules/epoxy" "0.2.1"
-    "@graphql-modules/logger" "0.2.1"
-    "@graphql-modules/sonar" "0.2.1"
+    "@graphql-modules/epoxy" "0.2.3"
+    "@graphql-modules/logger" "0.2.3"
+    "@graphql-modules/sonar" "0.2.3"
     dependency-graph "0.7.2"
     graphql-tools "4.0.3"
     tslib "1.9.3"
@@ -111,12 +111,12 @@
     graphql-tools "4.0.3"
     tslib "1.9.3"
 
-"@graphql-modules/epoxy@0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/epoxy/-/epoxy-0.2.1.tgz#2e00b3f0fde2578d8f9a2a6227546e9c4d171a18"
-  integrity sha512-ZxEZoCr+pasNax+WYAjtd88QX+C9RtUgbS5qorvvC3p93+uSz/NfEAYiwvKo1/amPZ5gXGeKbVUqdZQi66hJRQ==
+"@graphql-modules/epoxy@0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/epoxy/-/epoxy-0.2.3.tgz#8e1b1e85c9c1b15f773d27b9eff85e8d1419b436"
+  integrity sha512-0GE5Jx5ESEqW9ftQmgGfANPyNUYd6pbMQBlkTOgmRvBh14IEM0ixqSiYCxDXtHvz/3Azb6KmSQJfQwFtuPQoSQ==
   dependencies:
-    "@graphql-modules/logger" "0.2.1"
+    "@graphql-modules/logger" "0.2.3"
     "@types/deepmerge" "2.1.0"
     deepmerge "2.2.1"
     graphql-tools "4.0.3"
@@ -140,20 +140,20 @@
     tslib "1.9.3"
     winston "3.1.0"
 
-"@graphql-modules/logger@0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/logger/-/logger-0.2.1.tgz#eda291e715b9e5763d7739a5eaf601f1e2e56fd7"
-  integrity sha512-h1myhWv12y+aadlFmCBmQLaXUvCC0JacMFEfU1E4Ziy+mJlYuE3z8pwJ1qTp+sRLUZo79gXNGndxwnaaSUNE9w==
+"@graphql-modules/logger@0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/logger/-/logger-0.2.3.tgz#6513c9fd4a0cb76228b54bc16d3d54e35f52ca15"
+  integrity sha512-VotXEIJIOCJCFgU1PpYAnSqcnLjPADPOpKDFNjYVwsKont+GXCDp5guocH9vlLP7xgu1ospgTUOc7H42a+tnbQ==
   dependencies:
     tslib "1.9.3"
     winston "3.1.0"
 
-"@graphql-modules/sonar@0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/sonar/-/sonar-0.2.1.tgz#00112877d64796e22338f2d4d535a5791e268767"
-  integrity sha512-llMQzWjFIpo5sfrqyLm1egHTEAqqI/4b6MLIxrv/B2aLCU1CUWtQlmfziymt9TU4GapgC3nmk7wj9AcYCnuelA==
+"@graphql-modules/sonar@0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/sonar/-/sonar-0.2.3.tgz#8420cd1bdeb5e5df5a5d1e4754ec87256007b102"
+  integrity sha512-YY+hHqFv/+jqZHFhp/RE8hAli0Z1Sk82U+Zu336e02wt+XeE3qFuhxlMqSzTUUvk7hCwrPehwciy/uhlXPJZFQ==
   dependencies:
-    "@graphql-modules/logger" "0.2.1"
+    "@graphql-modules/logger" "0.2.3"
     "@types/glob" "7.1.1"
     glob "7.1.3"
     tslib "1.9.3"
@@ -6495,11 +6495,6 @@ redis-parser@^3.0.0:
   integrity sha1-tm2CjNyv5rS4pCin3vTGvKwxyLQ=
   dependencies:
     redis-errors "^1.0.0"
-
-reflect-metadata@0.1.12, reflect-metadata@^0.1.12:
-  version "0.1.12"
-  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.12.tgz#311bf0c6b63cd782f228a81abe146a2bfa9c56f2"
-  integrity sha512-n+IyV+nGz3+0q3/Yf1ra12KpCyi001bi4XFxSjbiWWjfqb52iTTtpGXmCCAOWWIAn9KEuFZKGqBERHmrtScZ3A==
 
 regenerator-runtime@^0.10.0:
   version "0.10.5"
