@@ -117,7 +117,7 @@ Object.keys(servers).forEach(key => {
           await server.accountsClientPassword.changePassword('wrongPassword', 'newPassword');
           throw new Error();
         } catch (error) {
-          expect(error.message).toMatch('Incorrect password');
+          expect(error.message).toMatch('Invalid credential');
         }
       });
 
