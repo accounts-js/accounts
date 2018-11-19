@@ -52,10 +52,10 @@
   "devDependencies": {
     "@types/jest": "23.3.9",
     "@types/jwt-decode": "2.2.1",
-    "@types/node": "10.12.0",
+    "@types/node": "10.12.9",
     "jest": "23.6.0",
     "jest-localstorage-mock": "2.3.0",
-    "jsonwebtoken": "8.3.0",
+    "jsonwebtoken": "8.4.0",
     "localstorage-polyfill": "1.0.1",
     "rimraf": "2.6.2"
   },

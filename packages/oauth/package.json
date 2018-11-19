@@ -30,7 +30,7 @@
   "devDependencies": {
     "@accounts/server": "^0.6.1",
     "@types/jest": "23.3.9",
-    "@types/node": "10.12.0",
+    "@types/node": "10.12.9",
     "jest": "23.6.0"
   }
 }
