@@ -27,7 +27,7 @@
     "oauth": "^0.9.15"
   },
   "devDependencies": {
-    "@types/jest": "23.3.7",
+    "@types/jest": "23.3.9",
     "@types/node": "10.12.0",
     "@types/oauth": "0.9.1",
     "jest": "23.6.0"
