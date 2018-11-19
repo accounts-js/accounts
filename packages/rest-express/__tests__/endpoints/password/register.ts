@@ -1,6 +1,6 @@
 import { registerPassword } from '../../../src/endpoints/password/register';
 
-const res = {
+const res: any = {
   json: jest.fn(),
   status: jest.fn(() => res),
 };
@@ -68,7 +68,7 @@ describe('registerPassword', () => {
     };
     const reqCopy = { ...req };
 
-    await middleware(req, res);
+    await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
     expect(accountsServer.getServices().password.createUser).toBeCalledWith({

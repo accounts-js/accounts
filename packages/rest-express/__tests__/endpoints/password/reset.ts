@@ -1,6 +1,6 @@
 import { resetPassword, sendResetPasswordEmail } from '../../../src/endpoints/password/reset';
 
-const res = {
+const res: any = {
   json: jest.fn(),
   status: jest.fn(() => res),
 };

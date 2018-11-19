@@ -1,6 +1,6 @@
 import { getUser } from '../../src/endpoints/get-user';
 
-const res = {
+const res: any = {
   json: jest.fn(),
   status: jest.fn(() => res),
 };

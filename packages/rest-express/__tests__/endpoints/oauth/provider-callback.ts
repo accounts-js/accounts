@@ -1,6 +1,6 @@
 import { providerCallback } from '../../../src/endpoints/oauth/provider-callback';
 
-const res = {
+const res: any = {
   json: jest.fn(),
   status: jest.fn(() => res),
 };
@@ -50,7 +50,7 @@ describe('providerCallback', () => {
       loginWithService: jest.fn(() => user),
     };
     const accountsServerOptions = {
-      transformOAuthResponse(response) {
+      transformOAuthResponse(response: any) {
         return {
           ...response,
           id: '2',
@@ -129,7 +129,6 @@ describe('providerCallback', () => {
       },
       headers: {},
     };
-    const reqCopy = { ...req };
 
     await middleware(req as any, res);
 
@@ -153,7 +152,6 @@ describe('providerCallback', () => {
       },
       headers: {},
     };
-    const reqCopy = { ...req };
 
     await middleware(req as any, res);
 

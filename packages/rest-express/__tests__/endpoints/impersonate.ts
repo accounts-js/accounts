@@ -1,6 +1,6 @@
 import { impersonate } from '../../src/endpoints/impersonate';
 
-const res = {
+const res: any = {
   json: jest.fn(),
   status: jest.fn(() => res),
 };

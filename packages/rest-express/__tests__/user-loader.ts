@@ -1,4 +1,3 @@
-import accountsExpress from '../src';
 import { userLoader } from '../src/user-loader';
 
 const user = { id: '1' };

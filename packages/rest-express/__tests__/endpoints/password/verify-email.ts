@@ -1,6 +1,6 @@
 import { verifyEmail, sendVerificationEmail } from '../../../src/endpoints/password/verify-email';
 
-const res = {
+const res: any = {
   json: jest.fn(),
   status: jest.fn(() => res),
 };

@@ -16,7 +16,6 @@ describe('twoFactor', () => {
 
   describe('twoFactorSecret', () => {
     it('calls password.twoFactor and returns new secret', async () => {
-      const message = 'Email verified';
       const passwordService = {
         twoFactor: {
           getNewAuthSecret: jest.fn(() => 'secret'),
@@ -77,7 +76,6 @@ describe('twoFactor', () => {
 
   describe('twoFactorSet', () => {
     it('calls password.twoFactor and set ', async () => {
-      const message = 'Email verified';
       const passwordService = {
         twoFactor: {
           set: jest.fn(() => null),
@@ -158,7 +156,6 @@ describe('twoFactor', () => {
 
   describe('twoFactorUnset', () => {
     it('calls password.twoFactor and set ', async () => {
-      const message = 'Email verified';
       const passwordService = {
         twoFactor: {
           unset: jest.fn(() => null),
