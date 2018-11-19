@@ -1,9 +1,9 @@
 import { DatabaseManager } from '../src';
 
 export default class Database {
-  public name;
+  public name: any;
 
-  constructor(name) {
+  constructor(name: any) {
     this.name = name;
   }
 
@@ -119,20 +119,22 @@ const databaseManager = new DatabaseManager({
 
 describe('DatabaseManager configuration', () => {
   it('should throw if no configuration object specified', () => {
-    expect(() => databaseManager.validateConfiguration()).toThrow();
+    expect(() => (databaseManager as any).validateConfiguration(null as any)).toThrow();
   });
 
   it('should throw if no userStorage specified', () => {
-    expect(() => databaseManager.validateConfiguration({ sessionStorage: true })).toThrow();
+    expect(() =>
+      (databaseManager as any).validateConfiguration({ sessionStorage: true })
+    ).toThrow();
   });
 
   it('should throw if no sessionStorage specified', () => {
-    expect(() => databaseManager.validateConfiguration({ userStorage: true })).toThrow();
+    expect(() => (databaseManager as any).validateConfiguration({ userStorage: true })).toThrow();
   });
 
   it('should throw if no sessionStorage specified', () => {
     expect(() =>
-      databaseManager.validateConfiguration({
+      (databaseManager as any).validateConfiguration({
         userStorage: true,
         sessionStorage: true,
       })
@@ -142,103 +144,109 @@ describe('DatabaseManager configuration', () => {
 
 describe('DatabaseManager', () => {
   it('createUser should be called on userStorage', () => {
-    expect(databaseManager.createUser()).toBe('userStorage');
+    expect(databaseManager.createUser({})).toBe('userStorage');
   });
 
   it('findUserById should be called on userStorage', () => {
-    expect(databaseManager.findUserById()).toBe('userStorage');
+    expect(databaseManager.findUserById('userId')).toBe('userStorage');
   });
 
   it('findUserByEmail should be called on userStorage', () => {
-    expect(databaseManager.findUserByEmail()).toBe('userStorage');
+    expect(databaseManager.findUserByEmail('email')).toBe('userStorage');
   });
 
   it('findUserByUsername should be called on userStorage', () => {
-    expect(databaseManager.findUserByUsername()).toBe('userStorage');
+    expect(databaseManager.findUserByUsername('username')).toBe('userStorage');
   });
 
   it('findPasswordHash should be called on userStorage', () => {
-    expect(databaseManager.findPasswordHash()).toBe('userStorage');
+    expect(databaseManager.findPasswordHash('userId')).toBe('userStorage');
   });
 
   it('findUserByEmailVerificationToken should be called on userStorage', () => {
-    expect(databaseManager.findUserByEmailVerificationToken()).toBe('userStorage');
+    expect(databaseManager.findUserByEmailVerificationToken('token')).toBe('userStorage');
   });
 
   it('findUserByResetPasswordToken should be called on userStorage', () => {
-    expect(databaseManager.findUserByResetPasswordToken()).toBe('userStorage');
+    expect(databaseManager.findUserByResetPasswordToken('token')).toBe('userStorage');
   });
 
   it('findUserByServiceId should be called on userStorage', () => {
-    expect(databaseManager.findUserByServiceId()).toBe('userStorage');
+    expect(databaseManager.findUserByServiceId('serviceName', 'serviceId')).toBe('userStorage');
   });
 
   it('addEmail should be called on userStorage', () => {
-    expect(databaseManager.addEmail()).toBe('userStorage');
+    expect(databaseManager.addEmail('userId', 'email', false)).toBe('userStorage');
   });
 
   it('removeEmail should be called on userStorage', () => {
-    expect(databaseManager.removeEmail()).toBe('userStorage');
+    expect(databaseManager.removeEmail('userId', 'email')).toBe('userStorage');
   });
 
   it('verifyEmail should be called on userStorage', () => {
-    expect(databaseManager.verifyEmail()).toBe('userStorage');
+    expect(databaseManager.verifyEmail('userId', 'email')).toBe('userStorage');
   });
 
   it('setUsername should be called on userStorage', () => {
-    expect(databaseManager.setUsername()).toBe('userStorage');
+    expect(databaseManager.setUsername('userId', 'username')).toBe('userStorage');
   });
 
   it('setPassword should be called on userStorage', () => {
-    expect(databaseManager.setPassword()).toBe('userStorage');
+    expect(databaseManager.setPassword('userId', 'password')).toBe('userStorage');
   });
 
   it('setProfile should be called on userStorage', () => {
-    expect(databaseManager.setProfile()).toBe('userStorage');
+    expect(databaseManager.setProfile('userId', {})).toBe('userStorage');
   });
 
   it('setService should be called on userStorage', () => {
-    expect(databaseManager.setService()).toBe('userStorage');
+    expect(databaseManager.setService('userId', 'serviceName', {})).toBe('userStorage');
   });
 
   it('unsetService should be called on userStorage', () => {
-    expect(databaseManager.unsetService()).toBe('userStorage');
+    expect(databaseManager.unsetService('userId', 'serviceName')).toBe('userStorage');
   });
 
   it('createSession should be called on sessionStorage', () => {
-    expect(databaseManager.createSession()).toBe('sessionStorage');
+    expect(databaseManager.createSession('userId', 'token', {})).toBe('sessionStorage');
   });
 
   it('updateSession should be called on sessionStorage', () => {
-    expect(databaseManager.updateSession()).toBe('sessionStorage');
+    expect(databaseManager.updateSession('sessionId', {})).toBe('sessionStorage');
   });
 
   it('invalidateSession should be called on sessionStorage', () => {
-    expect(databaseManager.invalidateSession()).toBe('sessionStorage');
+    expect(databaseManager.invalidateSession('sessionId')).toBe('sessionStorage');
   });
 
   it('invalidateAllSessions should be called on sessionStorage', () => {
-    expect(databaseManager.invalidateAllSessions()).toBe('sessionStorage');
+    expect(databaseManager.invalidateAllSessions('userId')).toBe('sessionStorage');
   });
 
   it('findSessionByToken should be called on sessionStorage', () => {
-    expect(databaseManager.findSessionByToken()).toBe('sessionStorage');
+    expect(databaseManager.findSessionByToken('token')).toBe('sessionStorage');
   });
 
   it('findSessionById should be called on sessionStorage', () => {
-    expect(databaseManager.findSessionById()).toBe('sessionStorage');
+    expect(databaseManager.findSessionById('sessionId')).toBe('sessionStorage');
   });
 
   it('addEmailVerificationToken should be called on sessionStorage', () => {
-    expect(databaseManager.addEmailVerificationToken()).toBe('userStorage');
+    expect(databaseManager.addEmailVerificationToken('userId', 'email', 'token')).toBe(
+      'userStorage'
+    );
   });
 
   it('addResetPasswordToken should be called on sessionStorage', () => {
-    expect(databaseManager.addResetPasswordToken()).toBe('userStorage');
+    expect(databaseManager.addResetPasswordToken('userId', 'email', 'token', 'reason')).toBe(
+      'userStorage'
+    );
   });
 
   it('setResetPassword should be called on sessionStorage', () => {
-    expect(databaseManager.setResetPassword()).toBe('userStorage');
+    expect(databaseManager.setResetPassword('userId', 'email', 'password', 'token')).toBe(
+      'userStorage'
+    );
   });
 
   it('setUserDeactivated should be called on sessionStorage', () => {
