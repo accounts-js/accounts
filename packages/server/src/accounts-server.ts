@@ -23,6 +23,7 @@ import { JwtData } from './types/jwt-data';
 import { EmailTemplateType } from './types/email-template-type';
 
 const defaultOptions = {
+  ambiguousErrorMessages: true,
   tokenSecret: 'secret',
   tokenConfigs: {
     accessToken: {
@@ -207,6 +208,9 @@ Please change it with a strong random token.`);
       }
 
       if (!impersonatedUser) {
+        if (this.options.ambiguousErrorMessages) {
+          return { authorized: false };
+        }
         throw new Error(`Impersonated user not found`);
       }
 

@@ -4,7 +4,6 @@ const user = {
   email: 'johnDoe@gmail.com',
   password: 'notSecure',
 };
-let userId: string;
 
 Object.keys(servers).forEach(key => {
   const server = servers[key];
@@ -15,11 +14,11 @@ Object.keys(servers).forEach(key => {
 
     describe('create a new user', () => {
       it('should create a new user with email and password', async () => {
-        userId = await server.accountsClientPassword.createUser({
+        const userId = await server.accountsClientPassword.createUser({
           email: user.email,
           password: user.password,
         });
-        expect(userId).toBeTruthy();
+        expect(userId).toBeNull();
       });
     });
 
@@ -34,7 +33,7 @@ Object.keys(servers).forEach(key => {
           });
           throw new Error();
         } catch (error) {
-          expect(error.message).toMatch('User not found');
+          expect(error.message).toMatch('Invalid credentials');
         }
       });
 
@@ -118,7 +117,7 @@ Object.keys(servers).forEach(key => {
           await server.accountsClientPassword.changePassword('wrongPassword', 'newPassword');
           throw new Error();
         } catch (error) {
-          expect(error.message).toMatch('Incorrect password');
+          expect(error.message).toMatch('Invalid credential');
         }
       });
 

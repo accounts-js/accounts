@@ -3,6 +3,7 @@ import { AccountsPassword } from '../src';
 
 describe('AccountsPassword', () => {
   const server: any = {
+    options: {},
     getHooks: () => ({
       emit: jest.fn(),
     }),

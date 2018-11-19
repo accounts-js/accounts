@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client",
-  "version": "0.4.0-alpha.1",
+  "version": "0.6.1",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -50,7 +50,7 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "23.3.7",
+    "@types/jest": "23.3.9",
     "@types/jwt-decode": "2.2.1",
     "@types/node": "10.12.0",
     "jest": "23.6.0",
@@ -60,7 +60,7 @@
     "rimraf": "2.6.2"
   },
   "dependencies": {
-    "@accounts/types": "^0.4.0-alpha.1",
+    "@accounts/types": "^0.6.1",
     "jwt-decode": "2.2.0"
   }
 }

@@ -9,7 +9,7 @@ export const registerPassword = (accountsServer: AccountsServer) => async (
   try {
     const password: any = accountsServer.getServices().password;
     const userId = await password.createUser(req.body.user);
-    res.json({ userId });
+    res.json(accountsServer.options.ambiguousErrorMessages ? null : userId);
   } catch (err) {
     sendError(res, err);
   }

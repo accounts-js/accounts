@@ -18,7 +18,8 @@ import {
   verifyPassword,
   isEmail,
 } from './utils';
-import { PasswordCreateUserType, PasswordLoginType, PasswordType } from './types';
+import { PasswordCreateUserType, PasswordLoginType, PasswordType, ErrorMessages } from './types';
+import { errors } from './errors';
 
 export interface AccountsPasswordOptions {
   twoFactor?: AccountsTwoFactorOptions;
@@ -36,6 +37,10 @@ export interface AccountsPasswordOptions {
    */
   passwordEnrollTokenExpiration?: number;
   minimumPasswordLength?: number;
+  /**
+   * Accounts password module errors
+   */
+  errors?: ErrorMessages;
   validateNewUser?: (
     user: PasswordCreateUserType
   ) => Promise<PasswordCreateUserType> | PasswordCreateUserType;
@@ -63,6 +68,7 @@ const defaultOptions = {
     const isValid = username && !isEmpty(trim(username)) && usernameRegex.test(username);
     return Boolean(isValid);
   },
+  errors,
 };
 
 export default class AccountsPassword implements AuthenticationService {
@@ -85,10 +91,10 @@ export default class AccountsPassword implements AuthenticationService {
   public async authenticate(params: PasswordLoginType): Promise<User> {
     const { user, password, code } = params;
     if (!user || !password) {
-      throw new Error('Unrecognized options for login request');
+      throw new Error(this.options.errors.unrecognizedOptionsForLogin);
     }
     if ((!isString(user) && !isPlainObject(user)) || !isString(password)) {
-      throw new Error('Match failed');
+      throw new Error(this.options.errors.matchFailed);
     }
 
     const foundUser = await this.passwordAuthenticator(user, password);
@@ -131,7 +137,7 @@ export default class AccountsPassword implements AuthenticationService {
    */
   public addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
     if (!this.options.validateEmail(newEmail)) {
-      throw new Error('Invalid email');
+      throw new Error(this.options.errors.invalidEmail);
     }
     return this.db.addEmail(userId, newEmail, verified);
   }
@@ -154,23 +160,23 @@ export default class AccountsPassword implements AuthenticationService {
    */
   public async verifyEmail(token: string): Promise<void> {
     if (!token || !isString(token)) {
-      throw new Error('Invalid token');
+      throw new Error(this.options.errors.invalidToken);
     }
 
     const user = await this.db.findUserByEmailVerificationToken(token);
     if (!user) {
-      throw new Error('Verify email link expired');
+      throw new Error(this.options.errors.verifyEmailLinkExpired);
     }
 
     const verificationTokens = getUserVerificationTokens(user);
     const tokenRecord = find(verificationTokens, (t: TokenRecord) => t.token === token);
     if (!tokenRecord || this.isTokenExpired(tokenRecord, this.options.verifyEmailTokenExpiration)) {
-      throw new Error('Verify email link expired');
+      throw new Error(this.options.errors.verifyEmailLinkExpired);
     }
 
     const emailRecord = find(user.emails, (e: EmailRecord) => e.address === tokenRecord.address);
     if (!emailRecord) {
-      throw new Error('Verify email link is for unknown address');
+      throw new Error(this.options.errors.verifyEmailLinkUnknownAddress);
     }
     await this.db.verifyEmail(user.id, emailRecord.address);
   }
@@ -183,15 +189,15 @@ export default class AccountsPassword implements AuthenticationService {
    */
   public async resetPassword(token: string, newPassword: PasswordType): Promise<void> {
     if (!token || !isString(token)) {
-      throw new Error('Invalid token');
+      throw new Error(this.options.errors.invalidToken);
     }
     if (!newPassword || !isString(newPassword)) {
-      throw new Error('Invalid new password');
+      throw new Error(this.options.errors.invalidNewPassword);
     }
 
     const user = await this.db.findUserByResetPasswordToken(token);
     if (!user) {
-      throw new Error('Reset password link expired');
+      throw new Error(this.options.errors.resetPasswordLinkExpired);
     }
 
     const resetTokens = getUserResetTokens(user);
@@ -206,12 +212,12 @@ export default class AccountsPassword implements AuthenticationService {
           : this.options.passwordResetTokenExpiration
       )
     ) {
-      throw new Error('Reset password link expired');
+      throw new Error(this.options.errors.resetPasswordLinkExpired);
     }
 
     const emails = user.emails || [];
     if (!includes(emails.map((email: EmailRecord) => email.address), resetTokenRecord.address)) {
-      throw new Error('Token has invalid email address');
+      throw new Error(this.options.errors.resetPasswordLinkUnknownAddress);
     }
 
     const password = await this.hashAndBcryptPassword(newPassword);
@@ -264,12 +270,16 @@ export default class AccountsPassword implements AuthenticationService {
    */
   public async sendVerificationEmail(address: string): Promise<void> {
     if (!address || !isString(address)) {
-      throw new Error('Invalid email');
+      throw new Error(this.options.errors.invalidEmail);
     }
 
     const user = await this.db.findUserByEmail(address);
     if (!user) {
-      throw new Error('User not found');
+      // To prevent user enumeration we fail silently
+      if (this.server.options.ambiguousErrorMessages) {
+        return;
+      }
+      throw new Error(this.options.errors.userNotFound);
     }
     const token = generateRandomToken();
     await this.db.addEmailVerificationToken(user.id, address, token);
@@ -295,12 +305,16 @@ export default class AccountsPassword implements AuthenticationService {
    */
   public async sendResetPasswordEmail(address: string): Promise<void> {
     if (!address || !isString(address)) {
-      throw new Error('Invalid email');
+      throw new Error(this.options.errors.invalidEmail);
     }
 
     const user = await this.db.findUserByEmail(address);
     if (!user) {
-      throw new Error('User not found');
+      // To prevent user enumeration we fail silently
+      if (this.server.options.ambiguousErrorMessages) {
+        return;
+      }
+      throw new Error(this.options.errors.userNotFound);
     }
     const token = generateRandomToken();
     await this.db.addResetPasswordToken(user.id, address, token, 'reset');
@@ -327,12 +341,12 @@ export default class AccountsPassword implements AuthenticationService {
    */
   public async sendEnrollmentEmail(address: string): Promise<void> {
     if (!address || !isString(address)) {
-      throw new Error('Invalid email');
+      throw new Error(this.options.errors.invalidEmail);
     }
 
     const user = await this.db.findUserByEmail(address);
     if (!user) {
-      throw new Error('User not found');
+      throw new Error(this.options.errors.userNotFound);
     }
     const token = generateRandomToken();
     await this.db.addResetPasswordToken(user.id, address, token, 'enroll');
@@ -356,20 +370,20 @@ export default class AccountsPassword implements AuthenticationService {
    */
   public async createUser(user: PasswordCreateUserType): Promise<string> {
     if (!this.options.validateUsername(user.username) && !this.options.validateEmail(user.email)) {
-      throw new Error('Username or Email is required');
+      throw new Error(this.options.errors.usernameOrEmailRequired);
     }
 
     if (user.username && (await this.db.findUserByUsername(user.username))) {
-      throw new Error('Username already exists');
+      throw new Error(this.options.errors.usernameAlreadyExists);
     }
 
     if (user.email && (await this.db.findUserByEmail(user.email))) {
-      throw new Error('Email already exists');
+      throw new Error(this.options.errors.emailAlreadyExists);
     }
 
     if (user.password) {
       if (!this.options.validatePassword(user.password)) {
-        throw new Error('Invalid password');
+        throw new Error(this.options.errors.invalidPassword);
       }
       user.password = await this.hashAndBcryptPassword(user.password);
     }
@@ -421,12 +435,16 @@ export default class AccountsPassword implements AuthenticationService {
 
     // @ts-ignore
     if (!foundUser) {
-      throw new Error('User not found');
+      throw new Error(
+        this.server.options.ambiguousErrorMessages
+          ? this.options.errors.invalidCredentials
+          : this.options.errors.userNotFound
+      );
     }
 
     const hash = await this.db.findPasswordHash(foundUser.id);
     if (!hash) {
-      throw new Error('User has no password set');
+      throw new Error(this.options.errors.noPasswordSet);
     }
 
     const hashAlgorithm = this.options.passwordHashAlgorithm;
@@ -434,7 +452,11 @@ export default class AccountsPassword implements AuthenticationService {
     const isPasswordValid = await verifyPassword(pass, hash);
 
     if (!isPasswordValid) {
-      throw new Error('Incorrect password');
+      throw new Error(
+        this.server.options.ambiguousErrorMessages
+          ? this.options.errors.invalidCredentials
+          : this.options.errors.incorrectPassword
+      );
     }
 
     return foundUser;
