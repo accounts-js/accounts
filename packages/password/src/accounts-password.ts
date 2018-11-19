@@ -452,7 +452,11 @@ export default class AccountsPassword implements AuthenticationService {
     const isPasswordValid = await verifyPassword(pass, hash);
 
     if (!isPasswordValid) {
-      throw new Error(this.options.errors.incorrectPassword);
+      throw new Error(
+        this.server.options.ambiguousErrorMessages
+          ? this.options.errors.invalidCredentials
+          : this.options.errors.incorrectPassword
+      );
     }
 
     return foundUser;
