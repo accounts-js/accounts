@@ -11,14 +11,7 @@
     "setupFiles": [
       "jest-localstorage-mock"
     ],
-    "transform": {
-      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "./__tests__/.*.ts$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
+    "preset": "ts-jest",
     "testPathIgnorePatterns": [
       "<rootDir>/__tests__/databases",
       "<rootDir>/__tests__/servers"
