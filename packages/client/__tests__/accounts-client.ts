@@ -1,5 +1,4 @@
 import { isTokenExpired } from '../src/utils';
-import { TransportInterface } from '../src';
 import { AccountsClient } from '../src/accounts-client';
 
 jest.mock('../src/utils');
