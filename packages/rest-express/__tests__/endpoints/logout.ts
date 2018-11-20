@@ -1,6 +1,6 @@
 import { logout } from '../../src/endpoints/logout';
 
-const res = {
+const res: any = {
   json: jest.fn(),
   status: jest.fn(() => res),
 };
@@ -21,7 +21,7 @@ describe('logout', () => {
     };
     const reqCopy = { ...req };
 
-    await middleware(req, res);
+    await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
     expect(accountsServer.logout).toBeCalledWith('token');
@@ -42,7 +42,7 @@ describe('logout', () => {
     };
     const reqCopy = { ...req };
 
-    await middleware(req, res);
+    await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
     expect(accountsServer.logout).toBeCalledWith('token');

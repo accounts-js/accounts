@@ -44,7 +44,7 @@ describe('AccountsSession', () => {
       },
     };
 
-    accountsSession.set(req, undefined);
+    accountsSession.set(req, undefined as any);
 
     expect(req.session[defaultName]).toEqual(null);
   });
@@ -140,7 +140,7 @@ describe('AccountsSession', () => {
       },
       session: {
         [defaultName]: tokens,
-        destroy: cb => {
+        destroy: (cb: any) => {
           delete req.session;
           cb();
         },

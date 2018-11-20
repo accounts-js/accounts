@@ -5,14 +5,13 @@ const user = {
   email: 'johndoe@gmail.com',
   password: 'notSecure',
 };
-let userId: string;
 
 Object.keys(servers).forEach(key => {
   const server = servers[key];
   describe(`${key} core`, () => {
     beforeAll(async () => {
       await server.start();
-      userId = await server.accountsClientPassword.createUser({
+      await server.accountsClientPassword.createUser({
         email: user.email,
         password: user.password,
       });

@@ -6,7 +6,7 @@ import { sendError } from '../../utils/send-error';
 import { AccountsExpressOptions } from '../../types';
 
 interface RequestWithSession extends express.Request {
-  session: { [key: string]: any };
+  session: any;
 }
 
 export const providerCallback = (

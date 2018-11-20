@@ -28,10 +28,10 @@
     "@accounts/server": "^0.6.1",
     "@accounts/types": "^0.6.1",
     "@graphql-modules/core": "^0.2.3",
-    "apollo-server": "^2.0.0",
+    "apollo-server": "^2.2.2",
     "graphql": "^0.13.2",
     "graphql-tools": "^4.0.3",
-    "jsonwebtoken": "^8.3.0",
+    "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11"
   }
 }

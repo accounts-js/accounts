@@ -15,7 +15,7 @@ const rpResult = JSON.stringify({
   },
 });
 
-rp.mockResolvedValue(rpResult);
+(rp as any).mockResolvedValue(rpResult);
 
 const instagramProvider = new AccountsOAuthInstagram();
 

@@ -7,7 +7,7 @@ describe('getUserAgent', () => {
         'user-agent': 'agent',
       },
     };
-    const userAgent = getUserAgent(req);
+    const userAgent = getUserAgent(req as any);
     expect(userAgent).toBe('agent');
   });
 
@@ -17,7 +17,7 @@ describe('getUserAgent', () => {
         'x-ucbrowser-ua': 'agent',
       },
     };
-    const userAgent = getUserAgent(req);
+    const userAgent = getUserAgent(req as any);
     expect(userAgent).toBe('agent');
   });
 });

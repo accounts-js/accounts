@@ -1,6 +1,6 @@
 import { refreshAccessToken } from '../../src/endpoints/refresh-access-token';
 
-const res = {
+const res: any = {
   json: jest.fn(),
   status: jest.fn(() => res),
 };
@@ -30,7 +30,7 @@ describe('refreshAccessToken', () => {
     };
     const reqCopy = { ...req };
 
-    await middleware(req, res);
+    await middleware(req as any, res);
 
     expect(accountsServer.refreshTokens).toBeCalledWith('token', 'refresh', null, '');
     expect(req).toEqual(reqCopy);
@@ -55,7 +55,7 @@ describe('refreshAccessToken', () => {
     };
     const reqCopy = { ...req };
 
-    await middleware(req, res);
+    await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
     expect(accountsServer.refreshTokens).toBeCalledWith('token', 'refresh', null, '');

@@ -16,8 +16,8 @@
     "test": "yarn testonly",
     "test-ci": "yarn lint && yarn coverage",
     "testonly": "jest",
-    "test:watch": "jest --watch",
-    "coverage": "yarn testonly -- --coverage"
+    "test:watch": "yarn testonly --watch",
+    "coverage": "yarn testonly --coverage"
   },
   "jest": {
     "transform": {
@@ -47,7 +47,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "23.3.9",
-    "@types/node": "10.12.0",
+    "@types/node": "10.12.9",
     "jest": "23.6.0",
     "rimraf": "2.6.2"
   }

@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { authFetch } from '../src/auth-fetch';
 
 window.fetch = jest.fn().mockImplementation(() => ({
@@ -15,7 +14,7 @@ describe('authFetch', () => {
     const accounts = {
       refreshSession: jest.fn(() => Promise.resolve({})),
     };
-    await authFetch(accounts, 'path', {});
+    await authFetch(accounts as any, 'path', {});
     expect(accounts.refreshSession).toBeCalled();
   });
 
@@ -23,21 +22,23 @@ describe('authFetch', () => {
     const accounts = {
       refreshSession: jest.fn(() => Promise.resolve({ accessToken: 'accessToken' })),
     };
-    await authFetch(accounts, 'path', {});
+    await authFetch(accounts as any, 'path', {});
     expect(accounts.refreshSession).toBeCalled();
-    expect(window.fetch.mock.calls[0][1].headers['accounts-access-token']).toBe('accessToken');
+    expect((window.fetch as jest.Mock).mock.calls[0][1].headers['accounts-access-token']).toBe(
+      'accessToken'
+    );
   });
 
   it('should pass other headers', async () => {
     const accounts = {
       refreshSession: jest.fn(() => Promise.resolve({ accessToken: 'accessToken' })),
     };
-    await authFetch(accounts, 'path', {
+    await authFetch(accounts as any, 'path', {
       headers: {
         toto: 'toto',
       },
     });
     expect(accounts.refreshSession).toBeCalled();
-    expect(window.fetch.mock.calls[0][1].headers.toto).toBe('toto');
+    expect((window.fetch as jest.Mock).mock.calls[0][1].headers.toto).toBe('toto');
   });
 });

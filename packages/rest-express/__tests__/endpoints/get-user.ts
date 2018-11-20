@@ -1,6 +1,6 @@
 import { getUser } from '../../src/endpoints/get-user';
 
-const res = {
+const res: any = {
   json: jest.fn(),
   status: jest.fn(() => res),
 };
@@ -25,7 +25,7 @@ describe('getUser', () => {
     };
     const reqCopy = { ...req };
 
-    await middleware(req, res);
+    await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
     expect(res.json).toBeCalledWith(user);

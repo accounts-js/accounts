@@ -16,7 +16,6 @@ describe('twoFactor', () => {
 
   describe('twoFactorSecret', () => {
     it('calls password.twoFactor and returns new secret', async () => {
-      const message = 'Email verified';
       const passwordService = {
         twoFactor: {
           getNewAuthSecret: jest.fn(() => 'secret'),
@@ -35,7 +34,7 @@ describe('twoFactor', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.twoFactor.getNewAuthSecret).toBeCalled();
@@ -66,7 +65,7 @@ describe('twoFactor', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.twoFactor.getNewAuthSecret).toBeCalled();
@@ -77,7 +76,6 @@ describe('twoFactor', () => {
 
   describe('twoFactorSet', () => {
     it('calls password.twoFactor and set ', async () => {
-      const message = 'Email verified';
       const passwordService = {
         twoFactor: {
           set: jest.fn(() => null),
@@ -99,7 +97,7 @@ describe('twoFactor', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.twoFactor.set).toBeCalledWith(
@@ -143,7 +141,7 @@ describe('twoFactor', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.twoFactor.set).toBeCalledWith(
@@ -158,7 +156,6 @@ describe('twoFactor', () => {
 
   describe('twoFactorUnset', () => {
     it('calls password.twoFactor and set ', async () => {
-      const message = 'Email verified';
       const passwordService = {
         twoFactor: {
           unset: jest.fn(() => null),
@@ -179,7 +176,7 @@ describe('twoFactor', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.twoFactor.unset).toBeCalledWith(
@@ -221,7 +218,7 @@ describe('twoFactor', () => {
       };
       const reqCopy = { ...req };
 
-      await middleware(req, res);
+      await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.twoFactor.unset).toBeCalledWith(

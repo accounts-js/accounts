@@ -1,6 +1,6 @@
 import { impersonate } from '../../src/endpoints/impersonate';
 
-const res = {
+const res: any = {
   json: jest.fn(),
   status: jest.fn(() => res),
 };
@@ -28,7 +28,7 @@ describe('impersonate', () => {
     };
     const reqCopy = { ...req };
 
-    await middleware(req, res);
+    await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
     expect(accountsServer.impersonate).toBeCalledWith('token', 'toto', null, '');
@@ -53,7 +53,7 @@ describe('impersonate', () => {
     };
     const reqCopy = { ...req };
 
-    await middleware(req, res);
+    await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
     expect(accountsServer.impersonate).toBeCalledWith('token', 'toto', null, '');

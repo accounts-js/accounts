@@ -16,7 +16,8 @@ describe('AccountsServer', () => {
   describe('config', () => {
     it('throws on invalid db', async () => {
       try {
-        const account = new AccountsServer({} as any, {});
+        // tslint:disable-next-line
+        new AccountsServer({} as any, {});
         throw new Error();
       } catch (err) {
         expect(err.message).toMatchSnapshot();

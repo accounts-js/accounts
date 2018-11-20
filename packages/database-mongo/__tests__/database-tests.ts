@@ -3,12 +3,12 @@ import { runDatabaseTests } from '@accounts/database-tests';
 import { Mongo } from '../src';
 
 export class DatabaseTests {
-  public database: Mongo;
-  public db: mongodb.Db;
-  public client: mongodb.MongoClient;
+  public database!: Mongo;
+  public db!: mongodb.Db;
+  public client!: mongodb.MongoClient;
   private options: any;
 
-  constructor(options?) {
+  constructor(options?: any) {
     this.options = options;
   }
 
