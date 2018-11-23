@@ -36,7 +36,8 @@ describe('resetPassword', () => {
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.resetPassword).toBeCalledWith(
         'token',
-        'new-password'
+        'new-password',
+        { ip: null, userAgent: '' }
       );
       expect(res.json).toBeCalledWith(null);
       expect(res.status).not.toBeCalled();
@@ -69,7 +70,8 @@ describe('resetPassword', () => {
       expect(req).toEqual(reqCopy);
       expect(accountsServer.getServices().password.resetPassword).toBeCalledWith(
         'token',
-        'new-password'
+        'new-password',
+        { ip: null, userAgent: '' }
       );
       expect(res.status).toBeCalledWith(400);
       expect(res.json).toBeCalledWith(error);
