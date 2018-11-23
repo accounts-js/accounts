@@ -100,7 +100,6 @@ Object.keys(servers).forEach(key => {
           newPassword
         );
         user.password = newPassword;
-        console.log(loginResultFromResetPassword);
         expect(loginResultFromResetPassword.sessionId).toBeTruthy();
         expect(loginResultFromResetPassword.tokens.accessToken).toBeTruthy();
         expect(loginResultFromResetPassword.tokens.refreshToken).toBeTruthy();
