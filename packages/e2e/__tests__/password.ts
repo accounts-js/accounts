@@ -95,9 +95,14 @@ Object.keys(servers).forEach(key => {
       it('should change the user password and be able to login with it', async () => {
         const token = server.emails[0].text;
         const newPassword = 'newPasswordTest';
-        const data = await server.accountsClientPassword.resetPassword(token, newPassword);
+        const loginResultFromResetPassword = await server.accountsClientPassword.resetPassword(
+          token,
+          newPassword
+        );
         user.password = newPassword;
-        expect(data).toBeNull();
+        expect(loginResultFromResetPassword.sessionId).toBeTruthy();
+        expect(loginResultFromResetPassword.tokens.accessToken).toBeTruthy();
+        expect(loginResultFromResetPassword.tokens.refreshToken).toBeTruthy();
 
         const loginResult = await server.accountsClientPassword.login({
           user: {
