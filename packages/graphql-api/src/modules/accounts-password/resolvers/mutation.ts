@@ -40,9 +40,8 @@ export const Mutation: MutationResolvers.Resolvers<ModuleContext<AccountsModuleC
     await injector.get(AccountsPassword).twoFactor.unset(userId, code);
     return null;
   },
-  resetPassword: async (_: null, { token, newPassword }, { injector }) => {
-    await injector.get(AccountsPassword).resetPassword(token, newPassword);
-    return null;
+  resetPassword: async (_: null, { token, newPassword }, { injector, ip, userAgent }) => {
+    return injector.get(AccountsPassword).resetPassword(token, newPassword, { ip, userAgent });
   },
   sendResetPasswordEmail: async (_: null, { email }, { injector }) => {
     await injector.get(AccountsPassword).sendResetPasswordEmail(email);

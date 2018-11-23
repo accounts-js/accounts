@@ -1,10 +1,18 @@
 import { AccountsClientPassword } from '../src/client-password';
 
+const loggedInResponse = {
+  sessionId: '1',
+  tokens: {
+    accessToken: 'accessToken',
+    refreshToken: 'refreshToken',
+  },
+};
+
 const mockedClient = {
   transport: {
     createUser: jest.fn(),
     sendResetPasswordEmail: jest.fn(),
-    resetPassword: jest.fn(),
+    resetPassword: jest.fn(() => Promise.resolve(loggedInResponse)),
     sendVerificationEmail: jest.fn(),
     verifyEmail: jest.fn(),
     changePassword: jest.fn(),
@@ -76,7 +84,8 @@ describe('AccountsClientPassword', () => {
     it('should hash password and call transport', async () => {
       const token = 'tokenTest';
       const newPassword = 'newPasswordTest';
-      await accountsPassword.resetPassword(token, newPassword);
+      const result = await accountsPassword.resetPassword(token, newPassword);
+      expect(result).toEqual(loggedInResponse);
       expect(mockedClient.transport.resetPassword.mock.calls[0][0]).toBe(token);
       expect(mockedClient.transport.resetPassword.mock.calls[0][1]).not.toBe(newPassword);
     });
