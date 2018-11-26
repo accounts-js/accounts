@@ -92,7 +92,7 @@ Object.keys(servers).forEach(key => {
         expect(server.emails.length).toBe(1);
       });
 
-      it.only('should change the user password and be able to login with it', async () => {
+      it('should change the user password and be able to login with it', async () => {
         const token = server.emails[0].text;
         const newPassword = 'newPasswordTest';
         const loginResultFromResetPassword = await server.accountsClientPassword.resetPassword(
