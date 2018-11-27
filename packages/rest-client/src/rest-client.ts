@@ -124,7 +124,11 @@ export class RestClient implements TransportInterface {
     return this.fetch('password/register', args, customHeaders);
   }
 
-  public resetPassword(token: string, newPassword: string, customHeaders?: object): Promise<void> {
+  public resetPassword(
+    token: string,
+    newPassword: string,
+    customHeaders?: object
+  ): Promise<LoginResult> {
     const args = {
       method: 'POST',
       body: JSON.stringify({

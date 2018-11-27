@@ -98,7 +98,7 @@ export default class GraphQLClient implements TransportInterface {
   /**
    * @inheritDoc
    */
-  public async resetPassword(token: string, newPassword: string): Promise<void> {
+  public async resetPassword(token: string, newPassword: string): Promise<LoginResult> {
     return this.mutate(resetPasswordMutation, 'resetPassword', { token, newPassword });
   }
 

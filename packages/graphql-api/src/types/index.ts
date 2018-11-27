@@ -78,7 +78,7 @@ export interface Mutation {
 
   verifyEmail?: boolean | null;
 
-  resetPassword?: boolean | null;
+  resetPassword?: LoginResult | null;
 
   sendVerificationEmail?: boolean | null;
 
@@ -99,12 +99,10 @@ export interface Mutation {
   authenticate?: LoginResult | null;
 }
 
-export interface ImpersonateReturn {
-  authorized?: boolean | null;
+export interface LoginResult {
+  sessionId?: string | null;
 
   tokens?: Tokens | null;
-
-  user?: User | null;
 }
 
 export interface Tokens {
@@ -113,10 +111,12 @@ export interface Tokens {
   accessToken?: string | null;
 }
 
-export interface LoginResult {
-  sessionId?: string | null;
+export interface ImpersonateReturn {
+  authorized?: boolean | null;
 
   tokens?: Tokens | null;
+
+  user?: User | null;
 }
 
 // ====================================================
@@ -356,7 +356,7 @@ export namespace MutationResolvers {
 
     verifyEmail?: VerifyEmailResolver<boolean | null, TypeParent, Context>;
 
-    resetPassword?: ResetPasswordResolver<boolean | null, TypeParent, Context>;
+    resetPassword?: ResetPasswordResolver<LoginResult | null, TypeParent, Context>;
 
     sendVerificationEmail?: SendVerificationEmailResolver<boolean | null, TypeParent, Context>;
 
@@ -397,12 +397,11 @@ export namespace MutationResolvers {
     token: string;
   }
 
-  export type ResetPasswordResolver<R = boolean | null, Parent = never, Context = any> = Resolver<
-    R,
-    Parent,
-    Context,
-    ResetPasswordArgs
-  >;
+  export type ResetPasswordResolver<
+    R = LoginResult | null,
+    Parent = never,
+    Context = any
+  > = Resolver<R, Parent, Context, ResetPasswordArgs>;
   export interface ResetPasswordArgs {
     token: string;
 
@@ -500,26 +499,19 @@ export namespace MutationResolvers {
   }
 }
 
-export namespace ImpersonateReturnResolvers {
-  export interface Resolvers<Context = any, TypeParent = ImpersonateReturn> {
-    authorized?: AuthorizedResolver<boolean | null, TypeParent, Context>;
+export namespace LoginResultResolvers {
+  export interface Resolvers<Context = any, TypeParent = LoginResult> {
+    sessionId?: SessionIdResolver<string | null, TypeParent, Context>;
 
     tokens?: TokensResolver<Tokens | null, TypeParent, Context>;
-
-    user?: UserResolver<User | null, TypeParent, Context>;
   }
 
-  export type AuthorizedResolver<
-    R = boolean | null,
-    Parent = ImpersonateReturn,
-    Context = any
-  > = Resolver<R, Parent, Context>;
-  export type TokensResolver<
-    R = Tokens | null,
-    Parent = ImpersonateReturn,
-    Context = any
-  > = Resolver<R, Parent, Context>;
-  export type UserResolver<R = User | null, Parent = ImpersonateReturn, Context = any> = Resolver<
+  export type SessionIdResolver<R = string | null, Parent = LoginResult, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type TokensResolver<R = Tokens | null, Parent = LoginResult, Context = any> = Resolver<
     R,
     Parent,
     Context
@@ -545,19 +537,26 @@ export namespace TokensResolvers {
   >;
 }
 
-export namespace LoginResultResolvers {
-  export interface Resolvers<Context = any, TypeParent = LoginResult> {
-    sessionId?: SessionIdResolver<string | null, TypeParent, Context>;
+export namespace ImpersonateReturnResolvers {
+  export interface Resolvers<Context = any, TypeParent = ImpersonateReturn> {
+    authorized?: AuthorizedResolver<boolean | null, TypeParent, Context>;
 
     tokens?: TokensResolver<Tokens | null, TypeParent, Context>;
+
+    user?: UserResolver<User | null, TypeParent, Context>;
   }
 
-  export type SessionIdResolver<R = string | null, Parent = LoginResult, Context = any> = Resolver<
-    R,
-    Parent,
-    Context
-  >;
-  export type TokensResolver<R = Tokens | null, Parent = LoginResult, Context = any> = Resolver<
+  export type AuthorizedResolver<
+    R = boolean | null,
+    Parent = ImpersonateReturn,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type TokensResolver<
+    R = Tokens | null,
+    Parent = ImpersonateReturn,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type UserResolver<R = User | null, Parent = ImpersonateReturn, Context = any> = Resolver<
     R,
     Parent,
     Context

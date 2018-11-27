@@ -7,6 +7,8 @@ import {
   DatabaseInterface,
   AuthenticationService,
   HashAlgorithm,
+  ConnectionInformations,
+  LoginResult,
 } from '@accounts/types';
 import { TwoFactor, AccountsTwoFactorOptions, getUserTwoFactorService } from '@accounts/two-factor';
 import { AccountsServer, ServerHooks, generateRandomToken } from '@accounts/server';
@@ -41,6 +43,7 @@ export interface AccountsPasswordOptions {
    * Accounts password module errors
    */
   errors?: ErrorMessages;
+  returnTokensAfterResetPassword?: boolean;
   validateNewUser?: (
     user: PasswordCreateUserType
   ) => Promise<PasswordCreateUserType> | PasswordCreateUserType;
@@ -57,6 +60,7 @@ const defaultOptions = {
   passwordResetTokenExpiration: 259200000,
   // 30 days - 30 * 24 * 60 * 60 * 1000
   passwordEnrollTokenExpiration: 2592000000,
+  returnTokensAfterResetPassword: false,
   validateEmail(email?: string): boolean {
     return !isEmpty(trim(email)) && isEmail(email);
   },
@@ -185,9 +189,13 @@ export default class AccountsPassword implements AuthenticationService {
    * @description Reset the password for a user using a token received in email.
    * @param {string} token - The token retrieved from the reset password URL.
    * @param {string} newPassword - A new password for the user.
-   * @returns {Promise<void>} - Return a Promise.
+   * @returns {Promise<LoginResult>} - Session tokens and user object.
    */
-  public async resetPassword(token: string, newPassword: PasswordType): Promise<void> {
+  public async resetPassword(
+    token: string,
+    newPassword: PasswordType,
+    infos: ConnectionInformations
+  ): Promise<LoginResult | null> {
     if (!token || !isString(token)) {
       throw new Error(this.options.errors.invalidToken);
     }
@@ -230,7 +238,13 @@ export default class AccountsPassword implements AuthenticationService {
     }
 
     // Changing the password should invalidate existing sessions
-    this.db.invalidateAllSessions(user.id);
+    await this.db.invalidateAllSessions(user.id);
+
+    if (this.options.returnTokensAfterResetPassword) {
+      return this.server.loginWithUser(user, infos);
+    } else {
+      return null;
+    }
   }
 
   /**

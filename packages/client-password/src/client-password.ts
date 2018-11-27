@@ -47,7 +47,7 @@ export class AccountsClientPassword {
    * @param {string} token - The token retrieved from the reset password URL.
    * @param {string} newPassword - A new password for the user. The password is not sent in plain text.
    */
-  public resetPassword(token: string, newPassword: string): Promise<void> {
+  public resetPassword(token: string, newPassword: string): Promise<LoginResult> {
     const hashedPassword = this.hashPassword(newPassword);
     return this.client.transport.resetPassword(token, hashedPassword);
   }

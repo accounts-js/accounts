@@ -16,7 +16,7 @@ export interface TransportInterface {
   verifyEmail(token: string): Promise<void>;
   sendResetPasswordEmail(email: string): Promise<void>;
   sendVerificationEmail(email: string): Promise<void>;
-  resetPassword(token: string, newPassword: string): Promise<void>;
+  resetPassword(token: string, newPassword: string): Promise<LoginResult>;
   changePassword(oldPassword: string, newPassword: string): Promise<void>;
   impersonate(
     token: string,

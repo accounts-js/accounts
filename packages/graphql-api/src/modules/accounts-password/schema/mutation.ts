@@ -6,7 +6,7 @@ export default (config: AccountsPasswordModuleConfig) => gql`
     # Creates a user with a password, returns the id corresponding db ids, such as number IDs, ObjectIDs or UUIDs
     createUser(user: CreateUserInput!): ID
     verifyEmail(token: String!): Boolean
-    resetPassword(token: String!, newPassword: String!): Boolean
+    resetPassword(token: String!, newPassword: String!): LoginResult
     sendVerificationEmail(email: String!): Boolean
     sendResetPasswordEmail(email: String!): Boolean
     changePassword(oldPassword: String!, newPassword: String!): Boolean

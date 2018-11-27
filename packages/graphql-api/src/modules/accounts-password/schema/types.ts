@@ -1,6 +1,16 @@
 import gql from 'graphql-tag';
 
 export default gql`
+  type Tokens {
+    refreshToken: String
+    accessToken: String
+  }
+
+  type LoginResult {
+    sessionId: String
+    tokens: Tokens
+  }
+
   type TwoFactorSecretKey {
     ascii: String
     base32: String
