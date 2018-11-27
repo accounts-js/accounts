@@ -10,7 +10,12 @@
     "precompile": "yarn clean && yarn gen-schema-types",
     "compile": "tsc",
     "prepublishOnly": "yarn compile",
+    "testonly": "jest",
+    "coverage": "yarn testonly --coverage",
     "gen-schema-types": "gql-gen --schema ./src/schema.ts --require ts-node/register/transpile-only --template graphql-codegen-typescript-resolvers-template --out ./src/types/index.ts"
+  },
+  "jest": {
+    "preset": "ts-jest"
   },
   "repository": {
     "type": "git",
