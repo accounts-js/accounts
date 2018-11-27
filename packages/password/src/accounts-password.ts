@@ -236,7 +236,7 @@ export default class AccountsPassword implements AuthenticationService {
     }
 
     // Changing the password should invalidate existing sessions
-    this.db.invalidateAllSessions(user.id);
+    await this.db.invalidateAllSessions(user.id);
 
     return this.server.loginWithUser(user, infos);
   }
