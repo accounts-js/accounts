@@ -1,7 +1,8 @@
-import { getClientIp } from 'request-ip';
-import { IncomingMessage } from 'http';
 import { ModuleConfig, ModuleContext } from '@graphql-modules/core';
-import { AccountsModuleContext, AccountsModuleConfig, AccountsModule, AccountsRequest } from '.';
+import { IncomingMessage } from 'http';
+import { getClientIp } from 'request-ip';
+
+import { AccountsModule, AccountsModuleConfig, AccountsModuleContext, AccountsRequest } from '.';
 
 export const getUA = (req: IncomingMessage) => {
   let userAgent: string = (req.headers['user-agent'] as string) || '';
