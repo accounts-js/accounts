@@ -43,6 +43,7 @@ export interface AccountsPasswordOptions {
    * Accounts password module errors
    */
   errors?: ErrorMessages;
+  returnTokensAfterResetPassword?: boolean;
   validateNewUser?: (
     user: PasswordCreateUserType
   ) => Promise<PasswordCreateUserType> | PasswordCreateUserType;
@@ -59,6 +60,7 @@ const defaultOptions = {
   passwordResetTokenExpiration: 259200000,
   // 30 days - 30 * 24 * 60 * 60 * 1000
   passwordEnrollTokenExpiration: 2592000000,
+  returnTokensAfterResetPassword: false,
   validateEmail(email?: string): boolean {
     return !isEmpty(trim(email)) && isEmail(email);
   },
@@ -193,7 +195,7 @@ export default class AccountsPassword implements AuthenticationService {
     token: string,
     newPassword: PasswordType,
     infos: ConnectionInformations
-  ): Promise<LoginResult> {
+  ): Promise<LoginResult | null> {
     if (!token || !isString(token)) {
       throw new Error(this.options.errors.invalidToken);
     }
@@ -238,7 +240,11 @@ export default class AccountsPassword implements AuthenticationService {
     // Changing the password should invalidate existing sessions
     await this.db.invalidateAllSessions(user.id);
 
-    return this.server.loginWithUser(user, infos);
+    if (this.options.returnTokensAfterResetPassword) {
+      return this.server.loginWithUser(user, infos);
+    } else {
+      return null;
+    }
   }
 
   /**

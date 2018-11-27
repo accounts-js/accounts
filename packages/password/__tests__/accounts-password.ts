@@ -318,7 +318,41 @@ describe('AccountsPassword', () => {
         invalidateAllSessions,
       } as any);
       password.server = { isTokenExpired, loginWithUser: jest.fn() } as any;
-      await password.resetPassword(token, newPassword, connectionInfo);
+      const loginResult = await password.resetPassword(token, newPassword, connectionInfo);
+      expect(loginResult).toBeNull();
+      expect(setResetPassword.mock.calls.length).toBe(1);
+      expect(invalidateAllSessions.mock.calls[0]).toMatchSnapshot();
+    });
+
+    it('reset password and return tokens', async () => {
+      const tmpAccountsPassword = new AccountsPassword({
+        returnTokensAfterResetPassword: true,
+      });
+
+      const findUserByResetPasswordToken = jest.fn(() => Promise.resolve(validUser));
+      const isTokenExpired = jest.fn(() => false);
+      const exampleLoginResult = {
+        sessionId: 'sessionIdValue',
+        tokens: {
+          refreshToken: 'refreshTokenValue',
+          accessToken: 'accessTokenValue',
+        },
+      };
+      const loginWithUser = jest.fn(() => Promise.resolve(exampleLoginResult));
+      const setResetPassword = jest.fn(() => Promise.resolve());
+      const invalidateAllSessions = jest.fn(() => Promise.resolve());
+      tmpAccountsPassword.setStore({
+        findUserByResetPasswordToken,
+        setResetPassword,
+        invalidateAllSessions,
+      } as any);
+      tmpAccountsPassword.server = { isTokenExpired, loginWithUser } as any;
+      const loginResult = await tmpAccountsPassword.resetPassword(
+        token,
+        newPassword,
+        connectionInfo
+      );
+      expect(loginResult).toEqual(exampleLoginResult);
       expect(setResetPassword.mock.calls.length).toBe(1);
       expect(invalidateAllSessions.mock.calls[0]).toMatchSnapshot();
     });
