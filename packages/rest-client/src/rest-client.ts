@@ -128,7 +128,7 @@ export class RestClient implements TransportInterface {
     token: string,
     newPassword: string,
     customHeaders?: object
-  ): Promise<LoginResult> {
+  ): Promise<LoginResult | null> {
     const args = {
       method: 'POST',
       body: JSON.stringify({

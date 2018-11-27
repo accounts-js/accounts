@@ -189,7 +189,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @description Reset the password for a user using a token received in email.
    * @param {string} token - The token retrieved from the reset password URL.
    * @param {string} newPassword - A new password for the user.
-   * @returns {Promise<LoginResult>} - Session tokens and user object.
+   * @returns {Promise<LoginResult | null>} - If `returnTokensAfterResetPassword` option is true return the session tokens and user object, otherwise return null.
    */
   public async resetPassword(
     token: string,
