@@ -4,6 +4,6 @@
   command = "yarn setup && yarn compile && yarn ts-node scripts/generate-api-docs.ts && cd website && yarn && yarn build"
 
 [build.environment]
-  NODE_VERSION = "9"
-  YARN_VERSION = "1.10.1"
+  NODE_VERSION = "10"
+  YARN_VERSION = "1.12.3"
   YARN_FLAGS = "--pure-lockfile"
