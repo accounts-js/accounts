@@ -1,6 +1,6 @@
 {
   "name": "@accounts/password",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
