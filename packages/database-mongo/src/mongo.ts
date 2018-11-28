@@ -1,13 +1,18 @@
-import { ObjectID, Db, Collection } from 'mongodb';
-import { get, merge } from 'lodash';
 import {
-  CreateUser,
-  User,
-  Session,
-  DatabaseInterface,
   ConnectionInformations,
+  CreateUser,
+  DatabaseInterface,
+  Session,
+  User,
 } from '@accounts/types';
+import { get, merge } from 'lodash';
+import { Collection, Db, ObjectID } from 'mongodb';
+
 import { AccountsMongoOptions, MongoUser } from './types';
+
+ObjectID.prototype.valueOf = function() {
+  return this.toString();
+};
 
 const toMongoID = (objectId: string | ObjectID) => {
   if (typeof objectId === 'string') {
