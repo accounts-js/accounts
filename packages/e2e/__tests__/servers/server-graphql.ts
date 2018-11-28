@@ -1,24 +1,21 @@
-import { ApolloServer, gql } from 'apollo-server';
-import { mergeGraphQLSchemas } from '@graphql-modules/epoxy';
-import fetch from 'node-fetch';
-
-// Server
-import { AccountsServer } from '@accounts/server';
-import { AccountsPassword } from '@accounts/password';
-import { AccountsModule } from '@accounts/graphql-api';
-import { User, DatabaseInterface } from '@accounts/types';
-
-// Client
 import { AccountsClient } from '@accounts/client';
 import { AccountsClientPassword } from '@accounts/client-password';
+import { AccountsModule } from '@accounts/graphql-api';
 import { AccountsGraphQLClient } from '@accounts/graphql-client';
-
+import { AccountsPassword } from '@accounts/password';
+import { AccountsServer } from '@accounts/server';
+import { DatabaseInterface, User } from '@accounts/types';
+import { mergeGraphQLSchemas } from '@graphql-modules/epoxy';
 import ApolloClient from 'apollo-boost';
+import { ApolloServer, gql } from 'apollo-server';
+import fetch from 'node-fetch';
 
+import { ServerTestInterface } from '.';
 import { DatabaseTestInterface } from '../databases';
 import { DatabaseTest } from '../databases/mongo';
-import { ServerTestInterface } from './index';
 
+// Server
+// Client
 (global as any).fetch = fetch;
 
 const convertUrlToToken = (url: string): string => {
@@ -85,7 +82,7 @@ export class ServerGraphqlTest implements ServerTestInterface {
       }
     `;
     this.apolloServer = new ApolloServer({
-      typeDefs: gql(mergeGraphQLSchemas([accountsGraphQL.typeDefs, typeDefs])),
+      typeDefs: mergeGraphQLSchemas([accountsGraphQL.typeDefs, typeDefs]),
       resolvers: accountsGraphQL.resolvers,
       context: accountsGraphQL.context,
     });
