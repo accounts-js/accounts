@@ -1,4 +1,26 @@
 {
+  "api": {
+    "Api Docs": [
+      "api/apollo-link-accounts/api-readme",
+      "api/boost/api-readme",
+      "api/client/api-readme",
+      "api/client-password/api-readme",
+      "api/database-manager/api-readme",
+      "api/database-mongo/api-readme",
+      "api/database-redis/api-readme",
+      "api/express-session/api-readme",
+      "api/graphql-api/api-readme",
+      "api/graphql-client/api-readme",
+      "api/oauth/api-readme",
+      "api/oauth-instagram/api-readme",
+      "api/oauth-twitter/api-readme",
+      "api/password/api-readme",
+      "api/rest-client/api-readme",
+      "api/rest-express/api-readme",
+      "api/server/api-readme",
+      "api/two-factor/api-readme"
+    ]
+  },
   "docs": {
     "Getting started": ["getting-started"],
     "Transports": ["transports/graphql", "transports/rest"],
