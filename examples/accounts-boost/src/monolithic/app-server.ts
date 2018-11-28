@@ -1,6 +1,6 @@
-import accountsBoost from '@accounts/boost';
+import accountsBoost, { authenticated } from '@accounts/boost';
+import { mergeGraphQLSchemas, mergeResolvers } from '@graphql-modules/epoxy';
 import { ApolloServer } from 'apollo-server';
-import { mergeResolvers, mergeGraphQLSchemas } from '@graphql-modules/epoxy';
 
 (async () => {
   const accounts = (await accountsBoost({
@@ -33,7 +33,7 @@ import { mergeResolvers, mergeGraphQLSchemas } from '@graphql-modules/epoxy';
       publicField: () => 'public',
       privateField: () => 'private',
       privateType: () => '',
-      privateFieldWithAuthResolver: accounts.auth((root, args, context) => {
+      privateFieldWithAuthResolver: authenticated((root, args, context) => {
         return 'private';
       }),
     },
@@ -50,7 +50,7 @@ import { mergeResolvers, mergeGraphQLSchemas } from '@graphql-modules/epoxy';
       // In order for the `@auth` directive to work
       ...accounts.schemaDirectives,
     },
-    context: req => accounts.context(req),
+    context: ({ req }) => accounts.context({ req }),
   } as any)
     .listen()
     .then(res => {

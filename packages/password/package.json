@@ -39,6 +39,6 @@
     "rimraf": "2.6.2"
   },
   "peerDependencies": {
-    "@accounts/server": "^0.4.0-alpha.1"
+    "@accounts/server": "^0.7.0"
   }
 }

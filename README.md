@@ -74,7 +74,7 @@ These variables should then be referenced when creating your GraphQL server.
 **Adding accounts to a GraphQL server**
 
 ```javascript
-import accountsBoost from '@accounts/boost';
+import accountsBoost, { authenticated } from '@accounts/boost';
 import { ApolloServer } from 'apollo-server';
 import { mergeGraphQLSchemas, mergeResolvers } from '@graphql-modules/epoxy';
 
@@ -109,7 +109,7 @@ import { mergeGraphQLSchemas, mergeResolvers } from '@graphql-modules/epoxy';
       publicField: () => 'public',
       privateField: () => 'private',
       privateType: () => '',
-      privateFieldWithAuthResolver: accounts.auth((root, args, context) => {
+      privateFieldWithAuthResolver: authenticated((root, args, context) => {
         return 'private';
       }),
     },
@@ -126,7 +126,7 @@ import { mergeGraphQLSchemas, mergeResolvers } from '@graphql-modules/epoxy';
       // In order for the `@auth` directive to work
       ...accounts.schemaDirectives,
     },
-    context: req => accounts.context(req),
+    context: ({ req }) => accounts.context({ req }),
   } as any)
     .listen()
     .then(res => {
@@ -158,7 +158,7 @@ import accountsBoost from '@accounts/boost';
 Next you need to configure your existing GraphQL server to authenticate incoming requests by using the context function provided by `accountsBoost`. Additionally you may merge your existing GraphQL server schema with the accounts server schema.
 
 ```javascript
-import accountsBoost from '@accounts/boost';
+import accountsBoost, { authenticated } from '@accounts/boost';
 import {
   makeExecutableSchema,
   mergeSchemas,
@@ -204,7 +204,11 @@ const accountsServerUri = 'http://localhost:4003/';
     link,
   });
 
+  // The @auth directive needs to be declared in your typeDefs
+
   const typeDefs = `
+    directive @auth on FIELD_DEFINITION | OBJECT
+
     type PrivateType @auth {
       privateField: String
     }
@@ -225,7 +229,7 @@ const accountsServerUri = 'http://localhost:4003/';
       publicField: () => 'public',
       privateField: () => 'private',
       privateType: () => '',
-      privateFieldWithAuthResolver: accounts.auth((root, args, context) => {
+      privateFieldWithAuthResolver: authenticated((root, args, context) => {
         return 'private';
       }),
     },
@@ -244,7 +248,7 @@ const accountsServerUri = 'http://localhost:4003/';
         ...accounts.schemaDirectives,
       },
     }),
-    context: req => accounts.context(req),
+    context: ({ req }) => accounts.context({ req }),
   }).listen();
 
   console.log(`GraphQL server running at ${apolloServer.url}`);
