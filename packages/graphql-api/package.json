@@ -1,6 +1,6 @@
 {
   "name": "@accounts/graphql-api",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Server side GraphQL transport for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -25,13 +25,13 @@
   "devDependencies": {
     "@gql2ts/from-schema": "1.10.1",
     "@gql2ts/types": "1.9.0",
-    "@graphql-modules/core": "0.2.3",
+    "@graphql-modules/core": "0.2.11",
     "@types/graphql": "14.0.3",
     "concurrently": "4.1.0",
-    "graphql": "0.13.2",
-    "graphql-code-generator": "0.13.0",
-    "graphql-codegen-typescript-resolvers-template": "0.13.0",
-    "graphql-codegen-typescript-template": "0.13.0",
+    "graphql": "14.0.2",
+    "graphql-code-generator": "0.14.3",
+    "graphql-codegen-typescript-resolvers-template": "0.14.3",
+    "graphql-codegen-typescript-template": "0.14.3",
     "graphql-tools": "4.0.3",
     "lodash": "4.17.11",
     "nock": "10.0.2",
@@ -42,7 +42,7 @@
     "graphql-tools": "^4.0.3"
   },
   "dependencies": {
-    "@accounts/password": "^0.7.0",
+    "@accounts/password": "^0.8.0",
     "@accounts/server": "^0.7.0",
     "@accounts/types": "^0.7.0",
     "@types/request-ip": "0.0.33",

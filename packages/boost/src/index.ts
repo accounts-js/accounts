@@ -1,14 +1,16 @@
+import { DatabaseManager } from '@accounts/database-manager';
+import { AccountsModule, authenticated } from '@accounts/graphql-api';
 import { AccountsServer, AccountsServerOptions } from '@accounts/server';
 import { AuthenticationService } from '@accounts/types';
 import { ApolloServer } from 'apollo-server';
-import { AccountsModule } from '@accounts/graphql-api';
-import { merge, get, isString } from 'lodash';
-import { DatabaseManager } from '@accounts/database-manager';
 import { verify } from 'jsonwebtoken';
+import { get, isString, merge } from 'lodash';
 
 export { AccountsModule };
 
 export { AccountsServerOptions };
+
+export { authenticated };
 
 export interface AccountsBoostOptions extends AccountsServerOptions {
   storage?: {

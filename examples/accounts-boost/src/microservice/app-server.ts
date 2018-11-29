@@ -1,14 +1,14 @@
-import accountsBoost from '@accounts/boost';
-import {
-  makeExecutableSchema,
-  mergeSchemas,
-  makeRemoteExecutableSchema,
-  introspectSchema,
-} from 'graphql-tools';
+import accountsBoost, { authenticated } from '@accounts/boost';
+import { setContext } from 'apollo-link-context';
 import { HttpLink } from 'apollo-link-http';
 import { ApolloServer } from 'apollo-server';
+import {
+  introspectSchema,
+  makeExecutableSchema,
+  makeRemoteExecutableSchema,
+  mergeSchemas,
+} from 'graphql-tools';
 import fetch from 'node-fetch';
-import { setContext } from 'apollo-link-context';
 
 const accountsServerUri = 'http://localhost:4003/';
 
@@ -18,9 +18,9 @@ const accountsServerUri = 'http://localhost:4003/';
     micro: true, // setting micro to true will instruct `@accounts/boost` to only verify access tokens without any additional session logic
   })).graphql();
 
-  // Note: the following steps are optional and only required if you want to stitch the remote accounts schema with your apps schema.
+  // // Note: the following steps are optional and only required if you want to stitch the remote accounts schema with your apps schema.
 
-  // Creates a link to fetch the remote schema from the accounts microservice.
+  // // Creates a link to fetch the remote schema from the accounts microservice.
 
   const http = new HttpLink({ uri: accountsServerUri, fetch });
 
@@ -44,7 +44,11 @@ const accountsServerUri = 'http://localhost:4003/';
     link,
   });
 
+  // The @auth directive needs to be declared in your typeDefs
+
   const typeDefs = `
+    directive @auth on FIELD_DEFINITION | OBJECT
+
     type PrivateType @auth {
       privateField: String
     }
@@ -70,7 +74,7 @@ const accountsServerUri = 'http://localhost:4003/';
       publicField: () => 'public',
       privateField: () => 'private',
       privateType: () => '',
-      privateFieldWithAuthResolver: accounts.auth((root, args, context) => {
+      privateFieldWithAuthResolver: authenticated((root, args, context) => {
         return 'private';
       }),
     },
@@ -93,7 +97,7 @@ const accountsServerUri = 'http://localhost:4003/';
         ...accounts.schemaDirectives,
       },
     }),
-    context: ({ req }) => accounts.context(req),
+    context: ({ req }) => accounts.context({ req }),
   }).listen();
 
   console.log(`GraphQL server running at ${apolloServer.url}`);
