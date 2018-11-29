@@ -45,8 +45,8 @@ const siteConfig = {
       label: 'Getting Started',
     },
     {
-      doc: 'transports/graphql',
-      label: 'GraphQL',
+      doc: 'api/server/api-readme',
+      label: 'Api reference',
     },
     {
       href: 'https://github.com/accounts-js/accounts',

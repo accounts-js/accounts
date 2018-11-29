@@ -11,7 +11,9 @@ Fullstack authentication and accounts-management for GraphQL and REST
 
 _Note: The packages within this repo are under active development — expect breaking changes with minor version updates._
 
-**[Documentation](https://accounts-js.netlify.com/docs/introduction/)**
+**[Documentation](https://accounts-js.netlify.com/docs/getting-started)**
+
+**[Api Documentation](https://accounts-js.netlify.com/docs/api/server/api-readme)**
 
 **[Examples](https://github.com/accounts-js/accounts/tree/master/examples)**
 
