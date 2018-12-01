@@ -1,0 +1,8 @@
+schema:
+  - "./src/schema.ts"
+generates:
+./src/types/index.ts:
+  plugins:
+    - "typescript-common"
+    - "typescript-resolvers"
+require: "ts-node/register/transpile-only"

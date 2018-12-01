@@ -10,7 +10,7 @@
     "precompile": "yarn clean && yarn gen-schema-types",
     "compile": "tsc",
     "prepublishOnly": "yarn compile",
-    "gen-schema-types": "gql-gen --schema ./src/schema.ts --require ts-node/register/transpile-only --template graphql-codegen-typescript-resolvers-template --out ./src/types/index.ts"
+    "gen-schema-types": "gql-gen"
   },
   "repository": {
     "type": "git",
@@ -29,9 +29,9 @@
     "@types/graphql": "14.0.3",
     "concurrently": "4.1.0",
     "graphql": "14.0.2",
-    "graphql-code-generator": "0.14.3",
-    "graphql-codegen-typescript-resolvers-template": "0.14.3",
-    "graphql-codegen-typescript-template": "0.14.3",
+    "graphql-code-generator": "0.14.5",
+    "graphql-codegen-typescript-resolvers": "0.14.5",
+    "graphql-codegen-typescript-common": "0.14.5",
     "graphql-tools": "4.0.3",
     "lodash": "4.17.11",
     "nock": "10.0.2",
