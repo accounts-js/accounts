@@ -4,12 +4,9 @@ import { AccountsServer } from '@accounts/server';
 import TypesTypeDefs from './schema/types';
 import getQueryTypeDefs from './schema/query';
 import getMutationTypeDefs from './schema/mutation';
-import getSchemaDef from './schema/schema-def';
 import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
 import { AccountsRequest } from '../accounts';
-// tslint:disable-next-line:no-implicit-dependencies
-import { mergeGraphQLSchemas } from '@graphql-modules/epoxy';
 
 export interface AccountsPasswordModuleConfig {
   accountsServer: AccountsServer;
@@ -25,13 +22,7 @@ export const AccountsPasswordModule = new GraphQLModule<
   AccountsRequest
 >({
   name: 'accounts-password',
-  typeDefs: ({ config }) =>
-    mergeGraphQLSchemas([
-      TypesTypeDefs,
-      getQueryTypeDefs(config),
-      getMutationTypeDefs(config),
-      ...(config.withSchemaDefinition ? [getSchemaDef(config)] : []),
-    ]),
+  typeDefs: ({ config }) => [TypesTypeDefs, getQueryTypeDefs(config), getMutationTypeDefs(config)],
   resolvers: ({ config }) =>
     ({
       [config.rootQueryName || 'Query']: Query,

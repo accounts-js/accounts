@@ -1,9 +1,9 @@
-import { MutationResolvers } from '../../../types';
+import { MutationResolvers } from '../../../models';
 import { ModuleContext } from '@graphql-modules/core';
 import { AccountsModuleContext } from '..';
 import { AccountsServer } from '@accounts/server';
 
-export const Mutation: MutationResolvers.Resolvers<ModuleContext<AccountsModuleContext>> = {
+export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> = {
   authenticate: async (_, args, ctx) => {
     const { serviceName, params } = args;
     const { ip, userAgent, injector } = ctx;
@@ -30,7 +30,7 @@ export const Mutation: MutationResolvers.Resolvers<ModuleContext<AccountsModuleC
 
     return impersonateRes;
   },
-  logout: async (_: null, __: null, context) => {
+  logout: async (_, __, context) => {
     const { authToken, injector } = context;
 
     if (authToken) {

@@ -7,10 +7,10 @@ import getMutationTypeDefs from './schema/mutation';
 import getSchemaDef from './schema/schema-def';
 import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
+import { User as UserResolvers } from './resolvers/user';
+import { LoginResult as LoginResultResolvers } from './resolvers/loginResult';
 import { User } from '@accounts/types';
 import { AccountsPasswordModule } from '../accounts-password';
-// tslint:disable-next-line:no-implicit-dependencies
-import { mergeGraphQLSchemas } from '@graphql-modules/epoxy';
 import { getClientIp } from 'request-ip';
 
 export interface AccountsRequest {
@@ -47,19 +47,21 @@ export const AccountsModule = new GraphQLModule<
     TypesTypeDefs(config),
     getQueryTypeDefs(config),
     getMutationTypeDefs(config),
-    getSchemaDef(config),
+    ...getSchemaDef(config),
   ],
   resolvers: ({ config }) =>
     ({
       [config.rootQueryName || 'Query']: Query,
       [config.rootMutationName || 'Mutation']: Mutation,
+      User: UserResolvers,
+      LoginResult: LoginResultResolvers,
     } as any),
   // If necessary, import AccountsPasswordModule together with this module
   imports: ({ config }) =>
     config.accountsServer.getServices().password
       ? [
           AccountsPasswordModule.forRoot({
-            accountsPassword: config.accountsServer.getServices().password,
+            accountsPassword: config.accountsServer.getServices().password as any,
             ...config,
           }),
         ]

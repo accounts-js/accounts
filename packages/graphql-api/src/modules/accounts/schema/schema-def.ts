@@ -3,10 +3,12 @@ import gql from 'graphql-tag';
 
 export default (config: AccountsModuleConfig) =>
   config.withSchemaDefinition
-    ? gql`
+    ? [
+        gql`
     schema {
         query: ${config.rootMutationName}
         mutation: ${config.rootQueryName}
     }
-`
+`,
+      ]
     : [];
