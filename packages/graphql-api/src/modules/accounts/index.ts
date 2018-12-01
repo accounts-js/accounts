@@ -43,13 +43,12 @@ export const AccountsModule = new GraphQLModule<
   AccountsModuleContext
 >({
   name: 'accounts',
-  typeDefs: ({ config }) =>
-    mergeGraphQLSchemas([
-      TypesTypeDefs(config),
-      getQueryTypeDefs(config),
-      getMutationTypeDefs(config),
-      ...(config.withSchemaDefinition ? [getSchemaDef(config)] : []),
-    ]),
+  typeDefs: ({ config }) => [
+    TypesTypeDefs(config),
+    getQueryTypeDefs(config),
+    getMutationTypeDefs(config),
+    getSchemaDef(config),
+  ],
   resolvers: ({ config }) =>
     ({
       [config.rootQueryName || 'Query']: Query,

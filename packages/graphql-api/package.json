@@ -6,11 +6,10 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf lib",
-    "start": "yarn gen-schema-types && tsc --watch",
-    "precompile": "yarn clean && yarn gen-schema-types",
+    "start": "gql-gen && tsc --watch",
+    "precompile": "yarn clean && gql-gen",
     "compile": "tsc",
-    "prepublishOnly": "yarn compile",
-    "gen-schema-types": "gql-gen"
+    "prepublishOnly": "yarn compile"
   },
   "repository": {
     "type": "git",
@@ -22,7 +21,7 @@
     "url": "https://github.com/js-accounts/graphql-api/issues"
   },
   "homepage": "https://github.com/js-accounts/graphql-api",
-  "devDependencies": { 
+  "devDependencies": {
     "@gql2ts/from-schema": "1.10.1",
     "@gql2ts/types": "1.9.0",
     "@graphql-modules/core": "0.2.14",
@@ -30,8 +29,8 @@
     "concurrently": "4.1.0",
     "graphql": "14.0.2",
     "graphql-code-generator": "0.14.5",
-    "graphql-codegen-typescript-resolvers": "0.14.5",
     "graphql-codegen-typescript-common": "0.14.5",
+    "graphql-codegen-typescript-resolvers": "0.14.5",
     "graphql-tools": "4.0.3",
     "lodash": "4.17.11",
     "nock": "10.0.2",
