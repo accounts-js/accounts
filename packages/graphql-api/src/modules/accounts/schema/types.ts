@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
+import { AccountsModuleConfig } from '..';
 
-export default gql`
+export default ({ userAsInterface }: AccountsModuleConfig) => gql`
   directive @auth on FIELD_DEFINITION | OBJECT
 
   type Tokens {
@@ -24,7 +25,7 @@ export default gql`
     verified: Boolean
   }
 
-  type User {
+  ${userAsInterface ? 'interface' : 'type'} User {
     id: ID!
     emails: [EmailRecord!]
     username: String

@@ -22,10 +22,10 @@
     "url": "https://github.com/js-accounts/graphql-api/issues"
   },
   "homepage": "https://github.com/js-accounts/graphql-api",
-  "devDependencies": {
+  "devDependencies": { 
     "@gql2ts/from-schema": "1.10.1",
     "@gql2ts/types": "1.9.0",
-    "@graphql-modules/core": "0.2.11",
+    "@graphql-modules/core": "0.2.14",
     "@types/graphql": "14.0.3",
     "concurrently": "4.1.0",
     "graphql": "14.0.2",
@@ -38,7 +38,7 @@
     "ts-node": "7.0.1"
   },
   "peerDependencies": {
-    "@graphql-modules/core": "^0.2.3",
+    "@graphql-modules/core": "^0.2.14",
     "graphql-tools": "^4.0.3"
   },
   "dependencies": {

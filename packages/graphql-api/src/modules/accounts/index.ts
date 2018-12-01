@@ -1,4 +1,4 @@
-import { GraphQLModule } from '@graphql-modules/core';
+import { GraphQLModule, ModuleConfig } from '@graphql-modules/core';
 import { AccountsServer } from '@accounts/server';
 import { IncomingMessage } from 'http';
 import TypesTypeDefs from './schema/types';
@@ -8,12 +8,10 @@ import getSchemaDef from './schema/schema-def';
 import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
 import { User } from '@accounts/types';
-import { contextBuilder } from './context-builder';
 import { AccountsPasswordModule } from '../accounts-password';
-import AccountsPassword from '@accounts/password';
-import { AuthenticatedDirective } from '../../utils/authenticated-directive';
 // tslint:disable-next-line:no-implicit-dependencies
 import { mergeGraphQLSchemas } from '@graphql-modules/epoxy';
+import { getClientIp } from 'request-ip';
 
 export interface AccountsRequest {
   req: IncomingMessage;
@@ -26,13 +24,14 @@ export interface AccountsModuleConfig {
   extendTypeDefs?: boolean;
   withSchemaDefinition?: boolean;
   headerName?: string;
+  userAsInterface?: boolean;
 }
 
-export interface AccountsModuleContext {
+export interface AccountsModuleContext<IUser = User> {
   authToken?: string;
   userAgent: string;
   ip: string;
-  user?: User;
+  user?: IUser;
   userId?: string;
 }
 
@@ -46,7 +45,7 @@ export const AccountsModule = new GraphQLModule<
   name: 'accounts',
   typeDefs: ({ config }) =>
     mergeGraphQLSchemas([
-      TypesTypeDefs,
+      TypesTypeDefs(config),
       getQueryTypeDefs(config),
       getMutationTypeDefs(config),
       ...(config.withSchemaDefinition ? [getSchemaDef(config)] : []),
@@ -61,7 +60,7 @@ export const AccountsModule = new GraphQLModule<
     config.accountsServer.getServices().password
       ? [
           AccountsPasswordModule.forRoot({
-            accountsPassword: config.accountsServer.getServices().password as AccountsPassword,
+            accountsPassword: config.accountsServer.getServices().password,
             ...config,
           }),
         ]
@@ -72,8 +71,43 @@ export const AccountsModule = new GraphQLModule<
       useValue: config.accountsServer,
     },
   ],
-  contextBuilder,
-  schemaDirectives: {
-    auth: AuthenticatedDirective,
+  context: async ({ req }, _, { injector }) => {
+    const config: AccountsModuleConfig = injector.get(ModuleConfig(AccountsModule));
+    const headerName = config.headerName || 'accounts-access-token';
+    const authToken = (req.headers[headerName] || req.headers[headerName.toLowerCase()]) as string;
+    let user;
+
+    if (authToken) {
+      try {
+        user = await config.accountsServer.resumeSession(authToken);
+      } catch (error) {
+        // Empty catch
+      }
+    }
+
+    let userAgent: string = (req.headers['user-agent'] as string) || '';
+    if (req.headers['x-ucbrowser-ua']) {
+      // special case of UC Browser
+      userAgent = req.headers['x-ucbrowser-ua'] as string;
+    }
+
+    return {
+      authToken,
+      userAgent,
+      ip: getClientIp(req),
+      user,
+      userId: user && user.id,
+    };
+  },
+  directiveResolvers: {
+    auth: async (next, src, args, context) => {
+      if (context && context.skipJSAccountsVerification === true) {
+        return next();
+      }
+      if (!context.userId && !context.user) {
+        throw new Error('Unauthorized');
+      }
+      return next();
+    },
   },
 });
