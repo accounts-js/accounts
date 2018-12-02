@@ -478,7 +478,18 @@
   resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.9.0.tgz#d07a54832757d2f2d1fc9891e5b0e3e3b4886c6a"
   integrity sha512-mkHar7AdyShUFJE6Mlke1tUbb+lPCK1EozZeAhCuRrhQ5aCCBAG6RxzNUYX1Q2jeGeyU0WRAtQu1oE/GoIsNXA==
 
-"@graphql-modules/core@0.2.14", "@graphql-modules/core@^0.2.14":
+"@graphql-modules/core@0.3.0-alpha.276388cc":
+  version "0.3.0-alpha.276388cc"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.3.0-alpha.276388cc.tgz#5d43671085cae82211743ba9d308bc8c69edef7e"
+  integrity sha512-SO+O4fZOBDTTXTm8KVRvVY9NxYV9qghZRIjRsw9mKdaGMg8BO22ootudoGi6b2twWYRbbXc7wlDWL5Pc5KtQ1A==
+  dependencies:
+    "@graphql-modules/di" "0.3.0-alpha.276388cc"
+    "@graphql-modules/epoxy" "0.3.0-alpha.276388cc"
+    dependency-graph "0.7.2"
+    graphql-tools "4.0.3"
+    tslib "1.9.3"
+
+"@graphql-modules/core@^0.2.14":
   version "0.2.14"
   resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.2.14.tgz#646edb3c875df711932fe40dd23db44e5e5cc1b1"
   integrity sha512-fmQSOtR+WiyXz2VTO/sqmIFyur2FFeQlrma87QV+zH/ld2cB4aQIvGLW9wSYCd6luptpwbV28glbHXMEHm6wiQ==
@@ -489,10 +500,27 @@
     graphql-tools "4.0.3"
     tslib "1.9.3"
 
+"@graphql-modules/di@0.3.0-alpha.276388cc":
+  version "0.3.0-alpha.276388cc"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.3.0-alpha.276388cc.tgz#6022f37217cb8bd67ba961ef6e0a5a1f62ca435f"
+  integrity sha512-WBH/FYNUhYe3gqG3rtw9tuPuggVoTaUUBxkDUEhJPmwLeipBuLhDbtN/y+cbailC4bz1dtNtNwxQHG6Uh+v6iw==
+  dependencies:
+    tslib "1.9.3"
+
 "@graphql-modules/epoxy@0.2.14":
   version "0.2.14"
   resolved "https://registry.yarnpkg.com/@graphql-modules/epoxy/-/epoxy-0.2.14.tgz#f8068a2cc2445988fa6f0994de1c6d1c79ef2974"
   integrity sha512-ONXynaT1fWiMWCnpyVNMiSGddd/YqAQ0TFaonuvmfjxu2z9+QwGRyPVk7XNFWl7Lt1cXoaYBMB73fSzFPRkiPQ==
+  dependencies:
+    "@types/deepmerge" "2.1.0"
+    deepmerge "2.2.1"
+    graphql-tools "4.0.3"
+    tslib "1.9.3"
+
+"@graphql-modules/epoxy@0.3.0-alpha.276388cc":
+  version "0.3.0-alpha.276388cc"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/epoxy/-/epoxy-0.3.0-alpha.276388cc.tgz#a7e128b546eacc77d679a7619721eb001a07c718"
+  integrity sha512-jOZaTYbp3rVwYtKstHtyNWaK7rEbJH4bFX8vz3LKIbQTF4yxCNApJS16wJdjI9CK9QINVavbkfck8kcTfJ0vww==
   dependencies:
     "@types/deepmerge" "2.1.0"
     deepmerge "2.2.1"

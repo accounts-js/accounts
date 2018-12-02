@@ -24,7 +24,7 @@
   "devDependencies": {
     "@gql2ts/from-schema": "1.10.1",
     "@gql2ts/types": "1.9.0",
-    "@graphql-modules/core": "0.2.14",
+    "@graphql-modules/core": "0.3.0-alpha.276388cc",
     "@types/graphql": "14.0.3",
     "concurrently": "4.1.0",
     "graphql": "14.0.2",
