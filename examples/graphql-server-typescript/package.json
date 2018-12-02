@@ -19,7 +19,7 @@
     "@accounts/password": "file:../../packages/password",
     "@accounts/rest-express": "file:../../packages/rest-express",
     "@accounts/server": "file:../../packages/server",
-    "@graphql-modules/epoxy": "^0.2.1",
+    "@graphql-modules/epoxy": "^0.2.15",
     "@types/mongoose": "5.2.0",
     "apollo-server": "2.0.0-rc.5",
     "cors": "2.8.4",

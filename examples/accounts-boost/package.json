@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@accounts/boost": "^0.7.0",
-    "@graphql-modules/epoxy": "^0.2.14",
+    "@graphql-modules/epoxy": "^0.2.15",
     "apollo-link-context": "^1.0.10",
     "apollo-link-http": "^1.5.7",
     "apollo-server": "^2.2.3",
