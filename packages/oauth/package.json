@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@accounts/server": "^0.7.0",
-    "@types/jest": "23.3.9",
+    "@types/jest": "23.3.10",
     "@types/node": "10.12.9",
     "jest": "23.6.0"
   }
