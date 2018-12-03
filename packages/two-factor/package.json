@@ -35,7 +35,7 @@
     "speakeasy": "^2.0.0"
   },
   "devDependencies": {
-    "@types/jest": "23.3.9",
+    "@types/jest": "23.3.10",
     "@types/node": "10.12.9",
     "jest": "23.6.0"
   }

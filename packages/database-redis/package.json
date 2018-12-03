@@ -40,7 +40,7 @@
   "devDependencies": {
     "@accounts/database-tests": "^0.7.0",
     "@types/ioredis": "4.0.4",
-    "@types/jest": "23.3.9",
+    "@types/jest": "23.3.10",
     "@types/lodash": "4.14.118",
     "@types/node": "10.12.9",
     "@types/shortid": "0.0.29",

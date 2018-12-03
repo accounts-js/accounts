@@ -32,7 +32,7 @@
     "@accounts/server": "^0.7.0",
     "@accounts/types": "^0.7.0",
     "@types/bcryptjs": "2.4.2",
-    "@types/jest": "23.3.9",
+    "@types/jest": "23.3.10",
     "@types/lodash": "4.14.118",
     "@types/node": "10.12.9",
     "jest": "23.6.0",
