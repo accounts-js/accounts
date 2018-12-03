@@ -42,7 +42,6 @@
     "@accounts/server": "^0.7.0",
     "@accounts/types": "^0.7.0",
     "@graphql-modules/core": "0.2.15",
-    "@graphql-modules/epoxy": "0.2.15",
     "@types/lodash": "4.14.118",
     "@types/mongoose": "5.3.1",
     "@types/node-fetch": "2.1.4",

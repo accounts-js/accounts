@@ -5,9 +5,8 @@ import { AccountsGraphQLClient } from '@accounts/graphql-client';
 import { AccountsPassword } from '@accounts/password';
 import { AccountsServer } from '@accounts/server';
 import { DatabaseInterface, User } from '@accounts/types';
-import { mergeGraphQLSchemas } from '@graphql-modules/epoxy';
 import ApolloClient from 'apollo-boost';
-import { ApolloServer, gql } from 'apollo-server';
+import { ApolloServer } from 'apollo-server';
 import fetch from 'node-fetch';
 
 import { ServerTestInterface } from '.';
@@ -69,22 +68,13 @@ export class ServerGraphqlTest implements ServerTestInterface {
         password: this.accountsPassword,
       }
     );
-    const accountsGraphQL = AccountsModule.forRoot({
+    const { schema, context } = AccountsModule.forRoot({
       accountsServer: this.accountsServer,
     });
 
-    const typeDefs = gql`
-      type Query {
-        _: Boolean
-      }
-      type Mutation {
-        _: Boolean
-      }
-    `;
     this.apolloServer = new ApolloServer({
-      typeDefs: mergeGraphQLSchemas([accountsGraphQL.typeDefs, typeDefs]),
-      resolvers: accountsGraphQL.resolvers,
-      context: accountsGraphQL.context,
+      schema,
+      context,
     });
 
     const apolloClient = new ApolloClient({ uri: `http://localhost:${this.port}` });
