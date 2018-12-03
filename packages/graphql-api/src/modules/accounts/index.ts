@@ -1,4 +1,4 @@
-import { GraphQLModule, ModuleConfig } from '@graphql-modules/core';
+import { GraphQLModule } from '@graphql-modules/core';
 import { AccountsServer } from '@accounts/server';
 import { IncomingMessage } from 'http';
 import TypesTypeDefs from './schema/types';
@@ -11,7 +11,9 @@ import { User as UserResolvers } from './resolvers/user';
 import { LoginResult as LoginResultResolvers } from './resolvers/loginResult';
 import { User } from '@accounts/types';
 import { AccountsPasswordModule } from '../accounts-password';
-import { getClientIp } from 'request-ip';
+import { AuthenticatedDirective } from '../../utils/authenticated-directive';
+import { context } from '../../utils';
+import AccountsPassword from '@accounts/password';
 
 export interface AccountsRequest {
   req: IncomingMessage;
@@ -37,11 +39,11 @@ export interface AccountsModuleContext<IUser = User> {
 
 // You can see the below. It is really easy to create a reusable GraphQL-Module with different configurations
 
-export const AccountsModule = new GraphQLModule<
+export const AccountsModule: GraphQLModule<
   AccountsModuleConfig,
   AccountsRequest,
   AccountsModuleContext
->({
+> = new GraphQLModule<AccountsModuleConfig, AccountsRequest, AccountsModuleContext>({
   name: 'accounts',
   typeDefs: ({ config }) => [
     TypesTypeDefs(config),
@@ -61,7 +63,7 @@ export const AccountsModule = new GraphQLModule<
     config.accountsServer.getServices().password
       ? [
           AccountsPasswordModule.forRoot({
-            accountsPassword: config.accountsServer.getServices().password as any,
+            accountsPassword: config.accountsServer.getServices().password as AccountsPassword,
             ...config,
           }),
         ]
@@ -72,43 +74,8 @@ export const AccountsModule = new GraphQLModule<
       useValue: config.accountsServer,
     },
   ],
-  context: async ({ req }, _, { injector }) => {
-    const config: AccountsModuleConfig = injector.get(ModuleConfig(AccountsModule));
-    const headerName = config.headerName || 'accounts-access-token';
-    const authToken = (req.headers[headerName] || req.headers[headerName.toLowerCase()]) as string;
-    let user;
-
-    if (authToken) {
-      try {
-        user = await config.accountsServer.resumeSession(authToken);
-      } catch (error) {
-        // Empty catch
-      }
-    }
-
-    let userAgent: string = (req.headers['user-agent'] as string) || '';
-    if (req.headers['x-ucbrowser-ua']) {
-      // special case of UC Browser
-      userAgent = req.headers['x-ucbrowser-ua'] as string;
-    }
-
-    return {
-      authToken,
-      userAgent,
-      ip: getClientIp(req),
-      user,
-      userId: user && user.id,
-    };
-  },
-  directiveResolvers: {
-    auth: async (next, src, args, context) => {
-      if (context && context.skipJSAccountsVerification === true) {
-        return next();
-      }
-      if (!context.userId && !context.user) {
-        throw new Error('Unauthorized');
-      }
-      return next();
-    },
+  context: context('accounts'),
+  schemaDirectives: {
+    auth: AuthenticatedDirective,
   },
 });

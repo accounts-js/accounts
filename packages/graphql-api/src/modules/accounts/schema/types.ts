@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import { AccountsModuleConfig } from '..';
 
 export default ({ userAsInterface }: AccountsModuleConfig) => gql`
-  directive @auth on FIELD_DEFINITION
+  directive @auth on FIELD_DEFINITION | OBJECT
 
   type Tokens {
     refreshToken: String

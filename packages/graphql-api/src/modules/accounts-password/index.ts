@@ -7,6 +7,7 @@ import getMutationTypeDefs from './schema/mutation';
 import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
 import { AccountsRequest } from '../accounts';
+import { context } from '../../utils';
 
 export interface AccountsPasswordModuleConfig {
   accountsServer: AccountsServer;
@@ -38,4 +39,5 @@ export const AccountsPasswordModule = new GraphQLModule<
       useValue: config.accountsPassword,
     },
   ],
+  context: context('accounts-password'),
 });
