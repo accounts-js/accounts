@@ -489,10 +489,28 @@
     graphql-tools "4.0.3"
     tslib "1.9.3"
 
+"@graphql-modules/core@0.2.16":
+  version "0.2.16"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.2.16.tgz#1dfeeeddabcc9b7ed4c948c2b991429eed5c715f"
+  integrity sha512-0ilpXmxhIROi2YzBI0GLJA8PwbdfzeJApgdrAzuVkRKvfEPbUiXNo6vxU1ThLTaQ3D5Qh+9zTED2VbUrel6v6w==
+  dependencies:
+    "@graphql-modules/di" "0.2.16"
+    "@graphql-modules/epoxy" "0.2.16"
+    dependency-graph "0.7.2"
+    graphql-tools "4.0.3"
+    tslib "1.9.3"
+
 "@graphql-modules/di@0.2.15":
   version "0.2.15"
   resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.2.15.tgz#549b05b3826ac661db8f103570ed731c44b1b0aa"
   integrity sha512-ifrP46FVENop/zsQ7+CJDC7Ngx5WNosNrpA9tCI16Uxwq7Gtk8CPtgz1IcOi5AwGRet2Zzf26krmn0X2HgeTlw==
+  dependencies:
+    tslib "1.9.3"
+
+"@graphql-modules/di@0.2.16":
+  version "0.2.16"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.2.16.tgz#3f0a9f9fb652ea0b7adca837093579842d4fc765"
+  integrity sha512-vjHTgq2Fsp225sfk4Ujpy5LRgx2VB9IIiODUb3jSnlHEGF5U6PrBVqwxdxjgTfAbHUIHTNc1xFJF4Uxq7ShykA==
   dependencies:
     tslib "1.9.3"
 
@@ -510,6 +528,16 @@
   version "0.2.15"
   resolved "https://registry.yarnpkg.com/@graphql-modules/epoxy/-/epoxy-0.2.15.tgz#0328172fbe9e404d9ea66342ea0e7f3d5d6f04f3"
   integrity sha512-rLB3+MYBTqobU5c6VC8dTHHml/W2wwa/AhJ4rx3pPicYxzaxUu/Rm0HOGsJpDE3FcCGmNR7emBiCwRpsqehqLg==
+  dependencies:
+    "@types/deepmerge" "2.1.0"
+    deepmerge "2.2.1"
+    graphql-tools "4.0.3"
+    tslib "1.9.3"
+
+"@graphql-modules/epoxy@0.2.16":
+  version "0.2.16"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/epoxy/-/epoxy-0.2.16.tgz#8db3eca69fe67b1d40cb76068698b8372a592937"
+  integrity sha512-711mgRXNbwnA1Fn9fZUHfy3Z9L+wU4WBbdbvbIQdieQpoB9DswYEWJN9PFNmjp3apMiHlyRQoZJwZBTC2CoQmg==
   dependencies:
     "@types/deepmerge" "2.1.0"
     deepmerge "2.2.1"
@@ -809,10 +837,15 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@10.12.10", "@types/node@10.12.9", "@types/node@^10.1.0":
+"@types/node@*", "@types/node@10.12.9", "@types/node@^10.1.0":
   version "10.12.9"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.9.tgz#a07bfa74331471e1dc22a47eb72026843f7b95c8"
   integrity sha512-eajkMXG812/w3w4a1OcBlaTwsFPO5F7fJ/amy+tieQxEMWBlbV1JGSjkFM+zkHNf81Cad+dfIRA+IBkvmvdAeA==
+
+"@types/node@10.12.10":
+  version "10.12.10"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.10.tgz#4fa76e6598b7de3f0cb6ec3abacc4f59e5b3a2ce"
+  integrity sha512-8xZEYckCbUVgK8Eg7lf5Iy4COKJ5uXlnIOnePN0WUwSQggy9tolM+tDJf7wMOnT/JT/W9xDYIaYggt3mRV2O5w==
 
 "@types/oauth@0.9.1":
   version "0.9.1"
