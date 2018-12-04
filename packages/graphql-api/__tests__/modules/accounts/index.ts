@@ -1,3 +1,4 @@
+import { print } from 'graphql';
 import { AccountsModule } from '../../../src/modules/accounts/index';
 
 const accountsServer = {
@@ -13,7 +14,7 @@ describe('AccountsModule', () => {
         accountsServer: accountsServer as any,
         withSchemaDefinition: true,
       });
-      expect(accountsGraphQL.typeDefs).toMatch(/schema/);
+      expect(print(accountsGraphQL.typeDefs)).toMatch(/schema/);
     });
 
     it('should export typeDefs without schema definition', () => {
@@ -21,7 +22,7 @@ describe('AccountsModule', () => {
         accountsServer: accountsServer as any,
         withSchemaDefinition: false,
       });
-      expect(accountsGraphQL.typeDefs).not.toMatch(/schema/);
+      expect(print(accountsGraphQL.typeDefs)).not.toMatch(/schema/);
     });
   });
 
@@ -31,7 +32,7 @@ describe('AccountsModule', () => {
         accountsServer: accountsServer as any,
         extendTypeDefs: true,
       });
-      expect(accountsGraphQL.typeDefs).toMatch(/extend/);
+      expect(print(accountsGraphQL.typeDefs)).toMatch(/extend/);
     });
 
     it('should not extends typeDefs', () => {
@@ -39,7 +40,7 @@ describe('AccountsModule', () => {
         accountsServer: accountsServer as any,
         extendTypeDefs: false,
       });
-      expect(accountsGraphQL.typeDefs).not.toMatch(/extend/);
+      expect(print(accountsGraphQL.typeDefs)).not.toMatch(/extend/);
     });
   });
 });
