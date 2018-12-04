@@ -40,4 +40,5 @@ export const AccountsPasswordModule = new GraphQLModule<
     },
   ],
   context: context('accounts-password'),
+  configRequired: true,
 });

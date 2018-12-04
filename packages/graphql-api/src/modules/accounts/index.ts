@@ -78,4 +78,5 @@ export const AccountsModule: GraphQLModule<
   schemaDirectives: {
     auth: AuthenticatedDirective,
   },
+  configRequired: true,
 });
