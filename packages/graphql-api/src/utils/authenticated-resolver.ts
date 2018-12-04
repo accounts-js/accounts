@@ -7,10 +7,8 @@ export const authenticated = (func: any) => async (
   if (context && context.skipJSAccountsVerification === true) {
     return func(root, args, context, info);
   }
-
   if (!context.userId && !context.user) {
     throw new Error('Unauthorized');
   }
-
   return func(root, args, context, info);
 };

@@ -1,6 +1,5 @@
 import { authenticated } from './authenticated-resolver';
 import { SchemaDirectiveVisitor } from 'graphql-tools';
-
 export class AuthenticatedDirective extends SchemaDirectiveVisitor {
   public visitFieldDefinition(field: any) {
     field.resolve = authenticated(field.resolve);

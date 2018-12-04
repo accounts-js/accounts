@@ -151,6 +151,7 @@ These are the available customizations:
 - `rootMutationName` (string) - The name of the root mutation, default: `Mutation`.
 - `extend` (boolean) - whether to add `extend` before the root type declaration, default: `true`.
 - `withSchemaDefinition` (boolean): whether to add `schema { ... }` declaration to the generation schema, default: `false`.
+- `userAsInterface` (boolean): whether to expose `interface User` as interface instead of `type User`, default: `false`.
 
 Pass a second object to `AccountsModule`, for example:
 
@@ -204,6 +205,43 @@ input CreateUserProfileInput {
 ```
 
 The user will be saved in the db with the profile key set.
+
+## Extending `User` interface
+
+If you set `userAsInterface` true, you can have multiple `User` types those implement same `User` interface
+
+```graphql
+enum AccountType {
+  Principal
+  Instructor
+  Student
+}
+type Principal {
+  id: ID
+  accountType: AccountType
+  username: String
+  emails: [EmailRecord]
+  profile: Profile
+}
+type Instructor implements User {
+  id: ID
+  accountType: AccountType
+  username: String
+  emails: [EmailRecord]
+  profile: Profile
+  lectures: [Lecture]
+  students: [Student]
+}
+type Student implements User {
+  id: ID
+  accountType: AccountType
+  username: String
+  emails: [EmailRecord]
+  profile: Profile
+  lectures: [Lecture]
+  instructors: [Instructor]
+}
+```
 
 # GraphQL Client
 

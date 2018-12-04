@@ -12,9 +12,9 @@ yarn add @accounts/boost
 ## Usage
 
 ```js
-import { AccountsServer } from '@accounts/boost';
+import { AccountsBoost } from '@accounts/boost';
 
-const accountsServer = new AccountsServer();
+const accountsBoost = new AccountsBoost();
 
-accountsServer.listen();
+accountsBoost.listen();
 ```
