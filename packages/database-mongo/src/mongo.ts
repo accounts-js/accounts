@@ -94,14 +94,14 @@ export class Mongo implements DatabaseInterface {
       user._id = this.options.idProvider();
     }
     const ret = await this.collection.insertOne(user);
-    return ret.ops[0]._id;
+    return ret.ops[0]._id.toString();
   }
 
   public async findUserById(userId: string): Promise<User | null> {
     const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     const user = await this.collection.findOne({ _id: id });
     if (user) {
-      user.id = user._id;
+      user.id = user._id.toString();
     }
     return user;
   }
@@ -111,7 +111,7 @@ export class Mongo implements DatabaseInterface {
       'emails.address': email.toLowerCase(),
     });
     if (user) {
-      user.id = user._id;
+      user.id = user._id.toString();
     }
     return user;
   }
@@ -124,7 +124,7 @@ export class Mongo implements DatabaseInterface {
         };
     const user = await this.collection.findOne(filter);
     if (user) {
-      user.id = user._id;
+      user.id = user._id.toString();
     }
     return user;
   }
@@ -142,7 +142,7 @@ export class Mongo implements DatabaseInterface {
       'services.email.verificationTokens.token': token,
     });
     if (user) {
-      user.id = user._id;
+      user.id = user._id.toString();
     }
     return user;
   }
@@ -152,7 +152,7 @@ export class Mongo implements DatabaseInterface {
       'services.password.reset.token': token,
     });
     if (user) {
-      user.id = user._id;
+      user.id = user._id.toString();
     }
     return user;
   }
@@ -162,7 +162,7 @@ export class Mongo implements DatabaseInterface {
       [`services.${serviceName}.id`]: serviceId,
     });
     if (user) {
-      user.id = user._id;
+      user.id = user._id.toString();
     }
     return user;
   }
@@ -333,7 +333,7 @@ export class Mongo implements DatabaseInterface {
     }
 
     const ret = await this.sessionCollection.insertOne(session);
-    return ret.ops[0]._id;
+    return ret.ops[0]._id.toString();
   }
 
   public async updateSession(sessionId: string, connection: ConnectionInformations): Promise<void> {
@@ -380,7 +380,7 @@ export class Mongo implements DatabaseInterface {
   public async findSessionByToken(token: string): Promise<Session | null> {
     const session = await this.sessionCollection.findOne({ token });
     if (session) {
-      session.id = session._id;
+      session.id = session._id.toString();
     }
     return session;
   }
@@ -390,7 +390,7 @@ export class Mongo implements DatabaseInterface {
     const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
     const session = await this.sessionCollection.findOne({ _id });
     if (session) {
-      session.id = session._id;
+      session.id = session._id.toString();
     }
     return session;
   }
