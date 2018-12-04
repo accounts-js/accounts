@@ -1,3 +1,9 @@
 export const User = {
-  id: (user: any) => user._id.toString(),
+  id: (user: any) => {
+    // In the case of Mongo
+    if (user._id) {
+      return user._id.toString();
+    }
+    return user.id.toString();
+  },
 };
