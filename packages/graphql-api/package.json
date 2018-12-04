@@ -6,11 +6,10 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf lib",
-    "start": "yarn gen-schema-types && tsc --watch",
-    "precompile": "yarn clean && yarn gen-schema-types",
+    "start": "gql-gen && tsc --watch",
+    "precompile": "yarn clean && gql-gen",
     "compile": "tsc",
-    "prepublishOnly": "yarn compile",
-    "gen-schema-types": "gql-gen --schema ./src/schema.ts --require ts-node/register/transpile-only --template graphql-codegen-typescript-resolvers-template --out ./src/types/index.ts"
+    "prepublishOnly": "yarn compile"
   },
   "repository": {
     "type": "git",
@@ -25,20 +24,22 @@
   "devDependencies": {
     "@gql2ts/from-schema": "1.10.1",
     "@gql2ts/types": "1.9.0",
-    "@graphql-modules/core": "0.2.11",
+    "@graphql-modules/core": "0.2.15",
     "@types/graphql": "14.0.3",
     "concurrently": "4.1.0",
     "graphql": "14.0.2",
-    "graphql-code-generator": "0.14.3",
-    "graphql-codegen-typescript-resolvers-template": "0.14.3",
-    "graphql-codegen-typescript-template": "0.14.3",
+    "graphql-code-generator": "0.14.5",
+    "graphql-codegen-add": "0.14.5",
+    "graphql-codegen-typescript-common": "0.14.5",
+    "graphql-codegen-typescript-resolvers": "0.14.5",
+    "graphql-codegen-typescript-server": "0.14.5",
     "graphql-tools": "4.0.3",
     "lodash": "4.17.11",
     "nock": "10.0.2",
     "ts-node": "7.0.1"
   },
   "peerDependencies": {
-    "@graphql-modules/core": "^0.2.3",
+    "@graphql-modules/core": "0.2.15",
     "graphql-tools": "^4.0.3"
   },
   "dependencies": {
@@ -46,7 +47,6 @@
     "@accounts/server": "^0.7.0",
     "@accounts/types": "^0.7.0",
     "@types/request-ip": "0.0.33",
-    "deepmerge": "2.2.1",
     "graphql-tag": "^2.10.0",
     "request-ip": "2.1.3"
   }

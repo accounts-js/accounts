@@ -2,9 +2,9 @@ import { ModuleContext } from '@graphql-modules/core';
 import { AccountsPassword, PasswordCreateUserType } from '@accounts/password';
 import { AccountsServer } from '@accounts/server';
 import { AccountsModuleContext } from '../../accounts';
-import { MutationResolvers } from '../../../types';
+import { MutationResolvers } from '../../../models';
 
-export const Mutation: MutationResolvers.Resolvers<ModuleContext<AccountsModuleContext>> = {
+export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> = {
   changePassword: async (_, { oldPassword, newPassword }, { user, injector }) => {
     if (!(user && user.id)) {
       throw new Error('Unauthorized');
@@ -14,7 +14,7 @@ export const Mutation: MutationResolvers.Resolvers<ModuleContext<AccountsModuleC
     await injector.get(AccountsPassword).changePassword(userId, oldPassword, newPassword);
     return null;
   },
-  createUser: async (_: null, { user }, { injector }) => {
+  createUser: async (_, { user }, { injector }) => {
     const userId = await injector.get(AccountsPassword).createUser(user as PasswordCreateUserType);
     return injector.get(AccountsServer).options.ambiguousErrorMessages ? null : userId;
   },
@@ -29,7 +29,7 @@ export const Mutation: MutationResolvers.Resolvers<ModuleContext<AccountsModuleC
     await injector.get(AccountsPassword).twoFactor.set(userId, secret as any, code);
     return null;
   },
-  twoFactorUnset: async (_: null, { code }, { user, injector }) => {
+  twoFactorUnset: async (_, { code }, { user, injector }) => {
     // Make sure user is logged in
     if (!(user && user.id)) {
       throw new Error('Unauthorized');
@@ -40,10 +40,10 @@ export const Mutation: MutationResolvers.Resolvers<ModuleContext<AccountsModuleC
     await injector.get(AccountsPassword).twoFactor.unset(userId, code);
     return null;
   },
-  resetPassword: async (_: null, { token, newPassword }, { injector, ip, userAgent }) => {
+  resetPassword: async (_, { token, newPassword }, { injector, ip, userAgent }) => {
     return injector.get(AccountsPassword).resetPassword(token, newPassword, { ip, userAgent });
   },
-  sendResetPasswordEmail: async (_: null, { email }, { injector }) => {
+  sendResetPasswordEmail: async (_, { email }, { injector }) => {
     await injector.get(AccountsPassword).sendResetPasswordEmail(email);
     return null;
   },
@@ -51,7 +51,7 @@ export const Mutation: MutationResolvers.Resolvers<ModuleContext<AccountsModuleC
     await injector.get(AccountsPassword).verifyEmail(token);
     return null;
   },
-  sendVerificationEmail: async (_: null, { email }, { injector }) => {
+  sendVerificationEmail: async (_, { email }, { injector }) => {
     await injector.get(AccountsPassword).sendVerificationEmail(email);
     return null;
   },

@@ -61,7 +61,7 @@ const start = async () => {
 
   const schema = makeExecutableSchema({
     typeDefs: mergeGraphQLSchemas([typeDefs, accountsGraphQL.typeDefs]),
-    resolvers: mergeResolvers([accountsGraphQL.resolvers, resolvers]) as any,
+    resolvers: mergeResolvers([accountsGraphQL.resolvers as any, resolvers]) as any,
     schemaDirectives: {
       ...accountsGraphQL.schemaDirectives,
     },
