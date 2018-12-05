@@ -1,8 +1,9 @@
 // tslint:disable-next-line
-import { ObjectID } from 'mongodb';
 import { randomBytes } from 'crypto';
-import { DatabaseTests } from './database-tests';
+import { ObjectID } from 'mongodb';
+
 import { Mongo } from '../src';
+import { DatabaseTests } from './database-tests';
 
 const databaseTests = new DatabaseTests();
 
@@ -102,8 +103,8 @@ describe('Mongo', () => {
       const ret = await databaseTests.database.findUserById(userId);
       expect(userId).toBeTruthy();
       expect(ret).toEqual({
-        _id: expect.any(ObjectID),
-        id: expect.any(ObjectID),
+        _id: expect.any(String),
+        id: expect.any(String),
         username: 'johndoe',
         emails: [
           {
