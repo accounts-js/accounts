@@ -2,10 +2,10 @@
   "private": true,
   "scripts": {
     "setup": "lerna bootstrap; yarn run link",
-    "start": "lerna exec -- yarn start",
+    "start": "lerna run start --parallel",
     "link": "lerna exec -- yarn link",
     "unlink": "lerna exec -- yarn unlink",
-    "clean": "lerna run clean; rm -rf node_modules; rm -rf packages/**/node_modules; rm -rf yarn.lock",
+    "clean": "lerna run clean; rm -rf node_modules; rm -rf packages/**/node_modules;",
     "clean:examples": "rm -rf examples/**/node_modules; rm -rf examples/**/yarn.lock",
     "compile": "lerna run compile",
     "lint": "tslint packages/*/{src,__tests__}/**/*.ts",
