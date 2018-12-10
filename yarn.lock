@@ -478,21 +478,21 @@
   resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.9.0.tgz#d07a54832757d2f2d1fc9891e5b0e3e3b4886c6a"
   integrity sha512-mkHar7AdyShUFJE6Mlke1tUbb+lPCK1EozZeAhCuRrhQ5aCCBAG6RxzNUYX1Q2jeGeyU0WRAtQu1oE/GoIsNXA==
 
-"@graphql-modules/core@0.2.15":
-  version "0.2.15"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.2.15.tgz#523a79d06472709043c2d08cae0a29c6e724a11c"
-  integrity sha512-lMbG/dWYBWVyxN6Vw5Hzogeb8TY9Q8eh2g9K1yn8kzc7uvVHzJUD2rLeJj4Y6RVBzkp7y27ElFkgyS8JHZZqtQ==
+"@graphql-modules/core@0.2.17":
+  version "0.2.17"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.2.17.tgz#7bcad837090b6a5b0ee1ccf87278771d70743d6b"
+  integrity sha512-ZTwrmVkUNtFDt7qfLTvqN+7QWJro/wOSCzEyBNtVl0/FZlsQcumYTT9SsXKxIh6yJbkY7X7oaF1+zpgptr8M5Q==
   dependencies:
-    "@graphql-modules/di" "0.2.15"
-    "@graphql-modules/epoxy" "0.2.15"
+    "@graphql-modules/di" "0.2.17"
+    "@graphql-modules/epoxy" "0.2.17"
     dependency-graph "0.7.2"
     graphql-tools "4.0.3"
     tslib "1.9.3"
 
-"@graphql-modules/di@0.2.15":
-  version "0.2.15"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.2.15.tgz#549b05b3826ac661db8f103570ed731c44b1b0aa"
-  integrity sha512-ifrP46FVENop/zsQ7+CJDC7Ngx5WNosNrpA9tCI16Uxwq7Gtk8CPtgz1IcOi5AwGRet2Zzf26krmn0X2HgeTlw==
+"@graphql-modules/di@0.2.17":
+  version "0.2.17"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.2.17.tgz#25c2c3fd0e4026863b4b4c68c55a45e35a307de9"
+  integrity sha512-+CWqZyALSyVkVLXrwEPJJdsEv9RDezZRv+d6gxVV4zD5NISsPWmxPvW2khmOybMyVRRyGkbVnEz3J+arkHyHaw==
   dependencies:
     tslib "1.9.3"
 
@@ -506,10 +506,10 @@
     graphql-tools "4.0.3"
     tslib "1.9.3"
 
-"@graphql-modules/epoxy@0.2.15":
-  version "0.2.15"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/epoxy/-/epoxy-0.2.15.tgz#0328172fbe9e404d9ea66342ea0e7f3d5d6f04f3"
-  integrity sha512-rLB3+MYBTqobU5c6VC8dTHHml/W2wwa/AhJ4rx3pPicYxzaxUu/Rm0HOGsJpDE3FcCGmNR7emBiCwRpsqehqLg==
+"@graphql-modules/epoxy@0.2.17":
+  version "0.2.17"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/epoxy/-/epoxy-0.2.17.tgz#f93fd64baa7328f0f69da7a2aa226b3c6e296e31"
+  integrity sha512-bPUubY9S5DQR1Dnc2jvOsi1geCYzPfnLJBZJTd4oKYIYI9gRaRnOHi94o4oCV6uoUxJAGeVYL0+IEDlE8imKCw==
   dependencies:
     "@types/deepmerge" "2.1.0"
     deepmerge "2.2.1"
