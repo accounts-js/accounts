@@ -808,9 +808,17 @@ describe('Mongo', () => {
   });
 
   describe('setUserDeactivated', () => {
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertUserIdToMongoObjectId: false,
+        idProvider: () => new ObjectId().toString(),
+      });
+      const userId = await mongoOptions.createUser(user);
+      await mongoOptions.setUserDeactivated(userId, true);
+    });
+
     it('should deactivate user', async () => {
       const userId = await databaseTests.database.createUser(user);
-      await delay(10);
       await databaseTests.database.setUserDeactivated(userId, true);
       const retUser = await databaseTests.database.findUserById(userId);
       expect(retUser!.deactivated).toBeTruthy();
