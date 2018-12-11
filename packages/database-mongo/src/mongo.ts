@@ -1,3 +1,4 @@
+// tslint:disable variable-name _id
 import {
   ConnectionInformations,
   CreateUser,
@@ -337,7 +338,6 @@ export class Mongo implements DatabaseInterface {
   }
 
   public async updateSession(sessionId: string, connection: ConnectionInformations): Promise<void> {
-    // tslint:disable-next-line variable-name
     const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
     await this.sessionCollection.updateOne(
       { _id },
@@ -352,7 +352,6 @@ export class Mongo implements DatabaseInterface {
   }
 
   public async invalidateSession(sessionId: string): Promise<void> {
-    // tslint:disable-next-line variable-name
     const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
     await this.sessionCollection.updateOne(
       { _id },
@@ -386,7 +385,6 @@ export class Mongo implements DatabaseInterface {
   }
 
   public async findSessionById(sessionId: string): Promise<Session | null> {
-    // tslint:disable-next-line variable-name
     const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
     const session = await this.sessionCollection.findOne({ _id });
     if (session) {
@@ -400,8 +398,9 @@ export class Mongo implements DatabaseInterface {
     email: string,
     token: string
   ): Promise<void> {
+    const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(userId) : userId;
     await this.collection.updateOne(
-      { _id: userId },
+      { _id },
       {
         $push: {
           'services.email.verificationTokens': {
@@ -420,8 +419,9 @@ export class Mongo implements DatabaseInterface {
     token: string,
     reason: string
   ): Promise<void> {
+    const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(userId) : userId;
     await this.collection.updateOne(
-      { _id: userId },
+      { _id },
       {
         $push: {
           'services.password.reset': {

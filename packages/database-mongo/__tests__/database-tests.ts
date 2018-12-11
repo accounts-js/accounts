@@ -45,5 +45,6 @@ runDatabaseTests(
   new DatabaseTests({
     convertUserIdToMongoObjectId: false,
     convertSessionIdToMongoObjectId: false,
+    idProvider: () => new mongodb.ObjectId().toString(),
   })
 );

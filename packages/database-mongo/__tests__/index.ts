@@ -1,6 +1,6 @@
 // tslint:disable-next-line
 import { randomBytes } from 'crypto';
-import { ObjectID } from 'mongodb';
+import { ObjectID, ObjectId } from 'mongodb';
 
 import { Mongo } from '../src';
 import { DatabaseTests } from './database-tests';
@@ -328,6 +328,7 @@ describe('Mongo', () => {
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
+        idProvider: () => new ObjectId().toString(),
       });
       const userId = await mongoOptions.createUser(user);
       await mongoOptions.addEmail(userId, 'hey', false);
@@ -366,6 +367,7 @@ describe('Mongo', () => {
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
+        idProvider: () => new ObjectId().toString(),
       });
       const userId = await mongoOptions.createUser(user);
       await mongoOptions.removeEmail(userId, 'hey');
