@@ -1,8 +1,9 @@
 // tslint:disable-next-line
-import { ObjectID } from 'mongodb';
 import { randomBytes } from 'crypto';
-import { DatabaseTests } from './database-tests';
+import { ObjectID, ObjectId } from 'mongodb';
+
 import { Mongo } from '../src';
+import { DatabaseTests } from './database-tests';
 
 const databaseTests = new DatabaseTests();
 
@@ -103,7 +104,7 @@ describe('Mongo', () => {
       expect(userId).toBeTruthy();
       expect(ret).toEqual({
         _id: expect.any(ObjectID),
-        id: expect.any(ObjectID),
+        id: expect.any(String),
         username: 'johndoe',
         emails: [
           {
@@ -327,6 +328,7 @@ describe('Mongo', () => {
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
+        idProvider: () => new ObjectId().toString(),
       });
       const userId = await mongoOptions.createUser(user);
       await mongoOptions.addEmail(userId, 'hey', false);
@@ -365,6 +367,7 @@ describe('Mongo', () => {
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
+        idProvider: () => new ObjectId().toString(),
       });
       const userId = await mongoOptions.createUser(user);
       await mongoOptions.removeEmail(userId, 'hey');
@@ -746,6 +749,15 @@ describe('Mongo', () => {
   });
 
   describe('addEmailVerificationToken', () => {
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertUserIdToMongoObjectId: false,
+        idProvider: () => new ObjectId().toString(),
+      });
+      const userId = await mongoOptions.createUser(user);
+      await mongoOptions.addEmailVerificationToken(userId, 'john@doe.com', 'token');
+    });
+
     it('should add a token', async () => {
       const userId = await databaseTests.database.createUser(user);
       await databaseTests.database.addEmailVerificationToken(userId, 'john@doe.com', 'token');
@@ -759,6 +771,15 @@ describe('Mongo', () => {
   });
 
   describe('addResetPasswordToken', () => {
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertUserIdToMongoObjectId: false,
+        idProvider: () => new ObjectId().toString(),
+      });
+      const userId = await mongoOptions.createUser(user);
+      await mongoOptions.addResetPasswordToken(userId, 'john@doe.com', 'token', 'reset');
+    });
+
     it('should add a token', async () => {
       const userId = await databaseTests.database.createUser(user);
       await databaseTests.database.addResetPasswordToken(userId, 'john@doe.com', 'token', 'reset');
@@ -787,9 +808,17 @@ describe('Mongo', () => {
   });
 
   describe('setUserDeactivated', () => {
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertUserIdToMongoObjectId: false,
+        idProvider: () => new ObjectId().toString(),
+      });
+      const userId = await mongoOptions.createUser(user);
+      await mongoOptions.setUserDeactivated(userId, true);
+    });
+
     it('should deactivate user', async () => {
       const userId = await databaseTests.database.createUser(user);
-      await delay(10);
       await databaseTests.database.setUserDeactivated(userId, true);
       const retUser = await databaseTests.database.findUserById(userId);
       expect(retUser!.deactivated).toBeTruthy();
