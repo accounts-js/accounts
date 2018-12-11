@@ -1,3 +1,4 @@
+// tslint:disable variable-name _id
 import {
   ConnectionInformations,
   CreateUser,
@@ -9,10 +10,6 @@ import { get, merge } from 'lodash';
 import { Collection, Db, ObjectID } from 'mongodb';
 
 import { AccountsMongoOptions, MongoUser } from './types';
-
-ObjectID.prototype.valueOf = function() {
-  return this.toString();
-};
 
 const toMongoID = (objectId: string | ObjectID) => {
   if (typeof objectId === 'string') {
@@ -94,14 +91,14 @@ export class Mongo implements DatabaseInterface {
       user._id = this.options.idProvider();
     }
     const ret = await this.collection.insertOne(user);
-    return ret.ops[0]._id;
+    return ret.ops[0]._id.toString();
   }
 
   public async findUserById(userId: string): Promise<User | null> {
     const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     const user = await this.collection.findOne({ _id: id });
     if (user) {
-      user.id = user._id;
+      user.id = user._id.toString();
     }
     return user;
   }
@@ -111,7 +108,7 @@ export class Mongo implements DatabaseInterface {
       'emails.address': email.toLowerCase(),
     });
     if (user) {
-      user.id = user._id;
+      user.id = user._id.toString();
     }
     return user;
   }
@@ -124,7 +121,7 @@ export class Mongo implements DatabaseInterface {
         };
     const user = await this.collection.findOne(filter);
     if (user) {
-      user.id = user._id;
+      user.id = user._id.toString();
     }
     return user;
   }
@@ -142,7 +139,7 @@ export class Mongo implements DatabaseInterface {
       'services.email.verificationTokens.token': token,
     });
     if (user) {
-      user.id = user._id;
+      user.id = user._id.toString();
     }
     return user;
   }
@@ -152,7 +149,7 @@ export class Mongo implements DatabaseInterface {
       'services.password.reset.token': token,
     });
     if (user) {
-      user.id = user._id;
+      user.id = user._id.toString();
     }
     return user;
   }
@@ -162,7 +159,7 @@ export class Mongo implements DatabaseInterface {
       [`services.${serviceName}.id`]: serviceId,
     });
     if (user) {
-      user.id = user._id;
+      user.id = user._id.toString();
     }
     return user;
   }
@@ -333,11 +330,10 @@ export class Mongo implements DatabaseInterface {
     }
 
     const ret = await this.sessionCollection.insertOne(session);
-    return ret.ops[0]._id;
+    return ret.ops[0]._id.toString();
   }
 
   public async updateSession(sessionId: string, connection: ConnectionInformations): Promise<void> {
-    // tslint:disable-next-line variable-name
     const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
     await this.sessionCollection.updateOne(
       { _id },
@@ -352,7 +348,6 @@ export class Mongo implements DatabaseInterface {
   }
 
   public async invalidateSession(sessionId: string): Promise<void> {
-    // tslint:disable-next-line variable-name
     const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
     await this.sessionCollection.updateOne(
       { _id },
@@ -380,17 +375,16 @@ export class Mongo implements DatabaseInterface {
   public async findSessionByToken(token: string): Promise<Session | null> {
     const session = await this.sessionCollection.findOne({ token });
     if (session) {
-      session.id = session._id;
+      session.id = session._id.toString();
     }
     return session;
   }
 
   public async findSessionById(sessionId: string): Promise<Session | null> {
-    // tslint:disable-next-line variable-name
     const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
     const session = await this.sessionCollection.findOne({ _id });
     if (session) {
-      session.id = session._id;
+      session.id = session._id.toString();
     }
     return session;
   }
@@ -400,8 +394,9 @@ export class Mongo implements DatabaseInterface {
     email: string,
     token: string
   ): Promise<void> {
+    const _id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     await this.collection.updateOne(
-      { _id: userId },
+      { _id },
       {
         $push: {
           'services.email.verificationTokens': {
@@ -420,8 +415,9 @@ export class Mongo implements DatabaseInterface {
     token: string,
     reason: string
   ): Promise<void> {
+    const _id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     await this.collection.updateOne(
-      { _id: userId },
+      { _id },
       {
         $push: {
           'services.password.reset': {

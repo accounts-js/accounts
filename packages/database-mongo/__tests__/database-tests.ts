@@ -27,7 +27,10 @@ export class DatabaseTests {
 
   public createConnection = async () => {
     const url = 'mongodb://localhost:27017';
-    this.client = await mongodb.MongoClient.connect(url);
+    this.client = await mongodb.MongoClient.connect(
+      url,
+      { useNewUrlParser: true }
+    );
     this.db = this.client.db('accounts-mongo-tests');
     this.database = new Mongo(this.db, this.options);
   };
@@ -45,5 +48,6 @@ runDatabaseTests(
   new DatabaseTests({
     convertUserIdToMongoObjectId: false,
     convertSessionIdToMongoObjectId: false,
+    idProvider: () => new mongodb.ObjectId().toString(),
   })
 );
