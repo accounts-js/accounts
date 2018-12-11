@@ -103,7 +103,7 @@ describe('Mongo', () => {
       const ret = await databaseTests.database.findUserById(userId);
       expect(userId).toBeTruthy();
       expect(ret).toEqual({
-        _id: expect.any(String),
+        _id: expect.any(ObjectID),
         id: expect.any(String),
         username: 'johndoe',
         emails: [
