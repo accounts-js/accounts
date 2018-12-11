@@ -749,6 +749,15 @@ describe('Mongo', () => {
   });
 
   describe('addEmailVerificationToken', () => {
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertUserIdToMongoObjectId: false,
+        idProvider: () => new ObjectId().toString(),
+      });
+      const userId = await mongoOptions.createUser(user);
+      await mongoOptions.addEmailVerificationToken(userId, 'john@doe.com', 'token');
+    });
+
     it('should add a token', async () => {
       const userId = await databaseTests.database.createUser(user);
       await databaseTests.database.addEmailVerificationToken(userId, 'john@doe.com', 'token');
@@ -762,6 +771,15 @@ describe('Mongo', () => {
   });
 
   describe('addResetPasswordToken', () => {
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertUserIdToMongoObjectId: false,
+        idProvider: () => new ObjectId().toString(),
+      });
+      const userId = await mongoOptions.createUser(user);
+      await mongoOptions.addResetPasswordToken(userId, 'john@doe.com', 'token', 'reset');
+    });
+
     it('should add a token', async () => {
       const userId = await databaseTests.database.createUser(user);
       await databaseTests.database.addResetPasswordToken(userId, 'john@doe.com', 'token', 'reset');

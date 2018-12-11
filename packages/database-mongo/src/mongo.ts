@@ -394,7 +394,7 @@ export class Mongo implements DatabaseInterface {
     email: string,
     token: string
   ): Promise<void> {
-    const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(userId) : userId;
+    const _id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     await this.collection.updateOne(
       { _id },
       {
@@ -415,7 +415,7 @@ export class Mongo implements DatabaseInterface {
     token: string,
     reason: string
   ): Promise<void> {
-    const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(userId) : userId;
+    const _id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     await this.collection.updateOne(
       { _id },
       {
