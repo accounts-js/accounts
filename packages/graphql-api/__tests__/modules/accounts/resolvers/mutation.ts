@@ -63,7 +63,7 @@ describe('accounts resolvers mutation', () => {
   describe('logout', () => {
     it('should not call logout if token is not present', async () => {
       await Mutation.logout!({}, {}, { injector } as any, {} as any);
-      expect(injector.get).toBeCalledWith(AccountsServer);
+      expect(injector.get).not.toBeCalledWith(AccountsServer);
       expect(accountsServerMock.logout).not.toBeCalled();
     });
 
