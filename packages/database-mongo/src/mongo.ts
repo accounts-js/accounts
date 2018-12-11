@@ -11,10 +11,6 @@ import { Collection, Db, ObjectID } from 'mongodb';
 
 import { AccountsMongoOptions, MongoUser } from './types';
 
-ObjectID.prototype.valueOf = function() {
-  return this.toString();
-};
-
 const toMongoID = (objectId: string | ObjectID) => {
   if (typeof objectId === 'string') {
     return new ObjectID(objectId);
