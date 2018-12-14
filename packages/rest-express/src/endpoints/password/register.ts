@@ -1,5 +1,6 @@
-import * as express from 'express';
 import { AccountsServer } from '@accounts/server';
+import * as express from 'express';
+
 import { sendError } from '../../utils/send-error';
 
 export const registerPassword = (accountsServer: AccountsServer) => async (
@@ -9,7 +10,7 @@ export const registerPassword = (accountsServer: AccountsServer) => async (
   try {
     const password: any = accountsServer.getServices().password;
     const userId = await password.createUser(req.body.user);
-    res.json(accountsServer.options.ambiguousErrorMessages ? null : userId);
+    res.json({ userId });
   } catch (err) {
     sendError(res, err);
   }

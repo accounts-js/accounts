@@ -18,7 +18,7 @@ Object.keys(servers).forEach(key => {
           email: user.email,
           password: user.password,
         });
-        expect(userId).toBeNull();
+        expect(userId).toBeTruthy();
       });
     });
 
