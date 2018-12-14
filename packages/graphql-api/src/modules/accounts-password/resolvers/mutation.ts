@@ -16,7 +16,7 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
   },
   createUser: async (_, { user }, { injector }) => {
     const userId = await injector.get(AccountsPassword).createUser(user as PasswordCreateUserType);
-    return injector.get(AccountsServer).options.ambiguousErrorMessages ? null : userId;
+    return userId;
   },
   twoFactorSet: async (_, { code, secret }, { user, injector }) => {
     // Make sure user is logged in
