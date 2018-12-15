@@ -47,6 +47,9 @@ export const accountsBoost = async (userOptions?: AccountsBoostOptions): Promise
 
       return new requiredPackage.Mongo(mongoClient, options);
     },
+    ['@accounts/prisma']: async (requiredPackage: any): Promise<any> => {
+      //
+    },
   };
 
   const storage = await Object.keys(databasePackages).reduce(

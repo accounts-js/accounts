@@ -1,0 +1,34 @@
+{
+  "name": "accounts-js-prisma-example",
+  "private": true,
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "scripts": {
+    "start:micro": "NODE_ENV=development nodemon -w src -x ts-node src/microservice/accounts-microservice.ts & sleep 2 && nodemon -w src -x ts-node src/microservice/app-server.ts",
+    "start:mono": "NODE_ENV=development nodemon -w src -x ts-node src/monolithic/app-server.ts",
+    "start-services": "docker-compose up -d",
+    "prestart": "yarn start-services",
+    "build": "tsc",
+    "test": "yarn build"
+  },
+  "dependencies": {
+    "@accounts/boost": "^0.7.0",
+    "@graphql-modules/epoxy": "^0.2.15",
+    "apollo-link-context": "^1.0.10",
+    "apollo-link-http": "^1.5.7",
+    "apollo-server": "^2.2.3",
+    "graphql": "^14.0.2",
+    "graphql-tools": "^4.0.3",
+    "lodash": "^4.17.11",
+    "node-fetch": "^2.3.0"
+  },
+  "devDependencies": {
+    "@accounts/tslint-config-accounts": "^0.0.9",
+    "@types/node": "10.12.10",
+    "nodemon": "1.18.7",
+    "ts-node": "7.0.1",
+    "tslint": "^5.11.0",
+    "typescript": "3.1.6"
+  }
+}

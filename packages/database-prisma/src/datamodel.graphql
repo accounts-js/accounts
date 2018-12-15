@@ -1,0 +1,62 @@
+type AccountsUser {
+  id: ID! @unique
+  username: String
+  sessions: [AccountsSession!]
+  services: [AccountsService!]
+  emails: [AccountsEmail!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deactivated: Boolean @default(value: false)
+  profile: Json
+}
+
+type AccountsService {
+ id: ID! @unique
+ createdAt: DateTime!
+ updatedAt: DateTime!
+ password: AccountsPasswordService
+}
+
+type AccountsPasswordService {
+  id: ID! @unique
+  bcrypt: String!
+  resetTokens: [AccountsPasswordResetToken]
+  createdAt: DateTime!
+  updatedAt: DateTime! 
+}
+
+type AccountsSession {
+  id: ID! @unique
+  userAgent: String
+  valid: Boolean!
+  token: String!
+  ip: String
+  extraData: Json
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type AccountsEmail {
+  id: ID! @unique
+  address: String!
+  verified: Boolean @default(value: false)
+  createdAt: DateTime!
+  updatedAt: DateTime! 
+}
+
+type AccountsEmailVerificationToken {
+  id: ID! @unique
+  token: String!
+  address: String!
+  createdAt: DateTime!
+  updatedAt: DateTime! 
+}
+
+type AccountsPasswordResetToken {
+  id: ID! @unique
+  token: String!
+  email: String
+  reason: String
+  createdAt: DateTime!
+  updatedAt: DateTime! 
+}

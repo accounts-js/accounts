@@ -1,0 +1,42 @@
+{
+  "name": "@accounts/prisma",
+  "version": "0.9.1",
+  "description": "Prisma adaptor for accounts",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib",
+    "start": "tsc --watch",
+    "precompile": "yarn clean",
+    "compile": "tsc",
+    "prepublishOnly": "yarn compile",
+    "testonly": "jest --runInBand --forceExit",
+    "test:watch": "jest --watch",
+    "coverage": "yarn testonly --coverage"
+  },
+  "files": [
+    "src",
+    "lib"
+  ],
+  "jest": {
+    "preset": "ts-jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/database-prisma"
+  },
+  "author": "Tim Mikeladze",
+  "license": "MIT",
+  "devDependencies": {
+    "@accounts/database-tests": "^0.9.1",
+    "@types/jest": "23.3.10",
+    "@types/lodash": "4.14.118",
+    "@types/node": "10.12.9",
+    "jest": "23.6.0"
+  },
+  "dependencies": {
+    "@accounts/types": "^0.9.0",
+    "graphql-request": "^1.8.2",
+    "lodash": "^4.17.11"
+  }
+}
