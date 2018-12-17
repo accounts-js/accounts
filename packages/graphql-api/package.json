@@ -9,7 +9,12 @@
     "start": "gql-gen && tsc --watch",
     "precompile": "yarn clean && gql-gen",
     "compile": "tsc",
+    "testonly": "jest",
+    "coverage": "yarn testonly --coverage",
     "prepublishOnly": "yarn compile"
+  },
+  "jest": {
+    "preset": "ts-jest"
   },
   "repository": {
     "type": "git",
