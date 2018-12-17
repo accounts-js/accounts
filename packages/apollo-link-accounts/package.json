@@ -21,10 +21,10 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/client": "^0.9.0",
-    "apollo-link": "1.2.4",
+    "apollo-link": "1.2.6",
     "rimraf": "2.6.2"
   },
   "dependencies": {
-    "apollo-link-context": "1.0.10"
+    "apollo-link-context": "1.0.12"
   }
 }
