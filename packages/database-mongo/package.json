@@ -30,7 +30,7 @@
   "devDependencies": {
     "@accounts/database-tests": "^0.9.1",
     "@types/jest": "23.3.10",
-    "@types/lodash": "4.14.118",
+    "@types/lodash": "4.14.119",
     "@types/mongodb": "3.1.15",
     "@types/node": "10.12.9",
     "jest": "23.6.0"
