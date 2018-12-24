@@ -46,7 +46,7 @@
     "@types/express": "4.16.0",
     "@types/jest": "23.3.10",
     "@types/lodash": "4.14.119",
-    "@types/node": "10.12.9",
+    "@types/node": "10.12.18",
     "@types/request-ip": "0.0.33",
     "jest": "23.6.0"
   },
