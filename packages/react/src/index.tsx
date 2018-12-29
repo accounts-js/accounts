@@ -317,6 +317,7 @@ export class Auth extends React.Component<any, any> {
       <AccountsContext.Consumer>
         {({ user }) => {
           if (user) {
+            // tslint:disable-next-line:no-shadowed-variable
             const Children = this.props.children as any;
             return <Children user={user} />;
           } else if (this.props.showSignIn) {
@@ -329,7 +330,7 @@ export class Auth extends React.Component<any, any> {
   }
 }
 
-export const withAuth = props => C => {
+export const withAuth = () => C => {
   return () => (
     <Auth>
       <C />

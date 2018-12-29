@@ -39,9 +39,9 @@ const client = new ApolloClient({
   ]),
 });
 
-let UserInfo: React.SFC<any> = ({ user }) => <div>{user && user.id}</div>;
+let UserInfo: any = ({ user }) => <div>{user.id}</div>;
 
-UserInfo = withAuth({})(UserInfo) as any;
+UserInfo = withAuth()(UserInfo) as any;
 
 const Home = () => (
   <div>
@@ -52,24 +52,22 @@ const Home = () => (
 );
 
 const MyAccount = () => (
-  <div>
-    <AccountsConsumer>{({ user }) => <div>ID: {user.id}</div>}</AccountsConsumer>
-  </div>
+  <AccountsConsumer>{({ user }) => <div>ID: {user.id} </div>}</AccountsConsumer>
 );
 
 const App = () => (
   <ApolloProvider client={client}>
-    <AccountsProvider accounts={accounts} components={accountsComponents}>
+    <AccountsProvider
+      accounts={accounts}
+      components={accountsComponents}
+      onSignIn={props => props.history.push('/')}
+    >
       <BrowserRouter>
         <>
-          <Route exact={true} path="/" component={Home} />
-          <Route
-            exact={true}
-            path="/sign-in"
-            render={props => <Accounts onSignIn={() => props.history.push('/')} />}
-          />
+          <Route exact={true} path="/" component={Home as any} />
+          <Route exact={true} path="/sign-in" component={Accounts} />
           <Auth>
-            <Route exact={true} path="/my-account" component={MyAccount} />
+            <Route exact={true} path="/my-account" component={MyAccount as any} />
           </Auth>
         </>
       </BrowserRouter>
