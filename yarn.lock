@@ -3448,12 +3448,12 @@ graphql-code-generator@0.15.2:
     request "2.88.0"
     valid-url "1.0.9"
 
-graphql-codegen-add@0.14.5:
-  version "0.14.5"
-  resolved "https://registry.yarnpkg.com/graphql-codegen-add/-/graphql-codegen-add-0.14.5.tgz#d27b1863302f96629be18ec69269a7249ebd78ae"
-  integrity sha512-W/jw5GU7lXb/3N9bVngxIB5QokdWQ78gMDSqPruwl23sJ0hGFKzJwgLAv8ZMzdsXjD838Z9VUZ378BudKFpmow==
+graphql-codegen-add@0.15.2:
+  version "0.15.2"
+  resolved "https://registry.yarnpkg.com/graphql-codegen-add/-/graphql-codegen-add-0.15.2.tgz#d447e57dc1db4b385882ce6307d047563ff63d2d"
+  integrity sha512-KWadUZpbTY/ssRI6rlRuugcSYc7UhcaXm9GoyfhRSdZgH1wIlpRv0kp0lKbo+JpXDcTykm8ggvb3Au9TdGQzhw==
   dependencies:
-    graphql-codegen-core "0.14.5"
+    graphql-codegen-core "0.15.2"
 
 graphql-codegen-core@0.14.5:
   version "0.14.5"
