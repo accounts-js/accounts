@@ -483,21 +483,21 @@
   resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.9.0.tgz#d07a54832757d2f2d1fc9891e5b0e3e3b4886c6a"
   integrity sha512-mkHar7AdyShUFJE6Mlke1tUbb+lPCK1EozZeAhCuRrhQ5aCCBAG6RxzNUYX1Q2jeGeyU0WRAtQu1oE/GoIsNXA==
 
-"@graphql-modules/core@0.2.17":
-  version "0.2.17"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.2.17.tgz#7bcad837090b6a5b0ee1ccf87278771d70743d6b"
-  integrity sha512-ZTwrmVkUNtFDt7qfLTvqN+7QWJro/wOSCzEyBNtVl0/FZlsQcumYTT9SsXKxIh6yJbkY7X7oaF1+zpgptr8M5Q==
+"@graphql-modules/core@0.2.18":
+  version "0.2.18"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.2.18.tgz#2deb86028731dcf6b3235453cc8482efb959eb1e"
+  integrity sha512-qM3UsrtT8P8BA2ZY7FQeaAbXHEg1cEbGXZ6c58auKPigwtq8sGwtDlj2IfWcUnwns4sKoBFNdZHm605odcD05w==
   dependencies:
-    "@graphql-modules/di" "0.2.17"
-    "@graphql-modules/epoxy" "0.2.17"
-    dependency-graph "0.7.2"
+    "@graphql-modules/di" "0.2.18"
+    "@graphql-modules/epoxy" "0.2.18"
+    dependency-graph "0.8.0"
     graphql-tools "4.0.3"
     tslib "1.9.3"
 
-"@graphql-modules/di@0.2.17":
-  version "0.2.17"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.2.17.tgz#25c2c3fd0e4026863b4b4c68c55a45e35a307de9"
-  integrity sha512-+CWqZyALSyVkVLXrwEPJJdsEv9RDezZRv+d6gxVV4zD5NISsPWmxPvW2khmOybMyVRRyGkbVnEz3J+arkHyHaw==
+"@graphql-modules/di@0.2.18":
+  version "0.2.18"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.2.18.tgz#0c454e5fe7d3a1630d29ba29cc73aceef5c032f7"
+  integrity sha512-Hox1qgm/g/rBoBmqydxGpv3TzhW2kN/D9N2kmzFVAX4/Iwb40xXfI5SNcmqSYilI6CLFBfLeiTQxFvekizRmLg==
   dependencies:
     tslib "1.9.3"
 
@@ -511,13 +511,12 @@
     graphql-tools "4.0.3"
     tslib "1.9.3"
 
-"@graphql-modules/epoxy@0.2.17":
-  version "0.2.17"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/epoxy/-/epoxy-0.2.17.tgz#f93fd64baa7328f0f69da7a2aa226b3c6e296e31"
-  integrity sha512-bPUubY9S5DQR1Dnc2jvOsi1geCYzPfnLJBZJTd4oKYIYI9gRaRnOHi94o4oCV6uoUxJAGeVYL0+IEDlE8imKCw==
+"@graphql-modules/epoxy@0.2.18":
+  version "0.2.18"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/epoxy/-/epoxy-0.2.18.tgz#58ea584e57e0573d804ee39e34ee2fad604ba63a"
+  integrity sha512-I5h45JKZXABJgKPnMIS7EwLDCIqvC53V/I1f35+uzo5a7Np4ItXvwYZXxNlTg+sbcSIhizA5q9XwwaMrOhOzqg==
   dependencies:
-    "@types/deepmerge" "2.1.0"
-    deepmerge "2.2.1"
+    deepmerge "3.0.0"
     graphql-tools "4.0.3"
     tslib "1.9.3"
 
@@ -2740,6 +2739,11 @@ deepmerge@2.2.1:
   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-2.2.1.tgz#5d3ff22a01c00f645405a2fbc17d0778a1801170"
   integrity sha512-R9hc1Xa/NOBi9WRVUWg19rl1UB7Tt4kuPd+thNJgFZoxXsTz7ncaPaeIm+40oSGuP33DfMb4sZt1QIGiJzC4EA==
 
+deepmerge@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-3.0.0.tgz#ca7903b34bfa1f8c2eab6779280775a411bfc6ba"
+  integrity sha512-a8z8bkgHsAML+uHLqmMS83HHlpy3PvZOOuiTQqaa3wu8ZVg3h0hqHk6aCsGdOnZV2XMM/FRimNGjUh0KCcmHBw==
+
 default-require-extensions@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/default-require-extensions/-/default-require-extensions-1.0.0.tgz#f37ea15d3e13ffd9b437d33e1a75b5fb97874cb8"
@@ -2803,10 +2807,10 @@ depd@~1.1.1, depd@~1.1.2:
   resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.2.tgz#9bcd52e14c097763e749b274c4346ed2e560b5a9"
   integrity sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=
 
-dependency-graph@0.7.2:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/dependency-graph/-/dependency-graph-0.7.2.tgz#91db9de6eb72699209d88aea4c1fd5221cac1c49"
-  integrity sha512-KqtH4/EZdtdfWX0p6MGP9jljvxSY6msy/pRUD4jgNwVpv3v1QmNLlsB3LDSSUg79BRVSn7jI1QPRtArGABovAQ==
+dependency-graph@0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/dependency-graph/-/dependency-graph-0.8.0.tgz#2da2d35ed852ecc24a5d6c17788ba57c3708755b"
+  integrity sha512-DCvzSq2UiMsuLnj/9AL484ummEgLtZIcRS7YvtO38QnpX3vqh9nJ8P+zhu8Ja+SmLrBHO2iDbva20jq38qvBkQ==
 
 deprecated-decorator@^0.1.6:
   version "0.1.6"
