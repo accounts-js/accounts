@@ -47,18 +47,20 @@ const Home = () => (
   <div>
     Home page
     <Link to="/sign-in">Sign in</Link>
-    <UserInfo />
+    <Auth>
+      <UserInfo />
+    </Auth>
   </div>
 );
 
 const MyAccount = () => (
-  <AccountsConsumer>{({ user }) => <div>ID: {user.id} </div>}</AccountsConsumer>
+  <AccountsConsumer>{({ user }) => user && <div>ID: {user.id} </div>}</AccountsConsumer>
 );
 
 const App = () => (
   <ApolloProvider client={client}>
     <AccountsProvider
-      accounts={accounts}
+      {...accounts}
       components={accountsComponents}
       onSignIn={props => props.history.push('/')}
     >
@@ -66,9 +68,7 @@ const App = () => (
         <>
           <Route exact={true} path="/" component={Home as any} />
           <Route exact={true} path="/sign-in" component={Accounts} />
-          <Auth>
-            <Route exact={true} path="/my-account" component={MyAccount as any} />
-          </Auth>
+          <Route exact={true} path="/my-account" component={MyAccount as any} />
         </>
       </BrowserRouter>
     </AccountsProvider>

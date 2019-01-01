@@ -3,7 +3,8 @@ import { AccountsClientPassword } from '@accounts/client-password';
 import { User } from '@accounts/types';
 import { ApolloClient } from 'apollo-client';
 import { identity, isEmpty, merge, pickBy, set, trim } from 'lodash';
-import React, { Children, Component } from 'react';
+import React, { Children, Component, ReactNode } from 'react';
+import { isFunction } from 'util';
 
 const isEmail = (email?: string) => {
   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -27,20 +28,16 @@ const formatError = error => {
   return error.replace('GraphQL error:', '').trim();
 };
 
-export interface Accounts {
-  apollo?: ApolloClient<any>;
-  client: AccountsClient;
-  link?: any;
-  password?: AccountsClientPassword;
-}
-
 export interface AccountsContext {
   labels: any;
   options: any;
   components: any;
   state: AccountsState;
   handlers: AccountsHandlers;
-  accounts: Accounts;
+  apollo?: ApolloClient<any>;
+  client: AccountsClient;
+  link?: any;
+  password?: AccountsClientPassword;
   user?: User;
 }
 
@@ -124,7 +121,8 @@ export class AccountsProvider extends React.Component<any, any> {
   private labels: {};
   private options: {};
   private components: {};
-  private accounts: Accounts;
+  private client: AccountsClient;
+  private password: AccountsClientPassword;
   private handlers: AccountsHandlers;
 
   constructor(props: AccountsContext) {
@@ -133,13 +131,24 @@ export class AccountsProvider extends React.Component<any, any> {
     this.labels = merge(defaultLabels, props.labels);
     this.options = merge(defaultOptions, props.options);
     this.components = merge(defaultComponents, props.components);
-    this.accounts = this.props.accounts;
+    this.client = this.props.client;
+    this.password = this.props.password;
+
     this.handlers = {
       handleChangeState: this.handleChangeState.bind(this),
       handleSignInClicked: this.handleSignInClicked.bind(this),
       handleClearErrors: this.handleClearErrors.bind(this),
       handleResetForm: this.handleResetForm.bind(this),
     };
+  }
+
+  public async componentDidMount() {
+    await this.client.refreshSession();
+    const user = await this.client.getUser();
+    if (user) {
+      this.handleChangeState('user', user);
+    }
+    debugger;
   }
 
   public handleChangeState(path, value) {
@@ -169,8 +178,6 @@ export class AccountsProvider extends React.Component<any, any> {
 
     const signIn = this.state.signIn;
 
-    const client = this.accounts.client;
-
     const email =
       !isEmpty(trim(signIn.fields.user.value)) &&
       isEmail(signIn.fields.user.value) &&
@@ -194,7 +201,7 @@ export class AccountsProvider extends React.Component<any, any> {
       return;
     }
 
-    client
+    this.client
       .loginWithService('password', {
         user: pickBy(
           {
@@ -206,15 +213,19 @@ export class AccountsProvider extends React.Component<any, any> {
         password,
       })
       .then(() => {
-        return client.getUser();
+        return this.client.getUser();
       })
       .then(user => {
         this.handleResetForm('signIn');
-        onSignIn(user);
+        if (onSignIn) {
+          onSignIn(user);
+        }
         return this.handleChangeState('user', user);
       })
       .catch(error => {
-        onSignInError(error);
+        if (onSignInError) {
+          onSignInError(error);
+        }
         this.handleChangeState('signIn.error', formatError(error.message));
       });
   }
@@ -223,7 +234,8 @@ export class AccountsProvider extends React.Component<any, any> {
     return (
       <AccountsContext.Provider
         value={{
-          accounts: this.accounts,
+          client: this.client,
+          password: this.password,
           state: this.state,
           labels: this.labels,
           options: this.options,
@@ -310,18 +322,27 @@ export class Accounts extends React.Component<any, any> {
   }
 }
 
+export interface AuthProps {
+  showSignIn?: boolean;
+  Component?: ReactNode;
+}
+
 // tslint:disable-next-line:max-classes-per-file
-export class Auth extends React.Component<any, any> {
+export class Auth extends React.Component<AuthProps, any> {
   public render() {
     return (
       <AccountsContext.Consumer>
-        {({ user }) => {
+        {({ user, ...otherProps }) => {
           if (user) {
             // tslint:disable-next-line:no-shadowed-variable
             const Children = this.props.children as any;
-            return <Children user={user} />;
+            return isFunction(this.props.children) ? (
+              <Children user={user} {...otherProps} />
+            ) : (
+              Children
+            );
           } else if (this.props.showSignIn) {
-            return <Accounts />;
+            return this.props.Component ? <this.props.Component /> : <Accounts />;
           }
           return null;
         }}
@@ -330,10 +351,6 @@ export class Auth extends React.Component<any, any> {
   }
 }
 
-export const withAuth = () => C => {
-  return () => (
-    <Auth>
-      <C />
-    </Auth>
-  );
+export const withAuth = (props?) => C => {
+  return () => <Auth {...props}>{otherProps => <C {...otherProps} />}</Auth>;
 };
