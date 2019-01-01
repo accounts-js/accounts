@@ -148,7 +148,6 @@ export class AccountsProvider extends React.Component<any, any> {
     if (user) {
       this.handleChangeState('user', user);
     }
-    debugger;
   }
 
   public handleChangeState(path, value) {
