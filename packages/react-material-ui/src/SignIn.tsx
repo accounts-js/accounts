@@ -55,25 +55,29 @@ export const Form = withStyles(
 ));
 
 export const Fields = withStyles(
-  (): any => ({
-    root: {
-      display: 'flex',
-      flexDirection: 'column',
-    },
-  })
+  theme =>
+    ({
+      root: {
+        display: 'flex',
+        flexDirection: 'column',
+      },
+    } as any)
 )(({ children, classes }: any) => (
   <AccountsConsumer>{() => <div className={classes.root}>{children}</div>}</AccountsConsumer>
 ));
 
-export const Actions = withStyles(theme => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: theme.spacing.unit * 2,
-    marginBottom: theme.spacing.unit * 2,
-  },
-}))(({ children, classes }: any) => (
+export const Actions = withStyles(
+  theme =>
+    ({
+      root: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: theme.spacing.unit * 2,
+        marginBottom: theme.spacing.unit * 2,
+      },
+    } as any)
+)(({ children, classes }: any) => (
   <AccountsConsumer>{() => <div className={classes.root}>{children}</div>}</AccountsConsumer>
 ));
 

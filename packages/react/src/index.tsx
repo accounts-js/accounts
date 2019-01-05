@@ -59,7 +59,7 @@ export interface Form {
 }
 
 export interface AccountsState {
-  view: string;
+  mode: string;
   serverOptionsLoaded: boolean;
   user?: User;
   signIn: Form;
@@ -84,7 +84,7 @@ export interface AccountsProviderProps {
 }
 
 const defaultState = {
-  view: 'signIn',
+  mode: 'signIn',
   serverOptionsLoaded: false,
   user: null,
   signIn: {
@@ -116,8 +116,7 @@ const defaultState = {
 };
 
 // tslint:disable-next-line:max-classes-per-file
-export class AccountsProvider extends React.Component<any, any> {
-  public state = defaultState;
+export class AccountsProvider extends React.Component<any, AccountsState> {
   private labels: {};
   private options: {};
   private components: {};
@@ -133,6 +132,8 @@ export class AccountsProvider extends React.Component<any, any> {
     this.components = merge(defaultComponents, props.components);
     this.client = this.props.client;
     this.password = this.props.password;
+
+    this.state = merge({}, defaultState, this.props.state);
 
     this.handlers = {
       handleChangeState: this.handleChangeState.bind(this),
@@ -256,7 +257,7 @@ export class Accounts extends React.Component<any, any> {
       <AccountsConsumer>
         {context => (
           <context.components.Wrapper>
-            {context.state.view === 'signIn' && (
+            {context.state.mode === 'signIn' && (
               <context.components.SignIn.Form>
                 <context.components.SignIn.Fields>
                   <context.components.SignIn.UserField
@@ -278,7 +279,7 @@ export class Accounts extends React.Component<any, any> {
                 <context.components.Error error={context.state.signIn.error} />
                 <context.components.SignIn.Actions>
                   <context.components.SignIn.SignUpButton
-                    onClick={() => context.handlers.handleChangeState('view', 'signIn')}
+                    onClick={() => context.handlers.handleChangeState('mode', 'signIn')}
                   />
                   <context.components.SignIn.SignInButton
                     onClick={() => context.handlers.handleSignInClicked(this.props)}
@@ -286,7 +287,7 @@ export class Accounts extends React.Component<any, any> {
                 </context.components.SignIn.Actions>
               </context.components.SignIn.Form>
             )}
-            {context.state.view === 'signUp' && (
+            {context.state.mode === 'signUp' && (
               <context.components.SignUp.Form>
                 <context.components.SignUp.Fields>
                   <context.components.SignUp.UserField
@@ -308,7 +309,7 @@ export class Accounts extends React.Component<any, any> {
                 <context.components.Error error={context.state.signIn.error} />
                 <context.components.SignUp.Actions>
                   <context.components.SignUp.SignInButton
-                    onClick={() => context.handlers.handleChangeState('view', 'signIn')}
+                    onClick={() => context.handlers.handleChangeState('mode', 'signIn')}
                   />
                   <context.components.SignUp.SignUpButton />
                 </context.components.SignUp.Actions>
@@ -324,6 +325,7 @@ export class Accounts extends React.Component<any, any> {
 export interface AuthProps {
   showSignIn?: boolean;
   Component?: ReactNode;
+  render?: ReactNode;
 }
 
 // tslint:disable-next-line:max-classes-per-file
@@ -334,14 +336,16 @@ export class Auth extends React.Component<AuthProps, any> {
         {({ user, ...otherProps }) => {
           if (user) {
             // tslint:disable-next-line:no-shadowed-variable
-            const Children = this.props.children as any;
-            return isFunction(this.props.children) ? (
-              <Children user={user} {...otherProps} />
+            const Component = this.props.render as any;
+            return isFunction(this.props.render) ? (
+              <Component user={user} {...otherProps} />
             ) : (
-              Children
+              this.props.children
             );
           } else if (this.props.showSignIn) {
-            return this.props.Component ? <this.props.Component /> : <Accounts />;
+            // tslint:disable-next-line:no-shadowed-variable
+            const Component = this.props.Component as any;
+            return this.props.Component ? <Component /> : <Accounts />;
           }
           return null;
         }}
