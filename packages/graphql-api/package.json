@@ -37,7 +37,7 @@
     "graphql-codegen-add": "0.15.2",
     "graphql-codegen-typescript-common": "0.15.2",
     "graphql-codegen-typescript-resolvers": "0.15.2",
-    "graphql-codegen-typescript-server": "0.14.5",
+    "graphql-codegen-typescript-server": "0.15.2",
     "graphql-tools": "4.0.3",
     "lodash": "4.17.11",
     "nock": "10.0.2",
