@@ -29,7 +29,7 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/database-tests": "^0.9.1",
-    "@types/jest": "23.3.10",
+    "@types/jest": "23.3.12",
     "@types/lodash": "4.14.119",
     "@types/mongodb": "3.1.18",
     "@types/node": "10.12.18",
