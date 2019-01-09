@@ -28,7 +28,7 @@
     "@types/node": "10.12.18",
     "@types/node-fetch": "2.1.4",
     "jest": "23.6.0",
-    "jest-localstorage-mock": "2.3.0"
+    "jest-localstorage-mock": "2.4.0"
   },
   "dependencies": {
     "@accounts/client": "^0.9.0",
