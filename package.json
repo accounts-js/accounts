@@ -69,7 +69,7 @@
     "prettier": "1.15.3",
     "ts-jest": "23.10.5",
     "tslint": "5.12.0",
-    "typedoc": "0.13.0",
+    "typedoc": "0.14.0",
     "typedoc-plugin-docusaurus": "1.0.14",
     "typescript": "3.2.2"
   },
