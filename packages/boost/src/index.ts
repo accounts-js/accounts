@@ -57,7 +57,7 @@ export const accountsBoost = async (userOptions?: AccountsBoostOptions): Promise
       }
       return res;
     },
-    Promise.resolve([])
+    Promise.resolve<any>([])
   );
 
   if (!storage) {
