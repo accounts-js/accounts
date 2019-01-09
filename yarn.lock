@@ -577,10 +577,12 @@
   resolved "https://registry.yarnpkg.com/@types/shortid/-/shortid-0.0.29.tgz#8093ee0416a6e2bf2aa6338109114b3fbffa0e9b"
   integrity sha1-gJPuBBam4r8qpjOBCRFLP7/6Dps=
 
-"@types/speakeasy@2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@types/speakeasy/-/speakeasy-2.0.2.tgz#153ec3636eea0562209b0a2f1fdf8b479286919b"
-  integrity sha512-h8KW3wSd3/l4oKRGYPxExCaos5VmjcnwDG3RK25tfcoWQR9iLmM9UbwvF1Pd+UT5aY1Z3LdQGt4xU0u9Zk/C2Q==
+"@types/speakeasy@2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@types/speakeasy/-/speakeasy-2.0.3.tgz#02dc0788b083fe9edaa790fa3958edba43491d87"
+  integrity sha512-lDc49Aec4WnQPRhW3n90ct14CH0Zyrj48RGMK1SSQP6BOf8HamWg+PG9uj1DVnaa6t+lhQU1j1lhGA7d9baxWw==
+  dependencies:
+    "@types/node" "*"
 
 "@types/tough-cookie@*":
   version "2.3.4"
