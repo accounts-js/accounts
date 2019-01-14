@@ -51,7 +51,7 @@
     "express": "4.16.4",
     "graphql": "14.0.2",
     "lodash": "4.17.11",
-    "mongoose": "5.4.2",
+    "mongoose": "5.4.3",
     "node-fetch": "2.3.0"
   }
 }
