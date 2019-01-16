@@ -3,57 +3,57 @@
 
 
 "@accounts/database-manager@file:../../packages/database-manager":
-  version "0.7.0"
+  version "0.9.2"
   dependencies:
-    "@accounts/types" "^0.7.0"
+    "@accounts/types" "^0.9.2"
 
 "@accounts/graphql-api@file:../../packages/graphql-api":
-  version "0.8.0"
+  version "0.9.2"
   dependencies:
-    "@accounts/password" "^0.8.0"
-    "@accounts/server" "^0.7.0"
-    "@accounts/types" "^0.7.0"
+    "@accounts/password" "^0.9.2"
+    "@accounts/server" "^0.9.2"
+    "@accounts/types" "^0.9.2"
     "@types/request-ip" "0.0.33"
     graphql-tag "^2.10.0"
     request-ip "2.1.3"
 
 "@accounts/mongo@file:../../packages/database-mongo":
-  version "0.8.0"
+  version "0.9.2"
   dependencies:
-    "@accounts/types" "^0.7.0"
+    "@accounts/types" "^0.9.2"
     lodash "^4.17.11"
     mongodb "^3.1.10"
 
-"@accounts/password@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@accounts/password/-/password-0.8.0.tgz#1f7d449eefc6d17c5b490a025e371f069256bbe8"
-  integrity sha512-IOp75NhBoxIgdHT+jY5ciVp6oLCr+lHZrHhQkwXtAd8htmTosfVRINnyZOkowtYWgTEqJW1xSmB+B8Jqh+0wlg==
+"@accounts/password@^0.9.2":
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/@accounts/password/-/password-0.9.2.tgz#59799af4523957b222699318002333ca18be7f95"
+  integrity sha512-YbALL9B+gDNY7mt60LuRegdN366LcNuejZojcV+798LNHmcVrOMqSbBiOzreoji1pyHm5pRPCUlxWyLK7LIgGw==
   dependencies:
-    "@accounts/two-factor" "^0.7.0"
+    "@accounts/two-factor" "^0.9.2"
     bcryptjs "^2.4.3"
     lodash "^4.17.11"
 
 "@accounts/password@file:../../packages/password":
-  version "0.8.0"
+  version "0.9.2"
   dependencies:
-    "@accounts/two-factor" "^0.7.0"
+    "@accounts/two-factor" "^0.9.2"
     bcryptjs "^2.4.3"
     lodash "^4.17.11"
 
 "@accounts/rest-express@file:../../packages/rest-express":
-  version "0.8.0"
+  version "0.9.2"
   dependencies:
-    "@accounts/types" "^0.7.0"
+    "@accounts/types" "^0.9.2"
     express "^4.16.4"
     lodash "^4.17.11"
     request-ip "^2.1.3"
 
-"@accounts/server@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@accounts/server/-/server-0.7.0.tgz#e72021bb8915b327c223fc65cb5d207012ce679e"
-  integrity sha512-7biqfgwLn3JJsK3lbUX9El2XDHw7vtCFl3WmqE/vnly1I1vP14i36ej/0JzmtAhm66OmmsDw+HaBS5MVrBX7DA==
+"@accounts/server@^0.9.2":
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/@accounts/server/-/server-0.9.2.tgz#18acc299890d9e569c87ab22ad41f4686661b474"
+  integrity sha512-plXLbDWVrL8Sl+UrAMiADCYpxndYAlWFRt05C1T0CB3ybTV1RudpcfxTqmmY6qIGRn9JMG2zzyzg3xCEH+UN6Q==
   dependencies:
-    "@accounts/types" "^0.7.0"
+    "@accounts/types" "^0.9.2"
     "@types/jsonwebtoken" "8.3.0"
     emittery "0.4.1"
     jsonwebtoken "8.4.0"
@@ -61,30 +61,30 @@
     lodash "4.17.11"
 
 "@accounts/server@file:../../packages/server":
-  version "0.7.0"
+  version "0.9.2"
   dependencies:
-    "@accounts/types" "^0.7.0"
+    "@accounts/types" "^0.9.2"
     "@types/jsonwebtoken" "8.3.0"
     emittery "0.4.1"
     jsonwebtoken "8.4.0"
     jwt-decode "2.2.0"
     lodash "4.17.11"
 
-"@accounts/two-factor@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@accounts/two-factor/-/two-factor-0.7.0.tgz#90b3909f91044fb129cf676439ef85c2a017cab3"
-  integrity sha512-L45efS9+U5Bk6ZEvaTpn5ik+exGjxU4iH8bzVKg8s7cqHI9onxpF3Bb9tNKZ0BkbV+C7tGtCzlekviETEIgg9g==
+"@accounts/two-factor@^0.9.2":
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/@accounts/two-factor/-/two-factor-0.9.2.tgz#b441e30583ef52017b198ab6fe93d98ac6936195"
+  integrity sha512-AbtAoVtGsgK4HqooJrxvjZvy3LZNsZqRtSVASq+caK/po5BGbAyDmMmiOSk0R0vBQMILlTu2SgnH+OG5Q+0qfg==
   dependencies:
-    "@accounts/types" "^0.7.0"
-    "@types/lodash" "^4.14.118"
+    "@accounts/types" "^0.9.2"
+    "@types/lodash" "^4.14.119"
     "@types/speakeasy" "2.0.2"
     lodash "^4.17.11"
     speakeasy "^2.0.0"
 
-"@accounts/types@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@accounts/types/-/types-0.7.0.tgz#582ad884b64c42f0be2b8ce63a5d19724f0bfdc7"
-  integrity sha512-RqFRgfbjREScmgw89qJ59NfMj+y09sLlSOaNOHzI722JbyG644vw/Qqk2di09Cg3e8tVzHBBxPDovueqiQttPA==
+"@accounts/types@^0.9.2":
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/@accounts/types/-/types-0.9.2.tgz#ce0709604a767cb3d40b7c994df1b3930734445b"
+  integrity sha512-SiVMFyePDZuDOQhuCNcR/fPXx9Qe+rPMAjm8m/Yl0xLWBMwrFH9mRRLdmuMw6OdPLgP81gX9+1lZ/fj+zCXtTQ==
 
 "@babel/runtime@^7.0.0-beta.40":
   version "7.0.0-beta.51"
@@ -246,10 +246,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/lodash@^4.14.118":
-  version "4.14.118"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.118.tgz#247bab39bfcc6d910d4927c6e06cbc70ec376f27"
-  integrity sha512-iiJbKLZbhSa6FYRip/9ZDX6HXhayXLDGY2Fqws9cOkEQ6XeKfaxB0sC541mowZJueYyMnVUmmG+al5/4fCDrgw==
+"@types/lodash@^4.14.119":
+  version "4.14.119"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.119.tgz#be847e5f4bc3e35e46d041c394ead8b603ad8b39"
+  integrity sha512-Z3TNyBL8Vd/M9D9Ms2S3LmFq2sSMzahodD6rCS9V2N44HUMINb75jNkSuwAx7eo2ufqTdfOdtGQpNbieUjPQmw==
 
 "@types/long@^3.0.32":
   version "3.0.32"
