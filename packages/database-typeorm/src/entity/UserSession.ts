@@ -32,10 +32,10 @@ export class UserSession {
   public extra?: object;
 
   @CreateDateColumn()
-  public createdAt!: Date;
+  public createdAt!: string;
 
   @UpdateDateColumn()
-  public updatedAt!: Date;
+  public updatedAt!: string;
 
   public userId!: string;
 }

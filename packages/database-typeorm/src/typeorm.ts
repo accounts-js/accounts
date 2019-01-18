@@ -20,19 +20,31 @@ export class Typeorm implements DatabaseInterface {
     this.sessionRepository = getRepository(UserSession);
   }
 
-  public async findUserByEmail(email: string): Promise<User | null | undefined> {
-    return this.userRepository.findOne({
+  public async findUserByEmail(email: string): Promise<User | null> {
+    const user = await this.userRepository.findOne({
       where: { email },
     });
+
+    if (user) {
+      return user;
+    }
+
+    return null;
   }
 
-  public async findUserByUsername(username: string): Promise<User | null | undefined> {
-    return this.userRepository.findOne({
+  public async findUserByUsername(username: string): Promise<User | null> {
+    const user = await this.userRepository.findOne({
       where: { username },
     });
+
+    if (user) {
+      return user;
+    }
+
+    return null;
   }
 
-  public async findUserById(userId: string): Promise<User | null | undefined> {
+  public async findUserById(userId: string): Promise<User | null> {
     const user = await this.userRepository.findOne(userId);
     if (!user) {
       throw new Error('User not found');
@@ -40,28 +52,34 @@ export class Typeorm implements DatabaseInterface {
     return user;
   }
 
-  public async findUserByResetPasswordToken(token: string): Promise<User | null | undefined> {
+  public async findUserByResetPasswordToken(token: string): Promise<User | null> {
     const service = await this.serviceRepository.findOne({
       where: {
         name: 'password.reset',
         token,
       },
     });
+
     if (service) {
       return this.findUserById(service.userId);
     }
+
+    return null;
   }
 
-  public async findUserByEmailVerificationToken(token: string): Promise<User | null | undefined> {
+  public async findUserByEmailVerificationToken(token: string): Promise<User | null> {
     const service = await this.serviceRepository.findOne({
       where: {
         name: 'email.verification',
         token,
       },
     });
+
     if (service) {
       return this.findUserById(service.userId);
     }
+
+    return null;
   }
 
   public async createUser(createUser: CreateUser): Promise<string> {
@@ -111,10 +129,7 @@ export class Typeorm implements DatabaseInterface {
     return profile;
   }
 
-  public async findUserByServiceId(
-    serviceName: string,
-    serviceId: string
-  ): Promise<User | undefined> {
+  public async findUserByServiceId(serviceName: string, serviceId: string): Promise<User | null> {
     const service = await this.serviceRepository.findOne({
       name: serviceName,
       id: serviceId,
@@ -123,16 +138,20 @@ export class Typeorm implements DatabaseInterface {
     if (service) {
       return service.user;
     }
+
+    return null;
   }
 
-  public async getService(
-    userId: string,
-    serviceName: string
-  ): Promise<UserService | null | undefined> {
+  public async getService(userId: string, serviceName: string): Promise<UserService | null> {
     const user = await this.findUserById(userId);
     if (user) {
-      return user.allServices.find(service => service.name === serviceName);
+      const service = user.allServices.find(s => s.name === serviceName);
+      if (service) {
+        return service;
+      }
     }
+
+    return null;
   }
 
   public async setService(
@@ -170,11 +189,12 @@ export class Typeorm implements DatabaseInterface {
     }
   }
 
-  public async findPasswordHash(userId: string): Promise<string | null | undefined> {
+  public async findPasswordHash(userId: string): Promise<string | null> {
     const service = await this.getService(userId, 'password');
     if (service) {
       return service.options.bcrypt;
     }
+    return null;
   }
 
   public async setPassword(userId: string, newPassword: string): Promise<void> {
@@ -273,8 +293,14 @@ export class Typeorm implements DatabaseInterface {
     }
   }
 
-  public findSessionById(sessionId: string): Promise<Session | null> {
-    return this.sessionRepository.findOne(sessionId) as Promise<ISession>;
+  public async findSessionById(sessionId: string): Promise<UserSession | null> {
+    const session = await this.sessionRepository.findOne(sessionId);
+
+    if (session) {
+      return session;
+    }
+
+    return null;
   }
 
   public findSessionByToken(token: string): Promise<ISession | null> {
@@ -286,7 +312,7 @@ export class Typeorm implements DatabaseInterface {
     token: string,
     connection: ConnectionInformations,
     extra?: object
-  ): Promise<string | undefined> {
+  ): Promise<string> {
     const user = await this.findUserById(userId);
     if (user) {
       const session = new UserSession();
@@ -302,19 +328,25 @@ export class Typeorm implements DatabaseInterface {
 
       return session.id;
     }
+
+    return '';
   }
 
   public async updateSession(sessionId: string, connection: ConnectionInformations): Promise<void> {
     const session = await this.findSessionById(sessionId);
-    session.userAgent = connection.userAgent;
-    session.ip = connection.ip;
-    await this.sessionRepository.save(session);
+    if (session) {
+      session.userAgent = connection.userAgent;
+      session.ip = connection.ip;
+      await this.sessionRepository.save(session);
+    }
   }
 
   public async invalidateSession(sessionId: string): Promise<void> {
     const session = await this.findSessionById(sessionId);
-    session.valid = false;
-    await this.sessionRepository.save(session);
+    if (session) {
+      session.valid = false;
+      await this.sessionRepository.save(session);
+    }
   }
 
   public async invalidateAllSessions(userId: string): Promise<void> {
