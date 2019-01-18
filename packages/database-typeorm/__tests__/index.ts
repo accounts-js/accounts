@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { Typeorm } from '../src/typeorm';
 
 describe('Typeorm', () => {
