@@ -60,7 +60,7 @@ export class Typeorm implements DatabaseInterface {
       },
     });
     if (service) {
-      return await this.findUserById(service.userId);
+      return this.findUserById(service.userId);
     }
   }
 
