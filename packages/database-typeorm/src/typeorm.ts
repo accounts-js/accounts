@@ -20,19 +20,19 @@ export class Typeorm implements DatabaseInterface {
     this.sessionRepository = getRepository(UserSession);
   }
 
-  public async findUserByEmail(email: string): Promise<User | undefined> {
+  public async findUserByEmail(email: string): Promise<User | null | undefined> {
     return this.userRepository.findOne({
       where: { email },
     });
   }
 
-  public async findUserByUsername(username: string): Promise<User | undefined> {
+  public async findUserByUsername(username: string): Promise<User | null | undefined> {
     return this.userRepository.findOne({
       where: { username },
     });
   }
 
-  public async findUserById(userId: string): Promise<User | undefined> {
+  public async findUserById(userId: string): Promise<User | null | undefined> {
     const user = await this.userRepository.findOne(userId);
     if (!user) {
       throw new Error('User not found');
@@ -40,7 +40,7 @@ export class Typeorm implements DatabaseInterface {
     return user;
   }
 
-  public async findUserByResetPasswordToken(token: string): Promise<User | undefined> {
+  public async findUserByResetPasswordToken(token: string): Promise<User | null | undefined> {
     const service = await this.serviceRepository.findOne({
       where: {
         name: 'password.reset',
@@ -52,7 +52,7 @@ export class Typeorm implements DatabaseInterface {
     }
   }
 
-  public async findUserByEmailVerificationToken(token: string): Promise<User | undefined> {
+  public async findUserByEmailVerificationToken(token: string): Promise<User | null | undefined> {
     const service = await this.serviceRepository.findOne({
       where: {
         name: 'email.verification',
@@ -125,7 +125,10 @@ export class Typeorm implements DatabaseInterface {
     }
   }
 
-  public async getService(userId: string, serviceName: string): Promise<UserService | undefined> {
+  public async getService(
+    userId: string,
+    serviceName: string
+  ): Promise<UserService | null | undefined> {
     const user = await this.findUserById(userId);
     if (user) {
       return user.allServices.find(service => service.name === serviceName);
@@ -167,7 +170,7 @@ export class Typeorm implements DatabaseInterface {
     }
   }
 
-  public async findPasswordHash(userId: string): Promise<string | undefined> {
+  public async findPasswordHash(userId: string): Promise<string | null | undefined> {
     const service = await this.getService(userId, 'password');
     if (service) {
       return service.options.bcrypt;
