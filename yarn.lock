@@ -491,10 +491,10 @@
     "@types/bson" "*"
     "@types/node" "*"
 
-"@types/mongodb@3.1.18":
-  version "3.1.18"
-  resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.1.18.tgz#24e847c15155226895ec9c79660ec0907005deff"
-  integrity sha512-8m8yvrDagesNNJdOIMk+g0b5z/sW48FwNp4GS1tRcHMKfQ/o40WsFXOXSfYY7y4xkutPFGQKGb4/GpzGFhpnqw==
+"@types/mongodb@3.1.19":
+  version "3.1.19"
+  resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.1.19.tgz#40c4310986888975771857810aa47fd3ea8e1acf"
+  integrity sha512-H54hQEovAhyLrIZOhPNfGyCCDoTqKsjb8GQBy8nptJqfxrYCp5WVcPJf9v0kfTPR72xOhaz9+WcYxOXWwEg1Vg==
   dependencies:
     "@types/bson" "*"
     "@types/node" "*"
