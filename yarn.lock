@@ -419,10 +419,10 @@
   resolved "https://registry.yarnpkg.com/@types/highlight.js/-/highlight.js-9.12.3.tgz#b672cfaac25cbbc634a0fd92c515f66faa18dbca"
   integrity sha512-pGF/zvYOACZ/gLGWdQH8zSwteQS1epp68yRcVLJMgUck/MjEn/FBYmPub9pXT8C1e4a8YZfHo1CKyV8q1vKUnQ==
 
-"@types/ioredis@4.0.4":
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-4.0.4.tgz#c0a809064c05e4c2663803128d46042e73c92558"
-  integrity sha512-QdJTMFrmKkphjoGIxItTMhP++8/6INLbgSIxB8kd9N+3OuiuiaZ2knt+OR4gFQrloac/ctwaQA1PCzISmD9afQ==
+"@types/ioredis@4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-4.0.5.tgz#248b2a9852de229d9e89ec757cd03dc39b884e21"
+  integrity sha512-ZjmiEJyrNrOBczf+eyrb4ae8toBnSgjgDZ38AJMPRTIQkuqyAEcKCBcyVrhoQue+F1UFcA7CXckMi41bjxUEtQ==
   dependencies:
     "@types/node" "*"
 
