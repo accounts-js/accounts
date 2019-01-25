@@ -11,7 +11,7 @@ import fetch from 'node-fetch';
 
 import { ServerTestInterface } from '.';
 import { DatabaseTestInterface } from '../databases';
-import { DatabaseTest } from '../databases/typeorm';
+import { DatabaseTest } from '../databases/mongo';
 
 // Server
 // Client

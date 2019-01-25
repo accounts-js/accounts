@@ -20,16 +20,16 @@ yarn add @accounts/typeorm
 ```javascript
 import { createConnection } from 'typeorm';
 import { AccountsServer } from '@accounts/server';
-import { Typeorm } from '@accounts/typeorm';
+import { AccountsTypeorm, entities } from '@accounts/typeorm';
 
-createConnection().then(() => {
+createConnection({
+  type: 'postgres',
+  url: 'postgres://user@localhost:5432/dbname',
+  entities,
+}).then(() => {
   const accountsTypeorm = new Typeorm();
   const accountsServer = new AccountsServer({ db: accountsTypeorm });
 });
 ```
 
 ## Options
-
-TODO: Allow your own entities.
-
-TODO: Provide models so they can be extended by the user.

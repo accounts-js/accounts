@@ -5,7 +5,6 @@ import { UserEmail } from '../src/entity/UserEmail';
 import { UserService } from '../src/entity/UserService';
 import { UserSession } from '../src/entity/UserSession';
 
-const connectionName = 'typeorm-accounts-js-test';
 const database = 'accounts-js-tests-e2e';
 
 export class DatabaseTests {
@@ -32,7 +31,6 @@ export class DatabaseTests {
 
   public createConnection = async () => {
     this.connection = await createConnection({
-      name: connectionName,
       type: 'postgres',
       host: 'localhost',
       port: 5432,
@@ -44,7 +42,7 @@ export class DatabaseTests {
     });
 
     this.database = new AccountsTypeorm({
-      connectionName,
+      connection: this.connection,
       ...this.options,
     });
   };

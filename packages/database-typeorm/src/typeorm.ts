@@ -15,23 +15,43 @@ const defaultOptions = {
 
 export class AccountsTypeorm implements DatabaseInterface {
   private options: AccountsTypeormOptions & typeof defaultOptions;
-  private userRepository: Repository<User>;
-  private emailRepository: Repository<UserEmail>;
-  private serviceRepository: Repository<UserService>;
-  private sessionRepository: Repository<UserSession>;
+  private userRepository: Repository<User> = null as any;
+  private emailRepository: Repository<UserEmail> = null as any;
+  private serviceRepository: Repository<UserService> = null as any;
+  private sessionRepository: Repository<UserSession> = null as any;
 
   constructor(options?: AccountsTypeormOptions) {
     this.options = { ...defaultOptions, ...options };
-    this.userRepository = getRepository(this.options.userEntity, this.options.connectionName);
-    this.emailRepository = getRepository(this.options.userEmailEntity, this.options.connectionName);
-    this.serviceRepository = getRepository(
-      this.options.userServiceEntity,
-      this.options.connectionName
-    );
-    this.sessionRepository = getRepository(
-      this.options.userSessionEntity,
-      this.options.connectionName
-    );
+
+    const {
+      connection,
+      connectionName,
+      userEntity,
+      userEmailEntity,
+      userServiceEntity,
+      userSessionEntity,
+    } = this.options;
+
+    const setRepositories = () => {
+      if (connection) {
+        this.userRepository = connection.getRepository(userEntity);
+        this.emailRepository = connection.getRepository(userEmailEntity);
+        this.serviceRepository = connection.getRepository(userServiceEntity);
+        this.sessionRepository = connection.getRepository(userSessionEntity);
+      } else {
+        this.userRepository = getRepository(userEntity, connectionName);
+        this.emailRepository = getRepository(userEmailEntity, connectionName);
+        this.serviceRepository = getRepository(userServiceEntity, connectionName);
+        this.sessionRepository = getRepository(userSessionEntity, connectionName);
+      }
+    };
+
+    // direct or lazy support
+    if (connection && !connection.isConnected) {
+      connection.connect().then(setRepositories);
+    } else {
+      setRepositories();
+    }
   }
 
   public async findUserByEmail(email: string): Promise<User | null> {

@@ -15,7 +15,7 @@ import { AccountsClientPassword } from '@accounts/client-password';
 import { RestClient } from '@accounts/rest-client';
 
 import { DatabaseTestInterface } from '../databases';
-import { DatabaseTest } from '../databases/typeorm';
+import { DatabaseTest } from '../databases/mongo';
 import { ServerTestInterface } from './index';
 
 (global as any).fetch = fetch;
