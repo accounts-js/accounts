@@ -28,7 +28,7 @@
     "request-promise": "^4.2.1"
   },
   "devDependencies": {
-    "@types/jest": "23.3.12",
+    "@types/jest": "23.3.13",
     "@types/node": "10.12.18",
     "@types/request-promise": "4.1.42",
     "jest": "23.6.0"
