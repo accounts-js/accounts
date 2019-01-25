@@ -143,6 +143,11 @@ Please change it with a strong random token.`);
       ip,
       userAgent,
     });
+
+    if (!sessionId) {
+      throw new Error('Could not create session');
+    }
+
     const { accessToken, refreshToken } = this.createTokens({
       token,
       userId: user.id,
@@ -234,6 +239,11 @@ Please change it with a strong random token.`);
         },
         { impersonatorUserId: user.id }
       );
+
+      if (!newSessionId) {
+        throw new Error('Could not create session');
+      }
+
       const impersonationTokens = this.createTokens({
         token: newSessionId,
         isImpersonated: true,

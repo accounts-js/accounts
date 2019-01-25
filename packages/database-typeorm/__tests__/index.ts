@@ -523,8 +523,10 @@ describe('AccountsTypeorm', () => {
       await databaseTests.database.invalidateAllSessions(userId);
       const session1 = await databaseTests.database.findSessionById(sessionId1!);
       const session2 = await databaseTests.database.findSessionById(sessionId2!);
-      expect(session1).toBeNull();
-      expect(session2).toBeNull();
+      expect(session1!.valid).toEqual(false);
+      expect(session1!.createdAt).not.toEqual(session1!.updatedAt);
+      expect(session2!.valid).toEqual(false);
+      expect(session2!.createdAt).not.toEqual(session2!.updatedAt);
     });
   });
 

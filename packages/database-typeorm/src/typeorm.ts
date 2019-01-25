@@ -364,22 +364,18 @@ export class AccountsTypeorm implements DatabaseInterface {
     extra?: object
   ) {
     const user = await this.findUserById(userId);
-    if (user) {
-      const session = new UserSession();
-      session.user = user;
-      session.token = token;
-      session.userAgent = connection.userAgent;
-      session.ip = connection.ip;
-      if (extra) {
-        session.extra = extra;
-      }
-      session.valid = true;
-      await this.sessionRepository.save(session);
-
-      return session.id;
+    const session = new UserSession();
+    session.user = user!;
+    session.token = token;
+    session.userAgent = connection.userAgent;
+    session.ip = connection.ip;
+    if (extra) {
+      session.extra = extra;
     }
+    session.valid = true;
+    await this.sessionRepository.save(session);
 
-    return null;
+    return session.id;
   }
 
   public async updateSession(sessionId: string, connection: ConnectionInformations): Promise<void> {
@@ -400,9 +396,13 @@ export class AccountsTypeorm implements DatabaseInterface {
   }
 
   public async invalidateAllSessions(userId: string): Promise<void> {
-    const user = await this.findUserById(userId);
-    if (user) {
-      await Promise.all(user.sessions.map(session => this.sessionRepository.remove(session)));
-    }
+    await this.sessionRepository.update(
+      {
+        userId,
+      },
+      {
+        valid: false,
+      }
+    );
   }
 }

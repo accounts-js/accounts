@@ -1,4 +1,3 @@
-import { runDatabaseTests } from '@accounts/database-tests';
 import { AccountsTypeorm } from '../src';
 import { Connection, createConnection } from 'typeorm';
 import { User } from '../src/entity/User';
@@ -64,4 +63,8 @@ export class DatabaseTests {
   };
 }
 
-runDatabaseTests(new DatabaseTests());
+describe('DatabaseTest', () => {
+  it('should have instance', () => {
+    expect(DatabaseTests).toBeTruthy();
+  });
+});
