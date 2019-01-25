@@ -54,7 +54,7 @@
     "lodash": "4.17.11"
   },
   "devDependencies": {
-    "@types/jest": "23.3.12",
+    "@types/jest": "23.3.13",
     "@types/jwt-decode": "2.2.1",
     "@types/node": "10.12.18",
     "jest": "23.6.0",
