@@ -1,8 +1,12 @@
-import { Entity } from 'typeorm';
+import { User } from '../entity/User';
+import { UserEmail } from '../entity/UserEmail';
+import { UserService } from '../entity/UserService';
+import { UserSession } from '../entity/UserSession';
 
 export interface AccountsTypeormOptions {
-  userEntity: typeof Entity;
-  userServiceEntity: typeof Entity;
-  userEmailEntity: typeof Entity;
-  userSessionEntity: typeof Entity;
+  connectionName?: string;
+  userEntity?: typeof User;
+  userServiceEntity?: typeof UserService;
+  userEmailEntity?: typeof UserEmail;
+  userSessionEntity?: typeof UserSession;
 }

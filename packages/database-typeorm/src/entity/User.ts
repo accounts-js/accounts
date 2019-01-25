@@ -7,6 +7,7 @@ import {
   OneToMany,
   AfterLoad,
 } from 'typeorm';
+import { get, set } from 'lodash';
 import { UserService } from './UserService';
 import { UserEmail } from './UserEmail';
 import { UserSession } from './UserSession';
@@ -16,7 +17,7 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   public id!: string;
 
-  @Column()
+  @Column({ nullable: true })
   public username!: string;
 
   @Column('jsonb', { nullable: true })
@@ -45,22 +46,10 @@ export class User {
   @AfterLoad()
   public async getServices() {
     this.services = this.allServices.reduce((acc, service) => {
-      if (service.name === 'password.reset') {
-        acc.password = acc.password || {};
-        acc.password.reset = acc.password.reset || [];
-        acc.password.reset.push({
-          token: service.token,
-          ...service.options,
-        });
-      }
-      if (service.name === 'email.verification') {
-        acc.email = acc.email || {};
-        acc.email.verificationTokens = acc.email.verificationTokens || [];
-        acc.email.verificationTokens.push({
-          token: service.token,
-          ...service.options,
-        });
-      }
+      set(acc, service.name, [
+        ...get(acc, service.name, []),
+        { ...(service.token ? { token: service.token } : {}), ...service.options },
+      ]);
       return acc;
     }, this.services);
   }

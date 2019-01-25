@@ -10,7 +10,7 @@
     "precompile": "yarn clean",
     "compile": "tsc",
     "prepublishOnly": "yarn compile",
-    "testonly": "jest --runInBand --forceExit",
+    "testonly": "jest --runInBand",
     "test:watch": "jest --watch",
     "coverage": "yarn testonly --coverage"
   },
@@ -31,11 +31,13 @@
     "@accounts/database-tests": "^0.9.2",
     "@types/jest": "23.3.12",
     "@types/node": "10.12.18",
-    "jest": "23.6.0"
+    "jest": "23.6.0",
+    "pg": "^7.8.0"
   },
   "dependencies": {
     "@accounts/types": "^0.9.2",
     "lodash": "^4.17.11",
+    "pg": "^7.8.0",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.11"
   }

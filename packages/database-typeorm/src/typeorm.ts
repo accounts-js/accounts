@@ -1,23 +1,37 @@
-import { ConnectionInformations, CreateUser, DatabaseInterface, Session } from '@accounts/types';
+import { ConnectionInformations, CreateUser, DatabaseInterface } from '@accounts/types';
 import { Repository, getRepository } from 'typeorm';
 import { User } from './entity/User';
 import { UserEmail } from './entity/UserEmail';
 import { UserService } from './entity/UserService';
 import { UserSession } from './entity/UserSession';
+import { AccountsTypeormOptions } from './types';
 
-type ISession = UserSession | Session;
+const defaultOptions = {
+  userEntity: User,
+  userEmailEntity: UserEmail,
+  userServiceEntity: UserService,
+  userSessionEntity: UserSession,
+};
 
-export class Typeorm implements DatabaseInterface {
+export class AccountsTypeorm implements DatabaseInterface {
+  private options: AccountsTypeormOptions & typeof defaultOptions;
   private userRepository: Repository<User>;
   private emailRepository: Repository<UserEmail>;
   private serviceRepository: Repository<UserService>;
   private sessionRepository: Repository<UserSession>;
 
-  constructor() {
-    this.userRepository = getRepository(User);
-    this.emailRepository = getRepository(UserEmail);
-    this.serviceRepository = getRepository(UserService);
-    this.sessionRepository = getRepository(UserSession);
+  constructor(options?: AccountsTypeormOptions) {
+    this.options = { ...defaultOptions, ...options };
+    this.userRepository = getRepository(this.options.userEntity, this.options.connectionName);
+    this.emailRepository = getRepository(this.options.userEmailEntity, this.options.connectionName);
+    this.serviceRepository = getRepository(
+      this.options.userServiceEntity,
+      this.options.connectionName
+    );
+    this.sessionRepository = getRepository(
+      this.options.userSessionEntity,
+      this.options.connectionName
+    );
   }
 
   public async findUserByEmail(email: string): Promise<User | null> {
@@ -47,7 +61,8 @@ export class Typeorm implements DatabaseInterface {
   public async findUserById(userId: string): Promise<User | null> {
     const user = await this.userRepository.findOne(userId);
     if (!user) {
-      throw new Error('User not found');
+      // throw new Error('User not found');
+      return null;
     }
     return user;
   }
@@ -70,7 +85,7 @@ export class Typeorm implements DatabaseInterface {
   public async findUserByEmailVerificationToken(token: string): Promise<User | null> {
     const service = await this.serviceRepository.findOne({
       where: {
-        name: 'email.verification',
+        name: 'email.verificationTokens',
         token,
       },
     });
@@ -89,9 +104,9 @@ export class Typeorm implements DatabaseInterface {
 
     if (email) {
       const userEmail = new UserEmail();
-      userEmail.address = email;
+      userEmail.address = email.toLocaleLowerCase();
       userEmail.verified = false;
-      this.emailRepository.save(userEmail);
+      await this.emailRepository.save(userEmail);
       user.emails = [userEmail];
     }
 
@@ -117,7 +132,9 @@ export class Typeorm implements DatabaseInterface {
     if (user) {
       user.username = newUsername;
       await this.userRepository.save(user);
+      return;
     }
+    throw new Error('User not found');
   }
 
   public async setProfile(userId: string, profile: object): Promise<object> {
@@ -125,18 +142,19 @@ export class Typeorm implements DatabaseInterface {
     if (user) {
       user.profile = profile;
       await this.userRepository.save(user);
+      return profile;
     }
-    return profile;
+    throw new Error('User not found');
   }
 
   public async findUserByServiceId(serviceName: string, serviceId: string): Promise<User | null> {
     const service = await this.serviceRepository.findOne({
       name: serviceName,
-      id: serviceId,
+      serviceId,
     });
 
     if (service) {
-      return service.user;
+      return this.findUserById(service.userId);
     }
 
     return null;
@@ -161,21 +179,30 @@ export class Typeorm implements DatabaseInterface {
     token?: string
   ): Promise<void> {
     let service = await this.getService(userId, serviceName);
-    if (service) {
-      if (token) {
-        service.token = token;
-      }
-      service.options = data;
-      await this.serviceRepository.save(service);
-    } else {
+
+    if (!service) {
       const user = await this.findUserById(userId);
       if (user) {
         service = new UserService();
         service.name = serviceName;
         service.user = user;
-        service.options = data;
-        await this.serviceRepository.save(service);
       }
+    }
+
+    const { id = null, ...options } = data as any;
+
+    if (service) {
+      service.options = options;
+
+      if (id) {
+        service.serviceId = id;
+      }
+
+      if (token) {
+        service.token = token;
+      }
+
+      await this.serviceRepository.save(service);
     }
   }
 
@@ -198,11 +225,17 @@ export class Typeorm implements DatabaseInterface {
   }
 
   public async setPassword(userId: string, newPassword: string): Promise<void> {
-    const service = await this.getService(userId, 'password');
-    if (service) {
-      service.options = { bcrypt: newPassword };
-      await this.serviceRepository.save(service);
+    const user = await this.findUserById(userId);
+    if (user) {
+      const service = await this.getService(userId, 'password');
+      if (service) {
+        service.options = { bcrypt: newPassword };
+        await this.serviceRepository.save(service);
+        await this.userRepository.update({ id: user.id }, {});
+        return;
+      }
     }
+    throw new Error('User not found');
   }
 
   public async addResetPasswordToken(
@@ -227,7 +260,7 @@ export class Typeorm implements DatabaseInterface {
     userId: string,
     email: string,
     newPassword: string,
-    token: string
+    token?: string
   ): Promise<void> {
     await this.setPassword(userId, newPassword);
     await this.unsetService(userId, 'password.reset');
@@ -238,35 +271,44 @@ export class Typeorm implements DatabaseInterface {
     if (user) {
       const userEmail = new UserEmail();
       userEmail.user = user;
-      userEmail.address = newEmail;
+      userEmail.address = newEmail.toLocaleLowerCase();
       userEmail.verified = verified;
-      await this.userRepository.save(user);
+      await this.emailRepository.save(userEmail);
+      await this.userRepository.update({ id: user.id }, {});
+      return;
     }
+    throw new Error('User not found');
   }
 
   public async removeEmail(userId: string, email: string): Promise<void> {
     const user = await this.findUserById(userId);
     if (user) {
-      const userEmail = user.emails.find(s => s.address === email);
+      const userEmail = user.emails.find(s => s.address === email.toLocaleLowerCase());
       if (!userEmail) {
         throw new Error('Email not found');
       }
       await this.emailRepository.remove(userEmail);
+      await this.userRepository.update({ id: user.id }, {});
+      return;
     }
+    throw new Error('User not found');
   }
 
   public async verifyEmail(userId: string, email: string): Promise<void> {
     const user = await this.findUserById(userId);
     if (user) {
-      const userEmail = user.emails.find(s => s.address === email);
+      const userEmail = user.emails.find(s => s.address === email.toLocaleLowerCase());
+
       if (!userEmail) {
         throw new Error('Email not found');
       }
       userEmail.verified = true;
       await this.emailRepository.save(userEmail);
-
-      this.unsetService(userId, 'email.verification');
+      await this.unsetService(userId, 'email.verificationTokens');
+      await this.userRepository.update({ id: user.id }, {});
+      return;
     }
+    throw new Error('User not found');
   }
 
   public async addEmailVerificationToken(
@@ -276,9 +318,9 @@ export class Typeorm implements DatabaseInterface {
   ): Promise<void> {
     await this.setService(
       userId,
-      'email.verification',
+      'email.verificationTokens',
       {
-        address: email,
+        address: email.toLocaleLowerCase(),
         when: new Date(),
       },
       token
@@ -294,25 +336,33 @@ export class Typeorm implements DatabaseInterface {
   }
 
   public async findSessionById(sessionId: string): Promise<UserSession | null> {
-    const session = await this.sessionRepository.findOne(sessionId);
+    try {
+      const session = await this.sessionRepository.findOne(sessionId);
 
-    if (session) {
-      return session;
+      if (session) {
+        return session;
+      }
+    } catch (err) {
+      // noop
     }
 
     return null;
   }
 
-  public findSessionByToken(token: string): Promise<ISession | null> {
-    return this.sessionRepository.findOne({ token }) as Promise<ISession>;
+  public async findSessionByToken(token: string) {
+    const session = await this.sessionRepository.findOne({ token });
+    if (!session) {
+      return null;
+    }
+    return session;
   }
 
   public async createSession(
     userId: string,
     token: string,
-    connection: ConnectionInformations,
+    connection: ConnectionInformations = {},
     extra?: object
-  ): Promise<string> {
+  ) {
     const user = await this.findUserById(userId);
     if (user) {
       const session = new UserSession();
@@ -329,7 +379,7 @@ export class Typeorm implements DatabaseInterface {
       return session.id;
     }
 
-    return '';
+    return null;
   }
 
   public async updateSession(sessionId: string, connection: ConnectionInformations): Promise<void> {

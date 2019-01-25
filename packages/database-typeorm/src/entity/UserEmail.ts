@@ -16,5 +16,6 @@ export class UserEmail {
   @Column({ default: false })
   public verified!: boolean;
 
+  @Column({ nullable: true })
   public userId!: string;
 }

@@ -1,4 +1,4 @@
-import { Typeorm } from './typeorm';
+import { AccountsTypeorm } from './typeorm';
 
-export { Typeorm };
-export default Typeorm;
+export { AccountsTypeorm };
+export default AccountsTypeorm;

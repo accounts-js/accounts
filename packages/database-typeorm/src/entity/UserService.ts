@@ -18,5 +18,9 @@ export class UserService {
   @Column('jsonb', { nullable: true })
   public options: { bcrypt: string } | any;
 
+  @Column({ nullable: true })
+  public serviceId!: string;
+
+  @Column({ nullable: true })
   public userId!: string;
 }

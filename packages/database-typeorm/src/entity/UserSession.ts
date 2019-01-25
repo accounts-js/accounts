@@ -37,5 +37,6 @@ export class UserSession {
   @UpdateDateColumn()
   public updatedAt!: string;
 
+  @Column({ nullable: true })
   public userId!: string;
 }
