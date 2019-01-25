@@ -6,6 +6,10 @@ jobs:
       - image: circleci/node:9
       - image: circleci/mongo:3
       - image: redis:4@sha256:a471807cc636a02d8be3959a52dd7262a83ce6351be19605ce17d5da06c42f1d
+      - image: circleci/postgres:10.6
+        environment:
+          POSTGRES_USER: accounts-js
+          POSTGRES_DB: accounts-js-tests-e2e
     steps:
       - checkout
       - run: yarn install --frozen-lockfile
