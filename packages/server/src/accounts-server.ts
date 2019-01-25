@@ -139,14 +139,10 @@ Please change it with a strong random token.`);
   public async loginWithUser(user: User, infos: ConnectionInformations): Promise<LoginResult> {
     const { ip, userAgent } = infos;
     const token = generateRandomToken();
-    const sessionId = await this.db.createSession(user.id, token, {
+    const sessionId = (await this.db.createSession(user.id, token, {
       ip,
       userAgent,
-    });
-
-    if (!sessionId) {
-      throw new Error('Could not create session');
-    }
+    })) as string;
 
     const { accessToken, refreshToken } = this.createTokens({
       token,
@@ -240,12 +236,8 @@ Please change it with a strong random token.`);
         { impersonatorUserId: user.id }
       );
 
-      if (!newSessionId) {
-        throw new Error('Could not create session');
-      }
-
       const impersonationTokens = this.createTokens({
-        token: newSessionId,
+        token: newSessionId as string,
         isImpersonated: true,
         userId: user.id,
       });
