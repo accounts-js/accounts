@@ -9,7 +9,10 @@ export const context = (moduleName: string) => async (
   _: any,
   { injector }: ModuleSessionInfo
 ) => {
-  if (!req) { return; }
+  if (!req) {
+    return null;
+  }
+
   const config: AccountsModuleConfig = injector.get(ModuleConfig(moduleName));
   const headerName = config.headerName || 'accounts-access-token';
   const authToken = (req.headers[headerName] || req.headers[headerName.toLowerCase()]) as string;
