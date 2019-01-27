@@ -10,9 +10,7 @@ export const context = (moduleName: string) => async (
   { injector }: ModuleSessionInfo
 ) => {
   if (!req) {
-    return {
-      userAgent: '',
-    };
+    return {};
   }
 
   const config: AccountsModuleConfig = injector.get(ModuleConfig(moduleName));
