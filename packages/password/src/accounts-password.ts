@@ -280,6 +280,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {string} [address] - Which address of the user's to send the email to.
    * This address must be in the user's emails list.
    * Defaults to the first unverified email in the list.
+   * If the address is already verified we do not send any email.
    * @returns {Promise<void>} - Return a Promise.
    */
   public async sendVerificationEmail(address: string): Promise<void> {
