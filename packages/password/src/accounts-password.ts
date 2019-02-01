@@ -295,6 +295,16 @@ export default class AccountsPassword implements AuthenticationService {
       }
       throw new Error(this.options.errors.userNotFound);
     }
+
+    // Do not send an email if the address is already verified
+    const emailRecord = find(
+      user.emails,
+      (email: EmailRecord) => email.address.toLowerCase() === address.toLocaleLowerCase()
+    );
+    if (!emailRecord || emailRecord.verified) {
+      return;
+    }
+
     const token = generateRandomToken();
     await this.db.addEmailVerificationToken(user.id, address, token);
 
