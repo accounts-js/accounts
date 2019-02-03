@@ -254,13 +254,11 @@ export class AccountsTypeorm implements DatabaseInterface {
   public async setPassword(userId: string, newPassword: string): Promise<void> {
     const user = await this.findUserById(userId);
     if (user) {
-      const service = await this.getService(userId, 'password');
-      if (service) {
-        service.options = { bcrypt: newPassword };
-        await this.serviceRepository.save(service);
-        await this.userRepository.update({ id: user.id }, {});
-        return;
-      }
+      await this.setService(userId, 'password', {
+        options: { bcrypt: newPassword },
+      });
+      await this.userRepository.update({ id: user.id }, {});
+      return;
     }
     throw new Error('User not found');
   }
