@@ -55,12 +55,13 @@ export class AccountsTypeorm implements DatabaseInterface {
   }
 
   public async findUserByEmail(email: string): Promise<User | null> {
-    const user = await this.userRepository.findOne({
-      where: { email },
+    const userEmail = await this.emailRepository.findOne({
+      where: { address: email.toLocaleLowerCase() },
+      cache: this.options.cache,
     });
 
-    if (user) {
-      return user;
+    if (userEmail) {
+      return this.findUserById(userEmail.userId);
     }
 
     return null;
@@ -69,6 +70,7 @@ export class AccountsTypeorm implements DatabaseInterface {
   public async findUserByUsername(username: string): Promise<User | null> {
     const user = await this.userRepository.findOne({
       where: { username },
+      cache: this.options.cache,
     });
 
     if (user) {
@@ -79,7 +81,9 @@ export class AccountsTypeorm implements DatabaseInterface {
   }
 
   public async findUserById(userId: string): Promise<User | null> {
-    const user = await this.userRepository.findOne(userId);
+    const user = await this.userRepository.findOne(userId, {
+      cache: this.options.cache,
+    });
     if (!user) {
       // throw new Error('User not found');
       return null;
@@ -93,6 +97,7 @@ export class AccountsTypeorm implements DatabaseInterface {
         name: 'password.reset',
         token,
       },
+      cache: this.options.cache,
     });
 
     if (service) {
@@ -108,6 +113,7 @@ export class AccountsTypeorm implements DatabaseInterface {
         name: 'email.verificationTokens',
         token,
       },
+      cache: this.options.cache,
     });
 
     if (service) {
@@ -171,6 +177,7 @@ export class AccountsTypeorm implements DatabaseInterface {
     const service = await this.serviceRepository.findOne({
       name: serviceName,
       serviceId,
+      cache: this.options.cache,
     });
 
     if (service) {
@@ -247,13 +254,9 @@ export class AccountsTypeorm implements DatabaseInterface {
   public async setPassword(userId: string, newPassword: string): Promise<void> {
     const user = await this.findUserById(userId);
     if (user) {
-      const service = await this.getService(userId, 'password');
-      if (service) {
-        service.options = { bcrypt: newPassword };
-        await this.serviceRepository.save(service);
-        await this.userRepository.update({ id: user.id }, {});
-        return;
-      }
+      await this.setService(userId, 'password', { bcrypt: newPassword });
+      await this.userRepository.update({ id: user.id }, {});
+      return;
     }
     throw new Error('User not found');
   }
@@ -357,7 +360,9 @@ export class AccountsTypeorm implements DatabaseInterface {
 
   public async findSessionById(sessionId: string): Promise<UserSession | null> {
     try {
-      const session = await this.sessionRepository.findOne(sessionId);
+      const session = await this.sessionRepository.findOne(sessionId, {
+        cache: this.options.cache,
+      });
 
       if (session) {
         return session;
@@ -370,7 +375,12 @@ export class AccountsTypeorm implements DatabaseInterface {
   }
 
   public async findSessionByToken(token: string) {
-    const session = await this.sessionRepository.findOne({ token });
+    const session = await this.sessionRepository.findOne(
+      { token },
+      {
+        cache: this.options.cache,
+      }
+    );
     if (!session) {
       return null;
     }

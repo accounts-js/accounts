@@ -5,6 +5,7 @@ import { UserSession } from '../entity/UserSession';
 import { Connection } from 'typeorm';
 
 export interface AccountsTypeormOptions {
+  cache?: undefined | number;
   connection?: Connection;
   connectionName?: string;
   userEntity?: typeof User;
