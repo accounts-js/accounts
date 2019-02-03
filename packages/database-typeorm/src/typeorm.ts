@@ -56,7 +56,7 @@ export class AccountsTypeorm implements DatabaseInterface {
 
   public async findUserByEmail(email: string): Promise<User | null> {
     const userEmail = await this.emailRepository.findOne({
-      where: { address: email },
+      where: { address: email.toLocaleLowerCase() },
       cache: this.options.cache,
     });
 
