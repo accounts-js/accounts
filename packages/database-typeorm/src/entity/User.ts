@@ -45,7 +45,7 @@ export class User {
 
   @AfterLoad()
   public async getServices() {
-    this.services = this.allServices.reduce((acc, service) => {
+    this.services = (this.allServices || []).reduce((acc, service) => {
       set(acc, service.name, [
         ...get(acc, service.name, []),
         { ...(service.token ? { token: service.token } : {}), ...service.options },
