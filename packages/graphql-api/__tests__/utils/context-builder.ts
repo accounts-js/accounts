@@ -38,4 +38,11 @@ describe('context-builder', () => {
     expect(data.authToken).toBe(authToken);
     expect(data.ip).toBe(ip);
   });
+
+  it('should allow no request in context', async () => {
+    const data = await context('test')!({} as any, {}, { injector } as any);
+    expect(data.ip).toBe('');
+    expect(data.userAgent).toBe('');
+    expect(injector.get).not.toBeCalled();
+  });
 });
