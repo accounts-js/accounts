@@ -47,7 +47,7 @@ export class User {
   public async getServices() {
     this.services = (this.allServices || []).reduce((acc, service) => {
       set(acc, service.name, [
-        ...get(acc, service.name, []),
+        ...[].concat(get(acc, service.name, [])),
         { ...(service.token ? { token: service.token } : {}), ...service.options },
       ]);
       return acc;
