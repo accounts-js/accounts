@@ -33,3 +33,34 @@ createConnection({
 ```
 
 ## Options
+
+```ts
+type Options = {
+  cache?: undefined | number; // Cache results from database (in ms)
+  connection?: Connection; // Pass a connection instance
+  connectionName?: string; // Use a connection name (if other than "default")
+  userEntity?: typeof User; // Overwrite entities with your own
+  userServiceEntity?: typeof UserService;
+  userEmailEntity?: typeof UserEmail;
+  userSessionEntity?: typeof UserSession;
+};
+```
+
+### Extending entities
+
+If you want to add fields, etc. to the User entity you can, by extending the base entities.
+
+```tsx
+import { User as AccountsUser } from '@accounts/typeorm';
+
+@Entity()
+export class User extends AccountsUser {
+  // Add fields
+  @Column()
+  custom_field: string;
+
+  // Overwrite fields
+  @Colum('text')
+  profile: string;
+}
+```
