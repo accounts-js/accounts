@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client-password",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "@accounts/client-password",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -43,8 +43,8 @@
     "rimraf": "2.6.3"
   },
   "dependencies": {
-    "@accounts/client": "^0.9.2",
-    "@accounts/types": "^0.9.2",
+    "@accounts/client": "^0.9.3",
+    "@accounts/types": "^0.9.3",
     "crypto-js": "^3.1.9-1"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@accounts/graphql-api",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Server side GraphQL transport for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -48,9 +48,9 @@
     "graphql-tools": "^4.0.3"
   },
   "dependencies": {
-    "@accounts/password": "^0.9.2",
-    "@accounts/server": "^0.9.2",
-    "@accounts/types": "^0.9.2",
+    "@accounts/password": "^0.9.3",
+    "@accounts/server": "^0.9.3",
+    "@accounts/types": "^0.9.3",
     "@types/request-ip": "0.0.33",
     "graphql-tag": "^2.10.0",
     "request-ip": "2.1.3"
