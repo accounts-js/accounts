@@ -42,7 +42,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "23.3.13",
-    "@types/node": "10.12.18",
+    "@types/node": "10.12.21",
     "jest": "23.6.0",
     "rimraf": "2.6.3"
   },
