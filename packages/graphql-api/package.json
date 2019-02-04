@@ -33,7 +33,7 @@
     "@types/graphql": "14.0.4",
     "concurrently": "4.1.0",
     "graphql": "14.0.2",
-    "graphql-code-generator": "0.15.2",
+    "graphql-code-generator": "0.16.1",
     "graphql-codegen-add": "0.15.2",
     "graphql-codegen-typescript-common": "0.15.2",
     "graphql-codegen-typescript-resolvers": "0.15.2",
