@@ -388,10 +388,13 @@ describe('AccountsPassword', () => {
   });
 
   describe('sendVerificationEmail', () => {
-    const email = 'john.doe@gmail.com';
+    const unverifiedEmail = 'john.doe@gmail.com';
     const verifiedEmail = 'john.doe2@gmail.com';
     const validUser = {
-      emails: [{ address: email }, { address: verifiedEmail, verified: true }],
+      emails: [
+        { address: unverifiedEmail, verified: false },
+        { address: verifiedEmail, verified: true },
+      ],
     };
 
     it('throws if email is empty', async () => {
@@ -407,11 +410,28 @@ describe('AccountsPassword', () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
       password.setStore({ findUserByEmail } as any);
       try {
-        await password.sendVerificationEmail(email);
+        await password.sendVerificationEmail(unverifiedEmail);
         throw new Error();
       } catch (err) {
         expect(err.message).toMatchSnapshot();
       }
+    });
+
+    it('should not send email if email is already verified', async () => {
+      const findUserByEmail = jest.fn(() => Promise.resolve(validUser));
+      const addEmailVerificationToken = jest.fn(() => Promise.resolve());
+      const prepareMail = jest.fn(() => Promise.resolve());
+      const sanitizeUser = jest.fn(() => Promise.resolve());
+      const sendMail = jest.fn(() => Promise.resolve());
+      password.setStore({ findUserByEmail, addEmailVerificationToken } as any);
+      password.server = {
+        prepareMail,
+        options: { sendMail },
+        sanitizeUser,
+      } as any;
+      set(password.server, 'options.emailTemplates', {});
+      await password.sendVerificationEmail(verifiedEmail);
+      expect(addEmailVerificationToken).not.toBeCalled();
     });
 
     it('send email to first unverified email', async () => {
@@ -427,7 +447,7 @@ describe('AccountsPassword', () => {
         sanitizeUser,
       } as any;
       set(password.server, 'options.emailTemplates', {});
-      await password.sendVerificationEmail(verifiedEmail);
+      await password.sendVerificationEmail(unverifiedEmail);
       expect(addEmailVerificationToken.mock.calls[0].length).toBe(3);
       expect(prepareMail.mock.calls[0].length).toBe(6);
       expect(sendMail.mock.calls[0].length).toBe(1);
@@ -446,7 +466,7 @@ describe('AccountsPassword', () => {
         sanitizeUser,
       } as any;
       set(password.server, 'options.emailTemplates', {});
-      await password.sendVerificationEmail(email);
+      await password.sendVerificationEmail(unverifiedEmail);
       expect(addEmailVerificationToken.mock.calls[0].length).toBe(3);
       expect(prepareMail.mock.calls[0].length).toBe(6);
       expect(sendMail.mock.calls[0].length).toBe(1);
