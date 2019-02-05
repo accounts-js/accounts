@@ -52,10 +52,11 @@
     "@accounts/server": "^0.9.3",
     "@accounts/types": "^0.9.3",
     "@graphql-modules/core": "0.4.0",
-    "graphql-tools": "^4.0.3",
-    "graphql-tag": "^2.10.0"
+    "graphql-tag": "^2.10.0",
+    "graphql-tools": "^4.0.3"
   },
   "dependencies": {
+    "graphql-toolkit": "^0.0.5",
     "request-ip": "2.1.3"
   }
 }
