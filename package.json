@@ -71,7 +71,7 @@
     "tslint": "5.12.1",
     "typedoc": "0.13.0",
     "typedoc-plugin-docusaurus": "1.0.14",
-    "typescript": "3.2.2"
+    "typescript": "3.2.4"
   },
   "collective": {
     "type": "opencollective",

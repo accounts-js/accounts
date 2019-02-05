@@ -27,6 +27,7 @@ export interface AccountsModuleConfig {
   withSchemaDefinition?: boolean;
   headerName?: string;
   userAsInterface?: boolean;
+  excludeAddUserInContext?: boolean;
 }
 
 export interface AccountsModuleContext<IUser = User> {

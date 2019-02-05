@@ -124,7 +124,7 @@ export class AccountsTypeorm implements DatabaseInterface {
   }
 
   public async createUser(createUser: CreateUser): Promise<string> {
-    const { username, email, password } = createUser;
+    const { username, email, password, ...otherFields } = createUser;
 
     const user = new User();
 
@@ -147,6 +147,8 @@ export class AccountsTypeorm implements DatabaseInterface {
     if (username) {
       user.username = username;
     }
+
+    Object.assign(user, otherFields);
 
     await this.userRepository.save(user);
 

@@ -24,8 +24,8 @@ describe('authFetch', () => {
     };
     await authFetch(accounts as any, 'path', {});
     expect(accounts.refreshSession).toBeCalled();
-    expect((window.fetch as jest.Mock).mock.calls[0][1].headers['accounts-access-token']).toBe(
-      'accessToken'
+    expect((window.fetch as jest.Mock).mock.calls[0][1].headers.Authorization).toBe(
+      'Bearer accessToken'
     );
   });
 

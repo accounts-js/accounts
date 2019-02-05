@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@accounts/boost": "^0.7.0",
-    "@graphql-modules/epoxy": "^0.2.15",
+    "graphql-toolkit": "^0.0.5",
     "apollo-link-context": "^1.0.10",
     "apollo-link-http": "^1.5.7",
     "apollo-server": "^2.2.3",
@@ -29,6 +29,6 @@
     "nodemon": "1.18.7",
     "ts-node": "7.0.1",
     "tslint": "^5.11.0",
-    "typescript": "3.1.6"
+    "typescript": "3.2.4"
   }
 }

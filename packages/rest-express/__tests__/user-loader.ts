@@ -26,7 +26,7 @@ describe('userLoader', () => {
     const provider = userLoader(accountsServer as any);
     const req = {
       headers: {
-        'accounts-access-token': 'token',
+        Authorization: 'Bearer token',
       },
     };
     const reqCopy = { ...req };

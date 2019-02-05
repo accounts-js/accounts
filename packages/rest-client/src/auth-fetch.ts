@@ -10,7 +10,7 @@ export const authFetch = async (accounts: AccountsClient, path: string, request:
   const headersCopy = { ...headers };
 
   if (tokens) {
-    headersCopy['accounts-access-token'] = tokens.accessToken;
+    headersCopy.Authorization = 'Bearer ' + tokens.accessToken;
   }
 
   /* tslint:disable no-string-literal */

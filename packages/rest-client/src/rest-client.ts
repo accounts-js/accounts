@@ -51,7 +51,7 @@ export class RestClient implements TransportInterface {
     return this.fetch(route, args, {
       ...customHeaders,
       ...{
-        'accounts-access-token': tokens ? tokens.accessToken : '',
+        Authorization: tokens ? 'Bearer ' + tokens.accessToken : '',
       },
     });
   }

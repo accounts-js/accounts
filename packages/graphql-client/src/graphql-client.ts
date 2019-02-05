@@ -152,7 +152,7 @@ export default class GraphQLClient implements TransportInterface {
         variables,
         context: {
           headers: {
-            'accounts-access-token': tokens ? tokens.accessToken : '',
+            Authorization: tokens ? 'Bearer ' + tokens.accessToken : '',
           },
         },
       });
@@ -172,7 +172,7 @@ export default class GraphQLClient implements TransportInterface {
         fetchPolicy: 'network-only',
         context: {
           headers: {
-            'accounts-access-token': tokens.accessToken,
+            Authorization: 'Bearer ' + tokens.accessToken,
           },
         },
       });

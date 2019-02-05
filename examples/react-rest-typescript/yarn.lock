@@ -2637,9 +2637,9 @@ dom-converter@~0.1:
   dependencies:
     utila "~0.3"
 
-dom-helpers@^3.2.1, dom-helpers@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/dom-helpers/-/dom-helpers-3.3.1.tgz#fc1a4e15ffdf60ddde03a480a9c0fece821dd4a6"
+dom-helpers@^3.2.1, dom-helpers@^3.2.4:
+  version "3.2.4"
+  resolved "https://registry.yarnpkg.com/dom-helpers/-/dom-helpers-3.2.4.tgz#fc1a4e15ffdf60ddde03a480a9c0fece821dd4a6"
   integrity sha512-2Sm+JaYn74OiTM2wHvxJOo3roiq/h25Yi69Fqk269cNUwIXsCvATB6CRSFC9Am/20G2b28hGv/+7NiWydIrPvg==
 
 dom-serializer@0:
@@ -7526,7 +7526,7 @@ react-transition-group@^2.2.1:
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.3.1.tgz#31d611b33e143a5e0f2d94c348e026a0f3b474b6"
   integrity sha512-hu4/LAOFSKjWt1+1hgnOv3ldxmt6lvZGTWz4KUkFrqzXrNDIVSu6txIcPszw7PNduR8en9YTN55JLRyd/L1ZiQ==
   dependencies:
-    dom-helpers "^3.3.1"
+    dom-helpers "^3.2.4"
     loose-envify "^1.3.1"
     prop-types "^15.6.1"
 
@@ -9067,8 +9067,8 @@ uglify-es@^3.3.4:
     source-map "~0.6.1"
 
 uglify-js@3.3.x, uglify-js@^3.0.13:
-  version "3.3.13"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.3.13.tgz#8a1a89eeb16e2d6a66b0db2b04cb871af3c669cf"
+  version "3.2.43"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.2.43.tgz#8a1a89eeb16e2d6a66b0db2b04cb871af3c669cf"
   integrity sha512-7rdn/bDOG1ElSTPdh7AI5TCjLv63ZD4k8BBadN3ssIkhlaQL2c0yRxmXCyOYhZK0wZTgGgUSnYQ4CGu+Jos5cA==
   dependencies:
     commander "~2.14.1"
