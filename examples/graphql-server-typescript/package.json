@@ -19,7 +19,7 @@
     "@accounts/password": "file:../../packages/password",
     "@accounts/rest-express": "file:../../packages/rest-express",
     "@accounts/server": "file:../../packages/server",
-    "@graphql-modules/core": "0.4.0",
+    "@graphql-modules/core": "0.4.1",
     "graphql-toolkit": "0.0.5",
     "@types/mongoose": "5.2.0",
     "apollo-server": "2.0.0-rc.5",

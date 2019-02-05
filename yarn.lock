@@ -157,10 +157,27 @@
     graphql-tools "4.0.4"
     tslib "1.9.3"
 
+"@graphql-modules/core@0.5.0-alpha.7334ffed":
+  version "0.5.0-alpha.7334ffed"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.5.0-alpha.7334ffed.tgz#7d272b32af36809e7c468140bcbc114c195ddd68"
+  integrity sha512-jdfzZhS6ga1aQnQMQeBijDY7vPuJJVg70hVtNqf6wXjDRyujSc+umYtx5UQqy7WqzhMxFXq0kDS/5vero7M2nw==
+  dependencies:
+    "@graphql-modules/di" "0.5.0-alpha.7334ffed"
+    graphql-toolkit "0.0.5"
+    graphql-tools "4.0.4"
+    tslib "1.9.3"
+
 "@graphql-modules/di@0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.4.0.tgz#d08edf38371ae28a54ba551fefc9eed9434c4cfc"
   integrity sha512-7aJtaFOd4faRyryXVtrV1Tvh+B1d7eXLKoso5QXZVEXbU/gctoNIFx4e77S6za/za9e+l5srPkdsbo/wVAmROQ==
+  dependencies:
+    tslib "1.9.3"
+
+"@graphql-modules/di@0.5.0-alpha.7334ffed":
+  version "0.5.0-alpha.7334ffed"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.5.0-alpha.7334ffed.tgz#c8304a0904065d1432605283c572c4a4d1a7eec9"
+  integrity sha512-s0J5JF5CrNYKl1djU/JKAln4lpBM0OnLjsrgImZfI7F9GyC3JYzPGojXGkYPV3fq0mRVyHjymES5VvSJwZU3rg==
   dependencies:
     tslib "1.9.3"
 
@@ -477,15 +494,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@^10.1.0":
+"@types/node@*", "@types/node@10.12.18", "@types/node@10.12.21", "@types/node@^10.1.0":
   version "10.12.18"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.18.tgz#1d3ca764718915584fcd9f6344621b7672665c67"
   integrity sha512-fh+pAqt4xRzPfqA6eh3Z2y6fyZavRIumvjhaCL753+TVkGKGhpPeyrJG2JftD0T9q4GF00KjefsQ+PQNDdWQaQ==
-
-"@types/node@10.12.21":
-  version "10.12.21"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.21.tgz#7e8a0c34cf29f4e17a36e9bd0ea72d45ba03908e"
-  integrity sha512-CBgLNk4o3XMnqMc0rhb6lc77IwShMEglz05deDcn2lQxyXEZivfwgYJu7SMha9V5XcrP6qZuevTHV/QrN2vjKQ==
 
 "@types/oauth@0.9.1":
   version "0.9.1"
