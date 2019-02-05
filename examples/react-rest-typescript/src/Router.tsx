@@ -42,4 +42,4 @@ const Router = ({ classes }: WithStyles<'root' | 'container'>) => {
   );
 };
 
-export default withStyles(styles)<{}>(Router);
+export default withStyles(styles)(Router);
