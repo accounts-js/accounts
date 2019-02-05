@@ -146,54 +146,20 @@
   resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.9.0.tgz#d07a54832757d2f2d1fc9891e5b0e3e3b4886c6a"
   integrity sha512-mkHar7AdyShUFJE6Mlke1tUbb+lPCK1EozZeAhCuRrhQ5aCCBAG6RxzNUYX1Q2jeGeyU0WRAtQu1oE/GoIsNXA==
 
-"@graphql-modules/core@0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.4.0.tgz#a45b7dcb259a5267413cad13a9f1cbaa223e03d6"
-  integrity sha512-OtB8LM0QLWHgCFaXF5jaQIPGY6HbzX2QtLYjpquHK421VSHaFuIdm7LQPC0Jv3ewdXupw7A4FAVf6u0NWUVHdQ==
+"@graphql-modules/core@0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.4.1.tgz#3b101b07f8631311e641c177b87c2f96192713b6"
+  integrity sha512-j0xE9b3h4wjlAXuKPVtD5rYhnP+8TUQFjKOELh9wnvFf4wMv15aYcPqXYy8jNZTxseWqRgnUTVyUWGA4kvaR4g==
   dependencies:
-    "@graphql-modules/di" "0.4.0"
-    "@graphql-modules/epoxy" "0.4.0"
-    "@graphql-modules/utils" "0.4.0"
-    graphql-tools "4.0.4"
-    tslib "1.9.3"
-
-"@graphql-modules/core@0.5.0-alpha.7334ffed":
-  version "0.5.0-alpha.7334ffed"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.5.0-alpha.7334ffed.tgz#7d272b32af36809e7c468140bcbc114c195ddd68"
-  integrity sha512-jdfzZhS6ga1aQnQMQeBijDY7vPuJJVg70hVtNqf6wXjDRyujSc+umYtx5UQqy7WqzhMxFXq0kDS/5vero7M2nw==
-  dependencies:
-    "@graphql-modules/di" "0.5.0-alpha.7334ffed"
+    "@graphql-modules/di" "0.4.1"
     graphql-toolkit "0.0.5"
     graphql-tools "4.0.4"
     tslib "1.9.3"
 
-"@graphql-modules/di@0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.4.0.tgz#d08edf38371ae28a54ba551fefc9eed9434c4cfc"
-  integrity sha512-7aJtaFOd4faRyryXVtrV1Tvh+B1d7eXLKoso5QXZVEXbU/gctoNIFx4e77S6za/za9e+l5srPkdsbo/wVAmROQ==
-  dependencies:
-    tslib "1.9.3"
-
-"@graphql-modules/di@0.5.0-alpha.7334ffed":
-  version "0.5.0-alpha.7334ffed"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.5.0-alpha.7334ffed.tgz#c8304a0904065d1432605283c572c4a4d1a7eec9"
-  integrity sha512-s0J5JF5CrNYKl1djU/JKAln4lpBM0OnLjsrgImZfI7F9GyC3JYzPGojXGkYPV3fq0mRVyHjymES5VvSJwZU3rg==
-  dependencies:
-    tslib "1.9.3"
-
-"@graphql-modules/epoxy@0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/epoxy/-/epoxy-0.4.0.tgz#de46c09898f15eacad09a292d6d4f26e23c1aa4c"
-  integrity sha512-zvqrxycS+ualpbMVTIKThYyNnZwWdvBUn9PQ/TzS5t8+LpV+vPBE/1vthvZN2NcuX92zs+dQWe4yC1WbVSWplA==
-  dependencies:
-    deepmerge "3.1.0"
-    graphql-tools "4.0.4"
-    tslib "1.9.3"
-
-"@graphql-modules/utils@0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/utils/-/utils-0.4.0.tgz#f37e332a9594e8f1321fd3383c8ac084ff0c6b56"
-  integrity sha512-ewPSGU2G69hgP7zSyXwQwc0/vEzy2bnmcKrFpPCId+Z5jFLhbF2p4DGbVyP0fM3n2/wxu1ElLvUBMxrMWdn6cg==
+"@graphql-modules/di@0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.4.1.tgz#1db5b9b9955664079beed016270ef9dddd7bad13"
+  integrity sha512-S27yVwD0HHSwdPKwmv4k+4tBqRBJXnHbIMibOc3esSQCVpVQRtSgwljPJZdXBCjEf/57ah2dh/NM4FKxGjftdA==
   dependencies:
     tslib "1.9.3"
 

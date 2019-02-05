@@ -47,13 +47,17 @@
     "@types/mongoose": "5.3.10",
     "@types/node-fetch": "2.1.4",
     "apollo-boost": "0.1.27",
-    "apollo-server": "2.3.1",
+    "apollo-server": "2.3.3",
+    "core-js": "3.0.0-beta.3",
     "body-parser": "1.18.3",
     "express": "4.16.4",
-    "graphql": "14.0.2",
+    "graphql": "14.1.1",
     "lodash": "4.17.11",
     "mongoose": "5.4.7",
     "node-fetch": "2.3.0",
     "typeorm": "0.2.11"
+  },
+  "resolutions": { 
+    "core-js": "3.0.0-beta.11" 
   }
 }
