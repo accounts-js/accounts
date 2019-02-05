@@ -163,7 +163,7 @@ export default class GraphQLClient implements TransportInterface {
   }
 
   private async query(query: any, resultField: any, variables: any = {}) {
-    const tokens = (await this.client.refreshSession()) || { accessToken: '' };
+    const tokens = await this.client.refreshSession();
 
     try {
       const { data } = await this.options.graphQLClient.query({
@@ -172,7 +172,7 @@ export default class GraphQLClient implements TransportInterface {
         fetchPolicy: 'network-only',
         context: {
           headers: {
-            Authorization: 'Bearer ' + tokens.accessToken,
+            Authorization: tokens ? 'Bearer ' + tokens.accessToken : '',
           },
         },
       });
