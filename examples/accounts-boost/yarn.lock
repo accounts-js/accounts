@@ -115,15 +115,15 @@
   resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.2.11.tgz#276371239cebaf372250e598a909489d5a52e6f1"
   integrity sha512-YjTbt7koBYqFRiKVUyqBRV5SlGMf+894uB/NOoJIZtH+IgIxkkwytHBRsnVOdHo/CmAR73m4eME2JhhUB5P8dw==
   dependencies:
-    "@graphql-modules/epoxy" "0.2.11"
+    "graphql-toolkit" "0.2.11"
     "@graphql-modules/sonar" "0.2.11"
     dependency-graph "0.7.2"
     graphql-tools "4.0.3"
     tslib "1.9.3"
 
-"@graphql-modules/epoxy@0.2.11", "@graphql-modules/epoxy@^0.2.11":
+"graphql-toolkit@0.2.11", "graphql-toolkit@^0.2.11":
   version "0.2.11"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/epoxy/-/epoxy-0.2.11.tgz#3771b8d80f762b65605ab9a5892ab0c9956ddd47"
+  resolved "https://registry.yarnpkg.com/graphql-toolkit/-/epoxy-0.2.11.tgz#3771b8d80f762b65605ab9a5892ab0c9956ddd47"
   integrity sha512-Z8PUwfXcqOIvuXp6KXjJ21PuTRH4beofKUYDRZalYnuRODbn5obmHxrs8U9zmUMA5AnSkIeW7TiANY2xfome+g==
   dependencies:
     "@types/deepmerge" "2.1.0"

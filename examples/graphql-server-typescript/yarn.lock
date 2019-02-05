@@ -100,7 +100,7 @@
   integrity sha512-lMbG/dWYBWVyxN6Vw5Hzogeb8TY9Q8eh2g9K1yn8kzc7uvVHzJUD2rLeJj4Y6RVBzkp7y27ElFkgyS8JHZZqtQ==
   dependencies:
     "@graphql-modules/di" "0.4.0"
-    "@graphql-modules/epoxy" "0.4.0"
+    "graphql-toolkit" "0.4.0"
     dependency-graph "0.7.2"
     graphql-tools "4.0.3"
     tslib "1.9.3"
@@ -112,9 +112,9 @@
   dependencies:
     tslib "1.9.3"
 
-"@graphql-modules/epoxy@0.4.0":
+"graphql-toolkit@0.4.0":
   version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/epoxy/-/epoxy-0.4.0.tgz#0328172fbe9e404d9ea66342ea0e7f3d5d6f04f3"
+  resolved "https://registry.yarnpkg.com/graphql-toolkit/-/epoxy-0.4.0.tgz#0328172fbe9e404d9ea66342ea0e7f3d5d6f04f3"
   integrity sha512-rLB3+MYBTqobU5c6VC8dTHHml/W2wwa/AhJ4rx3pPicYxzaxUu/Rm0HOGsJpDE3FcCGmNR7emBiCwRpsqehqLg==
   dependencies:
     "@types/deepmerge" "2.1.0"

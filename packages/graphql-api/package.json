@@ -27,6 +27,9 @@
   },
   "homepage": "https://github.com/js-accounts/graphql-api",
   "devDependencies": {
+    "@accounts/password": "^0.9.3",
+    "@accounts/server": "^0.9.3",
+    "@accounts/types": "^0.9.3",
     "@gql2ts/from-schema": "1.10.1",
     "@gql2ts/types": "1.9.0",
     "@graphql-modules/core": "0.4.0",
