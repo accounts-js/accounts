@@ -92,10 +92,7 @@ const accountsServerUri = 'http://localhost:4003/';
   const apolloServer = await new ApolloServer({
     schema: mergeSchemas({
       schemas: [executableLocalSchema, executableRemoteSchema],
-      schemaDirectives: {
-        // In order for the `@auth` directive to work
-        ...accounts.schemaDirectives,
-      },
+      schemaDirectives: accounts.schemaDirectives as any,
     }),
     context: ({ req }) => accounts.context({ req }),
   }).listen();

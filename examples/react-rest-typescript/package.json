@@ -10,9 +10,9 @@
     "eject": "react-scripts-ts eject"
   },
   "dependencies": {
-    "@accounts/client": "0.3.0-beta.29",
-    "@accounts/client-password": "0.3.0-beta.29",
-    "@accounts/rest-client": "0.3.0-beta.29",
+    "@accounts/client": "0.9.3",
+    "@accounts/client-password": "0.9.3",
+    "@accounts/rest-client": "0.9.3",
     "@material-ui/core": "1.5.1",
     "qrcode.react": "0.8.0",
     "react": "16.4.2",
