@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client",
-  "version": "0.9.3",
+  "version": "0.10.0",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -60,7 +60,7 @@
     "rimraf": "2.6.3"
   },
   "dependencies": {
-    "@accounts/types": "^0.9.3",
+    "@accounts/types": "^0.10.0",
     "jwt-decode": "2.2.0",
     "tslib": "1.9.3"
   }
