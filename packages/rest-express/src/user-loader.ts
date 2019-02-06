@@ -7,7 +7,10 @@ export const userLoader = (accountsServer: AccountsServer) => async (
   res: express.Response,
   next: any
 ) => {
-  let accessToken = get(req.headers, 'Authorization') || get(req.body, 'accessToken', undefined);
+  let accessToken =
+    get(req.headers, 'Authorization') ||
+    get(req.headers, 'authorization') ||
+    get(req.body, 'accessToken', undefined);
   accessToken = accessToken && accessToken.replace('Bearer ', '');
   if (!isEmpty(accessToken)) {
     try {

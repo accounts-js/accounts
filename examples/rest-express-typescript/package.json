@@ -10,14 +10,15 @@
     "test": "yarn build"
   },
   "dependencies": {
-    "@accounts/mongo": "0.3.0-beta.20",
-    "@accounts/password": "0.3.0-beta.20",
-    "@accounts/rest-express": "0.3.0-beta.20",
-    "@accounts/server": "0.3.0-beta.20",
+    "@accounts/mongo": "0.9.3",
+    "@accounts/password": "0.9.3",
+    "@accounts/rest-express": "0.9.3",
+    "@accounts/server": "0.9.3",
     "body-parser": "1.18.3",
-    "cors": "2.8.4",
+    "cors": "2.8.5",
     "express": "4.16.3",
-    "mongoose": "5.1.6"
+    "mongoose": "5.1.6",
+    "tslib": "1.9.3"
   },
   "devDependencies": {
     "@types/node": "10.5.4",

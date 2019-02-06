@@ -14,6 +14,7 @@ import { getTwoFactorSecretQuery } from './graphql/get-two-factor-secret.query';
 import { twoFactorUnsetMutation } from './graphql/two-factor-unset.mutation';
 import { impersonateMutation } from './graphql/impersonate.mutation';
 import { getUserQuery } from './graphql/get-user.query';
+import gql from 'graphql-tag';
 
 export interface IAuthenticateParams {
   [key: string]: string | object;
@@ -21,7 +22,7 @@ export interface IAuthenticateParams {
 
 export interface IOptionsType {
   graphQLClient: any;
-  userFieldsFragment?: string;
+  userFieldsFragment?: any;
 }
 
 export default class GraphQLClient implements TransportInterface {
@@ -30,6 +31,18 @@ export default class GraphQLClient implements TransportInterface {
 
   constructor(options: IOptionsType) {
     this.options = options;
+    this.options.userFieldsFragment =
+      this.options.userFieldsFragment ||
+      gql`
+        fragment userFields on User {
+          id
+          emails {
+            address
+            verified
+          }
+          username
+        }
+      `;
   }
 
   /**
@@ -57,7 +70,7 @@ export default class GraphQLClient implements TransportInterface {
   }
 
   public async getUser(): Promise<User> {
-    return this.query(getUserQuery, 'getUser');
+    return this.query(getUserQuery(this.options.userFieldsFragment), 'getUser');
   }
 
   /**
@@ -163,7 +176,7 @@ export default class GraphQLClient implements TransportInterface {
   }
 
   private async query(query: any, resultField: any, variables: any = {}) {
-    const tokens = (await this.client.refreshSession()) || { accessToken: '' };
+    const tokens = await this.client.refreshSession();
 
     try {
       const { data } = await this.options.graphQLClient.query({
@@ -172,7 +185,7 @@ export default class GraphQLClient implements TransportInterface {
         fetchPolicy: 'network-only',
         context: {
           headers: {
-            Authorization: 'Bearer ' + tokens.accessToken,
+            Authorization: tokens ? 'Bearer ' + tokens.accessToken : '',
           },
         },
       });

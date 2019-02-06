@@ -42,7 +42,7 @@
     "printWidth": 100
   },
   "resolutions": {
-    "@types/node": "10.12.18"
+    "@types/node": "10.12.21"
   },
   "renovate": {
     "extends": [

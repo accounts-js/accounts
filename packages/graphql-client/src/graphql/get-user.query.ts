@@ -1,14 +1,10 @@
 import gql from 'graphql-tag';
 
-export const getUserQuery = gql`
+export const getUserQuery = (userFieldsFragment: any) => gql`
+  ${userFieldsFragment}
   query {
     getUser {
-      id
-      emails {
-        address
-        verified
-      }
-      username
+      ...userFields
     }
   }
 `;

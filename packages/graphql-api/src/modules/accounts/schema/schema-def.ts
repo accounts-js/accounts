@@ -6,8 +6,8 @@ export default (config: AccountsModuleConfig) =>
     ? [
         gql`
     schema {
-        query: ${config.rootMutationName}
-        mutation: ${config.rootQueryName}
+        query: ${config.rootMutationName || 'Query'}
+        mutation: ${config.rootQueryName || 'Mutation'}
     }
 `,
       ]

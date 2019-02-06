@@ -19,21 +19,22 @@
     "@accounts/password": "file:../../packages/password",
     "@accounts/rest-express": "file:../../packages/rest-express",
     "@accounts/server": "file:../../packages/server",
-    "@graphql-modules/core": "0.4.0",
+    "@graphql-modules/core": "0.4.2",
     "graphql-toolkit": "0.0.5",
     "@types/mongoose": "5.2.0",
-    "apollo-server": "2.0.0-rc.5",
+    "apollo-server": "2.3.3",
     "cors": "2.8.4",
     "express": "4.16.3",
-    "graphql": "0.13.2",
-    "graphql-tools": "4.0.3",
+    "graphql": "14.1.1",
+    "graphql-tools": "4.0.4",
     "lodash": "4.17.10",
-    "mongoose": "5.2.2"
+    "mongoose": "5.2.2",
+    "tslib": "1.9.3"
   },
   "devDependencies": {
-    "@types/node": "10.5.4",
-    "nodemon": "1.17.5",
-    "ts-node": "7.0.0",
+    "@types/node": "10.12.21",
+    "nodemon": "1.18.9",
+    "ts-node": "8.0.2",
     "typescript": "3.2.4"
   }
 }

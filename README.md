@@ -78,7 +78,7 @@ These variables should then be referenced when creating your GraphQL server.
 ```javascript
 import accountsBoost, { authenticated } from '@accounts/boost';
 import { ApolloServer } from 'apollo-server';
-import { mergeGraphQLSchemas, mergeResolvers } from '@graphql-modules/epoxy';
+import { mergeGraphQLSchemas, mergeResolvers } from 'graphql-toolkit';
 
 (async () => {
   const accounts = (await accountsBoost({
