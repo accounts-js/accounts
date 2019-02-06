@@ -4,7 +4,7 @@
     "target": "es5",
     "lib": ["es2015", "esnext.asynciterable"],
     "sourceMap": true,
-    "skipLibCheck": true
+    "importHelpers": true
   },
   "include": ["./src/**/*"]
 }

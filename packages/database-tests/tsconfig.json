@@ -3,7 +3,8 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./lib",
-    "target": "esnext"
+    "target": "esnext",
+    "importHelpers": true
   },
   "exclude": ["node_modules", "__tests__", "lib"]
 }

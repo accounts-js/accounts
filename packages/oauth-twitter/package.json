@@ -24,7 +24,8 @@
     ]
   },
   "dependencies": {
-    "oauth": "^0.9.15"
+    "oauth": "^0.9.15",
+    "tslib": "1.9.3"
   },
   "devDependencies": {
     "@types/jest": "23.3.13",

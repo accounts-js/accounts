@@ -61,6 +61,7 @@
   },
   "dependencies": {
     "@accounts/types": "^0.9.3",
-    "jwt-decode": "2.2.0"
+    "jwt-decode": "2.2.0",
+    "tslib": "1.9.3"
   }
 }

@@ -47,6 +47,7 @@
     "rimraf": "2.6.3"
   },
   "dependencies": {
-    "@accounts/types": "^0.9.3"
+    "@accounts/types": "^0.9.3",
+    "tslib": "1.9.3"
   }
 }

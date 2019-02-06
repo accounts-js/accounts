@@ -38,6 +38,7 @@
   "dependencies": {
     "@accounts/types": "^0.9.3",
     "lodash": "^4.17.11",
-    "mongodb": "^3.1.10"
+    "mongodb": "^3.1.10",
+    "tslib": "1.9.3"
   }
 }

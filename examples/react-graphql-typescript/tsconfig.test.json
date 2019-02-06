@@ -2,6 +2,6 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
-    "skipLibCheck": true
+    "importHelpers": true
   }
 }
