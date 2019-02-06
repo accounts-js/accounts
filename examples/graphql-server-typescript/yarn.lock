@@ -161,20 +161,20 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@graphql-modules/core@0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.4.1.tgz#3b101b07f8631311e641c177b87c2f96192713b6"
-  integrity sha512-j0xE9b3h4wjlAXuKPVtD5rYhnP+8TUQFjKOELh9wnvFf4wMv15aYcPqXYy8jNZTxseWqRgnUTVyUWGA4kvaR4g==
+"@graphql-modules/core@0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.4.2.tgz#8a2c18d4012fc1ef73b6c65ec8198b7d0c02071e"
+  integrity sha512-elymkn9HDlapk4G5H/q7piPQsUPbJFzham2P3H/+2QE7QflR2X9N+b6KN4o/3ComE4SuKixm/i3+XusTCa4tZQ==
   dependencies:
-    "@graphql-modules/di" "0.4.1"
+    "@graphql-modules/di" "0.4.2"
     graphql-toolkit "0.0.5"
     graphql-tools "4.0.4"
     tslib "1.9.3"
 
-"@graphql-modules/di@0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.4.1.tgz#1db5b9b9955664079beed016270ef9dddd7bad13"
-  integrity sha512-S27yVwD0HHSwdPKwmv4k+4tBqRBJXnHbIMibOc3esSQCVpVQRtSgwljPJZdXBCjEf/57ah2dh/NM4FKxGjftdA==
+"@graphql-modules/di@0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.4.2.tgz#db730a587a4671d2e54b37b82215c97d46d4af81"
+  integrity sha512-Gzs1xGu3XiVisHnGcLmhlIeknHGAcjhQLbGSN/80pbkfBIlxxY1Qs/M0nMLezGAVB0nyqQfMtQLvfKmzxq3kAw==
   dependencies:
     tslib "1.9.3"
 
