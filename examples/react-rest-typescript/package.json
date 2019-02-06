@@ -10,25 +10,26 @@
     "eject": "react-scripts-ts eject"
   },
   "dependencies": {
-    "@accounts/client": "0.3.0-beta.29",
-    "@accounts/client-password": "0.3.0-beta.29",
-    "@accounts/rest-client": "0.3.0-beta.29",
-    "@material-ui/core": "1.5.1",
+    "@accounts/client": "0.9.3",
+    "@accounts/client-password": "0.9.3",
+    "@accounts/rest-client": "0.9.3",
+    "@material-ui/core": "3.9.2",
     "qrcode.react": "0.8.0",
-    "react": "16.4.2",
-    "react-dom": "16.4.2",
+    "react": "16.7.0",
+    "react-dom": "16.7.0",
     "react-router-dom": "4.3.1",
-    "react-scripts-ts": "2.17.0"
+    "react-scripts-ts": "3.1.0",
+    "tslib": "1.9.3"
   },
   "devDependencies": {
     "@types/jest": "23.3.2",
     "@types/node": "10.10.3",
     "@types/qrcode.react": "0.8.1",
-    "@types/react": "16.4.0",
-    "@types/react-dom": "16.0.7",
-    "@types/react-router": "4.0.29",
-    "@types/react-router-dom": "4.2.7",
-    "jest": "23.6.0",
-    "typescript": "2.9.2"
+    "@types/react": "16.8.1",
+    "@types/react-dom": "16.0.11",
+    "@types/react-router": "4.4.3",
+    "@types/react-router-dom": "4.3.1",
+    "jest": "23.4.2",
+    "typescript": "3.3.1"
   }
 }

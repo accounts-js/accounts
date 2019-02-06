@@ -4,7 +4,8 @@
     "rootDir": "./src",
     "outDir": "./lib",
     "noUnusedParameters": false,
-    "noUnusedLocals": false
+    "noUnusedLocals": false,
+    "importHelpers": true
   },
   "exclude": ["node_modules", "__tests__", "lib"]
 }

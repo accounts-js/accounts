@@ -179,11 +179,11 @@ const accountsServerUri = 'http://localhost:4003/';
     if (!previousContext.graphqlContext) {
       return {};
     }
-    // Attach the accounts-access-token to requests which are proxied to the remote schema.
+    // Attach the Authorization to requests which are proxied to the remote schema.
     // This step is optional and only required if you want the `getUser` query to return data.
     return {
       headers: {
-        'accounts-access-token': previousContext.graphqlContext.authToken,
+        Authorization: 'Bearer ' + previousContext.graphqlContext.authToken,
       },
     };
   }).concat(http);

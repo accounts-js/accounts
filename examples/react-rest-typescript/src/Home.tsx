@@ -24,7 +24,7 @@ class Home extends React.Component<RouteComponentProps<{}>, State> {
     }
     const res = await fetch('http://localhost:4000/user', {
       headers: {
-        'accounts-access-token': tokens ? tokens.accessToken : '',
+        Authorization: tokens ? 'Bearer ' + tokens.accessToken : '',
       },
     });
     const user = await res.json();

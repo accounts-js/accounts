@@ -29,6 +29,7 @@
     "jest": "23.6.0"
   },
   "dependencies": {
-    "@accounts/types": "^0.9.3"
+    "@accounts/types": "^0.9.3",
+    "tslib": "1.9.3"
   }
 }

@@ -25,7 +25,8 @@
   },
   "dependencies": {
     "request": "^2.88.0",
-    "request-promise": "^4.2.1"
+    "request-promise": "^4.2.1",
+    "tslib": "1.9.3"
   },
   "devDependencies": {
     "@types/jest": "23.3.13",

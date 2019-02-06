@@ -50,9 +50,7 @@ export class RestClient implements TransportInterface {
     const tokens = await this.client.refreshSession();
     return this.fetch(route, args, {
       ...customHeaders,
-      ...{
-        'accounts-access-token': tokens ? tokens.accessToken : '',
-      },
+      Authorization: tokens ? 'Bearer ' + tokens.accessToken : '',
     });
   }
 

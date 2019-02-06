@@ -15,7 +15,7 @@ yarn add @accounts/apollo-link
 import { accountsLink } from '@accounts/apollo-link';
 
 const accountsClient = new AccountsClient( ... );
-const authLink = accountsLink(accountsClient);
+const authLink = accountsLink(() => accountsClient);
 
 export const apolloClient = new ApolloClient({
   link: ApolloLink.from([authLink, httpLink]),

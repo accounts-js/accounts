@@ -14,7 +14,7 @@ describe('context-builder', () => {
   const reqMock = {
     headers: {
       'x-client-ip': ip,
-      ['accounts-access-token']: authToken,
+      Authorization: 'Bearer ' + authToken,
     },
   };
   const user = { id: 'idTest' };

@@ -45,6 +45,9 @@
   ],
   "author": "Elies Lou (Aetherall)",
   "license": "MIT",
+  "dependencies": {
+    "tslib": "1.9.3"
+  },
   "devDependencies": {
     "@types/jest": "23.3.13",
     "@types/node": "10.12.21",

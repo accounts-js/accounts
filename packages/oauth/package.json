@@ -25,7 +25,8 @@
   },
   "dependencies": {
     "@accounts/types": "^0.9.3",
-    "request-promise": "^4.2.1"
+    "request-promise": "^4.2.1",
+    "tslib": "1.9.3"
   },
   "devDependencies": {
     "@accounts/server": "^0.9.3",

@@ -78,7 +78,7 @@ These variables should then be referenced when creating your GraphQL server.
 ```javascript
 import accountsBoost, { authenticated } from '@accounts/boost';
 import { ApolloServer } from 'apollo-server';
-import { mergeGraphQLSchemas, mergeResolvers } from '@graphql-modules/epoxy';
+import { mergeGraphQLSchemas, mergeResolvers } from 'graphql-toolkit';
 
 (async () => {
   const accounts = (await accountsBoost({
@@ -190,11 +190,11 @@ const accountsServerUri = 'http://localhost:4003/';
     if (!previousContext.graphqlContext) {
       return {};
     }
-    // Attach the accounts-access-token to requests which are proxied to the remote schema.
+    // Attach the Authorization to requests which are proxied to the remote schema.
     // This step is optional and only required if you want the `getUser` query to return data.
     return {
       headers: {
-        'accounts-access-token': previousContext.graphqlContext.authToken,
+        Authorization: 'Bearer ' + previousContext.graphqlContext.authToken,
       },
     };
   }).concat(http);

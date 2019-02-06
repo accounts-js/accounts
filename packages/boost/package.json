@@ -27,11 +27,12 @@
     "@accounts/graphql-api": "^0.9.3",
     "@accounts/server": "^0.9.3",
     "@accounts/types": "^0.9.3",
-    "@graphql-modules/core": "0.2.18",
+    "@graphql-modules/core": "0.4.2",
     "apollo-server": "^2.2.3",
     "graphql": "^14.0.2",
     "graphql-tools": "^4.0.3",
     "jsonwebtoken": "^8.4.0",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.11",
+    "tslib": "1.9.3"
   }
 }

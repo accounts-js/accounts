@@ -2,14 +2,17 @@ import { setContext } from 'apollo-link-context';
 import { ApolloLink } from 'apollo-link';
 import { AccountsClient } from '@accounts/client';
 
-export const accountsLink = (accountsClient: AccountsClient): ApolloLink => {
+type AccountsClientFactory = () => AccountsClient | Promise<AccountsClient>;
+
+export const accountsLink = (accountsClientFactory: AccountsClientFactory): ApolloLink => {
   return setContext(async (_, { headers: headersWithoutTokens }) => {
-    const tokens = await accountsClient.refreshSession();
+    const accountsClient = await accountsClientFactory();
+    const tokens = await accountsClient.getTokens();
 
     const headers = { ...headersWithoutTokens };
 
     if (tokens) {
-      headers['accounts-access-token'] = tokens.accessToken;
+      headers.Authorization = 'Bearer ' + tokens.accessToken;
     }
 
     return {

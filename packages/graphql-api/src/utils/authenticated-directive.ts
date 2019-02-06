@@ -6,8 +6,11 @@ export class AuthenticatedDirective extends SchemaDirectiveVisitor {
   }
   public visitObject(object: any) {
     const fields = object.getFields();
-    Object.keys(fields).forEach((key: any) => {
-      fields[key].resolve = authenticated(fields[key].resolve);
+    Object.keys(fields).forEach(fieldName => {
+      const field = fields[fieldName];
+      if ('resolve' in field) {
+        field.resolve = authenticated(field.resolve);
+      }
     });
   }
 }

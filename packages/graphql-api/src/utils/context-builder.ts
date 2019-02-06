@@ -1,8 +1,6 @@
 import { AccountsRequest, AccountsModuleConfig } from '../modules';
-import { ModuleConfig } from '@graphql-modules/core';
+import { ModuleConfig, ModuleSessionInfo } from '@graphql-modules/core';
 import { getClientIp } from 'request-ip';
-// tslint:disable-next-line:no-submodule-imports
-import { ModuleSessionInfo } from '@graphql-modules/core/dist/module-session-info';
 
 export const context = (moduleName: string) => async (
   { req }: AccountsRequest,
@@ -17,11 +15,12 @@ export const context = (moduleName: string) => async (
   }
 
   const config: AccountsModuleConfig = injector.get(ModuleConfig(moduleName));
-  const headerName = config.headerName || 'accounts-access-token';
-  const authToken = (req.headers[headerName] || req.headers[headerName.toLowerCase()]) as string;
+  const headerName = config.headerName || 'Authorization';
+  let authToken = (req.headers[headerName] || req.headers[headerName.toLowerCase()]) as string;
+  authToken = authToken && authToken.replace('Bearer ', '');
   let user;
 
-  if (authToken) {
+  if (authToken && !config.excludeAddUserInContext) {
     try {
       user = await config.accountsServer.resumeSession(authToken);
     } catch (error) {

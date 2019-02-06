@@ -588,15 +588,15 @@ export interface DeprecatedDirectiveArgs {
   reason?: string;
 }
 
-export interface IResolvers {
-  Query?: QueryResolvers;
-  TwoFactorSecretKey?: TwoFactorSecretKeyResolvers;
-  User?: UserResolvers;
-  EmailRecord?: EmailRecordResolvers;
-  Mutation?: MutationResolvers;
-  LoginResult?: LoginResultResolvers;
-  Tokens?: TokensResolvers;
-  ImpersonateReturn?: ImpersonateReturnResolvers;
+export interface IResolvers<Context = {}> {
+  Query?: QueryResolvers<Context>;
+  TwoFactorSecretKey?: TwoFactorSecretKeyResolvers<Context>;
+  User?: UserResolvers<Context>;
+  EmailRecord?: EmailRecordResolvers<Context>;
+  Mutation?: MutationResolvers<Context>;
+  LoginResult?: LoginResultResolvers<Context>;
+  Tokens?: TokensResolvers<Context>;
+  ImpersonateReturn?: ImpersonateReturnResolvers<Context>;
 }
 
 export interface IDirectiveResolvers<Result> {

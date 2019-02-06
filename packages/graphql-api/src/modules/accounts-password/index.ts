@@ -16,6 +16,9 @@ export interface AccountsPasswordModuleConfig {
   rootMutationName?: string;
   extendTypeDefs?: boolean;
   withSchemaDefinition?: boolean;
+  headerName?: string;
+  userAsInterface?: boolean;
+  excludeAddUserInContext?: boolean;
 }
 
 export const AccountsPasswordModule = new GraphQLModule<

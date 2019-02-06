@@ -25,6 +25,7 @@
     "rimraf": "2.6.3"
   },
   "dependencies": {
-    "apollo-link-context": "1.0.14"
+    "apollo-link-context": "1.0.14",
+    "tslib": "1.9.3"
   }
 }

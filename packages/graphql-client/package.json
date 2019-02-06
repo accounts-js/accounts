@@ -39,6 +39,7 @@
   "dependencies": {
     "@accounts/client": "^0.9.3",
     "@accounts/types": "^0.9.3",
-    "graphql-tag": "^2.10.0"
+    "graphql-tag": "^2.10.0",
+    "tslib": "1.9.3"
   }
 }

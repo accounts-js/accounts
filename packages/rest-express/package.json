@@ -57,6 +57,7 @@
     "@accounts/types": "^0.9.3",
     "express": "^4.16.4",
     "lodash": "^4.17.11",
-    "request-ip": "^2.1.3"
+    "request-ip": "^2.1.3",
+    "tslib": "1.9.3"
   }
 }
