@@ -126,10 +126,10 @@ export class AccountsTypeorm implements DatabaseInterface {
   public async createUser(createUser: CreateUser): Promise<string> {
     const { username, email, password, ...otherFields } = createUser;
 
-    const user = new User();
+    const user = new this.options.userEntity();
 
     if (email) {
-      const userEmail = new UserEmail();
+      const userEmail = new this.options.userEmailEntity();
       userEmail.address = email.toLocaleLowerCase();
       userEmail.verified = false;
       await this.emailRepository.save(userEmail);
@@ -137,7 +137,7 @@ export class AccountsTypeorm implements DatabaseInterface {
     }
 
     if (password) {
-      const userService = new UserService();
+      const userService = new this.options.userServiceEntity();
       userService.name = 'password';
       userService.options = { bcrypt: password };
       await this.serviceRepository.save(userService);
@@ -212,7 +212,7 @@ export class AccountsTypeorm implements DatabaseInterface {
     if (!service) {
       const user = await this.findUserById(userId);
       if (user) {
-        service = new UserService();
+        service = new this.options.userServiceEntity();
         service.name = serviceName;
         service.user = user;
       }
@@ -294,7 +294,7 @@ export class AccountsTypeorm implements DatabaseInterface {
   public async addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
     const user = await this.findUserById(userId);
     if (user) {
-      const userEmail = new UserEmail();
+      const userEmail = new this.options.userEmailEntity();
       userEmail.user = user;
       userEmail.address = newEmail.toLocaleLowerCase();
       userEmail.verified = verified;
@@ -396,7 +396,7 @@ export class AccountsTypeorm implements DatabaseInterface {
     extra?: object
   ) {
     const user = await this.findUserById(userId);
-    const session = new UserSession();
+    const session = new this.options.userSessionEntity();
     session.user = user!;
     session.token = token;
     session.userAgent = connection.userAgent;
