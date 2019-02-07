@@ -1,6 +1,6 @@
 {
   "name": "@accounts/graphql-client",
-  "version": "0.11.1",
+  "version": "0.11.2",
   "description": "GraphQL client transport for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -37,8 +37,8 @@
     "nock": "10.0.6"
   },
   "dependencies": {
-    "@accounts/client": "^0.11.1",
-    "@accounts/types": "^0.11.1",
+    "@accounts/client": "^0.11.2",
+    "@accounts/types": "^0.11.2",
     "graphql-tag": "^2.10.0",
     "tslib": "1.9.3"
   }
