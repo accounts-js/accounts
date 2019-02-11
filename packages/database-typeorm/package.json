@@ -30,7 +30,7 @@
   "devDependencies": {
     "@accounts/database-tests": "^0.11.2",
     "@types/jest": "23.3.13",
-    "@types/node": "10.12.21",
+    "@types/node": "10.12.24",
     "jest": "23.6.0",
     "pg": "7.8.0"
   },
