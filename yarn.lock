@@ -429,10 +429,10 @@
     "@types/bson" "*"
     "@types/node" "*"
 
-"@types/mongoose@5.3.10":
-  version "5.3.10"
-  resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.3.10.tgz#7c5e8ff0c51a2c750b9d0ee6bb1cf0ee65826719"
-  integrity sha512-Sl5zbzBtjBMdEldbfiZEuF6p1FQZ+7R9TaFYROpeQzBKW9ZK/Xf0Y+E2mtWSNVM3mMjM/Hzw+20K+j/WV6TenQ==
+"@types/mongoose@5.3.12":
+  version "5.3.12"
+  resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.3.12.tgz#15cfda757852a2da2840fc2b001e693039cbbdf5"
+  integrity sha512-dmZv3H9lXWhLY8XrxJNu+pVUecquReR3AtPxVsnPTcTH/T/YTgxE0zeTavNcqaBUD5XXKtlTy+2VhZxDkn/0Jw==
   dependencies:
     "@types/mongodb" "*"
     "@types/node" "*"
@@ -5563,26 +5563,7 @@ mongodb-core@3.1.11:
   optionalDependencies:
     saslprep "^1.0.0"
 
-mongodb-core@3.1.9:
-  version "3.1.9"
-  resolved "https://registry.yarnpkg.com/mongodb-core/-/mongodb-core-3.1.9.tgz#c31ee407bf932b0149eaed775c17ee09974e4ca3"
-  integrity sha512-MJpciDABXMchrZphh3vMcqu8hkNf/Mi+Gk6btOimVg1XMxLXh87j6FAvRm+KmwD1A9fpu3qRQYcbQe4egj23og==
-  dependencies:
-    bson "^1.1.0"
-    require_optional "^1.0.1"
-    safe-buffer "^5.1.2"
-  optionalDependencies:
-    saslprep "^1.0.0"
-
-mongodb@3.1.10:
-  version "3.1.10"
-  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.1.10.tgz#45ad9b74ea376f4122d0881b75e5489b9e504ed7"
-  integrity sha512-Uml42GeFxhTGQVml1XQ4cD0o/rp7J2ROy0fdYUcVitoE7vFqEhKH4TYVqRDpQr/bXtCJVxJdNQC1ntRxNREkPQ==
-  dependencies:
-    mongodb-core "3.1.9"
-    safe-buffer "^5.1.2"
-
-mongodb@^3.1.10:
+mongodb@3.1.13, mongodb@^3.1.10:
   version "3.1.13"
   resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.1.13.tgz#f8cdcbb36ad7a08b570bd1271c8525753f75f9f4"
   integrity sha512-sz2dhvBZQWf3LRNDhbd30KHVzdjZx9IKC0L+kSZ/gzYquCF5zPOgGqRz6sSCqYZtKP2ekB4nfLxhGtzGHnIKxA==
@@ -5595,16 +5576,16 @@ mongoose-legacy-pluralize@1.0.2:
   resolved "https://registry.yarnpkg.com/mongoose-legacy-pluralize/-/mongoose-legacy-pluralize-1.0.2.tgz#3ba9f91fa507b5186d399fb40854bff18fb563e4"
   integrity sha512-Yo/7qQU4/EyIS8YDFSeenIvXxZN+ld7YdV9LqFVQJzTLye8unujAWPZ4NWKfFA+RNjh+wvTWKY9Z3E5XM6ZZiQ==
 
-mongoose@5.4.7:
-  version "5.4.7"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.4.7.tgz#eac012b38636a4b9075f66480263dd426e65c5c1"
-  integrity sha512-bFB9/VHB1FAY2dgTHIjtUYThcIaYSyS0vG0sCpwjW2GZ3XDTykXKV9dlGSWPqJ9+dnSOevdrhoHBgL3b63Or5w==
+mongoose@5.4.11:
+  version "5.4.11"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.4.11.tgz#db1cbbabbd6287cbdecdf52c2ea8d43194bc517a"
+  integrity sha512-Ah/JaZj4vhYP2CEjIy1ictJguzGJczHMtUQmLrBUpnQ4WhhQl5jOo6JHzKiRJ/PdLV25y22kt8WOdsc0DIojww==
   dependencies:
     async "2.6.1"
     bson "~1.1.0"
     kareem "2.3.0"
-    mongodb "3.1.10"
-    mongodb-core "3.1.9"
+    mongodb "3.1.13"
+    mongodb-core "3.1.11"
     mongoose-legacy-pluralize "1.0.2"
     mpath "0.5.1"
     mquery "3.2.0"
