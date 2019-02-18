@@ -25,6 +25,12 @@ export const emailTemplates: EmailTemplatesType = {
     html: (user: User, url: string) =>
       `To set your password please <a href="${url}">click here</a>.`,
   },
+
+  passwordChanged: {
+    subject: () => 'Your password has been changed',
+    text: () => `Your account password has been successfully changed`,
+    html: () => `Your account password has been successfully changed.`,
+  },
 };
 
 export type SendMailType = (mail: object) => Promise<void>;
