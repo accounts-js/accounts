@@ -311,12 +311,11 @@
     "@types/node" "*"
     "@types/range-parser" "*"
 
-"@types/express-session@1.15.11":
-  version "1.15.11"
-  resolved "https://registry.yarnpkg.com/@types/express-session/-/express-session-1.15.11.tgz#49bca7a8fb5c00402907e8ec0d3546ee28de2c41"
-  integrity sha512-BRgOXYBhmt71CuOR/PQvKBRgcS567xJmE7dT3r/FvTmWc1ZsR5joVH32dgH+z6F4FugniF04tMyXc4UF9M8Hfg==
+"@types/express-session@1.15.12":
+  version "1.15.12"
+  resolved "https://registry.yarnpkg.com/@types/express-session/-/express-session-1.15.12.tgz#1126704826e80f8381da4fbbb35a199f550d1433"
+  integrity sha512-DHZXzWy6Nu5Ng0syXUiVFRpZ6/1DOXoTCWa6RG3itGrub2ioBYvgtDbkT6VHHNo3iOdHRROyWANsMBJVaflblQ==
   dependencies:
-    "@types/events" "*"
     "@types/express" "*"
     "@types/node" "*"
 
