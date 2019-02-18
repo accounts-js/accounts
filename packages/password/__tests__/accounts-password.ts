@@ -371,10 +371,24 @@ describe('AccountsPassword', () => {
   });
 
   describe('changePassword', () => {
+    const validUser = {
+      emails: [{ address: 'john.doe@gmail.com', verified: true }],
+    };
+
     it('call passwordAuthenticator and this.db.setPassword', async () => {
       const userId = 'id';
       const setPassword = jest.fn(() => Promise.resolve('user'));
-      password.setStore({ setPassword } as any);
+      const findUserById = jest.fn(() => Promise.resolve(validUser));
+      password.setStore({ setPassword, findUserById } as any);
+      const prepareMail = jest.fn(() => Promise.resolve());
+      const sanitizeUser = jest.fn(() => Promise.resolve());
+      const sendMail = jest.fn(() => Promise.resolve());
+      password.server = {
+        prepareMail,
+        options: { sendMail },
+        sanitizeUser,
+      } as any;
+      set(password.server, 'options.emailTemplates', {});
       const passwordAuthenticator = jest
         .spyOn(password, 'passwordAuthenticator' as any)
         .mockImplementation(() => Promise.resolve({}));
@@ -383,6 +397,8 @@ describe('AccountsPassword', () => {
       expect(passwordAuthenticator.mock.calls[0][1]).toEqual('old-password');
       expect(setPassword.mock.calls[0][0]).toEqual(userId);
       expect(setPassword.mock.calls[0][1]).toBeTruthy();
+      expect(prepareMail.mock.calls[0].length).toBe(6);
+      expect(sendMail.mock.calls[0].length).toBe(1);
       (password as any).passwordAuthenticator.mockRestore();
     });
   });
