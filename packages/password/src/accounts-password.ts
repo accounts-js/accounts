@@ -247,20 +247,22 @@ export default class AccountsPassword implements AuthenticationService {
     // Changing the password should invalidate existing sessions
     await this.db.invalidateAllSessions(user.id);
 
-    const address = user.emails && user.emails[0].address;
-    if (!address) {
-      throw new Error(this.options.errors.noEmailSet);
-    }
+    if (this.options.notifyUserAfterPasswordChanged) {
+      const address = user.emails && user.emails[0].address;
+      if (!address) {
+        throw new Error(this.options.errors.noEmailSet);
+      }
 
-    const passwordChangedtMail = this.server.prepareMail(
-      address,
-      '',
-      this.server.sanitizeUser(user),
-      '',
-      this.server.options.emailTemplates.passwordChanged,
-      this.server.options.emailTemplates.from
-    );
-    await this.server.options.sendMail(passwordChangedtMail);
+      const passwordChangedMail = this.server.prepareMail(
+        address,
+        '',
+        this.server.sanitizeUser(user),
+        '',
+        this.server.options.emailTemplates.passwordChanged,
+        this.server.options.emailTemplates.from
+      );
+      await this.server.options.sendMail(passwordChangedMail);
+    }
 
     if (this.options.returnTokensAfterResetPassword) {
       return this.server.loginWithUser(user, infos);
@@ -293,28 +295,30 @@ export default class AccountsPassword implements AuthenticationService {
   ): Promise<void> {
     await this.passwordAuthenticator({ id: userId }, oldPassword);
 
-    const user = await this.db.findUserById(userId);
-    if (!user) {
-      throw new Error(this.options.errors.userNotFound);
-    }
-
     const password = await bcryptPassword(newPassword);
     await this.db.setPassword(userId, password);
 
-    const address = user.emails && user.emails[0].address;
-    if (!address) {
-      throw new Error(this.options.errors.noEmailSet);
-    }
+    if (this.options.notifyUserAfterPasswordChanged) {
+      const user = await this.db.findUserById(userId);
+      if (!user) {
+        throw new Error(this.options.errors.userNotFound);
+      }
 
-    const passwordChangedtMail = this.server.prepareMail(
-      address,
-      '',
-      this.server.sanitizeUser(user),
-      '',
-      this.server.options.emailTemplates.passwordChanged,
-      this.server.options.emailTemplates.from
-    );
-    await this.server.options.sendMail(passwordChangedtMail);
+      const address = user.emails && user.emails[0].address;
+      if (!address) {
+        throw new Error(this.options.errors.noEmailSet);
+      }
+
+      const passwordChangedMail = this.server.prepareMail(
+        address,
+        '',
+        this.server.sanitizeUser(user),
+        '',
+        this.server.options.emailTemplates.passwordChanged,
+        this.server.options.emailTemplates.from
+      );
+      await this.server.options.sendMail(passwordChangedMail);
+    }
   }
 
   /**
