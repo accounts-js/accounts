@@ -34,7 +34,7 @@
     "@accounts/types": "^0.11.2",
     "@types/bcryptjs": "2.4.2",
     "@types/jest": "23.3.13",
-    "@types/lodash": "4.14.120",
+    "@types/lodash": "4.14.121",
     "@types/node": "10.12.24",
     "jest": "23.6.0",
     "rimraf": "2.6.3"
