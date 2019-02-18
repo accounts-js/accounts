@@ -6,6 +6,7 @@ describe('email', () => {
       expect(emailTemplates.verifyEmail.subject()).toMatchSnapshot();
       expect(emailTemplates.resetPassword.subject()).toMatchSnapshot();
       expect(emailTemplates.enrollAccount.subject()).toMatchSnapshot();
+      expect(emailTemplates.passwordChanged.subject()).toMatchSnapshot();
     });
 
     it('should return default text', () => {
@@ -14,6 +15,7 @@ describe('email', () => {
       expect(emailTemplates.verifyEmail.text(user, url)).toMatchSnapshot();
       expect(emailTemplates.resetPassword.text(user, url)).toMatchSnapshot();
       expect(emailTemplates.enrollAccount.text(user, url)).toMatchSnapshot();
+      expect(emailTemplates.passwordChanged.text(user, url)).toMatchSnapshot();
     });
 
     it('should return default html', () => {
@@ -22,6 +24,7 @@ describe('email', () => {
       expect(emailTemplates.verifyEmail.html!(user, url)).toMatchSnapshot();
       expect(emailTemplates.resetPassword.html!(user, url)).toMatchSnapshot();
       expect(emailTemplates.enrollAccount.html!(user, url)).toMatchSnapshot();
+      expect(emailTemplates.passwordChanged.html!(user, url)).toMatchSnapshot();
     });
   });
 });
