@@ -62,7 +62,7 @@ Now, add `accountsGraphQL.typeDefs` to your schema definition (just before using
 
 ```js
 import { makeExecutableSchema } from 'graphql-tools';
-import { merge } from 'lodash';
+import { mergeGraphQLSchemas } from 'graphql-toolkit';
 
 const typeDefs = [
   `
@@ -92,7 +92,7 @@ let myResolvers = {
 };
 
 const schema = makeExecutableSchema({
-  resolvers: merge(accountsGraphQL.resolvers, myResolvers),
+  resolvers: mergeGraphQLSchemas(accountsGraphQL.resolvers, myResolvers),
   typeDefs,
 });
 ```
