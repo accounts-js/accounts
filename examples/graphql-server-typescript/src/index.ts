@@ -20,11 +20,23 @@ const start = async () => {
     userStorage,
   });
 
+  const accountsPassword = new AccountsPassword({
+    // This option is called when a new user create an account
+    // Inside we can apply our logic to validate the user fields
+    validateNewUser: user => {
+      // For example we can allow only some kind of emails
+      if (user.email.endsWith('.xyz')) {
+        throw new Error('Invalid email');
+      }
+      return user;
+    },
+  });
+
   // Create accounts server that holds a lower level of all accounts operations
   const accountsServer = new AccountsServer(
     { db: accountsDb, tokenSecret: 'secret' },
     {
-      password: new AccountsPassword(),
+      password: accountsPassword,
     }
   );
 
@@ -36,6 +48,16 @@ const start = async () => {
   const typeDefs = `
   type PrivateType @auth {
     field: String
+  }
+
+  # Our custom fields to add to the user
+  extend input CreateUserInput {
+    profile: CreateUserProfileInput!
+  }
+
+  input CreateUserProfileInput {
+    firstName: String!
+    lastName: String!
   }
 
   type Query {

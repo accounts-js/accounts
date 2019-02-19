@@ -194,6 +194,8 @@ const UserResolver = {
 To extend the user object during the user creation you need to extend the `CreateUserInput` type and add your fields:
 
 ```graphql
+# mySchema.graphql
+
 extend input CreateUserInput {
   profile: CreateUserProfileInput!
 }
@@ -204,7 +206,29 @@ input CreateUserProfileInput {
 }
 ```
 
+By default accounts-js only allow 'username', 'email' and 'password' for the user. In order to add custom fields you need to pass the `validateNewUser` function when you instanciate the 'accounts-password' package.
+
+```javascript
+// server.js
+
+const accountsPassword = new AccountsPassword({
+  // This option is called when a new user create an account
+  // Inside we can apply our logic to validate the user fields
+  validateNewUser: user => {
+    if (user.profile.firstName.length < 2) {
+      throw new Error('First name too short');
+    }
+    return user;
+  },
+});
+```
+
 The user will be saved in the db with the profile key set.
+
+You can check our examples if you want to try it:
+
+- server: https://github.com/accounts-js/accounts/tree/master/examples/graphql-server-typescript
+- client: https://github.com/accounts-js/accounts/tree/master/examples/react-graphql-typescript
 
 ## Extending `User` interface
 
