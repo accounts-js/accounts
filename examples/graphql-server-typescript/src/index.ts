@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import { mergeResolvers, mergeGraphQLSchemas } from 'graphql-toolkit';
 import { AccountsServer } from '@accounts/server';
 import { AccountsPassword } from '@accounts/password';
