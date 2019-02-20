@@ -1,16 +1,35 @@
 /* your custom css */
 
-@media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
+.homeContainer .homeWrapper {
+  padding: 2em 1em;
 }
 
-@media only screen and (min-width: 1024px) {
+.projectLogo {
+  display: block;
+  pointer-events: auto;
+  padding: 1em 0em;
 }
 
-@media only screen and (max-width: 1023px) {
+.homeContainer .homeWrapper .projectLogo img {
+  height: auto;
 }
 
-@media only screen and (min-width: 1400px) {
+.projectTitle {
+  margin-top: 0;
 }
 
-@media only screen and (min-width: 1500px) {
+.projectTitle small {
+  margin-top: 1em;
+}
+
+@media only screen and (min-width: 1200px) {
+  .homeContainer .homeWrapper .projectLogo {
+    justify-content: center;
+    position: relative;
+    padding: 1em 0em;
+  }
+
+  .homeContainer .homeWrapper .projectLogo img {
+    max-width: 550px;
+  }
 }
