@@ -28,6 +28,10 @@
 }
 
 @media only screen and (min-width: 1200px) {
+  .mainContainer .wrapper {
+    max-width: 1100px;
+  }
+
   .homeContainer .homeWrapper {
     padding: 6em 2em 1em;
   }
@@ -36,5 +40,9 @@
     justify-content: center;
     position: relative;
     padding: 1em 0em;
+  }
+
+  .gridBlock > * {
+    margin: 0 25px;
   }
 }
