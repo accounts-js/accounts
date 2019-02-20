@@ -1,5 +1,10 @@
 /* your custom css */
 
+.fixedHeaderContainer {
+  background: #ffffff;
+  border-bottom: 1px solid #f6f6f6;
+}
+
 .container.grey {
   background-color: #f6f6f6;
 }
@@ -28,6 +33,27 @@
 }
 
 @media only screen and (min-width: 1200px) {
+  .fixedHeaderContainer {
+    padding: 1em 0;
+  }
+
+  .fixedHeaderContainer header {
+    align-items: center;
+  }
+
+  .fixedHeaderContainer a {
+    height: 40px;
+  }
+
+  .navigationSlider .slidingNav ul li a {
+    color: #8fced1;
+  }
+
+  .navPusher {
+    /* Size of the header */
+    padding-top: 73px;
+  }
+
   .mainContainer .wrapper {
     max-width: 1100px;
   }
