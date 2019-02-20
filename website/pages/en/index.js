@@ -24,7 +24,11 @@ class Button extends React.Component {
   render() {
     return (
       <div className="pluginWrapper buttonWrapper">
-        <a className="button" href={this.props.href} target={this.props.target}>
+        <a
+          className={`button ${this.props.className || ''}`}
+          href={this.props.href}
+          target={this.props.target}
+        >
           {this.props.children}
         </a>
       </div>
@@ -73,7 +77,9 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle />
           <PromoSection>
-            <Button href={docUrl('getting-started.html', language)}>Getting started</Button>
+            <Button href={docUrl('getting-started.html', language)} className="primary">
+              Getting started
+            </Button>
             <Button href={siteConfig.repoUrl}>Github</Button>
           </PromoSection>
         </div>

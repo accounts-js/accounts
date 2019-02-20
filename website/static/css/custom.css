@@ -32,6 +32,15 @@
   margin-top: 1em;
 }
 
+.promoSection .promoRow .pluginRowBlock .pluginWrapper {
+  padding: 0 6px;
+}
+
+.button.primary {
+  background: #8fced1;
+  color: #fff;
+}
+
 @media only screen and (min-width: 1200px) {
   .fixedHeaderContainer {
     padding: 1em 0;
