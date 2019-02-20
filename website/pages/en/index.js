@@ -88,104 +88,41 @@ class HomeSplash extends React.Component {
   }
 }
 
-const Block = props => (
-  <Container padding={['bottom', 'top']} id={props.id} background={props.background}>
-    <GridBlock align="center" contents={props.children} layout={props.layout} />
-  </Container>
-);
-
-const Features = props => (
-  <Block layout="fourColumn">
-    {[
-      {
-        content: 'This is the content of my feature',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'top',
-        title: 'Feature One',
-      },
-      {
-        content: 'The content of my second feature',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'top',
-        title: 'Feature Two',
-      },
-    ]}
-  </Block>
-);
-
-const FeatureCallout = props => (
-  <div className="productShowcaseSection paddingBottom" style={{ textAlign: 'center' }}>
-    <h2>Feature Callout</h2>
-    <MarkdownBlock>These are features of this project</MarkdownBlock>
-  </div>
-);
-
-const LearnHow = props => (
-  <Block background="light">
-    {[
-      {
-        content: 'Talk about learning how to use this',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'right',
-        title: 'Learn How',
-      },
-    ]}
-  </Block>
-);
-
-const TryOut = props => (
-  <Block id="try">
-    {[
-      {
-        content: 'Talk about trying this out',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'left',
-        title: 'Try it Out',
-      },
-    ]}
-  </Block>
-);
-
-const Description = props => (
-  <Block background="dark">
-    {[
-      {
-        content: 'This is another description of how this project is useful',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'right',
-        title: 'Description',
-      },
-    ]}
-  </Block>
-);
-
-const Showcase = props => {
-  if ((siteConfig.users || []).length === 0) {
-    return null;
-  }
-  const showcase = siteConfig.users
-    .filter(user => {
-      return user.pinned;
-    })
-    .map((user, i) => {
-      return (
-        <a href={user.infoLink} key={i}>
-          <img src={user.image} alt={user.caption} title={user.caption} />
-        </a>
-      );
-    });
-
+const Features = () => {
   return (
-    <div className="productShowcaseSection paddingBottom">
-      <h2>{"Who's Using This?"}</h2>
-      <p>This project is used by all these people</p>
-      <div className="logos">{showcase}</div>
-      <div className="more-users">
-        <a className="button" href={pageUrl('users.html', props.language)}>
-          More {siteConfig.title} Users
-        </a>
+    <Container padding={['bottom', 'top']} className="grey">
+      <div className="gridBlock">
+        <div className="blockElement alignCenter fourByGridBlock">
+          <div className="blockContent">
+            <h2>Multiple transports</h2>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tempor accumsan lectus,
+              vitae cursus lorem aliquam et. Ut vulputate ligula eget nulla euismod, sit amet
+              feugiat mi vestibulum. Ut aliquam luctus mi tristique consectetur.
+            </p>
+          </div>
+        </div>
+        <div className="blockElement alignCenter fourByGridBlock">
+          <div className="blockContent">
+            <h2>Databases agnostic</h2>
+            <p>
+              Integer ut sapien a ipsum posuere dignissim. Donec ac molestie est, vel posuere massa.
+              Cras lorem felis, efficitur ac dui sit amet, ultrices finibus nisi. Duis dictum
+              feugiat nisi sit amet venenatis. Cras iaculis dictum ex vel fringilla.
+            </p>
+          </div>
+        </div>
+        <div className="blockElement alignCenter fourByGridBlock">
+          <div className="blockContent">
+            <h2>Strategies</h2>
+            <p>
+              Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+              Nunc lobortis sit amet turpis ut pellentesque. In aliquet nec mauris ac luctus.
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
+    </Container>
   );
 };
 
@@ -198,8 +135,6 @@ class Index extends React.Component {
         <HomeSplash language={language} />
         <div className="mainContainer">
           <Features />
-          <FeatureCallout />
-          <Showcase language={language} />
         </div>
       </div>
     );

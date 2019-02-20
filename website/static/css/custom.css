@@ -1,5 +1,9 @@
 /* your custom css */
 
+.container.grey {
+  background-color: #f6f6f6;
+}
+
 .homeContainer .homeWrapper {
   padding: 2em 1em;
 }
