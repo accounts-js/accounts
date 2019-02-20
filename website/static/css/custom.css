@@ -12,6 +12,7 @@
 
 .homeContainer .homeWrapper .projectLogo img {
   height: auto;
+  width: 550px;
 }
 
 .projectTitle {
@@ -23,13 +24,13 @@
 }
 
 @media only screen and (min-width: 1200px) {
+  .homeContainer .homeWrapper {
+    padding: 6em 2em 1em;
+  }
+
   .homeContainer .homeWrapper .projectLogo {
     justify-content: center;
     position: relative;
     padding: 1em 0em;
-  }
-
-  .homeContainer .homeWrapper .projectLogo img {
-    max-width: 550px;
   }
 }
