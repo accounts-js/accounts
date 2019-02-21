@@ -206,7 +206,7 @@ input CreateUserProfileInput {
 }
 ```
 
-By default accounts-js only allow 'username', 'email' and 'password' for the user. In order to add custom fields you need to pass the `validateNewUser` function when you instanciate the 'accounts-password' package.
+By default accounts-js only allow 'username', 'email' and 'password' for the user. In order to add custom fields you need to pass the `validateNewUser` function when you instantiate the 'accounts-password' package.
 
 ```javascript
 // server.js
