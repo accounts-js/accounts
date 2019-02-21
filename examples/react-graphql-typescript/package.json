@@ -11,10 +11,9 @@
     "lint": "tslint -c tslint.json -p tsconfig.json -e 'node_modules/**/*.{j,t}s'"
   },
   "dependencies": {
-    "@accounts/client": "0.9.3",
-    "@accounts/client-password": "0.9.3",
-    "@accounts/graphql-client": "0.9.3",
-    "@accounts/rest-client": "0.9.3",
+    "@accounts/client": "file:../../packages/client",
+    "@accounts/client-password": "file:../../packages/client-password",
+    "@accounts/graphql-client": "file:../../packages/graphql-client",
     "@material-ui/core": "3.9.2",
     "apollo-boost": "0.1.27",
     "graphql": "14.1.1",
