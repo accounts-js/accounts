@@ -63,6 +63,11 @@ export class ServerRestTest implements ServerTestInterface {
             subject: () => 'Set your password',
             text: (user: User, url: string) => convertUrlToToken(url),
           },
+          passwordChanged: {
+            subject: () => 'Your password has been changed',
+            text: () => `Your account password has been successfully changed`,
+            html: () => `Your account password has been successfully changed.`,
+          },
         },
         sendMail: async mail => {
           this.emails.push(mail);

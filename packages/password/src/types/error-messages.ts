@@ -8,6 +8,10 @@ export interface ErrorMessages {
    */
   noPasswordSet: string;
   /**
+   * Default to 'User has no email set'
+   */
+  noEmailSet: string;
+  /**
    * Default to 'Incorrect password'
    */
   incorrectPassword: string;
