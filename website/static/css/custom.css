@@ -24,6 +24,16 @@
   width: 550px;
 }
 
+.homeTitle {
+  text-align: center;
+  margin-top: 0;
+}
+
+.homeTitle span {
+  padding-bottom: 10px;
+  border-bottom: 4px solid #8fced1;
+}
+
 .projectTitle {
   margin-top: 0;
 }
@@ -55,7 +65,7 @@
   }
 
   .navigationSlider .slidingNav ul li a {
-    color: #77BBBC;
+    color: #77bbbc;
   }
 
   .navPusher {

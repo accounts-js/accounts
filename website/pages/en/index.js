@@ -91,6 +91,10 @@ class HomeSplash extends React.Component {
 const Features = () => {
   return (
     <Container padding={['bottom', 'top']} className="grey">
+      <h2 className="homeTitle">
+        <span>Why accounts-js?</span>
+      </h2>
+
       <div className="gridBlock">
         <div className="blockElement alignCenter fourByGridBlock">
           <div className="blockContent">
@@ -128,6 +132,10 @@ const Features = () => {
 
 const Bakers = () => (
   <Container padding={['bottom', 'top']}>
+    <h2 className="homeTitle">
+      <span>Open Collective</span>
+    </h2>
+
     <h3>Sponsors</h3>
     <a href="https://opencollective.com/accounts-js#sponsors" target="_blank">
       <img src="https://opencollective.com/accounts-js/sponsors.svg?width=890" />
