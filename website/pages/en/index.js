@@ -90,7 +90,7 @@ class HomeSplash extends React.Component {
 
 const Features = () => {
   return (
-    <Container padding={['bottom', 'top']} className="grey">
+    <Container padding={['bottom', 'top']} className="grey features">
       <h2 className="homeTitle">
         <span>Why accounts-js?</span>
       </h2>
@@ -131,20 +131,36 @@ const Features = () => {
 };
 
 const Bakers = () => (
-  <Container padding={['bottom', 'top']}>
+  <Container padding={['bottom', 'top']} className="support">
     <h2 className="homeTitle">
       <span>Open Collective</span>
     </h2>
 
-    <h3>Sponsors</h3>
-    <a href="https://opencollective.com/accounts-js#sponsors" target="_blank">
-      <img src="https://opencollective.com/accounts-js/sponsors.svg?width=890" />
-    </a>
+    <div className="supportSponsors">
+      <h3 className="supportTitle">Sponsors</h3>
+      {/*<div className="supportImage">
+        <a href="https://opencollective.com/accounts-js#sponsors" target="_blank">
+          <img src="https://opencollective.com/accounts-js/sponsors.svg?width=890&button=false" />
+        </a>
+</div>*/}
+      <div className="supportButton">
+        <Button href="https://opencollective.com/accounts-js#sponsors" className="primary">
+          Become a Sponsor
+        </Button>
+      </div>
+    </div>
 
-    <h3>Backers</h3>
-    <a href="https://opencollective.com/accounts-js#backers" target="_blank">
-      <img src="https://opencollective.com/accounts-js/backers.svg?width=890" />
-    </a>
+    <h3 className="supportTitle">Backers</h3>
+    <div className="supportImage">
+      <a href="https://opencollective.com/accounts-js#backers" target="_blank">
+        <img src="https://opencollective.com/accounts-js/backers.svg?width=890&button=false" />
+      </a>
+    </div>
+    <div className="supportButton">
+      <Button href="https://opencollective.com/accounts-js#backers" className="primary">
+        Become a Backer
+      </Button>
+    </div>
   </Container>
 );
 

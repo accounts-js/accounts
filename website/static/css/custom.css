@@ -42,6 +42,38 @@
   margin-top: 1em;
 }
 
+.features .blockContent h2 {
+  font-weight: 400;
+}
+
+.support .homeTitle {
+  margin-bottom: 50px;
+}
+
+.supportSponsors {
+  margin-bottom: 60px;
+}
+
+.supportSponsors .supportButton {
+  margin-top: 30px;
+}
+
+.supportTitle {
+  text-align: center;
+  color: #717171;
+  font-weight: 400;
+}
+
+.supportImage {
+  display: flex;
+  justify-content: center;
+}
+
+.supportButton {
+  display: flex;
+  justify-content: center;
+}
+
 .promoSection .promoRow .pluginRowBlock .pluginWrapper {
   padding: 0 6px;
 }

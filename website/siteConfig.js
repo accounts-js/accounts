@@ -22,7 +22,7 @@ const users = [
 
 const siteConfig = {
   title: 'accounts-js' /* title for your website */,
-  tagline: 'Fullstack authentication and accounts-management for Javascript.',
+  tagline: 'Fullstack authentication and accounts-management for Javascript',
   disableHeaderTitle: true,
   url: 'https://accounts-js.github.com' /* your website url */,
   baseUrl: '/' /* base url for your project */,
