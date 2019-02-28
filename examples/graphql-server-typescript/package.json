@@ -28,7 +28,7 @@
     "graphql": "14.1.1",
     "graphql-tools": "4.0.4",
     "lodash": "4.17.10",
-    "mongoose": "5.2.2",
+    "mongoose": "5.4.13",
     "tslib": "1.9.3"
   },
   "devDependencies": {

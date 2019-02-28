@@ -3,6 +3,7 @@ import { ErrorMessages } from './types';
 export const errors: ErrorMessages = {
   userNotFound: 'User not found',
   noPasswordSet: 'User has no password set',
+  noEmailSet: 'User has no email set',
   incorrectPassword: 'Incorrect password',
   unrecognizedOptionsForLogin: 'Unrecognized options for login request',
   matchFailed: 'Match failed',

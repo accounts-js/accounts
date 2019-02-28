@@ -301,6 +301,15 @@ describe('AccountsPassword', () => {
         invalidateAllSessions,
         verifyEmail,
       } as any);
+      const prepareMail = jest.fn(() => Promise.resolve());
+      const sanitizeUser = jest.fn(() => Promise.resolve());
+      const sendMail = jest.fn(() => Promise.resolve());
+      password.server = {
+        prepareMail,
+        options: { sendMail },
+        sanitizeUser,
+      } as any;
+      set(password.server, 'options.emailTemplates', {});
       await password.resetPassword(token, newPassword, connectionInfo);
       expect(setResetPassword.mock.calls.length).toBe(1);
       expect(verifyEmail.mock.calls.length).toBe(1);
@@ -317,7 +326,17 @@ describe('AccountsPassword', () => {
         setResetPassword,
         invalidateAllSessions,
       } as any);
-      password.server = { isTokenExpired, loginWithUser: jest.fn() } as any;
+      const prepareMail = jest.fn(() => Promise.resolve());
+      const sanitizeUser = jest.fn(() => Promise.resolve());
+      const sendMail = jest.fn(() => Promise.resolve());
+      password.server = {
+        isTokenExpired,
+        loginWithUser: jest.fn(),
+        prepareMail,
+        options: { sendMail },
+        sanitizeUser,
+      } as any;
+      set(password.server, 'options.emailTemplates', {});
       const loginResult = await password.resetPassword(token, newPassword, connectionInfo);
       expect(loginResult).toBeNull();
       expect(setResetPassword.mock.calls.length).toBe(1);
@@ -346,7 +365,17 @@ describe('AccountsPassword', () => {
         setResetPassword,
         invalidateAllSessions,
       } as any);
-      tmpAccountsPassword.server = { isTokenExpired, loginWithUser } as any;
+      const prepareMail = jest.fn(() => Promise.resolve());
+      const sanitizeUser = jest.fn(() => Promise.resolve());
+      const sendMail = jest.fn(() => Promise.resolve());
+      tmpAccountsPassword.server = {
+        isTokenExpired,
+        loginWithUser,
+        prepareMail,
+        options: { sendMail },
+        sanitizeUser,
+      } as any;
+      set(tmpAccountsPassword.server, 'options.emailTemplates', {});
       const loginResult = await tmpAccountsPassword.resetPassword(
         token,
         newPassword,
@@ -371,10 +400,24 @@ describe('AccountsPassword', () => {
   });
 
   describe('changePassword', () => {
+    const validUser = {
+      emails: [{ address: 'john.doe@gmail.com', verified: true }],
+    };
+
     it('call passwordAuthenticator and this.db.setPassword', async () => {
       const userId = 'id';
       const setPassword = jest.fn(() => Promise.resolve('user'));
-      password.setStore({ setPassword } as any);
+      const findUserById = jest.fn(() => Promise.resolve(validUser));
+      password.setStore({ setPassword, findUserById } as any);
+      const prepareMail = jest.fn(() => Promise.resolve());
+      const sanitizeUser = jest.fn(() => Promise.resolve());
+      const sendMail = jest.fn(() => Promise.resolve());
+      password.server = {
+        prepareMail,
+        options: { sendMail },
+        sanitizeUser,
+      } as any;
+      set(password.server, 'options.emailTemplates', {});
       const passwordAuthenticator = jest
         .spyOn(password, 'passwordAuthenticator' as any)
         .mockImplementation(() => Promise.resolve({}));
@@ -383,6 +426,8 @@ describe('AccountsPassword', () => {
       expect(passwordAuthenticator.mock.calls[0][1]).toEqual('old-password');
       expect(setPassword.mock.calls[0][0]).toEqual(userId);
       expect(setPassword.mock.calls[0][1]).toBeTruthy();
+      expect(prepareMail.mock.calls[0].length).toBe(6);
+      expect(sendMail.mock.calls[0].length).toBe(1);
       (password as any).passwordAuthenticator.mockRestore();
     });
   });

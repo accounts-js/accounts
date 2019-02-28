@@ -5,4 +5,5 @@ export interface EmailTemplatesType {
   verifyEmail: EmailTemplateType;
   resetPassword: EmailTemplateType;
   enrollAccount: EmailTemplateType;
+  passwordChanged: EmailTemplateType;
 }

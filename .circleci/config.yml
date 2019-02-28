@@ -5,8 +5,8 @@ jobs:
     docker:
       - image: circleci/node:9
       - image: circleci/mongo:3
-      - image: redis:4@sha256:e8b87a5e1bd53cba9226fa71a2eba27b177e4f1b94167d4d86b0cf9987d65d69
-      - image: circleci/postgres:10.6
+      - image: redis:4@sha256:d4eef66199e66049090f8bc90cdd1a5316613c33bff5f45fbe488e7f01c5abc9
+      - image: circleci/postgres:10.7
         environment:
           POSTGRES_USER: accounts-js
           POSTGRES_DB: accounts-js-tests-e2e
