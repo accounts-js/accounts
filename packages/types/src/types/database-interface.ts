@@ -70,7 +70,7 @@ export interface DatabaseInterfaceSessions {
     token: string,
     connection: ConnectionInformations,
     extraData?: object
-  ): Promise<string | null>;
+  ): Promise<string>;
 
   updateSession(sessionId: string, connection: ConnectionInformations): Promise<void>;
 
