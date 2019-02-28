@@ -144,7 +144,11 @@ const Bakers = () => (
         </a>
 </div>*/}
       <div className="supportButton">
-        <Button href="https://opencollective.com/accounts-js#sponsors" className="primary">
+        <Button
+          href="https://opencollective.com/accounts-js#sponsors"
+          className="primary"
+          target="_blank"
+        >
           Become a Sponsor
         </Button>
       </div>
@@ -157,7 +161,11 @@ const Bakers = () => (
       </a>
     </div>
     <div className="supportButton">
-      <Button href="https://opencollective.com/accounts-js#backers" className="primary">
+      <Button
+        href="https://opencollective.com/accounts-js#backers"
+        className="primary"
+        target="_blank"
+      >
         Become a Backer
       </Button>
     </div>
