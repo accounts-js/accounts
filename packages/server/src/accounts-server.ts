@@ -139,10 +139,10 @@ Please change it with a strong random token.`);
   public async loginWithUser(user: User, infos: ConnectionInformations): Promise<LoginResult> {
     const { ip, userAgent } = infos;
     const token = generateRandomToken();
-    const sessionId = (await this.db.createSession(user.id, token, {
+    const sessionId = await this.db.createSession(user.id, token, {
       ip,
       userAgent,
-    })) as string;
+    });
 
     const { accessToken, refreshToken } = this.createTokens({
       token,
@@ -237,7 +237,7 @@ Please change it with a strong random token.`);
       );
 
       const impersonationTokens = this.createTokens({
-        token: newSessionId as string,
+        token: newSessionId,
         isImpersonated: true,
         userId: user.id,
       });

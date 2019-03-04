@@ -366,10 +366,10 @@
   resolved "https://registry.yarnpkg.com/@types/highlight.js/-/highlight.js-9.12.3.tgz#b672cfaac25cbbc634a0fd92c515f66faa18dbca"
   integrity sha512-pGF/zvYOACZ/gLGWdQH8zSwteQS1epp68yRcVLJMgUck/MjEn/FBYmPub9pXT8C1e4a8YZfHo1CKyV8q1vKUnQ==
 
-"@types/ioredis@4.0.8":
-  version "4.0.8"
-  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-4.0.8.tgz#23f28c39ed2d2434ec7c70bd9e4b6d2dccb96c45"
-  integrity sha512-ZAXWkcij8wN+0eNNM1ofl8kzWvbPIwibBZcDa/8m32wqBcX7S4r+QRA59fob1OD1HQhEFVC16XFN8P5ZgSF1yQ==
+"@types/ioredis@4.0.9":
+  version "4.0.9"
+  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-4.0.9.tgz#45d986c8e1c71af9fa9acb8725db306744e1d94c"
+  integrity sha512-huquAKzRAQ2d58rUyOZn0lwkrJ9HKl2cm2ay++hiZDt2u/MwAe1Ca+Un8OEOODsu/dsrJ0UYtT6qfsB1JZ7gWg==
   dependencies:
     "@types/node" "*"
 
@@ -425,10 +425,18 @@
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
-"@types/mongodb@*", "@types/mongodb@3.1.19":
+"@types/mongodb@*":
   version "3.1.19"
   resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.1.19.tgz#40c4310986888975771857810aa47fd3ea8e1acf"
   integrity sha512-H54hQEovAhyLrIZOhPNfGyCCDoTqKsjb8GQBy8nptJqfxrYCp5WVcPJf9v0kfTPR72xOhaz9+WcYxOXWwEg1Vg==
+  dependencies:
+    "@types/bson" "*"
+    "@types/node" "*"
+
+"@types/mongodb@3.1.20":
+  version "3.1.20"
+  resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.1.20.tgz#278aa976eb60b6592f011d22fdf77fb4069ed753"
+  integrity sha512-tl9iKbhM8d9BQjhB/9L4KuyLxfEn9Weq6cBuM8C06fIuUJyyfk+5wlfwzvltvssuxjGY1GiHvZHmSTK8kJ1zwg==
   dependencies:
     "@types/bson" "*"
     "@types/node" "*"
