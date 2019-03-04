@@ -1,5 +1,5 @@
 ---
-title: 'Oauth'
+title: Oauth
 ---
 
 Coming soon ...

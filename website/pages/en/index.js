@@ -100,9 +100,9 @@ const Features = () => {
           <div className="blockContent">
             <h2>Multiple transports</h2>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tempor accumsan lectus,
-              vitae cursus lorem aliquam et. Ut vulputate ligula eget nulla euismod, sit amet
-              feugiat mi vestibulum. Ut aliquam luctus mi tristique consectetur.
+              Since accounts-js is very flexible, it can be used with multiple transports. For now
+              we provide packages for both <a href="/docs/transports/graphql">GraphQl</a> and{' '}
+              <a href="/docs/transports/rest">REST</a>.
             </p>
           </div>
         </div>
@@ -110,9 +110,9 @@ const Features = () => {
           <div className="blockContent">
             <h2>Databases agnostic</h2>
             <p>
-              Integer ut sapien a ipsum posuere dignissim. Donec ac molestie est, vel posuere massa.
-              Cras lorem felis, efficitur ac dui sit amet, ultrices finibus nisi. Duis dictum
-              feugiat nisi sit amet venenatis. Cras iaculis dictum ex vel fringilla.
+              We provide a native <a href="/docs/databases/mongo">mongo</a> integration which is
+              compatible with the meteor account system. We also have a Typeorm integration which
+              will let you use accounts-js with any kind of databases.
             </p>
           </div>
         </div>
@@ -120,8 +120,10 @@ const Features = () => {
           <div className="blockContent">
             <h2>Strategies</h2>
             <p>
-              Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-              Nunc lobortis sit amet turpis ut pellentesque. In aliquet nec mauris ac luctus.
+              You can use multiple strategies to let your users access to your app. For now we
+              support authentication via{' '}
+              <a href="/docs/strategies/password">email/username and password</a>,{' '}
+              <a href="/docs/strategies/oauth">Oauth</a> support is coming soon!
             </p>
           </div>
         </div>

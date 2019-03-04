@@ -1,5 +1,5 @@
 ---
-title: 'Facebook'
+title: Facebook
 ---
 
 [Github](https://github.com/accounts-js/accounts/tree/master/packages/oauth-facebook) |

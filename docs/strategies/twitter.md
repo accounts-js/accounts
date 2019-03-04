@@ -1,5 +1,5 @@
 ---
-title: 'Twitter'
+title: Twitter
 ---
 
 [Github](https://github.com/accounts-js/accounts/tree/master/packages/oauth-twitter) |
