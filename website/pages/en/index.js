@@ -101,7 +101,7 @@ const Features = () => {
             <h2>Multiple transports</h2>
             <p>
               Since accounts-js is very flexible, it can be used with multiple transports. For now
-              we provide packages for both <a href="/docs/transports/graphql">GraphQl</a> and{' '}
+              we provide packages for both <a href="/docs/transports/graphql">GraphQL</a> and{' '}
               <a href="/docs/transports/rest">REST</a>.
             </p>
           </div>
@@ -132,7 +132,7 @@ const Features = () => {
   );
 };
 
-const Bakers = () => (
+const Backers = () => (
   <Container padding={['bottom', 'top']} className="support">
     <h2 className="homeTitle">
       <span>Open Collective</span>
@@ -183,7 +183,7 @@ class Index extends React.Component {
         <HomeSplash language={language} />
         <div className="mainContainer">
           <Features />
-          <Bakers />
+          <Backers />
         </div>
       </div>
     );
