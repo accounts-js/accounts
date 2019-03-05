@@ -22,7 +22,7 @@ const users = [
 
 const siteConfig = {
   title: 'accounts-js' /* title for your website */,
-  tagline: 'Fullstack authentication and accounts-management for Javascript.',
+  tagline: 'Fullstack authentication and accounts-management for Javascript',
   disableHeaderTitle: true,
   url: 'https://accounts-js.github.com' /* your website url */,
   baseUrl: '/' /* base url for your project */,
@@ -63,7 +63,7 @@ const siteConfig = {
 
   /* colors for website */
   colors: {
-    primaryColor: '#8fced1',
+    primaryColor: '#77BBBC',
     secondaryColor: '#5d4b8e',
   },
 
@@ -89,8 +89,7 @@ const siteConfig = {
   copyright: 'Copyright © ' + new Date().getFullYear() + ' accounts-js',
 
   highlight: {
-    // Highlight.js theme to use for syntax highlighting in code blocks
-    theme: 'default',
+    theme: 'github',
   },
 
   // Add custom scripts here that would be placed in <script> tags

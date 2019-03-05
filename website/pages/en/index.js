@@ -8,9 +8,7 @@
 const React = require('react');
 
 const CompLibrary = require('../../core/CompLibrary.js');
-const MarkdownBlock = CompLibrary.MarkdownBlock; /* Used to read markdown */
 const Container = CompLibrary.Container;
-const GridBlock = CompLibrary.GridBlock;
 
 const siteConfig = require(process.cwd() + '/siteConfig.js');
 
@@ -22,15 +20,15 @@ function docUrl(doc, language) {
   return siteConfig.baseUrl + 'docs/' + (language ? language + '/' : '') + doc;
 }
 
-function pageUrl(page, language) {
-  return siteConfig.baseUrl + (language ? language + '/' : '') + page;
-}
-
 class Button extends React.Component {
   render() {
     return (
       <div className="pluginWrapper buttonWrapper">
-        <a className="button" href={this.props.href} target={this.props.target}>
+        <a
+          className={`button ${this.props.className || ''}`}
+          href={this.props.href}
+          target={this.props.target}
+        >
           {this.props.children}
         </a>
       </div>
@@ -58,7 +56,6 @@ const Logo = props => (
 
 const ProjectTitle = props => (
   <h2 className="projectTitle">
-    {siteConfig.title}
     <small>{siteConfig.tagline}</small>
   </h2>
 );
@@ -76,11 +73,13 @@ class HomeSplash extends React.Component {
     let language = this.props.language || '';
     return (
       <SplashContainer>
-        <Logo img_src={imgUrl('docusaurus.svg')} />
+        <Logo img_src={imgUrl('logo.png')} />
         <div className="inner">
           <ProjectTitle />
           <PromoSection>
-            <Button href={docUrl('getting-started.html', language)}>Getting started</Button>
+            <Button href={docUrl('getting-started.html', language)} className="primary">
+              Getting started
+            </Button>
             <Button href={siteConfig.repoUrl}>Github</Button>
           </PromoSection>
         </div>
@@ -89,106 +88,91 @@ class HomeSplash extends React.Component {
   }
 }
 
-const Block = props => (
-  <Container padding={['bottom', 'top']} id={props.id} background={props.background}>
-    <GridBlock align="center" contents={props.children} layout={props.layout} />
-  </Container>
-);
-
-const Features = props => (
-  <Block layout="fourColumn">
-    {[
-      {
-        content: 'This is the content of my feature',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'top',
-        title: 'Feature One',
-      },
-      {
-        content: 'The content of my second feature',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'top',
-        title: 'Feature Two',
-      },
-    ]}
-  </Block>
-);
-
-const FeatureCallout = props => (
-  <div className="productShowcaseSection paddingBottom" style={{ textAlign: 'center' }}>
-    <h2>Feature Callout</h2>
-    <MarkdownBlock>These are features of this project</MarkdownBlock>
-  </div>
-);
-
-const LearnHow = props => (
-  <Block background="light">
-    {[
-      {
-        content: 'Talk about learning how to use this',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'right',
-        title: 'Learn How',
-      },
-    ]}
-  </Block>
-);
-
-const TryOut = props => (
-  <Block id="try">
-    {[
-      {
-        content: 'Talk about trying this out',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'left',
-        title: 'Try it Out',
-      },
-    ]}
-  </Block>
-);
-
-const Description = props => (
-  <Block background="dark">
-    {[
-      {
-        content: 'This is another description of how this project is useful',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'right',
-        title: 'Description',
-      },
-    ]}
-  </Block>
-);
-
-const Showcase = props => {
-  if ((siteConfig.users || []).length === 0) {
-    return null;
-  }
-  const showcase = siteConfig.users
-    .filter(user => {
-      return user.pinned;
-    })
-    .map((user, i) => {
-      return (
-        <a href={user.infoLink} key={i}>
-          <img src={user.image} alt={user.caption} title={user.caption} />
-        </a>
-      );
-    });
-
+const Features = () => {
   return (
-    <div className="productShowcaseSection paddingBottom">
-      <h2>{"Who's Using This?"}</h2>
-      <p>This project is used by all these people</p>
-      <div className="logos">{showcase}</div>
-      <div className="more-users">
-        <a className="button" href={pageUrl('users.html', props.language)}>
-          More {siteConfig.title} Users
-        </a>
+    <Container padding={['bottom', 'top']} className="grey features">
+      <h2 className="homeTitle">
+        <span>Why accounts-js?</span>
+      </h2>
+
+      <div className="gridBlock">
+        <div className="blockElement alignCenter fourByGridBlock">
+          <div className="blockContent">
+            <h2>Multiple transports</h2>
+            <p>
+              Since accounts-js is very flexible, it can be used with multiple transports. For now
+              we provide packages for both <a href="/docs/transports/graphql">GraphQL</a> and{' '}
+              <a href="/docs/transports/rest">REST</a>.
+            </p>
+          </div>
+        </div>
+        <div className="blockElement alignCenter fourByGridBlock">
+          <div className="blockContent">
+            <h2>Databases agnostic</h2>
+            <p>
+              We provide a native <a href="/docs/databases/mongo">mongo</a> integration which is
+              compatible with the meteor account system. We also have a Typeorm integration which
+              will let you use accounts-js with any kind of databases.
+            </p>
+          </div>
+        </div>
+        <div className="blockElement alignCenter fourByGridBlock">
+          <div className="blockContent">
+            <h2>Strategies</h2>
+            <p>
+              You can use multiple strategies to let your users access to your app. For now we
+              support authentication via{' '}
+              <a href="/docs/strategies/password">email/username and password</a>,{' '}
+              <a href="/docs/strategies/oauth">Oauth</a> support is coming soon!
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
+    </Container>
   );
 };
+
+const Backers = () => (
+  <Container padding={['bottom', 'top']} className="support">
+    <h2 className="homeTitle">
+      <span>Open Collective</span>
+    </h2>
+
+    <div className="supportSponsors">
+      <h3 className="supportTitle">Sponsors</h3>
+      {/*<div className="supportImage">
+        <a href="https://opencollective.com/accounts-js#sponsors" target="_blank">
+          <img src="https://opencollective.com/accounts-js/sponsors.svg?width=890&button=false" />
+        </a>
+</div>*/}
+      <div className="supportButton">
+        <Button
+          href="https://opencollective.com/accounts-js#sponsors"
+          className="primary"
+          target="_blank"
+        >
+          Become a Sponsor
+        </Button>
+      </div>
+    </div>
+
+    <h3 className="supportTitle">Backers</h3>
+    <div className="supportImage">
+      <a href="https://opencollective.com/accounts-js#backers" target="_blank">
+        <img src="https://opencollective.com/accounts-js/backers.svg?width=890&button=false" />
+      </a>
+    </div>
+    <div className="supportButton">
+      <Button
+        href="https://opencollective.com/accounts-js#backers"
+        className="primary"
+        target="_blank"
+      >
+        Become a Backer
+      </Button>
+    </div>
+  </Container>
+);
 
 class Index extends React.Component {
   render() {
@@ -199,8 +183,7 @@ class Index extends React.Component {
         <HomeSplash language={language} />
         <div className="mainContainer">
           <Features />
-          <FeatureCallout />
-          <Showcase language={language} />
+          <Backers />
         </div>
       </div>
     );

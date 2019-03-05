@@ -1,5 +1,5 @@
 ---
-title: 'Password'
+title: Password
 ---
 
 [Github](https://github.com/accounts-js/accounts) |
