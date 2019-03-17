@@ -20,9 +20,6 @@ export class User {
   @Column({ nullable: true })
   public username!: string;
 
-  @Column('jsonb', { nullable: true })
-  public profile?: any;
-
   @OneToMany(() => UserService, userService => userService.user, { eager: true })
   public allServices!: UserService[];
 

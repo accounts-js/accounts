@@ -14,7 +14,6 @@ const mockStore = {
   findSessionById: jest.fn(),
   createUser: jest.fn(),
   setUsername: jest.fn(),
-  setProfile: jest.fn(),
   setService: jest.fn(),
   findPasswordHash: jest.fn(),
   findUserByResetPasswordToken: jest.fn(),
@@ -173,7 +172,6 @@ describe('AccountsOauth', () => {
 
     expect(authSpy).toBeCalledWith(params);
     expect(mockStore.findUserByServiceId).toBeCalledWith('facebook', '312312');
-    expect(mockStore.setProfile).not.toBeCalledWith(user.id, userChanged.profile);
     expect(mockStore.setService).toBeCalledWith(user.id, 'facebook', userChanged);
   });
 });

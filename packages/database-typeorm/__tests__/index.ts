@@ -363,15 +363,6 @@ describe('AccountsTypeorm', () => {
     });
   });
 
-  describe('setProfile', () => {
-    it('should change profile', async () => {
-      const userId = await databaseTests.database.createUser(user);
-      await delay(10);
-      const retUser = await databaseTests.database.setProfile(userId, { username: 'toto' });
-      expect((retUser as any).username).toEqual('toto');
-    });
-  });
-
   describe('setService', () => {
     it('should set service', async () => {
       const userId = await databaseTests.database.createUser(user);

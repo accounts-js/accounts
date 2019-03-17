@@ -95,11 +95,6 @@ export class DatabaseManager implements DatabaseInterface {
     return this.userStorage.setPassword.bind(this.userStorage);
   }
 
-  // Return the setProfile function from the userStorage
-  public get setProfile(): DatabaseInterface['setProfile'] {
-    return this.userStorage.setProfile.bind(this.userStorage);
-  }
-
   // Return the setService function from the userStorage
   public get setService(): DatabaseInterface['setService'] {
     return this.userStorage.setService.bind(this.userStorage);

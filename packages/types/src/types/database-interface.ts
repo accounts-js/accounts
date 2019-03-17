@@ -16,8 +16,6 @@ export interface DatabaseInterface extends DatabaseInterfaceSessions {
 
   setUsername(userId: string, newUsername: string): Promise<void>;
 
-  setProfile(userId: string, profile: object): Promise<object>;
-
   // Auth services related operations
   findUserByServiceId(serviceName: string, serviceId: string): Promise<User | null>;
 

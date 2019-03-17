@@ -101,9 +101,6 @@ describe('AccountsServer', () => {
         username: 'username',
         email: 'email@email.com',
         deactivated: false,
-        profile: {
-          bio: 'bio',
-        },
       };
       const accountsServer = new AccountsServer(
         {
@@ -841,89 +838,6 @@ describe('AccountsServer', () => {
       const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
       const foundUser = await accountsServer.resumeSession(accessToken);
       expect(foundUser).toEqual(user);
-    });
-  });
-
-  describe('setProfile', () => {
-    it('throws error if user is not found', async () => {
-      const accountsServer = new AccountsServer(
-        {
-          db: {
-            findUserById: () => Promise.resolve(null),
-          } as any,
-          tokenSecret: 'secret1',
-        },
-        {}
-      );
-      try {
-        const userId = null as any;
-        const profile = null as any;
-        await accountsServer.setProfile(userId, profile);
-        throw new Error();
-      } catch (err) {
-        const { message } = err;
-        expect(message).toEqual('User not found');
-      }
-    });
-
-    it('calls set profile on db interface', async () => {
-      const user = {
-        userId: '123',
-        username: 'username',
-      };
-      const profile = {
-        bio: 'bio',
-      };
-      const setProfile = jest.fn();
-      const accountsServer = new AccountsServer(
-        {
-          db: {
-            findUserById: () => Promise.resolve(user),
-            setProfile,
-          } as any,
-          tokenSecret: 'secret1',
-        },
-        {}
-      );
-
-      await accountsServer.setProfile('123', profile);
-      expect(setProfile.mock.calls.length).toEqual(1);
-      expect(setProfile.mock.calls[0][0]).toEqual('123');
-      expect(setProfile.mock.calls[0][1]).toEqual(profile);
-    });
-
-    it('merges profile and calls set profile on db interface', async () => {
-      const user = {
-        userId: '123',
-        username: 'username',
-        profile: {
-          title: 'title',
-        },
-      };
-      const profile = {
-        bio: 'bio',
-      };
-      const mergedProfile = {
-        title: 'title',
-        bio: 'bio',
-      };
-      const setProfile = jest.fn(() => mergedProfile);
-      const accountsServer = new AccountsServer(
-        {
-          db: {
-            findUserById: () => Promise.resolve(user),
-            setProfile,
-          } as any,
-          tokenSecret: 'secret1',
-        },
-        {}
-      );
-
-      const res = await accountsServer.updateProfile('123', profile);
-      expect(setProfile.mock.calls.length).toEqual(1);
-      expect(setProfile.mock.calls[0][0]).toEqual('123');
-      expect(setProfile.mock.calls[0][1]).toEqual(mergedProfile);
-      expect(res).toEqual(mergedProfile);
     });
   });
 
