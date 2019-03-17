@@ -39,7 +39,6 @@ export interface AccountsMongoOptions {
 export interface MongoUser {
   _id?: string | object;
   username?: string;
-  profile?: object;
   services: {
     password?: {
       bcrypt: string;

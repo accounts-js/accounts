@@ -253,20 +253,6 @@ export class Mongo implements DatabaseInterface {
     }
   }
 
-  public async setProfile(userId: string, profile: object): Promise<object> {
-    const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
-    await this.collection.updateOne(
-      { _id: id },
-      {
-        $set: {
-          profile,
-          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
-        },
-      }
-    );
-    return profile;
-  }
-
   public async setService(userId: string, serviceName: string, service: object): Promise<void> {
     const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     await this.collection.updateOne(

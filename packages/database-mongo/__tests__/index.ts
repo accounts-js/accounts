@@ -508,22 +508,6 @@ describe('Mongo', () => {
     });
   });
 
-  describe('setProfile', () => {
-    it('should not convert id', async () => {
-      const mongoOptions = new Mongo(databaseTests.db, {
-        convertUserIdToMongoObjectId: false,
-      });
-      await mongoOptions.setProfile('toto', { username: 'toto' });
-    });
-
-    it('should change profile', async () => {
-      const userId = await databaseTests.database.createUser(user);
-      await delay(10);
-      const retUser = await databaseTests.database.setProfile(userId, { username: 'toto' });
-      expect((retUser as any).username).toEqual('toto');
-    });
-  });
-
   describe('setService', () => {
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {

@@ -165,16 +165,6 @@ export class AccountsTypeorm implements DatabaseInterface {
     throw new Error('User not found');
   }
 
-  public async setProfile(userId: string, profile: object): Promise<object> {
-    const user = await this.findUserById(userId);
-    if (user) {
-      user.profile = profile;
-      await this.userRepository.save(user);
-      return profile;
-    }
-    throw new Error('User not found');
-  }
-
   public async findUserByServiceId(serviceName: string, serviceId: string): Promise<User | null> {
     const service = await this.serviceRepository.findOne({
       name: serviceName,

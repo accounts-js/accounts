@@ -59,10 +59,6 @@ export default class Database {
     return this.name;
   }
 
-  public setProfile() {
-    return this.name;
-  }
-
   public setService() {
     return this.name;
   }
@@ -193,10 +189,6 @@ describe('DatabaseManager', () => {
 
   it('setPassword should be called on userStorage', () => {
     expect(databaseManager.setPassword('userId', 'password')).toBe('userStorage');
-  });
-
-  it('setProfile should be called on userStorage', () => {
-    expect(databaseManager.setProfile('userId', {})).toBe('userStorage');
   });
 
   it('setService should be called on userStorage', () => {

@@ -123,7 +123,7 @@ In order to spot potential abstractions on the different authentication strategi
 
 - OAuth2 flow ends here but we still need to create or authenticate the user in our app.
 
-- For creating our session, accounts/server should require data about the user like `email` or `username` and any additional profile inforamtion the developer would like.
+- For creating our session, accounts/server should require data about the user like `email` or `username` and any additional profile information the developer would like.
 
 - accounts/server will then create a new user record or attach to an existing user with other authorization service configured and attach `access_token` response object as means to re-authenticate or get data at later time if needed.
 

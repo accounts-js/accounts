@@ -452,35 +452,6 @@ Please change it with a strong random token.`);
   }
 
   /**
-   * @description Change the profile for a user.
-   * @param {string} userId - User id.
-   * @param {Object} profile - The new user profile.
-   * @returns {Promise<void>} - Return a Promise.
-   */
-  public async setProfile(userId: string, profile: object): Promise<void> {
-    const user = await this.db.findUserById(userId);
-    if (!user) {
-      throw new Error('User not found');
-    }
-    await this.db.setProfile(userId, profile);
-  }
-
-  /**
-   * @description Update the profile for a user,
-   * the new profile will be added to the existing one.
-   * @param {string} userId - User id.
-   * @param {Object} profile - User profile to add.
-   * @returns {Promise<Object>} - Return a Promise.
-   */
-  public async updateProfile(userId: string, profile: object): Promise<object> {
-    const user = await this.db.findUserById(userId);
-    if (!user) {
-      throw new Error('User not found');
-    }
-    return this.db.setProfile(userId, { ...user.profile, ...profile });
-  }
-
-  /**
    * @description Deactivate a user, the user will not be able to login until his account is reactivated.
    * @param {string} userId - User id.
    * @returns {Promise<void>} - Return a Promise.
