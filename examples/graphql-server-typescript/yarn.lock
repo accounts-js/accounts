@@ -2,48 +2,60 @@
 # yarn lockfile v1
 
 
-"@accounts/database-manager@file:../../packages/database-manager":
-  version "0.11.2"
+"@accounts/database-manager@0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@accounts/database-manager/-/database-manager-0.12.0.tgz#bd9760d60c28e553017b7c0bceb39b07f80b5967"
+  integrity sha512-W6k7oz8jeXJ+kGkv5zVfkkf5WYZWctO2Mpp2QvCDt4RsDeXF5wkIl60codW840RgrjPfjYhTe36TUjVWWufWTA==
   dependencies:
-    "@accounts/types" "^0.11.2"
+    "@accounts/types" "^0.12.0"
     tslib "1.9.3"
 
-"@accounts/graphql-api@file:../../packages/graphql-api":
-  version "0.11.2"
+"@accounts/graphql-api@0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@accounts/graphql-api/-/graphql-api-0.12.0.tgz#587d27ba6cd12cab246453619524cc81a5d0ff78"
+  integrity sha512-FXhe+oz/8Zu/wImmrlEPpF6S3OQe+n4nUrrm1/SkWDW/vRgM53WhjrCQl25VaxOSVDTgKJ65AKPUt4/3nVxJHw==
   dependencies:
     graphql-toolkit "^0.0.5"
     request-ip "2.1.3"
     tslib "1.9.3"
 
-"@accounts/mongo@file:../../packages/database-mongo":
-  version "0.11.2"
+"@accounts/mongo@0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@accounts/mongo/-/mongo-0.12.0.tgz#0b4649be91f9deaa8d168940d9c399a53aece6d5"
+  integrity sha512-jFhdy/hDRDPYR5rh1PNILCE0MaEgQTlZBG7j9pr4LrlbiqRtqbdgFA059z67PxZ6Q67jIZ/F3q8JpN+DYZ1cDw==
   dependencies:
-    "@accounts/types" "^0.11.2"
+    "@accounts/types" "^0.12.0"
     lodash "^4.17.11"
     mongodb "^3.1.10"
     tslib "1.9.3"
 
-"@accounts/password@file:../../packages/password":
-  version "0.11.2"
+"@accounts/password@0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@accounts/password/-/password-0.12.0.tgz#ab594d1efcb641ac39053977cec5f3b7fa202899"
+  integrity sha512-8592Z3A1Lb0MVv0iO9m7JbhjLyqj/IDfpdEr42Ke92XE+2o3pCs8Bh8YD9FqOijEzQDg1Txc6ll60/dZq7GW/Q==
   dependencies:
-    "@accounts/two-factor" "^0.11.2"
+    "@accounts/two-factor" "^0.12.0"
     bcryptjs "^2.4.3"
     lodash "^4.17.11"
     tslib "1.9.3"
 
-"@accounts/rest-express@file:../../packages/rest-express":
-  version "0.11.2"
+"@accounts/rest-express@0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@accounts/rest-express/-/rest-express-0.12.0.tgz#f252780c52a5a435264c3903cf357c1aef71aa5f"
+  integrity sha512-yj4CDMdLp1sLtu5/gW5nXJ0cgUoNP+BX6UXLr8mOhuxtrUSLLTLs/CtSFj4n5luc9b9s4Xq9xk0GEQMGaguIQQ==
   dependencies:
-    "@accounts/types" "^0.11.2"
+    "@accounts/types" "^0.12.0"
     express "^4.16.4"
     lodash "^4.17.11"
     request-ip "^2.1.3"
     tslib "1.9.3"
 
-"@accounts/server@file:../../packages/server":
-  version "0.11.2"
+"@accounts/server@0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@accounts/server/-/server-0.12.0.tgz#a1b5fe6bbfdda118fee6b6b8879c2983ef37d0b8"
+  integrity sha512-XWld2N3kmx4gXu/T28kwFnWAPV+7XGJaLpOzVFzOiQqFnm1gxmQuKbRqGHeO+jlk93kk4+jOoPNenAu5/fVynw==
   dependencies:
-    "@accounts/types" "^0.11.2"
+    "@accounts/types" "^0.12.0"
     "@types/jsonwebtoken" "8.3.0"
     emittery "0.4.1"
     jsonwebtoken "8.4.0"
@@ -51,22 +63,22 @@
     lodash "4.17.11"
     tslib "1.9.3"
 
-"@accounts/two-factor@^0.11.2":
-  version "0.11.2"
-  resolved "https://registry.yarnpkg.com/@accounts/two-factor/-/two-factor-0.11.2.tgz#b68c98f219181bb8c5a261db5a5a742bfc698852"
-  integrity sha512-NyNvYb0FzFniBH+z+7o1cj1DVR5QuOQcnOUjhkbwBicX5p74vvOZur5wPeQ7gTWzSdlRtYn/EuSeKdnZD1Adig==
+"@accounts/two-factor@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@accounts/two-factor/-/two-factor-0.12.0.tgz#4262af3c201de4dfdfdf2d3d8842c39105953af3"
+  integrity sha512-5l4X/ZQ/m1HjBA/2ZgG6mp8I3eIOpKI5+Pumqmgah226Gh5sH4eYZC0gPAD5G4Z4y/GWBFQe3ibCY2KKz329Gw==
   dependencies:
-    "@accounts/types" "^0.11.2"
+    "@accounts/types" "^0.12.0"
     "@types/lodash" "^4.14.119"
     "@types/speakeasy" "2.0.2"
     lodash "^4.17.11"
     speakeasy "^2.0.0"
     tslib "1.9.3"
 
-"@accounts/types@^0.11.2":
-  version "0.11.2"
-  resolved "https://registry.yarnpkg.com/@accounts/types/-/types-0.11.2.tgz#5f7ac85af1af8009803a94bdb61d5e231d588761"
-  integrity sha512-ZpMYSWFy2AkjfNnoc/g2VTRAErRbSE97DZlnI3DKcdGh891yUdAmovdeeoZAUp9UW7lMRrMII9MgZRHMlLe5sA==
+"@accounts/types@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@accounts/types/-/types-0.12.0.tgz#43ad419939c94128051ff0140592c8a016cc3ab7"
+  integrity sha512-AKibcbs4HhPsK+TUrrR4KlStS0MdLLevxhMFb6dnFMY6DFZLnn/IYxPb85pbF3YRqN0GNj5hXlweN14cc7Y59A==
   dependencies:
     tslib "1.9.3"
 
@@ -1191,10 +1203,10 @@ ecc-jsbn@~0.1.1:
   dependencies:
     jsbn "~0.1.0"
 
-ecdsa-sig-formatter@1.0.10:
-  version "1.0.10"
-  resolved "https://npm-registry.lodestreams.com/ecdsa-sig-formatter/-/ecdsa-sig-formatter-1.0.10.tgz#1c595000f04a8897dfb85000892a0f4c33af86c3"
-  integrity sha1-HFlQAPBKiJffuFAAiSoPTDOvhsM=
+ecdsa-sig-formatter@1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/ecdsa-sig-formatter/-/ecdsa-sig-formatter-1.0.11.tgz#ae0f0fa2d85045ef14a817daa3ce9acd0489e5bf"
+  integrity sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==
   dependencies:
     safe-buffer "^5.0.1"
 
@@ -2167,21 +2179,21 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-jwa@^1.1.5:
-  version "1.1.6"
-  resolved "https://npm-registry.lodestreams.com/jwa/-/jwa-1.1.6.tgz#87240e76c9808dbde18783cf2264ef4929ee50e6"
-  integrity sha512-tBO/cf++BUsJkYql/kBbJroKOgHWEigTKBAjjBEmrMGYd1QMBC74Hr4Wo2zCZw6ZrVhlJPvoMrkcOnlWR/DJfw==
+jwa@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/jwa/-/jwa-1.4.1.tgz#743c32985cb9e98655530d53641b66c8645b039a"
+  integrity sha512-qiLX/xhEEFKUAJ6FiBMbes3w9ATzyk5W7Hvzpa/SLYdxNtng+gcurvrI7TbACjIXlsJyr05/S1oUhZrc63evQA==
   dependencies:
     buffer-equal-constant-time "1.0.1"
-    ecdsa-sig-formatter "1.0.10"
+    ecdsa-sig-formatter "1.0.11"
     safe-buffer "^5.0.1"
 
 jws@^3.1.5:
-  version "3.1.5"
-  resolved "https://registry.yarnpkg.com/jws/-/jws-3.1.5.tgz#80d12d05b293d1e841e7cb8b4e69e561adcf834f"
-  integrity sha512-GsCSexFADNQUr8T5HPJvayTjvPIfoyJPtLQBwn5a4WZQchcrPMPMAWcC1AzJVRDKyD6ZPROPAxgv6rfHViO4uQ==
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/jws/-/jws-3.2.2.tgz#001099f3639468c9414000e99995fa52fb478304"
+  integrity sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==
   dependencies:
-    jwa "^1.1.5"
+    jwa "^1.4.1"
     safe-buffer "^5.0.1"
 
 jwt-decode@2.2.0:
