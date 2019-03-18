@@ -38,7 +38,7 @@
   "devDependencies": {
     "@types/crypto-js": "3.1.43",
     "@types/jest": "23.3.13",
-    "@types/node": "10.12.24",
+    "@types/node": "10.14.1",
     "jest": "23.6.0",
     "rimraf": "2.6.3"
   },
