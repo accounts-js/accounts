@@ -35,7 +35,7 @@
     "@types/bcryptjs": "2.4.2",
     "@types/jest": "23.3.13",
     "@types/lodash": "4.14.123",
-    "@types/node": "10.12.24",
+    "@types/node": "10.14.1",
     "jest": "23.6.0",
     "rimraf": "2.6.3"
   },
