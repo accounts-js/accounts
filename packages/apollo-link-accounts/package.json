@@ -21,11 +21,11 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/client": "^0.13.0",
-    "apollo-link": "1.2.9",
+    "apollo-link": "1.2.11",
     "rimraf": "2.6.3"
   },
   "dependencies": {
-    "apollo-link-context": "1.0.15",
+    "apollo-link-context": "1.0.17",
     "tslib": "1.9.3"
   }
 }
