@@ -42,7 +42,7 @@
     "@accounts/server": "^0.13.0",
     "@accounts/typeorm": "^0.13.0",
     "@accounts/types": "^0.13.0",
-    "@graphql-modules/core": "0.4.2",
+    "@graphql-modules/core": "0.6.1",
     "@types/lodash": "4.14.122",
     "@types/mongoose": "5.3.21",
     "@types/node-fetch": "2.1.6",
