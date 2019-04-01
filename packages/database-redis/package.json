@@ -42,7 +42,7 @@
     "@types/ioredis": "4.0.10",
     "@types/jest": "23.3.13",
     "@types/lodash": "4.14.123",
-    "@types/node": "10.14.1",
+    "@types/node": "10.14.4",
     "@types/shortid": "0.0.29",
     "jest": "23.6.0"
   },

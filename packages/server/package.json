@@ -57,7 +57,7 @@
   "devDependencies": {
     "@types/jest": "23.3.13",
     "@types/jwt-decode": "2.2.1",
-    "@types/node": "10.14.1",
+    "@types/node": "10.14.4",
     "jest": "23.6.0",
     "rimraf": "2.6.3"
   }
