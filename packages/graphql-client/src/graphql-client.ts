@@ -159,39 +159,31 @@ export default class GraphQLClient implements TransportInterface {
         ? await this.client.getTokens()
         : await this.client.refreshSession();
 
-    try {
-      const { data } = await this.options.graphQLClient.mutate({
-        mutation,
-        variables,
-        context: {
-          headers: {
-            Authorization: tokens ? 'Bearer ' + tokens.accessToken : '',
-          },
+    const { data } = await this.options.graphQLClient.mutate({
+      mutation,
+      variables,
+      context: {
+        headers: {
+          Authorization: tokens ? 'Bearer ' + tokens.accessToken : '',
         },
-      });
-      return data[resultField];
-    } catch (e) {
-      throw new Error(e.message);
-    }
+      },
+    });
+    return data[resultField];
   }
 
   private async query(query: any, resultField: any, variables: any = {}) {
     const tokens = await this.client.refreshSession();
 
-    try {
-      const { data } = await this.options.graphQLClient.query({
-        query,
-        variables,
-        fetchPolicy: 'network-only',
-        context: {
-          headers: {
-            Authorization: tokens ? 'Bearer ' + tokens.accessToken : '',
-          },
+    const { data } = await this.options.graphQLClient.query({
+      query,
+      variables,
+      fetchPolicy: 'network-only',
+      context: {
+        headers: {
+          Authorization: tokens ? 'Bearer ' + tokens.accessToken : '',
         },
-      });
-      return data[resultField];
-    } catch (e) {
-      throw new Error(e.message);
-    }
+      },
+    });
+    return data[resultField];
   }
 }
