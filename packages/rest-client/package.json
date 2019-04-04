@@ -46,7 +46,7 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/client": "^0.14.0",
-    "@types/jest": "23.3.13",
+    "@types/jest": "23.3.14",
     "@types/lodash": "4.14.123",
     "@types/node": "10.14.4",
     "jest": "23.6.0",
