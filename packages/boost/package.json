@@ -29,7 +29,7 @@
     "@accounts/types": "^0.14.0",
     "@graphql-modules/core": "0.7.0",
     "apollo-server": "^2.2.3",
-    "graphql": "^14.0.2",
+    "graphql": "^14.2.1",
     "graphql-tools": "^4.0.3",
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",
