@@ -14,24 +14,17 @@
     "coverage": "jest --coverage"
   },
   "jest": {
-    "transform": {
-      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ]
+    "preset": "ts-jest"
   },
   "dependencies": {
     "request": "^2.88.0",
-    "request-promise": "^4.2.1",
+    "request-promise": "^4.2.4",
     "tslib": "1.9.3"
   },
   "devDependencies": {
-    "@types/jest": "23.3.13",
-    "@types/node": "10.14.4",
+    "@types/jest": "24.0.11",
+    "@types/node": "11.13.2",
     "@types/request-promise": "4.1.42",
-    "jest": "23.6.0"
+    "jest": "24.7.1"
   }
 }

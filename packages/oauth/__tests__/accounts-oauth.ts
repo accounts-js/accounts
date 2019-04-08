@@ -69,7 +69,7 @@ describe('AccountsOauth', () => {
       }));
       const oauth = new AccountsOauth({
         facebook: {
-          authenticate: authSpy,
+          authenticate: authSpy as any,
         },
       });
       oauth.setStore(mockStore as any);
@@ -90,7 +90,7 @@ describe('AccountsOauth', () => {
       }));
       const oauth = new AccountsOauth({
         facebook: {
-          authenticate: authSpy,
+          authenticate: authSpy as any,
         },
       });
       const store = {
@@ -119,7 +119,7 @@ describe('AccountsOauth', () => {
       const authSpy = jest.fn(() => user2);
       const oauth = new AccountsOauth({
         facebook: {
-          authenticate: authSpy,
+          authenticate: authSpy as any,
         },
       });
       const store = {
@@ -160,7 +160,7 @@ describe('AccountsOauth', () => {
     const authSpy = jest.fn(() => userChanged);
     const oauth = new AccountsOauth({
       facebook: {
-        authenticate: authSpy,
+        authenticate: authSpy as any,
       },
     });
     oauth.setStore(mockStore as any);

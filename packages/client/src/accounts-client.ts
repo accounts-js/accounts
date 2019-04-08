@@ -118,12 +118,12 @@ export class AccountsClient {
           return refreshedSession.tokens;
         } else if (isTokenExpired(tokens.refreshToken)) {
           // Refresh token is expired, user must sign back in
-          this.clearTokens();
+          await this.clearTokens();
           return null;
         }
         return tokens;
       } catch (err) {
-        this.clearTokens();
+        await this.clearTokens();
         throw err;
       }
     }

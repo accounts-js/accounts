@@ -42,7 +42,7 @@
     "printWidth": 100
   },
   "resolutions": {
-    "@types/node": "10.14.4"
+    "@types/node": "11.13.2"
   },
   "renovate": {
     "extends": [
@@ -67,7 +67,7 @@
     "lint-staged": "8.1.0",
     "opencollective": "1.0.3",
     "prettier": "1.15.3",
-    "ts-jest": "23.10.5",
+    "ts-jest": "24.0.2",
     "tslint": "5.12.1",
     "typedoc": "0.13.0",
     "typedoc-plugin-docusaurus": "1.0.14",
