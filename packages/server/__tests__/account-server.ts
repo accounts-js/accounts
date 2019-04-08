@@ -1094,9 +1094,14 @@ describe('AccountsServer', () => {
         tokens: { token: '001', isImpersonated: true },
         user: impersonatedUser,
       });
-      expect(createSession.mock.calls[0][3]).toEqual({
-        impersonatorUserId: user.id,
-      });
+      expect(createSession).toBeCalledWith(
+        expect.any(String),
+        expect.any(String),
+        { ip: 'ip', userAgent: 'user agent' },
+        {
+          impersonatorUserId: user.id,
+        }
+      );
     });
   });
 
