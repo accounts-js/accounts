@@ -139,21 +139,23 @@
   resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.9.0.tgz#d07a54832757d2f2d1fc9891e5b0e3e3b4886c6a"
   integrity sha512-mkHar7AdyShUFJE6Mlke1tUbb+lPCK1EozZeAhCuRrhQ5aCCBAG6RxzNUYX1Q2jeGeyU0WRAtQu1oE/GoIsNXA==
 
-"@graphql-modules/core@0.6.6":
-  version "0.6.6"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.6.6.tgz#fda48ac78dc9f9a51a6cfaebc6aa89fdf297bdc1"
-  integrity sha512-6qDwSdgIubewlUC2e8Leq6vUB/L3n+iTl+ezRO6UvAyp1TdlneFzrcjUmWr8vQURQPhPnc1BO3v8Fq5XKDPUWg==
+"@graphql-modules/core@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.7.0.tgz#c5b87e8febce7541b1b3ab147ebd242d69702318"
+  integrity sha512-nWEcn6WsJfEpMzN2++7gokleBh1jn+j6B4ZrcpYhndDaLtRpRgYMqbb+VEWe2TW8ezr2llMDs1upuQAKm/RwwA==
   dependencies:
-    "@graphql-modules/di" "0.6.6"
-    graphql-toolkit "0.2.7"
+    "@graphql-modules/di" "0.7.0"
+    apollo-server-caching "0.3.1"
+    graphql-toolkit "0.2.9"
     graphql-tools "4.0.4"
     tslib "1.9.3"
 
-"@graphql-modules/di@0.6.6":
-  version "0.6.6"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.6.6.tgz#68c7f0891a5ae631a7dea939d467c1bf49ef1c75"
-  integrity sha512-Z6ppgDAfptCLC4CgW0zTNdP4mobqCdSkRWn0ekKYihBFg6C+1oPEgphZRqqDA97DkA3cCPvCYmOiGIWW1kCo5A==
+"@graphql-modules/di@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.7.0.tgz#ae7a374ab1a18748e56a724bc3f6659bdb579090"
+  integrity sha512-mUzceezfyT2FmY2DIn309SVRFxDnjyThJTvv8tLwsSN8J9EUjv6oMXnC1/Zg+ZXDupx0RfKWLEcM+Obtw+FCyw==
   dependencies:
+    events "3.0.0"
     tslib "1.9.3"
 
 "@iamstarkov/listr-update-renderer@0.4.1":
@@ -891,6 +893,13 @@ apollo-server-caching@0.3.0:
   dependencies:
     lru-cache "^5.0.0"
 
+apollo-server-caching@0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/apollo-server-caching/-/apollo-server-caching-0.3.1.tgz#63fcb2aaa176e1e101b36a8450e6b4c593d2767a"
+  integrity sha512-mfxzikYXbB/OoEms77AGYwRh7FF3Oim5v5XWAL+VL49FrkbZt5lopVa4bABi7Mz8Nt3Htl9EBJN8765s/yh8IA==
+  dependencies:
+    lru-cache "^5.0.0"
+
 apollo-server-core@2.3.3:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/apollo-server-core/-/apollo-server-core-2.3.3.tgz#3c5fd036f755114b9efa55b41b9807e4d78a7139"
@@ -1223,6 +1232,11 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha1-x57Zf380y48robyXkLzDZkdLS3k=
+
+asyncro@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/asyncro/-/asyncro-3.0.0.tgz#3c7a732e263bc4a42499042f48d7d858e9c0134e"
+  integrity sha512-nEnWYfrBmA3taTiuiOoZYmgJ/CNrSoQLeLs29SeLcPu60yaw/mHDBHV0iOZ051fTvsTHxpCY+gXibqT9wbQYfg==
 
 atob@^2.1.1:
   version "2.1.2"
@@ -2822,6 +2836,11 @@ eventemitter3@^3.1.0:
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.0.tgz#090b4d6cdbd645ed10bf750d4b5407942d7ba163"
   integrity sha512-ivIvhpq/Y0uSjcHDcOIccjmYjGLcP09MFGE7ysAwkAvkXfpZlC985pH2/ui64DKazbTW/4kN3yqozUxlXzI6cA==
 
+events@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/events/-/events-3.0.0.tgz#9a0a0dfaf62893d92b875b8f2698ca4114973e88"
+  integrity sha512-Dc381HFWJzEOhQ+d8pkNon++bk9h6cdAoAj4iE6Q4y6xgTzySWXlKn05/TVNpjnfRqi/X0EpJEJohPjNI3zpVA==
+
 exec-sh@^0.2.0:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/exec-sh/-/exec-sh-0.2.2.tgz#2a5e7ffcbd7d0ba2755bdecb16e5a427dfbdec36"
@@ -3612,10 +3631,10 @@ graphql-tag-pluck@0.5.0:
     source-map-support "^0.5.9"
     typescript "^3.2.2"
 
-graphql-tag-pluck@0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/graphql-tag-pluck/-/graphql-tag-pluck-0.7.0.tgz#95481a144d3a6a6923a2851cc3fbe46b39192be3"
-  integrity sha512-BETjfTimrl942KT5b8mWfM28DI1VwOvHL92xxCPevPPzfQ5qxY4Tv79p0GdWWsfU8WQMSzp0FJpK4Qjh8A1dYw==
+graphql-tag-pluck@0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/graphql-tag-pluck/-/graphql-tag-pluck-0.8.0.tgz#604405f46dfd87f002d47c1f452f277bfc0ba92c"
+  integrity sha512-VxLa8OKNkRmSGmYupB+jhBynchSnkiDcGKs6ilxpAn07qMQmihI9CacCmwggIyRkkLeKsW8G7ZShS68KxUedEg==
   dependencies:
     "@babel/parser" "^7.2.0"
     "@babel/traverse" "^7.1.6"
@@ -3643,16 +3662,17 @@ graphql-toolkit@0.0.5, graphql-toolkit@^0.0.5:
     request "2.88.0"
     valid-url "1.0.9"
 
-graphql-toolkit@0.2.7:
-  version "0.2.7"
-  resolved "https://registry.yarnpkg.com/graphql-toolkit/-/graphql-toolkit-0.2.7.tgz#fbbeee537b0ed48c9c4be4e98b08c6cdb5fd5310"
-  integrity sha512-76C74agj4wtiAMIgxENdcgt86rSSDoSkZuvY6pZWCvHvuoI1n4R410QKO6muzA5lVZKZuF9gOBfVjhVHL002EQ==
+graphql-toolkit@0.2.9:
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/graphql-toolkit/-/graphql-toolkit-0.2.9.tgz#d8b2c3a37feee4fc6424139d1ca97366ff23bdad"
+  integrity sha512-ALojfCMRYb+o/kbHmnhf8Fa6QMS9I223us5jb1jxQc5n4/StYpPQDhVqb8WeAp8OA68D6k1Zxtz2uLyutR9KAw==
   dependencies:
     aggregate-error "2.2.0"
+    asyncro "^3.0.0"
     deepmerge "3.2.0"
     glob "7.1.3"
     graphql-import "0.7.1"
-    graphql-tag-pluck "0.7.0"
+    graphql-tag-pluck "0.8.0"
     graphql-tools "4.0.4"
     is-glob "4.0.0"
     is-valid-path "0.1.1"
