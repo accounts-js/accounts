@@ -2,7 +2,7 @@ import { context } from '../../src/utils/context-builder';
 
 describe('context-builder', () => {
   const accountsServerMock = {
-    resumeSession: jest.fn(() => user),
+    resumeSession: jest.fn<any, any>(() => user),
   };
   const injector = {
     get: jest.fn(() => ({
