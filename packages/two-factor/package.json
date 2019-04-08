@@ -30,7 +30,7 @@
   "dependencies": {
     "@accounts/types": "^0.14.0",
     "@types/lodash": "^4.14.119",
-    "@types/speakeasy": "2.0.2",
+    "@types/speakeasy": "2.0.4",
     "lodash": "^4.17.11",
     "speakeasy": "^2.0.0",
     "tslib": "1.9.3"
