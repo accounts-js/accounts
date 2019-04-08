@@ -14,14 +14,7 @@
     "coverage": "jest --coverage"
   },
   "jest": {
-    "transform": {
-      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ]
+    "preset": "ts-jest"
   },
   "dependencies": {
     "oauth": "^0.9.15",
