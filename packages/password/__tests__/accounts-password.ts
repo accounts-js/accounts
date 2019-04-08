@@ -14,7 +14,7 @@ describe('AccountsPassword', () => {
 
   afterEach(() => {
     password.server = server;
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
   describe('config', () => {
