@@ -32,13 +32,13 @@
     "@types/jest": "24.0.11",
     "@types/lodash": "4.14.123",
     "@types/mongodb": "3.1.22",
-    "@types/node": "10.14.4",
+    "@types/node": "11.13.2",
     "jest": "24.7.1"
   },
   "dependencies": {
     "@accounts/types": "^0.14.0",
     "lodash": "^4.17.11",
-    "mongodb": "^3.1.10",
+    "mongodb": "^3.2.3",
     "tslib": "1.9.3"
   }
 }

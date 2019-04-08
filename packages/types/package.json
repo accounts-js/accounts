@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@types/jest": "24.0.11",
-    "@types/node": "10.14.4",
+    "@types/node": "11.13.2",
     "jest": "24.7.1",
     "rimraf": "2.6.3"
   }

@@ -42,7 +42,7 @@
     "@accounts/types": "^0.14.0",
     "@types/jsonwebtoken": "8.3.2",
     "emittery": "0.4.1",
-    "jsonwebtoken": "8.5.0",
+    "jsonwebtoken": "8.5.1",
     "jwt-decode": "2.2.0",
     "lodash": "4.17.11",
     "tslib": "1.9.3"
@@ -50,7 +50,7 @@
   "devDependencies": {
     "@types/jest": "24.0.11",
     "@types/jwt-decode": "2.2.1",
-    "@types/node": "10.14.4",
+    "@types/node": "11.13.2",
     "jest": "24.7.1",
     "rimraf": "2.6.3"
   }
