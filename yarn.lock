@@ -744,10 +744,10 @@
     "@types/bson" "*"
     "@types/node" "*"
 
-"@types/mongoose@5.3.25":
-  version "5.3.25"
-  resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.3.25.tgz#bb8cca7a8393277d787ddf35f39e132c80474dc9"
-  integrity sha512-HhxLHxUD56N3LjpbpQ6SmaRFDx33RvxRNJwD303LN+ebmCXbZwqpR0pERE2SSjmhu+UvPiJDTH5Bm+YC1qlyNw==
+"@types/mongoose@5.3.26":
+  version "5.3.26"
+  resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.3.26.tgz#a979014c7fc9395e484695d4cc5647e7686251db"
+  integrity sha512-7NPdpUGU/1ZztTICcP3GxwWBAHTDyOLW0XJxrxlTl5i7R7XbT2Ucq33JussSLkWHKjbxpAmJnDwlYKcjwG7agg==
   dependencies:
     "@types/mongodb" "*"
     "@types/node" "*"
@@ -759,12 +759,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@^10.1.0":
-  version "10.14.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.14.4.tgz#1c586b991457cbb58fef51bc4e0cfcfa347714b5"
-  integrity sha512-DT25xX/YgyPKiHFOpNuANIQIVvYEwCWXgK2jYYwqgaMrYE6+tq+DtmMwlD3drl6DJbUwtlIDnn0d7tIn/EbXBg==
-
-"@types/node@11.13.2":
+"@types/node@*", "@types/node@11.13.2", "@types/node@^10.1.0":
   version "11.13.2"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-11.13.2.tgz#dc85dde46aa8740bb4aed54b8104250f8f849503"
   integrity sha512-HOtU5KqROKT7qX/itKHuTtt5fV0iXbheQvrgbLNXFJQBY/eh+VS5vmmTAVlo3qIGMsypm0G4N1t2AXjy1ZicaQ==
@@ -5896,10 +5891,10 @@ mongoose-legacy-pluralize@1.0.2:
   resolved "https://registry.yarnpkg.com/mongoose-legacy-pluralize/-/mongoose-legacy-pluralize-1.0.2.tgz#3ba9f91fa507b5186d399fb40854bff18fb563e4"
   integrity sha512-Yo/7qQU4/EyIS8YDFSeenIvXxZN+ld7YdV9LqFVQJzTLye8unujAWPZ4NWKfFA+RNjh+wvTWKY9Z3E5XM6ZZiQ==
 
-mongoose@5.5.0:
-  version "5.5.0"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.5.0.tgz#e1bf07cf9953840aaaafb25df163bc12ed70365c"
-  integrity sha512-GZdhdbTXTgikInIgtxR7ODcF3+MoJTumTsKYinX3zxJcQgMVr+Y0jBuFoLJ9YtVdF2nq1ukLnhS6RHfta1ptgQ==
+mongoose@5.5.1:
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.5.1.tgz#a256a08241a1412bb307b85e7ece25629d0b4bbe"
+  integrity sha512-sVDyzADl0RbNvoRWLL/zQDqoFGi1IaSo5+DpOwhvGgFs3pSsvmONPNW3JF1KvZerNkkkGFb8ZMuFBeKEiDqZLw==
   dependencies:
     async "2.6.1"
     bson "~1.1.1"
