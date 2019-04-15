@@ -1,0 +1,44 @@
+{
+  "name": "rest-express-typescript",
+  "private": true,
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "scripts": {
+    "start-only": "NODE_ENV=development nodemon -w src -x ts-node src/index.ts",
+    "start": "yarn start-only",
+    "start-services": "docker-compose up -d",
+    "prestart": "yarn start-services",
+    "build": "tsc",
+    "test": "yarn build"
+  },
+  "dependencies": {
+    "@accounts/database-manager": "0.14.0",
+    "@accounts/graphql-api": "0.12.0",
+    "@accounts/mongo": "0.12.0",
+    "@accounts/password": "0.12.0",
+    "@accounts/rest-express": "0.12.0",
+    "@accounts/server": "0.12.0",
+    "@accounts/typeorm": "^0.14.0",
+    "@accounts/types": "^0.14.0",
+    "@graphql-modules/core": "0.4.2",
+    "@types/mongoose": "5.2.0",
+    "apollo-server": "2.3.3",
+    "cors": "2.8.4",
+    "express": "4.16.3",
+    "graphql": "14.1.1",
+    "graphql-toolkit": "0.0.5",
+    "graphql-tools": "4.0.4",
+    "lodash": "4.17.10",
+    "mongoose": "5.4.13",
+    "pg": "^7.9.0",
+    "tslib": "1.9.3",
+    "typeorm": "^0.2.16"
+  },
+  "devDependencies": {
+    "@types/node": "11.13.4",
+    "nodemon": "1.18.9",
+    "ts-node": "8.0.2",
+    "typescript": "3.2.4"
+  }
+}
