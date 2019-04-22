@@ -1,27 +1,28 @@
-import { trim, isEmpty, pick, isString, isPlainObject, find, includes, defer } from 'lodash';
+import { AccountsServer, generateRandomToken, ServerHooks } from '@accounts/server';
+import { AccountsTwoFactorOptions, getUserTwoFactorService, TwoFactor } from '@accounts/two-factor';
 import {
-  User,
-  LoginUserIdentity,
-  EmailRecord,
-  TokenRecord,
-  DatabaseInterface,
   AuthenticationService,
-  HashAlgorithm,
   ConnectionInformations,
+  DatabaseInterface,
+  EmailRecord,
+  HashAlgorithm,
   LoginResult,
+  LoginUserIdentity,
+  TokenRecord,
+  User,
 } from '@accounts/types';
-import { TwoFactor, AccountsTwoFactorOptions, getUserTwoFactorService } from '@accounts/two-factor';
-import { AccountsServer, ServerHooks, generateRandomToken } from '@accounts/server';
+import { defer, find, includes, isEmpty, isPlainObject, isString, pick, trim } from 'lodash';
+
+import { errors } from './errors';
+import { ErrorMessages, PasswordCreateUserType, PasswordLoginType, PasswordType } from './types';
 import {
+  bcryptPassword,
   getUserResetTokens,
   getUserVerificationTokens,
   hashPassword,
-  bcryptPassword,
-  verifyPassword,
   isEmail,
+  verifyPassword,
 } from './utils';
-import { PasswordCreateUserType, PasswordLoginType, PasswordType, ErrorMessages } from './types';
-import { errors } from './errors';
 
 export interface AccountsPasswordOptions {
   /**
@@ -478,7 +479,7 @@ export default class AccountsPassword implements AuthenticationService {
     // If user does not provide the validate function only allow some fields
     user = this.options.validateNewUser
       ? await this.options.validateNewUser(user)
-      : pick(user, ['username', 'email', 'password']);
+      : (pick(user, ['username', 'email', 'password']) as PasswordCreateUserType);
 
     try {
       const userId = await this.db.createUser(user);

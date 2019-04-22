@@ -37,26 +37,26 @@
     "@types/request-ip": "0.0.33",
     "concurrently": "4.1.0",
     "graphql": "14.2.1",
-    "graphql-code-generator": "0.16.1",
-    "graphql-codegen-add": "0.16.1",
-    "graphql-codegen-typescript-common": "0.16.1",
-    "graphql-codegen-typescript-resolvers": "0.16.1",
-    "graphql-codegen-typescript-server": "0.16.1",
+    "graphql-code-generator": "0.18.1",
+    "graphql-codegen-add": "0.18.1",
+    "graphql-codegen-typescript-common": "0.18.1",
+    "graphql-codegen-typescript-resolvers": "0.18.1",
+    "graphql-codegen-typescript-server": "0.18.1",
     "graphql-tools": "4.0.4",
     "lodash": "4.17.11",
     "nock": "10.0.6",
-    "ts-node": "8.0.3"
+    "ts-node": "8.1.0"
   },
   "peerDependencies": {
-    "@accounts/password": "^0.9.3",
-    "@accounts/server": "^0.9.3",
-    "@accounts/types": "^0.9.3",
+    "@accounts/password": "^0.14.0",
+    "@accounts/server": "^0.14.0",
+    "@accounts/types": "^0.14.0",
     "@graphql-modules/core": "0.7.0",
-    "graphql-tag": "^2.10.0",
-    "graphql-tools": "^4.0.3"
+    "graphql-tag": "^2.10.1",
+    "graphql-tools": "^4.0.4"
   },
   "dependencies": {
-    "graphql-toolkit": "^0.0.5",
+    "graphql-toolkit": "^0.2.9",
     "request-ip": "2.1.3",
     "tslib": "1.9.3"
   }

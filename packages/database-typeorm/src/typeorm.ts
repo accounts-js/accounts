@@ -1,5 +1,6 @@
 import { ConnectionInformations, CreateUser, DatabaseInterface } from '@accounts/types';
-import { Repository, getRepository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
+
 import { User } from './entity/User';
 import { UserEmail } from './entity/UserEmail';
 import { UserService } from './entity/UserService';
@@ -166,11 +167,15 @@ export class AccountsTypeorm implements DatabaseInterface {
   }
 
   public async findUserByServiceId(serviceName: string, serviceId: string): Promise<User | null> {
-    const service = await this.serviceRepository.findOne({
-      name: serviceName,
-      serviceId,
-      cache: this.options.cache,
-    });
+    const service = await this.serviceRepository.findOne(
+      {
+        name: serviceName,
+        serviceId,
+      },
+      {
+        cache: this.options.cache,
+      }
+    );
 
     if (service) {
       return this.findUserById(service.userId);
