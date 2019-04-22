@@ -736,10 +736,10 @@
     "@types/bson" "*"
     "@types/node" "*"
 
-"@types/mongodb@3.1.23":
-  version "3.1.23"
-  resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.1.23.tgz#9aaa105f448427036cb6cd3aa042ab77b2ab8a7a"
-  integrity sha512-TNwS1HPh1nnaYorcQoWi+bH5kJ1Q/WqCjiD9XkU3oBeCZFYXXPafVUuFmoYFbzQ061ojhtsndRLzwNklRhU+4w==
+"@types/mongodb@3.1.24":
+  version "3.1.24"
+  resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.1.24.tgz#5fc22ebdd675395632ed776c86ef8021b489eff8"
+  integrity sha512-X3VlTujSc9gzwc7zKwXIdazRnvxWijEOVWlJ8uStiYHuYs8rg+6NgpBQDS0niw1yO1TIqKumewK4i2mKnZYXtQ==
   dependencies:
     "@types/bson" "*"
     "@types/node" "*"
