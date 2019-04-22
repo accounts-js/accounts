@@ -12,7 +12,7 @@
     "prepublishOnly": "yarn compile",
     "testonly": "jest --runInBand --forceExit",
     "test:watch": "jest --watch",
-    "coverage": "yarn testonly --coverage"
+    "coverage": "echo 'disabled mongo test'"
   },
   "files": [
     "src",
