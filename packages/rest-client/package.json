@@ -43,7 +43,7 @@
     "@types/lodash": "4.14.123",
     "@types/node": "11.13.8",
     "jest": "24.7.1",
-    "node-fetch": "2.3.0"
+    "node-fetch": "2.5.0"
   },
   "peerDependencies": {
     "@accounts/client": "^0.7.0"
