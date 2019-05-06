@@ -22,7 +22,7 @@
     "tslib": "1.9.3"
   },
   "devDependencies": {
-    "@types/jest": "24.0.11",
+    "@types/jest": "24.0.12",
     "@types/node": "11.13.10",
     "@types/request-promise": "4.1.43",
     "jest": "24.7.1"
