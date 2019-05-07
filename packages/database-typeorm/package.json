@@ -29,16 +29,16 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/database-tests": "^0.14.0",
-    "@types/jest": "24.0.11",
+    "@types/jest": "24.0.12",
     "@types/node": "11.13.10",
-    "jest": "24.7.1",
-    "pg": "7.9.0"
+    "jest": "24.8.0",
+    "pg": "7.10.0"
   },
   "dependencies": {
     "@accounts/types": "^0.14.0",
     "lodash": "^4.17.11",
     "reflect-metadata": "^0.1.13",
     "tslib": "1.9.3",
-    "typeorm": "^0.2.16"
+    "typeorm": "^0.2.17"
   }
 }

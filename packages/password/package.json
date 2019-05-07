@@ -26,10 +26,10 @@
     "@accounts/server": "^0.14.0",
     "@accounts/types": "^0.14.0",
     "@types/bcryptjs": "2.4.2",
-    "@types/jest": "24.0.11",
+    "@types/jest": "24.0.12",
     "@types/lodash": "4.14.123",
     "@types/node": "11.13.10",
-    "jest": "24.7.1",
+    "jest": "24.8.0",
     "rimraf": "2.6.3"
   },
   "peerDependencies": {
