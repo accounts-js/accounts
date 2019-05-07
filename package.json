@@ -42,7 +42,7 @@
     "printWidth": 100
   },
   "resolutions": {
-    "@types/node": "11.13.2"
+    "@types/node": "11.13.10"
   },
   "renovate": {
     "extends": [
