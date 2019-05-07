@@ -170,7 +170,7 @@ export class AccountsTypeorm implements DatabaseInterface {
       name: serviceName,
       serviceId,
       cache: this.options.cache,
-    });
+    } as any);
 
     if (service) {
       return this.findUserById(service.userId);
