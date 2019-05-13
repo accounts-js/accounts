@@ -40,7 +40,7 @@
   "devDependencies": {
     "@accounts/client": "^0.14.0",
     "@types/jest": "24.0.12",
-    "@types/lodash": "4.14.123",
+    "@types/lodash": "4.14.126",
     "@types/node": "11.13.10",
     "jest": "24.8.0",
     "node-fetch": "2.5.0"

@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@accounts/types": "^0.14.0",
-    "@types/lodash": "^4.14.123",
+    "@types/lodash": "^4.14.126",
     "@types/speakeasy": "2.0.2",
     "lodash": "^4.17.11",
     "speakeasy": "^2.0.0",

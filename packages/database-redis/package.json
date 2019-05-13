@@ -34,14 +34,14 @@
     "@accounts/database-tests": "^0.14.0",
     "@types/ioredis": "4.0.10",
     "@types/jest": "24.0.12",
-    "@types/lodash": "4.14.123",
+    "@types/lodash": "4.14.126",
     "@types/node": "11.13.10",
     "@types/shortid": "0.0.29",
     "jest": "24.8.0"
   },
   "dependencies": {
     "@accounts/types": "^0.14.0",
-    "ioredis": "^4.9.0",
+    "ioredis": "^4.9.3",
     "lodash": "^4.17.11",
     "shortid": "^2.2.14",
     "tslib": "1.9.3"
