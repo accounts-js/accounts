@@ -36,7 +36,7 @@
     "@types/graphql": "14.2.0",
     "@types/request-ip": "0.0.33",
     "concurrently": "4.1.0",
-    "graphql": "14.2.1",
+    "graphql": "14.3.0",
     "graphql-code-generator": "0.16.1",
     "graphql-codegen-add": "0.16.1",
     "graphql-codegen-typescript-common": "0.16.1",
