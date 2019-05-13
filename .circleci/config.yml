@@ -6,7 +6,7 @@ jobs:
       - image: circleci/node:11
       - image: circleci/mongo:3
       - image: circleci/redis:4
-      - image: circleci/postgres:10.7
+      - image: circleci/postgres:10.8
         environment:
           POSTGRES_USER: accounts-js
           POSTGRES_DB: accounts-js-tests-e2e
