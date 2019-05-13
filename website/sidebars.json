@@ -22,7 +22,7 @@
     ]
   },
   "docs": {
-    "Getting started": ["getting-started"],
+    "Getting started": ["getting-started", "email"],
     "Transports": ["transports/graphql", "transports/rest"],
     "Databases": ["databases/mongo", "databases/redis"],
     "Strategies": [
