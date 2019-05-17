@@ -486,7 +486,7 @@ Please change it with a strong random token.`);
   public sanitizeUser(user: User): User {
     const { userObjectSanitizer } = this.options;
 
-    return userObjectSanitizer(this.internalUserSanitizer(user), omit, pick as any);
+    return userObjectSanitizer(this.internalUserSanitizer(user), omit as any, pick as any);
   }
 
   private internalUserSanitizer(user: User): User {

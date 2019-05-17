@@ -478,7 +478,11 @@ export default class AccountsPassword implements AuthenticationService {
     // If user does not provide the validate function only allow some fields
     user = this.options.validateNewUser
       ? await this.options.validateNewUser(user)
-      : pick(user, ['username', 'email', 'password']);
+      : pick<PasswordCreateUserType, 'username' | 'email' | 'password'>(user, [
+          'username',
+          'email',
+          'password',
+        ]);
 
     try {
       const userId = await this.db.createUser(user);
