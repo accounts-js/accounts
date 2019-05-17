@@ -7,6 +7,7 @@ export const errors: ErrorMessages = {
   incorrectPassword: 'Incorrect password',
   unrecognizedOptionsForLogin: 'Unrecognized options for login request',
   matchFailed: 'Match failed',
+  invalidUsername: 'Invalid username',
   invalidEmail: 'Invalid email',
   invalidPassword: 'Invalid password',
   invalidNewPassword: 'Invalid new password',

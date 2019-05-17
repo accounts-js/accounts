@@ -456,8 +456,16 @@ export default class AccountsPassword implements AuthenticationService {
    * @returns Return the id of user created.
    */
   public async createUser(user: PasswordCreateUserType): Promise<string> {
-    if (!this.options.validateUsername(user.username) && !this.options.validateEmail(user.email)) {
+    if (!user.username && !user.email) {
       throw new Error(this.options.errors.usernameOrEmailRequired);
+    }
+
+    if (user.username && !this.options.validateUsername(user.username)) {
+      throw new Error(this.options.errors.invalidUsername);
+    }
+
+    if (user.email && !this.options.validateEmail(user.email)) {
+      throw new Error(this.options.errors.invalidEmail);
     }
 
     if (user.username && (await this.db.findUserByUsername(user.username))) {
