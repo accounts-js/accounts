@@ -459,9 +459,9 @@ export default class AccountsPassword implements AuthenticationService {
     if (!user.username && !user.email) {
       throw new Error(this.options.errors.usernameOrEmailRequired);
     }
-    
+
     if (user.username && !this.options.validateUsername(user.username)) {
-      throw new Error('Invalid username');
+      throw new Error(this.options.errors.invalidUsername);
     }
 
     if (user.email && !this.options.validateEmail(user.email)) {

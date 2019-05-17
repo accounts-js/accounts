@@ -24,6 +24,10 @@ export interface ErrorMessages {
    */
   matchFailed: string;
   /**
+   * Default to 'Invalid username'
+   */
+  invalidUsername: string;
+  /**
    * Default to 'Invalid email'
    */
   invalidEmail: string;
