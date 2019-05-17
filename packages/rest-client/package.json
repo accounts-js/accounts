@@ -19,14 +19,7 @@
   },
   "jest": {
     "testEnvironment": "jsdom",
-    "transform": {
-      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ]
+    "preset": "ts-jest"
   },
   "repository": {
     "type": "git",
@@ -46,11 +39,11 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/client": "^0.14.0",
-    "@types/jest": "23.3.13",
-    "@types/lodash": "4.14.123",
-    "@types/node": "10.14.4",
-    "jest": "23.6.0",
-    "node-fetch": "2.3.0"
+    "@types/jest": "24.0.13",
+    "@types/lodash": "4.14.129",
+    "@types/node": "12.0.2",
+    "jest": "24.8.0",
+    "node-fetch": "2.6.0"
   },
   "peerDependencies": {
     "@accounts/client": "^0.7.0"

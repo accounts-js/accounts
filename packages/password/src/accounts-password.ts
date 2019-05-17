@@ -24,21 +24,26 @@ import { PasswordCreateUserType, PasswordLoginType, PasswordType, ErrorMessages 
 import { errors } from './errors';
 
 export interface AccountsPasswordOptions {
+  /**
+   * Two factor options passed down to the @accounts/two-factor service.
+   */
   twoFactor?: AccountsTwoFactorOptions;
   passwordHashAlgorithm?: HashAlgorithm;
   /**
-   * The number of milliseconds from when a link to verify the user email is sent until token expires and user can't verify his email with the link anymore. Defaults to 3 days.
+   * The number of milliseconds from when a link to verify the user email is sent until token expires and user can't verify his email with the link anymore.
+   * Defaults to 3 days.
    */
   verifyEmailTokenExpiration?: number;
   /**
-   * The number of milliseconds from when a link to reset password is sent until token expires and user can't reset password with the link anymore. Defaults to 3 days.
+   * The number of milliseconds from when a link to reset password is sent until token expires and user can't reset password with the link anymore.
+   * Defaults to 3 days.
    */
   passwordResetTokenExpiration?: number;
   /**
-   * The number of milliseconds from when a link to set inital password is sent until token expires and user can't set password with the link anymore. Defaults to 30 days.
+   * The number of milliseconds from when a link to set inital password is sent until token expires and user can't set password with the link anymore.
+   * Defaults to 30 days.
    */
   passwordEnrollTokenExpiration?: number;
-  minimumPasswordLength?: number;
   /**
    * Accounts password module errors
    */
@@ -49,17 +54,28 @@ export interface AccountsPasswordOptions {
    * Default to true.
    */
   notifyUserAfterPasswordChanged?: boolean;
+  /**
+   * Default to false.
+   */
   returnTokensAfterResetPassword?: boolean;
+  /**
+   * Function that will validate the user object during `createUser`.
+   * The user returned from this function will be directly inserted in the database so be careful when you whitelist the fields,
+   * By default we only allow `username`, `email` and `password` fields.
+   */
   validateNewUser?: (
     user: PasswordCreateUserType
   ) => Promise<PasswordCreateUserType> | PasswordCreateUserType;
+  /**
+   * Function that check if the email is a valid email.
+   * This function will be called when you call `createUser` and `addEmail`.
+   */
   validateEmail?(email?: string): boolean;
   validatePassword?(password?: PasswordType): boolean;
   validateUsername?(username?: string): boolean;
 }
 
 const defaultOptions = {
-  minimumPasswordLength: 7,
   // 3 days - 3 * 24 * 60 * 60 * 1000
   verifyEmailTokenExpiration: 259200000,
   // 3 days - 3 * 24 * 60 * 60 * 1000
@@ -470,7 +486,11 @@ export default class AccountsPassword implements AuthenticationService {
     // If user does not provide the validate function only allow some fields
     user = this.options.validateNewUser
       ? await this.options.validateNewUser(user)
-      : pick(user, ['username', 'email', 'password']);
+      : pick<PasswordCreateUserType, 'username' | 'email' | 'password'>(user, [
+          'username',
+          'email',
+          'password',
+        ]);
 
     try {
       const userId = await this.db.createUser(user);
@@ -499,7 +519,7 @@ export default class AccountsPassword implements AuthenticationService {
       ? this.toUsernameAndEmail({ user })
       : this.toUsernameAndEmail({ ...user });
 
-    let foundUser: User | null;
+    let foundUser: User | null = null;
 
     if (id) {
       // this._validateLoginWithField('id', user);
@@ -512,7 +532,6 @@ export default class AccountsPassword implements AuthenticationService {
       foundUser = await this.db.findUserByEmail(email);
     }
 
-    // @ts-ignore
     if (!foundUser) {
       throw new Error(
         this.server.options.ambiguousErrorMessages

@@ -14,6 +14,7 @@ describe('AccountsPassword', () => {
 
   afterEach(() => {
     password.server = server;
+    jest.clearAllMocks();
   });
 
   describe('config', () => {
@@ -393,8 +394,7 @@ describe('AccountsPassword', () => {
       const setPassword = jest.fn(() => Promise.resolve('user'));
       password.setStore({ setPassword } as any);
       const user = await password.setPassword(userId, 'new-password');
-      expect(setPassword.mock.calls[0][0]).toEqual(userId);
-      expect(setPassword.mock.calls[0][1]).toBeTruthy();
+      expect(setPassword).toBeCalledWith(userId, expect.any(String));
       expect(user).toEqual('user');
     });
   });
@@ -424,8 +424,7 @@ describe('AccountsPassword', () => {
       await password.changePassword(userId, 'old-password', 'new-password');
       expect(passwordAuthenticator.mock.calls[0][0]).toEqual({ id: userId });
       expect(passwordAuthenticator.mock.calls[0][1]).toEqual('old-password');
-      expect(setPassword.mock.calls[0][0]).toEqual(userId);
-      expect(setPassword.mock.calls[0][1]).toBeTruthy();
+      expect(setPassword).toBeCalledWith(userId, expect.any(String));
       expect(prepareMail.mock.calls[0].length).toBe(6);
       expect(sendMail.mock.calls[0].length).toBe(1);
       (password as any).passwordAuthenticator.mockRestore();
@@ -610,7 +609,7 @@ describe('AccountsPassword', () => {
     });
   });
 
-  describe('createUser', async () => {
+  describe('createUser', () => {
     it('throws on required fields', async () => {
       try {
         await password.createUser({
@@ -669,7 +668,7 @@ describe('AccountsPassword', () => {
         email: 'email1@email.com',
       });
       expect(findUserByEmail.mock.calls.length).toBe(1);
-      expect(createUser.mock.calls[0][0]).toEqual({
+      expect(createUser).toBeCalledWith({
         email: 'email1@email.com',
         password: expect.any(String),
         additionalField: 'test',
@@ -687,7 +686,7 @@ describe('AccountsPassword', () => {
         additionalField: 'not allowed',
       });
       expect(findUserByEmail.mock.calls.length).toBe(1);
-      expect(createUser.mock.calls[0][0]).toEqual({
+      expect(createUser).toBeCalledWith({
         email: 'email1@email.com',
         password: expect.any(String),
       });

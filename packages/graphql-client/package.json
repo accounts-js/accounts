@@ -12,15 +12,7 @@
     "prepublishOnly": "yarn compile"
   },
   "jest": {
-    "transform": {
-      ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
-    "mapCoverage": true
+    "preset": "ts-jest"
   },
   "repository": {
     "type": "git",

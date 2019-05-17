@@ -1,11 +1,12 @@
-import mongoose from 'mongoose';
-import { mergeResolvers, mergeGraphQLSchemas } from 'graphql-toolkit';
-import { AccountsServer } from '@accounts/server';
-import { AccountsPassword } from '@accounts/password';
-import { ApolloServer, makeExecutableSchema } from 'apollo-server';
-import MongoDBInterface from '@accounts/mongo';
-import { AccountsModule } from '@accounts/graphql-api';
 import { DatabaseManager } from '@accounts/database-manager';
+import { AccountsModule } from '@accounts/graphql-api';
+import MongoDBInterface from '@accounts/mongo';
+import { AccountsPassword } from '@accounts/password';
+import { AccountsServer } from '@accounts/server';
+import { ApolloServer, makeExecutableSchema } from 'apollo-server';
+import gql from 'graphql-tag';
+import { mergeResolvers, mergeTypeDefs } from 'graphql-toolkit';
+import mongoose from 'mongoose';
 
 const start = async () => {
   // Create database connection
@@ -45,30 +46,30 @@ const start = async () => {
     accountsServer,
   });
 
-  const typeDefs = `
-  type PrivateType @auth {
-    field: String
-  }
+  const typeDefs = gql`
+    type PrivateType @auth {
+      field: String
+    }
 
-  # Our custom fields to add to the user
-  extend input CreateUserInput {
-    profile: CreateUserProfileInput!
-  }
+    # Our custom fields to add to the user
+    extend input CreateUserInput {
+      profile: CreateUserProfileInput!
+    }
 
-  input CreateUserProfileInput {
-    firstName: String!
-    lastName: String!
-  }
+    input CreateUserProfileInput {
+      firstName: String!
+      lastName: String!
+    }
 
-  type Query {
-    publicField: String
-    privateField: String @auth
-    privateType: PrivateType
-  }
+    type Query {
+      publicField: String
+      privateField: String @auth
+      privateType: PrivateType
+    }
 
-  type Mutation {
-    _: String
-  }
+    type Mutation {
+      _: String
+    }
   `;
 
   const resolvers = {
@@ -82,8 +83,8 @@ const start = async () => {
   };
 
   const schema = makeExecutableSchema({
-    typeDefs: mergeGraphQLSchemas([typeDefs, accountsGraphQL.typeDefs]),
-    resolvers: mergeResolvers([accountsGraphQL.resolvers as any, resolvers]) as any,
+    typeDefs: mergeTypeDefs([typeDefs, accountsGraphQL.typeDefs]),
+    resolvers: mergeResolvers([accountsGraphQL.resolvers, resolvers]),
     schemaDirectives: {
       ...accountsGraphQL.schemaDirectives,
     },

@@ -31,14 +31,20 @@ yarn start
 -> [Start the client side](../react-graphql-typescript).
 
 ```graphql
-mutation Register {
-  register(user: { username: "user", password: "1234567" })
+mutation CreateUser {
+  createUser(
+    user: {
+      email: "john.does@john.com"
+      password: "1234567"
+      profile: { firstName: "John", lastName: "Doe" }
+    }
+  )
 }
 
 mutation Auth {
   authenticate(
     serviceName: "password"
-    params: { password: "1234567", user: { username: "user" } }
+    params: { password: "1234567", user: { email: "john.does@john.com" } }
   ) {
     tokens {
       accessToken
