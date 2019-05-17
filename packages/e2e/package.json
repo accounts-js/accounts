@@ -43,7 +43,7 @@
     "@accounts/typeorm": "^0.14.0",
     "@accounts/types": "^0.14.0",
     "@graphql-modules/core": "0.7.1",
-    "@types/lodash": "4.14.126",
+    "@types/lodash": "4.14.129",
     "@types/mongoose": "5.5.1",
     "@types/node-fetch": "2.3.4",
     "apollo-boost": "0.3.1",
