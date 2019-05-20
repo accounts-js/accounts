@@ -32,7 +32,7 @@
     "@accounts/types": "^0.15.0",
     "@gql2ts/from-schema": "1.10.1",
     "@gql2ts/types": "1.9.0",
-    "@graphql-modules/core": "0.7.1",
+    "@graphql-modules/core": "0.7.3",
     "@types/graphql": "14.2.0",
     "@types/request-ip": "0.0.33",
     "concurrently": "4.1.0",
@@ -51,7 +51,7 @@
     "@accounts/password": "^0.9.3",
     "@accounts/server": "^0.9.3",
     "@accounts/types": "^0.9.3",
-    "@graphql-modules/core": "0.7.1",
+    "@graphql-modules/core": "0.7.3",
     "graphql-tag": "^2.10.0",
     "graphql-tools": "^4.0.3"
   },
