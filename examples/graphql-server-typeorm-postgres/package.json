@@ -1,0 +1,35 @@
+{
+  "name": "graphql-typeorm-typescript",
+  "private": true,
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "license": "Unlicensed",
+  "scripts": {
+    "start-only": "NODE_ENV=development nodemon -w src -x ts-node src/index.ts",
+    "start": "yarn start-only",
+    "start-services": "docker-compose up -d",
+    "prestart": "yarn start-services",
+    "build": "tsc",
+    "test": "yarn build"
+  },
+  "dependencies": {
+    "@accounts/graphql-api": "^0.15.0",
+    "@accounts/password": "^0.15.0",
+    "@accounts/server": "^0.15.0",
+    "@accounts/typeorm": "^0.15.0",
+    "@graphql-modules/core": "^0.7.5",
+    "apollo-server": "^2.5.0",
+    "graphql": "^14.3.1",
+    "graphql-toolkit": "^0.2.13",
+    "pg": "^7.11.0",
+    "typeorm": "^0.2.17"
+  },
+  "devDependencies": {
+    "@accounts/types": "^0.15.0",
+    "@types/graphql": "^14.2.0",
+    "@types/node": "^12.0.3",
+    "nodemon": "^1.19.1",
+    "ts-node": "^8.2.0",
+    "typescript": "^3.5.1"
+  }
+}
