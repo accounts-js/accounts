@@ -13,7 +13,6 @@ export const createAccounts = async () => {
     const tokenSecret = 'ACCOUNTS_SECRET' || 'not very secret secret';
     const db = new AccountsTypeorm({ connection, cache: 1000 });
     const password = new AccountsPassword();
-
     const accountsServer = new AccountsServer(
         {
             db,
