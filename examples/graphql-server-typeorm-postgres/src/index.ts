@@ -8,9 +8,9 @@ import { AccountsTypeorm } from '@accounts/typeorm';
 import { connect } from './connect';
 
 export const createAccounts = async () => {
-  const connection = await connect(process.env.TEST_DATABASE_URL);
+  const connection = await connect(process.env.DATABASE_URL);
   // Like, fix this man!
-  const tokenSecret = 'ACCOUNTS_SECRET' || 'not very secret secret';
+  const tokenSecret = 'process.env.ACCOUNTS_SECRET' || 'change this in .env';
   const db = new AccountsTypeorm({ connection, cache: 1000 });
   const password = new AccountsPassword();
   const accountsServer = new AccountsServer(
