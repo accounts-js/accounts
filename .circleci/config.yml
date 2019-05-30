@@ -20,3 +20,4 @@ jobs:
       - run: cd examples/rest-express-typescript && yarn install --frozen-lockfile && yarn test
       - run: cd examples/react-graphql-typescript && yarn install --frozen-lockfile && yarn test
       - run: cd examples/graphql-server-typescript && yarn install --frozen-lockfile && yarn test
+      - run: cd examples/graphql-server-typeorm-postgres && yarn install --frozen-lockfile && yarn test
