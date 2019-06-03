@@ -75,7 +75,7 @@ export const connect = (url = 'postgres://localhost:5432') => {
 ## Example
 
 You can find an example using the database-typeeorm package with a PostgreSQL database in the examples folder
-[graphql-server-typeorm-postgres](https://github.com/accounts-js/accounts/tree/master/examples/graphql-server-typeorm-postgres) 
+[graphql-server-typeorm-postgres](https://github.com/accounts-js/accounts/tree/master/examples/graphql-server-typeorm-postgres)
 
 ## Notice
 

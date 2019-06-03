@@ -15,6 +15,6 @@ GraphQL Server + GraphQL Client example:
 Other examples:
 
 - Accounts Boost [accounts-boost](./accounts-boost)
-- Typeorm + PostgreSQL example  [graphql-server-typeorm-postgres](./graphql-server-typeorm-postgres)
+- Typeorm + PostgreSQL example [graphql-server-typeorm-postgres](./graphql-server-typeorm-postgres)
 
 Please go to corresponding packages and see its README.
