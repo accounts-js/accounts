@@ -22,9 +22,19 @@
     ]
   },
   "docs": {
-    "Getting started": ["getting-started", "email"],
-    "Transports": ["transports/graphql", "transports/rest"],
-    "Databases": ["databases/mongo", "databases/redis"],
+    "Getting started": [
+      "getting-started",
+      "email"
+    ],
+    "Transports": [
+      "transports/graphql",
+      "transports/rest"
+    ],
+    "Databases": [
+      "databases/mongo",
+      "databases/redis",
+      "databases/typeorm"
+    ],
     "Strategies": [
       "strategies/password",
       "strategies/facebook",
