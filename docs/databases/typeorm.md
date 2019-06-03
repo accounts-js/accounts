@@ -1,7 +1,7 @@
 ---
 id: typeorm
-title: Typeorm
-sidebar_label: Typeorm
+title: TypeORM
+sidebar_label: TypeORM
 ---
 
 TypeORM data store for accounts-js
