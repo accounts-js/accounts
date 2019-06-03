@@ -12,4 +12,9 @@ GraphQL Server + GraphQL Client example:
 - Server: [graphql-server-typescript](./graphql-server-typescript)
 - Client: [react-graphql-typescript](./react-graphql-typescript)
 
+Other examples:
+
+- Accounts Boost [accounts-boost](./accounts-boost)
+- Typeorm + PostgreSQL example  [graphql-server-typeorm-postgres](./graphql-server-typeorm-postgres)
+
 Please go to corresponding packages and see its README.

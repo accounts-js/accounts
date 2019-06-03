@@ -1,6 +1,6 @@
 # accounts-boost examples
 
-Includes two two examples of using `@accounts/boost`.
+Includes two examples of using `@accounts/boost`.
 
 `yarn start:mono` - Starts a GraphQL server which consumes the `@accounts/boost` typeDefs and resolvers when building your app's schema.
 
