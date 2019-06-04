@@ -9,6 +9,11 @@ TypeORM data store for accounts-js
 [Github](https://github.com/accounts-js/accounts/tree/master/packages/database-mongo) |
 [npm](https://www.npmjs.com/package/@accounts/typeorm)
 
+## > Notice
+
+It is our long-term goal for typeorm package to be database agnostic and support all database types it does by default.
+For now it only works and has been tested with PostgreSQL, feel free to explore other typeorm-integrations.
+
 ## Install
 
 ```javascript
@@ -21,6 +26,7 @@ yarn add @accounts/typeorm typeorm pg
 import AccountsServer from '@accounts/server';
 import typeorm from '@accounts/typeorm';
 import { createConnection } from 'typeorm';
+
 export const createAccounts = async () => {
   const connection = await connect(process.env.DATABASE_URL);
   // Like, fix this man!
@@ -76,8 +82,3 @@ export const connect = (url = 'postgres://localhost:5432') => {
 
 You can find an example using the database-typeeorm package with a PostgreSQL database in the examples folder
 [graphql-server-typeorm-postgres](https://github.com/accounts-js/accounts/tree/master/examples/graphql-server-typeorm-postgres)
-
-## Notice
-
-It is our long-term goal for typeorm package to be database agnostic and support all database types it does by default.
-For now it only works and has been tested with PostgreSQL, feel free to explore other typeorm-integrations.
