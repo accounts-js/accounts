@@ -9,10 +9,8 @@ TypeORM data store for accounts-js
 [Github](https://github.com/accounts-js/accounts/tree/master/packages/database-mongo) |
 [npm](https://www.npmjs.com/package/@accounts/typeorm)
 
-## > Notice
-
-It is our long-term goal for typeorm package to be database agnostic and support all database types it does by default.
-For now it only works and has been tested with PostgreSQL, feel free to explore other typeorm-integrations.
+> It is our long-term goal for typeorm package to be database agnostic and support all database types it does by default.
+> For now it only works and has been tested with PostgreSQL, feel free to explore other typeorm-integrations.
 
 ## Install
 
