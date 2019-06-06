@@ -298,21 +298,21 @@
   resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.9.0.tgz#d07a54832757d2f2d1fc9891e5b0e3e3b4886c6a"
   integrity sha512-mkHar7AdyShUFJE6Mlke1tUbb+lPCK1EozZeAhCuRrhQ5aCCBAG6RxzNUYX1Q2jeGeyU0WRAtQu1oE/GoIsNXA==
 
-"@graphql-modules/core@0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.7.4.tgz#300b33df3aedf8a6eeec06b3f1d8dbd4e1da8f75"
-  integrity sha512-/SIKvQO5YM0Qu0qOna3s/4Y/+cgWWuNVlyUwM9MVwwukRds3bK7nSijE42QcZ2eP8XYq2pKdAU3OyhBELsRI3Q==
+"@graphql-modules/core@0.7.5":
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.7.5.tgz#a7c030afebcad388298a89b026cb2852b947d16f"
+  integrity sha512-+mcE+ysZ42WQggsrJMEDKu6tyq6uoraXX0MnQGPnZMzvjP7ko5dnqvRi6+7+Wdv+LL+wzzAWPu36YPrex5mRaQ==
   dependencies:
-    "@graphql-modules/di" "0.7.4"
+    "@graphql-modules/di" "0.7.5"
     apollo-server-caching "0.4.0"
     graphql-toolkit "0.2.13"
     graphql-tools "4.0.4"
     tslib "1.9.3"
 
-"@graphql-modules/di@0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.7.4.tgz#8c7c0bb58c85c7188828e734abac47870299d7b2"
-  integrity sha512-lQ8OLI/XMJklHPTIgO0vUGRotLqrD2xO2OrctjW5oUPA7cNWdKlcznG/9enVCERyf0RP8bS02f9fbnCV2Jei+Q==
+"@graphql-modules/di@0.7.5":
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.7.5.tgz#d6beac0a89755813d55420c2a7058b00b46b5657"
+  integrity sha512-lId2hQZxu6rWUEhlKbBG+WJl/k/1JqWG5zgVFgfZ9YzU6gYEdkkVrZ8YWaSw0jm181owL/H9UvWMn4MpzPtWVA==
   dependencies:
     events "3.0.0"
     tslib "1.9.3"
