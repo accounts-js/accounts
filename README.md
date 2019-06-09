@@ -19,9 +19,9 @@ _Note: The packages within this repo are under active development — expect bre
 
 ## About
 
-The `@accounts` suite of packages aims to provide the consumer an end to end authentication and accounts management solution, with a simple to start with interface while preserving options for configuration. These packages provide OAuth support for popular providers such as Instagram, Twitter, Github, two factor authentication, password based accounts along with recovery options and customizable account creation and validation.
+The `@accounts` suite of packages aims to provide the consumer an end to end authentication and accounts management solution, with a simple to start with interface while preserving options for configuration. These packages provide OAuth support for popular providers such as Instagram, Twitter, Github, two-factor authentication, password-based accounts along with recovery options and customizable account creation and validation.
 
-The `@accounts` packages are modular by nature and can be manually installed and configured, however we provide `@accounts/boost` - a package containing useful abstractions to get a GraphQL accounts server started with minimal configuration.
+The `@accounts` packages are modular by nature and can be manually installed and configured, however, we provide `@accounts/boost` - a package containing useful abstractions to get a GraphQL accounts server started with minimal configuration.
 
 ## Getting started with @accounts/boost
 
@@ -29,7 +29,7 @@ The `@accounts` packages are modular by nature and can be manually installed and
 
 `npm install @accounts/boost`
 
-**Choose your database database driver**
+**Choose your database driver**
 
 `npm install @accounts/mongo`
 
@@ -55,7 +55,7 @@ import accountsBoost from `@accounts/boost`;
 })();
 ```
 
-At this point you will have an accounts GraphQL server running at http://localhost:4003 with a GraphQL playground available at the same address.
+At this point, you will have an accounts GraphQL server running at http://localhost:4003 with a GraphQL playground available at the same address.
 
 Configuring additional options, such as providing custom connection options for a database or additional parameters based on your chosen packages can be achieved by supplying an options object when initializing the `accountsBoost`.
 
@@ -141,9 +141,9 @@ import { mergeGraphQLSchemas, mergeResolvers } from 'graphql-toolkit';
 
 Based on your requirements it can be advantageous to deploy a single accounts server which is then consumed by multiple apps.
 
-The following examples will show you how to setup a GraphQL server which can be used to authenticate requests via JWT token.
+The following examples will show you how to set up a GraphQL server which can be used to authenticate requests via JWT token.
 
-First start an accounts server:
+First, start an accounts server:
 
 ```javascript
 import accountsBoost from '@accounts/boost';
@@ -157,7 +157,7 @@ import accountsBoost from '@accounts/boost';
 })();
 ```
 
-Next you need to configure your existing GraphQL server to authenticate incoming requests by using the context function provided by `accountsBoost`. Additionally you may merge your existing GraphQL server schema with the accounts server schema.
+Next, you need to configure your existing GraphQL server to authenticate incoming requests by using the context function provided by `accountsBoost`. Additionally, you may merge your existing GraphQL server schema with the accounts server schema.
 
 ```javascript
 import accountsBoost, { authenticated } from '@accounts/boost';
@@ -299,7 +299,7 @@ framework had a plug and play approach for its monolithic framework that saved a
 ton of work that is traditionally done by any development team, over and over
 again. Meteor's accounts system had a couple of restrictions:
 
-- First it was published in Meteor's "atmosphere" package repository and was
+- First, it was published in Meteor's "atmosphere" package repository and was
   dependent on the Meteor's build tool.
 - Second, Meteor is built around DDP and so its accounts system was taking that
   for granted.
@@ -320,7 +320,7 @@ will be one authentication method that you can plug in. Currently, the only
 problem with passport.js in that regard is that it is designed to work with
 connect middlewares and adapter code is needed to plug into let's say a WS
 transport. We currently implemented our own local strategy just to make sense
-out of basic accounts packages. In the near future it will be separated into its
+out of basic accounts packages. In the near future, it will be separated into its
 own package.
 
 ### Why not refactor out the Meteor accounts suite?
