@@ -26,7 +26,7 @@
     "@types/lodash": "4.14.134",
     "@types/mongoose": "5.5.3",
     "@types/node": "12.0.2",
-    "@types/node-fetch": "2.3.4",
+    "@types/node-fetch": "2.3.5",
     "jest": "24.8.0",
     "jest-localstorage-mock": "2.4.0"
   },
@@ -45,7 +45,7 @@
     "@graphql-modules/core": "0.7.5",
     "@types/lodash": "4.14.134",
     "@types/mongoose": "5.5.3",
-    "@types/node-fetch": "2.3.4",
+    "@types/node-fetch": "2.3.5",
     "apollo-boost": "0.4.1",
     "apollo-server": "2.5.0",
     "body-parser": "1.19.0",
