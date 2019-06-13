@@ -17,6 +17,8 @@ _Note: The packages within this repo are under active development — expect bre
 
 **[Examples](https://github.com/accounts-js/accounts/tree/master/examples)**
 
+**[Spectrum](https://spectrum.chat/accounts-js)**
+
 ## About
 
 The `@accounts` suite of packages aims to provide the consumer an end to end authentication and accounts management solution, with a simple to start with interface while preserving options for configuration. These packages provide OAuth support for popular providers such as Instagram, Twitter, Github, two-factor authentication, password-based accounts along with recovery options and customizable account creation and validation.
