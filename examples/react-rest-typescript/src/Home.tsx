@@ -28,7 +28,7 @@ class Home extends React.Component<RouteComponentProps<{}>, State> {
       },
     });
     const user = await res.json();
-    this.setState({ user: user.user });
+    this.setState({ user: user });
   }
 
   onResendEmail = async () => {
