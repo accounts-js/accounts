@@ -61,7 +61,7 @@ class Signup extends React.Component<WithStyles<'formContainer'> & RouteComponen
     try {
       await accountsPassword.createUser({
         firstName: this.state.firstName,
-        lastName: this.state.firstName,
+        lastName: this.state.lastName,
         email: this.state.email,
         password: this.state.password,
       });
