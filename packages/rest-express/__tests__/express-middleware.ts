@@ -27,6 +27,7 @@ describe('express middleware', () => {
     );
     expect((router.post as jest.Mock).mock.calls[0][0]).toBe('test/impersonate');
     expect((router.post as jest.Mock).mock.calls[1][0]).toBe('test/user');
+    expect((router.get as jest.Mock).mock.calls[1][0]).toBe('test/user');
     expect((router.post as jest.Mock).mock.calls[2][0]).toBe('test/refreshTokens');
     expect((router.post as jest.Mock).mock.calls[3][0]).toBe('test/logout');
     expect((router.post as jest.Mock).mock.calls[4][0]).toBe('test/:service/authenticate');
@@ -43,6 +44,7 @@ describe('express middleware', () => {
     );
     expect((router.post as jest.Mock).mock.calls[0][0]).toBe('test/impersonate');
     expect((router.post as jest.Mock).mock.calls[1][0]).toBe('test/user');
+    expect((router.get as jest.Mock).mock.calls[1][0]).toBe('test/user');
     expect((router.post as jest.Mock).mock.calls[2][0]).toBe('test/refreshTokens');
     expect((router.post as jest.Mock).mock.calls[3][0]).toBe('test/logout');
     expect((router.post as jest.Mock).mock.calls[4][0]).toBe('test/:service/authenticate');
@@ -66,6 +68,7 @@ describe('express middleware', () => {
     );
     expect((router.post as jest.Mock).mock.calls[0][0]).toBe('test/impersonate');
     expect((router.post as jest.Mock).mock.calls[1][0]).toBe('test/user');
+    expect((router.get as jest.Mock).mock.calls[1][0]).toBe('test/user');
     expect((router.post as jest.Mock).mock.calls[2][0]).toBe('test/refreshTokens');
     expect((router.post as jest.Mock).mock.calls[3][0]).toBe('test/logout');
     expect((router.post as jest.Mock).mock.calls[4][0]).toBe('test/:service/authenticate');
