@@ -23,7 +23,12 @@ const accountsExpress = (
   options: AccountsExpressOptions = {}
 ): express.Router => {
   options = { ...defaultOptions, ...options };
-  const { path } = options;
+  let { path } = options;
+
+  // Stop invalid double slash root path
+  if (path === '/') {
+    path = '';
+  }
 
   const router = express.Router();
 
