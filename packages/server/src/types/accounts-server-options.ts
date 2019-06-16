@@ -11,8 +11,8 @@ export interface AccountsServerOptions {
    * Return ambiguous error messages from login failures to prevent user enumeration. Defaults to true.
    */
   ambiguousErrorMessages?: boolean;
-  db?: DatabaseInterface;
-  tokenSecret: string;
+  db: DatabaseInterface;
+  tokenSecret?: string;
   tokenConfigs?: {
     accessToken?: jwt.SignOptions;
     refreshToken?: jwt.SignOptions;
