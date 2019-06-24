@@ -16,13 +16,15 @@
     "testonly": "lerna run testonly",
     "prettier": "prettier --write '**/*.{json,md,js,ts}'",
     "test:prettier": "prettier --list-different '**/*.{json,md,js,ts}'",
+    "test:examples": "lerna run test --scope=\"@examples/*\"",
     "coverage": "lerna run coverage",
     "codecov": "codecov",
     "reset": "yarn clean; yarn install; yarn setup; yarn compile"
   },
   "workspaces": {
     "packages": [
-      "packages/*"
+      "packages/*",
+      "examples/*"
     ]
   },
   "husky": {

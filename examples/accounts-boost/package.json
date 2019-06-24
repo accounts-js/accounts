@@ -1,5 +1,5 @@
 {
-  "name": "accounts-boost",
+  "name": "@examples/accounts-boost",
   "private": true,
   "version": "1.0.0",
   "main": "lib/index.js",

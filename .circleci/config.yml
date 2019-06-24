@@ -27,8 +27,4 @@ jobs:
       - run: yarn run lerna bootstrap
       - run: yarn test
       - run: yarn codecov
-      - run: cd examples/react-rest-typescript && yarn install --frozen-lockfile && yarn test
-      - run: cd examples/rest-express-typescript && yarn install --frozen-lockfile && yarn test
-      - run: cd examples/react-graphql-typescript && yarn install --frozen-lockfile && yarn test
-      - run: cd examples/graphql-server-typescript && yarn install --frozen-lockfile && yarn test
-      - run: cd examples/graphql-server-typeorm-postgres && yarn install --frozen-lockfile && yarn test
+      - run: yarn test:examples

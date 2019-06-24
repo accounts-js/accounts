@@ -1,5 +1,5 @@
 {
-  "name": "graphql-typeorm-typescript",
+  "name": "@examples/graphql-typeorm-typescript",
   "private": true,
   "version": "1.0.0",
   "main": "lib/index.js",
