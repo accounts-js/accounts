@@ -25,6 +25,10 @@
     "packages": [
       "packages/*",
       "examples/*"
+    ],
+    "nohoist": [
+      "**/jest/**",
+      "**/jest"
     ]
   },
   "husky": {
