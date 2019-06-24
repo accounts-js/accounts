@@ -29,7 +29,7 @@
     "@types/react-dom": "16.0.11",
     "@types/react-router": "4.4.3",
     "@types/react-router-dom": "4.3.1",
-    "jest": "23.4.2",
+    "jest": "24.8.0",
     "typescript": "3.5.2"
   }
 }
