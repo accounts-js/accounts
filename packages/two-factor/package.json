@@ -18,6 +18,7 @@
     "coverage": "jest --coverage"
   },
   "jest": {
+    "testEnvironment": "node",
     "preset": "ts-jest"
   },
   "dependencies": {

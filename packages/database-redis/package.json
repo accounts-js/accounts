@@ -22,6 +22,7 @@
     "access": "public"
   },
   "jest": {
+    "testEnvironment": "node",
     "preset": "ts-jest"
   },
   "repository": {

@@ -12,6 +12,7 @@
     "prepublishOnly": "yarn compile"
   },
   "jest": {
+    "testEnvironment": "node",
     "preset": "ts-jest"
   },
   "author": "Leo Pradel",

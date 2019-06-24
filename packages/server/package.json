@@ -20,6 +20,7 @@
     "coverage": "npm run testonly -- --coverage"
   },
   "jest": {
+    "testEnvironment": "node",
     "preset": "ts-jest"
   },
   "repository": {
