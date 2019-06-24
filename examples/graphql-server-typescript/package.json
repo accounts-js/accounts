@@ -20,19 +20,19 @@
     "@accounts/rest-express": "0.14.0",
     "@accounts/server": "0.14.0",
     "@graphql-modules/core": "0.7.0",
-    "graphql-toolkit": "0.2.9",
     "@types/mongoose": "5.3.26",
     "apollo-server": "2.4.8",
     "cors": "2.8.5",
     "express": "4.16.4",
     "graphql": "14.2.1",
+    "graphql-toolkit": "0.2.9",
     "graphql-tools": "4.0.4",
     "lodash": "4.17.11",
     "mongoose": "5.5.2",
-    "tslib": "1.9.3"
+    "tslib": "1.10.0"
   },
   "devDependencies": {
-    "@types/node": "11.13.6",
+    "@types/node": "12.0.10",
     "nodemon": "1.18.11",
     "ts-node": "8.1.0",
     "typescript": "3.4.4"

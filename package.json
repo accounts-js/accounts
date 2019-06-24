@@ -44,12 +44,12 @@
     "printWidth": 100
   },
   "resolutions": {
-    "@types/node": "12.0.2"
+    "@types/node": "12.0.10"
   },
   "renovate": {
     "extends": [
       "config:base",
-      "schedule:weekly"
+      "schedule:monthly"
     ],
     "automerge": true,
     "major": {

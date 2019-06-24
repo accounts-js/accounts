@@ -39,6 +39,6 @@
     "@accounts/client": "^0.15.0",
     "@accounts/types": "^0.15.0",
     "crypto-js": "^3.1.9-1",
-    "tslib": "1.9.3"
+    "tslib": "1.10.0"
   }
 }

@@ -55,7 +55,7 @@
     "lodash": "4.17.11",
     "mongoose": "5.5.15",
     "node-fetch": "2.6.0",
-    "tslib": "1.9.3",
+    "tslib": "1.10.0",
     "typeorm": "0.2.17"
   }
 }

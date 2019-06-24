@@ -33,6 +33,6 @@
     "graphql-tools": "^4.0.3",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
-    "tslib": "1.9.3"
+    "tslib": "1.10.0"
   }
 }
