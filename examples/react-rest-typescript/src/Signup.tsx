@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
 import {
   withStyles,
