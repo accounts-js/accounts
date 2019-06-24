@@ -28,9 +28,7 @@
     ],
     "nohoist": [
       "**/jest/**",
-      "**/jest",
-      "**/graphql/**",
-      "**/graphql"
+      "**/jest"
     ]
   },
   "husky": {
