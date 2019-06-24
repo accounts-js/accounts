@@ -64,16 +64,16 @@
   "devDependencies": {
     "@accounts/tslint-config-accounts": "0.0.9",
     "codecov": "3.5.0",
-    "husky": "2.3.0",
+    "husky": "2.4.1",
     "lerna": "2.11.0",
-    "lint-staged": "8.1.7",
+    "lint-staged": "8.2.1",
     "opencollective": "1.0.3",
     "prettier": "1.17.1",
     "ts-jest": "24.0.2",
     "tslint": "5.16.0",
     "typedoc": "0.13.0",
     "typedoc-plugin-docusaurus": "1.0.14",
-    "typescript": "3.4.5"
+    "typescript": "3.5.2"
   },
   "collective": {
     "type": "opencollective",
