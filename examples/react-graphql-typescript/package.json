@@ -16,7 +16,7 @@
     "@accounts/graphql-client": "file:../../packages/graphql-client",
     "@material-ui/core": "3.9.2",
     "apollo-boost": "0.1.27",
-    "graphql": "14.1.1",
+    "graphql": "14.3.1",
     "qrcode.react": "0.9.2",
     "react": "16.8.0",
     "react-apollo": "2.4.1",
