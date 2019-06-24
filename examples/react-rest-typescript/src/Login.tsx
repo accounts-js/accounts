@@ -90,7 +90,7 @@ class Login extends React.Component<WithStyles<'formContainer'> & RouteComponent
         <Button variant="raised" color="primary" type="submit">
           Login
         </Button>
-        {error && <FormError error={error} />}
+        {error && <FormError error={error!} />}
         <Button component={SignUpLink}>Sign Up</Button>
         <Button component={ResetPasswordLink}>Reset Password</Button>
       </form>
