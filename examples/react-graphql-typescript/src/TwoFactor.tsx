@@ -1,6 +1,6 @@
+import React from 'react';
 import { Button, FormControl, Input, InputLabel, Typography } from '@material-ui/core';
-import * as QRCode from 'qrcode.react';
-import * as React from 'react';
+import QRCode from 'qrcode.react';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { accountsGraphQL } from './utils/accounts';

@@ -1,5 +1,5 @@
+import React from 'react';
 import { Typography, withStyles, WithStyles } from '@material-ui/core';
-import * as React from 'react';
 
 const styles = () => ({
   formError: {
