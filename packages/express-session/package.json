@@ -37,6 +37,7 @@
     "@accounts/server": "^0.15.0",
     "@types/express": "4.17.0",
     "@types/express-session": "1.15.13",
+    "@types/jest": "24.0.15",
     "@types/lodash": "4.14.134",
     "@types/request-ip": "0.0.33",
     "express": "4.17.1",
