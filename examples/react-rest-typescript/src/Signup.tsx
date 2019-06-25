@@ -61,7 +61,7 @@ class Signup extends React.Component<WithStyles<'formContainer'> & RouteComponen
     try {
       await accountsPassword.createUser({
         firstName: this.state.firstName,
-        lastName: this.state.firstName,
+        lastName: this.state.lastName,
         email: this.state.email,
         password: this.state.password,
       });
@@ -80,7 +80,7 @@ class Signup extends React.Component<WithStyles<'formContainer'> & RouteComponen
           Sign up
         </Typography>
         <FormControl margin="normal">
-          <InputLabel htmlFor="firstName">Fist name</InputLabel>
+          <InputLabel htmlFor="firstName">First name</InputLabel>
           <Input id="firstName" value={firstName} onChange={this.onChangeFirstName} />
         </FormControl>
         <FormControl margin="normal">

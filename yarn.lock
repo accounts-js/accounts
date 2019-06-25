@@ -1790,15 +1790,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@12.0.10", "@types/node@>=6":
+"@types/node@*", "@types/node@12.0.10", "@types/node@>=6", "@types/node@^10.1.0":
   version "12.0.10"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.10.tgz#51babf9c7deadd5343620055fc8aff7995c8b031"
   integrity sha512-LcsGbPomWsad6wmMNv7nBLw7YYYyfdYcz6xryKYQhx89c3XXan+8Q6AJ43G5XDIaklaVkK3mE4fCb0SBvMiPSQ==
-
-"@types/node@^10.1.0":
-  version "10.14.10"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.14.10.tgz#e491484c6060af8d461e12ec81c0da8a3282b8de"
-  integrity sha512-V8wj+w2YMNvGuhgl/MA5fmTxgjmVHVoasfIaxMMZJV6Y8Kk+Ydpi1z2whoShDCJ2BuNVoqH/h1hrygnBxkrw/Q==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -13746,7 +13741,7 @@ tslint@5.16.0:
     tslib "^1.8.0"
     tsutils "^2.29.0"
 
-tslint@5.18.0, tslint@^5.12.1:
+tslint@^5.12.1:
   version "5.18.0"
   resolved "https://registry.yarnpkg.com/tslint/-/tslint-5.18.0.tgz#f61a6ddcf372344ac5e41708095bbf043a147ac6"
   integrity sha512-Q3kXkuDEijQ37nXZZLKErssQVnwCV/+23gFEMROi8IlbaBG6tXqLPQJ5Wjcyt/yHPKBC+hD5SzuGaMora+ZS6w==
