@@ -1,5 +1,5 @@
+import React from 'react';
 import { CssBaseline, Grid, Paper, withStyles, WithStyles } from '@material-ui/core';
-import * as React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 
 import Home from './Home';

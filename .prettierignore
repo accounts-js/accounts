@@ -1,4 +1,5 @@
 coverage
 lib
+build
 package.json
 packages/graphql-api/schema.json

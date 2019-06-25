@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
 import {
   withStyles,
@@ -98,7 +98,7 @@ class Signup extends React.Component<WithStyles<'formContainer'> & RouteComponen
         <Button variant="raised" color="primary" type="submit">
           Sign Up
         </Button>
-        {error && <FormError error={error} />}
+        {error && <FormError error={error!} />}
         <Button component={LogInLink}>Log In</Button>
       </form>
     );
