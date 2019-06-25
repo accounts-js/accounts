@@ -14,16 +14,17 @@
     "coverage": "jest --coverage"
   },
   "jest": {
+    "testEnvironment": "node",
     "preset": "ts-jest"
   },
   "dependencies": {
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "tslib": "1.9.3"
+    "tslib": "1.10.0"
   },
   "devDependencies": {
-    "@types/jest": "24.0.13",
-    "@types/node": "12.0.7",
+    "@types/jest": "24.0.15",
+    "@types/node": "12.0.10",
     "@types/request-promise": "4.1.44",
     "jest": "24.8.0"
   }

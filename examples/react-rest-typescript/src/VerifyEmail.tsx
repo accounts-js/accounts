@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
 import { Button, Typography } from '@material-ui/core';
 
@@ -35,7 +35,7 @@ class VerifyEmail extends React.Component<RouteComponentProps<RouteMatchProps>, 
     const { error, success } = this.state;
     return (
       <div>
-        {error && <FormError error={error} />}
+        {error && <FormError error={error!} />}
         {success && <Typography>Your email has been verified</Typography>}
         <Button component={HomeLink}>Go Home</Button>
       </div>

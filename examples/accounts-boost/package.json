@@ -1,5 +1,5 @@
 {
-  "name": "accounts-boost",
+  "name": "@examples/accounts-boost",
   "private": true,
   "version": "1.0.0",
   "main": "lib/index.js",
@@ -13,22 +13,22 @@
     "test": "yarn build"
   },
   "dependencies": {
-    "@accounts/boost": "^0.9.3",
-    "graphql-toolkit": "^0.0.5",
-    "apollo-link-context": "^1.0.14",
-    "apollo-link-http": "^1.5.11",
-    "apollo-server": "^2.3.3",
-    "graphql": "^14.1.1",
-    "graphql-tools": "^4.0.4",
-    "lodash": "^4.17.11",
-    "node-fetch": "^2.3.0",
-    "tslib": "1.9.3"
+    "@accounts/boost": "0.15.0",
+    "apollo-link-context": "1.0.18",
+    "apollo-link-http": "1.5.15",
+    "apollo-server": "2.6.4",
+    "graphql": "14.3.1",
+    "graphql-toolkit": "0.0.5",
+    "graphql-tools": "4.0.4",
+    "lodash": "4.17.11",
+    "node-fetch": "2.6.0",
+    "tslib": "1.10.0"
   },
   "devDependencies": {
-    "@accounts/tslint-config-accounts": "^0.0.9",
-    "nodemon": "1.18.9",
-    "ts-node": "8.0.2",
+    "@accounts/tslint-config-accounts": "0.0.9",
+    "nodemon": "1.19.1",
+    "ts-node": "8.3.0",
     "tslint": "^5.12.1",
-    "typescript": "3.3.1"
+    "typescript": "3.5.2"
   }
 }

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
 import { Button, Typography } from '@material-ui/core';
 
@@ -28,7 +28,7 @@ class Home extends React.Component<RouteComponentProps<{}>, State> {
       },
     });
     const user = await res.json();
-    this.setState({ user: user.user });
+    this.setState({ user: user });
   }
 
   onResendEmail = async () => {

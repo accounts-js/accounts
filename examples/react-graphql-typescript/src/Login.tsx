@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Button,
   FormControl,
@@ -7,7 +8,6 @@ import {
   withStyles,
   WithStyles,
 } from '@material-ui/core';
-import * as React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 
 import FormError from './components/FormError';
@@ -96,7 +96,7 @@ class Login extends React.Component<WithStyles<'formContainer'> & RouteComponent
         <Button variant="raised" color="primary" type="submit">
           Login
         </Button>
-        {error && <FormError error={error} />}
+        {error && <FormError error={error!} />}
         <Button component={SignUpLink}>Sign Up</Button>
         <Button component={ResetPasswordLink}>Reset Password</Button>
       </form>
