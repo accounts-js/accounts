@@ -22,6 +22,7 @@
     "access": "public"
   },
   "jest": {
+    "testEnvironment": "node",
     "preset": "ts-jest"
   },
   "repository": {
@@ -44,6 +45,6 @@
     "ioredis": "^4.9.3",
     "lodash": "^4.17.11",
     "shortid": "^2.2.14",
-    "tslib": "1.9.3"
+    "tslib": "1.10.0"
   }
 }

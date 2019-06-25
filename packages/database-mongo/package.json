@@ -19,6 +19,7 @@
     "lib"
   ],
   "jest": {
+    "testEnvironment": "node",
     "preset": "ts-jest"
   },
   "repository": {
@@ -39,6 +40,6 @@
     "@accounts/types": "^0.15.0",
     "lodash": "^4.17.11",
     "mongodb": "^3.2.4",
-    "tslib": "1.9.3"
+    "tslib": "1.10.0"
   }
 }

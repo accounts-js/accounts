@@ -14,6 +14,7 @@
     "prepublishOnly": "yarn compile"
   },
   "jest": {
+    "testEnvironment": "node",
     "preset": "ts-jest"
   },
   "repository": {
@@ -33,19 +34,21 @@
     "@gql2ts/from-schema": "1.10.1",
     "@gql2ts/types": "1.9.0",
     "@graphql-modules/core": "0.7.5",
-    "@types/graphql": "14.2.0",
+    "@types/graphql": "14.2.2",
+    "@types/jest": "24.0.15",
     "@types/request-ip": "0.0.33",
     "concurrently": "4.1.0",
-    "graphql": "14.3.0",
+    "graphql": "14.3.1",
     "graphql-code-generator": "0.16.1",
     "graphql-codegen-add": "0.16.1",
     "graphql-codegen-typescript-common": "0.16.1",
     "graphql-codegen-typescript-resolvers": "0.16.1",
     "graphql-codegen-typescript-server": "0.16.1",
     "graphql-tools": "4.0.4",
+    "jest": "24.8.0",
     "lodash": "4.17.11",
     "nock": "10.0.6",
-    "ts-node": "8.1.0"
+    "ts-node": "8.3.0"
   },
   "peerDependencies": {
     "@accounts/password": "^0.9.3",
@@ -53,11 +56,11 @@
     "@accounts/types": "^0.9.3",
     "@graphql-modules/core": "0.7.5",
     "graphql-tag": "^2.10.0",
-    "graphql-tools": "^4.0.3"
+    "graphql-tools": "^4.0.4"
   },
   "dependencies": {
     "graphql-toolkit": "^0.0.5",
     "request-ip": "2.1.3",
-    "tslib": "1.9.3"
+    "tslib": "1.10.0"
   }
 }

@@ -55,6 +55,6 @@
   "dependencies": {
     "@accounts/types": "^0.15.0",
     "jwt-decode": "2.2.0",
-    "tslib": "1.9.3"
+    "tslib": "1.10.0"
   }
 }

@@ -14,11 +14,12 @@
     "coverage": "jest --coverage"
   },
   "jest": {
+    "testEnvironment": "node",
     "preset": "ts-jest"
   },
   "dependencies": {
     "oauth": "^0.9.15",
-    "tslib": "1.9.3"
+    "tslib": "1.10.0"
   },
   "devDependencies": {
     "@types/jest": "24.0.15",

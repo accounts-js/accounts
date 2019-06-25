@@ -25,6 +25,8 @@
   },
   "homepage": "https://github.com/js-accounts/graphql#readme",
   "devDependencies": {
+    "@types/jest": "24.0.15",
+    "jest": "24.8.0",
     "lodash": "4.17.11",
     "nock": "10.0.6"
   },
@@ -32,6 +34,6 @@
     "@accounts/client": "^0.15.0",
     "@accounts/types": "^0.15.0",
     "graphql-tag": "^2.10.0",
-    "tslib": "1.9.3"
+    "tslib": "1.10.0"
   }
 }

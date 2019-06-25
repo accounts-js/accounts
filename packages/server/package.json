@@ -20,6 +20,7 @@
     "coverage": "npm run testonly -- --coverage"
   },
   "jest": {
+    "testEnvironment": "node",
     "preset": "ts-jest"
   },
   "repository": {
@@ -45,7 +46,7 @@
     "jsonwebtoken": "8.5.1",
     "jwt-decode": "2.2.0",
     "lodash": "4.17.11",
-    "tslib": "1.9.3"
+    "tslib": "1.10.0"
   },
   "devDependencies": {
     "@types/jest": "24.0.15",

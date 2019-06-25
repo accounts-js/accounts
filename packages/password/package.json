@@ -14,13 +14,14 @@
     "coverage": "jest --coverage"
   },
   "jest": {
+    "testEnvironment": "node",
     "preset": "ts-jest"
   },
   "dependencies": {
     "@accounts/two-factor": "^0.15.0",
     "bcryptjs": "^2.4.3",
     "lodash": "^4.17.11",
-    "tslib": "1.9.3"
+    "tslib": "1.10.0"
   },
   "devDependencies": {
     "@accounts/server": "^0.15.0",

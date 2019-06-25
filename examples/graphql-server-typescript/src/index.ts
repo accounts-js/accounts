@@ -10,7 +10,9 @@ import mongoose from 'mongoose';
 
 const start = async () => {
   // Create database connection
-  await mongoose.connect('mongodb://localhost:27017/accounts-js-graphql-example');
+  await mongoose.connect('mongodb://localhost:27017/accounts-js-graphql-example', {
+    useNewUrlParser: true,
+  });
   const mongoConn = mongoose.connection;
 
   // Build a storage for storing users

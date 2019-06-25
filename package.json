@@ -8,21 +8,23 @@
     "clean": "lerna run clean; rm -rf node_modules; rm -rf packages/**/node_modules; rm -rf yarn.lock",
     "clean:examples": "rm -rf examples/**/node_modules; rm -rf examples/**/yarn.lock",
     "compile": "lerna run compile",
-    "lint": "tslint packages/*/{src,__tests__}/**/*.ts",
     "postinstall": "opencollective postinstall",
     "publish": "lerna publish",
     "publish:canary": "yarn run publish -- --canary",
     "test": "yarn lint && yarn compile && yarn coverage && yarn test:prettier",
     "testonly": "lerna run testonly",
     "prettier": "prettier --write '**/*.{json,md,js,ts}'",
+    "test:lint": "tslint packages/*/{src,__tests__}/**/*.ts",
     "test:prettier": "prettier --list-different '**/*.{json,md,js,ts}'",
+    "test:examples": "lerna run test --scope=\"@examples/*\"",
     "coverage": "lerna run coverage",
     "codecov": "codecov",
     "reset": "yarn clean; yarn install; yarn setup; yarn compile"
   },
   "workspaces": {
     "packages": [
-      "packages/*"
+      "packages/*",
+      "examples/*"
     ]
   },
   "husky": {
@@ -42,12 +44,13 @@
     "printWidth": 100
   },
   "resolutions": {
-    "@types/node": "12.0.2"
+    "@types/node": "12.0.10",
+    "graphql-tools": "4.0.4"
   },
   "renovate": {
     "extends": [
       "config:base",
-      "schedule:weekly"
+      "schedule:monthly"
     ],
     "automerge": true,
     "major": {
@@ -62,16 +65,16 @@
   "devDependencies": {
     "@accounts/tslint-config-accounts": "0.0.9",
     "codecov": "3.5.0",
-    "husky": "2.3.0",
+    "husky": "2.5.0",
     "lerna": "2.11.0",
-    "lint-staged": "8.1.7",
+    "lint-staged": "8.2.1",
     "opencollective": "1.0.3",
-    "prettier": "1.17.1",
+    "prettier": "1.18.2",
     "ts-jest": "24.0.2",
     "tslint": "5.16.0",
     "typedoc": "0.13.0",
     "typedoc-plugin-docusaurus": "1.0.14",
-    "typescript": "3.4.5"
+    "typescript": "3.5.2"
   },
   "collective": {
     "type": "opencollective",
