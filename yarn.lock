@@ -4053,10 +4053,10 @@ concat-stream@^1.4.10, concat-stream@^1.5.0:
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
 
-concurrently@4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/concurrently/-/concurrently-4.1.0.tgz#17fdf067da71210685d9ea554423ef239da30d33"
-  integrity sha512-pwzXCE7qtOB346LyO9eFWpkFJVO3JQZ/qU/feGeaAHiX1M3Rw3zgXKc5cZ8vSH5DGygkjzLFDzA/pwoQDkRNGg==
+concurrently@4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/concurrently/-/concurrently-4.1.1.tgz#42cf84d625163f3f5b2e2262568211ad76e1dbe8"
+  integrity sha512-48+FE5RJ0qc8azwKv4keVQWlni1hZeSjcWr8shBelOBtBHcKj1aJFM9lHRiSc1x7lq416pkvsqfBMhSRja+Lhw==
   dependencies:
     chalk "^2.4.1"
     date-fns "^1.23.0"
