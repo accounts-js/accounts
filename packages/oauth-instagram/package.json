@@ -11,7 +11,9 @@
     "compile": "tsc",
     "prepublishOnly": "yarn compile",
     "testonly": "jest",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "jest": {
     "testEnvironment": "node",
@@ -20,12 +22,14 @@
   "dependencies": {
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "tslib": "1.10.0"
+    "tslib": "1.10.0",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "@types/jest": "24.0.15",
     "@types/node": "12.0.10",
     "@types/request-promise": "4.1.44",
     "jest": "24.8.0"
-  }
+  },
+  "snyk": true
 }
