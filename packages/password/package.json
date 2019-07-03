@@ -11,7 +11,9 @@
     "compile": "tsc",
     "prepublishOnly": "yarn compile",
     "testonly": "jest --coverage",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "jest": {
     "testEnvironment": "node",
@@ -21,7 +23,8 @@
     "@accounts/two-factor": "^0.15.0",
     "bcryptjs": "^2.4.3",
     "lodash": "^4.17.11",
-    "tslib": "1.10.0"
+    "tslib": "1.10.0",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "@accounts/server": "^0.15.0",
@@ -35,5 +38,6 @@
   },
   "peerDependencies": {
     "@accounts/server": "^0.7.0"
-  }
+  },
+  "snyk": true
 }
