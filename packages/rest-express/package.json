@@ -16,7 +16,9 @@
     "test": "npm run testonly",
     "test:watch": "npm run testonly -- --watch --coverage",
     "testonly": "jest",
-    "coverage": "npm run testonly -- --coverage"
+    "coverage": "npm run testonly -- --coverage",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "jest": {
     "testEnvironment": "node",
@@ -51,6 +53,8 @@
     "express": "^4.17.0",
     "lodash": "^4.17.11",
     "request-ip": "^2.1.3",
-    "tslib": "1.10.0"
-  }
+    "tslib": "1.10.0",
+    "snyk": "^1.189.0"
+  },
+  "snyk": true
 }
