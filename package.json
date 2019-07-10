@@ -44,7 +44,7 @@
     "printWidth": 100
   },
   "resolutions": {
-    "@types/node": "12.0.10",
+    "@types/node": "12.6.2",
     "graphql-tools": "4.0.4"
   },
   "renovate": {
