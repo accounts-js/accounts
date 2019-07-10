@@ -29,6 +29,6 @@
     "nodemon": "1.19.1",
     "ts-node": "8.3.0",
     "tslint": "^5.12.1",
-    "typescript": "3.5.2"
+    "typescript": "3.5.3"
   }
 }
