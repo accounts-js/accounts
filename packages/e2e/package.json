@@ -52,7 +52,7 @@
     "body-parser": "1.19.0",
     "core-js": "3.1.4",
     "express": "4.17.1",
-    "graphql": "14.3.1",
+    "graphql": "14.4.2",
     "lodash": "4.17.11",
     "mongoose": "5.6.1",
     "node-fetch": "2.6.0",
