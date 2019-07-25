@@ -56,7 +56,7 @@
     "@accounts/types": "^0.9.3",
     "@graphql-modules/core": "0.7.5",
     "graphql-tag": "^2.10.0",
-    "graphql-tools": "^4.0.4"
+    "graphql-tools": "^4.0.5"
   },
   "dependencies": {
     "graphql-toolkit": "^0.4.1",

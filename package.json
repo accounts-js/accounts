@@ -45,7 +45,7 @@
   },
   "resolutions": {
     "@types/node": "12.6.8",
-    "graphql-tools": "4.0.4"
+    "graphql-tools": "4.0.5"
   },
   "renovate": {
     "extends": [
