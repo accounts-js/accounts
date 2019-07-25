@@ -32,8 +32,8 @@
     "@accounts/database-tests": "^0.15.0",
     "@types/jest": "24.0.15",
     "@types/lodash": "4.14.136",
-    "@types/mongodb": "3.1.28",
-    "@types/node": "12.6.2",
+    "@types/mongodb": "3.1.30",
+    "@types/node": "12.6.8",
     "jest": "24.8.0"
   },
   "dependencies": {

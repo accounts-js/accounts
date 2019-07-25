@@ -19,15 +19,15 @@
     "@accounts/typeorm": "0.15.0",
     "@graphql-modules/core": "0.7.5",
     "apollo-server": "2.7.0",
-    "graphql": "14.3.1",
+    "graphql": "14.4.2",
     "graphql-toolkit": "0.2.13",
     "pg": "7.11.0",
     "typeorm": "0.2.18"
   },
   "devDependencies": {
     "@accounts/types": "0.15.0",
-    "@types/graphql": "14.2.2",
-    "@types/node": "12.6.2",
+    "@types/graphql": "14.2.3",
+    "@types/node": "12.6.8",
     "nodemon": "1.19.1",
     "ts-node": "8.3.0",
     "typescript": "3.5.3"
