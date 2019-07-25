@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
 import {
   withStyles,
@@ -22,87 +22,81 @@ const styles = () => ({
 
 const LogInLink = (props: any) => <Link to="/login" {...props} />;
 
-interface State {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  error: string | null;
-}
-
-class Signup extends React.Component<WithStyles<'formContainer'> & RouteComponentProps<{}>, State> {
-  state = {
+const Signup = ({ classes, history }: WithStyles<'formContainer'> & RouteComponentProps<{}>) => {
+  const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  }>({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
-    error: null,
-  };
+  });
 
-  onChangeFirstName = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ firstName: target.value });
-  };
-
-  onChangeLastName = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ lastName: target.value });
-  };
-
-  onChangeEmail = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ email: target.value });
-  };
-
-  onChangePassword = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ password: target.value });
-  };
-
-  onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.setState({ error: null });
+    setError(null);
     try {
       await accountsPassword.createUser({
-        firstName: this.state.firstName,
-        lastName: this.state.lastName,
-        email: this.state.email,
-        password: this.state.password,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        password: user.password,
       });
-      this.props.history.push('/login');
+      history.push('/login');
     } catch (err) {
-      this.setState({ error: err.message });
+      setError(err.message);
     }
   };
 
-  render() {
-    const { classes } = this.props;
-    const { firstName, lastName, email, password, error } = this.state;
-    return (
-      <form onSubmit={this.onSubmit} className={classes.formContainer}>
-        <Typography variant="display1" gutterBottom>
-          Sign up
-        </Typography>
-        <FormControl margin="normal">
-          <InputLabel htmlFor="firstName">First name</InputLabel>
-          <Input id="firstName" value={firstName} onChange={this.onChangeFirstName} />
-        </FormControl>
-        <FormControl margin="normal">
-          <InputLabel htmlFor="lastName">Last name</InputLabel>
-          <Input id="lastName" value={lastName} onChange={this.onChangeLastName} />
-        </FormControl>
-        <FormControl margin="normal">
-          <InputLabel htmlFor="email">Email</InputLabel>
-          <Input id="email" value={email} onChange={this.onChangeEmail} />
-        </FormControl>
-        <FormControl margin="normal">
-          <InputLabel htmlFor="password">Password</InputLabel>
-          <Input id="password" type="password" value={password} onChange={this.onChangePassword} />
-        </FormControl>
-        <Button variant="raised" color="primary" type="submit">
-          Sign Up
-        </Button>
-        {error && <FormError error={error!} />}
-        <Button component={LogInLink}>Log In</Button>
-      </form>
-    );
-  }
-}
+  return (
+    <form onSubmit={onSubmit} className={classes.formContainer}>
+      <Typography variant="display1" gutterBottom>
+        Sign up
+      </Typography>
+      <FormControl margin="normal">
+        <InputLabel htmlFor="firstName">First name</InputLabel>
+        <Input
+          id="firstName"
+          value={user.firstName}
+          onChange={e => setUser(prevState => ({ ...prevState, firstName: e.target.value }))}
+        />
+      </FormControl>
+      <FormControl margin="normal">
+        <InputLabel htmlFor="lastName">Last name</InputLabel>
+        <Input
+          id="lastName"
+          value={user.lastName}
+          onChange={e => setUser(prevState => ({ ...prevState, lastName: e.target.value }))}
+        />
+      </FormControl>
+      <FormControl margin="normal">
+        <InputLabel htmlFor="email">Email</InputLabel>
+        <Input
+          id="email"
+          value={user.email}
+          onChange={e => setUser(prevState => ({ ...prevState, email: e.target.value }))}
+        />
+      </FormControl>
+      <FormControl margin="normal">
+        <InputLabel htmlFor="password">Password</InputLabel>
+        <Input
+          id="password"
+          type="password"
+          value={user.password}
+          onChange={e => setUser(prevState => ({ ...prevState, password: e.target.value }))}
+        />
+      </FormControl>
+      <Button variant="raised" color="primary" type="submit">
+        Sign Up
+      </Button>
+      {error && <FormError error={error!} />}
+      <Button component={LogInLink}>Log In</Button>
+    </form>
+  );
+};
 
 export default withStyles(styles)(Signup);
