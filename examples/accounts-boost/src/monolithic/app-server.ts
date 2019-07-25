@@ -1,5 +1,5 @@
 import accountsBoost, { authenticated } from '@accounts/boost';
-import { mergeGraphQLSchemas, mergeResolvers } from 'graphql-toolkit';
+import { mergeTypeDefs, mergeResolvers } from 'graphql-toolkit';
 import { ApolloServer } from 'apollo-server';
 
 (async () => {
@@ -44,7 +44,7 @@ import { ApolloServer } from 'apollo-server';
   };
 
   const apolloServer = new ApolloServer({
-    typeDefs: mergeGraphQLSchemas([typeDefs, accounts.typeDefs]),
+    typeDefs: mergeTypeDefs([typeDefs, accounts.typeDefs]),
     resolvers: mergeResolvers([accounts.resolvers, resolvers]),
     schemaDirectives: {
       // In order for the `@auth` directive to work

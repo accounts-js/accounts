@@ -27,10 +27,10 @@
     "@accounts/graphql-api": "^0.15.0",
     "@accounts/server": "^0.15.0",
     "@accounts/types": "^0.15.0",
-    "@graphql-modules/core": "0.7.5",
-    "apollo-server": "^2.7.0",
+    "@graphql-modules/core": "0.7.8",
+    "apollo-server": "^2.7.1",
     "graphql": "^14.3.1",
-    "graphql-tools": "^4.0.4",
+    "graphql-tools": "^4.0.5",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "tslib": "1.10.0"

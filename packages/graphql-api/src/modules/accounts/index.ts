@@ -14,7 +14,7 @@ import { AccountsPasswordModule } from '../accounts-password';
 import { AuthenticatedDirective } from '../../utils/authenticated-directive';
 import { context } from '../../utils';
 import AccountsPassword from '@accounts/password';
-import { mergeGraphQLSchemas } from 'graphql-toolkit';
+import { mergeTypeDefs } from 'graphql-toolkit';
 
 export interface AccountsRequest {
   req: IncomingMessage;
@@ -48,7 +48,7 @@ export const AccountsModule: GraphQLModule<
 > = new GraphQLModule<AccountsModuleConfig, AccountsRequest, AccountsModuleContext>({
   name: 'accounts',
   typeDefs: ({ config }) =>
-    mergeGraphQLSchemas(
+    mergeTypeDefs(
       [
         TypesTypeDefs(config),
         getQueryTypeDefs(config),
