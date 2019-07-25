@@ -5,5 +5,5 @@
 
 [build.environment]
   NODE_VERSION = "11"
-  YARN_VERSION = "1.17"
+  YARN_VERSION = "1.17.3"
   YARN_FLAGS = "--pure-lockfile"
