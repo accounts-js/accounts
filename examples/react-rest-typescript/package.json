@@ -24,12 +24,13 @@
     ]
   },
   "dependencies": {
-    "@accounts/client": "0.9.3",
-    "@accounts/client-password": "0.9.3",
-    "@accounts/rest-client": "0.9.3",
-    "@material-ui/core": "3.9.2",
-    "qrcode.react": "0.8.0",
-    "react": "16.7.0",
+    "@accounts/client": "0.15.0",
+    "@accounts/client-password": "0.15.0",
+    "@accounts/rest-client": "0.15.0",
+    "@material-ui/core": "4.2.1",
+    "@material-ui/styles": "4.2.1",
+    "qrcode.react": "0.9.3",
+    "react": "16.8.6",
     "react-dom": "16.8.6",
     "react-router-dom": "5.0.1",
     "tslib": "1.10.0"
@@ -37,9 +38,9 @@
   "devDependencies": {
     "@types/node": "12.6.8",
     "@types/qrcode.react": "0.8.2",
-    "@types/react": "16.8.22",
-    "@types/react-dom": "16.8.4",
-    "@types/react-router": "5.0.2",
+    "@types/react": "16.8.23",
+    "@types/react-dom": "16.8.5",
+    "@types/react-router": "5.0.3",
     "@types/react-router-dom": "4.3.4",
     "react-scripts": "3.0.1",
     "typescript": "3.5.3"

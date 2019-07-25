@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
-import { CssBaseline, withStyles, WithStyles, Grid, Paper } from '@material-ui/core';
+import { CssBaseline, Grid, Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
 
 import Signup from './Signup';
 import Login from './Login';
@@ -9,7 +10,7 @@ import ResetPassword from './ResetPassword';
 import VerifyEmail from './VerifyEmail';
 import TwoFactor from './TwoFactor';
 
-const styles = () => ({
+const useStyles = makeStyles({
   root: {
     margin: 'auto',
     maxWidth: 500,
@@ -20,7 +21,9 @@ const styles = () => ({
   },
 });
 
-const Router = ({ classes }: WithStyles<'root' | 'container'>) => {
+const Router = () => {
+  const classes = useStyles();
+
   return (
     <BrowserRouter>
       <Grid container className={classes.root}>
@@ -42,4 +45,4 @@ const Router = ({ classes }: WithStyles<'root' | 'container'>) => {
   );
 };
 
-export default withStyles(styles)(Router);
+export default Router;
