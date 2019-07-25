@@ -2,15 +2,6 @@
 # yarn lockfile v1
 
 
-"@accounts/client-password@0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@accounts/client-password/-/client-password-0.9.3.tgz#e25d6d9028aa7dcc3edca5de77cb93ca6730bf32"
-  integrity sha512-PefaZTuUQebvROZf4x1C2XewqcMq0V3i++pwMVf9NhVeM1lHgeUp92fa8Rg8/AH5qtr5SdxEgfwmPpWTFkjDkg==
-  dependencies:
-    "@accounts/client" "^0.9.3"
-    "@accounts/types" "^0.9.3"
-    crypto-js "^3.1.9-1"
-
 "@accounts/client-password@file:packages/client-password":
   version "0.15.0"
   dependencies:
@@ -18,14 +9,6 @@
     "@accounts/types" "^0.15.0"
     crypto-js "^3.1.9-1"
     tslib "1.10.0"
-
-"@accounts/client@0.9.3", "@accounts/client@^0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@accounts/client/-/client-0.9.3.tgz#e596ebb0b8785ec0a4643f7d2d528734502de9e4"
-  integrity sha512-07IhO6wqjQAlG++2R/FjjR+kut803mASqn/k65qeKYubCpkRENTr9XSWuM43Ykhlzypf+I8eP2QlX4IXNX/bGA==
-  dependencies:
-    "@accounts/types" "^0.9.3"
-    jwt-decode "2.2.0"
 
 "@accounts/client@file:packages/client":
   version "0.15.0"
@@ -42,54 +25,6 @@
     graphql-tag "^2.10.0"
     tslib "1.10.0"
 
-"@accounts/mongo@0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@accounts/mongo/-/mongo-0.9.3.tgz#88c9ea973a05bd5570f3e30161200ca504459d45"
-  integrity sha512-Gr46vW0tFPaGHIUVNxnhCfneQt0wrQ8oeGjRXt/Ktsl8FGpDJ0WXa5QbMmL6bOUBmS0H2UqdTDHEeUzwUvH57A==
-  dependencies:
-    "@accounts/types" "^0.9.3"
-    lodash "^4.17.11"
-    mongodb "^3.1.10"
-
-"@accounts/password@0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@accounts/password/-/password-0.9.3.tgz#2deba797a10ac2cf4ffcc38b917b0924c42e9072"
-  integrity sha512-+SJ2pCpfnKi9+E6AU/DXsmzYVS6wqJGtiexffFVXKDgAhgzyl571zH4nW/v2veddKBkXX+ulkhceuxTu1gY9Bw==
-  dependencies:
-    "@accounts/two-factor" "^0.9.3"
-    bcryptjs "^2.4.3"
-    lodash "^4.17.11"
-
-"@accounts/rest-client@0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@accounts/rest-client/-/rest-client-0.9.3.tgz#d13c5131f80ab24dd3ec2cca8dac6ca5017dae2c"
-  integrity sha512-n9kZCD/Y3hsH8jj+LuqZ86LlNza6cPz5Ovd6RW/cChoa0wpWMQ43+e76I4I6WZUwkJC5kdsZl9eiWH35IooSew==
-  dependencies:
-    "@accounts/types" "^0.9.3"
-    lodash "^4.17.11"
-
-"@accounts/rest-express@0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@accounts/rest-express/-/rest-express-0.9.3.tgz#377e4f09126fcdd5373f500f81ff4b767898dd8a"
-  integrity sha512-2OVawlUcXb9ENn87sQT7CFYm70QfqxVdIoqK9EASboo9rYe8J1hkApQIjJpmoph3VJNpswMDM6ABi8VFsDNb3A==
-  dependencies:
-    "@accounts/types" "^0.9.3"
-    express "^4.16.4"
-    lodash "^4.17.11"
-    request-ip "^2.1.3"
-
-"@accounts/server@0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@accounts/server/-/server-0.9.3.tgz#58ad1c97af2d1f8e619e7378ac67c95ecc599bf3"
-  integrity sha512-Ycd1tmx3VmIfg+7jZgWo1ICi8BPZYAfy8XumH4otD9v3tmL/KyN6u0oqo6Bp8FZeGjVLBeAzvPpY8MJMtL/HIw==
-  dependencies:
-    "@accounts/types" "^0.9.3"
-    "@types/jsonwebtoken" "8.3.0"
-    emittery "0.4.1"
-    jsonwebtoken "8.4.0"
-    jwt-decode "2.2.0"
-    lodash "4.17.11"
-
 "@accounts/tslint-config-accounts@0.0.9":
   version "0.0.9"
   resolved "https://registry.yarnpkg.com/@accounts/tslint-config-accounts/-/tslint-config-accounts-0.0.9.tgz#a2073361c4127ba7c8662cd72e08a28a794a44df"
@@ -97,22 +32,6 @@
   dependencies:
     tslint-config-prettier "^1.1.0"
     tslint-eslint-rules "^4.1.1"
-
-"@accounts/two-factor@^0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@accounts/two-factor/-/two-factor-0.9.3.tgz#cad12f15d1492c1704dd9a8e9aa893215d7f18ca"
-  integrity sha512-6pLPuJay7TSDZrSNWD7NNwd1gVLdZk9AkPEbekyUYN9rKJl98tuhwN6OeD5lOSOXpMbA+sTWf8q9KW7TohsEqQ==
-  dependencies:
-    "@accounts/types" "^0.9.3"
-    "@types/lodash" "^4.14.119"
-    "@types/speakeasy" "2.0.2"
-    lodash "^4.17.11"
-    speakeasy "^2.0.0"
-
-"@accounts/types@^0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@accounts/types/-/types-0.9.3.tgz#d53ce8303e0186865a94fe25c6d0aa9566e71c42"
-  integrity sha512-0/bbz8MifiU2Q2+E8quzhBk5suABfduMlPgcr3+8dvNX98QgptYTz1hpu/IBWTFYxhdo2RSgpQI6989/o/APyA==
 
 "@apollographql/apollo-tools@^0.3.6":
   version "0.3.7"
@@ -1761,13 +1680,6 @@
   dependencies:
     "@types/jest-diff" "*"
 
-"@types/jsonwebtoken@8.3.0":
-  version "8.3.0"
-  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-8.3.0.tgz#1fe79489df97b49273401ac3c8019cbf1dae4578"
-  integrity sha512-YKnUTR4VxwljbPORPrRon9E3uel1aD8nUdvzqArCCdMTWPvo0gnI2UZkwIHN2QATdj6HYXV/Iq3/KcecAO42Ww==
-  dependencies:
-    "@types/node" "*"
-
 "@types/jsonwebtoken@8.3.2":
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-8.3.2.tgz#e3d5245197152346fae7ee87d5541aa5a92d0362"
@@ -1788,7 +1700,7 @@
   resolved "https://registry.yarnpkg.com/@types/jwt-decode/-/jwt-decode-2.2.1.tgz#afdf5c527fcfccbd4009b5fd02d1e18241f2d2f2"
   integrity sha512-aWw2YTtAdT7CskFyxEX2K21/zSDStuf/ikI3yBqmwpwJF0pS+/IX5DWv+1UFffZIbruP6cnT9/LAJV1gFwAT1A==
 
-"@types/lodash@4.14.136", "@types/lodash@^4.14.110", "@types/lodash@^4.14.119", "@types/lodash@^4.14.129":
+"@types/lodash@4.14.136", "@types/lodash@^4.14.110", "@types/lodash@^4.14.129":
   version "4.14.136"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.136.tgz#413e85089046b865d960c9ff1d400e04c31ab60f"
   integrity sha512-0GJhzBdvsW2RUccNHOBkabI8HZVdOXmXbXhuKlDEd5Vv12P7oAVGfomGp3Ne21o5D/qu1WmthlNKFaoZJJeErA==
@@ -1895,6 +1807,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-dom@16.8.5":
+  version "16.8.5"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.8.5.tgz#3e3f4d99199391a7fb40aa3a155c8dd99b899cbd"
+  integrity sha512-idCEjROZ2cqh29+trmTmZhsBAUNQuYrF92JHKzZ5+aiFM1mlSk3bb23CK7HhYuOY75Apgap5y2jTyHzaM2AJGA==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-router-dom@4.3.4":
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-4.3.4.tgz#63a7a8558129d2f4ff76e4bdd099bf4b98e25a0d"
@@ -1904,7 +1823,7 @@
     "@types/react" "*"
     "@types/react-router" "*"
 
-"@types/react-router@*":
+"@types/react-router@*", "@types/react-router@5.0.3":
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-5.0.3.tgz#855a1606e62de3f4d69ea34fb3c0e50e98e964d5"
   integrity sha512-j2Gge5cvxca+5lK9wxovmGPgpVJMwjyu5lTA/Cd6fLGoPq7FXcUE1jFkEdxeyqGGz8VfHYSHCn5Lcn24BzaNKA==
@@ -1927,7 +1846,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*":
+"@types/react@*", "@types/react@16.8.23":
   version "16.8.23"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.23.tgz#ec6be3ceed6353a20948169b6cb4c97b65b97ad2"
   integrity sha512-abkEOIeljniUN9qB5onp++g0EY38h7atnDHxwKUFz1r3VH1+yG1OKi2sNPTyObL40goBmfKFpdii2lEzwLX1cA==
@@ -5816,7 +5735,7 @@ express-session@1.16.2:
     safe-buffer "5.1.2"
     uid-safe "~2.1.5"
 
-express@4.17.1, express@^4.0.0, express@^4.16.2, express@^4.16.4, express@^4.17.0:
+express@4.17.1, express@^4.0.0, express@^4.16.2, express@^4.17.0:
   version "4.17.1"
   resolved "https://registry.yarnpkg.com/express/-/express-4.17.1.tgz#4491fc38605cf51f8629d39c2b5d026f98a4c134"
   integrity sha512-mHJ9O79RqluphRrcw2X/GTh3k9tVv8YcoyY4Kkh4WDMUYKRZUq0h1o0w2rrrxBqM7VoeUVqgb27xlEMXTnYt4g==
@@ -8646,21 +8565,6 @@ jsonparse@^1.2.0:
   resolved "https://registry.yarnpkg.com/jsonparse/-/jsonparse-1.3.1.tgz#3f4dae4a91fac315f71062f8521cc239f1366280"
   integrity sha1-P02uSpH6wxX3EGL4UhzCOfE2YoA=
 
-jsonwebtoken@8.4.0:
-  version "8.4.0"
-  resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-8.4.0.tgz#8757f7b4cb7440d86d5e2f3becefa70536c8e46a"
-  integrity sha512-coyXjRTCy0pw5WYBpMvWOMN+Kjaik2MwTUIq9cna/W7NpO9E+iYbumZONAz3hcr+tXFJECoQVrtmIoC3Oz0gvg==
-  dependencies:
-    jws "^3.1.5"
-    lodash.includes "^4.3.0"
-    lodash.isboolean "^3.0.3"
-    lodash.isinteger "^4.0.4"
-    lodash.isnumber "^3.0.3"
-    lodash.isplainobject "^4.0.6"
-    lodash.isstring "^4.0.1"
-    lodash.once "^4.0.0"
-    ms "^2.1.1"
-
 jsonwebtoken@8.5.1, jsonwebtoken@^8.5.1:
   version "8.5.1"
   resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-8.5.1.tgz#00e71e0b8df54c2121a1f26137df2280673bcc0d"
@@ -8749,7 +8653,7 @@ jwa@^1.4.1:
     ecdsa-sig-formatter "1.0.11"
     safe-buffer "^5.0.1"
 
-jws@^3.1.5, jws@^3.2.2:
+jws@^3.2.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/jws/-/jws-3.2.2.tgz#001099f3639468c9414000e99995fa52fb478304"
   integrity sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==
@@ -9675,7 +9579,7 @@ mongodb-core@3.2.7:
   optionalDependencies:
     saslprep "^1.0.0"
 
-mongodb@3.2.7, mongodb@^3.1.10, mongodb@^3.2.4:
+mongodb@3.2.7, mongodb@^3.2.4:
   version "3.2.7"
   resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.2.7.tgz#8ba149e4be708257cad0dea72aebb2bbb311a7ac"
   integrity sha512-2YdWrdf1PJgxcCrT1tWoL6nHuk6hCxhddAAaEh8QJL231ci4+P9FLyqopbTm2Z2sAU6mhCri+wd9r1hOcHdoMw==
@@ -12007,16 +11911,6 @@ react-transition-group@^2.2.1:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
-react@16.7.0:
-  version "16.7.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.7.0.tgz#b674ec396b0a5715873b350446f7ea0802ab6381"
-  integrity sha512-StCz3QY8lxTb5cl2HJxjwLFOXPIFQp+p+hxQfc8WE0QiLfCtIlKj8/+5tjjKm8uSTlAW+fCPaavGFS06V9Ar3A==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.2"
-    scheduler "^0.12.0"
-
 react@16.8.6:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react/-/react-16.8.6.tgz#ad6c3a9614fd3a4e9ef51117f54d888da01f2bbe"
@@ -12674,14 +12568,6 @@ saxes@^3.1.9:
   integrity sha512-Ydydq3zC+WYDJK1+gRxRapLIED9PWeSuuS41wqyoRmzvhhh9nc+QQrVMKJYzJFULazeGhzSV0QleN2wD3boh2g==
   dependencies:
     xmlchars "^2.1.1"
-
-scheduler@^0.12.0:
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.12.0.tgz#8ab17699939c0aedc5a196a657743c496538647b"
-  integrity sha512-t7MBR28Akcp4Jm+QoR63XgAi9YgCUmgvDHqf5otgAj4QvdoBE4ImCX0ffehefePPG+aitiYHp0g/mW6s4Tp+dw==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
 
 scheduler@^0.13.6:
   version "0.13.6"
