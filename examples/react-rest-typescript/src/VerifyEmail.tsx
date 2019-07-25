@@ -26,6 +26,7 @@ const VerifyEmail = ({ match }: RouteComponentProps<RouteMatchProps>) => {
 
   useEffect(() => {
     verifyEmail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
