@@ -3,7 +3,7 @@ import { resolve } from 'path';
 import { Application } from 'typedoc';
 
 const packagesDir = resolve(__dirname, '../', 'packages');
-const apiDocsDir = resolve(__dirname, '../', 'docs', 'api');
+const apiDocsDir = resolve(__dirname, '../', 'website', 'docs', 'api');
 
 let dirs = readdirSync(packagesDir);
 
