@@ -28,7 +28,7 @@
     "@accounts/client-password": "0.15.0",
     "@accounts/rest-client": "0.15.0",
     "@material-ui/core": "3.9.2",
-    "qrcode.react": "0.8.0",
+    "qrcode.react": "0.9.3",
     "react": "16.8.6",
     "react-dom": "16.8.6",
     "react-router-dom": "5.0.1",
