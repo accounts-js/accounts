@@ -59,7 +59,7 @@
     "graphql-tools": "^4.0.4"
   },
   "dependencies": {
-    "graphql-toolkit": "^0.0.5",
+    "graphql-toolkit": "^0.4.0",
     "request-ip": "2.1.3",
     "tslib": "1.10.0"
   }
