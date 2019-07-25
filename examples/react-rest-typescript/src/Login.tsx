@@ -1,29 +1,27 @@
 import React, { useState } from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
-import {
-  withStyles,
-  WithStyles,
-  FormControl,
-  InputLabel,
-  Input,
-  Button,
-  Typography,
-} from '@material-ui/core';
+import { FormControl, InputLabel, Input, Button, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
 
 import { accountsPassword } from './accounts';
 import FormError from './components/FormError';
 
-const styles = () => ({
+const useStyles = makeStyles({
   formContainer: {
     display: 'flex',
-    flexDirection: 'column' as 'column',
+    flexDirection: 'column',
   },
 });
 
-const SignUpLink = (props: any) => <Link to="/signup" {...props} />;
-const ResetPasswordLink = (props: any) => <Link to="/reset-password" {...props} />;
+const SignUpLink = React.forwardRef<Link, any>((props, ref) => (
+  <Link to="/signup" {...props} ref={ref} />
+));
+const ResetPasswordLink = React.forwardRef<Link, any>((props, ref) => (
+  <Link to="/reset-password" {...props} ref={ref} />
+));
 
-const Login = ({ classes, history }: WithStyles<'formContainer'> & RouteComponentProps<{}>) => {
+const Login = ({ history }: RouteComponentProps<{}>) => {
+  const classes = useStyles();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
@@ -48,7 +46,7 @@ const Login = ({ classes, history }: WithStyles<'formContainer'> & RouteComponen
 
   return (
     <form onSubmit={onSubmit} className={classes.formContainer}>
-      <Typography variant="display1" gutterBottom>
+      <Typography variant="h4" gutterBottom>
         Login
       </Typography>
       <FormControl margin="normal">
@@ -68,7 +66,7 @@ const Login = ({ classes, history }: WithStyles<'formContainer'> & RouteComponen
         <InputLabel htmlFor="password">2fa code if enabled</InputLabel>
         <Input id="code" value={code} onChange={e => setCode(e.target.value)} />
       </FormControl>
-      <Button variant="raised" color="primary" type="submit">
+      <Button variant="contained" color="primary" type="submit">
         Login
       </Button>
       {error && <FormError error={error!} />}
@@ -78,4 +76,4 @@ const Login = ({ classes, history }: WithStyles<'formContainer'> & RouteComponen
   );
 };
 
-export default withStyles(styles)(Login);
+export default Login;

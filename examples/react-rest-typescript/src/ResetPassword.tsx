@@ -1,23 +1,15 @@
 import React, { useState } from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
-import {
-  withStyles,
-  WithStyles,
-  FormControl,
-  InputLabel,
-  Input,
-  Button,
-  Typography,
-  Snackbar,
-} from '@material-ui/core';
+import { FormControl, InputLabel, Input, Button, Typography, Snackbar } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
 
 import { accountsRest } from './accounts';
 import FormError from './components/FormError';
 
-const styles = () => ({
+const useStyles = makeStyles({
   formContainer: {
     display: 'flex',
-    flexDirection: 'column' as 'column',
+    flexDirection: 'column',
   },
 });
 
@@ -27,10 +19,8 @@ interface RouteMatchProps {
   token: string;
 }
 
-const ResetPassword = ({
-  classes,
-  match,
-}: WithStyles<'formContainer'> & RouteComponentProps<RouteMatchProps>) => {
+const ResetPassword = ({ match }: RouteComponentProps<RouteMatchProps>) => {
+  const classes = useStyles();
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
@@ -52,7 +42,6 @@ const ResetPassword = ({
         setSnackbarMessage('Your password has been reset successfully');
       }
     } catch (err) {
-      console.log(err);
       setError(err.message);
       setSnackbarMessage(null);
     }
@@ -60,7 +49,7 @@ const ResetPassword = ({
 
   return (
     <form onSubmit={onSubmit} className={classes.formContainer}>
-      <Typography variant="display1" gutterBottom>
+      <Typography variant="h4" gutterBottom>
         Reset Password
       </Typography>
       {!match.params.token && (
@@ -80,7 +69,7 @@ const ResetPassword = ({
           />
         </FormControl>
       )}
-      <Button variant="raised" color="primary" type="submit">
+      <Button variant="contained" color="primary" type="submit">
         Reset Password
       </Button>
       {error && <FormError error={error!} />}
@@ -99,4 +88,4 @@ const ResetPassword = ({
   );
 };
 
-export default withStyles(styles)(ResetPassword);
+export default ResetPassword;

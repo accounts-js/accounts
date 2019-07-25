@@ -52,7 +52,7 @@ const Home = ({ history }: RouteComponentProps<{}>) => {
 
       <Link to="two-factor">Set up 2fa</Link>
 
-      <Button variant="raised" color="primary" onClick={onLogout}>
+      <Button variant="contained" color="primary" onClick={onLogout}>
         Logout
       </Button>
     </div>

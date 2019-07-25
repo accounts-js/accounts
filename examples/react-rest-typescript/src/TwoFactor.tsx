@@ -21,7 +21,6 @@ const TwoFactor = () => {
     try {
       await accountsRest.twoFactorSet(secret, oneTimeCode);
     } catch (err) {
-      console.log(err);
       alert(err.message);
     }
   };
