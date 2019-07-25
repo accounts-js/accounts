@@ -18,7 +18,7 @@
     "@accounts/server": "0.15.0",
     "@accounts/typeorm": "0.15.0",
     "@graphql-modules/core": "0.7.5",
-    "apollo-server": "2.6.4",
+    "apollo-server": "2.7.0",
     "graphql": "14.3.1",
     "graphql-toolkit": "0.2.13",
     "pg": "7.11.0",

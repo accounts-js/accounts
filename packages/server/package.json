@@ -45,7 +45,7 @@
     "emittery": "0.4.1",
     "jsonwebtoken": "8.5.1",
     "jwt-decode": "2.2.0",
-    "lodash": "4.17.13",
+    "lodash": "4.17.15",
     "tslib": "1.10.0"
   },
   "devDependencies": {
