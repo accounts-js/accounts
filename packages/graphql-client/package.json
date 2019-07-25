@@ -27,7 +27,7 @@
   "devDependencies": {
     "@types/jest": "24.0.15",
     "jest": "24.8.0",
-    "lodash": "4.17.11",
+    "lodash": "4.17.15",
     "nock": "10.0.6"
   },
   "dependencies": {

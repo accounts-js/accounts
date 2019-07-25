@@ -29,7 +29,7 @@
     "@accounts/graphql-client": "file:../../packages/graphql-client",
     "@material-ui/core": "3.9.2",
     "apollo-boost": "0.1.27",
-    "graphql": "14.3.1",
+    "graphql": "14.4.2",
     "qrcode.react": "0.9.3",
     "react": "16.8.6",
     "react-apollo": "2.4.1",
@@ -38,13 +38,13 @@
     "tslib": "1.10.0"
   },
   "devDependencies": {
-    "@types/node": "12.0.10",
+    "@types/node": "12.6.8",
     "@types/qrcode.react": "0.8.2",
     "@types/react": "16.8.22",
     "@types/react-dom": "16.8.4",
     "@types/react-router": "5.0.2",
     "@types/react-router-dom": "4.3.4",
     "react-scripts": "3.0.1",
-    "typescript": "3.5.2"
+    "typescript": "3.5.3"
   }
 }

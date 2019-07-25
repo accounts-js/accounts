@@ -31,14 +31,14 @@
   "devDependencies": {
     "@accounts/database-tests": "^0.15.0",
     "@types/jest": "24.0.15",
-    "@types/lodash": "4.14.135",
-    "@types/mongodb": "3.1.28",
-    "@types/node": "12.0.10",
+    "@types/lodash": "4.14.136",
+    "@types/mongodb": "3.1.30",
+    "@types/node": "12.6.8",
     "jest": "24.8.0"
   },
   "dependencies": {
     "@accounts/types": "^0.15.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "mongodb": "^3.2.4",
     "tslib": "1.10.0"
   }
