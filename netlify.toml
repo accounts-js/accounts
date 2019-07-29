@@ -1,7 +1,7 @@
 [build]
   base    = "."
   publish = "website/build/accounts-js"
-  command = "yarn setup && yarn compile && yarn ts-node scripts/generate-api-docs.ts && cd website && yarn && yarn build"
+  command = "yarn setup && yarn compile && cd website && yarn && yarn generate-api-docs && yarn build"
 
 [build.environment]
   NODE_VERSION = "11"

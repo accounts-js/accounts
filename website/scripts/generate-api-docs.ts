@@ -2,8 +2,8 @@ import { readdirSync, readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 import { Application } from 'typedoc';
 
-const packagesDir = resolve(__dirname, '../', 'packages');
-const apiDocsDir = resolve(__dirname, '../', 'website', 'docs', 'api');
+const packagesDir = resolve(__dirname, '..', '..', 'packages');
+const apiDocsDir = resolve(__dirname, '..', '..', 'website', 'docs', 'api');
 
 let dirs = readdirSync(packagesDir);
 
