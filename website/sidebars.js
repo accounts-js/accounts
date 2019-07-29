@@ -16,11 +16,6 @@ module.exports = {
       'strategies/oauth',
       'strategies/twitter',
     ],
-    // 'Api reference': [
-    //   'api/database-mongo/api-readme',
-    //   'api/password/api-readme',
-    //   'api/server/api-readme',
-    // ],
   },
   api: {
     'Api Docs': [
