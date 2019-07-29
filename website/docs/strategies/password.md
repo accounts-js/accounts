@@ -38,3 +38,7 @@ TODO
 Due to some databases limitations, we have to do some internal logic to ensure that emails and usernames are uniques.
 
 ⚠️ Never query your database directly when you want to query a user by username or email. Instead use the the `AccountsPassword.findUserByEmail` and `AccountsPassword.findUserByUsername` functions.
+
+## Two factor
+
+TODO
