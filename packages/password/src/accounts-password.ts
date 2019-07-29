@@ -303,6 +303,7 @@ export default class AccountsPassword implements AuthenticationService {
 
   /**
    * @description Change the current user's password.
+   * It will trigger the `validatePassword` option and throw if password is invalid.
    * @param {string} userId - User id.
    * @param {string} oldPassword - The user's current password.
    * @param {string} newPassword - A new password for the user.
