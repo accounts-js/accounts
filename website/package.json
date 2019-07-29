@@ -33,7 +33,7 @@
   "devDependencies": {
     "patch-package": "6.1.2",
     "ts-node": "8.3.0",
-    "typedoc": "0.13.0",
+    "typedoc": "0.15.0",
     "typedoc-plugin-docusaurus": "1.0.14"
   }
 }
