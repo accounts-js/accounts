@@ -32,6 +32,10 @@ const accountsServer = new AccountsServer(...config, {
 });
 ```
 
+### Examples
+
+TODO
+
 ### Extend the user and validate custom fields
 
 By default accounts-js only allow `username`, `email` and `password` for the user. In order to add custom fields you need to pass the validateNewUser function when you instantiate the `@accounts/password` package.
