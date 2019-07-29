@@ -1,9 +1,9 @@
 [build]
   base    = "."
-  publish = "website/build/accounts-js"
-  command = "yarn setup && yarn compile && yarn ts-node scripts/generate-api-docs.ts && cd website && yarn && yarn build"
+  publish = "website/build"
+  command = "yarn setup && yarn compile && cd website && yarn && yarn generate-api-docs && yarn build"
 
 [build.environment]
-  NODE_VERSION = "10"
-  YARN_VERSION = "1.12.3"
+  NODE_VERSION = "11"
+  YARN_VERSION = "1.17.3"
   YARN_FLAGS = "--pure-lockfile"

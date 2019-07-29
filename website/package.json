@@ -1,15 +1,39 @@
 {
-  "license": "MIT",
+  "name": "accounts-js",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "examples": "docusaurus-examples",
-    "start": "docusaurus-start",
-    "build": "docusaurus-build",
-    "publish-gh-pages": "docusaurus-publish",
-    "write-translations": "docusaurus-write-translations",
-    "version": "docusaurus-version",
-    "rename-version": "docusaurus-rename-version"
+    "docusaurus": "docusaurus",
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy",
+    "generate-api-docs": "ts-node scripts/generate-api-docs.ts",
+    "postinstall": "patch-package"
+  },
+  "dependencies": {
+    "@docusaurus/core": "2.0.0-alpha.24",
+    "@docusaurus/preset-classic": "2.0.0-alpha.24",
+    "classnames": "2.2.6",
+    "react": "16.8.4",
+    "react-dom": "16.8.4"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
-    "docusaurus": "1.11.1"
+    "patch-package": "6.1.2",
+    "ts-node": "8.3.0",
+    "typedoc": "0.13.0",
+    "typedoc-plugin-docusaurus": "1.0.14"
   }
 }
