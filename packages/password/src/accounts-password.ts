@@ -72,6 +72,10 @@ export interface AccountsPasswordOptions {
    */
   validateEmail?(email?: string): boolean;
   validatePassword?(password?: PasswordType): boolean;
+  /**
+   * Function that check if the username is a valid username.
+   * This function will be called when you call `createUser`.
+   */
   validateUsername?(username?: string): boolean;
 }
 
