@@ -1,6 +1,6 @@
 {
   "name": "@examples/react-graphql-typescript",
-  "version": "0.1.0",
+  "version": "0.16.0",
   "private": true,
   "scripts": {
     "start": "SKIP_PREFLIGHT_CHECK=true react-scripts start",
