@@ -10,7 +10,11 @@ The `@accounts/password` package provide a secure system for a password based lo
 ## Install
 
 ```
+# With yarn
 yarn add @accounts/password
+
+# Or if you use npm
+npm install @accounts/password --save
 ```
 
 ## Usage
@@ -19,7 +23,10 @@ yarn add @accounts/password
 import AccountsServer from '@accounts/server';
 import AccountsPassword from '@accounts/password';
 
+// We create a new password instance with some custom config
 const password = new AccountsPassword(...config);
+
+// We pass the password instance the AccountsServer service list
 const accountsServer = new AccountsServer(...config, {
   password: password,
 });
@@ -30,7 +37,6 @@ const accountsServer = new AccountsServer(...config, {
 By default accounts-js only allow `username`, `email` and `password` for the user. In order to add custom fields you need to pass the validateNewUser function when you instantiate the `@accounts/password` package.
 
 ```javascript
-// server.js
 import AccountsPassword from '@accounts/password';
 
 const accountsPassword = new AccountsPassword({
