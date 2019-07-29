@@ -404,6 +404,15 @@ describe('AccountsPassword', () => {
       emails: [{ address: 'john.doe@gmail.com', verified: true }],
     };
 
+    it('throws when new password is invalid', async () => {
+      try {
+        await password.changePassword('userId', 'old-password', null as any);
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
     it('call passwordAuthenticator and this.db.setPassword', async () => {
       const userId = 'id';
       const setPassword = jest.fn(() => Promise.resolve('user'));

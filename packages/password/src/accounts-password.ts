@@ -71,6 +71,10 @@ export interface AccountsPasswordOptions {
    * This function will be called when you call `createUser` and `addEmail`.
    */
   validateEmail?(email?: string): boolean;
+  /**
+   * Function that check if the password is valid.
+   * This function will be called when you call `createUser` and `changePassword`.
+   */
   validatePassword?(password?: PasswordType): boolean;
   /**
    * Function that check if the username is a valid username.
@@ -303,6 +307,7 @@ export default class AccountsPassword implements AuthenticationService {
 
   /**
    * @description Change the current user's password.
+   * It will trigger the `validatePassword` option and throw if password is invalid.
    * @param {string} userId - User id.
    * @param {string} oldPassword - The user's current password.
    * @param {string} newPassword - A new password for the user.
@@ -313,6 +318,10 @@ export default class AccountsPassword implements AuthenticationService {
     oldPassword: string,
     newPassword: string
   ): Promise<void> {
+    if (!this.options.validatePassword(newPassword)) {
+      throw new Error(this.options.errors.invalidPassword);
+    }
+
     await this.passwordAuthenticator({ id: userId }, oldPassword);
 
     const password = await bcryptPassword(newPassword);
