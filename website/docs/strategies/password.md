@@ -24,11 +24,11 @@ import AccountsServer from '@accounts/server';
 import AccountsPassword from '@accounts/password';
 
 // We create a new password instance with some custom config
-const password = new AccountsPassword(...config);
+const accountsPassword = new AccountsPassword(...config);
 
 // We pass the password instance the AccountsServer service list
 const accountsServer = new AccountsServer(...config, {
-  password: password,
+  password: accountsPassword,
 });
 ```
 
@@ -67,7 +67,11 @@ const accountsPassword = new AccountsPassword({
 
 ### Multiple emails
 
-TODO
+You might want to allow multiple emails in your app, we allow this behavior by allowing you to link multiple emails to the user. **Use the following functions instead of directly updating the database**:
+
+- `AccountsPassword.addEmail` - Add an email address for a user.
+- `AccountsPassword.removeEmail` - Remove an email address for a user.
+- `AccountsPassword.verifyEmail` - Marks the user's email address as verified.
 
 ### Email case sensitivity
 
