@@ -1,18 +1,21 @@
-import React from 'react';
-import { Typography, withStyles, WithStyles } from '@material-ui/core';
+import * as React from 'react';
+import { Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
 
-const styles = () => ({
+const useStyles = makeStyles({
   formError: {
     color: 'red',
   },
 });
 
-interface IProps {
+interface Props {
   error: string;
 }
 
-const FormError = ({ classes, error }: WithStyles<'formError'> & IProps) => {
+const FormError = ({ error }: Props) => {
+  const classes = useStyles();
+
   return <Typography className={classes.formError}>{error}</Typography>;
 };
 
-export default withStyles(styles)(FormError);
+export default FormError;
