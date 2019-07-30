@@ -3,10 +3,6 @@ import { AccountsClientPassword } from '@accounts/client-password';
 import GraphQLClient from '@accounts/graphql-client';
 import ApolloClient from 'apollo-boost';
 
-// const createHeaders = (client: AccountsClient) => {
-
-// }
-
 const apolloClient = new ApolloClient({
   headers: function createHeaders() {
     // tslint:disable-next-line:no-console

@@ -1,128 +1,91 @@
-import React from 'react';
-import {
-  Button,
-  FormControl,
-  Input,
-  InputLabel,
-  Snackbar,
-  Typography,
-  withStyles,
-  WithStyles,
-} from '@material-ui/core';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import React, { useState } from 'react';
+import { RouteComponentProps, Link } from 'react-router-dom';
+import { FormControl, InputLabel, Input, Button, Typography, Snackbar } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
 
+import { accountsGraphQL } from './utils/accounts';
 import FormError from './components/FormError';
-import { accountsPassword } from './utils/accounts';
 
-const styles = () => ({
+const useStyles = makeStyles({
   formContainer: {
     display: 'flex',
-    flexDirection: 'column' as 'column',
+    flexDirection: 'column',
   },
 });
 
 const LogInLink = (props: any) => <Link to="/login" {...props} />;
 
-interface IRouteMatchProps {
+interface RouteMatchProps {
   token: string;
 }
 
-interface IState {
-  email: string;
-  newPassword: string;
-  error: string | null;
-  snackbarMessage: string | null;
-}
+const ResetPassword = ({ match }: RouteComponentProps<RouteMatchProps>) => {
+  const classes = useStyles();
+  const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [email, setEmail] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
-class Login extends React.Component<
-  WithStyles<'formContainer'> & RouteComponentProps<IRouteMatchProps>,
-  IState
-> {
-  public state = {
-    email: '',
-    error: null,
-    newPassword: '',
-    snackbarMessage: null,
-  };
-
-  public onChangeEmail = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ email: target.value });
-  };
-
-  public onChangeNewPassword = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ newPassword: target.value });
-  };
-
-  public onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.setState({ error: null, snackbarMessage: null });
-    const token = this.props.match.params.token;
+    setError(null);
+    setSnackbarMessage(null);
+    const token = match.params.token;
     try {
       // If no tokens send email to user
       if (!token) {
-        await accountsPassword.requestPasswordReset(this.state.email);
-        this.setState({ snackbarMessage: 'Email sent' });
+        await accountsGraphQL.sendResetPasswordEmail(email);
+        setSnackbarMessage('Email sent');
       } else {
         // If token try to change user password
-        await accountsPassword.resetPassword(token, this.state.newPassword);
-        this.setState({
-          snackbarMessage: 'Your password has been reset successfully',
-        });
+        await accountsGraphQL.resetPassword(token, newPassword);
+        setSnackbarMessage('Your password has been reset successfully');
       }
     } catch (err) {
-      // tslint:disable-next-line:no-console
-      console.log(err);
-      this.setState({ error: err.message, snackbarMessage: null });
+      setError(err.message);
+      setSnackbarMessage(null);
     }
   };
 
-  public onSanckbarClose = () => {
-    this.setState({ snackbarMessage: null });
-  };
+  return (
+    <form onSubmit={onSubmit} className={classes.formContainer}>
+      <Typography variant="h4" gutterBottom>
+        Reset Password
+      </Typography>
+      {!match.params.token && (
+        <FormControl margin="normal">
+          <InputLabel htmlFor="email">Email</InputLabel>
+          <Input id="email" value={email} onChange={e => setEmail(e.target.value)} />
+        </FormControl>
+      )}
+      {match.params.token && (
+        <FormControl margin="normal">
+          <InputLabel htmlFor="new-password">New Password</InputLabel>
+          <Input
+            id="new-password"
+            type="password"
+            value={newPassword}
+            onChange={e => setNewPassword(e.target.value)}
+          />
+        </FormControl>
+      )}
+      <Button variant="contained" color="primary" type="submit">
+        Reset Password
+      </Button>
+      {error && <FormError error={error!} />}
+      <Button component={LogInLink}>Log In</Button>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={!!snackbarMessage}
+        autoHideDuration={4000}
+        onClose={() => setSnackbarMessage(null)}
+        message={<span>{snackbarMessage}</span>}
+      />
+    </form>
+  );
+};
 
-  public render() {
-    const { classes, match } = this.props;
-    const { email, newPassword, error, snackbarMessage } = this.state;
-    return (
-      <form onSubmit={this.onSubmit} className={classes.formContainer}>
-        <Typography variant="display1" gutterBottom={true}>
-          Reset Password
-        </Typography>
-        {!match.params.token && (
-          <FormControl margin="normal">
-            <InputLabel htmlFor="email">Email</InputLabel>
-            <Input id="email" value={email} onChange={this.onChangeEmail} />
-          </FormControl>
-        )}
-        {match.params.token && (
-          <FormControl margin="normal">
-            <InputLabel htmlFor="new-password">New Password</InputLabel>
-            <Input
-              id="new-password"
-              type="password"
-              value={newPassword}
-              onChange={this.onChangeNewPassword}
-            />
-          </FormControl>
-        )}
-        <Button variant="raised" color="primary" type="submit">
-          Reset Password
-        </Button>
-        {error && <FormError error={error!} />}
-        <Button component={LogInLink}>Log In</Button>
-        <Snackbar
-          anchorOrigin={{
-            horizontal: 'right',
-            vertical: 'top',
-          }}
-          open={!!snackbarMessage}
-          autoHideDuration={4000}
-          onClose={this.onSanckbarClose}
-          message={<span>{snackbarMessage}</span>}
-        />
-      </form>
-    );
-  }
-}
-
-export default withStyles(styles)(Login);
+export default ResetPassword;
