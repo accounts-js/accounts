@@ -3,25 +3,25 @@
 
 
 "@accounts/client-password@file:packages/client-password":
-  version "0.15.0"
+  version "0.16.0"
   dependencies:
-    "@accounts/client" "^0.15.0"
-    "@accounts/types" "^0.15.0"
+    "@accounts/client" "^0.16.0"
+    "@accounts/types" "^0.16.0"
     crypto-js "^3.1.9-1"
     tslib "1.10.0"
 
 "@accounts/client@file:packages/client":
-  version "0.15.0"
+  version "0.16.0"
   dependencies:
-    "@accounts/types" "^0.15.0"
+    "@accounts/types" "^0.16.0"
     jwt-decode "2.2.0"
     tslib "1.10.0"
 
 "@accounts/graphql-client@file:packages/graphql-client":
-  version "0.15.0"
+  version "0.16.0"
   dependencies:
-    "@accounts/client" "^0.15.0"
-    "@accounts/types" "^0.15.0"
+    "@accounts/client" "^0.16.0"
+    "@accounts/types" "^0.16.0"
     graphql-tag "^2.10.0"
     tslib "1.10.0"
 
@@ -1796,18 +1796,18 @@
     "@types/bson" "*"
     "@types/node" "*"
 
-"@types/mongoose@5.5.6":
-  version "5.5.6"
-  resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.5.6.tgz#8ef6c56d5ebb79b34e92946b5679b7a053919b38"
-  integrity sha512-Duco8iiwOEGB756eIyafsrFbsAxjXQPkb/nplZtbxGOhfmsA90rXjO/GbDsBYbUz5nkGOCRHuNfxOJzoVAMHMg==
+"@types/mongoose@5.5.11":
+  version "5.5.11"
+  resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.5.11.tgz#8562bb84b4f3f41aebec27f263607bfe2183729e"
+  integrity sha512-Z1W2V3zrB+SeDGI6G1G5XR3JJkkMl4ni7a2Kmq10abdY0wapbaTtUT2/31N+UTPEzhB0KPXUgtQExeKxrc+hxQ==
   dependencies:
     "@types/mongodb" "*"
     "@types/node" "*"
 
-"@types/mongoose@5.5.9":
-  version "5.5.9"
-  resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.5.9.tgz#3ed062a68723f29e7cfa11c5bf165be88173f3ad"
-  integrity sha512-KVM8yWVGPc2XD8iov+VzMq/3vyzJ3kqQuiZOJOe3VTVW+U7R4bk5lDfRFvqnnPpQ/pvMPSn6xVVnuYaMUKhZSg==
+"@types/mongoose@5.5.6":
+  version "5.5.6"
+  resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.5.6.tgz#8ef6c56d5ebb79b34e92946b5679b7a053919b38"
+  integrity sha512-Duco8iiwOEGB756eIyafsrFbsAxjXQPkb/nplZtbxGOhfmsA90rXjO/GbDsBYbUz5nkGOCRHuNfxOJzoVAMHMg==
   dependencies:
     "@types/mongodb" "*"
     "@types/node" "*"
@@ -2491,6 +2491,18 @@ apollo-engine-reporting@1.4.1:
     async-retry "^1.2.1"
     graphql-extensions "0.8.1"
 
+apollo-engine-reporting@1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/apollo-engine-reporting/-/apollo-engine-reporting-1.4.2.tgz#f6c1e964c3c2c09bdb25c449f6b7ab05952ff459"
+  integrity sha512-Srw6Roqx38P82c5If6NmWdM/HVETLwcCGIl4x6a+DDcuPJl6n6ef+Sluoz4QAGrqQDJhMYk3jL9xOnEysgtonA==
+  dependencies:
+    apollo-engine-reporting-protobuf "0.4.0"
+    apollo-graphql "^0.3.3"
+    apollo-server-env "2.4.1"
+    apollo-server-types "0.2.1"
+    async-retry "^1.2.1"
+    graphql-extensions "0.8.2"
+
 apollo-env@0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/apollo-env/-/apollo-env-0.5.1.tgz#b9b0195c16feadf0fe9fd5563edb0b9b7d9e97d3"
@@ -2594,6 +2606,32 @@ apollo-server-core@2.7.1:
     subscriptions-transport-ws "^0.9.11"
     ws "^6.0.0"
 
+apollo-server-core@2.8.0:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/apollo-server-core/-/apollo-server-core-2.8.0.tgz#0bfba3d5eb557c6ffa68ad60e77f69e2634e211d"
+  integrity sha512-Bilaaaol8c4mpF+8DatsAm+leKd0lbz1jS7M+WIuu8GscAXFzzfT6311dNC7zx0wT5FUNNdHdvQOry/lyCn5GA==
+  dependencies:
+    "@apollographql/apollo-tools" "^0.4.0"
+    "@apollographql/graphql-playground-html" "1.6.24"
+    "@types/ws" "^6.0.0"
+    apollo-cache-control "0.8.1"
+    apollo-datasource "0.6.1"
+    apollo-engine-reporting "1.4.2"
+    apollo-server-caching "0.5.0"
+    apollo-server-env "2.4.1"
+    apollo-server-errors "2.3.1"
+    apollo-server-plugin-base "0.6.1"
+    apollo-server-types "0.2.1"
+    apollo-tracing "0.8.1"
+    fast-json-stable-stringify "^2.0.0"
+    graphql-extensions "0.9.0"
+    graphql-tag "^2.9.2"
+    graphql-tools "^4.0.0"
+    graphql-upload "^8.0.2"
+    sha.js "^2.4.11"
+    subscriptions-transport-ws "^0.9.11"
+    ws "^6.0.0"
+
 apollo-server-env@2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/apollo-server-env/-/apollo-server-env-2.4.1.tgz#58264ecfeb151919e0f480320b4e3769be9f18f3"
@@ -2627,6 +2665,26 @@ apollo-server-express@2.7.1:
     subscriptions-transport-ws "^0.9.16"
     type-is "^1.6.16"
 
+apollo-server-express@2.8.0:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/apollo-server-express/-/apollo-server-express-2.8.0.tgz#3815eee2fccfc9cba6d232420fa7411cda062647"
+  integrity sha512-7dj4CVyOMz1HeVoF8nw3aKw7QV/5D6PACiweu6k9xPRHurYf0bj3ncYkAMPNnxIAwu1I8FzMn4/84BWoKJ7ZFg==
+  dependencies:
+    "@apollographql/graphql-playground-html" "1.6.24"
+    "@types/accepts" "^1.3.5"
+    "@types/body-parser" "1.17.0"
+    "@types/cors" "^2.8.4"
+    "@types/express" "4.17.0"
+    accepts "^1.3.5"
+    apollo-server-core "2.8.0"
+    apollo-server-types "0.2.1"
+    body-parser "^1.18.3"
+    cors "^2.8.4"
+    graphql-subscriptions "^1.0.0"
+    graphql-tools "^4.0.0"
+    subscriptions-transport-ws "^0.9.16"
+    type-is "^1.6.16"
+
 apollo-server-plugin-base@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/apollo-server-plugin-base/-/apollo-server-plugin-base-0.6.1.tgz#b9c209aa2102a26c6134f51bfa1e4a8307b63b11"
@@ -2650,6 +2708,17 @@ apollo-server@2.7.1, apollo-server@^2.7.1:
   dependencies:
     apollo-server-core "2.7.1"
     apollo-server-express "2.7.1"
+    express "^4.0.0"
+    graphql-subscriptions "^1.0.0"
+    graphql-tools "^4.0.0"
+
+apollo-server@2.8.0:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/apollo-server/-/apollo-server-2.8.0.tgz#c57261f02f9f2865778ad8e0cdb3c6a80307beb5"
+  integrity sha512-WtHbP8/C7WkFBCA44V2uTiyuefgqlVSAb6di4XcCPLyopcg9XGKHYRPyp5uOOKlMDTfryNqV59DWHn5/oXkZmQ==
+  dependencies:
+    apollo-server-core "2.8.0"
+    apollo-server-express "2.8.0"
     express "^4.0.0"
     graphql-subscriptions "^1.0.0"
     graphql-tools "^4.0.0"
@@ -6670,6 +6739,24 @@ graphql-extensions@0.8.1:
     apollo-server-env "2.4.1"
     apollo-server-types "0.2.1"
 
+graphql-extensions@0.8.2:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/graphql-extensions/-/graphql-extensions-0.8.2.tgz#071f29b111b16b359eb9994b0a036bdeec106492"
+  integrity sha512-d0nbxMfMe7wxdsVdCn0OBx2rX0sbcIjo9TOud38i9OgNa9eeS23OxbNfe+ezTCkEvSVqgPzpy5DAOvM4HNDV4Q==
+  dependencies:
+    "@apollographql/apollo-tools" "^0.4.0"
+    apollo-server-env "2.4.1"
+    apollo-server-types "0.2.1"
+
+graphql-extensions@0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/graphql-extensions/-/graphql-extensions-0.9.0.tgz#88fb3b161f84a92f4a9032b2941919113600635d"
+  integrity sha512-0GQjQ2t2Nkg9OIk3eS5jcvQLzFkJtVB73t4AnEl7bejPwwShtY37XzE7mOlfof1OqbvRKvKFoks+wSjus2Fhzw==
+  dependencies:
+    "@apollographql/apollo-tools" "^0.4.0"
+    apollo-server-env "2.4.1"
+    apollo-server-types "0.2.1"
+
 graphql-import@0.7.1, graphql-import@^0.7.1:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/graphql-import/-/graphql-import-0.7.1.tgz#4add8d91a5f752d764b0a4a7a461fcd93136f223"
@@ -9627,6 +9714,25 @@ mongoose@5.6.6:
   version "5.6.6"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.6.6.tgz#78953b9ea91b1bf685ce59d7737100352af627f6"
   integrity sha512-5uecJSyl2TwbGM9vJteP4C54zsQL6qllq1qe/JPGO3oqIWcK/PnzCL91E0gfPH5VVpvWGX+6PafNYmU3NK8S7w==
+  dependencies:
+    async "2.6.2"
+    bson "~1.1.1"
+    kareem "2.3.0"
+    mongodb "3.2.7"
+    mongodb-core "3.2.7"
+    mongoose-legacy-pluralize "1.0.2"
+    mpath "0.6.0"
+    mquery "3.2.1"
+    ms "2.1.2"
+    regexp-clone "1.0.0"
+    safe-buffer "5.1.2"
+    sift "7.0.1"
+    sliced "1.0.1"
+
+mongoose@5.6.7:
+  version "5.6.7"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.6.7.tgz#f98116e2740816c5be3cdf07040834abcd090f2a"
+  integrity sha512-42rbdZ9HLBbGjLvRSB4voqemgFkJTIyqSLLcJARKs1zdQzEJ3O77dWRllIy2bSo35GcY17ihEdoJX27pDqu3Mg==
   dependencies:
     async "2.6.2"
     bson "~1.1.1"
