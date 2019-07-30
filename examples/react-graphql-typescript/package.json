@@ -24,15 +24,16 @@
     ]
   },
   "dependencies": {
-    "@accounts/client": "file:../../packages/client",
-    "@accounts/client-password": "file:../../packages/client-password",
-    "@accounts/graphql-client": "file:../../packages/graphql-client",
-    "@material-ui/core": "3.9.2",
+    "@accounts/client": "^0.16.0",
+    "@accounts/client-password": "^0.16.0",
+    "@accounts/graphql-client": "^0.16.0",
+    "@material-ui/core": "4.3.0",
+    "@material-ui/styles": "4.3.0",
     "apollo-boost": "0.1.27",
     "graphql": "14.4.2",
     "qrcode.react": "0.9.3",
     "react": "16.8.6",
-    "react-apollo": "2.4.1",
+    "react-apollo": "2.5.8",
     "react-dom": "16.8.6",
     "react-router-dom": "5.0.1",
     "tslib": "1.10.0"
@@ -40,9 +41,9 @@
   "devDependencies": {
     "@types/node": "12.6.8",
     "@types/qrcode.react": "0.8.2",
-    "@types/react": "16.8.22",
-    "@types/react-dom": "16.8.4",
-    "@types/react-router": "5.0.2",
+    "@types/react": "16.8.23",
+    "@types/react-dom": "16.8.5",
+    "@types/react-router": "5.0.3",
     "@types/react-router-dom": "4.3.4",
     "react-scripts": "3.0.1",
     "typescript": "3.5.3"
