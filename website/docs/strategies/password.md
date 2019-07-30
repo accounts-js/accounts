@@ -6,6 +6,7 @@ title: Password
 [npm](https://www.npmjs.com/package/@accounts/password)
 
 The `@accounts/password` package provide a secure system for a password based login strategy.
+This package will let you build your custom email (and or username) / password strategy.
 
 ## Install
 
