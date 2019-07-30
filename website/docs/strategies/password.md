@@ -34,7 +34,10 @@ const accountsServer = new AccountsServer(...config, {
 
 ### Examples
 
-TODO
+To see how to integrate the package into your app you can check these examples:
+
+- [GraphQL Server](https://github.com/accounts-js/accounts/tree/master/examples/graphql-server-typescript)
+- [Express REST Server](https://github.com/accounts-js/accounts/tree/master/examples/rest-express-typescript)
 
 ### Extend the user and validate custom fields
 
