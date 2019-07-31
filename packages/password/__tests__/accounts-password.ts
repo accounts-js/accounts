@@ -306,6 +306,7 @@ describe('AccountsPassword', () => {
       const sanitizeUser = jest.fn(() => Promise.resolve());
       const sendMail = jest.fn(() => Promise.resolve());
       password.server = {
+        ...server,
         prepareMail,
         options: { sendMail },
         sanitizeUser,
@@ -331,6 +332,7 @@ describe('AccountsPassword', () => {
       const sanitizeUser = jest.fn(() => Promise.resolve());
       const sendMail = jest.fn(() => Promise.resolve());
       password.server = {
+        ...server,
         isTokenExpired,
         loginWithUser: jest.fn(),
         prepareMail,
@@ -370,6 +372,7 @@ describe('AccountsPassword', () => {
       const sanitizeUser = jest.fn(() => Promise.resolve());
       const sendMail = jest.fn(() => Promise.resolve());
       tmpAccountsPassword.server = {
+        ...server,
         isTokenExpired,
         loginWithUser,
         prepareMail,
@@ -422,6 +425,7 @@ describe('AccountsPassword', () => {
       const sanitizeUser = jest.fn(() => Promise.resolve());
       const sendMail = jest.fn(() => Promise.resolve());
       password.server = {
+        ...server,
         prepareMail,
         options: { sendMail },
         sanitizeUser,
