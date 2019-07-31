@@ -23,7 +23,7 @@ module.exports = {
         src: 'img/logo.png',
       },
       links: [
-        { to: 'docs/getting-started', label: 'Getting Started', position: 'right' },
+        { to: 'docs/introduction', label: 'Documentation', position: 'right' },
         {
           to: 'docs/api/server/api-readme',
           label: 'Api reference',
