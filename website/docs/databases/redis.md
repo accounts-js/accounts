@@ -7,7 +7,7 @@ sidebar_label: Redis
 [Github](https://github.com/accounts-js/accounts/tree/master/packages/database-redis) |
 [npm](https://www.npmjs.com/package/@accounts/redis)
 
-The `@accounts/database-redis` package provide a redis connector for accounts-js.
+The `@accounts/redis` package provide a redis connector for accounts-js.
 
 > For now `@accounts/redis` only provide a session storage, you will need to use another connector for the user storage.
 
