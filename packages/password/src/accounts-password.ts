@@ -325,9 +325,6 @@ export default class AccountsPassword implements AuthenticationService {
     }
 
     const user = await this.passwordAuthenticator({ id: userId }, oldPassword);
-    if (!user) {
-      throw new Error(this.options.errors.userNotFound);
-    }
 
     const password = await bcryptPassword(newPassword);
     await this.db.setPassword(userId, password);
