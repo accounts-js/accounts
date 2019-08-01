@@ -324,20 +324,17 @@ export default class AccountsPassword implements AuthenticationService {
       throw new Error(this.options.errors.invalidPassword);
     }
 
-    await this.passwordAuthenticator({ id: userId }, oldPassword);
+    const user = await this.passwordAuthenticator({ id: userId }, oldPassword);
+    if (!user) {
+      throw new Error(this.options.errors.userNotFound);
+    }
 
     const password = await bcryptPassword(newPassword);
     await this.db.setPassword(userId, password);
 
-    const user = await this.db.findUserById(userId);
-
     this.server.getHooks().emit(ServerHooks.ChangePasswordSuccess, user);
 
     if (this.options.notifyUserAfterPasswordChanged) {
-      if (!user) {
-        throw new Error(this.options.errors.userNotFound);
-      }
-
       const address = user.emails && user.emails[0].address;
       if (!address) {
         throw new Error(this.options.errors.noEmailSet);
