@@ -12,4 +12,6 @@ export const ServerHooks = {
   RefreshTokensError: 'RefreshTokensError',
   ImpersonationSuccess: 'ImpersonationSuccess',
   ImpersonationError: 'ImpersonationError',
+  ResetPasswordSuccess: 'ResetPasswordSuccess',
+  ChangePasswordSuccess: 'ChangePasswordSuccess',
 };

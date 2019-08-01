@@ -263,6 +263,8 @@ export default class AccountsPassword implements AuthenticationService {
     // Change the user password and remove the old token
     await this.db.setResetPassword(user.id, resetTokenRecord.address, password, token);
 
+    this.server.getHooks().emit(ServerHooks.ResetPasswordSuccess, user);
+
     // If user clicked on an enrollment link we can verify his email
     if (resetTokenRecord.reason === 'enroll') {
       await this.db.verifyEmail(user.id, resetTokenRecord.address);
@@ -326,6 +328,8 @@ export default class AccountsPassword implements AuthenticationService {
 
     const password = await bcryptPassword(newPassword);
     await this.db.setPassword(userId, password);
+
+    this.server.getHooks().emit(ServerHooks.ChangePasswordSuccess, user);
 
     if (this.options.notifyUserAfterPasswordChanged) {
       const address = user.emails && user.emails[0].address;
