@@ -1003,10 +1003,28 @@
     graphql-toolkit "0.4.1"
     tslib "1.10.0"
 
+"@graphql-modules/core@0.7.9":
+  version "0.7.9"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.7.9.tgz#3eb2e83a7d26634b57b2f404403138ee259a5369"
+  integrity sha512-+Q6X09YETPRkpp10IKbhqgg+Crb5Te/VoNZSoELn27WS7ZiNftdMNwQrmCK7GrybKXUlNpqjcHDC7+LGWENnBw==
+  dependencies:
+    "@graphql-modules/di" "0.7.9"
+    apollo-server-caching "0.5.0"
+    graphql-toolkit "0.5.0"
+    tslib "1.10.0"
+
 "@graphql-modules/di@0.7.8":
   version "0.7.8"
   resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.7.8.tgz#dd64293ddac990229743f3c8d0f70ab483fd3af5"
   integrity sha512-JCvaO3bETYbTzRaPD/SW1v8euLlv68regWlhnixRsOtlKX026/6bFmXNFCh1l/F9j7EhD9PmiBq+iLRI277cGQ==
+  dependencies:
+    events "3.0.0"
+    tslib "1.10.0"
+
+"@graphql-modules/di@0.7.9":
+  version "0.7.9"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.7.9.tgz#4494fba7e2bd381de31c5e7773086c70f3bc7dbb"
+  integrity sha512-ZQ4DkbKfrhyqyV1lnt5SGYvPmhes71175Net/tqipm29B7kxflfHkJe4HzAX6aOc13SsDUfFM/7OT8678ZaHnw==
   dependencies:
     events "3.0.0"
     tslib "1.10.0"
@@ -6649,6 +6667,25 @@ graphql-toolkit@0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/graphql-toolkit/-/graphql-toolkit-0.4.1.tgz#f5a9fa225b51168dd0d0558dc59e8fc3d379e9b1"
   integrity sha512-asTRlNn0381f6/wVp8F0X2vsz8GJnv4TX+KNHg1k8Ybe6Ii5HBreJTxBHJ7GXlNDhj5MGCNi09nt8Oe7Ategrg==
+  dependencies:
+    "@kamilkisiela/graphql-tools" "4.0.6"
+    "@types/glob" "7.1.1"
+    aggregate-error "3.0.0"
+    asyncro "^3.0.0"
+    cross-fetch "^3.0.4"
+    deepmerge "4.0.0"
+    glob "7.1.4"
+    graphql-import "0.7.1"
+    is-glob "4.0.1"
+    is-valid-path "0.1.1"
+    lodash "4.17.15"
+    tslib "^1.9.3"
+    valid-url "1.0.9"
+
+graphql-toolkit@0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/graphql-toolkit/-/graphql-toolkit-0.5.0.tgz#7371c21809898286b2a9e164b45469586cf64498"
+  integrity sha512-tBgqyWPHI/Pgt+jp+uLZZy2EBCzjd6yWAu73oUlmrhgg7XM6f1ONotVHvIO2MK7j8khR+ex/cUe8FgpS1i845w==
   dependencies:
     "@kamilkisiela/graphql-tools" "4.0.6"
     "@types/glob" "7.1.1"
