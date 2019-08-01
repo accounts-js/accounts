@@ -35,7 +35,7 @@
     "@gql2ts/types": "1.9.0",
     "@graphql-modules/core": "0.7.9",
     "@types/graphql": "14.2.3",
-    "@types/jest": "24.0.15",
+    "@types/jest": "24.0.16",
     "@types/request-ip": "0.0.33",
     "concurrently": "4.1.1",
     "graphql": "14.4.2",

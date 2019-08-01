@@ -49,7 +49,7 @@
     "tslib": "1.10.0"
   },
   "devDependencies": {
-    "@types/jest": "24.0.15",
+    "@types/jest": "24.0.16",
     "@types/jwt-decode": "2.2.1",
     "@types/node": "12.6.8",
     "jest": "24.8.0",
