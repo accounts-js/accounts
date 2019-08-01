@@ -1,6 +1,6 @@
 {
   "name": "@accounts/mongo",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "description": "MongoDB adaptor for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -29,7 +29,7 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
-    "@accounts/database-tests": "^0.16.0",
+    "@accounts/database-tests": "^0.17.0",
     "@types/jest": "24.0.16",
     "@types/lodash": "4.14.136",
     "@types/mongodb": "3.1.31",
@@ -37,7 +37,7 @@
     "jest": "24.8.0"
   },
   "dependencies": {
-    "@accounts/types": "^0.16.0",
+    "@accounts/types": "^0.17.0",
     "lodash": "^4.17.15",
     "mongodb": "^3.2.4",
     "tslib": "1.10.0"

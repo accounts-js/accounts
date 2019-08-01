@@ -1,7 +1,7 @@
 {
   "name": "@examples/graphql-typeorm-typescript",
   "private": true,
-  "version": "0.16.0",
+  "version": "0.17.0",
   "main": "lib/index.js",
   "license": "Unlicensed",
   "scripts": {
@@ -13,10 +13,10 @@
     "test": "yarn build"
   },
   "dependencies": {
-    "@accounts/graphql-api": "^0.16.0",
-    "@accounts/password": "^0.16.0",
-    "@accounts/server": "^0.16.0",
-    "@accounts/typeorm": "^0.16.0",
+    "@accounts/graphql-api": "^0.17.0",
+    "@accounts/password": "^0.17.0",
+    "@accounts/server": "^0.17.0",
+    "@accounts/typeorm": "^0.17.0",
     "@graphql-modules/core": "0.7.8",
     "apollo-server": "2.7.1",
     "graphql": "14.4.2",
@@ -25,7 +25,7 @@
     "typeorm": "0.2.18"
   },
   "devDependencies": {
-    "@accounts/types": "^0.16.0",
+    "@accounts/types": "^0.17.0",
     "@types/graphql": "14.2.3",
     "@types/node": "12.6.8",
     "nodemon": "1.19.1",
