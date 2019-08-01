@@ -126,7 +126,7 @@ import { merge } from 'lodash';
 })();
 ```
 
-## Usage as a GraphQL micro service
+## Usage as a GraphQL microservice
 
 Based on your requirements it can be advantageous to deploy a single accounts server which is then consumed by multiple apps.
 
