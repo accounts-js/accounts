@@ -429,7 +429,7 @@ describe('AccountsPassword', () => {
       set(password.server, 'options.emailTemplates', {});
       const passwordAuthenticator = jest
         .spyOn(password, 'passwordAuthenticator' as any)
-        .mockImplementation(() => Promise.resolve({}));
+        .mockImplementation(() => Promise.resolve(validUser));
       await password.changePassword(userId, 'old-password', 'new-password');
       expect(passwordAuthenticator.mock.calls[0][0]).toEqual({ id: userId });
       expect(passwordAuthenticator.mock.calls[0][1]).toEqual('old-password');
