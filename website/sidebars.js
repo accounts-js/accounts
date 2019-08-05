@@ -7,7 +7,7 @@
 
 module.exports = {
   docs: {
-    Introduction: ['introduction'],
+    Introduction: ['introduction', 'contributing'],
     'Getting started': ['getting-started', 'email'],
     Transports: ['transports/graphql', 'transports/rest'],
     Databases: ['databases/mongo', 'databases/redis', 'databases/typeorm'],
