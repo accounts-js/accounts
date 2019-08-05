@@ -31,8 +31,9 @@ const features = [
     description: (
       <>
         We provide a native <a href="/docs/databases/mongo">mongo</a> integration which is
-        compatible with the meteor account system. We also have a Typeorm integration which will let
-        you use accounts-js with any kind of databases.
+        compatible with the meteor account system. We also have a{' '}
+        <a href="/docs/databases/typeorm">Typeorm</a> integration which will let you use accounts-js
+        with any kind of databases.
       </>
     ),
   },

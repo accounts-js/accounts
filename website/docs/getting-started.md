@@ -1,30 +1,40 @@
 ---
 id: getting-started
-title: Getting started
+title: Getting started with @accounts/boost
 sidebar_label: '@accounts/boost'
 ---
 
-# accounts
-
-## About
-
-The `@accounts` suite of packages aims to provide the consumer an end to end authentication and accounts management solution, with a simple to start with interface while preserving options for configuration. These packages provide OAuth support for popular providers such as Instagram, Twitter, Github, two factor authentication, password based accounts along with recovery options and customizable account creation and validation.
-
 The `@accounts` packages are modular by nature and can be manually installed and configured, however we provide `@accounts/boost` - a package containing useful abstractions to get a GraphQL accounts server started with minimal configuration.
-
-## Getting started with @accounts/boost
 
 **Install the core**
 
-`npm install @accounts/boost`
+```bash
+// Npm
+npm install --save @accounts/boost
+
+// Yarn
+yarn add @accounts/boost
+```
 
 **Choose your database database driver**
 
-`npm install @accounts/mongo`
+```bash
+// Npm
+npm install --save @accounts/mongo
+
+// Yarn
+yarn add @accounts/mongo
+```
 
 **Choose your authentication services**
 
-`npm install @accounts/password`
+```bash
+// Npm
+npm install --save @accounts/password
+
+// Yarn
+yarn add @accounts/password
+```
 
 The following starts an accounts server using the database, transport, and authentication services you provided with the default settings.
 
