@@ -298,7 +298,7 @@ const accountsGraphQL = new GraphQLClient({
 
 ## Using with Apollo Link
 
-In order to send the accounts token on every request sent to your GraphQL server, apollo requires you to implment an apollo-link. This link is usually quite generic when using accounts-js so we've implmeneted the apollo-link you need and offer it as a utility package.
+In order to send the accounts token on every request sent to your GraphQL server, apollo requires you to implment an apollo-link. This link is usually quite generic when using accounts-js so we've implemented the apollo-link you need and offer it as a utility package.
 
 ### Install @accounts/apollo-link
 
@@ -312,7 +312,8 @@ yarn add @accounts/apollo-link
 import { accountsLink } from '@accounts/apollo-link';
 
 const accountsClient = new AccountsClient( ... );
-const authLink = accountsLink(accountsClient);
+
+const authLink = accountsLink(() => accountsClient);
 
 export const apolloClient = new ApolloClient({
   link: ApolloLink.from([authLink, httpLink]),
