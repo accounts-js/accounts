@@ -17,6 +17,7 @@ module.exports = {
       'strategies/oauth',
       'strategies/twitter',
     ],
+    Cookbook: ['cookbook/react-native'],
   },
   api: {
     'Api Docs': [
