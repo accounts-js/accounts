@@ -59,6 +59,16 @@ export interface AccountsPasswordOptions {
    */
   returnTokensAfterResetPassword?: boolean;
   /**
+   * Invalidate existing sessions after password has been reset
+   * Default to true.
+   */
+  invalidateAllSessionsAfterPasswordReset?: boolean;
+  /**
+   * Invalidate existing sessions after password has been changed
+   * Default to false.
+   */
+  invalidateAllSessionsAfterPasswordChanged?: boolean;
+  /**
    * Function that will validate the user object during `createUser`.
    * The user returned from this function will be directly inserted in the database so be careful when you whitelist the fields,
    * By default we only allow `username`, `email` and `password` fields.
@@ -92,6 +102,8 @@ const defaultOptions = {
   passwordEnrollTokenExpiration: 2592000000,
   notifyUserAfterPasswordChanged: true,
   returnTokensAfterResetPassword: false,
+  invalidateAllSessionsAfterPasswordReset: true,
+  invalidateAllSessionsAfterPasswordChanged: false,
   validateEmail(email?: string): boolean {
     return !isEmpty(trim(email)) && isEmail(email);
   },
@@ -271,7 +283,9 @@ export default class AccountsPassword implements AuthenticationService {
     }
 
     // Changing the password should invalidate existing sessions
-    await this.db.invalidateAllSessions(user.id);
+    if (this.options.invalidateAllSessionsAfterPasswordReset) {
+      await this.db.invalidateAllSessions(user.id);
+    }
 
     if (this.options.notifyUserAfterPasswordChanged) {
       const address = user.emails && user.emails[0].address;
@@ -330,6 +344,10 @@ export default class AccountsPassword implements AuthenticationService {
     await this.db.setPassword(userId, password);
 
     this.server.getHooks().emit(ServerHooks.ChangePasswordSuccess, user);
+
+    if (this.options.invalidateAllSessionsAfterPasswordChanged) {
+      await this.db.invalidateAllSessions(user.id);
+    }
 
     if (this.options.notifyUserAfterPasswordChanged) {
       const address = user.emails && user.emails[0].address;
