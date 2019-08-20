@@ -1,7 +1,7 @@
 {
   "name": "@accounts/database-tests",
   "private": true,
-  "version": "0.17.0",
+  "version": "0.18.0",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
@@ -23,7 +23,7 @@
     "jest": "24.8.0"
   },
   "dependencies": {
-    "@accounts/types": "^0.17.0",
+    "@accounts/types": "^0.18.0",
     "tslib": "1.10.0"
   }
 }
