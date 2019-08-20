@@ -402,18 +402,51 @@ describe('AccountsPassword', () => {
     });
   });
 
-  describe('changePassword', () => {
+  describe('changePassword and invalidate all sessions', () => {
+    const tmpAccountsPassword = new AccountsPassword({
+      invalidateAllSessionsAfterPasswordChanged: true,
+    });
     const validUser = {
       emails: [{ address: 'john.doe@gmail.com', verified: true }],
     };
 
     it('throws when new password is invalid', async () => {
       try {
-        await password.changePassword('userId', 'old-password', null as any);
+        await tmpAccountsPassword.changePassword('userId', 'old-password', null as any);
         throw new Error();
       } catch (err) {
         expect(err.message).toMatchSnapshot();
       }
+    });
+
+    it('call invalidateAllSessions', async () => {
+      const userId = 'id';
+      const setPassword = jest.fn(() => Promise.resolve('user'));
+      const findUserById = jest.fn(() => Promise.resolve(validUser));
+      const invalidateAllSessions = jest.fn(() => Promise.resolve());
+      const findPasswordHash = jest.fn(() => Promise.resolve());
+      tmpAccountsPassword.setStore({
+        setPassword,
+        findUserById,
+        findPasswordHash,
+        invalidateAllSessions,
+      } as any);
+      const prepareMail = jest.fn(() => Promise.resolve());
+      const sanitizeUser = jest.fn(() => Promise.resolve());
+      const sendMail = jest.fn(() => Promise.resolve());
+      tmpAccountsPassword.server = {
+        ...server,
+        prepareMail,
+        options: { sendMail },
+        sanitizeUser,
+      } as any;
+      set(tmpAccountsPassword.server, 'options.emailTemplates', {});
+      jest
+        .spyOn(tmpAccountsPassword, 'passwordAuthenticator' as any)
+        .mockImplementation(() => Promise.resolve(validUser));
+      await tmpAccountsPassword.changePassword(userId, 'old-password', 'new-password');
+      expect(invalidateAllSessions.mock.calls[0]).toMatchSnapshot();
+      (tmpAccountsPassword as any).passwordAuthenticator.mockRestore();
     });
 
     it('call passwordAuthenticator and this.db.setPassword', async () => {
