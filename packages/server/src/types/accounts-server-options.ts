@@ -5,6 +5,7 @@ import { UserObjectSanitizerFunction } from './user-object-sanitizer-function';
 import { ResumeSessionValidator } from './resume-session-validator';
 import { PrepareMailFunction } from './prepare-mail-function';
 import { SendMailType } from './send-mail-type';
+import { TokenCreator } from './token-creator';
 
 export interface AccountsServerOptions {
   /**
@@ -24,4 +25,6 @@ export interface AccountsServerOptions {
   siteUrl?: string;
   prepareMail?: PrepareMailFunction;
   sendMail?: SendMailType;
+  tokenCreator?: TokenCreator;
+  createSessionTokenOnRefresh?: boolean;
 }
