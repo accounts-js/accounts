@@ -22,7 +22,7 @@ import { AccountsServerOptions } from './types/accounts-server-options';
 import { JwtData } from './types/jwt-data';
 import { EmailTemplateType } from './types/email-template-type';
 
-const defaultOptions: AccountsServerOptions = {
+const defaultOptions = {
   ambiguousErrorMessages: true,
   tokenSecret: 'secret',
   tokenConfigs: {
