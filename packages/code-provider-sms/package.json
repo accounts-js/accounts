@@ -1,0 +1,28 @@
+{
+  "name": "@accounts/code-provider-sms",
+  "version": "0.18.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib",
+    "start": "tsc --watch",
+    "precompile": "yarn clean",
+    "compile": "tsc",
+    "prepublishOnly": "yarn compile",
+    "testonly": "jest --coverage",
+    "coverage": "jest --coverage"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "preset": "ts-jest"
+  },
+  "dependencies": {
+    "twilio": "^3.33.3"
+  },
+  "devDependencies": {
+  },
+  "peerDependencies": {
+    "@accounts/code": "^0.18.0"
+  }
+}
