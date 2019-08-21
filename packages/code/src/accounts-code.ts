@@ -18,8 +18,8 @@ export interface AccountsCodeOptions {
 
 interface DBService {
   id: string;
-  code: string;
-  expiry: number;
+  code?: string;
+  expiry?: number;
 }
 
 const defaultOptions = {
@@ -85,9 +85,11 @@ export default class CodeService implements AuthenticationService {
       throw new Error(this.options.errors.wrongCode);
     }
 
-    if (expiry < Date.now()) {
+    if (expiry && expiry < Date.now()) {
       throw new Error(this.options.errors.codeExpired);
     }
+
+    await this.db.setService(user.id, this.serviceName, { id: serviceId });
 
     return user;
   }
