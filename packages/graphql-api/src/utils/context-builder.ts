@@ -59,9 +59,13 @@ export const context = (
 ) => async (request: any, _: any, session: ModuleSessionInfo): Promise<AccountsContext> => {
   const res = await requestExtractor(request, session, moduleName);
 
-  const config: AccountsModuleConfig = session.injector.get(ModuleConfig(moduleName));
+  if (res.authToken) {
+    const config: AccountsModuleConfig = session.injector.get(ModuleConfig(moduleName));
 
-  if (res.authToken && !config.excludeAddUserInContext) {
+    if (config.excludeAddUserInContext) {
+      return res;
+    }
+
     try {
       res.user = await config.accountsServer.resumeSession(res.authToken);
     } catch (e) {
