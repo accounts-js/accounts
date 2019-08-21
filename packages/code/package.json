@@ -24,6 +24,7 @@
     "tslib": "1.10.0"
   },
   "devDependencies": {
+    "@accounts/server": "^0.18.0",
     "@types/randomstring": "^1.1.6"
   },
   "peerDependencies": {

@@ -21,6 +21,7 @@
     "twilio": "^3.33.3"
   },
   "devDependencies": {
+    "@accounts/code": "^0.18.0"
   },
   "peerDependencies": {
     "@accounts/code": "^0.18.0"
