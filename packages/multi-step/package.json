@@ -1,0 +1,34 @@
+{
+  "name": "@accounts/multi-step",
+  "version": "0.18.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib",
+    "start": "tsc --watch",
+    "precompile": "yarn clean",
+    "compile": "tsc",
+    "prepublishOnly": "yarn compile",
+    "testonly": "jest --coverage",
+    "coverage": "jest --coverage"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "preset": "ts-jest"
+  },
+  "dependencies": {
+    "tslib": "1.10.0"
+  },
+  "devDependencies": {
+    "@accounts/server": "^0.18.0",
+    "@accounts/types": "^0.18.0",
+    "@types/lodash": "4.14.136",
+    "@types/jest": "24.0.16",
+    "jest": "24.8.0",
+    "rimraf": "2.6.3"
+  },
+  "peerDependencies": {
+    "@accounts/server": "^0.7.0"
+  }
+}
