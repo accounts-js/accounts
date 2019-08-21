@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 
 import { CodeHash } from '../types';
 
@@ -9,6 +9,8 @@ export default class SimpleCodeHash implements CodeHash {
 
   public verify(code: string, hash: string): boolean {
     const hashedCode = this._hash(code);
+
+    console.log(code, hashedCode);
 
     return hashedCode === hash;
   }

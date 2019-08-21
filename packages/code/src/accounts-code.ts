@@ -81,7 +81,11 @@ export default class CodeService implements AuthenticationService {
 
     const { code: serviceCode, expiry }: DBService = (user.services as any)[this.serviceName];
 
-    if (serviceCode !== code) {
+    if (!serviceCode) {
+      throw new Error(this.options.errors.codeWasNotFound);
+    }
+
+    if (!this.options.codeHash.verify(code, serviceCode)) {
       throw new Error(this.options.errors.wrongCode);
     }
 

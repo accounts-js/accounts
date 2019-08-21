@@ -1,4 +1,4 @@
-import randomstring from 'randomstring';
+import * as randomstring from 'randomstring';
 
 import { CodeGenerator } from '../types';
 
