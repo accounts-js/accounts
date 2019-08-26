@@ -570,7 +570,7 @@ describe('AccountsServer', () => {
             updateSession,
           } as any,
           tokenSecret: 'secret1',
-          createSessionTokenOnRefresh: true,
+          createNewSessionTokenOnRefresh: true,
           tokenCreator: {
             createToken: async () => {
               return '123';
