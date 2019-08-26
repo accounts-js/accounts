@@ -1,5 +1,5 @@
 {
-  "name": "@accounts/code-provider-sms",
+  "name": "@accounts/code-provider-twilio",
   "version": "0.18.0",
   "license": "MIT",
   "main": "lib/index.js",

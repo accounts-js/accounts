@@ -1,9 +1,9 @@
-# @accounts/code-provider-sms
+# @accounts/code-provider-twilio
 
 ## Install
 
 ```
-yarn add @accounts/code-provider-sms
+yarn add @accounts/code-provider-twilio
 ```
 
 ## Usage
@@ -11,9 +11,9 @@ yarn add @accounts/code-provider-sms
 ```js
 import { AccountsServer } from '@accounts/server';
 import { AccountsCode } from '@accounts/code';
-import { CodeProviderSMS } from '@accounts/code-provider-sms';
+import { CodeProviderTwilio } from '@accounts/code-provider-twilio';
 
-const codeProvider = new CodeProviderSMS({
+const codeProvider = new CodeProviderTwilio({
   sid: 'TWILIO_SID',
   secret: 'TWILIO_SECRET',
   phoneNumber: 'TWILIO_FROM_PHONE_NUMBER',
