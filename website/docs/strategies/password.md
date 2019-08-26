@@ -1,5 +1,7 @@
 ---
+id: password
 title: Password
+sidebar_label: Server
 ---
 
 [Github](https://github.com/accounts-js/accounts/tree/master/packages/password) |
