@@ -1,5 +1,4 @@
 import { AccountsClient } from '@accounts/client';
-import { SHA256 } from 'crypto-js';
 import { LoginResult, CreateUser } from '@accounts/types';
 import { AccountsClientPasswordOptions } from './types';
 
@@ -88,7 +87,6 @@ export class AccountsClientPassword {
     if (this.options.hashPassword) {
       return this.options.hashPassword(password);
     }
-    const hashedPassword = SHA256(password);
-    return hashedPassword.toString();
+    return password;
   }
 }
