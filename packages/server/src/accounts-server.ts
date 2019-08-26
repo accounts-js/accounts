@@ -37,7 +37,7 @@ const defaultOptions = {
   userObjectSanitizer: (user: User) => user,
   sendMail,
   siteUrl: 'http://localhost:3000',
-  createSessionTokenOnRefresh: false,
+  createNewSessionTokenOnRefresh: false,
 };
 
 export class AccountsServer {
@@ -303,7 +303,7 @@ Please change it with a strong random token.`);
         }
 
         let newToken;
-        if (this.options.createSessionTokenOnRefresh) {
+        if (this.options.createNewSessionTokenOnRefresh) {
           newToken = await this.createSessionToken(user);
         }
 

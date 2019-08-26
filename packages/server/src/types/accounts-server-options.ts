@@ -26,5 +26,8 @@ export interface AccountsServerOptions {
   prepareMail?: PrepareMailFunction;
   sendMail?: SendMailType;
   tokenCreator?: TokenCreator;
-  createSessionTokenOnRefresh?: boolean;
+  /**
+   * Creates a new session token each time a user refreshes his access token
+   */
+  createNewSessionTokenOnRefresh?: boolean;
 }
