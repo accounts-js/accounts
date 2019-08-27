@@ -5,6 +5,7 @@
     "outDir": "./lib",
     "noUnusedParameters": false,
     "noUnusedLocals": false,
+    "experimentalDecorators": true,
     "importHelpers": true
   },
   "exclude": ["node_modules", "__tests__", "lib"]
