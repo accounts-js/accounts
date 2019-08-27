@@ -29,7 +29,6 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
-    "@types/crypto-js": "3.1.43",
     "@types/jest": "24.0.16",
     "@types/node": "12.6.8",
     "jest": "24.8.0",
@@ -38,7 +37,6 @@
   "dependencies": {
     "@accounts/client": "^0.18.0",
     "@accounts/types": "^0.18.0",
-    "crypto-js": "^3.1.9-1",
     "tslib": "1.10.0"
   }
 }
