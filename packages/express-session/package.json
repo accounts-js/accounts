@@ -39,7 +39,7 @@
     "@types/express-session": "1.15.14",
     "@types/jest": "24.0.18",
     "@types/lodash": "4.14.137",
-    "@types/request-ip": "0.0.33",
+    "@types/request-ip": "0.0.34",
     "express": "4.17.1",
     "express-session": "1.16.2",
     "jest": "24.9.0"
