@@ -20,7 +20,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "rimraf": "2.6.3"
+    "rimraf": "3.0.0"
   },
   "dependencies": {
     "@accounts/database-manager": "^0.18.0",
@@ -28,7 +28,7 @@
     "@accounts/server": "^0.18.0",
     "@accounts/types": "^0.18.0",
     "@graphql-modules/core": "0.7.9",
-    "apollo-server": "^2.7.1",
+    "apollo-server": "^2.9.0",
     "graphql": "^14.3.1",
     "graphql-tools": "^4.0.5",
     "jsonwebtoken": "^8.5.1",

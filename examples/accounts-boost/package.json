@@ -16,7 +16,7 @@
     "@accounts/boost": "^0.18.0",
     "apollo-link-context": "1.0.18",
     "apollo-link-http": "1.5.15",
-    "apollo-server": "2.7.1",
+    "apollo-server": "2.9.0",
     "graphql": "14.4.2",
     "graphql-toolkit": "0.4.1",
     "graphql-tools": "4.0.5",
