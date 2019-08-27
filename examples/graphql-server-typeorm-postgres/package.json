@@ -17,17 +17,16 @@
     "@accounts/password": "^0.18.0",
     "@accounts/server": "^0.18.0",
     "@accounts/typeorm": "^0.18.0",
-    "@graphql-modules/core": "0.7.8",
-    "apollo-server": "2.7.1",
-    "graphql": "14.4.2",
-    "graphql-toolkit": "0.4.1",
-    "pg": "7.11.0",
+    "@graphql-modules/core": "0.7.10",
+    "apollo-server": "2.9.0",
+    "graphql": "14.5.3",
+    "graphql-toolkit": "0.5.10",
+    "pg": "7.12.1",
     "typeorm": "0.2.18"
   },
   "devDependencies": {
     "@accounts/types": "^0.18.0",
-    "@types/graphql": "14.2.3",
-    "@types/node": "12.6.8",
+    "@types/node": "12.7.2",
     "nodemon": "1.19.1",
     "ts-node": "8.3.0",
     "typescript": "3.5.3"

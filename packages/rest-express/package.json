@@ -36,12 +36,12 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/server": "^0.18.0",
-    "@types/express": "4.17.0",
-    "@types/jest": "24.0.16",
-    "@types/lodash": "4.14.136",
-    "@types/node": "12.6.8",
-    "@types/request-ip": "0.0.33",
-    "jest": "24.8.0"
+    "@types/express": "4.17.1",
+    "@types/jest": "24.0.18",
+    "@types/lodash": "4.14.137",
+    "@types/node": "12.7.2",
+    "@types/request-ip": "0.0.34",
+    "jest": "24.9.0"
   },
   "peerDependencies": {
     "@accounts/server": "^0.7.0"

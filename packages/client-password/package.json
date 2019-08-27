@@ -29,10 +29,10 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "24.0.16",
-    "@types/node": "12.6.8",
-    "jest": "24.8.0",
-    "rimraf": "2.6.3"
+    "@types/jest": "24.0.18",
+    "@types/node": "12.7.2",
+    "jest": "24.9.0",
+    "rimraf": "3.0.0"
   },
   "dependencies": {
     "@accounts/client": "^0.18.0",

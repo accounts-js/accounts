@@ -22,7 +22,7 @@
   "devDependencies": {
     "@accounts/client": "^0.18.0",
     "apollo-link": "1.2.12",
-    "rimraf": "2.6.3"
+    "rimraf": "3.0.0"
   },
   "dependencies": {
     "apollo-link-context": "1.0.18",
