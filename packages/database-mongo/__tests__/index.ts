@@ -679,6 +679,33 @@ describe('Mongo', () => {
       expect(ret!.updatedAt).toBeTruthy();
       expect(ret!.createdAt).not.toEqual(ret!.updatedAt);
     });
+
+    it('should update session with token', async () => {
+      const token = generateRandomToken();
+      const token2 = generateRandomToken();
+      const sessionId = await databaseTests.database.createSession(session.userId, token, {
+        ip: session.ip,
+        userAgent: session.userAgent,
+      });
+      await delay(10);
+      await databaseTests.database.updateSession(
+        sessionId,
+        {
+          ip: 'new ip',
+          userAgent: 'new user agent',
+        },
+        token2
+      );
+      const ret = await databaseTests.database.findSessionById(sessionId);
+      expect(ret!.userId).toEqual(session.userId);
+      expect(ret!.ip).toEqual('new ip');
+      expect(ret!.userAgent).toEqual('new user agent');
+      expect(ret!.valid).toEqual(true);
+      expect(ret!.token).toEqual(token2);
+      expect(ret!.createdAt).toBeTruthy();
+      expect(ret!.updatedAt).toBeTruthy();
+      expect(ret!.createdAt).not.toEqual(ret!.updatedAt);
+    });
   });
 
   describe('invalidateSession', () => {
