@@ -24,7 +24,7 @@ const accountsLink = (client: ApolloClient<any>, storage: StorageAdapter = local
         if (refreshToken && !isTokenExpired(refreshToken)) {
           client
             .mutate(REFRESH_TOKEN, { variables: { accessToken, refreshToken } })
-            .then(REFRESH_TOKEN_CALLBACK);
+            .then(REFRESH_TOKEN_CALLBACK());
         } else {
           storage.remove('accessToken');
           storage.remove('refreshToken');
