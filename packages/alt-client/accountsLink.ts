@@ -2,6 +2,7 @@ import { ApolloLink } from 'apollo-link';
 import * as jwtDecode from 'jwt-decode';
 import localStorage from './storage/localStorage';
 import { StorageAdapter } from './storage/interface';
+import { REFRESH_TOKEN, REFRESH_TOKEN_CALLBACK } from './mutations';
 
 interface JwtDecodeData {
   exp: number;
@@ -17,14 +18,16 @@ export const isTokenExpired = (token: string): boolean => {
 const accountsLink = (storage: StorageAdapter = localStorage, client: ApolloClient<any>) =>
   new ApolloLink((operation, forward) => {
     const accessToken = storage.get('accessToken');
-    const resumeToken = storage.get('resumeToken');
+    const refreshToken = storage.get('refreshToken');
     if (accessToken) {
       if (isTokenExpired(accessToken)) {
-        if (resumeToken && !isTokenExpired(resumeToken)) {
-          client.mutate()
+        if (refreshToken && !isTokenExpired(refreshToken)) {
+          client
+            .mutate(REFRESH_TOKEN, { variables: { accessToken, refreshToken } })
+            .then(REFRESH_TOKEN_CALLBACK);
         } else {
           storage.remove('accessToken');
-          storage.remove('resumeToken');
+          storage.remove('refreshToken');
         }
       }
       operation.setContext(() => ({
