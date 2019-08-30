@@ -15,7 +15,7 @@ export const isTokenExpired = (token: string): boolean => {
   return decodedToken.exp < currentTime;
 };
 
-const accountsLink = (storage: StorageAdapter = localStorage, client: ApolloClient<any>) =>
+const accountsLink = (client: ApolloClient<any>, storage: StorageAdapter = localStorage) =>
   new ApolloLink((operation, forward) => {
     const accessToken = storage.get('accessToken');
     const refreshToken = storage.get('refreshToken');
