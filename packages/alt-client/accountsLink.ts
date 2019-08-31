@@ -1,5 +1,6 @@
 import { ApolloLink } from 'apollo-link';
 import jwtDecode from 'jwt-decode';
+import { ApolloClient } from 'apollo-client';
 import localStorage from './storage/localStorage';
 import { StorageAdapter } from './storage/interface';
 import { REFRESH_TOKEN, REFRESH_TOKEN_CALLBACK } from './mutations';
@@ -17,25 +18,32 @@ export const isTokenExpired = (token: string): boolean => {
 
 const accountsLink = (client: ApolloClient<any>, storage: StorageAdapter = localStorage) =>
   new ApolloLink((operation, forward) => {
-    const accessToken = storage.get('accessToken');
-    const refreshToken = storage.get('refreshToken');
-    if (accessToken) {
-      if (isTokenExpired(accessToken)) {
-        if (refreshToken && !isTokenExpired(refreshToken)) {
-          client
-            .mutate({ mutation: REFRESH_TOKEN, variables: { accessToken, refreshToken } })
-            .then(REFRESH_TOKEN_CALLBACK());
-        } else {
-          storage.remove('accessToken');
-          storage.remove('refreshToken');
+    operation.setContext(async () => {
+      const accessToken = await storage.get('accessToken');
+      const refreshToken = await storage.get('refreshToken');
+      if (accessToken) {
+        if (isTokenExpired(accessToken)) {
+          if (refreshToken && !isTokenExpired(refreshToken)) {
+            await client
+              .mutate({
+                mutation: REFRESH_TOKEN,
+                variables: { accessToken, refreshToken },
+              })
+              .then(REFRESH_TOKEN_CALLBACK());
+          } else {
+            await storage.remove('accessToken');
+            await storage.remove('refreshToken');
+            return;
+          }
         }
       }
-      operation.setContext(() => ({
+      return {
         headers: {
           Authorization: 'Bearer ' + accessToken,
         },
-      }));
-    }
+      };
+    });
+
     return forward ? forward(operation) : null;
   });
 
