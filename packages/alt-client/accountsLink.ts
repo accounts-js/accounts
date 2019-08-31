@@ -1,5 +1,5 @@
 import { ApolloLink } from 'apollo-link';
-import * as jwtDecode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 import localStorage from './storage/localStorage';
 import { StorageAdapter } from './storage/interface';
 import { REFRESH_TOKEN, REFRESH_TOKEN_CALLBACK } from './mutations';
@@ -23,7 +23,7 @@ const accountsLink = (client: ApolloClient<any>, storage: StorageAdapter = local
       if (isTokenExpired(accessToken)) {
         if (refreshToken && !isTokenExpired(refreshToken)) {
           client
-            .mutate(REFRESH_TOKEN, { variables: { accessToken, refreshToken } })
+            .mutate({ mutation: REFRESH_TOKEN, variables: { accessToken, refreshToken } })
             .then(REFRESH_TOKEN_CALLBACK());
         } else {
           storage.remove('accessToken');
