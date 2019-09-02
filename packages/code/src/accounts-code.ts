@@ -43,6 +43,14 @@ export default class CodeService implements AuthenticationService {
     this.db = store;
   }
 
+  public async updateUserServiceId(userId: string, serviceId: string): Promise<void> {
+    const dbService: DBService = {
+      id: serviceId,
+    };
+
+    await this.db.setService(userId, this.serviceName, dbService);
+  }
+
   public async prepareAuthentication(serviceId: string) {
     const user = await this.db.findUserByServiceId(this.serviceName, serviceId);
 
