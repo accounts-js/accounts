@@ -1,7 +1,7 @@
 {
   "name": "@examples/graphql-server-typescript",
   "private": true,
-  "version": "0.18.0",
+  "version": "0.19.0",
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
@@ -10,24 +10,24 @@
     "test": "yarn build"
   },
   "dependencies": {
-    "@accounts/database-manager": "^0.18.0",
-    "@accounts/graphql-api": "^0.18.0",
-    "@accounts/mongo": "^0.18.0",
-    "@accounts/password": "^0.18.0",
-    "@accounts/rest-express": "^0.18.0",
-    "@accounts/server": "^0.18.0",
-    "@graphql-modules/core": "0.7.8",
-    "apollo-server": "2.8.0",
-    "graphql": "14.4.2",
-    "graphql-toolkit": "0.4.1",
+    "@accounts/database-manager": "^0.19.0",
+    "@accounts/graphql-api": "^0.19.0",
+    "@accounts/mongo": "^0.19.0",
+    "@accounts/password": "^0.19.0",
+    "@accounts/rest-express": "^0.19.0",
+    "@accounts/server": "^0.19.0",
+    "@graphql-modules/core": "0.7.10",
+    "apollo-server": "2.9.0",
+    "graphql": "14.5.3",
+    "graphql-toolkit": "0.5.10",
     "graphql-tools": "4.0.5",
     "lodash": "4.17.15",
-    "mongoose": "5.6.7",
+    "mongoose": "5.6.11",
     "tslib": "1.10.0"
   },
   "devDependencies": {
-    "@types/mongoose": "5.5.11",
-    "@types/node": "12.6.8",
+    "@types/mongoose": "5.5.13",
+    "@types/node": "12.7.2",
     "nodemon": "1.19.1",
     "ts-node": "8.3.0",
     "typescript": "3.5.3"

@@ -1,6 +1,6 @@
 {
   "name": "@accounts/redis",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "description": "Redis adaptor for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -32,17 +32,17 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
-    "@accounts/database-tests": "^0.18.0",
-    "@types/ioredis": "4.0.13",
-    "@types/jest": "24.0.16",
-    "@types/lodash": "4.14.136",
-    "@types/node": "12.6.8",
+    "@accounts/database-tests": "^0.19.0",
+    "@types/ioredis": "4.0.15",
+    "@types/jest": "24.0.18",
+    "@types/lodash": "4.14.137",
+    "@types/node": "12.7.2",
     "@types/shortid": "0.0.29",
-    "jest": "24.8.0"
+    "jest": "24.9.0"
   },
   "dependencies": {
-    "@accounts/types": "^0.18.0",
-    "ioredis": "^4.11.2",
+    "@accounts/types": "^0.19.0",
+    "ioredis": "^4.14.0",
     "lodash": "^4.17.15",
     "shortid": "^2.2.14",
     "tslib": "1.10.0"

@@ -12,7 +12,11 @@ module.exports = {
     Transports: ['transports/graphql', 'transports/rest'],
     Databases: ['databases/mongo', 'databases/redis', 'databases/typeorm'],
     Strategies: [
-      'strategies/password',
+      {
+        type: 'category',
+        label: 'Password',
+        items: ['strategies/password', 'strategies/password-client'],
+      },
       'strategies/facebook',
       'strategies/oauth',
       'strategies/twitter',

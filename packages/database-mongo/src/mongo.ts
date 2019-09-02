@@ -319,18 +319,25 @@ export class Mongo implements DatabaseInterface {
     return ret.ops[0]._id.toString();
   }
 
-  public async updateSession(sessionId: string, connection: ConnectionInformations): Promise<void> {
+  public async updateSession(
+    sessionId: string,
+    connection: ConnectionInformations,
+    newToken?: string
+  ): Promise<void> {
+    const updateClause = {
+      $set: {
+        userAgent: connection.userAgent,
+        ip: connection.ip,
+        [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+      },
+    };
+
+    if (newToken) {
+      updateClause.$set.token = newToken;
+    }
+
     const _id = this.options.convertSessionIdToMongoObjectId ? toMongoID(sessionId) : sessionId;
-    await this.sessionCollection.updateOne(
-      { _id },
-      {
-        $set: {
-          userAgent: connection.userAgent,
-          ip: connection.ip,
-          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
-        },
-      }
-    );
+    await this.sessionCollection.updateOne({ _id }, updateClause);
   }
 
   public async invalidateSession(sessionId: string): Promise<void> {

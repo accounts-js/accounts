@@ -37,6 +37,7 @@ const defaultOptions = {
   userObjectSanitizer: (user: User) => user,
   sendMail,
   siteUrl: 'http://localhost:3000',
+  createNewSessionTokenOnRefresh: false,
 };
 
 export class AccountsServer {
@@ -138,7 +139,7 @@ Please change it with a strong random token.`);
    */
   public async loginWithUser(user: User, infos: ConnectionInformations): Promise<LoginResult> {
     const { ip, userAgent } = infos;
-    const token = generateRandomToken();
+    const token = await this.createSessionToken(user);
     const sessionId = await this.db.createSession(user.id, token, {
       ip,
       userAgent,
@@ -300,8 +301,14 @@ Please change it with a strong random token.`);
         if (!user) {
           throw new Error('User not found');
         }
-        const tokens = this.createTokens({ token: sessionToken, userId: user.id });
-        await this.db.updateSession(session.id, { ip, userAgent });
+
+        let newToken;
+        if (this.options.createNewSessionTokenOnRefresh) {
+          newToken = await this.createSessionToken(user);
+        }
+
+        const tokens = this.createTokens({ token: newToken || sessionToken, userId: user.id });
+        await this.db.updateSession(session.id, { ip, userAgent }, newToken);
 
         const result = {
           sessionId: session.id,
@@ -514,6 +521,12 @@ Please change it with a strong random token.`);
   private defaultCreateTokenizedUrl(pathFragment: string, token: string): string {
     const siteUrl = this.options.siteUrl;
     return `${siteUrl}/${pathFragment}/${token}`;
+  }
+
+  private async createSessionToken(user: User): Promise<string> {
+    return this.options.tokenCreator
+      ? this.options.tokenCreator.createToken(user)
+      : generateRandomToken();
   }
 }
 

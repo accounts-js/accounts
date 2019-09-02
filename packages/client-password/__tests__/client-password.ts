@@ -21,6 +21,7 @@ const user = {
 describe('AccountsClientPassword', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.spyOn(accountsPassword, 'hashPassword');
   });
 
   it('requires the client', async () => {
@@ -51,17 +52,26 @@ describe('AccountsClientPassword', () => {
   describe('createUser', () => {
     it('should hash password and call transport', async () => {
       await accountsPassword.createUser(user);
-      expect(mockedClient.transport.createUser.mock.calls[0][0].email).toBe(user.email);
-      expect(mockedClient.transport.createUser.mock.calls[0][0].password).not.toBe(user.password);
+      expect(accountsPassword.hashPassword).toBeCalledTimes(1);
+      expect(accountsPassword.hashPassword).toBeCalledWith(user.password);
+      expect(mockedClient.transport.createUser).toBeCalledTimes(1);
+      expect(mockedClient.transport.createUser).toBeCalledWith({
+        email: user.email,
+        password: user.password,
+      });
     });
   });
 
   describe('login', () => {
     it('should hash password and call client', async () => {
       await accountsPassword.login(user);
-      expect(mockedClient.loginWithService.mock.calls[0][0]).toBe('password');
-      expect(mockedClient.loginWithService.mock.calls[0][1].email).toBe(user.email);
-      expect(mockedClient.loginWithService.mock.calls[0][1].password).not.toBe(user.password);
+      expect(accountsPassword.hashPassword).toBeCalledTimes(1);
+      expect(accountsPassword.hashPassword).toBeCalledWith(user.password);
+      expect(mockedClient.loginWithService).toBeCalledTimes(1);
+      expect(mockedClient.loginWithService).toBeCalledWith('password', {
+        email: user.email,
+        password: user.password,
+      });
     });
   });
 
@@ -77,8 +87,10 @@ describe('AccountsClientPassword', () => {
       const token = 'tokenTest';
       const newPassword = 'newPasswordTest';
       await accountsPassword.resetPassword(token, newPassword);
-      expect(mockedClient.transport.resetPassword.mock.calls[0][0]).toBe(token);
-      expect(mockedClient.transport.resetPassword.mock.calls[0][1]).not.toBe(newPassword);
+      expect(accountsPassword.hashPassword).toBeCalledTimes(1);
+      expect(accountsPassword.hashPassword).toBeCalledWith(newPassword);
+      expect(mockedClient.transport.resetPassword).toBeCalledTimes(1);
+      expect(mockedClient.transport.resetPassword).toBeCalledWith(token, newPassword);
     });
   });
 
@@ -100,8 +112,11 @@ describe('AccountsClientPassword', () => {
     it('should hash password and call transport', async () => {
       const newPassword = 'newPasswordTest';
       await accountsPassword.changePassword(user.password, newPassword);
-      expect(mockedClient.transport.changePassword.mock.calls[0][0]).not.toBe(user.password);
-      expect(mockedClient.transport.changePassword.mock.calls[0][1]).not.toBe(newPassword);
+      expect(accountsPassword.hashPassword).toBeCalledTimes(2);
+      expect(accountsPassword.hashPassword).toHaveBeenNthCalledWith(1, user.password);
+      expect(accountsPassword.hashPassword).toHaveBeenNthCalledWith(2, newPassword);
+      expect(mockedClient.transport.changePassword).toBeCalledTimes(1);
+      expect(mockedClient.transport.changePassword).toBeCalledWith(user.password, newPassword);
     });
   });
 });

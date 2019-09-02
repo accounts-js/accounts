@@ -1,6 +1,6 @@
 {
   "name": "@accounts/database-manager",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "description": "Accounts Database Manager, allow the use of separate databases for session and user",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -35,13 +35,13 @@
   "author": "Elies Lou (Aetherall)",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "24.0.16",
-    "@types/node": "12.6.8",
-    "jest": "24.8.0",
-    "rimraf": "2.6.3"
+    "@types/jest": "24.0.18",
+    "@types/node": "12.7.2",
+    "jest": "24.9.0",
+    "rimraf": "3.0.0"
   },
   "dependencies": {
-    "@accounts/types": "^0.18.0",
+    "@accounts/types": "^0.19.0",
     "tslib": "1.10.0"
   }
 }

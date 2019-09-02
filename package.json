@@ -44,7 +44,7 @@
     "printWidth": 100
   },
   "resolutions": {
-    "@types/node": "12.6.8",
+    "@types/node": "12.7.2",
     "graphql-tools": "4.0.5"
   },
   "renovate": {
@@ -65,13 +65,13 @@
   "devDependencies": {
     "@accounts/tslint-config-accounts": "0.0.9",
     "codecov": "3.5.0",
-    "husky": "3.0.1",
-    "lerna": "2.11.0",
-    "lint-staged": "9.2.1",
+    "husky": "3.0.4",
+    "lerna": "3.16.4",
+    "lint-staged": "9.2.5",
     "opencollective": "1.0.3",
     "prettier": "1.18.2",
     "ts-jest": "24.0.2",
-    "tslint": "5.16.0",
+    "tslint": "5.19.0",
     "typescript": "3.5.3"
   },
   "collective": {

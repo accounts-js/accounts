@@ -70,7 +70,11 @@ export interface DatabaseInterfaceSessions {
     extraData?: object
   ): Promise<string>;
 
-  updateSession(sessionId: string, connection: ConnectionInformations): Promise<void>;
+  updateSession(
+    sessionId: string,
+    connection: ConnectionInformations,
+    newToken?: string
+  ): Promise<void>;
 
   invalidateSession(sessionId: string): Promise<void>;
 

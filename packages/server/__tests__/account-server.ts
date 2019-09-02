@@ -540,7 +540,60 @@ describe('AccountsServer', () => {
         refreshToken: 'newRefreshToken',
       });
       const res = await accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
-      expect(updateSession.mock.calls[0]).toEqual(['456', { ip: 'ip', userAgent: 'user agent' }]);
+      expect(updateSession.mock.calls[0]).toEqual([
+        '456',
+        { ip: 'ip', userAgent: 'user agent' },
+        undefined,
+      ]);
+      expect((res as any).user).toEqual({
+        userId: '123',
+        username: 'username',
+      });
+    });
+
+    it('updates session and returns new tokens and user with new session token', async () => {
+      const updateSession = jest.fn(() => Promise.resolve());
+      const user = {
+        userId: '123',
+        username: 'username',
+      };
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionByToken: () =>
+              Promise.resolve({
+                id: '456',
+                valid: true,
+                userId: '123',
+              }),
+            findUserById: () => Promise.resolve(user),
+            updateSession,
+          } as any,
+          tokenSecret: 'secret1',
+          createNewSessionTokenOnRefresh: true,
+          tokenCreator: {
+            createToken: async () => {
+              return '123';
+            },
+          },
+        },
+        {}
+      );
+      const { accessToken, refreshToken } = accountsServer.createTokens({
+        token: '456',
+        userId: user.userId,
+      });
+      accountsServer.createTokens = () => ({
+        accessToken: 'newAccessToken',
+        refreshToken: 'newRefreshToken',
+      });
+
+      const res = await accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
+      expect(updateSession.mock.calls[0]).toEqual([
+        '456',
+        { ip: 'ip', userAgent: 'user agent' },
+        '123',
+      ]);
       expect((res as any).user).toEqual({
         userId: '123',
         username: 'username',
