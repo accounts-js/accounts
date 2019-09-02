@@ -50,9 +50,9 @@
     "ts-node": "8.3.0"
   },
   "peerDependencies": {
-    "@accounts/password": "^0.9.3",
-    "@accounts/server": "^0.9.3",
-    "@accounts/types": "^0.9.3",
+    "@accounts/password": "^0.19.0",
+    "@accounts/server": "^0.19.0",
+    "@accounts/types": "^0.19.0",
     "@graphql-modules/core": "0.7.9",
     "graphql-tag": "^2.10.0",
     "graphql-tools": "^4.0.5"
