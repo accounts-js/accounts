@@ -1,0 +1,14 @@
+overwrite: true
+schema: ../graphql-api/src/schema.ts
+require: ts-node/register/transpile-only
+generates:
+  ./src/type-graphql.ts:
+    config:
+      noNamespaces: true
+      declarationType:
+        type: "abstract class"
+      decoratorName:
+        type: "InterfaceType"
+    plugins:
+      - add: /* tslint:disable */
+      - typescript-type-graphql

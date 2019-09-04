@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./lib",
+    "noUnusedParameters": false,
+    "noUnusedLocals": false,
+    "noImplicitAny": false,
+    "experimentalDecorators": true,
+    "importHelpers": true
+  },
+  "exclude": ["node_modules", "__tests__", "lib"]
+}
