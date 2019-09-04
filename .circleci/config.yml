@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: node:12-alpine
+      - image: circleci/node:11
       - image: circleci/mongo:3
       - image: circleci/redis:4
       - image: circleci/postgres:10.9
