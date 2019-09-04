@@ -6,4 +6,5 @@ export interface User {
   id: string;
   services?: object;
   deactivated: boolean;
+  mfaChallenges?: string[];
 }

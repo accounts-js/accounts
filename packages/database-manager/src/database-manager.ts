@@ -1,15 +1,21 @@
-import { DatabaseInterface, DatabaseInterfaceSessions } from '@accounts/types';
+import {
+  DatabaseInterface,
+  DatabaseInterfaceSessions,
+  DatabaseInterfaceMfaLoginAttempts,
+} from '@accounts/types';
 
 import { Configuration } from './types/configuration';
 
 export class DatabaseManager implements DatabaseInterface {
   private userStorage: DatabaseInterface;
   private sessionStorage: DatabaseInterface | DatabaseInterfaceSessions;
+  private mfaLoginAttemptsStorage: DatabaseInterface | DatabaseInterfaceMfaLoginAttempts;
 
   constructor(configuration: Configuration) {
     this.validateConfiguration(configuration);
     this.userStorage = configuration.userStorage;
     this.sessionStorage = configuration.sessionStorage;
+    this.mfaLoginAttemptsStorage = configuration.mfaLoginAttemptsStorage;
   }
 
   private validateConfiguration(configuration: Configuration): void {
@@ -153,5 +159,17 @@ export class DatabaseManager implements DatabaseInterface {
   // Return the setResetPassword function from the userStorage
   public get setUserDeactivated(): DatabaseInterface['setUserDeactivated'] {
     return this.userStorage.setUserDeactivated.bind(this.userStorage);
+  }
+
+  public get createMfaLoginAttempt(): DatabaseInterface['createMfaLoginAttempt'] {
+    return this.mfaLoginAttemptsStorage.createMfaLoginAttempt.bind(this.mfaLoginAttemptsStorage);
+  }
+
+  public get getMfaLoginAttempt(): DatabaseInterface['getMfaLoginAttempt'] {
+    return this.mfaLoginAttemptsStorage.getMfaLoginAttempt.bind(this.mfaLoginAttemptsStorage);
+  }
+
+  public get removeMfaLoginAttempt(): DatabaseInterface['removeMfaLoginAttempt'] {
+    return this.mfaLoginAttemptsStorage.removeMfaLoginAttempt.bind(this.mfaLoginAttemptsStorage);
   }
 }

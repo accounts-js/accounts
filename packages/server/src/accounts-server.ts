@@ -4,6 +4,7 @@ import * as Emittery from 'emittery';
 import {
   User,
   LoginResult,
+  MFALoginResult,
   Tokens,
   Session,
   ImpersonationResult,
@@ -11,9 +12,15 @@ import {
   DatabaseInterface,
   AuthenticationService,
   ConnectionInformations,
+  MfaLoginAttempt,
 } from '@accounts/types';
 
-import { generateAccessToken, generateRefreshToken, generateRandomToken } from './utils/tokens';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  generateRandomToken,
+  hashToken,
+} from './utils/tokens';
 
 import { emailTemplates, sendMail } from './utils/email';
 import { ServerHooks } from './utils/server-hooks';
@@ -94,7 +101,7 @@ Please change it with a strong random token.`);
     serviceName: string,
     params: any,
     infos: ConnectionInformations
-  ): Promise<LoginResult> {
+  ): Promise<LoginResult | MFALoginResult> {
     const hooksInfo: any = {
       // The service name, such as “password” or “twitter”.
       service: serviceName,
@@ -104,11 +111,22 @@ Please change it with a strong random token.`);
       params,
     };
     try {
-      if (!this.services[serviceName]) {
+      if (serviceName !== 'mfa' && !this.services[serviceName]) {
         throw new Error(`No service with the name ${serviceName} was registered.`);
       }
 
-      const user: User | null = await this.services[serviceName].authenticate(params);
+      let user: User | null;
+
+      if (serviceName !== 'mfa') {
+        user = await this.services[serviceName].authenticate(params);
+      } else {
+        user = await this.getUserFromMfaToken({ skipValidation: false, ...params });
+
+        if (user) {
+          await this.db.removeMfaLoginAttempt(params.mfaToken);
+        }
+      }
+
       hooksInfo.user = user;
       if (!user) {
         throw new Error(`Service ${serviceName} was not able to authenticate user`);
@@ -119,6 +137,11 @@ Please change it with a strong random token.`);
 
       // Let the user validate the login attempt
       await this.hooks.emitSerial(ServerHooks.ValidateLogin, hooksInfo);
+
+      if (serviceName !== 'mfa' && user.mfaChallenges && user.mfaChallenges.length > 0) {
+        return this.createMfaLoginProcess(user);
+      }
+
       const loginResult = await this.loginWithUser(user, infos);
       this.hooks.emit(ServerHooks.LoginSuccess, hooksInfo);
       return loginResult;
@@ -126,6 +149,32 @@ Please change it with a strong random token.`);
       this.hooks.emit(ServerHooks.LoginError, { ...hooksInfo, error: err });
       throw err;
     }
+  }
+
+  public async performMfaChallenge(
+    challenge: string,
+    mfaToken: string,
+    params: any
+  ): Promise<string> {
+    const userFromMfa = await this.getUserFromMfaToken({ skipValidation: true, mfaToken });
+
+    if (
+      !userFromMfa ||
+      !userFromMfa.mfaChallenges ||
+      userFromMfa.mfaChallenges.indexOf(challenge) === -1
+    ) {
+      throw new Error('Performing the mfa challenge is not available');
+    }
+
+    const userFromChallenge: User | null = await this.services[challenge].authenticate(params);
+
+    if (!userFromChallenge || userFromMfa.id !== userFromChallenge.id) {
+      throw new Error(`Service ${challenge} was not able to authenticate user`);
+    }
+
+    const mfaLoginAttempt = (await this.db.getMfaLoginAttempt(mfaToken)) as MfaLoginAttempt;
+
+    return mfaLoginAttempt.loginToken;
   }
 
   /**
@@ -527,6 +576,40 @@ Please change it with a strong random token.`);
     return this.options.tokenCreator
       ? this.options.tokenCreator.createToken(user)
       : generateRandomToken();
+  }
+
+  private async getUserFromMfaToken({
+    mfaToken,
+    loginToken,
+    skipValidation = false,
+  }: {
+    mfaToken: string;
+    loginToken?: string;
+    skipValidation: boolean;
+  }): Promise<User | null> {
+    const loginAttempt = await this.db.getMfaLoginAttempt(mfaToken);
+
+    if (!loginAttempt) {
+      return null;
+    }
+
+    if (!skipValidation && loginAttempt.loginToken !== loginToken) {
+      return null;
+    }
+
+    return this.db.findUserById(loginAttempt.userId);
+  }
+
+  private async createMfaLoginProcess(user: User): Promise<MFALoginResult> {
+    const loginToken = generateRandomToken();
+    const mfaToken = hashToken(loginToken);
+
+    await this.db.createMfaLoginAttempt(mfaToken, loginToken, user.id);
+
+    return {
+      mfaToken,
+      challenges: user.mfaChallenges as string[],
+    };
   }
 }
 

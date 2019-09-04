@@ -106,11 +106,24 @@ export default class Database {
   public setUserDeactivated() {
     return this.name;
   }
+
+  public createMfaLoginAttempt() {
+    return this.name;
+  }
+
+  public getMfaLoginAttempt() {
+    return this.name;
+  }
+
+  public removeMfaLoginAttempt() {
+    return this.name;
+  }
 }
 
 const databaseManager = new DatabaseManager({
   userStorage: new Database('userStorage'),
   sessionStorage: new Database('sessionStorage'),
+  mfaLoginAttemptsStorage: new Database('mfaLoginAttemptsStorage'),
 });
 
 describe('DatabaseManager configuration', () => {
@@ -125,6 +138,10 @@ describe('DatabaseManager configuration', () => {
   });
 
   it('should throw if no sessionStorage specified', () => {
+    expect(() => (databaseManager as any).validateConfiguration({ userStorage: true })).toThrow();
+  });
+
+  it('should throw if no mfaLoginAttemptsStorage specified', () => {
     expect(() => (databaseManager as any).validateConfiguration({ userStorage: true })).toThrow();
   });
 
@@ -243,5 +260,19 @@ describe('DatabaseManager', () => {
 
   it('setUserDeactivated should be called on sessionStorage', () => {
     expect(databaseManager.setUserDeactivated('userId', true)).toBe('userStorage');
+  });
+
+  it('createMfaLoginAttempt should be called on mfaLoginAttemptsStorage', () => {
+    expect(databaseManager.createMfaLoginAttempt('mfaToken', 'loginToken', 'userId')).toBe(
+      'mfaLoginAttemptsStorage'
+    );
+  });
+
+  it('getMfaLoginAttempt should be called on mfaLoginAttemptsStorage', () => {
+    expect(databaseManager.getMfaLoginAttempt('mfaToken')).toBe('mfaLoginAttemptsStorage');
+  });
+
+  it('removeMfaLoginAttempt should be called on mfaLoginAttemptsStorage', () => {
+    expect(databaseManager.removeMfaLoginAttempt('mfaToken')).toBe('mfaLoginAttemptsStorage');
   });
 });
