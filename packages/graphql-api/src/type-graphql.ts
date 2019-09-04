@@ -11,72 +11,33 @@ export type Scalars = {
   Float: number;
 };
 
-@TypeGraphQL.InterfaceType()
-export class User {
-  __typename?: 'User';
+export type AuthenticateParamsInput = {
+  access_token?: Maybe<Scalars['String']>;
+  access_token_secret?: Maybe<Scalars['String']>;
+  provider?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  user?: Maybe<UserInput>;
+  code?: Maybe<Scalars['String']>;
+};
 
-  @TypeGraphQL.Field(type => TypeGraphQL.ID)
-  id!: Scalars['ID'];
+export type CreateUserInput = {
+  username?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+};
 
-  @TypeGraphQL.Field(type => [EmailRecord], { nullable: true })
-  emails!: Maybe<Array<EmailRecord>>;
+@TypeGraphQL.ObjectType()
+export class EmailRecord {
+  __typename?: 'EmailRecord';
 
   @TypeGraphQL.Field(type => String, { nullable: true })
-  username!: Maybe<Scalars['String']>;
+  address!: Maybe<Scalars['String']>;
+
+  @TypeGraphQL.Field(type => Boolean, { nullable: true })
+  verified!: Maybe<Scalars['Boolean']>;
 }
 
-@TypeGraphQL.InterfaceType()
-export class TwoFactorSecretKey {
-  __typename?: 'TwoFactorSecretKey';
-
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  ascii!: Maybe<Scalars['String']>;
-
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  base32!: Maybe<Scalars['String']>;
-
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  hex!: Maybe<Scalars['String']>;
-
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  qr_code_ascii!: Maybe<Scalars['String']>;
-
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  qr_code_hex!: Maybe<Scalars['String']>;
-
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  qr_code_base32!: Maybe<Scalars['String']>;
-
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  google_auth_qr!: Maybe<Scalars['String']>;
-
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  otpauth_url!: Maybe<Scalars['String']>;
-}
-
-@TypeGraphQL.InterfaceType()
-export class Tokens {
-  __typename?: 'Tokens';
-
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  refreshToken!: Maybe<Scalars['String']>;
-
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  accessToken!: Maybe<Scalars['String']>;
-}
-
-@TypeGraphQL.InterfaceType()
-export class LoginResult {
-  __typename?: 'LoginResult';
-
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  sessionId!: Maybe<Scalars['String']>;
-
-  @TypeGraphQL.Field(type => Tokens, { nullable: true })
-  tokens!: Maybe<Tokens>;
-}
-
-@TypeGraphQL.InterfaceType()
+@TypeGraphQL.ObjectType()
 export class ImpersonateReturn {
   __typename?: 'ImpersonateReturn';
 
@@ -90,48 +51,15 @@ export class ImpersonateReturn {
   user!: Maybe<User>;
 }
 
-@TypeGraphQL.InterfaceType()
-export class EmailRecord {
-  __typename?: 'EmailRecord';
+@TypeGraphQL.ObjectType()
+export class LoginResult {
+  __typename?: 'LoginResult';
 
   @TypeGraphQL.Field(type => String, { nullable: true })
-  address!: Maybe<Scalars['String']>;
+  sessionId!: Maybe<Scalars['String']>;
 
-  @TypeGraphQL.Field(type => Boolean, { nullable: true })
-  verified!: Maybe<Scalars['Boolean']>;
-}
-
-@TypeGraphQL.InputType()
-export class AuthenticateParamsInput {
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  access_token!: Maybe<Scalars['String']>;
-
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  access_token_secret!: Maybe<Scalars['String']>;
-
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  provider!: Maybe<Scalars['String']>;
-
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  password!: Maybe<Scalars['String']>;
-
-  @TypeGraphQL.Field(type => UserInput, { nullable: true })
-  user!: Maybe<UserInput>;
-
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  code!: Maybe<Scalars['String']>;
-}
-
-@TypeGraphQL.InputType()
-export class CreateUserInput {
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  username!: Maybe<Scalars['String']>;
-
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  email!: Maybe<Scalars['String']>;
-
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  password!: Maybe<Scalars['String']>;
+  @TypeGraphQL.Field(type => Tokens, { nullable: true })
+  tokens!: Maybe<Tokens>;
 }
 
 export class Mutation {
@@ -174,89 +102,55 @@ export class Mutation {
   authenticate!: Maybe<LoginResult>;
 }
 
-@TypeGraphQL.ArgsType()
-export class MutationCreateUserArgs {
-  @TypeGraphQL.Field(type => CreateUserInput)
-  user!: FixDecorator<CreateUserInput>;
-}
+export type MutationCreateUserArgs = {
+  user: CreateUserInput;
+};
 
-@TypeGraphQL.ArgsType()
-export class MutationVerifyEmailArgs {
-  @TypeGraphQL.Field(type => String)
-  token!: Scalars['String'];
-}
+export type MutationVerifyEmailArgs = {
+  token: Scalars['String'];
+};
 
-@TypeGraphQL.ArgsType()
-export class MutationResetPasswordArgs {
-  @TypeGraphQL.Field(type => String)
-  token!: Scalars['String'];
+export type MutationResetPasswordArgs = {
+  token: Scalars['String'];
+  newPassword: Scalars['String'];
+};
 
-  @TypeGraphQL.Field(type => String)
-  newPassword!: Scalars['String'];
-}
+export type MutationSendVerificationEmailArgs = {
+  email: Scalars['String'];
+};
 
-@TypeGraphQL.ArgsType()
-export class MutationSendVerificationEmailArgs {
-  @TypeGraphQL.Field(type => String)
-  email!: Scalars['String'];
-}
+export type MutationSendResetPasswordEmailArgs = {
+  email: Scalars['String'];
+};
 
-@TypeGraphQL.ArgsType()
-export class MutationSendResetPasswordEmailArgs {
-  @TypeGraphQL.Field(type => String)
-  email!: Scalars['String'];
-}
+export type MutationChangePasswordArgs = {
+  oldPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+};
 
-@TypeGraphQL.ArgsType()
-export class MutationChangePasswordArgs {
-  @TypeGraphQL.Field(type => String)
-  oldPassword!: Scalars['String'];
+export type MutationTwoFactorSetArgs = {
+  secret: TwoFactorSecretKeyInput;
+  code: Scalars['String'];
+};
 
-  @TypeGraphQL.Field(type => String)
-  newPassword!: Scalars['String'];
-}
+export type MutationTwoFactorUnsetArgs = {
+  code: Scalars['String'];
+};
 
-@TypeGraphQL.ArgsType()
-export class MutationTwoFactorSetArgs {
-  @TypeGraphQL.Field(type => TwoFactorSecretKeyInput)
-  secret!: FixDecorator<TwoFactorSecretKeyInput>;
+export type MutationImpersonateArgs = {
+  accessToken: Scalars['String'];
+  username: Scalars['String'];
+};
 
-  @TypeGraphQL.Field(type => String)
-  code!: Scalars['String'];
-}
+export type MutationRefreshTokensArgs = {
+  accessToken: Scalars['String'];
+  refreshToken: Scalars['String'];
+};
 
-@TypeGraphQL.ArgsType()
-export class MutationTwoFactorUnsetArgs {
-  @TypeGraphQL.Field(type => String)
-  code!: Scalars['String'];
-}
-
-@TypeGraphQL.ArgsType()
-export class MutationImpersonateArgs {
-  @TypeGraphQL.Field(type => String)
-  accessToken!: Scalars['String'];
-
-  @TypeGraphQL.Field(type => String)
-  username!: Scalars['String'];
-}
-
-@TypeGraphQL.ArgsType()
-export class MutationRefreshTokensArgs {
-  @TypeGraphQL.Field(type => String)
-  accessToken!: Scalars['String'];
-
-  @TypeGraphQL.Field(type => String)
-  refreshToken!: Scalars['String'];
-}
-
-@TypeGraphQL.ArgsType()
-export class MutationAuthenticateArgs {
-  @TypeGraphQL.Field(type => String)
-  serviceName!: Scalars['String'];
-
-  @TypeGraphQL.Field(type => AuthenticateParamsInput)
-  params!: FixDecorator<AuthenticateParamsInput>;
-}
+export type MutationAuthenticateArgs = {
+  serviceName: Scalars['String'];
+  params: AuthenticateParamsInput;
+};
 
 export class Query {
   __typename?: 'Query';
@@ -268,8 +162,21 @@ export class Query {
   getUser!: Maybe<User>;
 }
 
-@TypeGraphQL.InputType()
-export class TwoFactorSecretKeyInput {
+@TypeGraphQL.ObjectType()
+export class Tokens {
+  __typename?: 'Tokens';
+
+  @TypeGraphQL.Field(type => String, { nullable: true })
+  refreshToken!: Maybe<Scalars['String']>;
+
+  @TypeGraphQL.Field(type => String, { nullable: true })
+  accessToken!: Maybe<Scalars['String']>;
+}
+
+@TypeGraphQL.ObjectType()
+export class TwoFactorSecretKey {
+  __typename?: 'TwoFactorSecretKey';
+
   @TypeGraphQL.Field(type => String, { nullable: true })
   ascii!: Maybe<Scalars['String']>;
 
@@ -295,14 +202,33 @@ export class TwoFactorSecretKeyInput {
   otpauth_url!: Maybe<Scalars['String']>;
 }
 
-@TypeGraphQL.InputType()
-export class UserInput {
-  @TypeGraphQL.Field(type => TypeGraphQL.ID, { nullable: true })
-  id!: Maybe<Scalars['ID']>;
+export type TwoFactorSecretKeyInput = {
+  ascii?: Maybe<Scalars['String']>;
+  base32?: Maybe<Scalars['String']>;
+  hex?: Maybe<Scalars['String']>;
+  qr_code_ascii?: Maybe<Scalars['String']>;
+  qr_code_hex?: Maybe<Scalars['String']>;
+  qr_code_base32?: Maybe<Scalars['String']>;
+  google_auth_qr?: Maybe<Scalars['String']>;
+  otpauth_url?: Maybe<Scalars['String']>;
+};
 
-  @TypeGraphQL.Field(type => String, { nullable: true })
-  email!: Maybe<Scalars['String']>;
+@TypeGraphQL.ObjectType()
+export class User {
+  __typename?: 'User';
+
+  @TypeGraphQL.Field(type => TypeGraphQL.ID)
+  id!: Scalars['ID'];
+
+  @TypeGraphQL.Field(type => [EmailRecord], { nullable: true })
+  emails!: Maybe<Array<EmailRecord>>;
 
   @TypeGraphQL.Field(type => String, { nullable: true })
   username!: Maybe<Scalars['String']>;
 }
+
+export type UserInput = {
+  id?: Maybe<Scalars['ID']>;
+  email?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+};
