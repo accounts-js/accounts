@@ -13,10 +13,10 @@ generates:
   ./src/type-graphql.ts:
     config:
       noNamespaces: true
-#      declarationType:
-#        type: "abstract class"
-#      decoratorName:
-#        type: "InterfaceType"
+      declarationType:
+        type: "abstract class"
+      decoratorName:
+        type: "InterfaceType"
     plugins:
       - add: /* tslint:disable */
       - typescript-type-graphql

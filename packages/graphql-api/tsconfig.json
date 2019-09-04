@@ -5,6 +5,7 @@
     "outDir": "./lib",
     "noUnusedParameters": false,
     "noUnusedLocals": false,
+    "noImplicitAny": false,
     "experimentalDecorators": true,
     "importHelpers": true
   },
