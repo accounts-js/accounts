@@ -29,6 +29,6 @@
     "@types/node": "12.7.4",
     "nodemon": "1.19.2",
     "ts-node": "8.3.0",
-    "typescript": "3.6.2"
+    "typescript": "3.5.3"
   }
 }

@@ -72,7 +72,7 @@
     "prettier": "1.18.2",
     "ts-jest": "24.0.2",
     "tslint": "5.19.0",
-    "typescript": "3.6.2"
+    "typescript": "3.5.3"
   },
   "collective": {
     "type": "opencollective",
