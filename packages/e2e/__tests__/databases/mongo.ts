@@ -15,7 +15,7 @@ export class DatabaseTest implements DatabaseTestInterface {
 
   public async start() {
     (mongoose as any).Promise = global.Promise;
-    await mongoose.connect(connectionString);
+    await mongoose.connect(connectionString, { useNewUrlParser: true });
     await mongoose.connection.dropDatabase();
   }
 
