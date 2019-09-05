@@ -10,7 +10,7 @@ Three pieces need to be configured to use accounts-js in your application:
 
 #### 1. Transports
 
-Since accounts-js is very flexible, it can be used with multiple transports. For now we provide packages for both [GraphQL](/docs/transports/graphql) and [REST](/docs/transports/rest).
+Since accounts-js is very flexible, it can be used with multiple transports. For now we provide packages for both [GraphQL](/docs/transports/graphql) and [REST](/docs/transports/rest-express).
 
 #### 2. Databases
 
