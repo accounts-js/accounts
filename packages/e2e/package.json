@@ -25,7 +25,7 @@
     "@types/express": "4.17.1",
     "@types/jest": "24.0.18",
     "@types/lodash": "4.14.136",
-    "@types/mongoose": "5.5.11",
+    "@types/mongoose": "5.5.17",
     "@types/node": "12.7.4",
     "@types/node-fetch": "2.5.0",
     "jest": "24.9.0",
