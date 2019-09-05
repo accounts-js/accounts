@@ -44,7 +44,7 @@
     "printWidth": 100
   },
   "resolutions": {
-    "@types/node": "12.7.2",
+    "@types/node": "12.7.4",
     "graphql-tools": "4.0.5"
   },
   "renovate": {
@@ -65,8 +65,8 @@
   "devDependencies": {
     "@accounts/tslint-config-accounts": "0.0.9",
     "codecov": "3.5.0",
-    "husky": "3.0.4",
-    "lerna": "3.16.4",
+    "husky": "3.0.5",
+    "lerna": "2.11.0",
     "lint-staged": "9.2.5",
     "opencollective": "1.0.3",
     "prettier": "1.18.2",
