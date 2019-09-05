@@ -53,7 +53,7 @@
     "@accounts/password": "^0.9.3",
     "@accounts/server": "^0.9.3",
     "@accounts/types": "^0.9.3",
-    "@graphql-modules/core": "0.7.9",
+    "@graphql-modules/core": "0.7.11",
     "graphql-tag": "^2.10.0",
     "graphql-tools": "^4.0.5"
   },
