@@ -21,7 +21,7 @@ const features = [
       <>
         Since accounts-js is very flexible, it can be used with multiple transports. For now we
         provide packages for both <a href="/docs/transports/graphql">GraphQL</a> and{' '}
-        <a href="/docs/transports/rest">REST</a>.
+        <a href="/docs/transports/rest-express">REST</a>.
       </>
     ),
   },
