@@ -15,6 +15,7 @@ import { AuthenticatedDirective } from '../../utils/authenticated-directive';
 import { context } from '../../utils';
 import AccountsPassword from '@accounts/password';
 import { mergeTypeDefs } from 'graphql-toolkit';
+import GraphQLJSON from 'graphql-type-json';
 
 export interface AccountsRequest {
   req: IncomingMessage;
@@ -61,6 +62,8 @@ export const AccountsModule: GraphQLModule<
     ),
   resolvers: ({ config }) =>
     ({
+      // Inject JSON custom scalar
+      JSON: GraphQLJSON,
       [config.rootQueryName || 'Query']: Query,
       [config.rootMutationName || 'Mutation']: Mutation,
       User: UserResolvers,

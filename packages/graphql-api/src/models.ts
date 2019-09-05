@@ -27,20 +27,6 @@ export interface TwoFactorSecretKeyInput {
   otpauth_url?: Maybe<string>;
 }
 
-export interface AuthenticateParamsInput {
-  access_token?: Maybe<string>;
-
-  access_token_secret?: Maybe<string>;
-
-  provider?: Maybe<string>;
-
-  password?: Maybe<string>;
-
-  user?: Maybe<UserInput>;
-
-  code?: Maybe<string>;
-}
-
 export interface UserInput {
   id?: Maybe<string>;
 
@@ -48,6 +34,12 @@ export interface UserInput {
 
   username?: Maybe<string>;
 }
+
+export type Json = any;
+
+// ====================================================
+// Scalars
+// ====================================================
 
 // ====================================================
 // Types
@@ -184,10 +176,10 @@ export interface RefreshTokensMutationArgs {
 export interface AuthenticateMutationArgs {
   serviceName: string;
 
-  params: AuthenticateParamsInput;
+  params: Json;
 }
 
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 
 export type Resolver<Result, Parent = {}, TContext = {}, Args = {}> = (
   parent: Parent,
@@ -498,7 +490,7 @@ export type MutationAuthenticateResolver<
 export interface MutationAuthenticateArgs {
   serviceName: string;
 
-  params: AuthenticateParamsInput;
+  params: Json;
 }
 
 export interface LoginResultResolvers<TContext = {}, TypeParent = LoginResult> {
@@ -592,6 +584,10 @@ export interface DeprecatedDirectiveArgs {
   reason?: string;
 }
 
+export interface JSONScalarConfig extends GraphQLScalarTypeConfig<Json, any> {
+  name: 'JSON';
+}
+
 export type IResolvers<TContext = {}> = {
   Query?: QueryResolvers<TContext>;
   TwoFactorSecretKey?: TwoFactorSecretKeyResolvers<TContext>;
@@ -601,6 +597,7 @@ export type IResolvers<TContext = {}> = {
   LoginResult?: LoginResultResolvers<TContext>;
   Tokens?: TokensResolvers<TContext>;
   ImpersonateReturn?: ImpersonateReturnResolvers<TContext>;
+  Json?: GraphQLScalarType;
 } & { [typeName: string]: never };
 
 export type IDirectiveResolvers<Result> = {

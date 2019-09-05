@@ -9,6 +9,6 @@ export default (config: AccountsModuleConfig) => gql`
 
     # Example: Login with password
     # authenticate(serviceName: "password", params: {password: "<pw>", user: {email: "<email>"}})
-    authenticate(serviceName: String!, params: AuthenticateParamsInput!): LoginResult
+    authenticate(serviceName: String!, params: JSON!): LoginResult
   }
 `;
