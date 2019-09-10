@@ -9,7 +9,14 @@ module.exports = {
   docs: {
     Introduction: ['introduction', 'contributing'],
     'Getting started': ['getting-started', 'email'],
-    Transports: ['transports/graphql', 'transports/rest'],
+    Transports: [
+      'transports/graphql',
+      {
+        type: 'category',
+        label: 'Rest',
+        items: ['transports/rest-express', 'transports/rest-client'],
+      },
+    ],
     Databases: ['databases/mongo', 'databases/redis', 'databases/typeorm'],
     Strategies: [
       {
