@@ -182,6 +182,20 @@ describe('Accounts', () => {
       expect(mockTransport.refreshTokens).not.toHaveBeenCalledWith();
     });
 
+    it('should call transport.refreshTokens if force is required and set the tokens', async () => {
+      (isTokenExpired as jest.Mock).mockImplementationOnce(() => false);
+      (isTokenExpired as jest.Mock).mockImplementationOnce(() => false);
+      await accountsClient.setTokens(tokens);
+      const result = await accountsClient.refreshSession(true);
+      expect(result).toEqual(loggedInResponse.tokens);
+      expect(isTokenExpired).toHaveBeenCalledWith(tokens.accessToken);
+      expect(mockTransport.refreshTokens).toHaveBeenCalledWith(
+        tokens.accessToken,
+        tokens.refreshToken
+      );
+      expect(localStorage.setItem).toHaveBeenCalledTimes(4);
+    });
+
     it('should clear the tokens is refreshToken is expired', async () => {
       (isTokenExpired as jest.Mock).mockImplementationOnce(() => false);
       (isTokenExpired as jest.Mock).mockImplementationOnce(() => true);

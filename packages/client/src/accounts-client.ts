@@ -112,14 +112,14 @@ export class AccountsClient {
    * Refresh the user session
    * If the tokens have expired try to refresh them
    */
-  public async refreshSession(): Promise<Tokens | null> {
+  public async refreshSession(force: boolean = false): Promise<Tokens | null> {
     const tokens = await this.getTokens();
     if (tokens) {
       try {
         const isAccessTokenExpired = isTokenExpired(tokens.accessToken);
         const isRefreshTokenExpired = isTokenExpired(tokens.refreshToken);
         // See if accessToken is expired and refreshToken is not
-        if (isAccessTokenExpired && !isRefreshTokenExpired) {
+        if ((force || isAccessTokenExpired) && !isRefreshTokenExpired) {
           // Request a new token pair
           const refreshedSession = await this.transport.refreshTokens(
             tokens.accessToken,

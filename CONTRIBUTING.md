@@ -22,6 +22,8 @@ The Accounts project was intended - since its inception - to be a community main
 - Link together all the packages: `yarn setup`
 - Watch the packages for changes and recompile: `yarn start`
 - If you want to use the accounts project in your own project, use `yarn link @accounts/<name of package>` within your project.
+- Run `docker-compose up -d` to start database services required for tests.
+- Run `yarn test` to run all the tests.
 
 ## Pull Requests
 

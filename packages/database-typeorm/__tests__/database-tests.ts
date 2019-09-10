@@ -1,5 +1,6 @@
-import { AccountsTypeorm } from '../src';
 import { Connection, createConnection } from 'typeorm';
+
+import { AccountsTypeorm } from '../src';
 import { User } from '../src/entity/User';
 import { UserEmail } from '../src/entity/UserEmail';
 import { UserService } from '../src/entity/UserService';
@@ -35,7 +36,7 @@ export class DatabaseTests {
       host: 'localhost',
       port: 5432,
       entities: [User, UserEmail, UserService, UserSession],
-      username: 'accounts-js',
+      username: 'postgres',
       password: '',
       database,
       synchronize: true,
