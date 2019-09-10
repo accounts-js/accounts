@@ -23,6 +23,7 @@ const tokens = {
 
 const mockTransport = {
   loginWithService: jest.fn(() => Promise.resolve(loggedInResponse)),
+  authenticateWithService: jest.fn(() => Promise.resolve(true)),
   logout: jest.fn(() => Promise.resolve()),
   refreshTokens: jest.fn(() => Promise.resolve(loggedInResponse)),
   sendResetPasswordEmail: jest.fn(() => Promise.resolve()),
@@ -149,6 +150,20 @@ describe('Accounts', () => {
       expect(localStorage.getItem('accounts:refreshToken')).toEqual(
         loggedInResponse.tokens.refreshToken
       );
+    });
+  });
+
+  describe('authenticateWithService', () => {
+    it('calls transport', async () => {
+      await accountsClient.authenticateWithService('password', {
+        username: 'user',
+        password: 'password',
+      });
+      expect(mockTransport.authenticateWithService).toHaveBeenCalledTimes(1);
+      expect(mockTransport.authenticateWithService).toHaveBeenCalledWith('password', {
+        username: 'user',
+        password: 'password',
+      });
     });
   });
 
