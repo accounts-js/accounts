@@ -115,6 +115,8 @@ export interface Mutation {
   logout?: Maybe<boolean>;
 
   authenticate?: Maybe<LoginResult>;
+
+  authenticateWithoutSessionCreation?: Maybe<boolean>;
 }
 
 export interface LoginResult {
@@ -182,6 +184,11 @@ export interface RefreshTokensMutationArgs {
   refreshToken: string;
 }
 export interface AuthenticateMutationArgs {
+  serviceName: string;
+
+  params: AuthenticateParamsInput;
+}
+export interface AuthenticateWithoutSessionCreationMutationArgs {
   serviceName: string;
 
   params: AuthenticateParamsInput;
@@ -380,6 +387,12 @@ export interface MutationResolvers<TContext = {}, TypeParent = {}> {
   logout?: MutationLogoutResolver<Maybe<boolean>, TypeParent, TContext>;
 
   authenticate?: MutationAuthenticateResolver<Maybe<LoginResult>, TypeParent, TContext>;
+
+  authenticateWithoutSessionCreation?: MutationAuthenticateWithoutSessionCreationResolver<
+    Maybe<boolean>,
+    TypeParent,
+    TContext
+  >;
 }
 
 export type MutationCreateUserResolver<R = Maybe<string>, Parent = {}, TContext = {}> = Resolver<
@@ -496,6 +509,17 @@ export type MutationAuthenticateResolver<
   TContext = {}
 > = Resolver<R, Parent, TContext, MutationAuthenticateArgs>;
 export interface MutationAuthenticateArgs {
+  serviceName: string;
+
+  params: AuthenticateParamsInput;
+}
+
+export type MutationAuthenticateWithoutSessionCreationResolver<
+  R = Maybe<boolean>,
+  Parent = {},
+  TContext = {}
+> = Resolver<R, Parent, TContext, MutationAuthenticateWithoutSessionCreationArgs>;
+export interface MutationAuthenticateWithoutSessionCreationArgs {
   serviceName: string;
 
   params: AuthenticateParamsInput;

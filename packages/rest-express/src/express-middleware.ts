@@ -8,6 +8,7 @@ import { getUser } from './endpoints/get-user';
 import { impersonate } from './endpoints/impersonate';
 import { logout } from './endpoints/logout';
 import { serviceAuthenticate } from './endpoints/service-authenticate';
+import { serviceAuthenticateWithoutSessionCreation } from './endpoints/service-authenticate-without-session-creation';
 import { registerPassword } from './endpoints/password/register';
 import { twoFactorSecret, twoFactorSet, twoFactorUnset } from './endpoints/password/two-factor';
 import { changePassword } from './endpoints/password/change-password';
@@ -40,6 +41,11 @@ const accountsExpress = (
   router.post(`${path}/refreshTokens`, refreshAccessToken(accountsServer));
 
   router.post(`${path}/logout`, userLoader(accountsServer), logout(accountsServer));
+
+  router.post(
+    `${path}/:service/authenticateWithoutSessionCreation`,
+    serviceAuthenticateWithoutSessionCreation(accountsServer)
+  );
 
   router.post(`${path}/:service/authenticate`, serviceAuthenticate(accountsServer));
 
