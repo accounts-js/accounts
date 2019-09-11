@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { randomBytes } from 'crypto';
 import { DatabaseTests } from './database-tests';
 import { AccountsTypeorm } from '../src/typeorm';
-
+import { MfaLoginAttempt } from '../src/entity/MfaLoginAttempt';
 const databaseTests = new DatabaseTests();
 
 const generateRandomToken = (length: number = 43): string => randomBytes(length).toString('hex');
@@ -569,6 +569,69 @@ describe('AccountsTypeorm', () => {
       const retUser = await databaseTests.database.findUserById(userId);
       expect(retUser!.deactivated).toBeTruthy();
       expect((retUser as any).createdAt).not.toEqual((retUser as any).updatedAt);
+    });
+  });
+
+  describe('createMfaLoginAttempt', () => {
+    it('should create mfa login attempt', async () => {
+      const mfaToken = generateRandomToken();
+      const loginToken = generateRandomToken();
+      const userId = '123';
+
+      await databaseTests.database.createMfaLoginAttempt(mfaToken, loginToken, userId);
+
+      const resFromDb = await databaseTests
+        .connection!.getRepository(MfaLoginAttempt)
+        .findOne(mfaToken);
+
+      expect(resFromDb).toEqual({
+        id: mfaToken,
+        mfaToken,
+        loginToken,
+        userId,
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      });
+    });
+  });
+
+  describe('removeMfaLoginAttempt', () => {
+    it('should remove mfa login attempt', async () => {
+      const entity: any = {
+        mfaToken: generateRandomToken(),
+        loginToken: generateRandomToken(),
+        userId: '123',
+      };
+
+      entity.id = entity.mfaToken;
+
+      await databaseTests.connection!.getRepository(MfaLoginAttempt).save(entity);
+
+      await databaseTests.database.removeMfaLoginAttempt(entity.mfaToken);
+
+      const resFromDb = await databaseTests
+        .connection!.getRepository(MfaLoginAttempt)
+        .findOne(entity.mfaToken);
+
+      expect(resFromDb).toBeUndefined();
+    });
+  });
+
+  describe('getMfaLoginAttempt', () => {
+    it('should return mfa login attempt', async () => {
+      const entity: any = {
+        mfaToken: generateRandomToken(),
+        loginToken: generateRandomToken(),
+        userId: '123',
+      };
+
+      entity.id = entity.mfaToken;
+
+      await databaseTests.connection!.getRepository(MfaLoginAttempt).save(entity);
+
+      const attempt = await databaseTests.database.getMfaLoginAttempt(entity.mfaToken);
+
+      expect(attempt).toEqual(entity);
     });
   });
 });

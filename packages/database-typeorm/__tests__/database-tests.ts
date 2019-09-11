@@ -5,6 +5,7 @@ import { User } from '../src/entity/User';
 import { UserEmail } from '../src/entity/UserEmail';
 import { UserService } from '../src/entity/UserService';
 import { UserSession } from '../src/entity/UserSession';
+import { MfaLoginAttempt } from '../src/entity/MfaLoginAttempt';
 
 const database = 'accounts-js-tests-e2e';
 
@@ -35,7 +36,7 @@ export class DatabaseTests {
       type: 'postgres',
       host: 'localhost',
       port: 5432,
-      entities: [User, UserEmail, UserService, UserSession],
+      entities: [User, UserEmail, UserService, UserSession, MfaLoginAttempt],
       username: 'postgres',
       password: '',
       database,

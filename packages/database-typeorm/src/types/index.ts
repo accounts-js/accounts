@@ -2,6 +2,7 @@ import { User } from '../entity/User';
 import { UserEmail } from '../entity/UserEmail';
 import { UserService } from '../entity/UserService';
 import { UserSession } from '../entity/UserSession';
+import { MfaLoginAttempt } from '../entity/MfaLoginAttempt';
 import { Connection } from 'typeorm';
 
 export interface AccountsTypeormOptions {
@@ -12,4 +13,5 @@ export interface AccountsTypeormOptions {
   userServiceEntity?: typeof UserService;
   userEmailEntity?: typeof UserEmail;
   userSessionEntity?: typeof UserSession;
+  mfaLoginAttemptEntity?: typeof MfaLoginAttempt;
 }
