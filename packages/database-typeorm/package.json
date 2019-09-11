@@ -7,9 +7,6 @@
   "scripts": {
     "clean": "rimraf lib",
     "start": "tsc --watch",
-    "start:db": "docker run --name accounts-postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=accounts-js-tests-e2e -p 5432:5432 -d postgres",
-    "stop:db": "docker stop accounts-postgres",
-    "rm:db": "docker rm accounts-postgres",
     "precompile": "yarn clean",
     "compile": "tsc",
     "prepublishOnly": "yarn compile",

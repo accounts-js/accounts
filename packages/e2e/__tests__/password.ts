@@ -1,3 +1,4 @@
+import { LoginResult } from '@accounts/types';
 import { servers } from './servers';
 
 const user = {
@@ -38,12 +39,12 @@ Object.keys(servers).forEach(key => {
       });
 
       it('should login the user and get the session', async () => {
-        const loginResult = await server.accountsClientPassword.login({
+        const loginResult = (await server.accountsClientPassword.login({
           user: {
             email: user.email,
           },
           password: user.password,
-        });
+        })) as LoginResult;
         expect(loginResult.sessionId).toBeTruthy();
         expect(loginResult.tokens.accessToken).toBeTruthy();
         expect(loginResult.tokens.refreshToken).toBeTruthy();
@@ -99,12 +100,12 @@ Object.keys(servers).forEach(key => {
         user.password = newPassword;
         expect(data).toBeNull();
 
-        const loginResult = await server.accountsClientPassword.login({
+        const loginResult = (await server.accountsClientPassword.login({
           user: {
             email: user.email,
           },
           password: user.password,
-        });
+        })) as LoginResult;
         expect(loginResult.sessionId).toBeTruthy();
         expect(loginResult.tokens.accessToken).toBeTruthy();
         expect(loginResult.tokens.refreshToken).toBeTruthy();
@@ -127,12 +128,12 @@ Object.keys(servers).forEach(key => {
         user.password = newPassword;
         expect(data).toBeNull();
 
-        const loginResult = await server.accountsClientPassword.login({
+        const loginResult = (await server.accountsClientPassword.login({
           user: {
             email: user.email,
           },
           password: user.password,
-        });
+        })) as LoginResult;
         expect(loginResult.sessionId).toBeTruthy();
         expect(loginResult.tokens.accessToken).toBeTruthy();
         expect(loginResult.tokens.refreshToken).toBeTruthy();

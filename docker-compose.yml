@@ -1,16 +1,17 @@
-version: '3.6'
+version: '3'
 services:
-  postgres:
-    image: circleci/postgres:10.10
-    ports:
-      - '5432:5432'
-    environment:
-      POSTGRES_DB: accounts-js-tests-e2e
   mongo:
-    image: circleci/mongo:3
+    image: mongo
     ports:
-      - '27017:27017'
+      - "27017:27017"
   redis:
-    image: circleci/redis:4
+    image: redis
     ports:
-      - '6379:6379'
+      - "6379:6379"
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=accounts-js-tests-e2e
