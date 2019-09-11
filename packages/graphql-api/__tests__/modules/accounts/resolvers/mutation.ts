@@ -4,6 +4,7 @@ import { Mutation } from '../../../../src/modules/accounts/resolvers/mutation';
 describe('accounts resolvers mutation', () => {
   const accountsServerMock = {
     options: {},
+    performMfaChallenge: jest.fn(),
     loginWithService: jest.fn(),
     impersonate: jest.fn(),
     logout: jest.fn(),
@@ -36,6 +37,23 @@ describe('accounts resolvers mutation', () => {
         ip,
         userAgent,
       });
+    });
+  });
+
+  describe('performMfaChallenge', () => {
+    const challenge = 'sms';
+    const mfaToken = 'mfa-token';
+    const params = {};
+
+    it('should call performMfaChallenge', async () => {
+      await Mutation.performMfaChallenge!(
+        {},
+        { challenge, mfaToken, params } as any,
+        { injector, ip, userAgent } as any,
+        {} as any
+      );
+      expect(injector.get).toBeCalledWith(AccountsServer);
+      expect(accountsServerMock.performMfaChallenge).toBeCalledWith(challenge, mfaToken, params);
     });
   });
 

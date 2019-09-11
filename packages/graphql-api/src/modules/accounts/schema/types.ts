@@ -14,6 +14,13 @@ export default ({ userAsInterface }: AccountsModuleConfig) => gql`
     tokens: Tokens
   }
 
+  type MFALoginResult {
+    mfaToken: String
+    challenges: [String]
+  }
+
+  union LoginWithServiceResult = LoginResult | MFALoginResult
+
   type ImpersonateReturn {
     authorized: Boolean
     tokens: Tokens

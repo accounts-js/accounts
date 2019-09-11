@@ -1,4 +1,10 @@
-import { LoginResult, ImpersonationResult, CreateUser, User } from '@accounts/types';
+import {
+  LoginResult,
+  MFALoginResult,
+  ImpersonationResult,
+  CreateUser,
+  User,
+} from '@accounts/types';
 import { AccountsClient } from './accounts-client';
 
 export interface TransportInterface {
@@ -9,7 +15,8 @@ export interface TransportInterface {
     authenticateParams: {
       [key: string]: string | object;
     }
-  ): Promise<LoginResult>;
+  ): Promise<LoginResult | MFALoginResult>;
+  performMfaChallenge(challenge: string, mfaToken: string, params: any): Promise<string>;
   logout(): Promise<void>;
   getUser(): Promise<User>;
   refreshTokens(accessToken: string, refreshToken: string): Promise<LoginResult>;

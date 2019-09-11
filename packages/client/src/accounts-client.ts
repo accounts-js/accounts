@@ -1,4 +1,4 @@
-import { LoginResult, Tokens, ImpersonationResult, User } from '@accounts/types';
+import { LoginResult, MFALoginResult, Tokens, ImpersonationResult, User } from '@accounts/types';
 import { TransportInterface } from './transport-interface';
 import { TokenStorage, AccountsClientOptions } from './types';
 import { tokenStorageLocal } from './token-storage-local';
@@ -7,6 +7,7 @@ import { isTokenExpired } from './utils';
 enum TokenKey {
   AccessToken = 'accessToken',
   RefreshToken = 'refreshToken',
+  MfaToken = 'mfaToken',
   OriginalAccessToken = 'originalAccessToken',
   OriginalRefreshToken = 'originalRefreshToken',
 }
@@ -92,10 +93,38 @@ export class AccountsClient {
   public async loginWithService(
     service: string,
     credentials: { [key: string]: any }
-  ): Promise<LoginResult> {
+  ): Promise<LoginResult | Omit<MFALoginResult, 'mfaToken'>> {
     const response = await this.transport.loginWithService(service, credentials);
-    await this.setTokens(response.tokens);
+
+    if ((response as LoginResult).tokens) {
+      await this.setTokens((response as LoginResult).tokens);
+    } else {
+      await this.storage.setItem(
+        this.getTokenKey(TokenKey.MfaToken),
+        (response as MFALoginResult).mfaToken
+      );
+    }
+
     return response;
+  }
+
+  /**
+   * Performs the mfa needed challenge and logs in afterwards
+   */
+  public async performMfaChallenge(challenge: string, params: any): Promise<LoginResult> {
+    const mfaToken = await this.storage.getItem(this.getTokenKey(TokenKey.MfaToken));
+
+    if (!mfaToken) {
+      throw new Error('mfaToken is not available in storage');
+    }
+
+    const loginToken = await this.transport.performMfaChallenge(challenge, mfaToken, params);
+
+    const result = await this.loginWithService('mfa', { mfaToken, loginToken });
+
+    await this.storage.removeItem(this.getTokenKey(TokenKey.MfaToken));
+
+    return result as any;
   }
 
   /**

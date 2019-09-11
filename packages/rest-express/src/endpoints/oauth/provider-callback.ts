@@ -28,11 +28,11 @@ export const providerCallback = (
     );
 
     if (options && options.onOAuthSuccess) {
-      options.onOAuthSuccess(req, res, loggedInUser);
+      options.onOAuthSuccess(req, res, loggedInUser as any);
     }
 
     if (options && options.transformOAuthResponse) {
-      res.json(options.transformOAuthResponse(loggedInUser));
+      res.json(options.transformOAuthResponse(loggedInUser as any));
     } else {
       res.json(loggedInUser);
     }

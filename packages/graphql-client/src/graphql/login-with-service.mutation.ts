@@ -3,10 +3,20 @@ import gql from 'graphql-tag';
 export const loginWithServiceMutation = gql`
   mutation($serviceName: String!, $params: AuthenticateParamsInput!) {
     authenticate(serviceName: $serviceName, params: $params) {
-      sessionId
-      tokens {
-        refreshToken
-        accessToken
+      __typename
+      ... on LoginResult {
+        sessionId
+        tokens {
+          refreshToken
+          accessToken
+        }
+      }
+      ... on LoginResult {
+        sessionId
+        tokens {
+          refreshToken
+          accessToken
+        }
       }
     }
   }

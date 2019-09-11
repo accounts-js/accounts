@@ -11,6 +11,10 @@ const loggedInResponse = {
   },
 };
 
+const mfaLoginResult = {
+  mfaToken: 'mfaToken',
+};
+
 const impersonateResult = {
   authorized: true,
   tokens: { accessToken: 'newAccessToken', refreshToken: 'newRefreshToken' },
@@ -22,7 +26,10 @@ const tokens = {
 };
 
 const mockTransport = {
-  loginWithService: jest.fn(() => Promise.resolve(loggedInResponse)),
+  loginWithService: jest.fn((service: string) =>
+    service === 'mfa-login' ? Promise.resolve(mfaLoginResult) : Promise.resolve(loggedInResponse)
+  ),
+  performMfaChallenge: jest.fn(() => Promise.resolve('login-token')),
   logout: jest.fn(() => Promise.resolve()),
   refreshTokens: jest.fn(() => Promise.resolve(loggedInResponse)),
   sendResetPasswordEmail: jest.fn(() => Promise.resolve()),
@@ -149,6 +156,38 @@ describe('Accounts', () => {
       expect(localStorage.getItem('accounts:refreshToken')).toEqual(
         loggedInResponse.tokens.refreshToken
       );
+    });
+
+    it('set the mfa token when mfa is enabled', async () => {
+      await accountsClient.loginWithService('mfa-login', {
+        username: 'user',
+        password: 'password',
+      });
+      expect(localStorage.setItem).toHaveBeenCalledTimes(1);
+      expect(localStorage.getItem('accounts:mfaToken')).toEqual(mfaLoginResult.mfaToken);
+    });
+  });
+
+  describe('performMfaChallenge', () => {
+    it('throws error when no mfaToken exists in storage', async () => {
+      await expect(accountsClient.performMfaChallenge('sms', {})).rejects.toMatchSnapshot(
+        'mfaToken-not-available'
+      );
+    });
+
+    it('performs the challenge and return the login result', async () => {
+      localStorage.setItem('accounts:mfaToken', 'mfa-token');
+
+      await accountsClient.performMfaChallenge('sms', {});
+
+      expect(localStorage.setItem).toHaveBeenCalledTimes(3);
+      expect(localStorage.getItem('accounts:accessToken')).toEqual(
+        loggedInResponse.tokens.accessToken
+      );
+      expect(localStorage.getItem('accounts:refreshToken')).toEqual(
+        loggedInResponse.tokens.refreshToken
+      );
+      expect(localStorage.getItem('accounts:mfaToken')).toBeNull();
     });
   });
 
