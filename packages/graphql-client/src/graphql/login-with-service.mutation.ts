@@ -11,12 +11,9 @@ export const loginWithServiceMutation = gql`
           accessToken
         }
       }
-      ... on LoginResult {
-        sessionId
-        tokens {
-          refreshToken
-          accessToken
-        }
+      ... on MFALoginResult {
+        mfaToken
+        challenges
       }
     }
   }
