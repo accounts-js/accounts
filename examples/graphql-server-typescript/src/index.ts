@@ -21,6 +21,7 @@ const start = async () => {
   const accountsDb = new DatabaseManager({
     sessionStorage: userStorage,
     userStorage,
+    mfaLoginAttemptsStorage: userStorage,
   });
 
   const accountsPassword = new AccountsPassword({
