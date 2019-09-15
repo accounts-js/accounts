@@ -1,8 +1,10 @@
+import { cookieStorageLocal } from './cookie-storage-local';
 import { LoginResult, Tokens, ImpersonationResult, User } from '@accounts/types';
 import { TransportInterface } from './transport-interface';
 import { TokenStorage, AccountsClientOptions } from './types';
 import { tokenStorageLocal } from './token-storage-local';
 import { isTokenExpired } from './utils';
+import { cookieStorageLocal } from './cookie-storage-local';
 
 enum TokenKey {
   AccessToken = 'accessToken',
@@ -13,6 +15,7 @@ enum TokenKey {
 
 const defaultOptions = {
   tokenStorage: tokenStorageLocal,
+  cookieStorage: cookieStorageLocal,
   tokenStoragePrefix: 'accounts',
 };
 
@@ -23,7 +26,7 @@ export class AccountsClient {
 
   constructor(options: AccountsClientOptions, transport: TransportInterface) {
     this.options = { ...defaultOptions, ...options };
-    this.storage = this.options.tokenStorage;
+    this.storage = this.options.tokenStorage && this.options.cookieStorage;
 
     if (!transport) {
       throw new Error('A valid transport is required');

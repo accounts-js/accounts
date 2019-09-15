@@ -21,8 +21,8 @@ const apolloClient = new ApolloClient({
 const accountsGraphQL = new GraphQLClient({ graphQLClient: apolloClient });
 const accountsClient = new AccountsClient(
   {
-    // We tell the accounts-js client to use AsyncStorage to store the tokens
-    tokenStorage: cookieStorage,
+    // We tell the accounts-js client to use cookieStorage to store the tokens
+    cookieStorage,
   },
   accountsGraphQL
 );

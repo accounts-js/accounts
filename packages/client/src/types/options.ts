@@ -1,4 +1,5 @@
 import { TokenStorage } from '.';
+import { CookieStorage } from '.';
 
 export interface AccountsClientOptions {
   /**
@@ -6,6 +7,8 @@ export interface AccountsClientOptions {
    * Default: 'localStorage'.
    */
   tokenStorage?: TokenStorage;
+  cookieStorage?: CookieStorage;
+
   /**
    * Token that will prefix the storage key.
    * Default: 'accounts'.
