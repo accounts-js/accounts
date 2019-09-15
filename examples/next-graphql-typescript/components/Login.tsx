@@ -99,12 +99,12 @@ class Login extends React.Component<WithStyles<'formContainer'>, State> {
         {error && <FormError error={error!} />}
         <Button>
           <Link href="/signup" as={`/signup`}>
-            Sign Up
+            <a>Sign Up</a>
           </Link>
         </Button>
         <Button>
           <Link href="/reset-password" as={`/reset-password`}>
-            Reset Password
+            <a>Reset Password</a>
           </Link>
         </Button>
       </form>

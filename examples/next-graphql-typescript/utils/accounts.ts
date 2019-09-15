@@ -5,7 +5,9 @@ import ApolloClient from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import fetch from 'isomorphic-fetch';
-
+import { CookieStorage } from 'cookie-storage';
+const cookieStorage = new CookieStorage();
+// const awaitCookies = await cookieStorage;
 const link = new HttpLink({
   uri: 'http://localhost:4000/graphql',
   fetch,
@@ -17,7 +19,14 @@ const apolloClient = new ApolloClient({
 });
 
 const accountsGraphQL = new GraphQLClient({ graphQLClient: apolloClient });
-const accountsClient = new AccountsClient({}, accountsGraphQL);
+const accountsClient = new AccountsClient(
+  {
+    // We tell the accounts-js client to use AsyncStorage to store the tokens
+    tokenStorage: cookieStorage,
+  },
+  accountsGraphQL
+);
+
 const accountsPassword = new AccountsClientPassword(accountsClient);
 
 export { accountsClient, accountsGraphQL, accountsPassword, apolloClient };

@@ -1,6 +1,6 @@
 import React from 'react';
-import Layout from '../components/Layout';
-import ResetPassword from '../components/ResetPassword';
+import Layout from '../../components/Layout';
+import ResetPassword from '../../components/ResetPassword';
 import { useRouter } from 'next/router';
 
 const ResetPasswordPage: React.FC = () => {

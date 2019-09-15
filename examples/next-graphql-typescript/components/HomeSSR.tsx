@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Button, Typography } from '@material-ui/core';
 import Link from 'next/link';
 import { accountsClient, accountsGraphQL } from '../utils/accounts';
@@ -12,16 +13,16 @@ class Home extends React.Component<State> {
     user: null as any,
   };
   // use getInitialProps where LocalStorage is not available.
-  public async componentDidMount() {
-    // refresh the session to get a new accessToken if expired
-    const tokens = await accountsClient.refreshSession();
-    if (!tokens) {
-      Router.push('/login');
-      return;
-    }
-    const user = await accountsGraphQL.getUser();
-    await this.setState({ user });
-  }
+  // public async componentDidMount() {
+  //   // refresh the session to get a new accessToken if expired
+  //   const tokens = await accountsClient.refreshSession();
+  //   if (!tokens) {
+  //     Router.push('/login');
+  //     return;
+  //   }
+  //   const user = await accountsGraphQL.getUser();
+  //   await this.setState({ user });
+  // }
 
   public onResendEmail = async () => {
     const { user } = this.state;
@@ -53,7 +54,7 @@ class Home extends React.Component<State> {
           <a>Set up 2fa</a>
         </Link>
         <Button variant="outlined" color="primary" onClick={this.onLogout}>
-          <a>Logout</a>
+          Logout
         </Button>
       </div>
     );
