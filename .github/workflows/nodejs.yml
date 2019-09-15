@@ -9,6 +9,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - name: Docker compose
+      run: docker-compose up -d
     - name: Install Dependencies
       run: yarn install --frozen-lockfile
     - name: Lerna bootstrap
