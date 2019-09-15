@@ -4,6 +4,7 @@ import Link from 'next/link';
 // import Router from "next/router";
 import FormError from '../components/FormError';
 import { accountsGraphQL } from '../utils/accounts';
+// import { useRouter } from 'next/router';
 
 // const HomeLink = (props: any) => <Link to="/" {...props} />;
 
@@ -24,7 +25,8 @@ class VerifyEmail extends React.Component<Token, State> {
 
   public async componentDidMount() {
     try {
-      await accountsGraphQL.verifyEmail('fix@me.com');
+      console.log(token);
+      await accountsGraphQL.verifyEmail(`${token}`);
       this.setState({ success: true });
     } catch (err) {
       this.setState({ error: err.message });
