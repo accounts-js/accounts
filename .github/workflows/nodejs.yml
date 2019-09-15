@@ -9,15 +9,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - name: Install Dependencies
+      run: yarn install --frozen-lockfile
+    - name: Lerna bootstrap
+      run: yarn run lerna bootstrap
     - name: yarn install, build, and test
       run: |
-        yarn install --frozen-lockfile
-        yarn run lerna bootstrap
         yarn test:lint
         yarn test:prettier
         yarn compile
         yarn coverage
         yarn codecov
-        yarn test:examples
+    - name: Test examples
+      run: yarn test:examples
       env:
         CI: true
