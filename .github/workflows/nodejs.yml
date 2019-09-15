@@ -13,6 +13,11 @@ jobs:
       run: |
         yarn install --frozen-lockfile
         yarn run lerna bootstrap
-        yarn test
+        yarn test:lint
+        yarn test:prettier
+        yarn compile
+        yarn coverage
+        yarn codecov
+        yarn test:examples
       env:
         CI: true
