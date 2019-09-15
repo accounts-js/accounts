@@ -11,7 +11,7 @@ class Home extends React.Component<State> {
   public state = {
     user: null as any,
   };
-
+  // use getInitialProps where LocalStorage is not available.
   public async componentDidMount() {
     // refresh the session to get a new accessToken if expired
     const tokens = await accountsClient.refreshSession();

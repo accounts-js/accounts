@@ -14,8 +14,7 @@ import {
 import Link from 'next/link';
 import FormError from './FormError';
 import { accountsPassword } from '../utils/accounts';
-// import useTranslation from "../hooks/useTranslation";
-// const {locale } = useTranslation();
+
 const styles = () => ({
   formContainer: {
     display: 'flex',
@@ -68,17 +67,14 @@ class Signup extends React.Component<WithStyles<'formContainer'>, State> {
           lastName: this.state.lastName,
         },
       });
-      Router.push({
-        pathname: '/login',
-        // query: { name: "Zeit" }
-      });
+      Router.push({ pathname: '/login' });
     } catch (err) {
       this.setState({ error: err.message });
     }
   };
 
   public render() {
-    // const { classes } = this.props;
+    const { classes } = this.props;
     const { firstName, lastName, email, password, error } = this.state;
     return (
       <form onSubmit={this.onSubmit}>

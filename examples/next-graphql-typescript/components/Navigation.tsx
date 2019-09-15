@@ -1,10 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-// import useTranslation from '../hooks/useTranslation'
 
 const Navigation: React.FC = () => {
-  // const Navigation = () => {
-  // const t } = useTranslation()
   return (
     <ul className="root">
       <li>
@@ -13,18 +10,8 @@ const Navigation: React.FC = () => {
         </Link>
       </li>
       <li>
-        <Link href="/login" as={`/login`}>
-          <a>Login</a>
-        </Link>
-      </li>
-      <li>
-        <Link href="/signup" as={`/signup`}>
-          <a>Signup</a>
-        </Link>
-      </li>
-      <li>
-        <Link href="/reset-password" as={`/reset-password`}>
-          <a>Reset Password</a>
+        <Link href="/ssr" as={`/ssr`}>
+          <a>ssr</a>
         </Link>
       </li>
       <style jsx>{`

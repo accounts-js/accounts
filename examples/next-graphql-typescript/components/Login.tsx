@@ -8,7 +8,6 @@ import {
   withStyles,
   WithStyles,
 } from '@material-ui/core';
-// import { Link, RouteComponentProps } from "react-router-dom";
 import Link from 'next/link';
 import FormError from './FormError';
 import { accountsPassword } from '../utils/accounts';
@@ -19,11 +18,6 @@ const styles = () => ({
     flexDirection: 'column' as 'column',
   },
 });
-
-// const SignUpLink = (props: any) => <Link to="/signup" {...props} />;
-// const ResetPasswordLink = (props: any) => (
-//   <Link to="/reset-password" {...props} />
-// );
 
 interface State {
   email: string;

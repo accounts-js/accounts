@@ -25,8 +25,7 @@ class VerifyEmail extends React.Component<Token, State> {
 
   public async componentDidMount() {
     try {
-      console.log(token);
-      await accountsGraphQL.verifyEmail(`${token}`);
+      accountsGraphQL.verifyEmail(`${this.props.token}`);
       this.setState({ success: true });
     } catch (err) {
       this.setState({ error: err.message });
