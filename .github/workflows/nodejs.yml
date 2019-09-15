@@ -13,13 +13,16 @@ jobs:
       run: yarn install --frozen-lockfile
     - name: Lerna bootstrap
       run: yarn run lerna bootstrap
-    - name: yarn install, build, and test
-      run: |
-        yarn test:lint
-        yarn test:prettier
-        yarn compile
-        yarn coverage
-        yarn codecov
+    - name: Check lint
+      run: yarn test:lint
+    - name: Check prettier
+      run: yarn test:prettier
+    - name: Compile packages
+      run: yarn compile
+    - name: Run tests
+      run: yarn coverage
+    - name: Upload coverage
+      run: yarn codecov
     - name: Test examples
       run: yarn test:examples
       env:
