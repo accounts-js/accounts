@@ -1,6 +1,4 @@
-import { TokenStorage } from '.';
-import { CookieStorage } from '.';
-
+import { TokenStorage, CookieStorage } from '.';
 export interface AccountsClientOptions {
   /**
    * Storage that accounts-js will use to store the tokens.

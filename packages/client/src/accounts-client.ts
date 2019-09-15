@@ -1,4 +1,3 @@
-import { cookieStorageLocal } from './cookie-storage-local';
 import { LoginResult, Tokens, ImpersonationResult, User } from '@accounts/types';
 import { TransportInterface } from './transport-interface';
 import { TokenStorage, AccountsClientOptions } from './types';
