@@ -1,6 +1,6 @@
 // import React from 'react';
 // import Layout from '../components/Layout';
-// import HomeSSR from '../components/HomeSSR';
+import HomeSSR from '../components/HomeSSR';
 
 // const HomePage = () => (
 //   <Layout titleKey="Cruceritis">
@@ -12,11 +12,14 @@
 import Layout from '../components/Layout';
 import Link from 'next/link';
 import fetch from 'isomorphic-unfetch';
-import nextCookie from 'next-cookies';
+import cookies from 'next-cookies';
 import Router from 'next/router';
-function auth(ctx) {
-  const { token } = nextCookie(ctx);
+import { accountsClient, accountsGraphQL } from '../utils/accounts';
 
+function auth(ctx) {
+  const allCookies = cookies(ctx);
+  // console.log(allCookies);
+  const token = allCookies.accounts_accessToken;
   /*
    * If `ctx.req` is available it means we are on the server.
    * Additionally if there's no token it means the user is not logged in.
@@ -30,14 +33,24 @@ function auth(ctx) {
   if (!token) {
     Router.push('/login');
   }
-
+  // const user = await accountsGraphQL.getUser();
+  // const token = await user;
+  // console.log(token);
   return token;
+}
+
+async function getUser(token) {
+  const user = await accountsGraphQL.getUser();
+  console.log(user);
+  return user;
 }
 
 const HomePage = props => (
   <Layout titleKey={'Shows'}>
     {/* <h1>Batman TV Shows</h1> */}
-    <p>{props.token}</p>
+    <div>{props.token}</div>
+    <div>{props.user}</div>
+    <HomeSSR />
     {/* <ul>
       {props.shows.map(show => (
         <li key={show.id}>
@@ -52,6 +65,9 @@ const HomePage = props => (
 
 HomePage.getInitialProps = async function(ctx) {
   const token = auth(ctx);
+  const user = await getUser(token);
+  // await this.setState({ user });
+  // const getUser = await getUser(token);
   // /*
   //  * If `ctx.req` is available it means we are on the server.
   //  * Additionally if there's no token it means the user is not logged in.
@@ -71,7 +87,7 @@ HomePage.getInitialProps = async function(ctx) {
 
   return {
     token: token,
-    // shows: data.map(entry => entry.show),
+    userId: user,
   };
 };
 
