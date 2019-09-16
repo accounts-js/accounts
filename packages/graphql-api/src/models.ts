@@ -116,6 +116,8 @@ export interface Mutation {
 
   authenticate?: Maybe<LoginWithServiceResult>;
 
+  verifyAuthentication?: Maybe<boolean>;
+
   performMfaChallenge?: Maybe<string>;
 }
 
@@ -190,6 +192,11 @@ export interface RefreshTokensMutationArgs {
   refreshToken: string;
 }
 export interface AuthenticateMutationArgs {
+  serviceName: string;
+
+  params: AuthenticateParamsInput;
+}
+export interface VerifyAuthenticationMutationArgs {
   serviceName: string;
 
   params: AuthenticateParamsInput;
@@ -402,6 +409,8 @@ export interface MutationResolvers<TContext = {}, TypeParent = {}> {
 
   authenticate?: MutationAuthenticateResolver<Maybe<LoginWithServiceResult>, TypeParent, TContext>;
 
+  verifyAuthentication?: MutationVerifyAuthenticationResolver<Maybe<boolean>, TypeParent, TContext>;
+
   performMfaChallenge?: MutationPerformMfaChallengeResolver<Maybe<string>, TypeParent, TContext>;
 }
 
@@ -519,6 +528,17 @@ export type MutationAuthenticateResolver<
   TContext = {}
 > = Resolver<R, Parent, TContext, MutationAuthenticateArgs>;
 export interface MutationAuthenticateArgs {
+  serviceName: string;
+
+  params: AuthenticateParamsInput;
+}
+
+export type MutationVerifyAuthenticationResolver<
+  R = Maybe<boolean>,
+  Parent = {},
+  TContext = {}
+> = Resolver<R, Parent, TContext, MutationVerifyAuthenticationArgs>;
+export interface MutationVerifyAuthenticationArgs {
   serviceName: string;
 
   params: AuthenticateParamsInput;

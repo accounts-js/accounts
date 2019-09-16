@@ -88,6 +88,16 @@ export class AccountsClient {
   }
 
   /**
+   * Authenticate the user with a specific service (not creating a session)
+   */
+  public async authenticateWithService(
+    service: string,
+    credentials: { [key: string]: any }
+  ): Promise<boolean> {
+    return this.transport.authenticateWithService(service, credentials);
+  }
+
+  /**
    * Login the user with a specific service
    */
   public async loginWithService(

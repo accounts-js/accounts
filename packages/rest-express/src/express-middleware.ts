@@ -9,6 +9,7 @@ import { impersonate } from './endpoints/impersonate';
 import { logout } from './endpoints/logout';
 import { serviceAuthenticate } from './endpoints/service-authenticate';
 import { performMfaChallenge } from './endpoints/perform-mfa-challenge';
+import { serviceVerifyAuthentication } from './endpoints/verify-authentication';
 import { registerPassword } from './endpoints/password/register';
 import { twoFactorSecret, twoFactorSet, twoFactorUnset } from './endpoints/password/two-factor';
 import { changePassword } from './endpoints/password/change-password';
@@ -41,6 +42,8 @@ const accountsExpress = (
   router.post(`${path}/refreshTokens`, refreshAccessToken(accountsServer));
 
   router.post(`${path}/logout`, userLoader(accountsServer), logout(accountsServer));
+
+  router.post(`${path}/:service/verifyAuthentication`, serviceVerifyAuthentication(accountsServer));
 
   router.post(`${path}/:service/authenticate`, serviceAuthenticate(accountsServer));
 

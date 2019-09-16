@@ -8,6 +8,7 @@ import {
 } from '@accounts/types';
 import { createUserMutation } from './graphql/create-user.mutation';
 import { loginWithServiceMutation } from './graphql/login-with-service.mutation';
+import { authenticateWithServiceMutation } from './graphql/authenticate-with-service.mutation';
 import { logoutMutation } from './graphql/logout.mutation';
 import { performMfaChallengeMutation } from './graphql/perform-mfa-challenge.mutation';
 import { refreshTokensMutation } from './graphql/refresh-tokens.mutation';
@@ -61,6 +62,19 @@ export default class GraphQLClient implements TransportInterface {
    */
   public async createUser(user: CreateUser): Promise<string> {
     return this.mutate(createUserMutation, 'createUser', { user });
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public async authenticateWithService(
+    service: string,
+    authenticateParams: { [key: string]: string | object }
+  ): Promise<boolean> {
+    return this.mutate(authenticateWithServiceMutation, 'verifyAuthentication', {
+      serviceName: service,
+      params: authenticateParams,
+    });
   }
 
   /**

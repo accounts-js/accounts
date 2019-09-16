@@ -29,6 +29,7 @@ const mockTransport = {
   loginWithService: jest.fn((service: string) =>
     service === 'mfa-login' ? Promise.resolve(mfaLoginResult) : Promise.resolve(loggedInResponse)
   ),
+  authenticateWithService: jest.fn(() => Promise.resolve(true)),
   performMfaChallenge: jest.fn(() => Promise.resolve('login-token')),
   logout: jest.fn(() => Promise.resolve()),
   refreshTokens: jest.fn(() => Promise.resolve(loggedInResponse)),
@@ -188,6 +189,20 @@ describe('Accounts', () => {
         loggedInResponse.tokens.refreshToken
       );
       expect(localStorage.getItem('accounts:mfaToken')).toBeNull();
+    });
+  });
+
+  describe('authenticateWithService', () => {
+    it('calls transport', async () => {
+      await accountsClient.authenticateWithService('password', {
+        username: 'user',
+        password: 'password',
+      });
+      expect(mockTransport.authenticateWithService).toHaveBeenCalledTimes(1);
+      expect(mockTransport.authenticateWithService).toHaveBeenCalledWith('password', {
+        username: 'user',
+        password: 'password',
+      });
     });
   });
 

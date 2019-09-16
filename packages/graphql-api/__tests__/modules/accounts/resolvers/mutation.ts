@@ -6,6 +6,7 @@ describe('accounts resolvers mutation', () => {
     options: {},
     performMfaChallenge: jest.fn(),
     loginWithService: jest.fn(),
+    authenticateWithService: jest.fn(),
     impersonate: jest.fn(),
     logout: jest.fn(),
     refreshTokens: jest.fn(),
@@ -34,6 +35,20 @@ describe('accounts resolvers mutation', () => {
       );
       expect(injector.get).toBeCalledWith(AccountsServer);
       expect(accountsServerMock.loginWithService).toBeCalledWith(serviceName, params, {
+        ip,
+        userAgent,
+      });
+    });
+
+    it('should call authenticateWithService', async () => {
+      await Mutation.verifyAuthentication!(
+        {},
+        { serviceName, params } as any,
+        { injector, ip, userAgent } as any,
+        {} as any
+      );
+      expect(injector.get).toBeCalledWith(AccountsServer);
+      expect(accountsServerMock.authenticateWithService).toBeCalledWith(serviceName, params, {
         ip,
         userAgent,
       });
