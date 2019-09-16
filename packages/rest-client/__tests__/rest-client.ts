@@ -92,6 +92,23 @@ describe('RestClient', () => {
     });
   });
 
+  describe('authenticateWithService', () => {
+    it('should call fetch with verifyAuthentication path', async () => {
+      await restClient.authenticateWithService('password', {
+        user: {
+          username: 'toto',
+        },
+        password: 'password',
+      });
+      expect((window.fetch as jest.Mock).mock.calls[0][0]).toBe(
+        'http://localhost:3000/accounts/password/verifyAuthentication'
+      );
+      expect((window.fetch as jest.Mock).mock.calls[0][1].body).toBe(
+        '{"user":{"username":"toto"},"password":"password"}'
+      );
+    });
+  });
+
   describe('impersonate', () => {
     it('should call fetch with impersonate path', () =>
       restClient

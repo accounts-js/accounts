@@ -94,6 +94,63 @@ describe('AccountsServer', () => {
     });
   });
 
+  describe('authenticateWithService', () => {
+    it('throws on invalid service', async () => {
+      try {
+        const accountServer = new AccountsServer({ db: {} } as any, {});
+        await accountServer.authenticateWithService('facebook', {}, {});
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('throws when user not found', async () => {
+      const authenticate = jest.fn(() => Promise.resolve());
+      try {
+        const service: any = { authenticate, setStore: jest.fn() };
+        const accountServer = new AccountsServer({ db: {} } as any, {
+          facebook: service,
+        });
+        await accountServer.authenticateWithService('facebook', {}, {});
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('throws when user is deactivated', async () => {
+      const authenticate = jest.fn(() => Promise.resolve({ id: 'userId', deactivated: true }));
+      try {
+        const service: any = { authenticate, setStore: jest.fn() };
+        const accountServer = new AccountsServer({ db: {} } as any, {
+          facebook: service,
+        });
+        await accountServer.authenticateWithService('facebook', {}, {});
+        throw new Error();
+      } catch (err) {
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('should return true upon success', async () => {
+      const authenticate = jest.fn(() => Promise.resolve({ id: 'userId' }));
+      const createSession = jest.fn(() => Promise.resolve('sessionId'));
+      const service: any = { authenticate, setStore: jest.fn() };
+      const accountServer = new AccountsServer(
+        {
+          db: { createSession } as any,
+          tokenSecret: 'secret1',
+        },
+        {
+          facebook: service,
+        }
+      );
+      const res = await accountServer.authenticateWithService('facebook', {}, {});
+      expect(res).toBeTruthy();
+    });
+  });
+
   describe('loginWithUser', () => {
     it('creates a session when given a proper user object', async () => {
       const user = {
