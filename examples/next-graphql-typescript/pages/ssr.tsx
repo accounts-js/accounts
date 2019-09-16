@@ -1,6 +1,6 @@
 // import React from 'react';
 // import Layout from '../components/Layout';
-import HomeSSR from '../components/HomeSSR';
+// import HomeSSR from '../components/HomeSSR';
 
 // const HomePage = () => (
 //   <Layout titleKey="Cruceritis">
@@ -15,7 +15,7 @@ import fetch from 'isomorphic-unfetch';
 import cookies from 'next-cookies';
 import Router from 'next/router';
 import { accountsClient, accountsGraphQL } from '../utils/accounts';
-
+import { EmailRecord } from '@accounts/types';
 function auth(ctx) {
   const allCookies = cookies(ctx);
   // console.log(allCookies);
@@ -44,28 +44,28 @@ async function getUser(token) {
   console.log(user);
   return user;
 }
-
-const HomePage = props => (
+type User = {
+  username: string;
+  id: string;
+  emails: EmailRecord[];
+};
+const HomePage = (props: { token: string; user: User; username: string }) => (
   <Layout titleKey={'Shows'}>
     {/* <h1>Batman TV Shows</h1> */}
+    <div>{props.username}</div>
     <div>{props.token}</div>
-    <div>{props.user}</div>
-    <HomeSSR />
-    {/* <ul>
-      {props.shows.map(show => (
-        <li key={show.id}>
-          <Link href="/p/[id]" as={`/p/${show.id}`}>
-            <a>{show.name}</a>
-          </Link>
-        </li>
-      ))}
-    </ul> */}
   </Layout>
 );
 
 HomePage.getInitialProps = async function(ctx) {
   const token = auth(ctx);
   const user = await getUser(token);
+  const username = await user.username;
+  console.log(username);
+  //  user.username;
+  // if (user) {
+
+  // }
   // await this.setState({ user });
   // const getUser = await getUser(token);
   // /*
@@ -87,7 +87,8 @@ HomePage.getInitialProps = async function(ctx) {
 
   return {
     token: token,
-    userId: user,
+    user: (await user) as User,
+    // username: username,
   };
 };
 
