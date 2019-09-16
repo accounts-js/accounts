@@ -9,7 +9,7 @@ import { Configuration } from './types/configuration';
 export class DatabaseManager implements DatabaseInterface {
   private userStorage: DatabaseInterface;
   private sessionStorage: DatabaseInterface | DatabaseInterfaceSessions;
-  private mfaLoginAttemptsStorage: DatabaseInterface | DatabaseInterfaceMfaLoginAttempts;
+  private mfaLoginAttemptsStorage?: DatabaseInterface | DatabaseInterfaceMfaLoginAttempts;
 
   constructor(configuration: Configuration) {
     this.validateConfiguration(configuration);
@@ -162,14 +162,23 @@ export class DatabaseManager implements DatabaseInterface {
   }
 
   public get createMfaLoginAttempt(): DatabaseInterface['createMfaLoginAttempt'] {
+    if (!this.mfaLoginAttemptsStorage) {
+      throw new Error('No mfaLoginAttemptsStorage defined for manager');
+    }
     return this.mfaLoginAttemptsStorage.createMfaLoginAttempt.bind(this.mfaLoginAttemptsStorage);
   }
 
   public get getMfaLoginAttempt(): DatabaseInterface['getMfaLoginAttempt'] {
+    if (!this.mfaLoginAttemptsStorage) {
+      throw new Error('No mfaLoginAttemptsStorage defined for manager');
+    }
     return this.mfaLoginAttemptsStorage.getMfaLoginAttempt.bind(this.mfaLoginAttemptsStorage);
   }
 
   public get removeMfaLoginAttempt(): DatabaseInterface['removeMfaLoginAttempt'] {
+    if (!this.mfaLoginAttemptsStorage) {
+      throw new Error('No mfaLoginAttemptsStorage defined for manager');
+    }
     return this.mfaLoginAttemptsStorage.removeMfaLoginAttempt.bind(this.mfaLoginAttemptsStorage);
   }
 }

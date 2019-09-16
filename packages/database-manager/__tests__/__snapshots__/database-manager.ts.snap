@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatabaseManager configuration without MFA createMfaLoginAttempt should throw error 1`] = `"No mfaLoginAttemptsStorage defined for manager"`;
+
+exports[`DatabaseManager configuration without MFA getMfaLoginAttempt should throw error 1`] = `"No mfaLoginAttemptsStorage defined for manager"`;
+
+exports[`DatabaseManager configuration without MFA removeMfaLoginAttempt should throw error 1`] = `"No mfaLoginAttemptsStorage defined for manager"`;

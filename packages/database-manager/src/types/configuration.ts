@@ -7,5 +7,5 @@ import {
 export interface Configuration {
   userStorage: DatabaseInterface;
   sessionStorage: DatabaseInterface | DatabaseInterfaceSessions;
-  mfaLoginAttemptsStorage: DatabaseInterface | DatabaseInterfaceMfaLoginAttempts;
+  mfaLoginAttemptsStorage?: DatabaseInterface | DatabaseInterfaceMfaLoginAttempts;
 }

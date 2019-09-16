@@ -276,3 +276,28 @@ describe('DatabaseManager', () => {
     expect(databaseManager.removeMfaLoginAttempt('mfaToken')).toBe('mfaLoginAttemptsStorage');
   });
 });
+
+describe('DatabaseManager configuration without MFA', () => {
+  const databaseManagerNoMfa = new DatabaseManager({
+    userStorage: new Database('userStorage'),
+    sessionStorage: new Database('sessionStorage'),
+  });
+
+  it('createMfaLoginAttempt should throw error', () => {
+    expect(() =>
+      databaseManagerNoMfa.createMfaLoginAttempt('mfaToken', 'loginToken', 'userId')
+    ).toThrowErrorMatchingSnapshot();
+  });
+
+  it('getMfaLoginAttempt should throw error', () => {
+    expect(() =>
+      databaseManagerNoMfa.getMfaLoginAttempt('mfaToken')
+    ).toThrowErrorMatchingSnapshot();
+  });
+
+  it('removeMfaLoginAttempt should throw error', () => {
+    expect(() =>
+      databaseManagerNoMfa.removeMfaLoginAttempt('mfaToken')
+    ).toThrowErrorMatchingSnapshot();
+  });
+});
