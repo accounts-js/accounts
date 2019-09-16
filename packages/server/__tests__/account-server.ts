@@ -98,9 +98,9 @@ describe('AccountsServer', () => {
 
     it('should create an MFA login process when enabled', async () => {
       const loginToken = 'login-token';
-      const mfaToken = 'mfa-token';
+      const mfaToken = '936cef147c65abc808defb3598daa752851176e3505b5879620b4d4200f00462'; // hash of loginToken
       jest.spyOn(tokens, 'generateRandomToken').mockImplementation(() => loginToken);
-      jest.spyOn(tokens, 'hashToken').mockImplementation(() => mfaToken);
+      jest.spyOn(tokens, 'hashToken');
 
       const authenticate = jest.fn(() => Promise.resolve({ id: 'userId', mfaChallenges: ['sms'] }));
       const createMfaLoginAttempt = jest.fn(() => Promise.resolve());
