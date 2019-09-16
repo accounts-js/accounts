@@ -40,7 +40,7 @@ describe('accounts resolvers mutation', () => {
     });
 
     it('should call authenticateWithService', async () => {
-      await Mutation.authenticateWithoutSessionCreation!(
+      await Mutation.verifyAuthentication!(
         {},
         { serviceName, params } as any,
         { injector, ip, userAgent } as any,

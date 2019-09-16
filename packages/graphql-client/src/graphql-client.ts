@@ -64,7 +64,7 @@ export default class GraphQLClient implements TransportInterface {
     service: string,
     authenticateParams: { [key: string]: string | object }
   ): Promise<boolean> {
-    return this.mutate(authenticateWithServiceMutation, 'authenticateWithoutSessionCreation', {
+    return this.mutate(authenticateWithServiceMutation, 'verifyAuthentication', {
       serviceName: service,
       params: authenticateParams,
     });

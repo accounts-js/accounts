@@ -14,7 +14,7 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
     });
     return authenticated;
   },
-  authenticateWithoutSessionCreation: async (_, args, ctx) => {
+  verifyAuthentication: async (_, args, ctx) => {
     const { serviceName, params } = args;
     const { ip, userAgent, injector } = ctx;
 

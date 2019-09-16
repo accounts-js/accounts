@@ -1,11 +1,11 @@
-import { serviceAuthenticateWithoutSessionCreation } from '../../src/endpoints/service-authenticate-without-session-creation';
+import { serviceVerifyAuthentication } from '../../src/endpoints/verify-authentication';
 
 const res: any = {
   json: jest.fn(),
   status: jest.fn(() => res),
 };
 
-describe('serviceAuthenticateWithoutSessionCreation', () => {
+describe('serviceVerifyAuthentication', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -14,7 +14,7 @@ describe('serviceAuthenticateWithoutSessionCreation', () => {
     const accountsServer = {
       authenticateWithService: jest.fn(() => true),
     };
-    const middleware = serviceAuthenticateWithoutSessionCreation(accountsServer as any);
+    const middleware = serviceVerifyAuthentication(accountsServer as any);
 
     const req = {
       params: {
@@ -42,7 +42,7 @@ describe('serviceAuthenticateWithoutSessionCreation', () => {
         throw error;
       }),
     };
-    const middleware = serviceAuthenticateWithoutSessionCreation(accountsServer as any);
+    const middleware = serviceVerifyAuthentication(accountsServer as any);
     const req = {
       params: {
         service: 'sms',

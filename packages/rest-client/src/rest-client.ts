@@ -65,7 +65,7 @@ export class RestClient implements TransportInterface {
         ...data,
       }),
     };
-    return this.fetch(`${provider}/authenticateWithoutSessionCreation`, args, customHeaders);
+    return this.fetch(`${provider}/verifyAuthentication`, args, customHeaders);
   }
 
   public loginWithService(

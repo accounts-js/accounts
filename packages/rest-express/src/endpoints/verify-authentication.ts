@@ -4,7 +4,7 @@ import { AccountsServer } from '@accounts/server';
 import { getUserAgent } from '../utils/get-user-agent';
 import { sendError } from '../utils/send-error';
 
-export const serviceAuthenticateWithoutSessionCreation = (accountsServer: AccountsServer) => async (
+export const serviceVerifyAuthentication = (accountsServer: AccountsServer) => async (
   req: express.Request,
   res: express.Response
 ) => {
