@@ -1,5 +1,5 @@
 overwrite: true
-schema: ./src/schema.ts
+schema: ./dev/schema.ts
 require: ts-node/register/transpile-only
 generates:
   ./src/introspection-result.ts:
