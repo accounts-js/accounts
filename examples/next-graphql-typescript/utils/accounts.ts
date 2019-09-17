@@ -22,7 +22,7 @@ const accountsGraphQL = new GraphQLClient({ graphQLClient: apolloClient });
 const accountsClient = new AccountsClient(
   {
     // We tell the accounts-js client to use cookieStorage to store the tokens
-    cookieStorage,
+    tokenStorage: cookieStorage,
   },
   accountsGraphQL
 );
