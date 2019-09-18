@@ -20,7 +20,7 @@ async function onLogout() {
 function auth(ctx) {
   const allCookies = cookies(ctx);
   console.log(allCookies);
-  const token = allCookies['accounts:accessToken'];
+  const token = allCookies[encodeURIComponent('accounts:accessToken')];
   /*
    * If `ctx.req` is available it means we are on the server.
    * Additionally if there's no token it means the user is not logged in.
