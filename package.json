@@ -63,7 +63,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@accounts/tslint-config-accounts": "0.0.9",
     "@typescript-eslint/eslint-plugin": "2.3.0",
     "@typescript-eslint/parser": "2.3.0",
     "codecov": "3.5.0",
@@ -76,7 +75,6 @@
     "opencollective": "1.0.3",
     "prettier": "1.18.2",
     "ts-jest": "24.0.2",
-    "tslint": "5.19.0",
     "typescript": "3.5.3"
   },
   "collective": {

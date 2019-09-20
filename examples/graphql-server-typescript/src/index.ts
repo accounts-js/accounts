@@ -99,7 +99,6 @@ const start = async () => {
   });
 
   server.listen(4000).then(({ url }) => {
-    // tslint:disable-next-line:no-console
     console.log(`🚀  Server ready at ${url}`);
   });
 };

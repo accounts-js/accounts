@@ -5,7 +5,6 @@ import ApolloClient from 'apollo-boost';
 
 const apolloClient = new ApolloClient({
   headers: function createHeaders() {
-    // tslint:disable-next-line:no-console
     console.log('arguments', arguments);
   },
   uri: 'http://localhost:4000/graphql',

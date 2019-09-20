@@ -26,7 +26,6 @@ describe('AccountsClientPassword', () => {
 
   it('requires the client', async () => {
     try {
-      // tslint:disable-next-line no-unused-expression
       new AccountsClientPassword(null as any);
       throw new Error();
     } catch (err) {

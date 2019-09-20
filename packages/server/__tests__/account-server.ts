@@ -16,7 +16,6 @@ describe('AccountsServer', () => {
   describe('config', () => {
     it('throws on invalid db', async () => {
       try {
-        // tslint:disable-next-line
         new AccountsServer({} as any, {});
         throw new Error();
       } catch (err) {

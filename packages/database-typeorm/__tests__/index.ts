@@ -36,7 +36,7 @@ describe('AccountsTypeorm', () => {
 
     it('should need a working connection', () => {
       try {
-        new AccountsTypeorm({ connectionName: 'not-exists' }); // tslint:disable-line no-unused-expression
+        new AccountsTypeorm({ connectionName: 'not-exists' });
         throw new Error();
       } catch (err) {
         expect(err.message).toEqual('Connection "not-exists" was not found.');
