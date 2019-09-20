@@ -1,20 +1,21 @@
-import { GraphQLModule } from '@graphql-modules/core';
-import { AccountsServer } from '@accounts/server';
-import { IncomingMessage } from 'http';
-import TypesTypeDefs from './schema/types';
-import getQueryTypeDefs from './schema/query';
-import getMutationTypeDefs from './schema/mutation';
-import getSchemaDef from './schema/schema-def';
-import { Query } from './resolvers/query';
-import { Mutation } from './resolvers/mutation';
-import { User as UserResolvers } from './resolvers/user';
-import { LoginResult as LoginResultResolvers } from './resolvers/loginResult';
-import { User } from '@accounts/types';
-import { AccountsPasswordModule } from '../accounts-password';
-import { AuthenticatedDirective } from '../../utils/authenticated-directive';
-import { context } from '../../utils';
 import AccountsPassword from '@accounts/password';
+import { AccountsServer } from '@accounts/server';
+import { User } from '@accounts/types';
+import { GraphQLModule } from '@graphql-modules/core';
 import { mergeTypeDefs } from 'graphql-toolkit';
+import { IncomingMessage } from 'http';
+
+import { context } from '../../utils';
+import { AuthenticatedDirective } from '../../utils/authenticated-directive';
+import { AccountsPasswordModule } from '../accounts-password';
+import { LoginResult as LoginResultResolvers } from './resolvers/loginResult';
+import { Mutation } from './resolvers/mutation';
+import { Query } from './resolvers/query';
+import { User as UserResolvers } from './resolvers/user';
+import getMutationTypeDefs from './schema/mutation';
+import getQueryTypeDefs from './schema/query';
+import getSchemaDef from './schema/schema-def';
+import TypesTypeDefs from './schema/types';
 
 export interface AccountsRequest {
   req: IncomingMessage;

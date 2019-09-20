@@ -1,5 +1,6 @@
 import { ConnectionInformations, CreateUser, DatabaseInterface } from '@accounts/types';
-import { Repository, getRepository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
+
 import { User } from './entity/User';
 import { UserEmail } from './entity/UserEmail';
 import { UserService } from './entity/UserService';

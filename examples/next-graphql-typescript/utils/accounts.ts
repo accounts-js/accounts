@@ -1,11 +1,11 @@
 import { AccountsClient } from '@accounts/client';
 import { AccountsClientPassword } from '@accounts/client-password';
 import GraphQLClient from '@accounts/graphql-client';
-import ApolloClient from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import ApolloClient from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
-import fetch from 'isomorphic-fetch';
 import { CookieStorage } from 'cookie-storage';
+import fetch from 'isomorphic-fetch';
 
 const cookieStorage = new CookieStorage();
 const link = new HttpLink({
