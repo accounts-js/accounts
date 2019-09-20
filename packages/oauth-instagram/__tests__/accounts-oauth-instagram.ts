@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import * as rp from 'request-promise';
 
 import AccountsOAuthInstagram from '../src';

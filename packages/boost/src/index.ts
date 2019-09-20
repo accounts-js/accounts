@@ -39,6 +39,7 @@ export const accountsBoost = async (userOptions?: AccountsBoostOptions): Promise
   const databasePackages = {
     ['@accounts/mongo']: async (requiredPackage: any): Promise<any> => {
       // The `@accounts/mongo` package comes with the `mongodb` driver
+      // eslint-disable-next-line
       const mongodb = require('mongodb');
 
       const mongoClient = (await mongodb.MongoClient.connect(get(options, 'storage.uri'))).db(
@@ -91,6 +92,7 @@ export const accountsBoost = async (userOptions?: AccountsBoostOptions): Promise
     Promise.resolve({})
   );
 
+  // eslint-disable-next-line
   return new AccountsBoost(options, services);
 };
 

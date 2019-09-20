@@ -1186,7 +1186,7 @@ describe('AccountsServer', () => {
           valid: true,
           userId: '123',
         } as any);
-      accountsServer.createTokens = ({ token, isImpersonated = false, userId }) =>
+      accountsServer.createTokens = ({ token, isImpersonated = false }) =>
         ({
           token,
           isImpersonated,

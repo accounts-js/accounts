@@ -6,7 +6,7 @@ import { DatabaseTests } from './database-tests';
 
 const databaseTests = new DatabaseTests();
 
-const generateRandomToken = (length: number = 43): string => randomBytes(length).toString('hex');
+const generateRandomToken = (length = 43): string => randomBytes(length).toString('hex');
 
 const user = {
   username: 'johndoe',
