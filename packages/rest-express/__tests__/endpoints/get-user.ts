@@ -28,7 +28,7 @@ describe('getUser', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(res.json).toBeCalledWith(user);
-    expect(res.status).not.toBeCalled();
+    expect(res.json).toHaveBeenCalledWith(user);
+    expect(res.status).not.toHaveBeenCalled();
   });
 });

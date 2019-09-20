@@ -30,7 +30,7 @@ describe('AccountsOAuthInstagram', () => {
     });
 
     it('should return the user data', () => {
-      instagramProvider.authenticate(params).then(result => {
+      return instagramProvider.authenticate(params).then(result => {
         expect(result).toBe({
           id: 'id',
           username: 'username',

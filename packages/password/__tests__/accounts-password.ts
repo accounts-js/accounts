@@ -397,7 +397,7 @@ describe('AccountsPassword', () => {
       const setPassword = jest.fn(() => Promise.resolve('user'));
       password.setStore({ setPassword } as any);
       const user = await password.setPassword(userId, 'new-password');
-      expect(setPassword).toBeCalledWith(userId, expect.any(String));
+      expect(setPassword).toHaveBeenCalledWith(userId, expect.any(String));
       expect(user).toEqual('user');
     });
   });
@@ -470,7 +470,7 @@ describe('AccountsPassword', () => {
       await password.changePassword(userId, 'old-password', 'new-password');
       expect(passwordAuthenticator.mock.calls[0][0]).toEqual({ id: userId });
       expect(passwordAuthenticator.mock.calls[0][1]).toEqual('old-password');
-      expect(setPassword).toBeCalledWith(userId, expect.any(String));
+      expect(setPassword).toHaveBeenCalledWith(userId, expect.any(String));
       expect(prepareMail.mock.calls[0].length).toBe(6);
       expect(sendMail.mock.calls[0].length).toBe(1);
       (password as any).passwordAuthenticator.mockRestore();
@@ -521,7 +521,7 @@ describe('AccountsPassword', () => {
       } as any;
       set(password.server, 'options.emailTemplates', {});
       await password.sendVerificationEmail(verifiedEmail);
-      expect(addEmailVerificationToken).not.toBeCalled();
+      expect(addEmailVerificationToken).not.toHaveBeenCalled();
     });
 
     it('send email to first unverified email', async () => {
@@ -714,7 +714,7 @@ describe('AccountsPassword', () => {
         email: 'email1@email.com',
       });
       expect(findUserByEmail.mock.calls.length).toBe(1);
-      expect(createUser).toBeCalledWith({
+      expect(createUser).toHaveBeenCalledWith({
         email: 'email1@email.com',
         password: expect.any(String),
         additionalField: 'test',
@@ -732,7 +732,7 @@ describe('AccountsPassword', () => {
         additionalField: 'not allowed',
       });
       expect(findUserByEmail.mock.calls.length).toBe(1);
-      expect(createUser).toBeCalledWith({
+      expect(createUser).toHaveBeenCalledWith({
         email: 'email1@email.com',
         password: expect.any(String),
       });

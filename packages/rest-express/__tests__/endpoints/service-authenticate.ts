@@ -30,12 +30,12 @@ describe('serviceAuthenticate', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.loginWithService).toBeCalledWith('sms', undefined, {
+    expect(accountsServer.loginWithService).toHaveBeenCalledWith('sms', undefined, {
       ip: null,
       userAgent: '',
     });
-    expect(res.json).toBeCalledWith(user);
-    expect(res.status).not.toBeCalled();
+    expect(res.json).toHaveBeenCalledWith(user);
+    expect(res.status).not.toHaveBeenCalled();
   });
 
   it('Sends error if it was thrown on loginWithService', async () => {
@@ -57,11 +57,11 @@ describe('serviceAuthenticate', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.loginWithService).toBeCalledWith('sms', undefined, {
+    expect(accountsServer.loginWithService).toHaveBeenCalledWith('sms', undefined, {
       ip: null,
       userAgent: '',
     });
-    expect(res.status).toBeCalledWith(400);
-    expect(res.json).toBeCalledWith(error);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(error);
   });
 });

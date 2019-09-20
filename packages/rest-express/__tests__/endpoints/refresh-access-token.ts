@@ -32,10 +32,10 @@ describe('refreshAccessToken', () => {
 
     await middleware(req as any, res);
 
-    expect(accountsServer.refreshTokens).toBeCalledWith('token', 'refresh', null, '');
+    expect(accountsServer.refreshTokens).toHaveBeenCalledWith('token', 'refresh', null, '');
     expect(req).toEqual(reqCopy);
-    expect(res.json).toBeCalledWith(session);
-    expect(res.status).not.toBeCalled();
+    expect(res.json).toHaveBeenCalledWith(session);
+    expect(res.status).not.toHaveBeenCalled();
   });
 
   it('Sends error if it was thrown on refreshTokens', async () => {
@@ -58,8 +58,8 @@ describe('refreshAccessToken', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.refreshTokens).toBeCalledWith('token', 'refresh', null, '');
-    expect(res.status).toBeCalledWith(400);
-    expect(res.json).toBeCalledWith(error);
+    expect(accountsServer.refreshTokens).toHaveBeenCalledWith('token', 'refresh', null, '');
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(error);
   });
 });
