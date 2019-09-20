@@ -1,6 +1,6 @@
 import { pick, omit, isString, merge } from 'lodash';
 import * as jwt from 'jsonwebtoken';
-import * as Emittery from 'emittery';
+import Emittery from 'emittery';
 import {
   User,
   LoginResult,
