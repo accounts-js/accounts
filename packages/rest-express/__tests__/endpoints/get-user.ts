@@ -14,7 +14,7 @@ describe('getUser', () => {
     const user = {
       id: '1',
     };
-    const middleware = getUser({} as any);
+    const middleware = getUser();
 
     const req = {
       user,
