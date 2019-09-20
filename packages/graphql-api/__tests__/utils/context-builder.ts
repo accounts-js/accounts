@@ -1,6 +1,7 @@
 import { context } from '../../src/utils/context-builder';
 
 describe('context-builder', () => {
+  const user = { id: 'idTest' };
   const accountsServerMock = {
     resumeSession: jest.fn<any, any>(() => user),
   };
@@ -17,7 +18,6 @@ describe('context-builder', () => {
       Authorization: 'Bearer ' + authToken,
     },
   };
-  const user = { id: 'idTest' };
 
   beforeEach(() => {
     jest.clearAllMocks();
