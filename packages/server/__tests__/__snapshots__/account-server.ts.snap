@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`AccountsServer authenticateWithService throws on invalid service 1`] = `"No service with the name facebook was registered."`;
+
+exports[`AccountsServer authenticateWithService throws when user is deactivated 1`] = `"Your account has been deactivated"`;
+
+exports[`AccountsServer authenticateWithService throws when user not found 1`] = `"Service facebook was not able to authenticate user"`;
+
 exports[`AccountsServer config throws on invalid db 1`] = `"A database driver is required"`;
 
 exports[`AccountsServer loginWithService throws on invalid service 1`] = `"No service with the name facebook was registered."`;
