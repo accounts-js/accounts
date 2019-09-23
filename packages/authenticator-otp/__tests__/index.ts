@@ -19,7 +19,7 @@ describe('AuthenticatorOtp', () => {
       mockedDb.createAuthenticator.mockResolvedValueOnce('authenticatorIdtest');
       const result = await authenticatorOtp.associate('userIdTest', {});
 
-      expect(mockedDb.createAuthenticator).toBeCalledWith({
+      expect(mockedDb.createAuthenticator).toHaveBeenCalledWith({
         type: 'otp',
         userId: 'userIdTest',
         secret: expect.any(String),
