@@ -4,16 +4,19 @@ import QRCode from 'qrcode.react';
 
 import { accountsRest, accountsClient } from './accounts';
 
+interface OTP {
+  otpauthUri: string;
+  secret: string;
+}
+
 const TwoFactor = () => {
-  const [secret, setSecret] = useState();
+  const [secret, setSecret] = useState<OTP | undefined>();
   const [oneTimeCode, setOneTimeCode] = useState('');
 
   const fetchTwoFactorSecret = async () => {
-    const data = await accountsRest.getTwoFactorSecret();
     // TODO try catch and show error if needed
-    const data2 = await accountsClient.mfaAssociate('otp');
-    console.log(data2);
-    setSecret(data.secret);
+    const data = await accountsClient.mfaAssociate('otp');
+    setSecret(data);
   };
 
   useEffect(() => {
@@ -35,9 +38,9 @@ const TwoFactor = () => {
     <div>
       <Typography gutterBottom>Two-factor authentication</Typography>
       <Typography gutterBottom>Backup code:</Typography>
-      <Typography gutterBottom>{secret.base32}</Typography>
+      <Typography gutterBottom>{secret.secret}</Typography>
       <Typography gutterBottom>Use Google Authenticator for example</Typography>
-      <QRCode value={secret.otpauth_url} />
+      <QRCode value={secret.otpauthUri} />
       <Typography gutterBottom>Confirm with one-time code:</Typography>
       <FormControl margin="normal">
         <InputLabel htmlFor="one-time-code">One time code</InputLabel>
