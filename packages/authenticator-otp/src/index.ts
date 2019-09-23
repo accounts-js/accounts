@@ -2,13 +2,6 @@ import { DatabaseInterface } from '@accounts/types';
 import { AccountsServer } from '@accounts/server';
 import * as otplib from 'otplib';
 
-// DB object
-interface Authenticator {
-  id: string;
-  type: string;
-  secret: string;
-}
-
 interface AuthenticatorService {
   server: any;
   serviceName: string;
@@ -80,7 +73,7 @@ export class AuthenticatorOtp implements AuthenticatorService {
     }
 
     // Should this be in accounts-js server before calling authenticate?
-    const authenticator = (await this.db.getAuthenticator(authenticatorId)) as Authenticator | null;
+    const authenticator: any = await this.db.findAuthenticatorById(authenticatorId);
     if (!authenticator || authenticator.type !== this.serviceName) {
       throw new Error('Authenticator not found');
     }
