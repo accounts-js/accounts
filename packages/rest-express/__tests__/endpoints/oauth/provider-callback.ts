@@ -33,13 +33,13 @@ describe('providerCallback', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.loginWithService).toBeCalledWith(
+    expect(accountsServer.loginWithService).toHaveBeenCalledWith(
       'oauth',
       { accessToken: 'token', accessTokenSecret: 'secret' },
       { ip: null, userAgent: '' }
     );
-    expect(res.json).toBeCalledWith(user);
-    expect(res.status).not.toBeCalled();
+    expect(res.json).toHaveBeenCalledWith(user);
+    expect(res.status).not.toHaveBeenCalled();
   });
 
   it('is able to transform json response', async () => {
@@ -73,11 +73,11 @@ describe('providerCallback', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(res.json).toBeCalledWith({
+    expect(res.json).toHaveBeenCalledWith({
       ...user,
       id: '2',
     });
-    expect(res.status).not.toBeCalled();
+    expect(res.status).not.toHaveBeenCalled();
   });
 
   it('Sends error if it was thrown on loginWithService', async () => {
@@ -99,13 +99,13 @@ describe('providerCallback', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.loginWithService).toBeCalledWith(
+    expect(accountsServer.loginWithService).toHaveBeenCalledWith(
       'oauth',
       { accessToken: 'token' },
       { ip: null, userAgent: '' }
     );
-    expect(res.status).toBeCalledWith(400);
-    expect(res.json).toBeCalledWith(error);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(error);
   });
 
   it('calls success callback if loginWithService succeed', async () => {
@@ -132,7 +132,7 @@ describe('providerCallback', () => {
 
     await middleware(req as any, res);
 
-    expect(accountsServerOptions.onOAuthSuccess).toBeCalledWith(req, res, user);
+    expect(accountsServerOptions.onOAuthSuccess).toHaveBeenCalledWith(req, res, user);
   });
 
   it('calls error callback if it was thrown on loginWithService', async () => {
@@ -155,6 +155,6 @@ describe('providerCallback', () => {
 
     await middleware(req as any, res);
 
-    expect(accountsServerOptions.onOAuthError).toBeCalledWith(req, res, error);
+    expect(accountsServerOptions.onOAuthError).toHaveBeenCalledWith(req, res, error);
   });
 });

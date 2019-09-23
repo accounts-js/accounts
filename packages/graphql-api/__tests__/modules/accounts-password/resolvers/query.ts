@@ -28,8 +28,8 @@ describe('accounts-password resolvers query', () => {
 
     it('should call getNewAuthSecret', async () => {
       await Query.twoFactorSecret!({}, {}, { injector, user } as any, {} as any);
-      expect(injector.get).toBeCalledWith(AccountsPassword);
-      expect(accountsPasswordMock.twoFactor.getNewAuthSecret).toBeCalledWith();
+      expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
+      expect(accountsPasswordMock.twoFactor.getNewAuthSecret).toHaveBeenCalledWith();
     });
   });
 });

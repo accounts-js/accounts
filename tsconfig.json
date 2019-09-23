@@ -7,8 +7,7 @@
     "declaration": true,
     "pretty": true,
     "lib": ["es6", "es2015", "es2016", "es2017", "dom", "esnext.asynciterable"],
-    "noUnusedLocals": true,
     "strict": true,
-    "allowSyntheticDefaultImports": true
+    "esModuleInterop": true
   }
 }

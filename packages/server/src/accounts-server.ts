@@ -1,6 +1,6 @@
 import { pick, omit, isString, merge } from 'lodash';
 import * as jwt from 'jsonwebtoken';
-import * as Emittery from 'emittery';
+import Emittery from 'emittery';
 import {
   User,
   LoginResult,
@@ -52,7 +52,6 @@ export class AccountsServer {
       throw new Error('A database driver is required');
     }
     if (this.options.tokenSecret === defaultOptions.tokenSecret) {
-      // tslint:disable-next-line no-console
       console.log(`
 You are using the default secret "${this.options.tokenSecret}" which is not secure.
 Please change it with a strong random token.`);
@@ -62,7 +61,6 @@ Please change it with a strong random token.`);
     this.db = this.options.db;
 
     // Set the db to all services
-    // tslint:disable-next-line
     for (const service in this.services) {
       this.services[service].setStore(this.db);
       this.services[service].server = this;

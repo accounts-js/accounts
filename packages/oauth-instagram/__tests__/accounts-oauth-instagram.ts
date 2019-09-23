@@ -1,4 +1,5 @@
-import * as rp from 'request-promise';
+/* eslint-disable @typescript-eslint/camelcase */
+import rp from 'request-promise';
 
 import AccountsOAuthInstagram from '../src';
 
@@ -29,12 +30,12 @@ describe('AccountsOAuthInstagram', () => {
     });
 
     it('should return the user data', () => {
-      instagramProvider.authenticate(params).then(result => {
-        expect(result).toBe({
+      return instagramProvider.authenticate(params).then(result => {
+        expect(result).toMatchObject({
           id: 'id',
           username: 'username',
           profilePicture: 'profile_picture',
-          accessToken: 'access_token',
+          accessToken: 'test',
         });
       });
     });
