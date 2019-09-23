@@ -3,12 +3,12 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:11
+      - image: circleci/node:12
       - image: circleci/mongo:3
       - image: circleci/redis:4
-      - image: circleci/postgres:10.9
+      - image: circleci/postgres:10.10
         environment:
-          POSTGRES_USER: accounts-js
+          POSTGRES_USER: postgres
           POSTGRES_DB: accounts-js-tests-e2e
     steps:
       - checkout

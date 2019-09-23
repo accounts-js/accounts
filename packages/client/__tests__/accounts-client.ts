@@ -23,6 +23,7 @@ const tokens = {
 
 const mockTransport = {
   loginWithService: jest.fn(() => Promise.resolve(loggedInResponse)),
+  authenticateWithService: jest.fn(() => Promise.resolve(true)),
   logout: jest.fn(() => Promise.resolve()),
   refreshTokens: jest.fn(() => Promise.resolve(loggedInResponse)),
   sendResetPasswordEmail: jest.fn(() => Promise.resolve()),
@@ -152,6 +153,20 @@ describe('Accounts', () => {
     });
   });
 
+  describe('authenticateWithService', () => {
+    it('calls transport', async () => {
+      await accountsClient.authenticateWithService('password', {
+        username: 'user',
+        password: 'password',
+      });
+      expect(mockTransport.authenticateWithService).toHaveBeenCalledTimes(1);
+      expect(mockTransport.authenticateWithService).toHaveBeenCalledWith('password', {
+        username: 'user',
+        password: 'password',
+      });
+    });
+  });
+
   describe('refreshSession', () => {
     it('should do nothing when no tokens', async () => {
       const result = await accountsClient.refreshSession();
@@ -180,6 +195,20 @@ describe('Accounts', () => {
       expect(result).toEqual(tokens);
       expect(localStorage.setItem).toHaveBeenCalledTimes(2);
       expect(mockTransport.refreshTokens).not.toHaveBeenCalledWith();
+    });
+
+    it('should call transport.refreshTokens if force is required and set the tokens', async () => {
+      (isTokenExpired as jest.Mock).mockImplementationOnce(() => false);
+      (isTokenExpired as jest.Mock).mockImplementationOnce(() => false);
+      await accountsClient.setTokens(tokens);
+      const result = await accountsClient.refreshSession(true);
+      expect(result).toEqual(loggedInResponse.tokens);
+      expect(isTokenExpired).toHaveBeenCalledWith(tokens.accessToken);
+      expect(mockTransport.refreshTokens).toHaveBeenCalledWith(
+        tokens.accessToken,
+        tokens.refreshToken
+      );
+      expect(localStorage.setItem).toHaveBeenCalledTimes(4);
     });
 
     it('should clear the tokens is refreshToken is expired', async () => {
