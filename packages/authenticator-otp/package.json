@@ -1,0 +1,45 @@
+{
+  "name": "@accounts/authenticator-otp",
+  "version": "0.19.0",
+  "description": "@accounts/authenticator-otp",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rimraf lib",
+    "start": "tsc --watch",
+    "precompile": "yarn clean",
+    "compile": "tsc",
+    "prepublishOnly": "yarn compile",
+    "test": "yarn testonly",
+    "test-ci": "yarn lint && yarn coverage",
+    "testonly": "jest",
+    "test:watch": "jest --watch",
+    "coverage": "yarn testonly --coverage"
+  },
+  "jest": {
+    "preset": "ts-jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/authenticator-otp"
+  },
+  "author": "Leo Pradel",
+  "license": "MIT",
+  "devDependencies": {
+    "@accounts/server": "^0.19.0",
+    "@types/jest": "24.0.18",
+    "@types/node": "12.7.4",
+    "jest": "24.9.0",
+    "rimraf": "3.0.0"
+  },
+  "dependencies": {
+    "@accounts/types": "^0.19.0",
+    "otplib": "11.0.1"
+  },
+  "peerDependencies": {
+    "@accounts/server": "^0.19.0"
+  }
+}
