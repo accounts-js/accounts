@@ -18,7 +18,8 @@ export interface AuthenticatorOtpOptions {
   appName?: string;
 
   /**
-   * Two factor user name that will be displayed inside the user authenticator app.
+   * Two factor user name that will be displayed inside the user authenticator app,
+   * usually a name, email etc..
    * Will be called every time a user register a new device.
    */
   userName?: (userId: string) => Promise<string> | string;
