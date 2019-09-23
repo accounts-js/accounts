@@ -15,7 +15,7 @@ describe('authFetch', () => {
       refreshSession: jest.fn(() => Promise.resolve({})),
     };
     await authFetch(accounts as any, 'path', {});
-    expect(accounts.refreshSession).toBeCalled();
+    expect(accounts.refreshSession).toHaveBeenCalled();
   });
 
   it('should set access token header', async () => {
@@ -23,7 +23,7 @@ describe('authFetch', () => {
       refreshSession: jest.fn(() => Promise.resolve({ accessToken: 'accessToken' })),
     };
     await authFetch(accounts as any, 'path', {});
-    expect(accounts.refreshSession).toBeCalled();
+    expect(accounts.refreshSession).toHaveBeenCalled();
     expect((window.fetch as jest.Mock).mock.calls[0][1].headers.Authorization).toBe(
       'Bearer accessToken'
     );
@@ -38,7 +38,7 @@ describe('authFetch', () => {
         toto: 'toto',
       },
     });
-    expect(accounts.refreshSession).toBeCalled();
+    expect(accounts.refreshSession).toHaveBeenCalled();
     expect((window.fetch as jest.Mock).mock.calls[0][1].headers.toto).toBe('toto');
   });
 });

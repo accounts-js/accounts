@@ -128,7 +128,7 @@ describe('DatabaseManager configuration', () => {
     expect(() => (databaseManager as any).validateConfiguration({ userStorage: true })).toThrow();
   });
 
-  it('should throw if no sessionStorage specified', () => {
+  it('should not throw if sessionStorage specified', () => {
     expect(() =>
       (databaseManager as any).validateConfiguration({
         userStorage: true,

@@ -36,8 +36,6 @@ export const emailTemplates: EmailTemplatesType = {
 export type SendMailType = (mail: object) => Promise<void>;
 
 export const sendMail = async (mail: object): Promise<void> => {
-  // tslint:disable-next-line no-console
   console.warn('No configuration for email, you must set an email configuration');
-  // tslint:disable-next-line no-console
   console.log(mail);
 };
