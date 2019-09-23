@@ -198,6 +198,10 @@ export class AccountsClient {
     await this.clearTokens();
   }
 
+  public mfaAssociate(type: string) {
+    return this.transport.mfaAssociate(type);
+  }
+
   private getTokenKey(tokenName: TokenKey): string {
     return `${this.options.tokenStoragePrefix}:${tokenName}`;
   }
