@@ -1,15 +1,6 @@
-import { DatabaseInterface } from '@accounts/types';
+import { DatabaseInterface, AuthenticatorService } from '@accounts/types';
 import { AccountsServer } from '@accounts/server';
 import * as otplib from 'otplib';
-
-interface AuthenticatorService {
-  server: any;
-  serviceName: string;
-  setStore(store: DatabaseInterface): void;
-  associate(userId: string, params: any): Promise<any>;
-  authenticate(authenticatorId: string, params: any): Promise<boolean>;
-  // TODO ability to delete an authenticator
-}
 
 export interface AuthenticatorOtpOptions {
   /**

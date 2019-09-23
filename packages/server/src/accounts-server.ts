@@ -10,6 +10,7 @@ import {
   HookListener,
   DatabaseInterface,
   AuthenticationService,
+  AuthenticatorService,
   ConnectionInformations,
 } from '@accounts/types';
 
@@ -43,6 +44,7 @@ const defaultOptions = {
 export class AccountsServer {
   public options: AccountsServerOptions & typeof defaultOptions;
   private services: { [key: string]: AuthenticationService };
+  private authenticators: { [key: string]: AuthenticatorService };
   private db: DatabaseInterface;
   private hooks: Emittery;
 
@@ -59,6 +61,7 @@ Please change it with a strong random token.`);
     }
 
     this.services = services || {};
+    this.authenticators = {};
     this.db = this.options.db;
 
     // Set the db to all services
@@ -530,6 +533,28 @@ Please change it with a strong random token.`);
 
     return userObjectSanitizer(this.internalUserSanitizer(user), omit as any, pick as any);
   }
+
+  /**
+   * MFA related operations
+   */
+
+  /**
+   * @description Start the association of a new authenticator
+   */
+  public async mfaAssociate(serviceName: string) {
+    if (!this.authenticators[serviceName]) {
+      throw new Error(`No service with the name ${serviceName} was registered.`);
+    }
+
+    // TODO see how to get the userId
+    const userId = 'TODO';
+    const params = 'TODO';
+    return this.authenticators[serviceName].associate(userId, params);
+  }
+
+  /**
+   * Private methods
+   */
 
   private internalUserSanitizer(user: User): User {
     return omit(user, ['services']) as any;
