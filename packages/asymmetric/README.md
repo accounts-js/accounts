@@ -1,21 +1,18 @@
-# @accounts/password
-
-[![npm](https://img.shields.io/npm/v/@accounts/password.svg?maxAge=2592000)](https://www.npmjs.com/package/@accounts/password)
-![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
+# @accounts/asymmetric
 
 ## Install
 
 ```
-yarn add @accounts/password
+yarn add @accounts/asymmetric
 ```
 
 ## Usage
 
 ```js
 import { AccountsServer } from '@accounts/server';
-import { AccountsPassword } from '@accounts/password';
+import { AccountsAsymmetric } from '@accounts/asymmetric';
 
-export const accountsPassword = new AccountsPassword({
+export const accountsAsymmetric = new AccountsAsymmetric({
   // options
 });
 
@@ -24,7 +21,7 @@ const accountsServer = new AccountsServer(
     // options
   },
   {
-    password: accountsPassword,
+    asymmetric: accountsAsymmetric,
   }
 );
 ```
