@@ -12,6 +12,7 @@ import { serviceVerifyAuthentication } from './endpoints/verify-authentication';
 import { registerPassword } from './endpoints/password/register';
 import { twoFactorSecret, twoFactorSet, twoFactorUnset } from './endpoints/password/two-factor';
 import { changePassword } from './endpoints/password/change-password';
+import { associate } from './endpoints/mfa/associate';
 import { userLoader } from './user-loader';
 import { AccountsExpressOptions } from './types';
 
@@ -45,6 +46,8 @@ const accountsExpress = (
   router.post(`${path}/:service/verifyAuthentication`, serviceVerifyAuthentication(accountsServer));
 
   router.post(`${path}/:service/authenticate`, serviceAuthenticate(accountsServer));
+
+  router.post(`${path}/mfa/associate`, associate(accountsServer));
 
   const services = accountsServer.getServices();
 

@@ -48,7 +48,11 @@ export class AccountsServer {
   private db: DatabaseInterface;
   private hooks: Emittery;
 
-  constructor(options: AccountsServerOptions, services: { [key: string]: AuthenticationService }) {
+  constructor(
+    options: AccountsServerOptions,
+    services: { [key: string]: AuthenticationService },
+    authenticators?: { [key: string]: AuthenticatorService }
+  ) {
     this.options = merge({ ...defaultOptions }, options);
     if (!this.options.db) {
       throw new Error('A database driver is required');
@@ -60,7 +64,7 @@ Please change it with a strong random token.`);
     }
 
     this.services = services || {};
-    this.authenticators = {};
+    this.authenticators = authenticators || {};
     this.db = this.options.db;
 
     // Set the db to all services
