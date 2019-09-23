@@ -8,8 +8,8 @@ export const associate = (accountsServer: AccountsServer) => async (
 ) => {
   try {
     const { type } = req.body;
-    const loginToken = await accountsServer.mfaAssociate(type);
-    res.json(loginToken);
+    const mfaAssociateResult = await accountsServer.mfaAssociate(type);
+    res.json(mfaAssociateResult);
   } catch (err) {
     sendError(res, err);
   }

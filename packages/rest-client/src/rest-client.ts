@@ -224,6 +224,18 @@ export class RestClient implements TransportInterface {
     return this.authFetch('password/twoFactorUnset', args, customHeaders);
   }
 
+  /**
+   * MFA related operations
+   */
+
+  public async mfaAssociate(type: string, customHeaders?: object) {
+    const args = {
+      method: 'POST',
+      body: JSON.stringify({ type }),
+    };
+    return this.fetch(`/mfa/associate`, args, customHeaders);
+  }
+
   private _loadHeadersObject(plainHeaders: object): { [key: string]: string } {
     if (isPlainObject(plainHeaders)) {
       const customHeaders = headers;
