@@ -56,19 +56,24 @@ export class AuthenticatorOtp implements AuthenticatorService {
     const secret = otplib.authenticator.generateSecret();
     const userName = this.options.userName ? await this.options.userName(userId) : userId;
     const otpauthUri = otplib.authenticator.keyuri(userName, this.options.appName, secret);
-    // TODO generate some recovery codes?
+    // TODO generate some recovery codes like slack is doing?
 
-    // TODO let's not use service for that but a separate mongo collection
-    await this.db.addAuthenticator(userId, this.serviceName, { secret });
+    const authenticatorId = await this.db.createAuthenticator({
+      type: this.serviceName,
+      userId,
+      secret,
+    });
 
-    // TODO also return the id
     return {
-      id: 'TODO',
+      id: authenticatorId,
       secret,
       otpauthUri,
     };
   }
 
+  /**
+   * Verify that the code provided by the user is valid
+   */
   public async authenticate(authenticatorId: string, { code }: { code?: string }) {
     if (!code) {
       throw new Error('Code required');
