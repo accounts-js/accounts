@@ -13,3 +13,4 @@ export * from './types/hook-listener';
 export * from './types/authentication-service';
 export * from './types/hash-algorithm';
 export * from './types/authenticator/create-authenticator';
+export * from './types/authenticator/authenticator';

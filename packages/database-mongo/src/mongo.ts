@@ -5,6 +5,7 @@ import {
   DatabaseInterface,
   Session,
   User,
+  Authenticator,
 } from '@accounts/types';
 import { get, merge } from 'lodash';
 import { Collection, Db, ObjectID } from 'mongodb';
@@ -28,6 +29,7 @@ const defaultOptions = {
   },
   convertUserIdToMongoObjectId: true,
   convertSessionIdToMongoObjectId: true,
+  convertAuthenticatorIdToMongoObjectId: true,
   caseSensitiveUserName: true,
   dateProvider: (date?: Date) => (date ? date.getTime() : Date.now()),
 };
@@ -447,5 +449,16 @@ export class Mongo implements DatabaseInterface {
     }
     const ret = await this.authenticatorCollection.insertOne(authenticator);
     return ret.ops[0]._id.toString();
+  }
+
+  public async findAuthenticatorById(authenticatorId: string): Promise<Authenticator | null> {
+    const id = this.options.convertAuthenticatorIdToMongoObjectId
+      ? toMongoID(authenticatorId)
+      : authenticatorId;
+    const authenticator = await this.authenticatorCollection.findOne({ _id: id });
+    if (authenticator) {
+      authenticator.id = authenticator._id.toString();
+    }
+    return authenticator;
   }
 }

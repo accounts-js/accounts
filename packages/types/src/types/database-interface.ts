@@ -3,6 +3,7 @@ import { Session } from './session';
 import { CreateUser } from './create-user';
 import { ConnectionInformations } from './connection-informations';
 import { CreateAuthenticator } from './authenticator/create-authenticator';
+import { Authenticator } from './authenticator/authenticator';
 
 export interface DatabaseInterface extends DatabaseInterfaceSessions {
   /**
@@ -78,6 +79,8 @@ export interface DatabaseInterface extends DatabaseInterfaceSessions {
    */
 
   createAuthenticator(authenticator: CreateAuthenticator): Promise<string>;
+
+  findAuthenticatorById(authenticatorId: string): Promise<Authenticator | null>;
 }
 
 export interface DatabaseInterfaceSessions {

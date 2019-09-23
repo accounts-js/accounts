@@ -27,6 +27,10 @@ export interface AccountsMongoOptions {
    */
   convertSessionIdToMongoObjectId?: boolean;
   /**
+   * Should the authenticator collection use _id as string or ObjectId, default 'true'.
+   */
+  convertAuthenticatorIdToMongoObjectId: boolean;
+  /**
    * Perform case intensitive query for user name, default 'true'.
    */
   caseSensitiveUserName?: boolean;
