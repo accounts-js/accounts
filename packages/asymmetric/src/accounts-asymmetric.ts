@@ -2,12 +2,26 @@ import { AuthenticationService, DatabaseInterface } from '@accounts/types';
 import { AccountsServer } from '@accounts/server';
 import * as crypto from 'crypto';
 
-import { AsymmetricLoginType, PublicKeyType } from './types';
+import { AsymmetricLoginType, PublicKeyType, ErrorMessages } from './types';
+import { errors } from './errors';
 
-export default class AsymmetricService implements AuthenticationService {
+export interface AccountsAsymmetricOptions {
+  errors?: ErrorMessages;
+}
+
+const defaultOptions = {
+  errors,
+};
+
+export default class AccountsAsymmetric implements AuthenticationService {
   public serviceName = 'asymmetric';
   public server!: AccountsServer;
   private db!: DatabaseInterface;
+  private options: AccountsAsymmetricOptions & typeof defaultOptions;
+
+  constructor(options: AccountsAsymmetricOptions = {}) {
+    this.options = { ...defaultOptions, ...options };
+  }
 
   public setStore(store: DatabaseInterface) {
     this.db = store;
@@ -29,7 +43,7 @@ export default class AsymmetricService implements AuthenticationService {
     const user = await this.db.findUserByServiceId(this.serviceName, params.publicKey);
 
     if (!user) {
-      throw new Error();
+      throw new Error(this.options.errors.userNotFound);
     }
 
     try {
@@ -49,7 +63,7 @@ export default class AsymmetricService implements AuthenticationService {
 
       return isVerified ? user : null;
     } catch (e) {
-      throw new Error();
+      throw new Error(this.options.errors.verificationFailed);
     }
   }
 }
