@@ -15,8 +15,6 @@ export interface DatabaseInterface extends DatabaseInterfaceSessions {
 
   findUserById(userId: string): Promise<User | null>;
 
-  setUserDeactivated(userId: string, deactivated: boolean): Promise<void>;
-
   /**
    * Create and update users
    */
@@ -24,6 +22,8 @@ export interface DatabaseInterface extends DatabaseInterfaceSessions {
   createUser(user: CreateUser): Promise<string>;
 
   setUsername(userId: string, newUsername: string): Promise<void>;
+
+  setUserDeactivated(userId: string, deactivated: boolean): Promise<void>;
 
   /**
    * Auth services related operations
