@@ -9,7 +9,7 @@ import {
 import { get, merge } from 'lodash';
 import { Collection, Db, ObjectID } from 'mongodb';
 
-import { AccountsMongoOptions, MongoUser } from './types';
+import { AccountsMongoOptions, MongoUser, MongoAuthenticator } from './types';
 
 const toMongoID = (objectId: string | ObjectID) => {
   if (typeof objectId === 'string') {
@@ -21,6 +21,7 @@ const toMongoID = (objectId: string | ObjectID) => {
 const defaultOptions = {
   collectionName: 'users',
   sessionCollectionName: 'sessions',
+  authenticatorCollectionName: 'authenticators',
   timestamps: {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -40,6 +41,8 @@ export class Mongo implements DatabaseInterface {
   private collection: Collection;
   // Session collection
   private sessionCollection: Collection;
+  // Session collection
+  private authenticatorCollection: Collection;
 
   constructor(db: any, options?: AccountsMongoOptions) {
     this.options = merge({ ...defaultOptions }, options);
@@ -49,6 +52,7 @@ export class Mongo implements DatabaseInterface {
     this.db = db;
     this.collection = this.db.collection(this.options.collectionName);
     this.sessionCollection = this.db.collection(this.options.sessionCollectionName);
+    this.authenticatorCollection = this.db.collection(this.options.authenticatorCollectionName);
   }
 
   public async setupIndexes(): Promise<void> {
@@ -426,5 +430,22 @@ export class Mongo implements DatabaseInterface {
 
   public async setResetPassword(userId: string, email: string, newPassword: string): Promise<void> {
     await this.setPassword(userId, newPassword);
+  }
+
+  /**
+   * MFA related operations
+   */
+
+  public async createAuthenticator(newAuthenticator: CreateUser): Promise<string> {
+    const authenticator: MongoAuthenticator = {
+      ...newAuthenticator,
+      [this.options.timestamps.createdAt]: this.options.dateProvider(),
+      [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+    };
+    if (this.options.idProvider) {
+      authenticator._id = this.options.idProvider();
+    }
+    const ret = await this.authenticatorCollection.insertOne(authenticator);
+    return ret.ops[0]._id.toString();
   }
 }

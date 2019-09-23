@@ -8,6 +8,10 @@ export interface AccountsMongoOptions {
    */
   sessionCollectionName?: string;
   /**
+   * The authenticators collection name, default 'authenticators'.
+   */
+  authenticatorCollectionName?: string;
+  /**
    * The timestamps for the users and sessions collection, default 'createdAt' and 'updatedAt'.
    */
   timestamps?: {
@@ -50,5 +54,12 @@ export interface MongoUser {
       verified: boolean;
     }
   ];
+  [key: string]: any;
+}
+
+export interface MongoAuthenticator {
+  _id?: string | object;
+  type?: string;
+  userId?: string;
   [key: string]: any;
 }
