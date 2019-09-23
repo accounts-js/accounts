@@ -2,28 +2,43 @@ import { User } from './user';
 import { Session } from './session';
 import { CreateUser } from './create-user';
 import { ConnectionInformations } from './connection-informations';
+import { CreateAuthenticator } from './authenticator/create-authenticator';
 
 export interface DatabaseInterface extends DatabaseInterfaceSessions {
-  // Find user by identity fields
+  /**
+   * Find user by identity fields
+   */
+
   findUserByEmail(email: string): Promise<User | null>;
 
   findUserByUsername(username: string): Promise<User | null>;
 
   findUserById(userId: string): Promise<User | null>;
 
-  // Create and update users
+  setUserDeactivated(userId: string, deactivated: boolean): Promise<void>;
+
+  /**
+   * Create and update users
+   */
+
   createUser(user: CreateUser): Promise<string>;
 
   setUsername(userId: string, newUsername: string): Promise<void>;
 
-  // Auth services related operations
+  /**
+   * Auth services related operations
+   */
+
   findUserByServiceId(serviceName: string, serviceId: string): Promise<User | null>;
 
   setService(userId: string, serviceName: string, data: object): Promise<void>;
 
   unsetService(userId: string, serviceName: string): Promise<void>;
 
-  // Password related operation
+  /**
+   * Password related operation
+   */
+
   findPasswordHash(userId: string): Promise<string | null>;
 
   findUserByResetPasswordToken(token: string): Promise<User | null>;
@@ -44,7 +59,10 @@ export interface DatabaseInterface extends DatabaseInterfaceSessions {
     token: string
   ): Promise<void>;
 
-  // Email related operations
+  /**
+   * Email related operations
+   */
+
   findUserByEmailVerificationToken(token: string): Promise<User | null>;
 
   addEmail(userId: string, newEmail: string, verified: boolean): Promise<void>;
@@ -55,7 +73,11 @@ export interface DatabaseInterface extends DatabaseInterfaceSessions {
 
   addEmailVerificationToken(userId: string, email: string, token: string): Promise<void>;
 
-  setUserDeactivated(userId: string, deactivated: boolean): Promise<void>;
+  /**
+   * MFA related operations
+   */
+
+  createAuthenticator(authenticator: CreateAuthenticator): Promise<string>;
 }
 
 export interface DatabaseInterfaceSessions {
