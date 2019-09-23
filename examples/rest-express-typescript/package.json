@@ -10,6 +10,7 @@
     "test": "yarn build"
   },
   "dependencies": {
+    "@accounts/authenticator-otp": "^0.19.0",
     "@accounts/mongo": "^0.19.0",
     "@accounts/password": "^0.19.0",
     "@accounts/rest-express": "^0.19.0",

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Typography, FormControl, InputLabel, Input } from '@material-ui/core';
 import QRCode from 'qrcode.react';
 
-import { accountsRest } from './accounts';
+import { accountsRest, accountsClient } from './accounts';
 
 const TwoFactor = () => {
   const [secret, setSecret] = useState();
@@ -10,6 +10,9 @@ const TwoFactor = () => {
 
   const fetchTwoFactorSecret = async () => {
     const data = await accountsRest.getTwoFactorSecret();
+    // TODO try catch and show error if needed
+    const data2 = await accountsClient.mfaAssociate('otp');
+    console.log(data2);
     setSecret(data.secret);
   };
 

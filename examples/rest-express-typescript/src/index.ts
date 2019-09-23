@@ -6,6 +6,7 @@ import { AccountsServer } from '@accounts/server';
 import { AccountsPassword } from '@accounts/password';
 import accountsExpress, { userLoader } from '@accounts/rest-express';
 import MongoDBInterface from '@accounts/mongo';
+import { AuthenticatorOtp } from '@accounts/authenticator-otp';
 
 mongoose.connect('mongodb://localhost:27017/accounts-js-rest-example', { useNewUrlParser: true });
 const db = mongoose.connection;
@@ -22,6 +23,9 @@ const accountsServer = new AccountsServer(
   },
   {
     password: new AccountsPassword(),
+  },
+  {
+    otp: new AuthenticatorOtp({}),
   }
 );
 app.use(accountsExpress(accountsServer));

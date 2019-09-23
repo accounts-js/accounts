@@ -73,6 +73,12 @@ Please change it with a strong random token.`);
       this.services[service].server = this;
     }
 
+    // Set the db to all authenticators
+    for (const service in this.authenticators) {
+      this.authenticators[service].setStore(this.db);
+      this.authenticators[service].server = this;
+    }
+
     // Initialize hooks
     this.hooks = new Emittery();
   }
