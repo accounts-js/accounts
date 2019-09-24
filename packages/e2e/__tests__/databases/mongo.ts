@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import { DatabaseInterface } from '@accounts/types';
 // TODO rename to AccountsMongo ?
 import { Mongo } from '@accounts/mongo';

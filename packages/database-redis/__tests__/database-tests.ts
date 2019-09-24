@@ -1,5 +1,5 @@
 import { runDatabaseTests } from '@accounts/database-tests';
-import * as IORedis from 'ioredis';
+import IORedis from 'ioredis';
 
 import { RedisSessions } from '../src/redis';
 

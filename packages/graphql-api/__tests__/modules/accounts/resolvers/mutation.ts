@@ -32,8 +32,8 @@ describe('accounts resolvers mutation', () => {
         { injector, ip, userAgent } as any,
         {} as any
       );
-      expect(injector.get).toBeCalledWith(AccountsServer);
-      expect(accountsServerMock.loginWithService).toBeCalledWith(serviceName, params, {
+      expect(injector.get).toHaveBeenCalledWith(AccountsServer);
+      expect(accountsServerMock.loginWithService).toHaveBeenCalledWith(serviceName, params, {
         ip,
         userAgent,
       });
@@ -46,8 +46,8 @@ describe('accounts resolvers mutation', () => {
         { injector, ip, userAgent } as any,
         {} as any
       );
-      expect(injector.get).toBeCalledWith(AccountsServer);
-      expect(accountsServerMock.authenticateWithService).toBeCalledWith(serviceName, params, {
+      expect(injector.get).toHaveBeenCalledWith(AccountsServer);
+      expect(accountsServerMock.authenticateWithService).toHaveBeenCalledWith(serviceName, params, {
         ip,
         userAgent,
       });
@@ -65,8 +65,8 @@ describe('accounts resolvers mutation', () => {
         { injector, ip, userAgent } as any,
         {} as any
       );
-      expect(injector.get).toBeCalledWith(AccountsServer);
-      expect(accountsServerMock.impersonate).toBeCalledWith(
+      expect(injector.get).toHaveBeenCalledWith(AccountsServer);
+      expect(accountsServerMock.impersonate).toHaveBeenCalledWith(
         accessToken,
         { username },
         ip,
@@ -78,14 +78,14 @@ describe('accounts resolvers mutation', () => {
   describe('logout', () => {
     it('should not call logout if token is not present', async () => {
       await Mutation.logout!({}, {}, { injector } as any, {} as any);
-      expect(injector.get).not.toBeCalledWith(AccountsServer);
-      expect(accountsServerMock.logout).not.toBeCalled();
+      expect(injector.get).not.toHaveBeenCalledWith(AccountsServer);
+      expect(accountsServerMock.logout).not.toHaveBeenCalled();
     });
 
     it('should call logout', async () => {
       await Mutation.logout!({}, {}, { injector, authToken } as any, {} as any);
-      expect(injector.get).toBeCalledWith(AccountsServer);
-      expect(accountsServerMock.logout).toBeCalledWith(authToken);
+      expect(injector.get).toHaveBeenCalledWith(AccountsServer);
+      expect(accountsServerMock.logout).toHaveBeenCalledWith(authToken);
     });
   });
 
@@ -100,8 +100,8 @@ describe('accounts resolvers mutation', () => {
         { injector, ip, userAgent } as any,
         {} as any
       );
-      expect(injector.get).toBeCalledWith(AccountsServer);
-      expect(accountsServerMock.refreshTokens).toBeCalledWith(
+      expect(injector.get).toHaveBeenCalledWith(AccountsServer);
+      expect(accountsServerMock.refreshTokens).toHaveBeenCalledWith(
         accessToken,
         refreshToken,
         ip,

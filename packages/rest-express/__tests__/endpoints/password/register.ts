@@ -37,11 +37,11 @@ describe('registerPassword', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.getServices().password.createUser).toBeCalledWith({
+    expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
       username: 'toto',
     });
-    expect(res.json).toBeCalledWith('1');
-    expect(res.status).not.toBeCalled();
+    expect(res.json).toHaveBeenCalledWith('1');
+    expect(res.status).not.toHaveBeenCalled();
   });
 
   it('calls password.createUser and returns null if server have ambiguousErrorMessages', async () => {
@@ -71,11 +71,11 @@ describe('registerPassword', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.getServices().password.createUser).toBeCalledWith({
+    expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
       username: 'toto',
     });
-    expect(res.json).toBeCalledWith(null);
-    expect(res.status).not.toBeCalled();
+    expect(res.json).toHaveBeenCalledWith(null);
+    expect(res.status).not.toHaveBeenCalled();
   });
 
   it('Sends error if it was thrown on loginWithService', async () => {
@@ -105,10 +105,10 @@ describe('registerPassword', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.getServices().password.createUser).toBeCalledWith({
+    expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
       username: 'toto',
     });
-    expect(res.status).toBeCalledWith(400);
-    expect(res.json).toBeCalledWith(error);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(error);
   });
 });

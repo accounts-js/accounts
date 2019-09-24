@@ -35,8 +35,8 @@ const accountsExpress = (
 
   router.post(`${path}/impersonate`, impersonate(accountsServer));
 
-  router.get(`${path}/user`, userLoader(accountsServer), getUser(accountsServer));
-  router.post(`${path}/user`, userLoader(accountsServer), getUser(accountsServer));
+  router.get(`${path}/user`, userLoader(accountsServer), getUser());
+  router.post(`${path}/user`, userLoader(accountsServer), getUser());
 
   router.post(`${path}/refreshTokens`, refreshAccessToken(accountsServer));
 

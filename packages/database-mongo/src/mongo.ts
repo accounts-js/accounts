@@ -1,4 +1,3 @@
-// tslint:disable variable-name _id
 import {
   ConnectionInformations,
   CreateUser,

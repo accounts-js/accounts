@@ -7,7 +7,7 @@ describe('authenticated-resolver', () => {
       await authenticated(spy)({}, {}, {}, {});
       throw new Error();
     } catch (error) {
-      expect(spy).not.toBeCalled();
+      expect(spy).not.toHaveBeenCalled();
       expect(error.message).toBe('Unauthorized');
     }
   });
@@ -15,12 +15,12 @@ describe('authenticated-resolver', () => {
   it('should call spy if user is in the context', async () => {
     const spy = jest.fn();
     await authenticated(spy)({}, {}, { userId: 'userId', user: {} }, {});
-    expect(spy).toBeCalled();
+    expect(spy).toHaveBeenCalled();
   });
 
   it('should call spy if no user and skipJSAccountsVerification is true', async () => {
     const spy = jest.fn();
     await authenticated(spy)({}, {}, { skipJSAccountsVerification: true }, {});
-    expect(spy).toBeCalled();
+    expect(spy).toHaveBeenCalled();
   });
 });

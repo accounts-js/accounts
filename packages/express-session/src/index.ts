@@ -42,6 +42,7 @@ export class AccountsSession {
         if (tokens) {
           const user = await this.options.user.resolve(tokens);
 
+          // eslint-disable-next-line
           // @ts-ignore
           req[this.options.user.name] = user;
         }

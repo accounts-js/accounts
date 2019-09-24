@@ -49,17 +49,21 @@ describe('accounts-password resolvers mutation', () => {
         { user, injector } as any,
         {} as any
       );
-      expect(injector.get).toBeCalledWith(AccountsPassword);
-      expect(accountsPasswordMock.changePassword).toBeCalledWith(user.id, oldPassword, newPassword);
+      expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
+      expect(accountsPasswordMock.changePassword).toHaveBeenCalledWith(
+        user.id,
+        oldPassword,
+        newPassword
+      );
     });
   });
 
   describe('createUser', () => {
     it('should call createUser', async () => {
       await Mutation.createUser!({}, { user } as any, { injector } as any, {} as any);
-      expect(injector.get).toBeCalledWith(AccountsPassword);
-      expect(injector.get).toBeCalledWith(AccountsServer);
-      expect(accountsPasswordMock.createUser).toBeCalledWith(user);
+      expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
+      expect(injector.get).toHaveBeenCalledWith(AccountsServer);
+      expect(accountsPasswordMock.createUser).toHaveBeenCalledWith(user);
     });
   });
 
@@ -83,8 +87,8 @@ describe('accounts-password resolvers mutation', () => {
         { injector, user } as any,
         {} as any
       );
-      expect(injector.get).toBeCalledWith(AccountsPassword);
-      expect(accountsPasswordMock.twoFactor.set).toBeCalledWith(user.id, secret, code);
+      expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
+      expect(accountsPasswordMock.twoFactor.set).toHaveBeenCalledWith(user.id, secret, code);
     });
   });
 
@@ -102,8 +106,8 @@ describe('accounts-password resolvers mutation', () => {
 
     it('should call twoFactor.unset', async () => {
       await Mutation.twoFactorUnset!({}, { code } as any, { injector, user } as any, {} as any);
-      expect(injector.get).toBeCalledWith(AccountsPassword);
-      expect(accountsPasswordMock.twoFactor.unset).toBeCalledWith(user.id, code);
+      expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
+      expect(accountsPasswordMock.twoFactor.unset).toHaveBeenCalledWith(user.id, code);
     });
   });
 
@@ -118,8 +122,8 @@ describe('accounts-password resolvers mutation', () => {
         { injector, ip, userAgent } as any,
         {} as any
       );
-      expect(injector.get).toBeCalledWith(AccountsPassword);
-      expect(accountsPasswordMock.resetPassword).toBeCalledWith(token, newPassword, {
+      expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
+      expect(accountsPasswordMock.resetPassword).toHaveBeenCalledWith(token, newPassword, {
         ip,
         userAgent,
       });
@@ -131,8 +135,8 @@ describe('accounts-password resolvers mutation', () => {
 
     it('should call sendResetPasswordEmail', async () => {
       await Mutation.sendResetPasswordEmail!({}, { email } as any, { injector } as any, {} as any);
-      expect(injector.get).toBeCalledWith(AccountsPassword);
-      expect(accountsPasswordMock.sendResetPasswordEmail).toBeCalledWith(email);
+      expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
+      expect(accountsPasswordMock.sendResetPasswordEmail).toHaveBeenCalledWith(email);
     });
   });
 
@@ -141,8 +145,8 @@ describe('accounts-password resolvers mutation', () => {
 
     it('should call verifyEmail', async () => {
       await Mutation.verifyEmail!({}, { token } as any, { injector } as any, {} as any);
-      expect(injector.get).toBeCalledWith(AccountsPassword);
-      expect(accountsPasswordMock.verifyEmail).toBeCalledWith(token);
+      expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
+      expect(accountsPasswordMock.verifyEmail).toHaveBeenCalledWith(token);
     });
   });
 
@@ -151,8 +155,8 @@ describe('accounts-password resolvers mutation', () => {
 
     it('should call sendVerificationEmail', async () => {
       await Mutation.sendVerificationEmail!({}, { email } as any, { injector } as any, {} as any);
-      expect(injector.get).toBeCalledWith(AccountsPassword);
-      expect(accountsPasswordMock.sendVerificationEmail).toBeCalledWith(email);
+      expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
+      expect(accountsPasswordMock.sendVerificationEmail).toHaveBeenCalledWith(email);
     });
   });
 });
