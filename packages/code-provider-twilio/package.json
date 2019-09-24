@@ -1,6 +1,6 @@
 {
   "name": "@accounts/code-provider-twilio",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -19,9 +19,9 @@
     "twilio": "^3.33.3"
   },
   "devDependencies": {
-    "@accounts/code": "^0.18.0"
+    "@accounts/code": "^0.19.0"
   },
   "peerDependencies": {
-    "@accounts/code": "^0.18.0"
+    "@accounts/code": "^0.19.0"
   }
 }

@@ -2,26 +2,6 @@
 # yarn lockfile v1
 
 
-"@accounts/server@^0.18.0":
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/@accounts/server/-/server-0.18.0.tgz#9bcccae7691f7ac392718bb9b6a171d66828737b"
-  integrity sha512-wO5/jlc6dVcHFmsqi/FmgKLyli7wkMGwq0gJaBgNev2HC6PJV9O3oUx546Rj8L/QrYqPGjWQ/qGFF+jvCogfCg==
-  dependencies:
-    "@accounts/types" "^0.18.0"
-    "@types/jsonwebtoken" "8.3.2"
-    emittery "0.4.1"
-    jsonwebtoken "8.5.1"
-    jwt-decode "2.2.0"
-    lodash "4.17.15"
-    tslib "1.10.0"
-
-"@accounts/types@^0.18.0":
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/@accounts/types/-/types-0.18.0.tgz#5c44287415cf714a726ef54c210771c535635cc3"
-  integrity sha512-qWm4HKFlM5iv4dDMs5XtjCAJufRVDN+btD7coE2phnI/uVCQvm5slPL7veZMFKyuaiK+1C64qzIU5z1J8g18ww==
-  dependencies:
-    tslib "1.10.0"
-
 "@apollographql/apollo-tools@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@apollographql/apollo-tools/-/apollo-tools-0.4.0.tgz#8a1a0ab7a0bb12ccc03b72e4a104cfa5d969fd5f"
@@ -2394,13 +2374,6 @@
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.3.tgz#bdfd69d61e464dcc81b25159c270d75a73c1a636"
   integrity sha512-Il2DtDVRGDcqjDtE+rF8iqg1CArehSK84HZJCT7AMITlyXRBpuPhqGLDQMowraqqu1coEaimg4ZOqggt6L6L+A==
-
-"@types/jsonwebtoken@8.3.2":
-  version "8.3.2"
-  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-8.3.2.tgz#e3d5245197152346fae7ee87d5541aa5a92d0362"
-  integrity sha512-Mkjljd9DTpkPlrmGfTJvcP4aBU7yO2QmW7wNVhV4/6AEUxYoacqU7FJU/N0yFEHTsIrE4da3rUrjrR5ejicFmA==
-  dependencies:
-    "@types/node" "*"
 
 "@types/jsonwebtoken@8.3.3":
   version "8.3.3"
