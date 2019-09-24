@@ -81,6 +81,8 @@ export interface DatabaseInterface extends DatabaseInterfaceSessions {
   createAuthenticator(authenticator: CreateAuthenticator): Promise<string>;
 
   findAuthenticatorById(authenticatorId: string): Promise<Authenticator | null>;
+
+  findUserAuthenticators(userId: string): Promise<Authenticator[]>;
 }
 
 export interface DatabaseInterfaceSessions {

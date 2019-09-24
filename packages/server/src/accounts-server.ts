@@ -548,6 +548,7 @@ Please change it with a strong random token.`);
 
   /**
    * @description Start the association of a new authenticator
+   * @param {string} serviceName - Service name of the authenticator service.
    */
   public async mfaAssociate(serviceName: string) {
     if (!this.authenticators[serviceName]) {
