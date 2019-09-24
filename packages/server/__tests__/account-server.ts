@@ -1,4 +1,4 @@
-import * as jwtDecode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 import { LoginResult, MFALoginResult } from '@accounts/types';
 
 import { AccountsServer } from '../src/accounts-server';
@@ -19,7 +19,6 @@ describe('AccountsServer', () => {
   describe('config', () => {
     it('throws on invalid db', async () => {
       try {
-        // tslint:disable-next-line
         new AccountsServer({} as any, {});
         throw new Error();
       } catch (err) {
@@ -407,7 +406,7 @@ describe('AccountsServer', () => {
 
       const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
       await accountsServer.logout(accessToken);
-      expect(invalidateSession).toBeCalledWith('456');
+      expect(invalidateSession).toHaveBeenCalledWith('456');
     });
   });
 
@@ -512,7 +511,7 @@ describe('AccountsServer', () => {
       const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
       await accountsServer.logout(accessToken);
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
 
     it('ServerHooks.LogoutError', async () => {
@@ -541,7 +540,7 @@ describe('AccountsServer', () => {
         // nothing to do
       }
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
 
     it('ServerHooks.ResumeSessionSuccess', async () => {
@@ -571,7 +570,7 @@ describe('AccountsServer', () => {
       const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
       await accountsServer.resumeSession(accessToken);
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
 
     it('ServerHooks.ResumeSessionError with invalid session', async () => {
@@ -606,7 +605,7 @@ describe('AccountsServer', () => {
         // nothing to do
       }
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
 
     it('ServerHooks.ResumeSessionError with invalid errored session', async () => {
@@ -636,7 +635,7 @@ describe('AccountsServer', () => {
         // nothing to do
       }
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
 
     it('ServerHooks.RefreshTokensError', async () => {
@@ -665,7 +664,7 @@ describe('AccountsServer', () => {
         // nothing to do
       }
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
 
     it('ServerHooks.RefreshTokensSuccess', async () => {
@@ -703,7 +702,7 @@ describe('AccountsServer', () => {
 
       await accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
 
     it('ServerHooks.ImpersonationError', async () => {
@@ -725,7 +724,7 @@ describe('AccountsServer', () => {
         // nothing to do
       }
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
 
     it('ServerHooks.ImpersonationSuccess', async () => {
@@ -764,7 +763,7 @@ describe('AccountsServer', () => {
 
       await accountsServer.impersonate(accessToken, { userId: 'userId' }, 'ip', 'user agent');
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
   });
 
@@ -1390,7 +1389,7 @@ describe('AccountsServer', () => {
           valid: true,
           userId: '123',
         } as any);
-      accountsServer.createTokens = ({ token, isImpersonated = false, userId }) =>
+      accountsServer.createTokens = ({ token, isImpersonated = false }) =>
         ({
           token,
           isImpersonated,
@@ -1407,7 +1406,7 @@ describe('AccountsServer', () => {
         tokens: { token: '001', isImpersonated: true },
         user: impersonatedUser,
       });
-      expect(createSession).toBeCalledWith(
+      expect(createSession).toHaveBeenCalledWith(
         expect.any(String),
         expect.any(String),
         { ip: 'ip', userAgent: 'user agent' },

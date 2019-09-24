@@ -24,20 +24,20 @@ import { impersonateMutation } from './graphql/impersonate.mutation';
 import { getUserQuery } from './graphql/get-user.query';
 import gql from 'graphql-tag';
 
-export interface IAuthenticateParams {
+export interface AuthenticateParams {
   [key: string]: string | object;
 }
 
-export interface IOptionsType {
+export interface OptionsType {
   graphQLClient: any;
   userFieldsFragment?: any;
 }
 
 export default class GraphQLClient implements TransportInterface {
   public client!: AccountsClient;
-  private options: IOptionsType;
+  private options: OptionsType;
 
-  constructor(options: IOptionsType) {
+  constructor(options: OptionsType) {
     this.options = options;
     this.options.userFieldsFragment =
       this.options.userFieldsFragment ||
@@ -82,7 +82,7 @@ export default class GraphQLClient implements TransportInterface {
    */
   public async loginWithService(
     service: string,
-    authenticateParams: IAuthenticateParams
+    authenticateParams: AuthenticateParams
   ): Promise<LoginResult | MFALoginResult> {
     return this.mutate(loginWithServiceMutation, 'authenticate', {
       serviceName: service,
@@ -93,7 +93,7 @@ export default class GraphQLClient implements TransportInterface {
   public async performMfaChallenge(
     challenge: string,
     mfaToken: string,
-    params: IAuthenticateParams
+    params: AuthenticateParams
   ): Promise<string> {
     return this.mutate(performMfaChallengeMutation, 'performMfaChallenge', {
       challenge,

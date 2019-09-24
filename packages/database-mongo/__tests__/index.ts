@@ -1,4 +1,3 @@
-// tslint:disable-next-line
 import { randomBytes } from 'crypto';
 import { ObjectID, ObjectId } from 'mongodb';
 import { MfaLoginAttempt } from '@accounts/types';
@@ -8,7 +7,7 @@ import { DatabaseTests } from './database-tests';
 
 const databaseTests = new DatabaseTests();
 
-const generateRandomToken = (length: number = 43): string => randomBytes(length).toString('hex');
+const generateRandomToken = (length = 43): string => randomBytes(length).toString('hex');
 
 const user = {
   username: 'johndoe',
@@ -78,7 +77,6 @@ describe('Mongo', () => {
 
     it('should throw with an invalid database connection object', () => {
       try {
-        // tslint:disable-next-line
         new Mongo(null as any);
         throw new Error();
       } catch (err) {

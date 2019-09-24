@@ -49,7 +49,6 @@ describe('Accounts', () => {
 
   it('requires a transport', async () => {
     try {
-      // tslint:disable-next-line no-unused-expression
       new AccountsClient(null as any, null as any);
       throw new Error();
     } catch (err) {

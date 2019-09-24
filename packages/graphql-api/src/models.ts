@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 export type Maybe<T> = T | null;
 
 export interface CreateUserInput {

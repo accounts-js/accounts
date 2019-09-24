@@ -79,7 +79,7 @@ describe('AccountsOauth', () => {
       };
       await oauth.authenticate(params);
 
-      expect(authSpy).toBeCalledWith(params);
+      expect(authSpy).toHaveBeenCalledWith(params);
     });
 
     it('should find a user by service id or email', async () => {
@@ -105,9 +105,9 @@ describe('AccountsOauth', () => {
       };
       await oauth.authenticate(params);
 
-      expect(authSpy).toBeCalledWith(params);
-      expect(store.findUserByServiceId).toBeCalledWith('facebook', '312312');
-      expect(store.findUserByEmail).toBeCalledWith('t1@matrix.com');
+      expect(authSpy).toHaveBeenCalledWith(params);
+      expect(store.findUserByServiceId).toHaveBeenCalledWith('facebook', '312312');
+      expect(store.findUserByEmail).toHaveBeenCalledWith('t1@matrix.com');
     });
 
     it('should create a user if not found on the accounts db', async () => {
@@ -139,12 +139,12 @@ describe('AccountsOauth', () => {
       };
       await oauth.authenticate(params);
 
-      expect(authSpy).toBeCalledWith(params);
-      expect(store.findUserByServiceId).toBeCalledWith('facebook', '2');
-      expect(store.findUserByEmail).toBeCalledWith('t2@matrix.com');
-      expect(store.createUser).toBeCalledWith({ email: user2.email });
-      expect(store.findUserById).toBeCalledWith('34123');
-      expect(store.setService).toBeCalledWith('34123', 'facebook', user2);
+      expect(authSpy).toHaveBeenCalledWith(params);
+      expect(store.findUserByServiceId).toHaveBeenCalledWith('facebook', '2');
+      expect(store.findUserByEmail).toHaveBeenCalledWith('t2@matrix.com');
+      expect(store.createUser).toHaveBeenCalledWith({ email: user2.email });
+      expect(store.findUserById).toHaveBeenCalledWith('34123');
+      expect(store.setService).toHaveBeenCalledWith('34123', 'facebook', user2);
     });
   });
 
@@ -170,9 +170,9 @@ describe('AccountsOauth', () => {
     };
     await oauth.authenticate(params);
 
-    expect(authSpy).toBeCalledWith(params);
-    expect(mockStore.findUserByServiceId).toBeCalledWith('facebook', '312312');
-    expect(mockStore.setService).toBeCalledWith(user.id, 'facebook', userChanged);
+    expect(authSpy).toHaveBeenCalledWith(params);
+    expect(mockStore.findUserByServiceId).toHaveBeenCalledWith('facebook', '312312');
+    expect(mockStore.setService).toHaveBeenCalledWith(user.id, 'facebook', userChanged);
   });
 });
 
@@ -194,6 +194,6 @@ describe('unlink', () => {
 
   it('should unset data of oauth provider', async () => {
     await oauth.unlink('1', 'facebook');
-    expect(mockStore.setService).toBeCalledWith('1', 'facebook', null);
+    expect(mockStore.setService).toHaveBeenCalledWith('1', 'facebook', null);
   });
 });
