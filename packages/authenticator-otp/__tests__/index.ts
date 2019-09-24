@@ -15,7 +15,7 @@ describe('AuthenticatorOtp', () => {
   });
 
   describe('associate', () => {
-    it('should generate a random secret', async () => {
+    it('should create a new database entry and return the secret and url', async () => {
       mockedDb.createAuthenticator.mockResolvedValueOnce('authenticatorIdtest');
       const result = await authenticatorOtp.associate('userIdTest', {});
 
