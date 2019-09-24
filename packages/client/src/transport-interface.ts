@@ -1,4 +1,4 @@
-import { LoginResult, ImpersonationResult, CreateUser, User } from '@accounts/types';
+import { LoginResult, ImpersonationResult, CreateUser, User, Authenticator } from '@accounts/types';
 import { AccountsClient } from './accounts-client';
 
 export interface TransportInterface extends TransportMfaInterface {
@@ -39,4 +39,5 @@ export interface TransportInterface extends TransportMfaInterface {
  */
 interface TransportMfaInterface {
   mfaAssociate(type: string): Promise<any>;
+  authenticators(): Promise<Authenticator[]>;
 }

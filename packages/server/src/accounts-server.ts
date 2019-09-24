@@ -12,6 +12,7 @@ import {
   AuthenticationService,
   AuthenticatorService,
   ConnectionInformations,
+  Authenticator,
 } from '@accounts/types';
 
 import { generateAccessToken, generateRefreshToken, generateRandomToken } from './utils/tokens';
@@ -559,6 +560,16 @@ Please change it with a strong random token.`);
     const userId = 'TODO';
     const params = 'TODO';
     return this.authenticators[serviceName].associate(userId, params);
+  }
+
+  /**
+   * @description Return the list of the active and inactive authenticators for this user.
+   * @param {string} userId - User id linked to the authenticators.
+   */
+  public async findUserAuthenticators(userId: string): Promise<Authenticator[]> {
+    const authenticators = await this.db.findUserAuthenticators(userId);
+    // TODO need to whitelist the fields returned, eg OTP should not expose the secret property
+    return authenticators;
   }
 
   /**

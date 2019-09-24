@@ -202,6 +202,10 @@ export class AccountsClient {
     return this.transport.mfaAssociate(type);
   }
 
+  public authenticators() {
+    return this.transport.authenticators();
+  }
+
   private getTokenKey(tokenName: TokenKey): string {
     return `${this.options.tokenStoragePrefix}:${tokenName}`;
   }
