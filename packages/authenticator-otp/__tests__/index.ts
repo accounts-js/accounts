@@ -23,6 +23,7 @@ describe('AuthenticatorOtp', () => {
         type: 'otp',
         userId: 'userIdTest',
         secret: expect.any(String),
+        active: false,
       });
       expect(result).toEqual({
         id: 'authenticatorIdtest',

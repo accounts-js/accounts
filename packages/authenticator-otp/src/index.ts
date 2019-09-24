@@ -52,6 +52,7 @@ export class AuthenticatorOtp implements AuthenticatorService {
       type: this.serviceName,
       userId,
       secret,
+      active: false,
     });
 
     return {
