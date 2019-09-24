@@ -54,6 +54,20 @@ export class RestClient implements TransportInterface {
     });
   }
 
+  public authenticateWithService(
+    provider: string,
+    data: any,
+    customHeaders?: object
+  ): Promise<boolean> {
+    const args = {
+      method: 'POST',
+      body: JSON.stringify({
+        ...data,
+      }),
+    };
+    return this.fetch(`${provider}/verifyAuthentication`, args, customHeaders);
+  }
+
   public loginWithService(
     provider: string,
     data: any,

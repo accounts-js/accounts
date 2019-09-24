@@ -1,4 +1,4 @@
-import * as jwtDecode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 import { isTokenExpired } from '../src/utils';
 
 jest.mock('jwt-decode');

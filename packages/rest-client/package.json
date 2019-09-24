@@ -40,13 +40,13 @@
   "devDependencies": {
     "@accounts/client": "^0.19.0",
     "@types/jest": "24.0.18",
-    "@types/lodash": "4.14.137",
-    "@types/node": "12.7.2",
+    "@types/lodash": "4.14.138",
+    "@types/node": "12.7.4",
     "jest": "24.9.0",
     "node-fetch": "2.6.0"
   },
   "peerDependencies": {
-    "@accounts/client": "^0.7.0"
+    "@accounts/client": "^0.19.0"
   },
   "dependencies": {
     "@accounts/types": "^0.19.0",

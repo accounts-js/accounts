@@ -37,9 +37,9 @@ describe('twoFactor', () => {
       await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.twoFactor.getNewAuthSecret).toBeCalled();
-      expect(res.json).toBeCalledWith({ secret: 'secret' });
-      expect(res.status).not.toBeCalled();
+      expect(accountsServer.getServices().password.twoFactor.getNewAuthSecret).toHaveBeenCalled();
+      expect(res.json).toHaveBeenCalledWith({ secret: 'secret' });
+      expect(res.status).not.toHaveBeenCalled();
     });
 
     it('Sends error if it was thrown on twoFactorSecret', async () => {
@@ -68,9 +68,9 @@ describe('twoFactor', () => {
       await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.twoFactor.getNewAuthSecret).toBeCalled();
-      expect(res.status).toBeCalledWith(400);
-      expect(res.json).toBeCalledWith(error);
+      expect(accountsServer.getServices().password.twoFactor.getNewAuthSecret).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith(error);
     });
   });
 
@@ -100,21 +100,21 @@ describe('twoFactor', () => {
       await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.twoFactor.set).toBeCalledWith(
+      expect(accountsServer.getServices().password.twoFactor.set).toHaveBeenCalledWith(
         'userId',
         'secret',
         'code'
       );
-      expect(res.json).toBeCalled();
-      expect(res.status).not.toBeCalled();
+      expect(res.json).toHaveBeenCalled();
+      expect(res.status).not.toHaveBeenCalled();
     });
 
     it('Sends error if no userId', async () => {
       const middleware = twoFactorSet(null as any);
       await middleware({} as any, res);
 
-      expect(res.status).toBeCalledWith(401);
-      expect(res.json).toBeCalled();
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalled();
     });
 
     it('Sends error if it was thrown on twoFactorSecret', async () => {
@@ -144,13 +144,13 @@ describe('twoFactor', () => {
       await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.twoFactor.set).toBeCalledWith(
+      expect(accountsServer.getServices().password.twoFactor.set).toHaveBeenCalledWith(
         'userId',
         'secret',
         'code'
       );
-      expect(res.status).toBeCalledWith(400);
-      expect(res.json).toBeCalledWith(error);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith(error);
     });
   });
 
@@ -179,20 +179,20 @@ describe('twoFactor', () => {
       await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.twoFactor.unset).toBeCalledWith(
+      expect(accountsServer.getServices().password.twoFactor.unset).toHaveBeenCalledWith(
         'userId',
         'code'
       );
-      expect(res.json).toBeCalled();
-      expect(res.status).not.toBeCalled();
+      expect(res.json).toHaveBeenCalled();
+      expect(res.status).not.toHaveBeenCalled();
     });
 
     it('Sends error if no userId', async () => {
       const middleware = twoFactorUnset(null as any);
       await middleware({} as any, res);
 
-      expect(res.status).toBeCalledWith(401);
-      expect(res.json).toBeCalled();
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalled();
     });
 
     it('Sends error if it was thrown on twoFactorSecret', async () => {
@@ -221,12 +221,12 @@ describe('twoFactor', () => {
       await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.twoFactor.unset).toBeCalledWith(
+      expect(accountsServer.getServices().password.twoFactor.unset).toHaveBeenCalledWith(
         'userId',
         'code'
       );
-      expect(res.status).toBeCalledWith(400);
-      expect(res.json).toBeCalledWith(error);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith(error);
     });
   });
 });

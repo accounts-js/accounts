@@ -4,6 +4,12 @@ import { AccountsClient } from './accounts-client';
 export interface TransportInterface {
   client: AccountsClient;
   createUser(user: CreateUser): Promise<string>;
+  authenticateWithService(
+    service: string,
+    authenticateParams: {
+      [key: string]: string | object;
+    }
+  ): Promise<boolean>;
   loginWithService(
     service: string,
     authenticateParams: {

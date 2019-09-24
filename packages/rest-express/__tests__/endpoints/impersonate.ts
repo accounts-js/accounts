@@ -31,9 +31,9 @@ describe('impersonate', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.impersonate).toBeCalledWith('token', 'toto', null, '');
-    expect(res.json).toBeCalledWith(impersonateReturnType);
-    expect(res.status).not.toBeCalled();
+    expect(accountsServer.impersonate).toHaveBeenCalledWith('token', 'toto', null, '');
+    expect(res.json).toHaveBeenCalledWith(impersonateReturnType);
+    expect(res.status).not.toHaveBeenCalled();
   });
 
   it('Sends error if it was thrown on impersonate', async () => {
@@ -56,8 +56,8 @@ describe('impersonate', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.impersonate).toBeCalledWith('token', 'toto', null, '');
-    expect(res.status).toBeCalledWith(400);
-    expect(res.json).toBeCalledWith(error);
+    expect(accountsServer.impersonate).toHaveBeenCalledWith('token', 'toto', null, '');
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(error);
   });
 });

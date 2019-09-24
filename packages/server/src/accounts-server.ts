@@ -1,6 +1,6 @@
 import { pick, omit, isString, merge } from 'lodash';
 import * as jwt from 'jsonwebtoken';
-import * as Emittery from 'emittery';
+import Emittery from 'emittery';
 import {
   User,
   LoginResult,
@@ -52,7 +52,6 @@ export class AccountsServer {
       throw new Error('A database driver is required');
     }
     if (this.options.tokenSecret === defaultOptions.tokenSecret) {
-      // tslint:disable-next-line no-console
       console.log(`
 You are using the default secret "${this.options.tokenSecret}" which is not secure.
 Please change it with a strong random token.`);
@@ -62,7 +61,6 @@ Please change it with a strong random token.`);
     this.db = this.options.db;
 
     // Set the db to all services
-    // tslint:disable-next-line
     for (const service in this.services) {
       this.services[service].setStore(this.db);
       this.services[service].server = this;
@@ -88,6 +86,41 @@ Please change it with a strong random token.`);
     this.hooks.on(eventName, callback);
 
     return () => this.hooks.off(eventName, callback);
+  }
+
+  public async authenticateWithService(
+    serviceName: string,
+    params: any,
+    infos: ConnectionInformations
+  ): Promise<boolean> {
+    const hooksInfo: any = {
+      // The service name, such as “password” or “twitter”.
+      service: serviceName,
+      // The connection informations <ConnectionInformations>
+      connection: infos,
+      // Params received
+      params,
+    };
+    try {
+      if (!this.services[serviceName]) {
+        throw new Error(`No service with the name ${serviceName} was registered.`);
+      }
+
+      const user: User | null = await this.services[serviceName].authenticate(params);
+      hooksInfo.user = user;
+      if (!user) {
+        throw new Error(`Service ${serviceName} was not able to authenticate user`);
+      }
+      if (user.deactivated) {
+        throw new Error('Your account has been deactivated');
+      }
+
+      this.hooks.emit(ServerHooks.AuthenticateSuccess, hooksInfo);
+      return true;
+    } catch (err) {
+      this.hooks.emit(ServerHooks.AuthenticateError, { ...hooksInfo, error: err });
+      throw err;
+    }
   }
 
   public async loginWithService(

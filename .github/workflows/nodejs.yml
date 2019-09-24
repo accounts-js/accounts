@@ -1,0 +1,29 @@
+name: Node CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Docker compose
+      run: docker-compose up -d
+    - name: Install Dependencies
+      run: yarn install --frozen-lockfile
+    - name: Lerna bootstrap
+      run: yarn run lerna bootstrap
+    - name: Check lint
+      run: yarn test:lint
+    - name: Compile packages
+      run: yarn compile
+    - name: Run tests
+      run: yarn coverage
+    - name: Upload coverage
+      run: yarn codecov
+    - name: Test examples
+      run: yarn test:examples
+      env:
+        CI: true
