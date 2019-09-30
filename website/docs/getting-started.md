@@ -75,7 +75,7 @@ These variables should then be referenced when creating your GraphQL server.
 **Adding accounts to a GraphQL server**
 
 ```javascript
-import accountsBoost from '@accounts/boost';
+import accountsBoost, { authenticated } from '@accounts/boost';
 import { ApolloServer } from 'apollo-server';
 import { merge } from 'lodash';
 
@@ -85,6 +85,8 @@ import { merge } from 'lodash';
   })).graphql();
 
   const typeDefs = `
+    directive @auth on FIELD_DEFINITION | OBJECT
+
     type PrivateType @auth {
       privateField: String
     }
@@ -110,7 +112,7 @@ import { merge } from 'lodash';
       publicField: () => 'public',
       privateField: () => 'private',
       privateType: () => '',
-      privateFieldWithAuthResolver: accounts.auth((root, args, context) => {
+      privateFieldWithAuthResolver: authenticated((root, args, context) => {
         return 'private';
       }),
     },
@@ -159,7 +161,7 @@ import accountsBoost from '@accounts/boost';
 Next you need to configure your existing GraphQL server to authenticate incoming requests by using the context function provided by `accountsBoost`. Additionally you may merge your existing GraphQL server schema with the accounts server schema.
 
 ```javascript
-import accountsBoost from '@accounts/boost';
+import accountsBoost, { authenticated } from '@accounts/boost';
 import {
   makeExecutableSchema,
   mergeSchemas,
@@ -206,6 +208,8 @@ const accountsServerUri = 'http://localhost:4003/';
   });
 
   const typeDefs = `
+    directive @auth on FIELD_DEFINITION | OBJECT
+
     type PrivateType @auth {
       privateField: String
     }
@@ -215,6 +219,11 @@ const accountsServerUri = 'http://localhost:4003/';
       privateField: String @auth
       privateType: PrivateType
       privateFieldWithAuthResolver: String
+    }
+
+    type Mutation {
+      privateMutation: String @auth
+      publicMutation: String
     }
     `;
 
@@ -226,9 +235,13 @@ const accountsServerUri = 'http://localhost:4003/';
       publicField: () => 'public',
       privateField: () => 'private',
       privateType: () => '',
-      privateFieldWithAuthResolver: accounts.auth((root, args, context) => {
+      privateFieldWithAuthResolver: authenticated((root, args, context) => {
         return 'private';
       }),
+    },
+    Mutation: {
+      privateMutation: () => 'private',
+      publicMutation: () => 'public',
     },
   };
 
