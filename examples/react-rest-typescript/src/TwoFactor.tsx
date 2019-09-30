@@ -5,6 +5,7 @@ import QRCode from 'qrcode.react';
 import { accountsRest, accountsClient } from './accounts';
 
 interface OTP {
+  id: string;
   otpauthUri: string;
   secret: string;
 }
