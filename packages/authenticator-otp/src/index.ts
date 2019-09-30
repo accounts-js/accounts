@@ -42,11 +42,14 @@ export class AuthenticatorOtp implements AuthenticatorService {
   /**
    * Start the association of a new OTP device
    */
-  public async associate(userId: string, params: any) {
+  public async associate(
+    userId: string,
+    params: any
+  ): Promise<{ id: string; secret: string; otpauthUri: string }> {
     const secret = otplib.authenticator.generateSecret();
     const userName = this.options.userName ? await this.options.userName(userId) : userId;
     const otpauthUri = otplib.authenticator.keyuri(userName, this.options.appName, secret);
-    // TODO generate some recovery codes like slack is doing?
+    // TODO generate some recovery codes like slack is doing (as an option)?
 
     const authenticatorId = await this.db.createAuthenticator({
       type: this.serviceName,
@@ -65,7 +68,10 @@ export class AuthenticatorOtp implements AuthenticatorService {
   /**
    * Verify that the code provided by the user is valid
    */
-  public async authenticate(authenticatorId: string, { code }: { code?: string }) {
+  public async authenticate(
+    authenticatorId: string,
+    { code }: { code?: string }
+  ): Promise<boolean> {
     if (!code) {
       throw new Error('Code required');
     }
