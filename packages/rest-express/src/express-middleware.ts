@@ -8,6 +8,7 @@ import { getUser } from './endpoints/get-user';
 import { impersonate } from './endpoints/impersonate';
 import { logout } from './endpoints/logout';
 import { serviceAuthenticate } from './endpoints/service-authenticate';
+import { performMfaChallenge } from './endpoints/perform-mfa-challenge';
 import { serviceVerifyAuthentication } from './endpoints/verify-authentication';
 import { registerPassword } from './endpoints/password/register';
 import { twoFactorSecret, twoFactorSet, twoFactorUnset } from './endpoints/password/two-factor';
@@ -45,6 +46,8 @@ const accountsExpress = (
   router.post(`${path}/:service/verifyAuthentication`, serviceVerifyAuthentication(accountsServer));
 
   router.post(`${path}/:service/authenticate`, serviceAuthenticate(accountsServer));
+
+  router.post(`${path}/performMfaChallenge`, performMfaChallenge(accountsServer));
 
   const services = accountsServer.getServices();
 

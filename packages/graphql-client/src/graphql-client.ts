@@ -1,9 +1,16 @@
 import { TransportInterface, AccountsClient } from '@accounts/client';
-import { CreateUser, LoginResult, ImpersonationResult, User } from '@accounts/types';
+import {
+  CreateUser,
+  LoginResult,
+  ImpersonationResult,
+  User,
+  MFALoginResult,
+} from '@accounts/types';
 import { createUserMutation } from './graphql/create-user.mutation';
 import { loginWithServiceMutation } from './graphql/login-with-service.mutation';
 import { authenticateWithServiceMutation } from './graphql/authenticate-with-service.mutation';
 import { logoutMutation } from './graphql/logout.mutation';
+import { performMfaChallengeMutation } from './graphql/perform-mfa-challenge.mutation';
 import { refreshTokensMutation } from './graphql/refresh-tokens.mutation';
 import { verifyEmailMutation } from './graphql/verify-email.mutation';
 import { sendResetPasswordEmailMutation } from './graphql/send-reset-password-email.mutation';
@@ -76,10 +83,22 @@ export default class GraphQLClient implements TransportInterface {
   public async loginWithService(
     service: string,
     authenticateParams: AuthenticateParams
-  ): Promise<LoginResult> {
+  ): Promise<LoginResult | MFALoginResult> {
     return this.mutate(loginWithServiceMutation, 'authenticate', {
       serviceName: service,
       params: authenticateParams,
+    });
+  }
+
+  public async performMfaChallenge(
+    challenge: string,
+    mfaToken: string,
+    params: AuthenticateParams
+  ): Promise<string> {
+    return this.mutate(performMfaChallengeMutation, 'performMfaChallenge', {
+      challenge,
+      mfaToken,
+      params,
     });
   }
 

@@ -1,9 +1,12 @@
 import { User } from './user';
 import { Session } from './session';
+import { MfaLoginAttempt } from './mfa-login-attempt';
 import { CreateUser } from './create-user';
 import { ConnectionInformations } from './connection-informations';
 
-export interface DatabaseInterface extends DatabaseInterfaceSessions {
+export interface DatabaseInterface
+  extends DatabaseInterfaceSessions,
+    DatabaseInterfaceMfaLoginAttempts {
   // Find user by identity fields
   findUserByEmail(email: string): Promise<User | null>;
 
@@ -56,6 +59,12 @@ export interface DatabaseInterface extends DatabaseInterfaceSessions {
   addEmailVerificationToken(userId: string, email: string, token: string): Promise<void>;
 
   setUserDeactivated(userId: string, deactivated: boolean): Promise<void>;
+}
+
+export interface DatabaseInterfaceMfaLoginAttempts {
+  createMfaLoginAttempt(mfaToken: string, loginToken: string, userId: string): Promise<void>;
+  getMfaLoginAttempt(mfaToken: string): Promise<MfaLoginAttempt | null>;
+  removeMfaLoginAttempt(mfaToken: string): Promise<void>;
 }
 
 export interface DatabaseInterfaceSessions {

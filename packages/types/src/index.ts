@@ -7,6 +7,8 @@ export * from './types/user';
 export * from './types/create-user';
 export * from './types/email-record';
 export * from './types/login-result';
+export * from './types/mfa-login-result';
+export * from './types/mfa-login-attempt';
 export * from './types/impersonation-result';
 export * from './types/login-user-identity';
 export * from './types/hook-listener';

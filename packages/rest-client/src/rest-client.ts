@@ -82,6 +82,19 @@ export class RestClient implements TransportInterface {
     return this.fetch(`${provider}/authenticate`, args, customHeaders);
   }
 
+  public async performMfaChallenge(
+    challenge: string,
+    mfaToken: string,
+    params: any,
+    customHeaders?: object
+  ): Promise<string> {
+    const args = {
+      method: 'POST',
+      body: JSON.stringify({ challenge, mfaToken, params }),
+    };
+    return this.fetch(`performMfaChallenge`, args, customHeaders);
+  }
+
   public impersonate(
     accessToken: string,
     impersonated: LoginUserIdentity,

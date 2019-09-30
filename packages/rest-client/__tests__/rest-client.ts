@@ -75,6 +75,18 @@ describe('RestClient', () => {
     });
   });
 
+  describe('performMfaChallenge', () => {
+    it('should call fetch with performMfaChallenge path', async () => {
+      await restClient.performMfaChallenge('sms', 'mfa-token', {});
+      expect((window.fetch as jest.Mock).mock.calls[0][0]).toBe(
+        'http://localhost:3000/accounts/performMfaChallenge'
+      );
+      expect((window.fetch as jest.Mock).mock.calls[0][1].body).toBe(
+        '{"challenge":"sms","mfaToken":"mfa-token","params":{}}'
+      );
+    });
+  });
+
   describe('loginWithService', () => {
     it('should call fetch with authenticate path', async () => {
       await restClient.loginWithService('password', {

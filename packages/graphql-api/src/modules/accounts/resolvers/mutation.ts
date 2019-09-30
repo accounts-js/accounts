@@ -14,6 +14,15 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
     });
     return authenticated;
   },
+  performMfaChallenge: async (_, args, ctx) => {
+    const { challenge, mfaToken, params } = args;
+    const { injector } = ctx;
+
+    const loginToken = await injector
+      .get(AccountsServer)
+      .performMfaChallenge(challenge, mfaToken, params);
+    return loginToken;
+  },
   verifyAuthentication: async (_, args, ctx) => {
     const { serviceName, params } = args;
     const { ip, userAgent, injector } = ctx;

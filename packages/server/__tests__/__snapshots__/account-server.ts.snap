@@ -8,8 +8,20 @@ exports[`AccountsServer authenticateWithService throws when user not found 1`] =
 
 exports[`AccountsServer config throws on invalid db 1`] = `"A database driver is required"`;
 
+exports[`AccountsServer loginWithService throws error when MFA login token is invalid 1`] = `[Error: Service mfa was not able to authenticate user]`;
+
 exports[`AccountsServer loginWithService throws on invalid service 1`] = `"No service with the name facebook was registered."`;
 
 exports[`AccountsServer loginWithService throws when user is deactivated 1`] = `"Your account has been deactivated"`;
 
 exports[`AccountsServer loginWithService throws when user not found 1`] = `"Service facebook was not able to authenticate user"`;
+
+exports[`AccountsServer performMfaChallenge throws error the challenge is failing #2 1`] = `[Error: Service sms was not able to authenticate user]`;
+
+exports[`AccountsServer performMfaChallenge throws error the challenge is failing 1`] = `[Error: Service sms was not able to authenticate user]`;
+
+exports[`AccountsServer performMfaChallenge throws error when mfa is not enabled for user #2 1`] = `[Error: Performing the mfa challenge is not available]`;
+
+exports[`AccountsServer performMfaChallenge throws error when mfa is not enabled for user 1`] = `[Error: Performing the mfa challenge is not available]`;
+
+exports[`AccountsServer performMfaChallenge throws error when mfaToken is wrong 1`] = `[Error: Performing the mfa challenge is not available]`;

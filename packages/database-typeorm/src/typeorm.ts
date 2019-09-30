@@ -1,9 +1,15 @@
-import { ConnectionInformations, CreateUser, DatabaseInterface } from '@accounts/types';
+import {
+  ConnectionInformations,
+  CreateUser,
+  DatabaseInterface,
+  MfaLoginAttempt as MfaLoginAttemptType,
+} from '@accounts/types';
 import { Repository, getRepository } from 'typeorm';
 import { User } from './entity/User';
 import { UserEmail } from './entity/UserEmail';
 import { UserService } from './entity/UserService';
 import { UserSession } from './entity/UserSession';
+import { MfaLoginAttempt } from './entity/MfaLoginAttempt';
 import { AccountsTypeormOptions } from './types';
 
 const defaultOptions = {
@@ -11,6 +17,7 @@ const defaultOptions = {
   userEmailEntity: UserEmail,
   userServiceEntity: UserService,
   userSessionEntity: UserSession,
+  mfaLoginAttemptEntity: MfaLoginAttempt,
 };
 
 export class AccountsTypeorm implements DatabaseInterface {
@@ -19,6 +26,7 @@ export class AccountsTypeorm implements DatabaseInterface {
   private emailRepository: Repository<UserEmail> = null as any;
   private serviceRepository: Repository<UserService> = null as any;
   private sessionRepository: Repository<UserSession> = null as any;
+  private mfaLoginAttemptRepository: Repository<MfaLoginAttempt> = null as any;
 
   constructor(options?: AccountsTypeormOptions) {
     this.options = { ...defaultOptions, ...options };
@@ -30,6 +38,7 @@ export class AccountsTypeorm implements DatabaseInterface {
       userEmailEntity,
       userServiceEntity,
       userSessionEntity,
+      mfaLoginAttemptEntity,
     } = this.options;
 
     const setRepositories = () => {
@@ -38,11 +47,13 @@ export class AccountsTypeorm implements DatabaseInterface {
         this.emailRepository = connection.getRepository(userEmailEntity);
         this.serviceRepository = connection.getRepository(userServiceEntity);
         this.sessionRepository = connection.getRepository(userSessionEntity);
+        this.mfaLoginAttemptRepository = connection.getRepository(mfaLoginAttemptEntity);
       } else {
         this.userRepository = getRepository(userEntity, connectionName);
         this.emailRepository = getRepository(userEmailEntity, connectionName);
         this.serviceRepository = getRepository(userServiceEntity, connectionName);
         this.sessionRepository = getRepository(userSessionEntity, connectionName);
+        this.mfaLoginAttemptRepository = getRepository(mfaLoginAttemptEntity, connectionName);
       }
     };
 
@@ -426,5 +437,22 @@ export class AccountsTypeorm implements DatabaseInterface {
         valid: false,
       }
     );
+  }
+
+  public async createMfaLoginAttempt(
+    mfaToken: string,
+    loginToken: string,
+    userId: string
+  ): Promise<void> {
+    await this.mfaLoginAttemptRepository.save({ id: mfaToken, mfaToken, loginToken, userId });
+  }
+  public async getMfaLoginAttempt(mfaToken: string): Promise<MfaLoginAttemptType | null> {
+    const res = await this.mfaLoginAttemptRepository.findOne(mfaToken);
+
+    return res || null;
+  }
+  public async removeMfaLoginAttempt(mfaToken: string): Promise<void> {
+    const mfaLoginAttempt = await this.getMfaLoginAttempt(mfaToken);
+    await this.mfaLoginAttemptRepository.remove(mfaLoginAttempt as MfaLoginAttempt);
   }
 }

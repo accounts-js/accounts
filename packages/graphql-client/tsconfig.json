@@ -5,5 +5,5 @@
     "outDir": "./lib",
     "importHelpers": true
   },
-  "exclude": ["node_modules", "__tests__", "lib"]
+  "exclude": ["node_modules", "__tests__", "lib", "dev"]
 }

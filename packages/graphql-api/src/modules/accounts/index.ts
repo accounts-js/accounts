@@ -8,7 +8,10 @@ import getSchemaDef from './schema/schema-def';
 import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
 import { User as UserResolvers } from './resolvers/user';
-import { LoginResult as LoginResultResolvers } from './resolvers/loginResult';
+import {
+  LoginResult as LoginResultResolvers,
+  LoginWithServiceResult,
+} from './resolvers/loginResult';
 import { User } from '@accounts/types';
 import { AccountsPasswordModule } from '../accounts-password';
 import { AuthenticatedDirective } from '../../utils/authenticated-directive';
@@ -65,6 +68,7 @@ export const AccountsModule: GraphQLModule<
       [config.rootMutationName || 'Mutation']: Mutation,
       User: UserResolvers,
       LoginResult: LoginResultResolvers,
+      LoginWithServiceResult,
     } as any),
   // If necessary, import AccountsPasswordModule together with this module
   imports: ({ config }) =>

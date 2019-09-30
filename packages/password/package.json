@@ -10,7 +10,7 @@
     "precompile": "yarn clean",
     "compile": "tsc",
     "prepublishOnly": "yarn compile",
-    "testonly": "jest --coverage",
+    "testonly": "jest",
     "coverage": "jest --coverage"
   },
   "jest": {

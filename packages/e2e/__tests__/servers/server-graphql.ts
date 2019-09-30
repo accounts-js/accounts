@@ -1,13 +1,14 @@
 import { AccountsClient } from '@accounts/client';
 import { AccountsClientPassword } from '@accounts/client-password';
 import { AccountsModule } from '@accounts/graphql-api';
-import { AccountsGraphQLClient } from '@accounts/graphql-client';
+import { AccountsGraphQLClient, IntrospectionResult } from '@accounts/graphql-client';
 import { AccountsPassword } from '@accounts/password';
 import { AccountsServer } from '@accounts/server';
 import { DatabaseInterface, User } from '@accounts/types';
 import ApolloClient from 'apollo-boost';
 import { ApolloServer } from 'apollo-server';
 import fetch from 'node-fetch';
+import { IntrospectionFragmentMatcher, InMemoryCache } from 'apollo-cache-inmemory';
 
 import { ServerTestInterface } from '.';
 import { DatabaseTestInterface } from '../databases';
@@ -82,7 +83,13 @@ export class ServerGraphqlTest implements ServerTestInterface {
       context,
     });
 
-    const apolloClient = new ApolloClient({ uri: `http://localhost:${this.port}` });
+    const fragmentMatcher = new IntrospectionFragmentMatcher({
+      introspectionQueryResultData: IntrospectionResult,
+    });
+
+    const cache = new InMemoryCache({ fragmentMatcher });
+
+    const apolloClient = new ApolloClient({ uri: `http://localhost:${this.port}`, cache });
 
     const accountsClientGraphQL = new AccountsGraphQLClient({
       graphQLClient: apolloClient,

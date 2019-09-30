@@ -1,0 +1,8 @@
+overwrite: true
+schema: ./dev/schema.ts
+require: ts-node/register/transpile-only
+generates:
+  ./src/introspection-result.ts:
+    plugins:
+      - add: /* tslint:disable */
+      - fragment-matcher

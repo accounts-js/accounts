@@ -1,5 +1,6 @@
 import { randomBytes } from 'crypto';
 import { ObjectID, ObjectId } from 'mongodb';
+import { MfaLoginAttempt } from '@accounts/types';
 
 import { Mongo } from '../src';
 import { DatabaseTests } from './database-tests';
@@ -832,6 +833,82 @@ describe('Mongo', () => {
       const retUser = await databaseTests.database.findUserById(userId);
       expect(retUser!.deactivated).toBeTruthy();
       expect((retUser as any).createdAt).not.toEqual((retUser as any).updatedAt);
+    });
+  });
+
+  describe('MfaLoginAttempts', () => {
+    it('should create a new mfa login attempt', async () => {
+      const attempt = { _id: '123', loginToken: '456', userId: '789' };
+      await databaseTests.database.createMfaLoginAttempt(
+        attempt._id,
+        attempt.loginToken,
+        attempt.userId
+      );
+
+      const dbObject = await databaseTests.db
+        .collection('mfa-login-attempts')
+        .findOne({ _id: attempt._id });
+
+      expect(dbObject).toEqual(attempt);
+    });
+
+    it('should not create a new mfa login attempt if already exists', async () => {
+      const attempt = { _id: '123', loginToken: '456', userId: '789' };
+      await databaseTests.db.collection('mfa-login-attempts').insertOne(attempt);
+
+      try {
+        await databaseTests.database.createMfaLoginAttempt(
+          attempt._id,
+          attempt.loginToken,
+          attempt.userId
+        );
+      } catch (e) {
+        const db = await databaseTests.db
+          .collection('mfa-login-attempts')
+          .find()
+          .toArray();
+
+        expect(db).toHaveLength(1);
+      }
+
+      expect.assertions(1);
+    });
+
+    it('should get a mfa login attempt', async () => {
+      const attempt = { _id: '123', loginToken: '456', userId: '789' };
+      await databaseTests.db.collection('mfa-login-attempts').insertOne(attempt);
+
+      const attemptFromDb = (await databaseTests.database.getMfaLoginAttempt(
+        attempt._id
+      )) as MfaLoginAttempt;
+
+      expect(attemptFromDb.id).toEqual(attempt._id);
+      expect(attemptFromDb.mfaToken).toEqual(attempt._id);
+      expect(attemptFromDb.loginToken).toEqual(attempt.loginToken);
+      expect(attemptFromDb.userId).toEqual(attempt.userId);
+    });
+
+    it('should return null while getting a mfa login attempt with wrong id', async () => {
+      const attempt = { _id: '123', loginToken: '456', userId: '789' };
+      await databaseTests.db.collection('mfa-login-attempts').insertOne(attempt);
+
+      const attemptFromDb = await databaseTests.database.getMfaLoginAttempt('111');
+
+      expect(attemptFromDb).toBeNull();
+    });
+
+    it('should remove a mfa login attempt', async () => {
+      const attempt = { _id: '123', loginToken: '456', userId: '789' };
+      await databaseTests.db.collection('mfa-login-attempts').insertOne(attempt);
+
+      await databaseTests.database.removeMfaLoginAttempt(attempt._id);
+
+      const db = await databaseTests.db
+        .collection('mfa-login-attempts')
+        .find()
+        .toArray();
+
+      expect(db).toHaveLength(0);
     });
   });
 });

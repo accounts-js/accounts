@@ -68,6 +68,7 @@ export const accountsBoost = async (userOptions?: AccountsBoostOptions): Promise
   options.db = new DatabaseManager({
     userStorage: storage,
     sessionStorage: storage,
+    mfaLoginAttemptsStorage: storage,
   });
 
   const servicePackages = {

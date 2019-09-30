@@ -1,7 +1,10 @@
 import jwtDecode from 'jwt-decode';
+import { LoginResult, MFALoginResult } from '@accounts/types';
+
 import { AccountsServer } from '../src/accounts-server';
 import { JwtData } from '../src/types/jwt-data';
 import { ServerHooks } from '../src/utils/server-hooks';
+import * as tokens from '../src/utils/tokens';
 
 const delay = (timeout: number) => new Promise(resolve => setTimeout(resolve, timeout));
 
@@ -89,7 +92,82 @@ describe('AccountsServer', () => {
         }
       );
       const res = await accountServer.loginWithService('facebook', {}, {});
-      expect(res.tokens).toBeTruthy();
+      expect((res as LoginResult).tokens).toBeTruthy();
+    });
+
+    it('should create an MFA login process when enabled', async () => {
+      const loginToken = 'login-token';
+      const mfaToken = '936cef147c65abc808defb3598daa752851176e3505b5879620b4d4200f00462'; // hash of loginToken
+      jest.spyOn(tokens, 'generateRandomToken').mockImplementation(() => loginToken);
+      jest.spyOn(tokens, 'hashToken');
+
+      const authenticate = jest.fn(() => Promise.resolve({ id: 'userId', mfaChallenges: ['sms'] }));
+      const createMfaLoginAttempt = jest.fn(() => Promise.resolve());
+      const service: any = { authenticate, setStore: jest.fn() };
+      const accountServer = new AccountsServer(
+        {
+          db: { createMfaLoginAttempt } as any,
+          tokenSecret: 'secret1',
+        },
+        {
+          facebook: service,
+        }
+      );
+      const res = (await accountServer.loginWithService('facebook', {}, {})) as MFALoginResult;
+
+      expect(res.challenges).toEqual(['sms']);
+      expect(res.mfaToken).toEqual(mfaToken);
+      expect(createMfaLoginAttempt).toHaveBeenCalledWith(mfaToken, loginToken, 'userId');
+      expect(tokens.hashToken).toHaveBeenCalledWith(loginToken);
+    });
+
+    it('should finish MFA login process', async () => {
+      const loginToken = 'login-token';
+      const userId = 'user-id';
+      const mfaToken = 'mfa-token';
+
+      const getMfaLoginAttempt = jest.fn(() => Promise.resolve({ loginToken, userId }));
+      const removeMfaLoginAttempt = jest.fn(() => Promise.resolve());
+      const findUserById = jest.fn(() => Promise.resolve({ id: userId }));
+      const createSession = jest.fn(() => Promise.resolve('sessionId'));
+
+      const accountServer = new AccountsServer(
+        {
+          db: { getMfaLoginAttempt, findUserById, removeMfaLoginAttempt, createSession } as any,
+          tokenSecret: 'secret1',
+        },
+        {}
+      );
+      const res = (await accountServer.loginWithService(
+        'mfa',
+        { loginToken, mfaToken },
+        {}
+      )) as LoginResult;
+
+      expect((res as LoginResult).tokens).toBeTruthy();
+      expect(getMfaLoginAttempt).toHaveBeenCalledWith(mfaToken);
+      expect(removeMfaLoginAttempt).toHaveBeenCalledWith(mfaToken);
+      expect(findUserById).toHaveBeenCalledWith(userId);
+    });
+
+    it('throws error when MFA login token is invalid', async () => {
+      const loginToken = 'login-token';
+      const wrongLoginToken = 'wrong-login-token';
+      const userId = 'user-id';
+      const mfaToken = 'mfa-token';
+
+      const getMfaLoginAttempt = jest.fn(() => Promise.resolve({ loginToken, userId }));
+
+      const accountServer = new AccountsServer(
+        {
+          db: { getMfaLoginAttempt } as any,
+          tokenSecret: 'secret1',
+        },
+        {}
+      );
+      await expect(
+        accountServer.loginWithService('mfa', { loginToken: wrongLoginToken, mfaToken }, {})
+      ).rejects.toMatchSnapshot();
     });
   });
 
@@ -174,6 +252,131 @@ describe('AccountsServer', () => {
       expect(decodedAccessToken.data.token).toBeTruthy();
       expect(accessToken).toBeTruthy();
       expect(refreshToken).toBeTruthy();
+    });
+  });
+
+  describe('performMfaChallenge', () => {
+    it('throws error when mfaToken is wrong', async () => {
+      const mfaToken = 'mfa-token';
+
+      const getMfaLoginAttempt = jest.fn(() => Promise.resolve(null));
+
+      const accountServer = new AccountsServer(
+        {
+          db: { getMfaLoginAttempt } as any,
+          tokenSecret: 'secret1',
+        },
+        {}
+      );
+      await expect(
+        accountServer.performMfaChallenge('sms', mfaToken, {})
+      ).rejects.toMatchSnapshot();
+    });
+
+    it('throws error when mfa is not enabled for user', async () => {
+      const userId = 'userId';
+      const mfaToken = 'mfa-token';
+
+      const getMfaLoginAttempt = jest.fn(() => Promise.resolve({ id: userId }));
+      const findUserById = jest.fn(() => Promise.resolve({ id: userId }));
+
+      const accountServer = new AccountsServer(
+        {
+          db: { getMfaLoginAttempt, findUserById } as any,
+          tokenSecret: 'secret1',
+        },
+        {}
+      );
+      await expect(
+        accountServer.performMfaChallenge('sms', mfaToken, {})
+      ).rejects.toMatchSnapshot();
+    });
+
+    it('throws error when mfa is not enabled for user #2', async () => {
+      const userId = 'userId';
+      const mfaToken = 'mfa-token';
+
+      const getMfaLoginAttempt = jest.fn(() => Promise.resolve({ id: userId }));
+      const findUserById = jest.fn(() => Promise.resolve({ id: userId, mfaChallenges: [] }));
+
+      const accountServer = new AccountsServer(
+        {
+          db: { getMfaLoginAttempt, findUserById } as any,
+          tokenSecret: 'secret1',
+        },
+        {}
+      );
+      await expect(
+        accountServer.performMfaChallenge('sms', mfaToken, {})
+      ).rejects.toMatchSnapshot();
+    });
+
+    it('throws error the challenge is failing', async () => {
+      const userId = 'userId';
+      const mfaToken = 'mfa-token';
+      const authenticate = jest.fn(() => Promise.resolve());
+      const getMfaLoginAttempt = jest.fn(() => Promise.resolve({ id: userId }));
+      const findUserById = jest.fn(() => Promise.resolve({ id: userId, mfaChallenges: ['sms'] }));
+      const service: any = { authenticate, setStore: jest.fn() };
+
+      const accountServer = new AccountsServer(
+        {
+          db: { getMfaLoginAttempt, findUserById } as any,
+          tokenSecret: 'secret1',
+        },
+        {
+          sms: service,
+        }
+      );
+      await expect(
+        accountServer.performMfaChallenge('sms', mfaToken, {})
+      ).rejects.toMatchSnapshot();
+    });
+
+    it('throws error the challenge is failing #2', async () => {
+      const userId = 'userId';
+      const mfaToken = 'mfa-token';
+      const authenticate = jest.fn(() => Promise.resolve({ id: 'userId2' }));
+      const getMfaLoginAttempt = jest.fn(() => Promise.resolve({ id: userId }));
+      const findUserById = jest.fn(() => Promise.resolve({ id: userId, mfaChallenges: ['sms'] }));
+      const service: any = { authenticate, setStore: jest.fn() };
+
+      const accountServer = new AccountsServer(
+        {
+          db: { getMfaLoginAttempt, findUserById } as any,
+          tokenSecret: 'secret1',
+        },
+        {
+          sms: service,
+        }
+      );
+      await expect(
+        accountServer.performMfaChallenge('sms', mfaToken, {})
+      ).rejects.toMatchSnapshot();
+    });
+
+    it('should return the loginToken upon success', async () => {
+      const userId = 'userId';
+      const loginToken = 'login-token';
+      const mfaToken = 'mfa-token';
+      const authenticate = jest.fn(() => Promise.resolve({ id: userId }));
+      const findUserById = jest.fn(() => Promise.resolve({ id: userId, mfaChallenges: ['sms'] }));
+
+      const getMfaLoginAttempt = jest.fn(() => Promise.resolve({ id: userId, loginToken }));
+      const service: any = { authenticate, setStore: jest.fn() };
+
+      const accountServer = new AccountsServer(
+        {
+          db: { getMfaLoginAttempt, findUserById } as any,
+          tokenSecret: 'secret1',
+        },
+        {
+          sms: service,
+        }
+      );
+      const res = await accountServer.performMfaChallenge('sms', mfaToken, {});
+
+      expect(res).toEqual(loginToken);
     });
   });
 

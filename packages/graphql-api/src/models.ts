@@ -114,9 +114,11 @@ export interface Mutation {
 
   logout?: Maybe<boolean>;
 
-  authenticate?: Maybe<LoginResult>;
+  authenticate?: Maybe<LoginWithServiceResult>;
 
   verifyAuthentication?: Maybe<boolean>;
+
+  performMfaChallenge?: Maybe<string>;
 }
 
 export interface LoginResult {
@@ -137,6 +139,12 @@ export interface ImpersonateReturn {
   tokens?: Maybe<Tokens>;
 
   user?: Maybe<User>;
+}
+
+export interface MfaLoginResult {
+  mfaToken?: Maybe<string>;
+
+  challenges?: Maybe<(Maybe<string>)[]>;
 }
 
 // ====================================================
@@ -193,6 +201,19 @@ export interface VerifyAuthenticationMutationArgs {
 
   params: AuthenticateParamsInput;
 }
+export interface PerformMfaChallengeMutationArgs {
+  challenge: string;
+
+  mfaToken: string;
+
+  params: AuthenticateParamsInput;
+}
+
+// ====================================================
+// Unions
+// ====================================================
+
+export type LoginWithServiceResult = LoginResult | MfaLoginResult;
 
 import { GraphQLResolveInfo } from 'graphql';
 
@@ -386,9 +407,11 @@ export interface MutationResolvers<TContext = {}, TypeParent = {}> {
 
   logout?: MutationLogoutResolver<Maybe<boolean>, TypeParent, TContext>;
 
-  authenticate?: MutationAuthenticateResolver<Maybe<LoginResult>, TypeParent, TContext>;
+  authenticate?: MutationAuthenticateResolver<Maybe<LoginWithServiceResult>, TypeParent, TContext>;
 
   verifyAuthentication?: MutationVerifyAuthenticationResolver<Maybe<boolean>, TypeParent, TContext>;
+
+  performMfaChallenge?: MutationPerformMfaChallengeResolver<Maybe<string>, TypeParent, TContext>;
 }
 
 export type MutationCreateUserResolver<R = Maybe<string>, Parent = {}, TContext = {}> = Resolver<
@@ -500,7 +523,7 @@ export type MutationLogoutResolver<R = Maybe<boolean>, Parent = {}, TContext = {
   TContext
 >;
 export type MutationAuthenticateResolver<
-  R = Maybe<LoginResult>,
+  R = Maybe<LoginWithServiceResult>,
   Parent = {},
   TContext = {}
 > = Resolver<R, Parent, TContext, MutationAuthenticateArgs>;
@@ -517,6 +540,19 @@ export type MutationVerifyAuthenticationResolver<
 > = Resolver<R, Parent, TContext, MutationVerifyAuthenticationArgs>;
 export interface MutationVerifyAuthenticationArgs {
   serviceName: string;
+
+  params: AuthenticateParamsInput;
+}
+
+export type MutationPerformMfaChallengeResolver<
+  R = Maybe<string>,
+  Parent = {},
+  TContext = {}
+> = Resolver<R, Parent, TContext, MutationPerformMfaChallengeArgs>;
+export interface MutationPerformMfaChallengeArgs {
+  challenge: string;
+
+  mfaToken: string;
 
   params: AuthenticateParamsInput;
 }
@@ -579,6 +615,32 @@ export type ImpersonateReturnUserResolver<
   TContext = {}
 > = Resolver<R, Parent, TContext>;
 
+export interface MfaLoginResultResolvers<TContext = {}, TypeParent = MfaLoginResult> {
+  mfaToken?: MfaLoginResultMfaTokenResolver<Maybe<string>, TypeParent, TContext>;
+
+  challenges?: MfaLoginResultChallengesResolver<Maybe<(Maybe<string>)[]>, TypeParent, TContext>;
+}
+
+export type MfaLoginResultMfaTokenResolver<
+  R = Maybe<string>,
+  Parent = MfaLoginResult,
+  TContext = {}
+> = Resolver<R, Parent, TContext>;
+export type MfaLoginResultChallengesResolver<
+  R = Maybe<(Maybe<string>)[]>,
+  Parent = MfaLoginResult,
+  TContext = {}
+> = Resolver<R, Parent, TContext>;
+
+export interface LoginWithServiceResultResolvers {
+  __resolveType: LoginWithServiceResultResolveType;
+}
+export type LoginWithServiceResultResolveType<
+  R = 'LoginResult' | 'MFALoginResult',
+  Parent = LoginResult | MfaLoginResult,
+  TContext = {}
+> = TypeResolveFn<R, Parent, TContext>;
+
 export type AuthDirectiveResolver<Result> = DirectiveResolverFn<
   Result,
   {},
@@ -621,6 +683,8 @@ export type IResolvers<TContext = {}> = {
   LoginResult?: LoginResultResolvers<TContext>;
   Tokens?: TokensResolvers<TContext>;
   ImpersonateReturn?: ImpersonateReturnResolvers<TContext>;
+  MfaLoginResult?: MfaLoginResultResolvers<TContext>;
+  LoginWithServiceResult?: LoginWithServiceResultResolvers;
 } & { [typeName: string]: never };
 
 export type IDirectiveResolvers<Result> = {

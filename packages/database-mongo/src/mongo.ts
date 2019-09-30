@@ -3,10 +3,11 @@ import {
   CreateUser,
   DatabaseInterface,
   Session,
+  MfaLoginAttempt,
   User,
 } from '@accounts/types';
 import { get, merge } from 'lodash';
-import { Collection, Db, ObjectID } from 'mongodb';
+import { Collection, Db, ObjectID, MongoError } from 'mongodb';
 
 import { AccountsMongoOptions, MongoUser } from './types';
 
@@ -20,6 +21,7 @@ const toMongoID = (objectId: string | ObjectID) => {
 const defaultOptions = {
   collectionName: 'users',
   sessionCollectionName: 'sessions',
+  mfaLoginCollectionName: 'mfa-login-attempts',
   timestamps: {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -39,6 +41,8 @@ export class Mongo implements DatabaseInterface {
   private collection: Collection;
   // Session collection
   private sessionCollection: Collection;
+  // Session collection
+  private mfaLoginCollection: Collection;
 
   constructor(db: any, options?: AccountsMongoOptions) {
     this.options = merge({ ...defaultOptions }, options);
@@ -48,6 +52,7 @@ export class Mongo implements DatabaseInterface {
     this.db = db;
     this.collection = this.db.collection(this.options.collectionName);
     this.sessionCollection = this.db.collection(this.options.sessionCollectionName);
+    this.mfaLoginCollection = this.db.collection(this.options.mfaLoginCollectionName);
   }
 
   public async setupIndexes(): Promise<void> {
@@ -425,5 +430,40 @@ export class Mongo implements DatabaseInterface {
 
   public async setResetPassword(userId: string, email: string, newPassword: string): Promise<void> {
     await this.setPassword(userId, newPassword);
+  }
+
+  public async createMfaLoginAttempt(
+    mfaToken: string,
+    loginToken: string,
+    userId: string
+  ): Promise<void> {
+    try {
+      await this.mfaLoginCollection.insertOne({ _id: mfaToken, loginToken, userId });
+    } catch (e) {
+      const me = e as MongoError;
+      if (me.code === 11000) {
+        // duplicate key
+        throw new Error('mfa login attempt already exists');
+      }
+    }
+  }
+
+  public async getMfaLoginAttempt(mfaToken: string): Promise<MfaLoginAttempt | null> {
+    const dbObject = await this.mfaLoginCollection.findOne({ _id: mfaToken });
+
+    if (!dbObject) {
+      return null;
+    }
+
+    return {
+      id: dbObject._id,
+      mfaToken: dbObject._id,
+      loginToken: dbObject.loginToken,
+      userId: dbObject.userId,
+    };
+  }
+
+  public async removeMfaLoginAttempt(mfaToken: string): Promise<void> {
+    await this.mfaLoginCollection.deleteOne({ _id: mfaToken });
   }
 }

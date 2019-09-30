@@ -8,6 +8,10 @@ export interface AccountsMongoOptions {
    */
   sessionCollectionName?: string;
   /**
+   * The MFA login attempts collection name, default 'mfa-login-attempts'.
+   */
+  mfaLoginCollectionName?: string;
+  /**
    * The timestamps for the users and sessions collection, default 'createdAt' and 'updatedAt'.
    */
   timestamps?: {
