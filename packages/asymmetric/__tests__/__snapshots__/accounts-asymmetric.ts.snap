@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AccountsAsymmetric throws error when the user is not found by public key 1`] = `[Error: User not found]`;
+
+exports[`AccountsAsymmetric throws error when the verification process fails 1`] = `[Error: Failed to verify signature]`;
