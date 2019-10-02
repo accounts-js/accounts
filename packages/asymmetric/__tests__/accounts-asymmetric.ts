@@ -5,10 +5,17 @@ import { AccountsAsymmetric } from '../src';
 
 describe('AccountsAsymmetric', () => {
   it('should update the public key', async () => {
-    const { publicKey } = crypto.generateKeyPairSync('ec', {
-      namedCurve: 'sect239k1',
+    const { publicKey } = crypto.generateKeyPairSync('rsa', {
+      modulusLength: 512,
+      publicKeyEncoding: {
+        type: 'pkcs1',
+        format: 'pem',
+      },
+      privateKeyEncoding: {
+        type: 'pkcs1',
+        format: 'pem',
+      },
     });
-    const publicKeyStr = publicKey.export({ type: 'spki', format: 'der' }).toString('base64');
 
     const service = new AccountsAsymmetric();
 
@@ -16,7 +23,7 @@ describe('AccountsAsymmetric', () => {
     service.setStore({ setService } as any);
 
     const publicKeyParams: PublicKeyType = {
-      key: publicKeyStr,
+      key: publicKey,
       encoding: 'base64',
       format: 'pem',
       type: 'spki',
@@ -26,23 +33,29 @@ describe('AccountsAsymmetric', () => {
 
     expect(res).toBeTruthy();
     expect(setService).toHaveBeenCalledWith('123', service.serviceName, {
-      id: publicKeyStr,
+      id: publicKey,
       ...publicKeyParams,
     });
   });
 
   it('throws error when the user is not found by public key', async () => {
-    const { privateKey, publicKey } = crypto.generateKeyPairSync('ec', {
-      namedCurve: 'sect239k1',
+    const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
+      modulusLength: 512,
+      publicKeyEncoding: {
+        type: 'pkcs1',
+        format: 'pem',
+      },
+      privateKeyEncoding: {
+        type: 'pkcs1',
+        format: 'pem',
+      },
     });
     const payload = 'some data to sign';
 
-    const sign = crypto.createSign('sha512');
+    const sign = crypto.createSign('SHA256');
     sign.write(payload);
     sign.end();
     const signature = sign.sign(privateKey, 'hex');
-
-    const publicKeyStr = publicKey.export({ type: 'spki', format: 'der' }).toString('base64');
 
     const service = new AccountsAsymmetric();
 
@@ -53,49 +66,7 @@ describe('AccountsAsymmetric', () => {
       service.authenticate({
         signature,
         payload,
-        publicKey: publicKeyStr,
-        signatureAlgorithm: 'sha512',
-        signatureFormat: 'hex',
-      })
-    ).rejects.toMatchSnapshot();
-  });
-
-  it('throws error when the verification process fails', async () => {
-    const { privateKey, publicKey } = crypto.generateKeyPairSync('ec', {
-      namedCurve: 'sect239k1',
-    });
-    const payload = 'some data to sign';
-
-    const sign = crypto.createSign('sha512');
-    sign.write(payload);
-    sign.end();
-    const signature = sign.sign(privateKey, 'hex');
-
-    const publicKeyStr = publicKey.export({ type: 'spki', format: 'der' }).toString('base64');
-
-    const service = new AccountsAsymmetric();
-
-    const publicKeyParams: PublicKeyType = {
-      key: publicKeyStr,
-      encoding: 'base64',
-      format: 'pem',
-      type: 'spki',
-    };
-
-    const user = {
-      id: '123',
-      services: {
-        [service.serviceName]: publicKeyParams,
-      },
-    };
-    const findUserByServiceId = jest.fn(() => Promise.resolve(user));
-    service.setStore({ findUserByServiceId } as any);
-
-    await expect(
-      service.authenticate({
-        signature,
-        payload,
-        publicKey: publicKeyStr,
+        publicKey,
         signatureAlgorithm: 'sha512',
         signatureFormat: 'hex',
       })
@@ -103,20 +74,26 @@ describe('AccountsAsymmetric', () => {
   });
 
   it('should return null when signature is invalid', async () => {
-    const { publicKey } = crypto.generateKeyPairSync('ec', {
-      namedCurve: 'sect239k1',
+    const { publicKey } = crypto.generateKeyPairSync('rsa', {
+      modulusLength: 512,
+      publicKeyEncoding: {
+        type: 'pkcs1',
+        format: 'pem',
+      },
+      privateKeyEncoding: {
+        type: 'pkcs1',
+        format: 'pem',
+      },
     });
     const payload = 'some data to sign';
-
-    const publicKeyStr = publicKey.export({ type: 'spki', format: 'der' }).toString('base64');
 
     const service = new AccountsAsymmetric();
 
     const publicKeyParams: PublicKeyType = {
-      key: publicKeyStr,
+      key: publicKey,
       encoding: 'base64',
-      format: 'der',
-      type: 'spki',
+      format: 'pem',
+      type: 'pkcs1',
     };
 
     const user = {
@@ -131,8 +108,8 @@ describe('AccountsAsymmetric', () => {
     const userFromService = await service.authenticate({
       signature: 'some signature',
       payload,
-      publicKey: publicKeyStr,
-      signatureAlgorithm: 'sha512',
+      publicKey: publicKey,
+      signatureAlgorithm: 'sha256',
       signatureFormat: 'hex',
     });
 
@@ -140,25 +117,31 @@ describe('AccountsAsymmetric', () => {
   });
 
   it('should return user when verification is successful', async () => {
-    const { privateKey, publicKey } = crypto.generateKeyPairSync('ec', {
-      namedCurve: 'sect239k1',
+    const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
+      modulusLength: 512,
+      publicKeyEncoding: {
+        type: 'pkcs1',
+        format: 'pem',
+      },
+      privateKeyEncoding: {
+        type: 'pkcs1',
+        format: 'pem',
+      },
     });
     const payload = 'some data to sign';
 
-    const sign = crypto.createSign('sha512');
+    const sign = crypto.createSign('sha256');
     sign.write(payload);
     sign.end();
     const signature = sign.sign(privateKey, 'hex');
 
-    const publicKeyStr = publicKey.export({ type: 'spki', format: 'der' }).toString('base64');
-
     const service = new AccountsAsymmetric();
 
     const publicKeyParams: PublicKeyType = {
-      key: publicKeyStr,
+      key: publicKey,
       encoding: 'base64',
-      format: 'der',
-      type: 'spki',
+      format: 'pem',
+      type: 'pkcs1',
     };
 
     const user = {
@@ -173,8 +156,57 @@ describe('AccountsAsymmetric', () => {
     const userFromService = await service.authenticate({
       signature,
       payload,
-      publicKey: publicKeyStr,
-      signatureAlgorithm: 'sha512',
+      publicKey: publicKey,
+      signatureAlgorithm: 'sha256',
+      signatureFormat: 'hex',
+    });
+
+    expect(userFromService).toEqual(user);
+  });
+
+  it('should return user when verification is successful using der format', async () => {
+    const { publicKey: publicKeyBuffer, privateKey } = crypto.generateKeyPairSync('rsa', {
+      modulusLength: 512,
+      publicKeyEncoding: {
+        type: 'pkcs1',
+        format: 'der',
+      },
+      privateKeyEncoding: {
+        type: 'pkcs1',
+        format: 'pem',
+      },
+    });
+    const publicKey = publicKeyBuffer.toString('base64');
+    const payload = 'some data to sign';
+
+    const sign = crypto.createSign('sha256');
+    sign.write(payload);
+    sign.end();
+    const signature = sign.sign(privateKey, 'hex');
+
+    const service = new AccountsAsymmetric();
+
+    const publicKeyParams: PublicKeyType = {
+      key: publicKey,
+      encoding: 'base64',
+      format: 'der',
+      type: 'pkcs1',
+    };
+
+    const user = {
+      id: '123',
+      services: {
+        [service.serviceName]: publicKeyParams,
+      },
+    };
+    const findUserByServiceId = jest.fn(() => Promise.resolve(user));
+    service.setStore({ findUserByServiceId } as any);
+
+    const userFromService = await service.authenticate({
+      signature,
+      payload,
+      publicKey,
+      signatureAlgorithm: 'sha256',
       signatureFormat: 'hex',
     });
 

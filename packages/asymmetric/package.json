@@ -1,6 +1,6 @@
 {
   "name": "@accounts/asymmetric",
-  "version": "0.19.0",
+  "version": "0.19.1",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -19,12 +19,14 @@
   },
   "dependencies": {
     "@accounts/types": "^0.19.0",
+    "node-forge": "^0.9.1",
     "tslib": "1.10.0"
   },
   "devDependencies": {
     "@accounts/server": "^0.19.0",
     "@types/jest": "24.0.18",
-    "@types/node": "12.7.4",
+    "@types/node": "10.14.19",
+    "@types/node-forge": "^0.8.6",
     "jest": "24.9.0",
     "rimraf": "3.0.0"
   },
