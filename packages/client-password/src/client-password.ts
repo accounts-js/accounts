@@ -1,5 +1,6 @@
 import { AccountsClient } from '@accounts/client';
-import { LoginResult, CreateUser } from '@accounts/types';
+import { LoginResult } from '@accounts/types';
+import { PasswordCreateUserType, PasswordLoginType } from '@accounts/password';
 import { AccountsClientPasswordOptions } from './types';
 
 export class AccountsClientPassword {
@@ -17,16 +18,24 @@ export class AccountsClientPassword {
   /**
    * Create a new user.
    */
-  public async createUser(user: CreateUser): Promise<string> {
-    const hashedPassword = this.hashPassword(user.password);
+  public async createUser(user: PasswordCreateUserType): Promise<string> {
+    let hashedPassword = user.password;
+    if (typeof user.password === 'string') {
+      // mostly just a type check
+      hashedPassword = this.hashPassword(user.password);
+    }
     return this.client.transport.createUser({ ...user, password: hashedPassword });
   }
 
   /**
    * Log the user in with a password.
    */
-  public async login(user: any): Promise<LoginResult> {
-    const hashedPassword = this.hashPassword(user.password);
+  public async login(user: PasswordLoginType): Promise<LoginResult> {
+    let hashedPassword = user.password;
+    if (typeof user.password === 'string') {
+      // mostly just a type check maybe throw if it's not a string?
+      hashedPassword = this.hashPassword(user.password);
+    }
     return this.client.loginWithService('password', {
       ...user,
       password: hashedPassword,
