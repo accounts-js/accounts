@@ -16,6 +16,8 @@ import { twoFactorUnsetMutation } from './graphql/two-factor-unset.mutation';
 import { impersonateMutation } from './graphql/impersonate.mutation';
 import { getUserQuery } from './graphql/get-user.query';
 import gql from 'graphql-tag';
+import { GraphQLErrorList } from './GraphQLErrorList';
+import { print } from 'graphql';
 
 export interface IAuthenticateParams {
   [key: string]: string | object;
@@ -166,14 +168,14 @@ export default class GraphQLClient implements TransportInterface {
   }
 
   private async mutate(mutation: any, resultField: any, variables: any = {}) {
-    // If we are executiong a refresh token mutation do not call refress session again
+    // If we are executing a refresh token mutation do not call refresh session again
     // otherwise it will end up in an infinite loop
     const tokens =
       mutation === refreshTokensMutation
         ? await this.client.getTokens()
         : await this.client.refreshSession();
 
-    const { data } = await this.options.graphQLClient.mutate({
+    const { data, errors } = await this.options.graphQLClient.mutate({
       mutation,
       variables,
       context: {
@@ -182,13 +184,18 @@ export default class GraphQLClient implements TransportInterface {
         },
       },
     });
+
+    if (errors) {
+      throw new GraphQLErrorList(errors, `in mutation: \r\n ${print(mutation)}`);
+    }
+
     return data[resultField];
   }
 
   private async query(query: any, resultField: any, variables: any = {}) {
     const tokens = await this.client.refreshSession();
 
-    const { data } = await this.options.graphQLClient.query({
+    const { data, errors } = await this.options.graphQLClient.query({
       query,
       variables,
       fetchPolicy: 'network-only',
@@ -198,6 +205,11 @@ export default class GraphQLClient implements TransportInterface {
         },
       },
     });
+
+    if (errors) {
+      throw new GraphQLErrorList(errors, `in query: \r\n ${print(query)}`);
+    }
+
     return data[resultField];
   }
 }
