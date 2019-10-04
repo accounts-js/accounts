@@ -9,7 +9,7 @@ export class GraphQLErrorList extends Error {
     this.stack = new Error().stack;
 
     const br = '\r\n';
-    const summary = `${errors.length} error${errors.length > 1 && 's'}${
+    const summary = `${errors.length} error${errors.length > 1 ? 's' : ''}${
       message ? ' ' + message : ':'
     }`;
     const errList = errors.map(err => `\t- ${err.message}`).join(br);
