@@ -16,7 +16,7 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
   },
   createUser: async (_, { user }, ctx) => {
     const { ip, userAgent, injector } = ctx;
-    const userId = await injector.get(AccountsPassword).createUser(user as PasswordCreateUserType);
+    await injector.get(AccountsPassword).createUser(user as PasswordCreateUserType);
     return await injector.get(AccountsServer).loginWithService('password', user, {
       ip,
       userAgent,

@@ -1,4 +1,3 @@
-import { LoginResult } from './../../../../../types/src/types/login-result';
 import gql from 'graphql-tag';
 import { AccountsPasswordModuleConfig } from '..';
 
