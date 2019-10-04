@@ -92,7 +92,7 @@ export interface EmailRecord {
 }
 
 export interface Mutation {
-  createUser?: Maybe<string>;
+  createUser?: Maybe<LoginResult>;
 
   verifyEmail?: Maybe<boolean>;
 
@@ -356,7 +356,7 @@ export type EmailRecordVerifiedResolver<
 > = Resolver<R, Parent, TContext>;
 
 export interface MutationResolvers<TContext = {}, TypeParent = {}> {
-  createUser?: MutationCreateUserResolver<Maybe<string>, TypeParent, TContext>;
+  createUser?: MutationCreateUserResolver<Maybe<LoginResult>, TypeParent, TContext>;
 
   verifyEmail?: MutationVerifyEmailResolver<Maybe<boolean>, TypeParent, TContext>;
 
@@ -391,12 +391,11 @@ export interface MutationResolvers<TContext = {}, TypeParent = {}> {
   verifyAuthentication?: MutationVerifyAuthenticationResolver<Maybe<boolean>, TypeParent, TContext>;
 }
 
-export type MutationCreateUserResolver<R = Maybe<string>, Parent = {}, TContext = {}> = Resolver<
-  R,
-  Parent,
-  TContext,
-  MutationCreateUserArgs
->;
+export type MutationCreateUserResolver<
+  R = Maybe<LoginResult>,
+  Parent = {},
+  TContext = {}
+> = Resolver<R, Parent, TContext, MutationCreateUserArgs>;
 export interface MutationCreateUserArgs {
   user: CreateUserInput;
 }
