@@ -11,7 +11,10 @@ export const impersonateMutation = gql`
       # // TODO: Extract user into a fragment
       user {
         id
-        email
+        emails {
+          address
+          verified
+        }
         username
       }
     }
