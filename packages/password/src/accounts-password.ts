@@ -91,6 +91,10 @@ export interface AccountsPasswordOptions {
    * This function will be called when you call `createUser`.
    */
   validateUsername?(username?: string): boolean;
+  /**
+   * Will automatically send a verification email after signup
+   */
+  sendVerificationEmailAfterSignup?: boolean;
 }
 
 const defaultOptions = {
@@ -116,6 +120,7 @@ const defaultOptions = {
     return Boolean(isValid);
   },
   errors,
+  sendVerificationEmailAfterSignup: false,
 };
 
 export default class AccountsPassword implements AuthenticationService {
@@ -526,6 +531,9 @@ export default class AccountsPassword implements AuthenticationService {
       const userId = await this.db.createUser(user);
 
       defer(async () => {
+        if (this.options.sendVerificationEmailAfterSignup && user.email)
+          this.sendVerificationEmail(user.email);
+
         const userRecord = (await this.db.findUserById(userId)) as User;
         this.server.getHooks().emit(ServerHooks.CreateUserSuccess, userRecord);
       });

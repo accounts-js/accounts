@@ -38,6 +38,7 @@ const defaultOptions = {
   sendMail,
   siteUrl: 'http://localhost:3000',
   createNewSessionTokenOnRefresh: false,
+  sendVerificationEmailAfterSignup: true,
 };
 
 export class AccountsServer {
