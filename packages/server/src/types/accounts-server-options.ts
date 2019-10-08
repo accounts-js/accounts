@@ -1,4 +1,3 @@
-import { sendVerificationEmail } from './../../../rest-express/src/endpoints/password/verify-email';
 import * as jwt from 'jsonwebtoken';
 import { User, DatabaseInterface } from '@accounts/types';
 import { EmailTemplatesType } from './email-templates-type';
