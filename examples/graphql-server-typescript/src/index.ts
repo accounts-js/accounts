@@ -64,7 +64,10 @@ const start = async () => {
     }
 
     type Query {
+      # Example of how to get the userId from the context and return the current logged in user or null
+      me: User
       publicField: String
+      # You can only query this if you are logged in
       privateField: String @auth
       privateType: PrivateType
     }
@@ -76,6 +79,13 @@ const start = async () => {
 
   const resolvers = {
     Query: {
+      me: (_, __, ctx) => {
+        // ctx.userId will be set if user is logged in
+        if (ctx.userId) {
+          return accountsServer.findUserById(ctx.userId);
+        }
+        return null;
+      },
       publicField: () => 'public',
       privateField: () => 'private',
       privateType: () => ({
