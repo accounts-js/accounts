@@ -2,7 +2,7 @@ import { DatabaseManager } from '@accounts/database-manager';
 import { AccountsModule } from '@accounts/graphql-api';
 import MongoDBInterface from '@accounts/mongo';
 import { AccountsPassword } from '@accounts/password';
-import { AccountsServer } from '@accounts/server';
+import { AccountsServer, ServerHooks } from '@accounts/server';
 import { ApolloServer, makeExecutableSchema } from 'apollo-server';
 import gql from 'graphql-tag';
 import { mergeResolvers, mergeTypeDefs } from 'graphql-toolkit';
@@ -42,6 +42,12 @@ const start = async () => {
       password: accountsPassword,
     }
   );
+
+  accountsServer.on(ServerHooks.ValidateLogin, ({ user }) => {
+    // This hook is called every time a user try to login.
+    // You can use it to only allow users with verified email to login.
+    // If you throw an error here it will be returned to the client.
+  });
 
   // Creates resolvers, type definitions, and schema directives used by accounts-js
   const accountsGraphQL = AccountsModule.forRoot({
