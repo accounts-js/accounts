@@ -284,6 +284,8 @@ yarn add @accounts/graphql-client
 
 ```js
 import { ApolloClient } from 'apollo-client';
+import { AccountsClient } from '@accounts/client';
+import { AccountsClientPassword } from '@accounts/client-password';
 import { AccountsGraphQLClient } from '@accounts/graphql-client';
 
 // Create Apollo client
@@ -314,6 +316,8 @@ const passwordClient = new AccountsClientPassword(accountsClient);
 The AccountsGraphQLClient will throw errors when the graphql query/mutation returns them. Because there could be multiple `GraphQLError`s, these errors will be wrapped into a `GraphQLErrorList` object.
 
 ```js
+import { GraphQLErrorList } from '@accounts/graphql-client';
+
 async function registerUser() {
   try {
     passwordClient.createUser({ email: 'foo@foobar.com', password: 'foo' });
