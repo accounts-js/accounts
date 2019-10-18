@@ -14,7 +14,7 @@ import { getFieldFromDecoratorParams, isGQLParam } from '../utils/GraphQLUtils';
  *      }
  *   }
  */
-export const UserAgent = createParamDecorator((_data: never, req: Request) => {
+export const UserAgent = createParamDecorator((_data: any, req: Request) => {
   if (isGQLParam(req)) {
     return getFieldFromDecoratorParams(req, 'userAgent');
   }

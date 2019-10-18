@@ -7,7 +7,7 @@ export const AccountsServerProvider: FactoryProvider<AccountsServer> = {
   provide: ACCOUNTS_JS_SERVER,
   useFactory: (options: NestAccountsOptions) => {
     const { serverOptions, services } = options;
-    return new AccountsServer(serverOptions, services);
+    return new AccountsServer(serverOptions, services || {});
   },
   inject: [ACCOUNTS_JS_OPTIONS],
 };

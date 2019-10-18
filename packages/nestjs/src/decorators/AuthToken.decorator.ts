@@ -13,4 +13,6 @@ import { getFieldFromDecoratorParams } from '../utils/GraphQLUtils';
  *      }
  *   }
  */
-export const AuthToken = createParamDecorator((_data: never, param) => getFieldFromDecoratorParams(param, 'authToken'));
+export const AuthToken = createParamDecorator((_data: any, param: any) =>
+  getFieldFromDecoratorParams(param, 'authToken'),
+);

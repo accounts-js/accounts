@@ -27,7 +27,7 @@ export function getGQLArgs<TArgs = any>(param: AccountsSessionRequest | GQLParam
 export function getGQLContext<TContext extends Context>(
   param: AccountsSessionRequest | GQLParam,
 ): TContext | undefined {
-  return isGQLParam(param) && (param[2] as TContext);
+  return (isGQLParam(param) && (param[2] as TContext)) || undefined;
 }
 export function getGQLInfo<TInfo = any>(param: AccountsSessionRequest | GQLParam): TInfo | undefined {
   return isGQLParam(param) && param[3];
@@ -49,12 +49,12 @@ export function getFieldFromDecoratorParams<K extends keyof Context>(
 export function getFieldFromDecoratorParams(param: AccountsSessionRequest | GQLParam, ...fields: any[]): any {
   if (isGQLParam(param)) {
     const ctx = getGQLContext(param);
-    return (ctx && deepGet(ctx, fields)) || (ctx.req && deepGet(ctx.req, fields));
+    return ctx && (deepGet(ctx, fields) || (ctx.req && deepGet(ctx.req, fields)));
   }
   return deepGet(param, fields) || null;
 }
 
-function deepGet(obj, fields: any[]) {
+function deepGet(obj: any, fields: any[]): any {
   if (!obj || !fields || !fields.length) return null;
 
   const field = fields.shift();

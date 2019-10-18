@@ -14,7 +14,7 @@ export class EnableWithService implements CanActivate {
   ) {}
 
   // tslint:disable-next-line:variable-name
-  private _services;
+  private _services: any;
   get services() {
     if (!this._services) {
       this._services = this.accountsServer.getServices();

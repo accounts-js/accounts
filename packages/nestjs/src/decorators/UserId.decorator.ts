@@ -13,4 +13,4 @@ import { getFieldFromDecoratorParams } from '../utils/GraphQLUtils';
  *      }
  *   }
  */
-export const UserId = createParamDecorator((_data: never, param) => getFieldFromDecoratorParams(param, 'userId'));
+export const UserId = createParamDecorator((_data: any, param: any) => getFieldFromDecoratorParams(param, 'userId'));

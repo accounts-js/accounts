@@ -15,7 +15,7 @@ import { getFieldFromDecoratorParams, isGQLParam } from '../utils/GraphQLUtils';
  *      }
  *   }
  */
-export const ClientIP = createParamDecorator((_data: never, req: Request) => {
+export const ClientIP = createParamDecorator((_data: any, req: Request) => {
   if (isGQLParam(req)) {
     getFieldFromDecoratorParams(req, 'ip');
   } else {

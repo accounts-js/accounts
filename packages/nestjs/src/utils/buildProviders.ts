@@ -1,15 +1,11 @@
+import AccountsServer from '@accounts/server';
 import { Provider } from '@nestjs/common';
 import { AccountsSessionInterceptorProvider } from '../interceptors/ResumeSession.interceptor';
-import {
-  NestAccountsOptionsResult,
-  NestAccountsOptions,
-  AsyncNestAccountsOptions,
-} from '../interfaces/AccountsNestModuleOptions';
+import { AsyncNestAccountsOptions } from '../interfaces/AccountsNestModuleOptions';
 import { accountsOptionsToProvider } from '../providers/AccountsOptions.provider';
 import { AccountsServerProvider } from '../providers/AccountsServer.provider';
-import { ACCOUNTS_JS_SERVER } from './accounts.constants';
 import { GraphQLModuleProvider } from '../providers/GraphQLModule';
-import AccountsServer from '@accounts/server';
+import { ACCOUNTS_JS_SERVER } from './accounts.constants';
 
 export function buildProviders(options: AsyncNestAccountsOptions, server?: AccountsServer): Provider[] {
   if (!server || !(server instanceof AccountsServer)) {

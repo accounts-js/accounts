@@ -17,8 +17,8 @@ type NonServerNestAccountsOptions = Omit<NestAccountsOptions, 'serverOptions' | 
 
 @Module({})
 export class AccountsJsModule implements NestModule {
+  static register(options: NestAccountsOptions): DynamicModule;
   static register(server: AccountsServer, options?: NonServerNestAccountsOptions): DynamicModule;
-  static register(options?: NestAccountsOptions): DynamicModule;
   static register(
     serverOrOptions: AccountsServer | NestAccountsOptions,
     options?: NonServerNestAccountsOptions,
@@ -26,7 +26,7 @@ export class AccountsJsModule implements NestModule {
     let providers = [];
 
     if (serverOrOptions instanceof AccountsServer) {
-      providers = buildProviders(options, serverOrOptions);
+      providers = buildProviders(options || {}, serverOrOptions);
     } else {
       providers = buildProviders(serverOrOptions);
     }
