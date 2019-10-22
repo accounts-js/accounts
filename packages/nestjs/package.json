@@ -1,7 +1,7 @@
 {
   "name": "@accounts/nestjs",
   "version": "0.19.0",
-  "description": "NestJS AccontsJS module and utilities",
+  "description": "NestJS AccountsJS module and utilities",
   "main": "lib/index.js",
   "files": [
     "dist/*",
