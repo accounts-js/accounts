@@ -1,4 +1,4 @@
-import { User } from '@accounts/graphql-api';
+import { User } from '@accounts/types';
 import { ExecutionContext, SetMetadata } from '@nestjs/common';
 import { AccountsSessionRequest } from '../interfaces/AccountsRequest';
 import { AUTH_VALIDATOR_FUNCTIONS } from '../utils/accounts.constants';
