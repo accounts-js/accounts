@@ -1,0 +1,27 @@
+{
+  "name": "@accounts/code-provider-twilio",
+  "version": "0.19.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib",
+    "start": "tsc --watch",
+    "precompile": "yarn clean",
+    "compile": "tsc",
+    "prepublishOnly": "yarn compile"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "preset": "ts-jest"
+  },
+  "dependencies": {
+    "twilio": "^3.33.3"
+  },
+  "devDependencies": {
+    "@accounts/code": "^0.19.0"
+  },
+  "peerDependencies": {
+    "@accounts/code": "^0.19.0"
+  }
+}
