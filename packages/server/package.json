@@ -41,7 +41,7 @@
   "license": "MIT",
   "dependencies": {
     "@accounts/types": "^0.19.0",
-    "@types/jsonwebtoken": "8.3.4",
+    "@types/jsonwebtoken": "8.3.5",
     "emittery": "0.4.1",
     "jsonwebtoken": "8.5.1",
     "jwt-decode": "2.2.0",
