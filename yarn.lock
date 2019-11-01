@@ -962,14 +962,14 @@
     graphql-toolkit "0.5.12"
     tslib "1.10.0"
 
-"@graphql-modules/core@0.7.12":
-  version "0.7.12"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.7.12.tgz#a8d39d41174902d4b61ab207477bc354728591b0"
-  integrity sha512-sgbLgltO2KSAk+fd9pI78AhApOzXoElkDpPL94/shhk0WGrcCU9d432Vf8K4HPhAbio0Tu++TJTbiiJBu8GeAQ==
+"@graphql-modules/core@0.7.13":
+  version "0.7.13"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.7.13.tgz#c4528f83f78cdfaeedea4d3f064d2afc81f09aa5"
+  integrity sha512-csBpOPmk5UdETC5UeN8wqacNMzOrfiMkdEUMixPuQ7/+i0wrvNR1k4FGy97DVb09YGrNhpwF3pphlc/2warhLQ==
   dependencies:
-    "@graphql-modules/di" "0.7.12"
+    "@graphql-modules/di" "0.7.13"
     apollo-server-caching "0.5.0"
-    graphql-toolkit "0.5.13"
+    graphql-toolkit "0.5.16"
     tslib "1.10.0"
 
 "@graphql-modules/di@0.7.11":
@@ -980,10 +980,10 @@
     events "3.0.0"
     tslib "1.10.0"
 
-"@graphql-modules/di@0.7.12":
-  version "0.7.12"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.7.12.tgz#6f99a3e27e54d0401ff94252dd8b19c4a39b17ee"
-  integrity sha512-WYXSWyM1/M62sZG0GzV1kIbZ42muOe37JQelyU761MV3loob4lJe0yugeel4NrxvYsfMYGLjjyUFg3XHAOl7/Q==
+"@graphql-modules/di@0.7.13":
+  version "0.7.13"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.7.13.tgz#513949cca7121fb372e248f663fc97d916080216"
+  integrity sha512-/WEFjDcrSnXfUS1IA8FwAnI+KQSB5FoBYYlvSQ6hUzD5WYk0Ge34Xt2JVUAlhmRDlgpHlErlFLW6ZhTsKA22/Q==
   dependencies:
     events "3.0.0"
     tslib "1.10.0"
@@ -7714,10 +7714,10 @@ graphql-toolkit@0.5.12:
     tslib "^1.9.3"
     valid-url "1.0.9"
 
-graphql-toolkit@0.5.13:
-  version "0.5.13"
-  resolved "https://registry.yarnpkg.com/graphql-toolkit/-/graphql-toolkit-0.5.13.tgz#5c3a5cc5f9bdf18ac1c8ea209a3d51efbe2b9623"
-  integrity sha512-5L5KEnuvJH1bc49w3lbcGm9YC8M7y0A0gQuNYrXlVWCrefCXMI9DWhx7c7MwyyHEF4Rp9wKP5uiWSyLghKsumg==
+graphql-toolkit@0.5.16:
+  version "0.5.16"
+  resolved "https://registry.yarnpkg.com/graphql-toolkit/-/graphql-toolkit-0.5.16.tgz#7673364e4458a6e6bc561eb3b87b2bb0e8360059"
+  integrity sha512-J3rAlsO7A/TJTZ7kLcFYy4/sIvB2AxiosxXFQICdsXf8R9b//fy7jmXnNo38ml1mm//915V0U5HMuAvo/hYiWQ==
   dependencies:
     "@kamilkisiela/graphql-tools" "4.0.6"
     "@types/glob" "7.1.1"
