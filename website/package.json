@@ -12,7 +12,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-alpha.24",
+    "@docusaurus/core": "2.0.0-alpha.34",
     "@docusaurus/preset-classic": "2.0.0-alpha.24",
     "classnames": "2.2.6",
     "react": "16.8.4",
