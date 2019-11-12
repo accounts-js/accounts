@@ -1,5 +1,6 @@
 import { DatabaseManager } from '../src';
 
+// eslint-disable-next-line jest/no-export
 export default class Database {
   public name: any;
 
