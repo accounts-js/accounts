@@ -27,7 +27,7 @@
     "@types/lodash": "4.14.146",
     "@types/mongoose": "5.5.30",
     "@types/node": "12.12.7",
-    "@types/node-fetch": "2.5.0",
+    "@types/node-fetch": "2.5.3",
     "jest": "24.9.0",
     "jest-localstorage-mock": "2.4.0"
   },
@@ -54,6 +54,6 @@
     "mongoose": "5.7.10",
     "node-fetch": "2.6.0",
     "tslib": "1.10.0",
-    "typeorm": "0.2.18"
+    "typeorm": "0.2.20"
   }
 }
