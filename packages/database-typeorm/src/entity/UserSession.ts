@@ -13,7 +13,11 @@ export class UserSession {
   @PrimaryGeneratedColumn('uuid')
   public id!: string;
 
-  @ManyToOne(() => User, user => user.sessions, { onDelete: 'CASCADE' })
+  @ManyToOne(
+    () => User,
+    user => user.sessions,
+    { onDelete: 'CASCADE' }
+  )
   public user!: User;
 
   @Column()

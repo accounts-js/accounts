@@ -90,7 +90,7 @@ export class Mongo implements DatabaseInterface {
       user._id = this.options.idProvider();
     }
     const ret = await this.collection.insertOne(user);
-    return ret.ops[0]._id.toString();
+    return (ret.ops[0]._id as ObjectID).toString();
   }
 
   public async findUserById(userId: string): Promise<User | null> {
@@ -315,7 +315,7 @@ export class Mongo implements DatabaseInterface {
     }
 
     const ret = await this.sessionCollection.insertOne(session);
-    return ret.ops[0]._id.toString();
+    return (ret.ops[0]._id as ObjectID).toString();
   }
 
   public async updateSession(

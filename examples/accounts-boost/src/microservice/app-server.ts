@@ -13,16 +13,18 @@ import fetch from 'node-fetch';
 const accountsServerUri = 'http://localhost:4003/';
 
 (async () => {
-  const accounts = (await accountsBoost({
-    tokenSecret: 'terrible secret',
-    micro: true, // setting micro to true will instruct `@accounts/boost` to only verify access tokens without any additional session logic
-  })).graphql();
+  const accounts = (
+    await accountsBoost({
+      tokenSecret: 'terrible secret',
+      micro: true, // setting micro to true will instruct `@accounts/boost` to only verify access tokens without any additional session logic
+    })
+  ).graphql();
 
   // // Note: the following steps are optional and only required if you want to stitch the remote accounts schema with your apps schema.
 
   // // Creates a link to fetch the remote schema from the accounts microservice.
 
-  const http = new HttpLink({ uri: accountsServerUri, fetch });
+  const http = new HttpLink({ uri: accountsServerUri, fetch: fetch as any });
 
   const link = setContext((request, previousContext) => {
     if (!previousContext.graphqlContext) {

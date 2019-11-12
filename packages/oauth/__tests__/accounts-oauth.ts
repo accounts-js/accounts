@@ -38,13 +38,11 @@ describe('AccountsOauth', () => {
   describe('authenticate', () => {
     it('should throw invalid provider', async () => {
       const oauth = new AccountsOauth({});
-      try {
-        await oauth.authenticate({
+      await expect(
+        oauth.authenticate({
           provider: 'facebook',
-        });
-      } catch (err) {
-        expect(err.message).toBe('Invalid provider');
-      }
+        })
+      ).rejects.toThrowError('Invalid provider');
     });
 
     it('should throw invalid provider if user provider was not supplied', async () => {
@@ -52,13 +50,11 @@ describe('AccountsOauth', () => {
         facebook: {},
       };
       const oauth = new AccountsOauth(options as any);
-      try {
-        await oauth.authenticate({
+      await expect(
+        oauth.authenticate({
           provider: 'facebook',
-        });
-      } catch (err) {
-        expect(err.message).toBe('Invalid provider');
-      }
+        })
+      ).rejects.toThrowError('Invalid provider');
     });
 
     it("should call provider's authenticate method in order to get the user itself", async () => {
@@ -185,11 +181,7 @@ describe('unlink', () => {
   oauth.setStore(mockStore as any);
 
   it('should throw if given wrong provider', async () => {
-    try {
-      await oauth.unlink('1', 'twitter');
-    } catch (e) {
-      expect(e.message).toBe('Invalid provider');
-    }
+    await expect(oauth.unlink('1', 'twitter')).rejects.toThrowError('Invalid provider');
   });
 
   it('should unset data of oauth provider', async () => {
