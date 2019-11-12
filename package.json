@@ -64,7 +64,6 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "2.7.0",
     "@typescript-eslint/parser": "2.7.0",
-    "codecov": "3.6.1",
     "eslint": "6.6.0",
     "eslint-config-prettier": "6.5.0",
     "eslint-plugin-jest": "23.0.3",
