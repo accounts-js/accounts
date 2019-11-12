@@ -36,13 +36,13 @@
     "tslib": "1.10.0"
   },
   "devDependencies": {
-    "@types/node": "12.7.4",
+    "@types/node": "12.12.7",
     "@types/qrcode.react": "0.8.2",
     "@types/react": "16.9.2",
     "@types/react-dom": "16.9.0",
     "@types/react-router": "5.0.3",
     "@types/react-router-dom": "4.3.5",
     "react-scripts": "3.1.1",
-    "typescript": "3.5.3"
+    "typescript": "3.7.2"
   }
 }

@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/js-accounts/graphql#readme",
   "devDependencies": {
-    "@types/jest": "24.0.21",
+    "@types/jest": "24.0.22",
     "jest": "24.9.0",
     "lodash": "4.17.15",
     "nock": "10.0.6"
