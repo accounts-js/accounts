@@ -19,7 +19,7 @@
     "apollo-server": "2.9.7",
     "graphql": "14.5.8",
     "graphql-toolkit": "0.6.8",
-    "graphql-tools": "4.0.5",
+    "graphql-tools": "4.0.6",
     "lodash": "4.17.15",
     "node-fetch": "2.6.0",
     "tslib": "1.10.0"
