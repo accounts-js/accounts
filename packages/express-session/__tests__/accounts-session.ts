@@ -98,141 +98,149 @@ describe('AccountsSession', () => {
     expect(req.session[defaultName]).not.toEqual(tokens);
   });
 
-  test('should renew', (done: jest.DoneCallback) => {
-    const mockedServer = mockAccountsServer();
-    const accountsSession = new AccountsSession(mockedServer as any);
-    const tokens = {
-      accessToken: 'access',
-      refreshToken: 'refresh',
-    };
-    const req: any = {
-      headers: {
-        'user-agent': null,
-      },
-      session: {
-        [defaultName]: tokens,
-      },
-    };
-
-    accountsSession
-      .renew(req)
-      .then(newTokens => {
-        expect(newTokens).toBeDefined();
-        expect(accountsSession.get(req)).toEqual({
-          accessToken: 'newAccess',
-          refreshToken: 'newRefresh',
-        });
-        done();
-      })
-      .catch(done.fail);
-  });
-
-  test('should destroy', (done: jest.DoneCallback) => {
-    const mockedServer = mockAccountsServer();
-    const accountsSession = new AccountsSession(mockedServer as any);
-    const tokens = {
-      accessToken: 'access',
-      refreshToken: 'refresh',
-    };
-    const req: any = {
-      headers: {
-        'user-agent': null,
-      },
-      session: {
-        [defaultName]: tokens,
-        destroy: (cb: any) => {
-          delete req.session;
-          cb();
+  test('should renew', () => {
+    return new Promise(done => {
+      const mockedServer = mockAccountsServer();
+      const accountsSession = new AccountsSession(mockedServer as any);
+      const tokens = {
+        accessToken: 'access',
+        refreshToken: 'refresh',
+      };
+      const req: any = {
+        headers: {
+          'user-agent': null,
         },
-      },
-    };
+        session: {
+          [defaultName]: tokens,
+        },
+      };
 
-    accountsSession
-      .destroy(req)
-      .then(result => {
-        expect(result).toBeUndefined();
-        expect(mockedServer.logout).toHaveBeenCalledWith(tokens.accessToken);
-        expect(accountsSession.get(req)).toBeUndefined();
-
-        done();
-      })
-      .catch(done.fail);
-  });
-
-  test('should renew tokens and resolve a user via middleware', (done: jest.DoneCallback) => {
-    const mockedServer = mockAccountsServer();
-    const resolveFn = jest.fn().mockReturnValue('user');
-    const accountsSession = new AccountsSession(mockedServer as any, {
-      user: {
-        name: 'currentUser',
-        resolve: resolveFn,
-      },
+      accountsSession
+        .renew(req)
+        .then(newTokens => {
+          expect(newTokens).toBeDefined();
+          expect(accountsSession.get(req)).toEqual({
+            accessToken: 'newAccess',
+            refreshToken: 'newRefresh',
+          });
+          done();
+        })
+        .catch(done.fail);
     });
-    const tokens = {
-      accessToken: 'access',
-      refreshToken: 'refresh',
-    };
-    const req: any = {
-      headers: {
-        'user-agent': null,
-      },
-      session: {
-        [defaultName]: tokens,
-      },
-    };
-    const res: any = {};
-    const next = jest.fn();
-
-    accountsSession
-      .middleware()(req, res, next)
-      .then(() => {
-        expect(resolveFn).toHaveBeenCalledWith({
-          accessToken: 'newAccess',
-          refreshToken: 'newRefresh',
-        });
-        expect(req.currentUser).toEqual('user');
-        expect(next).toHaveBeenCalled();
-
-        done();
-      })
-      .catch(done.fail);
   });
 
-  test('should have a default resolver', (done: jest.DoneCallback) => {
-    const user = {
-      name: 'foo',
-    };
-    const resumeSession = jest.fn(() => user);
-    const accountsSession = new AccountsSession({
-      ...mockAccountsServer(),
-      resumeSession,
-    } as any);
+  test('should destroy', () => {
+    return new Promise(done => {
+      const mockedServer = mockAccountsServer();
+      const accountsSession = new AccountsSession(mockedServer as any);
+      const tokens = {
+        accessToken: 'access',
+        refreshToken: 'refresh',
+      };
+      const req: any = {
+        headers: {
+          'user-agent': null,
+        },
+        session: {
+          [defaultName]: tokens,
+          destroy: (cb: any) => {
+            delete req.session;
+            cb();
+          },
+        },
+      };
 
-    const tokens = {
-      accessToken: 'access',
-      refreshToken: 'refresh',
-    };
-    const req: any = {
-      headers: {
-        'user-agent': null,
-      },
-      session: {
-        [defaultName]: tokens,
-      },
-    };
-    const res: any = {};
-    const next = () => {
-      //
-    };
+      accountsSession
+        .destroy(req)
+        .then(result => {
+          expect(result).toBeUndefined();
+          expect(mockedServer.logout).toHaveBeenCalledWith(tokens.accessToken);
+          expect(accountsSession.get(req)).toBeUndefined();
 
-    accountsSession
-      .middleware()(req, res, next)
-      .then(() => {
-        expect(resumeSession).toHaveBeenCalledWith('newAccess');
-        expect(req.user).toEqual(user);
+          done();
+        })
+        .catch(done.fail);
+    });
+  });
 
-        done();
-      })
-      .catch(done.fail);
+  test('should renew tokens and resolve a user via middleware', () => {
+    return new Promise(done => {
+      const mockedServer = mockAccountsServer();
+      const resolveFn = jest.fn().mockReturnValue('user');
+      const accountsSession = new AccountsSession(mockedServer as any, {
+        user: {
+          name: 'currentUser',
+          resolve: resolveFn,
+        },
+      });
+      const tokens = {
+        accessToken: 'access',
+        refreshToken: 'refresh',
+      };
+      const req: any = {
+        headers: {
+          'user-agent': null,
+        },
+        session: {
+          [defaultName]: tokens,
+        },
+      };
+      const res: any = {};
+      const next = jest.fn();
+
+      accountsSession
+        .middleware()(req, res, next)
+        .then(() => {
+          expect(resolveFn).toHaveBeenCalledWith({
+            accessToken: 'newAccess',
+            refreshToken: 'newRefresh',
+          });
+          expect(req.currentUser).toEqual('user');
+          expect(next).toHaveBeenCalled();
+
+          done();
+        })
+        .catch(done.fail);
+    });
+  });
+
+  test('should have a default resolver', () => {
+    return new Promise(done => {
+      const user = {
+        name: 'foo',
+      };
+      const resumeSession = jest.fn(() => user);
+      const accountsSession = new AccountsSession({
+        ...mockAccountsServer(),
+        resumeSession,
+      } as any);
+
+      const tokens = {
+        accessToken: 'access',
+        refreshToken: 'refresh',
+      };
+      const req: any = {
+        headers: {
+          'user-agent': null,
+        },
+        session: {
+          [defaultName]: tokens,
+        },
+      };
+      const res: any = {};
+      const next = () => {
+        //
+      };
+
+      accountsSession
+        .middleware()(req, res, next)
+        .then(() => {
+          expect(resumeSession).toHaveBeenCalledWith('newAccess');
+          expect(req.user).toEqual(user);
+
+          done();
+        })
+        .catch(done.fail);
+    });
   });
 });

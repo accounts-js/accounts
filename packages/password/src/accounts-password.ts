@@ -267,7 +267,12 @@ export default class AccountsPassword implements AuthenticationService {
     }
 
     const emails = user.emails || [];
-    if (!includes(emails.map((email: EmailRecord) => email.address), resetTokenRecord.address)) {
+    if (
+      !includes(
+        emails.map((email: EmailRecord) => email.address),
+        resetTokenRecord.address
+      )
+    ) {
       throw new Error(this.options.errors.resetPasswordLinkUnknownAddress);
     }
 
