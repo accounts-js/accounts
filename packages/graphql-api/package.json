@@ -46,7 +46,6 @@
     "graphql-tools": "4.0.6",
     "jest": "24.9.0",
     "lodash": "4.17.15",
-    "nock": "10.0.6",
     "ts-node": "8.5.0"
   },
   "peerDependencies": {
