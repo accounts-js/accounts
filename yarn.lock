@@ -1086,16 +1086,6 @@
   resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.9.0.tgz#d07a54832757d2f2d1fc9891e5b0e3e3b4886c6a"
   integrity sha512-mkHar7AdyShUFJE6Mlke1tUbb+lPCK1EozZeAhCuRrhQ5aCCBAG6RxzNUYX1Q2jeGeyU0WRAtQu1oE/GoIsNXA==
 
-"@graphql-modules/core@0.7.11":
-  version "0.7.11"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.7.11.tgz#5eab67d25045967c33bf40de5c0eb972370ce0df"
-  integrity sha512-9xTX3M/vYNYYBagAhS883Ng8G4kF0/lOGg6tBfnSXAgA7EqDZkJuHb8fYwUTLQMKiNEeZK8KOFhiaIkTgOIHNw==
-  dependencies:
-    "@graphql-modules/di" "0.7.11"
-    apollo-server-caching "0.5.0"
-    graphql-toolkit "0.5.12"
-    tslib "1.10.0"
-
 "@graphql-modules/core@0.7.13":
   version "0.7.13"
   resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.7.13.tgz#c4528f83f78cdfaeedea4d3f064d2afc81f09aa5"
@@ -1104,14 +1094,6 @@
     "@graphql-modules/di" "0.7.13"
     apollo-server-caching "0.5.0"
     graphql-toolkit "0.5.16"
-    tslib "1.10.0"
-
-"@graphql-modules/di@0.7.11":
-  version "0.7.11"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.7.11.tgz#10927f948e789ce1cc89e2e2b615ed3b91777a9f"
-  integrity sha512-SkE6OK/ZSJYb0eIg0bP1iOKTldjAUSXZu4dcoiK3wTPWiQ1FXtg+IOnb6mDUTD6RosbeYMZPbQFCfSwEcM6KLA==
-  dependencies:
-    events "3.0.0"
     tslib "1.10.0"
 
 "@graphql-modules/di@0.7.13":
@@ -2425,6 +2407,11 @@
   resolved "https://registry.yarnpkg.com/@types/caseless/-/caseless-0.12.2.tgz#f65d3d6389e01eeb458bd54dc8f52b95a9463bc8"
   integrity sha512-6ckxMjBBD8URvjB6J3NcnuAn5Pkl7t3TizAg+xdlzzQGSPSmBcXf8KoIH0ua/i+tio+ZRUHEXp0HEmvaR4kt0w==
 
+"@types/color-name@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
+  integrity sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
+
 "@types/connect@*":
   version "3.4.32"
   resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.32.tgz#aa0e9616b9435ccad02bc52b5b454ffc2c70ba28"
@@ -3310,10 +3297,11 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
     color-convert "^1.9.0"
 
 ansi-styles@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-4.1.0.tgz#d3ba8047b818293eaaa7978321dd61bff9842cfc"
-  integrity sha512-Qts4KCLKG+waHc9C4m07weIY8qyeixoS0h6RnbsNVD6Fw+pEZGW3vTyObL3WXpE09Mq4Oi7/lBEyLmOiLtlYWQ==
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-4.2.0.tgz#5681f0dcf7ae5880a7841d8831c4724ed9cc0172"
+  integrity sha512-7kFQgnEaMdRtwf6uSfUnVr9gSGC7faurn+J/Mv90/W+iTtN0405/nLdopfMWwchyxhbGYl6TC4Sccn9TUkGAgg==
   dependencies:
+    "@types/color-name" "^1.1.1"
     color-convert "^2.0.1"
 
 any-observable@^0.3.0:
@@ -7811,14 +7799,7 @@ graphql-upload@^8.0.2:
     http-errors "^1.7.3"
     object-path "^0.11.4"
 
-graphql@14.5.4:
-  version "14.5.4"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-14.5.4.tgz#b33fe957854e90c10d4c07c7d26b6c8e9f159a13"
-  integrity sha512-dPLvHoxy5m9FrkqWczPPRnH0X80CyvRE6e7Fa5AWEqEAzg9LpxHvKh24po/482E6VWHigOkAmb4xCp6P9yT9gw==
-  dependencies:
-    iterall "^1.2.2"
-
-graphql@^14.5.3, graphql@^14.5.4:
+graphql@14.5.8, graphql@^14.5.3, graphql@^14.5.4:
   version "14.5.8"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-14.5.8.tgz#504f3d3114cb9a0a3f359bbbcf38d9e5bf6a6b3c"
   integrity sha512-MMwmi0zlVLQKLdGiMfWkgQD7dY/TUKt4L+zgJ/aR0Howebod3aNgP5JkgvAULiR2HPVZaP2VEElqtdidHweLkg==

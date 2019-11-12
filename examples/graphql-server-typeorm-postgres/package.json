@@ -17,9 +17,9 @@
     "@accounts/password": "^0.19.0",
     "@accounts/server": "^0.19.0",
     "@accounts/typeorm": "^0.19.0",
-    "@graphql-modules/core": "0.7.11",
+    "@graphql-modules/core": "0.7.13",
     "apollo-server": "2.9.3",
-    "graphql": "14.5.4",
+    "graphql": "14.5.8",
     "graphql-toolkit": "0.5.12",
     "pg": "7.12.1",
     "typeorm": "0.2.18"
