@@ -22,6 +22,8 @@ The Accounts project was intended - since its inception - to be a community main
 - Link together all the packages: `yarn setup`
 - Watch the packages for changes and recompile: `yarn start`
 - If you want to use the accounts project in your own project, use `yarn link @accounts/<name of package>` within your project.
+- Run `docker-compose up -d` to start database services required for tests.
+- Run `yarn test` to run all the tests.
 
 ## Pull Requests
 
@@ -34,8 +36,7 @@ Alternatively, prepend your PR title with `[discuss]` to have a conversation aro
 
 1.  Must not break the **test suite** (`yarn test`), nor reduce **test coverage** (`yarn coverage`). If you're fixing a bug, include a test that would fail without your fix.
 
-2.  Must respect the **tslint.json** (`yarn lint`). Ideally your editor supports `tslint`. Especially since the project is quite new, feel free to query default rules with us that don't make sense, or disable rules in a particular scope when it makes sense, together with a comment explaining why.
-    You can find the config [here](https://github.com/accounts-js/tslint-config-accounts).
+2.  Must respect the **.eslintrc.js** (`yarn test:lint`). Ideally your editor supports `eslint`. Especially since the project is quite new, feel free to query default rules with us that don't make sense, or disable rules in a particular scope when it makes sense, together with a comment explaining why.
 
 3.  Must be **isolated**. Avoid grouping many, unrelated changes in a single PR.
 

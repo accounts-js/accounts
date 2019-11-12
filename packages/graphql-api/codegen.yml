@@ -6,7 +6,7 @@ generates:
     config:
       noNamespaces: true
     plugins:
-      - add: /* tslint:disable */
+      - add: /* eslint-disable */
       - typescript
       - typescript-resolvers
       - typescript-operations

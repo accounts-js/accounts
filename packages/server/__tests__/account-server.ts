@@ -1,4 +1,4 @@
-import * as jwtDecode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 import { AccountsServer } from '../src/accounts-server';
 import { JwtData } from '../src/types/jwt-data';
 import { ServerHooks } from '../src/utils/server-hooks';
@@ -15,13 +15,7 @@ describe('AccountsServer', () => {
 
   describe('config', () => {
     it('throws on invalid db', async () => {
-      try {
-        // tslint:disable-next-line
-        new AccountsServer({} as any, {});
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toMatchSnapshot();
-      }
+      expect(() => new AccountsServer({} as any, {})).toThrowError('A database driver is required');
     });
   });
 
@@ -39,41 +33,32 @@ describe('AccountsServer', () => {
 
   describe('loginWithService', () => {
     it('throws on invalid service', async () => {
-      try {
-        const accountServer = new AccountsServer({ db: {} } as any, {});
-        await accountServer.loginWithService('facebook', {}, {});
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toMatchSnapshot();
-      }
+      const accountServer = new AccountsServer({ db: {} } as any, {});
+      await expect(accountServer.loginWithService('facebook', {}, {})).rejects.toThrowError(
+        'No service with the name facebook was registered.'
+      );
     });
 
     it('throws when user not found', async () => {
       const authenticate = jest.fn(() => Promise.resolve());
-      try {
-        const service: any = { authenticate, setStore: jest.fn() };
-        const accountServer = new AccountsServer({ db: {} } as any, {
-          facebook: service,
-        });
-        await accountServer.loginWithService('facebook', {}, {});
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toMatchSnapshot();
-      }
+      const service: any = { authenticate, setStore: jest.fn() };
+      const accountServer = new AccountsServer({ db: {} } as any, {
+        facebook: service,
+      });
+      await expect(accountServer.loginWithService('facebook', {}, {})).rejects.toThrowError(
+        'Service facebook was not able to authenticate user'
+      );
     });
 
     it('throws when user is deactivated', async () => {
       const authenticate = jest.fn(() => Promise.resolve({ id: 'userId', deactivated: true }));
-      try {
-        const service: any = { authenticate, setStore: jest.fn() };
-        const accountServer = new AccountsServer({ db: {} } as any, {
-          facebook: service,
-        });
-        await accountServer.loginWithService('facebook', {}, {});
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toMatchSnapshot();
-      }
+      const service: any = { authenticate, setStore: jest.fn() };
+      const accountServer = new AccountsServer({ db: {} } as any, {
+        facebook: service,
+      });
+      await expect(accountServer.loginWithService('facebook', {}, {})).rejects.toThrowError(
+        'Your account has been deactivated'
+      );
     });
 
     it('should return tokens', async () => {
@@ -91,6 +76,54 @@ describe('AccountsServer', () => {
       );
       const res = await accountServer.loginWithService('facebook', {}, {});
       expect(res.tokens).toBeTruthy();
+    });
+  });
+
+  describe('authenticateWithService', () => {
+    it('throws on invalid service', async () => {
+      const accountServer = new AccountsServer({ db: {} } as any, {});
+      await expect(accountServer.authenticateWithService('facebook', {}, {})).rejects.toThrowError(
+        'No service with the name facebook was registered.'
+      );
+    });
+
+    it('throws when user not found', async () => {
+      const authenticate = jest.fn(() => Promise.resolve());
+      const service: any = { authenticate, setStore: jest.fn() };
+      const accountServer = new AccountsServer({ db: {} } as any, {
+        facebook: service,
+      });
+      await expect(accountServer.authenticateWithService('facebook', {}, {})).rejects.toThrowError(
+        'Service facebook was not able to authenticate user'
+      );
+    });
+
+    it('throws when user is deactivated', async () => {
+      const authenticate = jest.fn(() => Promise.resolve({ id: 'userId', deactivated: true }));
+      const service: any = { authenticate, setStore: jest.fn() };
+      const accountServer = new AccountsServer({ db: {} } as any, {
+        facebook: service,
+      });
+      await expect(accountServer.authenticateWithService('facebook', {}, {})).rejects.toThrowError(
+        'Your account has been deactivated'
+      );
+    });
+
+    it('should return true upon success', async () => {
+      const authenticate = jest.fn(() => Promise.resolve({ id: 'userId' }));
+      const createSession = jest.fn(() => Promise.resolve('sessionId'));
+      const service: any = { authenticate, setStore: jest.fn() };
+      const accountServer = new AccountsServer(
+        {
+          db: { createSession } as any,
+          tokenSecret: 'secret1',
+        },
+        {
+          facebook: service,
+        }
+      );
+      const res = await accountServer.authenticateWithService('facebook', {}, {});
+      expect(res).toBeTruthy();
     });
   });
 
@@ -147,7 +180,7 @@ describe('AccountsServer', () => {
 
       const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
       await accountsServer.logout(accessToken);
-      expect(invalidateSession).toBeCalledWith('456');
+      expect(invalidateSession).toHaveBeenCalledWith('456');
     });
   });
 
@@ -252,7 +285,7 @@ describe('AccountsServer', () => {
       const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
       await accountsServer.logout(accessToken);
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
 
     it('ServerHooks.LogoutError', async () => {
@@ -281,7 +314,7 @@ describe('AccountsServer', () => {
         // nothing to do
       }
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
 
     it('ServerHooks.ResumeSessionSuccess', async () => {
@@ -311,7 +344,7 @@ describe('AccountsServer', () => {
       const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
       await accountsServer.resumeSession(accessToken);
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
 
     it('ServerHooks.ResumeSessionError with invalid session', async () => {
@@ -346,7 +379,7 @@ describe('AccountsServer', () => {
         // nothing to do
       }
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
 
     it('ServerHooks.ResumeSessionError with invalid errored session', async () => {
@@ -376,7 +409,7 @@ describe('AccountsServer', () => {
         // nothing to do
       }
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
 
     it('ServerHooks.RefreshTokensError', async () => {
@@ -405,7 +438,7 @@ describe('AccountsServer', () => {
         // nothing to do
       }
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
 
     it('ServerHooks.RefreshTokensSuccess', async () => {
@@ -443,7 +476,7 @@ describe('AccountsServer', () => {
 
       await accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
 
     it('ServerHooks.ImpersonationError', async () => {
@@ -465,7 +498,7 @@ describe('AccountsServer', () => {
         // nothing to do
       }
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
 
     it('ServerHooks.ImpersonationSuccess', async () => {
@@ -504,7 +537,7 @@ describe('AccountsServer', () => {
 
       await accountsServer.impersonate(accessToken, { userId: 'userId' }, 'ip', 'user agent');
       await delay(10);
-      expect(hookSpy).toBeCalled();
+      expect(hookSpy).toHaveBeenCalled();
     });
   });
 
@@ -608,14 +641,9 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      try {
-        const accessToken = null as any;
-        const refreshToken = null as any;
-        await accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('An accessToken and refreshToken are required');
-      }
+      await expect(
+        accountsServer.refreshTokens(null as any, null as any, 'ip', 'user agent')
+      ).rejects.toThrowError('An accessToken and refreshToken are required');
     });
     it('throws error if tokens are not valid', async () => {
       const accountsServer = new AccountsServer(
@@ -625,17 +653,9 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      try {
-        await accountsServer.refreshTokens(
-          'bad access token',
-          'bad refresh token',
-          'ip',
-          'user agent'
-        );
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('Tokens are not valid');
-      }
+      await expect(
+        accountsServer.refreshTokens('bad access token', 'bad refresh token', 'ip', 'user agent')
+      ).rejects.toThrowError('Tokens are not valid');
     });
 
     it('throws error if session not found', async () => {
@@ -648,16 +668,13 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      try {
-        const { accessToken, refreshToken } = accountsServer.createTokens({
-          token: '123',
-          userId: '213',
-        });
-        await accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('Session not found');
-      }
+      const { accessToken, refreshToken } = accountsServer.createTokens({
+        token: '123',
+        userId: '213',
+      });
+      await expect(
+        accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent')
+      ).rejects.toThrowError('Session not found');
     });
 
     it('throws error if session not valid', async () => {
@@ -673,16 +690,13 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      try {
-        const { accessToken, refreshToken } = accountsServer.createTokens({
-          token: '456',
-          userId: 'user',
-        });
-        await accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('Session is no longer valid');
-      }
+      const { accessToken, refreshToken } = accountsServer.createTokens({
+        token: '456',
+        userId: 'user',
+      });
+      await expect(
+        accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent')
+      ).rejects.toThrowError('Session is no longer valid');
     });
 
     it('throws error if user not found', async () => {
@@ -701,16 +715,14 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      try {
-        const { accessToken, refreshToken } = accountsServer.createTokens({
-          token: '456',
-          userId: 'user',
-        });
-        await accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('User not found');
-      }
+
+      const { accessToken, refreshToken } = accountsServer.createTokens({
+        token: '456',
+        userId: 'user',
+      });
+      await expect(
+        accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent')
+      ).rejects.toThrowError('User not found');
     });
   });
 
@@ -723,14 +735,11 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      try {
-        const accessToken = null as any;
-        await accountsServer.logout(accessToken);
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('An accessToken is required');
-      }
+      await expect(accountsServer.logout(null as any)).rejects.toThrowError(
+        'An accessToken is required'
+      );
     });
+
     it('throws error if tokens are not valid', async () => {
       const accountsServer = new AccountsServer(
         {
@@ -739,13 +748,11 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      try {
-        await accountsServer.logout('bad access token');
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('Tokens are not valid');
-      }
+      await expect(accountsServer.logout('bad access token')).rejects.toThrowError(
+        'Tokens are not valid'
+      );
     });
+
     it('throws error if session not found', async () => {
       const accountsServer = new AccountsServer(
         {
@@ -756,17 +763,14 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      try {
-        const { accessToken } = accountsServer.createTokens({
-          token: '456',
-          userId: 'user',
-        });
-        await accountsServer.logout(accessToken);
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('Session not found');
-      }
+
+      const { accessToken } = accountsServer.createTokens({
+        token: '456',
+        userId: 'user',
+      });
+      await expect(accountsServer.logout(accessToken)).rejects.toThrowError('Session not found');
     });
+
     it('throws error if session not valid', async () => {
       const accountsServer = new AccountsServer(
         {
@@ -780,16 +784,13 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      try {
-        const { accessToken } = accountsServer.createTokens({
-          token: '456',
-          userId: 'user',
-        });
-        await accountsServer.logout(accessToken);
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('Session is no longer valid');
-      }
+      const { accessToken } = accountsServer.createTokens({
+        token: '456',
+        userId: 'user',
+      });
+      await expect(accountsServer.logout(accessToken)).rejects.toThrowError(
+        'Session is no longer valid'
+      );
     });
   });
 
@@ -827,14 +828,10 @@ describe('AccountsServer', () => {
         {}
       );
 
-      try {
-        const { accessToken } = accountsServer.createTokens({ token: '456', userId: 'user' });
-        await accountsServer.resumeSession(accessToken);
-        throw new Error();
-      } catch (err) {
-        const { message } = err;
-        expect(message).toEqual('User not found');
-      }
+      const { accessToken } = accountsServer.createTokens({ token: '456', userId: 'user' });
+      await expect(accountsServer.resumeSession(accessToken)).rejects.toThrowError(
+        'User not found'
+      );
     });
 
     it('should throw if session is not valid', async () => {
@@ -857,14 +854,11 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      try {
-        const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
-        await accountsServer.resumeSession(accessToken);
-        throw new Error();
-      } catch (err) {
-        const { message } = err;
-        expect(message).toEqual('Invalid Session');
-      }
+
+      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
+      await expect(accountsServer.resumeSession(accessToken)).rejects.toThrowError(
+        'Invalid Session'
+      );
     });
 
     it('return user', async () => {
@@ -937,14 +931,12 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      try {
-        const accessToken = null as any;
-        const impersonated = null as any;
-        await accountsServer.impersonate(accessToken, impersonated, 'ip', 'user agent');
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('An access token is required');
-      }
+
+      const accessToken = null as any;
+      const impersonated = null as any;
+      await expect(
+        accountsServer.impersonate(accessToken, impersonated, 'ip', 'user agent')
+      ).rejects.toThrowError('An access token is required');
     });
 
     it('throws error if access token is not valid', async () => {
@@ -956,12 +948,9 @@ describe('AccountsServer', () => {
         {}
       );
 
-      try {
-        await accountsServer.impersonate('invalidToken', {}, 'ip', 'user agent');
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('Access token is not valid');
-      }
+      await expect(
+        accountsServer.impersonate('invalidToken', {}, 'ip', 'user agent')
+      ).rejects.toThrowError('Access token is not valid');
     });
 
     it('throws error if session is not valid', async () => {
@@ -980,12 +969,9 @@ describe('AccountsServer', () => {
           userId: '123',
         } as any);
 
-      try {
-        await accountsServer.impersonate(accessToken, {}, 'ip', 'user agent');
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('Session is not valid for user');
-      }
+      await expect(
+        accountsServer.impersonate(accessToken, {}, 'ip', 'user agent')
+      ).rejects.toThrowError('Session is not valid for user');
     });
 
     it('throws error if user is not found', async () => {
@@ -1006,12 +992,9 @@ describe('AccountsServer', () => {
           userId: '123',
         } as any);
 
-      try {
-        await accountsServer.impersonate(accessToken, { userId: 'userId' }, 'ip', 'user agent');
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('User not found');
-      }
+      await expect(
+        accountsServer.impersonate(accessToken, { userId: 'userId' }, 'ip', 'user agent')
+      ).rejects.toThrowError('User not found');
     });
 
     it('throws error if impersonated user is not found', async () => {
@@ -1036,12 +1019,9 @@ describe('AccountsServer', () => {
           userId: '123',
         } as any);
 
-      try {
-        await accountsServer.impersonate(accessToken, { userId: 'userId' }, 'ip', 'user agent');
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toEqual('Impersonated user not found');
-      }
+      await expect(
+        accountsServer.impersonate(accessToken, { userId: 'userId' }, 'ip', 'user agent')
+      ).rejects.toThrowError('Impersonated user not found');
     });
 
     it('returns not authorized if impersonationAuthorize function is not passed in config', async () => {
@@ -1130,7 +1110,7 @@ describe('AccountsServer', () => {
           valid: true,
           userId: '123',
         } as any);
-      accountsServer.createTokens = ({ token, isImpersonated = false, userId }) =>
+      accountsServer.createTokens = ({ token, isImpersonated = false }) =>
         ({
           token,
           isImpersonated,
@@ -1147,7 +1127,7 @@ describe('AccountsServer', () => {
         tokens: { token: '001', isImpersonated: true },
         user: impersonatedUser,
       });
-      expect(createSession).toBeCalledWith(
+      expect(createSession).toHaveBeenCalledWith(
         expect.any(String),
         expect.any(String),
         { ip: 'ip', userAgent: 'user agent' },

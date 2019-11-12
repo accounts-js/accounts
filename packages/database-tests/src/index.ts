@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto';
 
-const generateRandomToken = (length: number = 43): string => randomBytes(length).toString('hex');
+const generateRandomToken = (length = 43): string => randomBytes(length).toString('hex');
 const generatePseudoRandomUuid = () =>
   [4, 2, 2, 2, 6].map(len => generateRandomToken(len)).join('-');
 
@@ -8,6 +8,7 @@ function delay(time: number) {
   return new Promise(resolve => setTimeout(() => resolve(), time));
 }
 
+// eslint-disable-next-line jest/no-export
 export const runDatabaseTests = (tests: any) => {
   describe('@accounts/database-tests', () => {
     const token1 = generateRandomToken();

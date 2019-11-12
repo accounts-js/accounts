@@ -19,12 +19,12 @@
   },
   "dependencies": {
     "request": "^2.88.0",
-    "request-promise": "^4.2.4",
+    "request-promise": "^4.2.5",
     "tslib": "1.10.0"
   },
   "devDependencies": {
-    "@types/jest": "24.0.18",
-    "@types/node": "12.7.4",
+    "@types/jest": "24.0.22",
+    "@types/node": "12.12.7",
     "@types/request-promise": "4.1.44",
     "jest": "24.9.0"
   }

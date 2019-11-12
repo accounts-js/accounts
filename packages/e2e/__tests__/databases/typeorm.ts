@@ -1,7 +1,8 @@
-import { ConnectionManager, Connection, ConnectionOptions } from 'typeorm';
-import { DatabaseInterface } from '@accounts/types';
 import { AccountsTypeorm, entities } from '@accounts/typeorm';
-import { DatabaseTestInterface } from './index';
+import { DatabaseInterface } from '@accounts/types';
+import { Connection, ConnectionManager, ConnectionOptions } from 'typeorm';
+
+import { DatabaseTestInterface } from '.';
 
 const connectionName = 'typeorm-accounts-js-test';
 const connectionConfig: ConnectionOptions = {
@@ -9,7 +10,7 @@ const connectionConfig: ConnectionOptions = {
   type: 'postgres',
   host: 'localhost',
   port: 5432,
-  username: 'accounts-js',
+  username: 'postgres',
   entities,
   password: '',
   database: 'accounts-js-tests-e2e',

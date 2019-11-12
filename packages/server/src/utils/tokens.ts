@@ -4,8 +4,7 @@ import { randomBytes } from 'crypto';
 /**
  * Generate a random token string
  */
-export const generateRandomToken = (length: number = 43): string =>
-  randomBytes(length).toString('hex');
+export const generateRandomToken = (length = 43): string => randomBytes(length).toString('hex');
 
 export const generateAccessToken = ({
   secret,

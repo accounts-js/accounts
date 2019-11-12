@@ -87,6 +87,16 @@ export class AccountsClient {
   }
 
   /**
+   * Authenticate the user with a specific service (not creating a session)
+   */
+  public async authenticateWithService(
+    service: string,
+    credentials: { [key: string]: any }
+  ): Promise<boolean> {
+    return this.transport.authenticateWithService(service, credentials);
+  }
+
+  /**
    * Login the user with a specific service
    */
   public async loginWithService(
@@ -102,7 +112,7 @@ export class AccountsClient {
    * Refresh the user session
    * If the tokens have expired try to refresh them
    */
-  public async refreshSession(force: boolean = false): Promise<Tokens | null> {
+  public async refreshSession(force = false): Promise<Tokens | null> {
     const tokens = await this.getTokens();
     if (tokens) {
       try {

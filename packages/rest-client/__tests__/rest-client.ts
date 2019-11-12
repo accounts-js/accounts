@@ -46,12 +46,10 @@ describe('RestClient', () => {
         json: jest.fn().mockImplementation(() => ({ test: 'test' })),
       }));
 
-      try {
-        await restClient.fetch('route', {}, { origin: 'localhost:3000' });
-        throw new Error();
-      } catch (err) {
-        expect((window.fetch as jest.Mock).mock.calls[0][1].headers.origin).toBe('localhost:3000');
-      }
+      await expect(
+        restClient.fetch('route', {}, { origin: 'localhost:3000' })
+      ).rejects.toThrowError();
+      expect((window.fetch as jest.Mock).mock.calls[0][1].headers.origin).toBe('localhost:3000');
       window.fetch = jest.fn().mockImplementation(() => ({
         status: 200,
         json: jest.fn().mockImplementation(() => ({ test: 'test' })),
@@ -60,14 +58,10 @@ describe('RestClient', () => {
 
     it('should throw if server did not return a response', async () => {
       window.fetch = jest.fn().mockImplementation(() => null);
-
-      try {
-        await restClient.fetch('route', {}, { origin: 'localhost:3000' });
-        throw new Error();
-      } catch (err) {
-        expect((window.fetch as jest.Mock).mock.calls[0][1].headers.origin).toBe('localhost:3000');
-        expect(err.message).toBe('Server did not return a response');
-      }
+      await expect(
+        restClient.fetch('route', {}, { origin: 'localhost:3000' })
+      ).rejects.toThrowError('Server did not return a response');
+      expect((window.fetch as jest.Mock).mock.calls[0][1].headers.origin).toBe('localhost:3000');
       window.fetch = jest.fn().mockImplementation(() => ({
         status: 200,
         json: jest.fn().mockImplementation(() => ({ test: 'test' })),
@@ -85,6 +79,23 @@ describe('RestClient', () => {
       });
       expect((window.fetch as jest.Mock).mock.calls[0][0]).toBe(
         'http://localhost:3000/accounts/password/authenticate'
+      );
+      expect((window.fetch as jest.Mock).mock.calls[0][1].body).toBe(
+        '{"user":{"username":"toto"},"password":"password"}'
+      );
+    });
+  });
+
+  describe('authenticateWithService', () => {
+    it('should call fetch with verifyAuthentication path', async () => {
+      await restClient.authenticateWithService('password', {
+        user: {
+          username: 'toto',
+        },
+        password: 'password',
+      });
+      expect((window.fetch as jest.Mock).mock.calls[0][0]).toBe(
+        'http://localhost:3000/accounts/password/verifyAuthentication'
       );
       expect((window.fetch as jest.Mock).mock.calls[0][1].body).toBe(
         '{"user":{"username":"toto"},"password":"password"}'

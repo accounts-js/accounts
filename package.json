@@ -11,11 +11,10 @@
     "postinstall": "opencollective postinstall",
     "publish": "lerna publish",
     "publish:canary": "yarn run publish -- --canary",
-    "test": "yarn test:lint && yarn compile && yarn coverage && yarn test:prettier",
+    "test": "yarn test:lint && yarn compile && yarn coverage",
     "testonly": "lerna run testonly",
     "prettier": "prettier --write '**/*.{json,md,js,ts}'",
-    "test:lint": "tslint packages/*/{src,__tests__}/**/*.ts",
-    "test:prettier": "prettier --list-different '**/*.{json,md,js,ts}'",
+    "test:lint": "eslint 'packages/*/{src,__tests__}/**/*.ts'",
     "test:examples": "lerna run test --scope=\"@examples/*\"",
     "coverage": "lerna run coverage",
     "codecov": "codecov",
@@ -44,8 +43,7 @@
     "printWidth": 100
   },
   "resolutions": {
-    "@types/node": "12.7.4",
-    "graphql-tools": "4.0.5"
+    "@types/node": "12.12.7"
   },
   "renovate": {
     "extends": [
@@ -63,16 +61,19 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@accounts/tslint-config-accounts": "0.0.9",
-    "codecov": "3.5.0",
-    "husky": "3.0.5",
-    "lerna": "2.11.0",
-    "lint-staged": "9.2.5",
+    "@typescript-eslint/eslint-plugin": "2.7.0",
+    "@typescript-eslint/parser": "2.7.0",
+    "eslint": "6.6.0",
+    "eslint-config-prettier": "6.5.0",
+    "eslint-plugin-jest": "23.0.3",
+    "eslint-plugin-prettier": "3.1.1",
+    "husky": "3.0.9",
+    "lerna": "3.18.4",
+    "lint-staged": "9.4.2",
     "opencollective": "1.0.3",
-    "prettier": "1.18.2",
-    "ts-jest": "24.0.2",
-    "tslint": "5.19.0",
-    "typescript": "3.5.3"
+    "prettier": "1.19.1",
+    "ts-jest": "24.1.0",
+    "typescript": "3.7.2"
   },
   "collective": {
     "type": "opencollective",

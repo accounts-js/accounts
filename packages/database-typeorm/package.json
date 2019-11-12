@@ -9,10 +9,7 @@
     "start": "tsc --watch",
     "precompile": "yarn clean",
     "compile": "tsc",
-    "prepublishOnly": "yarn compile",
-    "testonly": "jest --runInBand",
-    "test:watch": "jest --watch",
-    "coverage": "yarn testonly --coverage"
+    "prepublishOnly": "yarn compile"
   },
   "files": [
     "src",
@@ -30,8 +27,8 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/database-tests": "^0.19.0",
-    "@types/jest": "24.0.18",
-    "@types/node": "12.7.4",
+    "@types/jest": "24.0.22",
+    "@types/node": "12.12.7",
     "jest": "24.9.0",
     "pg": "7.12.1"
   },

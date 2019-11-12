@@ -1,8 +1,9 @@
-/* tslint:disable */
+/* eslint-disable */
 import { GraphQLResolveInfo } from 'graphql';
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } &
   { [P in K]-?: NonNullable<T[P]> };
+
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -60,6 +61,7 @@ export type Mutation = {
   refreshTokens?: Maybe<LoginResult>;
   logout?: Maybe<Scalars['Boolean']>;
   authenticate?: Maybe<LoginResult>;
+  verifyAuthentication?: Maybe<Scalars['Boolean']>;
 };
 
 export type MutationCreateUserArgs = {
@@ -108,6 +110,11 @@ export type MutationRefreshTokensArgs = {
 };
 
 export type MutationAuthenticateArgs = {
+  serviceName: Scalars['String'];
+  params: AuthenticateParamsInput;
+};
+
+export type MutationVerifyAuthenticationArgs = {
   serviceName: Scalars['String'];
   params: AuthenticateParamsInput;
 };
@@ -378,6 +385,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationAuthenticateArgs, 'serviceName' | 'params'>
+  >;
+  verifyAuthentication?: Resolver<
+    Maybe<ResolversTypes['Boolean']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationVerifyAuthenticationArgs, 'serviceName' | 'params'>
   >;
 };
 

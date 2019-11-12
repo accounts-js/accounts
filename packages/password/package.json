@@ -27,9 +27,9 @@
     "@accounts/server": "^0.19.0",
     "@accounts/types": "^0.19.0",
     "@types/bcryptjs": "2.4.2",
-    "@types/jest": "24.0.18",
-    "@types/lodash": "4.14.138",
-    "@types/node": "12.7.4",
+    "@types/jest": "24.0.22",
+    "@types/lodash": "4.14.146",
+    "@types/node": "12.12.7",
     "jest": "24.9.0",
     "rimraf": "3.0.0"
   },

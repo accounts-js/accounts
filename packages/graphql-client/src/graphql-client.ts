@@ -1,35 +1,36 @@
-import { TransportInterface, AccountsClient } from '@accounts/client';
-import { CreateUser, LoginResult, ImpersonationResult, User } from '@accounts/types';
+import { AccountsClient, TransportInterface } from '@accounts/client';
+import { CreateUser, ImpersonationResult, LoginResult, User } from '@accounts/types';
+import gql from 'graphql-tag';
+import { authenticateWithServiceMutation } from './graphql/authenticate-with-service.mutation';
+import { changePasswordMutation } from './graphql/change-password.mutation';
 import { createUserMutation } from './graphql/create-user.mutation';
+import { getTwoFactorSecretQuery } from './graphql/get-two-factor-secret.query';
+import { getUserQuery } from './graphql/get-user.query';
+import { impersonateMutation } from './graphql/impersonate.mutation';
 import { loginWithServiceMutation } from './graphql/login-with-service.mutation';
 import { logoutMutation } from './graphql/logout.mutation';
 import { refreshTokensMutation } from './graphql/refresh-tokens.mutation';
-import { verifyEmailMutation } from './graphql/verify-email.mutation';
+import { resetPasswordMutation } from './graphql/reset-password.mutation';
 import { sendResetPasswordEmailMutation } from './graphql/send-reset-password-email.mutation';
 import { sendVerificationEmailMutation } from './graphql/send-verification-email.mutation';
-import { resetPasswordMutation } from './graphql/reset-password.mutation';
-import { changePasswordMutation } from './graphql/change-password.mutation';
 import { twoFactorSetMutation } from './graphql/two-factor-set.mutation';
-import { getTwoFactorSecretQuery } from './graphql/get-two-factor-secret.query';
 import { twoFactorUnsetMutation } from './graphql/two-factor-unset.mutation';
-import { impersonateMutation } from './graphql/impersonate.mutation';
-import { getUserQuery } from './graphql/get-user.query';
-import gql from 'graphql-tag';
+import { verifyEmailMutation } from './graphql/verify-email.mutation';
 
-export interface IAuthenticateParams {
+export interface AuthenticateParams {
   [key: string]: string | object;
 }
 
-export interface IOptionsType {
+export interface OptionsType {
   graphQLClient: any;
   userFieldsFragment?: any;
 }
 
 export default class GraphQLClient implements TransportInterface {
   public client!: AccountsClient;
-  private options: IOptionsType;
+  private options: OptionsType;
 
-  constructor(options: IOptionsType) {
+  constructor(options: OptionsType) {
     this.options = options;
     this.options.userFieldsFragment =
       this.options.userFieldsFragment ||
@@ -59,9 +60,22 @@ export default class GraphQLClient implements TransportInterface {
   /**
    * @inheritDoc
    */
+  public async authenticateWithService(
+    service: string,
+    authenticateParams: { [key: string]: string | object }
+  ): Promise<boolean> {
+    return this.mutate(authenticateWithServiceMutation, 'verifyAuthentication', {
+      serviceName: service,
+      params: authenticateParams,
+    });
+  }
+
+  /**
+   * @inheritDoc
+   */
   public async loginWithService(
     service: string,
-    authenticateParams: IAuthenticateParams
+    authenticateParams: AuthenticateParams
   ): Promise<LoginResult> {
     return this.mutate(loginWithServiceMutation, 'authenticate', {
       serviceName: service,
@@ -140,19 +154,20 @@ export default class GraphQLClient implements TransportInterface {
   public async impersonate(
     token: string,
     impersonated: {
-      userId?: string;
       username?: string;
-      email?: string;
+      /* These aren't implemented in graphql-api, comment them out for now to avoid confusion */
+      // userId?: string;
+      // email?: string;
     }
   ): Promise<ImpersonationResult> {
-    return this.mutate(impersonateMutation, 'impersonate', {
+    return this.mutate(impersonateMutation(this.options.userFieldsFragment), 'impersonate', {
       accessToken: token,
       username: impersonated.username,
     });
   }
 
   private async mutate(mutation: any, resultField: any, variables: any = {}) {
-    // If we are executiong a refresh token mutation do not call refress session again
+    // If we are executing a refresh token mutation do not call refresh session again
     // otherwise it will end up in an infinite loop
     const tokens =
       mutation === refreshTokensMutation
