@@ -42,7 +42,7 @@
   "dependencies": {
     "@accounts/types": "^0.19.0",
     "@types/jsonwebtoken": "8.3.5",
-    "emittery": "0.4.1",
+    "emittery": "0.5.1",
     "jsonwebtoken": "8.5.1",
     "jwt-decode": "2.2.0",
     "lodash": "4.17.15",

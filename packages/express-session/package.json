@@ -41,7 +41,7 @@
     "@types/lodash": "4.14.146",
     "@types/request-ip": "0.0.34",
     "express": "4.17.1",
-    "express-session": "1.16.2",
+    "express-session": "1.17.0",
     "jest": "24.9.0"
   },
   "peerDependencies": {

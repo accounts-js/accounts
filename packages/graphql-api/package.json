@@ -36,7 +36,7 @@
     "@graphql-modules/core": "0.7.13",
     "@types/jest": "24.0.22",
     "@types/request-ip": "0.0.34",
-    "concurrently": "4.1.2",
+    "concurrently": "5.0.0",
     "graphql": "14.5.8",
     "graphql-code-generator": "0.18.2",
     "graphql-codegen-add": "0.18.2",

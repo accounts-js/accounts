@@ -36,7 +36,7 @@
     "apollo-link": "1.2.13",
     "apollo-link-http": "1.5.16",
     "graphql": "14.5.8",
-    "qrcode.react": "0.9.3",
+    "qrcode.react": "1.0.0",
     "react": "16.11.0",
     "react-apollo": "2.5.8",
     "react-dom": "16.11.0",
@@ -45,11 +45,11 @@
   },
   "devDependencies": {
     "@types/node": "12.12.7",
-    "@types/qrcode.react": "0.8.2",
+    "@types/qrcode.react": "0.9.0",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.4",
-    "@types/react-router": "5.0.3",
-    "@types/react-router-dom": "4.3.5",
+    "@types/react-router": "5.1.2",
+    "@types/react-router-dom": "5.1.2",
     "react-scripts": "3.2.0",
     "typescript": "3.7.2"
   }
