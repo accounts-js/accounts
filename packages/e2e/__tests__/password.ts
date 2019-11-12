@@ -24,17 +24,14 @@ Object.keys(servers).forEach(key => {
 
     describe('login', () => {
       it('should throw when wrong credentials', async () => {
-        try {
-          await server.accountsClientPassword.login({
+        await expect(
+          server.accountsClientPassword.login({
             user: {
               email: 'toto@google.com',
             },
             password: 'heya',
-          });
-          throw new Error();
-        } catch (error) {
-          expect(error.message).toMatch('Invalid credentials');
-        }
+          })
+        ).rejects.toThrowError('Invalid credentials');
       });
 
       it('should login the user and get the session', async () => {
@@ -52,12 +49,9 @@ Object.keys(servers).forEach(key => {
 
     describe('verify user email', () => {
       it('should throw when wrong token', async () => {
-        try {
-          await server.accountsClientPassword.verifyEmail('wrongToken');
-          throw new Error();
-        } catch (error) {
-          expect(error.message).toMatch('Verify email link expired');
-        }
+        await expect(server.accountsClientPassword.verifyEmail('wrongToken')).rejects.toThrowError(
+          'Verify email link expired'
+        );
       });
 
       it('should request a new token for the user', async () => {
@@ -78,12 +72,9 @@ Object.keys(servers).forEach(key => {
 
     describe('reset user password', () => {
       it('should throw when wrong token', async () => {
-        try {
-          await server.accountsClientPassword.resetPassword('wrongToken', 'newPassword');
-          throw new Error();
-        } catch (error) {
-          expect(error.message).toMatch('Reset password link expired');
-        }
+        await expect(
+          server.accountsClientPassword.resetPassword('wrongToken', 'newPassword')
+        ).rejects.toThrowError('Reset password link expired');
       });
 
       it('should request a new token for the user', async () => {
@@ -113,12 +104,9 @@ Object.keys(servers).forEach(key => {
 
     describe('change password when user is logged in', () => {
       it('should throw when wrong password', async () => {
-        try {
-          await server.accountsClientPassword.changePassword('wrongPassword', 'newPassword');
-          throw new Error();
-        } catch (error) {
-          expect(error.message).toMatch('Invalid credential');
-        }
+        await expect(
+          server.accountsClientPassword.changePassword('wrongPassword', 'newPassword')
+        ).rejects.toThrowError('Invalid credential');
       });
 
       it('should change the user password and be able to login with it', async () => {
