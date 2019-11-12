@@ -41,13 +41,9 @@ describe('Accounts', () => {
   });
 
   it('requires a transport', async () => {
-    try {
-      new AccountsClient(null as any, null as any);
-      throw new Error();
-    } catch (err) {
-      const { message } = err;
-      expect(message).toEqual('A valid transport is required');
-    }
+    expect(() => new AccountsClient(null as any, null as any)).toThrowError(
+      'A valid transport is required'
+    );
   });
 
   describe('getTokens', () => {
@@ -221,42 +217,31 @@ describe('Accounts', () => {
     });
 
     it('should clear the tokens and forward the error', async () => {
-      try {
-        (isTokenExpired as jest.Mock).mockImplementation(() => {
-          throw new Error('Err');
-        });
-        await accountsClient.setTokens(tokens);
-        await accountsClient.refreshSession();
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toBe('Err');
-        expect(localStorage.removeItem).toHaveBeenCalledTimes(2);
-        expect(mockTransport.refreshTokens).not.toHaveBeenCalledWith();
-      }
+      (isTokenExpired as jest.Mock).mockImplementation(() => {
+        throw new Error('Err');
+      });
+      await accountsClient.setTokens(tokens);
+      await expect(accountsClient.refreshSession()).rejects.toThrowError('Err');
+      expect(localStorage.removeItem).toHaveBeenCalledTimes(2);
+      expect(mockTransport.refreshTokens).not.toHaveBeenCalledWith();
     });
   });
 
   describe('impersonate', () => {
     it('should throw error if no tokens', async () => {
-      try {
-        await accountsClient.impersonate({ userId: 'test' });
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toBe('An access token is required');
-      }
+      await expect(accountsClient.impersonate({ userId: 'test' })).rejects.toThrowError(
+        'An access token is required'
+      );
     });
 
     it('should throw if server return unauthorized', async () => {
       (mockTransport.impersonate as jest.Mock).mockImplementationOnce(() =>
         Promise.resolve({ authorized: false })
       );
-      try {
-        await accountsClient.setTokens(tokens);
-        await accountsClient.impersonate({ userId: 'test' });
-        throw new Error();
-      } catch (err) {
-        expect(err.message).toBe('User unauthorized to impersonate');
-      }
+      await accountsClient.setTokens(tokens);
+      await expect(accountsClient.impersonate({ userId: 'test' })).rejects.toThrowError(
+        'User unauthorized to impersonate'
+      );
     });
 
     it('should set tokens correctly if impersonation was authorized', async () => {
