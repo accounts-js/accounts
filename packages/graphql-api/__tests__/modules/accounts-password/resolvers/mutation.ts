@@ -34,12 +34,9 @@ describe('accounts-password resolvers mutation', () => {
     const newPassword = 'newPasswordTest';
 
     it('should throw if no user in context', async () => {
-      try {
-        await Mutation.changePassword!({}, { oldPassword, newPassword }, {} as any, {} as any);
-        throw new Error();
-      } catch (error) {
-        expect(error.message).toBe('Unauthorized');
-      }
+      await expect(
+        Mutation.changePassword!({}, { oldPassword, newPassword }, {} as any, {} as any)
+      ).rejects.toThrowError('Unauthorized');
     });
 
     it('should call changePassword', async () => {
@@ -72,12 +69,9 @@ describe('accounts-password resolvers mutation', () => {
     const secret = 'secretTest';
 
     it('should throw if no user in context', async () => {
-      try {
-        await Mutation.twoFactorSet!({}, { code, secret } as any, {} as any, {} as any);
-        throw new Error();
-      } catch (error) {
-        expect(error.message).toBe('Unauthorized');
-      }
+      await expect(
+        Mutation.twoFactorSet!({}, { code, secret } as any, {} as any, {} as any)
+      ).rejects.toThrowError('Unauthorized');
     });
 
     it('should call twoFactor.set', async () => {
@@ -96,12 +90,9 @@ describe('accounts-password resolvers mutation', () => {
     const code = 'codeTest';
 
     it('should throw if no user in context', async () => {
-      try {
-        await Mutation.twoFactorUnset!({}, { code } as any, {} as any, {} as any);
-        throw new Error();
-      } catch (error) {
-        expect(error.message).toBe('Unauthorized');
-      }
+      await expect(
+        Mutation.twoFactorUnset!({}, { code } as any, {} as any, {} as any)
+      ).rejects.toThrowError('Unauthorized');
     });
 
     it('should call twoFactor.unset', async () => {
