@@ -558,16 +558,15 @@ Please change it with a strong random token.`);
 
   /**
    * @description Start the association of a new authenticator
+   * @param {string} userId - User id to link the new authenticator.
    * @param {string} serviceName - Service name of the authenticator service.
+   * @param {any} params - Params for the the authenticator service.
    */
-  public async mfaAssociate(serviceName: string) {
+  public async mfaAssociate(userId: string, serviceName: string, params: any) {
     if (!this.authenticators[serviceName]) {
       throw new Error(`No service with the name ${serviceName} was registered.`);
     }
 
-    // TODO see how to get the userId
-    const userId = 'TODO';
-    const params = 'TODO';
     return this.authenticators[serviceName].associate(userId, params);
   }
 

@@ -47,7 +47,7 @@ const accountsExpress = (
 
   router.post(`${path}/:service/authenticate`, serviceAuthenticate(accountsServer));
 
-  router.post(`${path}/mfa/associate`, associate(accountsServer));
+  router.post(`${path}/mfa/associate`, userLoader(accountsServer), associate(accountsServer));
 
   router.get(`${path}/mfa/authenticators`, userLoader(accountsServer), associate(accountsServer));
 

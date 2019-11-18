@@ -233,7 +233,7 @@ export class RestClient implements TransportInterface {
       method: 'POST',
       body: JSON.stringify({ type }),
     };
-    return this.fetch(`mfa/associate`, args, customHeaders);
+    return this.authFetch(`mfa/associate`, args, customHeaders);
   }
 
   public async authenticators(customHeaders?: object) {
