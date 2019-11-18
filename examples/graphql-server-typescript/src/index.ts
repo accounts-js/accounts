@@ -2,7 +2,7 @@ import { DatabaseManager } from '@accounts/database-manager';
 import { AccountsModule } from '@accounts/graphql-api';
 import MongoDBInterface from '@accounts/mongo';
 import { AccountsPassword } from '@accounts/password';
-import { AccountsServer } from '@accounts/server';
+import { AccountsServer, ServerHooks } from '@accounts/server';
 import { ApolloServer, makeExecutableSchema } from 'apollo-server';
 import gql from 'graphql-tag';
 import { mergeResolvers, mergeTypeDefs } from 'graphql-toolkit';
@@ -43,6 +43,12 @@ const start = async () => {
     }
   );
 
+  accountsServer.on(ServerHooks.ValidateLogin, ({ user }) => {
+    // This hook is called every time a user try to login.
+    // You can use it to only allow users with verified email to login.
+    // If you throw an error here it will be returned to the client.
+  });
+
   // Creates resolvers, type definitions, and schema directives used by accounts-js
   const accountsGraphQL = AccountsModule.forRoot({
     accountsServer,
@@ -64,7 +70,10 @@ const start = async () => {
     }
 
     type Query {
+      # Example of how to get the userId from the context and return the current logged in user or null
+      me: User
       publicField: String
+      # You can only query this if you are logged in
       privateField: String @auth
       privateType: PrivateType
     }
@@ -76,6 +85,13 @@ const start = async () => {
 
   const resolvers = {
     Query: {
+      me: (_, __, ctx) => {
+        // ctx.userId will be set if user is logged in
+        if (ctx.userId) {
+          return accountsServer.findUserById(ctx.userId);
+        }
+        return null;
+      },
       publicField: () => 'public',
       privateField: () => 'private',
       privateType: () => ({

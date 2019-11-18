@@ -8,6 +8,7 @@ function delay(time: number) {
   return new Promise(resolve => setTimeout(() => resolve(), time));
 }
 
+// eslint-disable-next-line jest/no-export
 export const runDatabaseTests = (tests: any) => {
   describe('@accounts/database-tests', () => {
     const token1 = generateRandomToken();

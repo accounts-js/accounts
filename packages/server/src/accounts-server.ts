@@ -96,6 +96,15 @@ Please change it with a strong random token.`);
     return this.hooks;
   }
 
+  /**
+   * Subscribe to an accounts-js event.
+   * ```javascript
+   * accountsServer.on(ServerHooks.ValidateLogin, ({ user }) => {
+   *   // This hook is called every time a user try to login
+   *   // You can use it to only allow users with verified email to login
+   * });
+   * ```
+   */
   public on(eventName: string, callback: HookListener): () => void {
     this.hooks.on(eventName, callback);
 

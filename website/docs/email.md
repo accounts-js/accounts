@@ -45,7 +45,7 @@ const accountsServer = new AccountsServer(options);
 ## Example using [nodemailer](https://github.com/nodemailer/nodemailer)
 
 ```javascript
-import emailjs from 'emailjs';
+import nodemailer from 'nodemailer';
 
 // Initiate nodemailer
 const transporter = nodemailer.createTransport({

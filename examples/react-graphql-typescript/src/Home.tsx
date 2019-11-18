@@ -1,30 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { RouteComponentProps, Link } from 'react-router-dom';
+import React from 'react';
+import { RouteComponentProps, Link, Redirect } from 'react-router-dom';
 import { Button, Typography } from '@material-ui/core';
+import gql from 'graphql-tag';
+import { useQuery } from '@apollo/react-hooks';
 
 import { accountsClient, accountsGraphQL } from './utils/accounts';
 
-const Home = ({ history }: RouteComponentProps<{}>) => {
-  const [user, setUser] = useState();
-
-  useEffect(() => {
-    fetchUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const fetchUser = async () => {
-    // refresh the session to get a new accessToken if expired
-    const tokens = await accountsClient.refreshSession();
-    if (!tokens) {
-      history.push('/login');
-      return;
+const ME_QUERY = gql`
+  query me {
+    me {
+      id
+      emails {
+        address
+        verified
+      }
     }
-    const accountsUser = await accountsGraphQL.getUser();
-    setUser(accountsUser);
-  };
+  }
+`;
+
+const Home = ({ history }: RouteComponentProps<{}>) => {
+  const { loading, error, data } = useQuery(ME_QUERY);
 
   const onResendEmail = async () => {
-    await accountsGraphQL.sendVerificationEmail(user.emails[0].address);
+    await accountsGraphQL.sendVerificationEmail(data.me.emails[0].address);
   };
 
   const onLogout = async () => {
@@ -32,17 +30,22 @@ const Home = ({ history }: RouteComponentProps<{}>) => {
     history.push('/login');
   };
 
-  if (!user) {
-    return null;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  // If user is not logged in we redirect him to the login page
+  if (!data.me) {
+    return <Redirect to="/login" />;
   }
+
   return (
     <div>
       <Typography gutterBottom>You are logged in</Typography>
-      <Typography gutterBottom>Email: {user.emails[0].address}</Typography>
+      <Typography gutterBottom>Email: {data.me.emails[0].address}</Typography>
       <Typography gutterBottom>
-        You email is {user.emails[0].verified ? 'verified' : 'unverified'}
+        You email is {data.me.emails[0].verified ? 'verified' : 'unverified'}
       </Typography>
-      {!user.emails[0].verified && (
+      {!data.me.emails[0].verified && (
         <Button onClick={onResendEmail}>Resend verification email</Button>
       )}
 

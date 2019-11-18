@@ -98,7 +98,7 @@ describe('AccountsSession', () => {
     expect(req.session[defaultName]).not.toEqual(tokens);
   });
 
-  test('should renew', (done: jest.DoneCallback) => {
+  test('should renew', async () => {
     const mockedServer = mockAccountsServer();
     const accountsSession = new AccountsSession(mockedServer as any);
     const tokens = {
@@ -114,20 +114,16 @@ describe('AccountsSession', () => {
       },
     };
 
-    accountsSession
-      .renew(req)
-      .then(newTokens => {
-        expect(newTokens).toBeDefined();
-        expect(accountsSession.get(req)).toEqual({
-          accessToken: 'newAccess',
-          refreshToken: 'newRefresh',
-        });
-        done();
-      })
-      .catch(done.fail);
+    const newTokens = await accountsSession.renew(req);
+
+    expect(newTokens).toBeDefined();
+    expect(accountsSession.get(req)).toEqual({
+      accessToken: 'newAccess',
+      refreshToken: 'newRefresh',
+    });
   });
 
-  test('should destroy', (done: jest.DoneCallback) => {
+  test('should destroy', async () => {
     const mockedServer = mockAccountsServer();
     const accountsSession = new AccountsSession(mockedServer as any);
     const tokens = {
@@ -147,19 +143,14 @@ describe('AccountsSession', () => {
       },
     };
 
-    accountsSession
-      .destroy(req)
-      .then(result => {
-        expect(result).toBeUndefined();
-        expect(mockedServer.logout).toHaveBeenCalledWith(tokens.accessToken);
-        expect(accountsSession.get(req)).toBeUndefined();
+    const result = await accountsSession.destroy(req);
 
-        done();
-      })
-      .catch(done.fail);
+    expect(result).toBeUndefined();
+    expect(mockedServer.logout).toHaveBeenCalledWith(tokens.accessToken);
+    expect(accountsSession.get(req)).toBeUndefined();
   });
 
-  test('should renew tokens and resolve a user via middleware', (done: jest.DoneCallback) => {
+  test('should renew tokens and resolve a user via middleware', async () => {
     const mockedServer = mockAccountsServer();
     const resolveFn = jest.fn().mockReturnValue('user');
     const accountsSession = new AccountsSession(mockedServer as any, {
@@ -183,22 +174,16 @@ describe('AccountsSession', () => {
     const res: any = {};
     const next = jest.fn();
 
-    accountsSession
-      .middleware()(req, res, next)
-      .then(() => {
-        expect(resolveFn).toHaveBeenCalledWith({
-          accessToken: 'newAccess',
-          refreshToken: 'newRefresh',
-        });
-        expect(req.currentUser).toEqual('user');
-        expect(next).toHaveBeenCalled();
-
-        done();
-      })
-      .catch(done.fail);
+    await accountsSession.middleware()(req, res, next);
+    expect(resolveFn).toHaveBeenCalledWith({
+      accessToken: 'newAccess',
+      refreshToken: 'newRefresh',
+    });
+    expect(req.currentUser).toEqual('user');
+    expect(next).toHaveBeenCalled();
   });
 
-  test('should have a default resolver', (done: jest.DoneCallback) => {
+  test('should have a default resolver', async () => {
     const user = {
       name: 'foo',
     };
@@ -225,14 +210,8 @@ describe('AccountsSession', () => {
       //
     };
 
-    accountsSession
-      .middleware()(req, res, next)
-      .then(() => {
-        expect(resumeSession).toHaveBeenCalledWith('newAccess');
-        expect(req.user).toEqual(user);
-
-        done();
-      })
-      .catch(done.fail);
+    await accountsSession.middleware()(req, res, next);
+    expect(resumeSession).toHaveBeenCalledWith('newAccess');
+    expect(req.user).toEqual(user);
   });
 });
