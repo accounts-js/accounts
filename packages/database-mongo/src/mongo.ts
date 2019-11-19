@@ -453,7 +453,7 @@ export class Mongo implements DatabaseInterface {
       authenticator._id = this.options.idProvider();
     }
     const ret = await this.authenticatorCollection.insertOne(authenticator);
-    return ret.ops[0]._id.toString();
+    return (ret as any).ops[0]._id.toString();
   }
 
   public async findAuthenticatorById(authenticatorId: string): Promise<Authenticator | null> {
@@ -488,7 +488,7 @@ export class Mongo implements DatabaseInterface {
     if (this.options.idProvider) {
       mfaChallenge._id = this.options.idProvider();
     }
-    const ret = await this.authenticatorCollection.insertOne(mfaChallenge);
-    return ret.ops[0]._id.toString();
+    const ret = await this.mfaChallengeCollection.insertOne(mfaChallenge);
+    return (ret as any).ops[0]._id.toString();
   }
 }
