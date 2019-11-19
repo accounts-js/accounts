@@ -22,6 +22,7 @@ const defaultOptions = {
   collectionName: 'users',
   sessionCollectionName: 'sessions',
   authenticatorCollectionName: 'authenticators',
+  mfaChallengeCollection: 'mfaChallenges',
   timestamps: {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -42,8 +43,10 @@ export class Mongo implements DatabaseInterface {
   private collection: Collection;
   // Session collection
   private sessionCollection: Collection;
-  // Session collection
+  // Authenticator collection
   private authenticatorCollection: Collection;
+  // Mfa challenge collection
+  private mfaChallengeCollection: Collection;
 
   constructor(db: any, options?: AccountsMongoOptions) {
     this.options = merge({ ...defaultOptions }, options);
@@ -54,6 +57,7 @@ export class Mongo implements DatabaseInterface {
     this.collection = this.db.collection(this.options.collectionName);
     this.sessionCollection = this.db.collection(this.options.sessionCollectionName);
     this.authenticatorCollection = this.db.collection(this.options.authenticatorCollectionName);
+    this.mfaChallengeCollection = this.db.collection(this.options.mfaChallengeCollection);
   }
 
   public async setupIndexes(): Promise<void> {
