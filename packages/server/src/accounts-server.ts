@@ -568,6 +568,8 @@ Please change it with a strong random token.`);
     }
 
     const associate = await this.authenticators[serviceName].associate(userId, params);
+
+    // We create a new challenge for the authenticator so it can be verified later
     const mfaChallengeToken = generateRandomToken();
     // associate.id refer to the authenticator id
     await this.db.createMfaChallenge({
