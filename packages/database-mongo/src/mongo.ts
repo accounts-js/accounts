@@ -5,11 +5,13 @@ import {
   Session,
   User,
   Authenticator,
+  CreateAuthenticator,
+  CreateMfaChallenge,
 } from '@accounts/types';
 import { get, merge } from 'lodash';
 import { Collection, Db, ObjectID } from 'mongodb';
 
-import { AccountsMongoOptions, MongoUser, MongoAuthenticator } from './types';
+import { AccountsMongoOptions, MongoUser, MongoAuthenticator, MongoMfaChallenge } from './types';
 
 const toMongoID = (objectId: string | ObjectID) => {
   if (typeof objectId === 'string') {
@@ -438,10 +440,10 @@ export class Mongo implements DatabaseInterface {
   }
 
   /**
-   * MFA related operations
+   * MFA authenticators related operations
    */
 
-  public async createAuthenticator(newAuthenticator: CreateUser): Promise<string> {
+  public async createAuthenticator(newAuthenticator: CreateAuthenticator): Promise<string> {
     const authenticator: MongoAuthenticator = {
       ...newAuthenticator,
       [this.options.timestamps.createdAt]: this.options.dateProvider(),
@@ -471,5 +473,22 @@ export class Mongo implements DatabaseInterface {
       authenticator.id = authenticator._id.toString();
     });
     return authenticators;
+  }
+
+  /**
+   * MFA challenges related operations
+   */
+
+  public async createMfaChallenge(newMfaChallenge: CreateMfaChallenge): Promise<string> {
+    const mfaChallenge: MongoMfaChallenge = {
+      ...newMfaChallenge,
+      [this.options.timestamps.createdAt]: this.options.dateProvider(),
+      [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+    };
+    if (this.options.idProvider) {
+      mfaChallenge._id = this.options.idProvider();
+    }
+    const ret = await this.authenticatorCollection.insertOne(mfaChallenge);
+    return ret.ops[0]._id.toString();
   }
 }

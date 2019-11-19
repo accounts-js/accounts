@@ -15,3 +15,4 @@ export * from './types/hash-algorithm';
 export * from './types/authenticator/authenticator-service';
 export * from './types/authenticator/authenticator';
 export * from './types/authenticator/create-authenticator';
+export * from './types/mfa-challenge/create-mfa-challenge';

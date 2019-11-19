@@ -71,3 +71,9 @@ export interface MongoAuthenticator {
   userId?: string;
   [key: string]: any;
 }
+
+export interface MongoMfaChallenge {
+  _id?: string | object;
+  userId?: string;
+  authenticatorId?: string;
+}
