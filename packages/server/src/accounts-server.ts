@@ -562,12 +562,24 @@ Please change it with a strong random token.`);
    * @param {string} serviceName - Service name of the authenticator service.
    * @param {any} params - Params for the the authenticator service.
    */
-  public async mfaAssociate(userId: string, serviceName: string, params: any) {
+  public async mfaAssociate(userId: string, serviceName: string, params: any): Promise<any> {
     if (!this.authenticators[serviceName]) {
       throw new Error(`No service with the name ${serviceName} was registered.`);
     }
 
-    return this.authenticators[serviceName].associate(userId, params);
+    const associate = await this.authenticators[serviceName].associate(userId, params);
+    const mfaChallengeToken = generateRandomToken();
+    // associate.id refer to the authenticator id
+    await this.db.createMfaChallenge({
+      userId,
+      authenticatorId: associate.id,
+      token: mfaChallengeToken,
+    });
+
+    return {
+      ...associate,
+      mfaToken: mfaChallengeToken,
+    };
   }
 
   /**

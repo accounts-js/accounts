@@ -8,7 +8,10 @@ import accountsExpress, { userLoader } from '@accounts/rest-express';
 import MongoDBInterface from '@accounts/mongo';
 import { AuthenticatorOtp } from '@accounts/authenticator-otp';
 
-mongoose.connect('mongodb://localhost:27017/accounts-js-rest-example', { useNewUrlParser: true });
+mongoose.connect('mongodb://localhost:27017/accounts-js-rest-example', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 const db = mongoose.connection;
 
 const app = express();
