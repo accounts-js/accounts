@@ -6,6 +6,7 @@ import {
   User,
   Authenticator,
   CreateAuthenticator,
+  MfaChallenge,
   CreateMfaChallenge,
 } from '@accounts/types';
 import { get, merge } from 'lodash';
@@ -490,5 +491,13 @@ export class Mongo implements DatabaseInterface {
     }
     const ret = await this.mfaChallengeCollection.insertOne(mfaChallenge);
     return (ret as any).ops[0]._id.toString();
+  }
+
+  public async findMfaChallengeByToken(token: string): Promise<MfaChallenge | null> {
+    const mfaChallenge = await this.mfaChallengeCollection.findOne({ token });
+    if (mfaChallenge) {
+      mfaChallenge.id = mfaChallenge._id.toString();
+    }
+    return mfaChallenge;
   }
 }

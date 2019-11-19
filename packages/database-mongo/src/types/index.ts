@@ -76,4 +76,5 @@ export interface MongoMfaChallenge {
   _id?: string | object;
   userId?: string;
   authenticatorId?: string;
+  token: string;
 }

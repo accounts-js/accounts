@@ -4,6 +4,8 @@ import { CreateUser } from './create-user';
 import { ConnectionInformations } from './connection-informations';
 import { CreateAuthenticator } from './authenticator/create-authenticator';
 import { Authenticator } from './authenticator/authenticator';
+import { CreateMfaChallenge } from './mfa-challenge/create-mfa-challenge';
+import { MfaChallenge } from './mfa-challenge/mfa-challenge';
 
 export interface DatabaseInterface extends DatabaseInterfaceSessions {
   /**
@@ -75,7 +77,7 @@ export interface DatabaseInterface extends DatabaseInterfaceSessions {
   addEmailVerificationToken(userId: string, email: string, token: string): Promise<void>;
 
   /**
-   * MFA related operations
+   * MFA authenticator related operations
    */
 
   createAuthenticator(authenticator: CreateAuthenticator): Promise<string>;
@@ -83,6 +85,14 @@ export interface DatabaseInterface extends DatabaseInterfaceSessions {
   findAuthenticatorById(authenticatorId: string): Promise<Authenticator | null>;
 
   findUserAuthenticators(userId: string): Promise<Authenticator[]>;
+
+  /**
+   * MFA challenges related operations
+   */
+
+  createMfaChallenge(newMfaChallenge: CreateMfaChallenge): Promise<string>;
+
+  findMfaChallengeByToken(token: string): Promise<MfaChallenge | null>;
 }
 
 export interface DatabaseInterfaceSessions {
