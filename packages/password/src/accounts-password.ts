@@ -69,6 +69,11 @@ export interface AccountsPasswordOptions {
    */
   invalidateAllSessionsAfterPasswordChanged?: boolean;
   /**
+   * Will automatically send a verification email after signup.
+   * Default to false.
+   */
+  sendVerificationEmailAfterSignup?: boolean;
+  /**
    * Function that will validate the user object during `createUser`.
    * The user returned from this function will be directly inserted in the database so be careful when you whitelist the fields,
    * By default we only allow `username`, `email` and `password` fields.
@@ -91,10 +96,6 @@ export interface AccountsPasswordOptions {
    * This function will be called when you call `createUser`.
    */
   validateUsername?(username?: string): boolean;
-  /**
-   * Will automatically send a verification email after signup
-   */
-  sendVerificationEmailAfterSignup?: boolean;
 }
 
 const defaultOptions = {
