@@ -13,7 +13,12 @@ export interface AccountsServerOptions {
    */
   ambiguousErrorMessages?: boolean;
   db?: DatabaseInterface;
-  tokenSecret: string;
+  tokenSecret:
+    | string
+    | {
+        publicKey: jwt.Secret;
+        privateKey: jwt.Secret;
+      };
   tokenConfigs?: {
     accessToken?: jwt.SignOptions;
     refreshToken?: jwt.SignOptions;
