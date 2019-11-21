@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcryptjs';
-import * as crypto from 'crypto';
+import { createHash } from 'crypto';
 import { PasswordType } from '../types/password-type';
 
 export const bcryptPassword = async (password: string): Promise<string> => {
@@ -10,7 +10,7 @@ export const bcryptPassword = async (password: string): Promise<string> => {
 
 export const hashPassword = (password: PasswordType, algorithm: string) => {
   if (typeof password === 'string') {
-    const hash = crypto.createHash(algorithm);
+    const hash = createHash(algorithm);
     hash.update(password);
     return hash.digest('hex');
   }
