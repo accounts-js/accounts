@@ -41,7 +41,7 @@
     "@accounts/client": "^0.20.0",
     "@types/jest": "24.0.23",
     "@types/lodash": "4.14.149",
-    "@types/node": "12.12.7",
+    "@types/node": "12.12.14",
     "jest": "24.9.0",
     "node-fetch": "2.6.0"
   },

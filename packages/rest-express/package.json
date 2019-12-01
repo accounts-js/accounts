@@ -39,7 +39,7 @@
     "@types/express": "4.17.2",
     "@types/jest": "24.0.23",
     "@types/lodash": "4.14.149",
-    "@types/node": "12.12.7",
+    "@types/node": "12.12.14",
     "@types/request-ip": "0.0.34",
     "jest": "24.9.0"
   },
