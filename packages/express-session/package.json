@@ -36,7 +36,7 @@
   "devDependencies": {
     "@accounts/server": "^0.20.0",
     "@types/express": "4.17.2",
-    "@types/express-session": "1.15.15",
+    "@types/express-session": "1.15.16",
     "@types/jest": "24.0.22",
     "@types/lodash": "4.14.146",
     "@types/request-ip": "0.0.34",
