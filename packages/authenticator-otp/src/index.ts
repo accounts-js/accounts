@@ -16,6 +16,7 @@ export interface AuthenticatorOtpOptions {
    * Two factor user name that will be displayed inside the user authenticator app,
    * usually a name, email etc..
    * Will be called every time a user register a new device.
+   * That way you can display something like "Github (accounts-js)" in the authenticator app.
    */
   userName?: (userId: string) => Promise<string> | string;
 }
@@ -49,7 +50,7 @@ export class AuthenticatorOtp implements AuthenticatorService {
     const secret = otplib.authenticator.generateSecret();
     const userName = this.options.userName ? await this.options.userName(userId) : userId;
     const otpauthUri = otplib.authenticator.keyuri(userName, this.options.appName, secret);
-    // TODO generate some recovery codes like slack is doing (as an option)?
+    // TODO generate some recovery codes like slack is doing (as an option, or maybe should just be a separate authenticator so it can be used by anything)?
 
     const authenticatorId = await this.db.createAuthenticator({
       type: this.serviceName,
@@ -69,19 +70,11 @@ export class AuthenticatorOtp implements AuthenticatorService {
    * Verify that the code provided by the user is valid
    */
   public async authenticate(
-    authenticatorId: string,
+    authenticator: DbAuthenticatorOtp,
     { code }: { code?: string }
   ): Promise<boolean> {
     if (!code) {
       throw new Error('Code required');
-    }
-
-    // Should this be in accounts-js server before calling authenticate?
-    const authenticator = (await this.db.findAuthenticatorById(
-      authenticatorId
-    )) as DbAuthenticatorOtp | null;
-    if (!authenticator || authenticator.type !== this.serviceName) {
-      throw new Error('Authenticator not found');
     }
 
     return otplib.authenticator.check(code, authenticator.secret);

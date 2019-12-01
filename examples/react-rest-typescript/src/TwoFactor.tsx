@@ -5,6 +5,7 @@ import QRCode from 'qrcode.react';
 import { accountsRest, accountsClient } from './accounts';
 
 interface OTP {
+  mfaToken: string;
   id: string;
   otpauthUri: string;
   secret: string;
@@ -25,8 +26,15 @@ const TwoFactor = () => {
   }, []);
 
   const onSetTwoFactor = async () => {
+    if (!secret) return;
+
     try {
-      await accountsRest.twoFactorSet(secret, oneTimeCode);
+      // await accountsRest.twoFactorSet(secret, oneTimeCode);
+      const res = await accountsRest.loginWithService('mfa', {
+        mfaToken: secret.mfaToken,
+        code: oneTimeCode,
+      });
+      console.log(res);
     } catch (err) {
       alert(err.message);
     }

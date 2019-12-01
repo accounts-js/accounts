@@ -469,11 +469,26 @@ export class Mongo implements DatabaseInterface {
   }
 
   public async findUserAuthenticators(userId: string): Promise<Authenticator[]> {
-    const authenticators = await this.sessionCollection.find({ userId }).toArray();
+    const authenticators = await this.authenticatorCollection.find({ userId }).toArray();
     authenticators.forEach(authenticator => {
       authenticator.id = authenticator._id.toString();
     });
     return authenticators;
+  }
+
+  public async activateAuthenticator(authenticatorId: string): Promise<void> {
+    const id = this.options.convertAuthenticatorIdToMongoObjectId
+      ? toMongoID(authenticatorId)
+      : authenticatorId;
+    await this.authenticatorCollection.updateOne(
+      { _id: id },
+      {
+        $set: {
+          active: true,
+          activatedAt: this.options.dateProvider(),
+        },
+      }
+    );
   }
 
   /**

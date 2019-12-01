@@ -86,6 +86,8 @@ export interface DatabaseInterface extends DatabaseInterfaceSessions {
 
   findUserAuthenticators(userId: string): Promise<Authenticator[]>;
 
+  activateAuthenticator(authenticatorId: string): Promise<void>;
+
   /**
    * MFA challenges related operations
    */
