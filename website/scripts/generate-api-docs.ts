@@ -35,7 +35,9 @@ dirs.forEach(dir => {
   const docFiles = readdirSync(resolve(apiDocsDir, dir));
   docFiles.forEach(file => {
     let fileContent = readFileSync(resolve(apiDocsDir, dir, file), { encoding: 'utf8' });
-    fileContent = fileContent.replace(new RegExp('.md', 'g'), '');
+    fileContent = fileContent
+      .replace(/\((api-\S+)\)/gm, '(/docs/api/' + dir + '/$1)')
+      .replace(new RegExp('.md', 'g'), '');
     writeFileSync(resolve(apiDocsDir, dir, file), fileContent, { encoding: 'utf8' });
   });
 });
