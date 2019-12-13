@@ -69,6 +69,8 @@ const data = await accountsClient.mfaAssociate('otp');
 
 // Data have the following structure
 {
+  // Token that will be used later to activate the new authenticator
+  mfaToken: string;
   // Id of the object stored in the database
   id: string;
   // Secret to show to the user so they can save it in a safe place
@@ -112,7 +114,20 @@ const data = await accountsClient.mfaAssociate('otp');
 
 ## Confirm the association
 
-TODO
+Finally, in order to activate the new authenticator, we need to validate the OTP code.
+You will need to login using the `mfa` service by using the code you collected from the user coming from his authenticator app.
+
+```javascript
+// oneTimeCode is the OTP code entered by the user
+const oneTimeCode = '...';
+
+await accountsRest.loginWithService('mfa', {
+  mfaToken: secret.mfaToken,
+  code: oneTimeCode,
+});
+```
+
+If the call was successful, the authenticator is now activated and will be required next time the user try to login.
 
 ### Examples
 
