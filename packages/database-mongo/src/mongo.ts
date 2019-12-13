@@ -33,6 +33,7 @@ const defaultOptions = {
   convertUserIdToMongoObjectId: true,
   convertSessionIdToMongoObjectId: true,
   convertAuthenticatorIdToMongoObjectId: true,
+  convertMfaChallengeIdToMongoObjectId: true,
   caseSensitiveUserName: true,
   dateProvider: (date?: Date) => (date ? date.getTime() : Date.now()),
 };
@@ -509,10 +510,28 @@ export class Mongo implements DatabaseInterface {
   }
 
   public async findMfaChallengeByToken(token: string): Promise<MfaChallenge | null> {
-    const mfaChallenge = await this.mfaChallengeCollection.findOne({ token });
+    const mfaChallenge = await this.mfaChallengeCollection.findOne({
+      token,
+      deactivated: { $exists: false },
+    });
     if (mfaChallenge) {
       mfaChallenge.id = mfaChallenge._id.toString();
     }
     return mfaChallenge;
+  }
+
+  public async deactivateMfaChallenge(mfaChallengeId: string): Promise<void> {
+    const id = this.options.convertMfaChallengeIdToMongoObjectId
+      ? toMongoID(mfaChallengeId)
+      : mfaChallengeId;
+    await this.mfaChallengeCollection.updateOne(
+      { _id: id },
+      {
+        $set: {
+          deactivated: true,
+          deactivatedAt: this.options.dateProvider(),
+        },
+      }
+    );
   }
 }

@@ -95,6 +95,8 @@ export interface DatabaseInterface extends DatabaseInterfaceSessions {
   createMfaChallenge(newMfaChallenge: CreateMfaChallenge): Promise<string>;
 
   findMfaChallengeByToken(token: string): Promise<MfaChallenge | null>;
+
+  deactivateMfaChallenge(mfaChallengeId: string): Promise<void>;
 }
 
 export interface DatabaseInterfaceSessions {

@@ -184,4 +184,9 @@ export class DatabaseManager implements DatabaseInterface {
   public get findMfaChallengeByToken(): DatabaseInterface['findMfaChallengeByToken'] {
     return this.userStorage.findMfaChallengeByToken.bind(this.userStorage);
   }
+
+  // Return the deactivateMfaChallenge function from the userStorage
+  public get deactivateMfaChallenge(): DatabaseInterface['deactivateMfaChallenge'] {
+    return this.userStorage.deactivateMfaChallenge.bind(this.userStorage);
+  }
 }

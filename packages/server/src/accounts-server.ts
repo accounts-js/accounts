@@ -187,12 +187,17 @@ Please change it with a strong random token.`);
           throw new Error('Authenticator is not active');
         }
 
-        // TODO invalidate the current challenge
-        // TODO return a new session
+        // We invalidate the current mfa challenge so it can't be reused later
+        await this.db.deactivateMfaChallenge(mfaChallenge.id);
 
-        console.log(mfaChallenge, authenticator);
-
-        throw new Error('Not implemented');
+        const user = await this.db.findUserById(mfaChallenge.userId);
+        if (!user) {
+          throw new Error('user not found');
+        }
+        hooksInfo.user = user;
+        const loginResult = await this.loginWithUser(user, infos);
+        this.hooks.emit(ServerHooks.LoginSuccess, hooksInfo);
+        return loginResult;
       }
 
       if (!this.services[serviceName]) {

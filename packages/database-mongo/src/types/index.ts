@@ -35,7 +35,11 @@ export interface AccountsMongoOptions {
    */
   convertAuthenticatorIdToMongoObjectId: boolean;
   /**
-   * Perform case intensitive query for user name, default 'true'.
+   * Should the mfa challenge collection use _id as string or ObjectId, default 'true'.
+   */
+  convertMfaChallengeIdToMongoObjectId: boolean;
+  /**
+   * Perform case insensitive query for user name, default 'true'.
    */
   caseSensitiveUserName?: boolean;
   /**
