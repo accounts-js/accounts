@@ -1,6 +1,6 @@
 {
   "name": "@accounts/server",
-  "version": "0.20.0",
+  "version": "0.20.1",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -40,7 +40,7 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "dependencies": {
-    "@accounts/types": "^0.20.0",
+    "@accounts/types": "^0.20.1",
     "@types/jsonwebtoken": "8.3.5",
     "emittery": "0.5.1",
     "jsonwebtoken": "8.5.1",
