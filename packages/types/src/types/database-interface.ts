@@ -1,7 +1,6 @@
 import { User } from './user';
-import { Session } from './session';
 import { CreateUser } from './create-user';
-import { ConnectionInformations } from './connection-informations';
+import { DatabaseInterfaceSessions } from './session/database-interface';
 import { DatabaseInterfaceAuthenticators } from './authenticator/database-interface';
 import { DatabaseInterfaceMfaChallenges } from './mfa-challenge/database-interface';
 
@@ -76,27 +75,4 @@ export interface DatabaseInterface
   verifyEmail(userId: string, email: string): Promise<void>;
 
   addEmailVerificationToken(userId: string, email: string, token: string): Promise<void>;
-}
-
-export interface DatabaseInterfaceSessions {
-  findSessionById(sessionId: string): Promise<Session | null>;
-
-  findSessionByToken(token: string): Promise<Session | null>;
-
-  createSession(
-    userId: string,
-    token: string,
-    connection: ConnectionInformations,
-    extraData?: object
-  ): Promise<string>;
-
-  updateSession(
-    sessionId: string,
-    connection: ConnectionInformations,
-    newToken?: string
-  ): Promise<void>;
-
-  invalidateSession(sessionId: string): Promise<void>;
-
-  invalidateAllSessions(userId: string): Promise<void>;
 }
