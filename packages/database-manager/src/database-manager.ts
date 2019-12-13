@@ -154,4 +154,34 @@ export class DatabaseManager implements DatabaseInterface {
   public get setUserDeactivated(): DatabaseInterface['setUserDeactivated'] {
     return this.userStorage.setUserDeactivated.bind(this.userStorage);
   }
+
+  // Return the findAuthenticatorById function from the userStorage
+  public get findAuthenticatorById(): DatabaseInterface['findAuthenticatorById'] {
+    return this.userStorage.findAuthenticatorById.bind(this.userStorage);
+  }
+
+  // Return the findUserAuthenticators function from the userStorage
+  public get findUserAuthenticators(): DatabaseInterface['findUserAuthenticators'] {
+    return this.userStorage.findUserAuthenticators.bind(this.userStorage);
+  }
+
+  // Return the createAuthenticator function from the userStorage
+  public get createAuthenticator(): DatabaseInterface['createAuthenticator'] {
+    return this.userStorage.createAuthenticator.bind(this.userStorage);
+  }
+
+  // Return the activateAuthenticator function from the userStorage
+  public get activateAuthenticator(): DatabaseInterface['activateAuthenticator'] {
+    return this.userStorage.activateAuthenticator.bind(this.userStorage);
+  }
+
+  // Return the createMfaChallenge function from the userStorage
+  public get createMfaChallenge(): DatabaseInterface['createMfaChallenge'] {
+    return this.userStorage.createMfaChallenge.bind(this.userStorage);
+  }
+
+  // Return the findMfaChallengeByToken function from the userStorage
+  public get findMfaChallengeByToken(): DatabaseInterface['findMfaChallengeByToken'] {
+    return this.userStorage.findMfaChallengeByToken.bind(this.userStorage);
+  }
 }
