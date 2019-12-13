@@ -15,4 +15,8 @@ export interface Authenticator {
    * Is authenticator active
    */
   active: boolean;
+  /**
+   * If active is true, contain the date when the authenticator was activated
+   */
+  activatedAt?: string;
 }
