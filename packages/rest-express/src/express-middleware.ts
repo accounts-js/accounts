@@ -13,6 +13,7 @@ import { registerPassword } from './endpoints/password/register';
 import { twoFactorSecret, twoFactorSet, twoFactorUnset } from './endpoints/password/two-factor';
 import { changePassword } from './endpoints/password/change-password';
 import { associate } from './endpoints/mfa/associate';
+import { authenticators } from './endpoints/mfa/authenticators';
 import { userLoader } from './user-loader';
 import { AccountsExpressOptions } from './types';
 
@@ -49,7 +50,11 @@ const accountsExpress = (
 
   router.post(`${path}/mfa/associate`, userLoader(accountsServer), associate(accountsServer));
 
-  router.get(`${path}/mfa/authenticators`, userLoader(accountsServer), associate(accountsServer));
+  router.get(
+    `${path}/mfa/authenticators`,
+    userLoader(accountsServer),
+    authenticators(accountsServer)
+  );
 
   const services = accountsServer.getServices();
 
