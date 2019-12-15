@@ -105,9 +105,7 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
           <form onSubmit={formik.handleSubmit}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <Typography variant="h5" gutterBottom>
-                  Sign in
-                </Typography>
+                <Typography variant="h5">Sign in</Typography>
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -162,9 +160,9 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
                 </Grid>
               </Grid>
             </Grid>
-            <Divider className={classes.divider} />
-            <Link component={SignUpLink}>Don't have an account?</Link>
           </form>
+          <Divider className={classes.divider} />
+          <Link component={SignUpLink}>Don't have an account?</Link>
         </CardContent>
       </Card>
     </Container>
