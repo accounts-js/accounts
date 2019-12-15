@@ -92,9 +92,6 @@ const Signup = ({ history }: RouteComponentProps<{}>) => {
           horizontal: 'center',
         }}
         open={!!error}
-        ContentProps={{
-          'aria-describedby': 'message-id',
-        }}
         onClose={() => setError(undefined)}
       >
         <SnackBarContentError message={error} />
@@ -137,6 +134,7 @@ const Signup = ({ history }: RouteComponentProps<{}>) => {
                   variant="outlined"
                   fullWidth={true}
                   id="email"
+                  type="email"
                   value={formik.values.email}
                   onChange={formik.handleChange}
                   error={Boolean(formik.errors.email && formik.touched.email)}
