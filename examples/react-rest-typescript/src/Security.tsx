@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import { useFormik, FormikErrors } from 'formik';
 import { accountsPassword } from './accounts';
+import { TwoFactor } from './TwoFactor';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -137,6 +138,8 @@ export const Security = () => {
           </CardActions>
         </form>
       </Card>
+
+      <TwoFactor />
     </Container>
   );
 };

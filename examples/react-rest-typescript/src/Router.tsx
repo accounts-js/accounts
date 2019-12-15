@@ -8,7 +8,6 @@ import Login from './Login';
 import Home from './Home';
 import ResetPassword from './ResetPassword';
 import VerifyEmail from './VerifyEmail';
-import TwoFactor from './TwoFactor';
 import { Security } from './Security';
 
 const useStyles = makeStyles({
@@ -38,7 +37,6 @@ const Router = () => {
       <CssBaseline />
       <Route exact path="/" component={Home} />
       <Route path="/security" component={Security} />
-      <Route path="/two-factor" component={TwoFactor} />
 
       <Route path="/signup" component={Signup} />
       <Route path="/login" component={Login} />

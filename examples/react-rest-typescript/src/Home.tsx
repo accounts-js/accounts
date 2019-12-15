@@ -1,10 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { RouteComponentProps, Link } from 'react-router-dom';
-import { Button, Typography } from '@material-ui/core';
-
+import { RouteComponentProps } from 'react-router-dom';
+import {
+  Button,
+  Typography,
+  Container,
+  makeStyles,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+} from '@material-ui/core';
 import { accountsClient, accountsRest } from './accounts';
 
+const useStyles = makeStyles(theme => ({
+  container: {
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
+  },
+  card: {
+    marginTop: theme.spacing(3),
+  },
+  cardHeader: {
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
+  },
+  cardContent: {
+    padding: theme.spacing(3),
+  },
+}));
+
 const Home = ({ history }: RouteComponentProps<{}>) => {
+  const classes = useStyles();
   const [user, setUser] = useState();
 
   useEffect(() => {
@@ -41,22 +67,29 @@ const Home = ({ history }: RouteComponentProps<{}>) => {
     return null;
   }
   return (
-    <div>
-      <Typography gutterBottom>You are logged in</Typography>
-      <Typography gutterBottom>Email: {user.emails[0].address}</Typography>
-      <Typography gutterBottom>
-        You email is {user.emails[0].verified ? 'verified' : 'unverified'}
-      </Typography>
-      {!user.emails[0].verified && (
-        <Button onClick={onResendEmail}>Resend verification email</Button>
-      )}
+    <Container maxWidth="sm" className={classes.container}>
+      <Typography variant="h5">Account Details</Typography>
+      <Card className={classes.card}>
+        <CardHeader subheader="Emails" className={classes.cardHeader} />
+        <Divider />
+        <CardContent className={classes.cardContent}>
+          {user.emails.map((email: any, index: number) => (
+            <React.Fragment key={index}>
+              <Typography gutterBottom>
+                {email.address}: {email.verified ? 'verified' : 'unverified'}
+              </Typography>
+              {!email.verified && (
+                <Button onClick={onResendEmail}>Resend verification email</Button>
+              )}
+            </React.Fragment>
+          ))}
 
-      <Link to="two-factor">Set up 2fa</Link>
-
-      <Button variant="contained" color="primary" onClick={onLogout}>
-        Logout
-      </Button>
-    </div>
+          <Button variant="contained" color="primary" onClick={onLogout}>
+            Logout
+          </Button>
+        </CardContent>
+      </Card>
+    </Container>
   );
 };
 
