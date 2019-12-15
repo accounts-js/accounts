@@ -9,6 +9,7 @@ import Home from './Home';
 import ResetPassword from './ResetPassword';
 import VerifyEmail from './VerifyEmail';
 import TwoFactor from './TwoFactor';
+import { Security } from './Security';
 
 const useStyles = makeStyles({
   root: {
@@ -31,6 +32,7 @@ const Router = () => {
           <Paper className={classes.container}>
             <CssBaseline />
             <Route exact path="/" component={Home} />
+            <Route path="/security" component={Security} />
             <Route path="/two-factor" component={TwoFactor} />
 
             <Route path="/signup" component={Signup} />
