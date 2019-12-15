@@ -45,12 +45,12 @@
   },
   "devDependencies": {
     "@types/node": "12.12.7",
-    "@types/qrcode.react": "0.9.0",
+    "@types/qrcode.react": "1.0.0",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.4",
     "@types/react-router": "5.1.2",
     "@types/react-router-dom": "5.1.2",
     "react-scripts": "3.3.0",
-    "typescript": "3.7.2"
+    "typescript": "3.7.3"
   }
 }
