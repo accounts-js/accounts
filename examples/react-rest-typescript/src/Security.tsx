@@ -12,6 +12,7 @@ import {
   Button,
   Typography,
 } from '@material-ui/core';
+import { useFormik, FormikErrors } from 'formik';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -33,47 +34,100 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+interface ChangePasswordValues {
+  oldPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
 export const Security = () => {
   const classes = useStyles();
+  const formik = useFormik<ChangePasswordValues>({
+    initialValues: {
+      oldPassword: '',
+      newPassword: '',
+      confirmNewPassword: '',
+    },
+    validate: values => {
+      const errors: FormikErrors<ChangePasswordValues> = {};
+      if (!values.oldPassword) {
+        errors.oldPassword = 'Required';
+      }
+      if (!values.newPassword) {
+        errors.newPassword = 'Required';
+      }
+      if (!values.confirmNewPassword) {
+        errors.confirmNewPassword = 'Required';
+      }
+      if (!errors.confirmNewPassword && values.newPassword !== values.confirmNewPassword) {
+        errors.confirmNewPassword = 'Passwords do not match';
+      }
+      return errors;
+    },
+    onSubmit: values => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
 
   return (
     <Container maxWidth="md" className={classes.container}>
       <Typography variant="h5">Security</Typography>
       <Card className={classes.card}>
-        <CardHeader subheader="Change password" className={classes.cardHeader} />
-        <Divider />
-        <CardContent className={classes.cardContent}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
-              <TextField
-                label="Old password"
-                variant="outlined"
-                fullWidth={true}
-                id="old-password"
-              />
+        <form onSubmit={formik.handleSubmit}>
+          <CardHeader subheader="Change password" className={classes.cardHeader} />
+          <Divider />
+          <CardContent className={classes.cardContent}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={4}>
+                <TextField
+                  label="Old password"
+                  variant="outlined"
+                  fullWidth={true}
+                  type="password"
+                  id="oldPassword"
+                  value={formik.values.oldPassword}
+                  onChange={formik.handleChange}
+                  error={Boolean(formik.errors.oldPassword && formik.touched.oldPassword)}
+                  helperText={formik.touched.oldPassword && formik.errors.oldPassword}
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <TextField
+                  label="New password"
+                  variant="outlined"
+                  fullWidth={true}
+                  type="password"
+                  id="newPassword"
+                  value={formik.values.newPassword}
+                  onChange={formik.handleChange}
+                  error={Boolean(formik.errors.newPassword && formik.touched.newPassword)}
+                  helperText={formik.touched.newPassword && formik.errors.newPassword}
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <TextField
+                  label="Confirm new password"
+                  variant="outlined"
+                  fullWidth={true}
+                  type="password"
+                  id="confirmNewPassword"
+                  value={formik.values.confirmNewPassword}
+                  onChange={formik.handleChange}
+                  error={Boolean(
+                    formik.errors.confirmNewPassword && formik.touched.confirmNewPassword
+                  )}
+                  helperText={formik.touched.confirmNewPassword && formik.errors.confirmNewPassword}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={4}>
-              <TextField
-                label="New password"
-                variant="outlined"
-                fullWidth={true}
-                id="new-password"
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <TextField
-                label="Confirm new password"
-                variant="outlined"
-                fullWidth={true}
-                id="confirm-new-password"
-              />
-            </Grid>
-          </Grid>
-        </CardContent>
-        <Divider />
-        <CardActions className={classes.cardActions}>
-          <Button variant="contained">Update password</Button>
-        </CardActions>
+          </CardContent>
+          <Divider />
+          <CardActions className={classes.cardActions}>
+            <Button variant="contained" type="submit">
+              Update password
+            </Button>
+          </CardActions>
+        </form>
       </Card>
     </Container>
   );
