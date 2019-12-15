@@ -13,6 +13,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { useFormik, FormikErrors } from 'formik';
+import { accountsPassword } from './accounts';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -64,8 +65,15 @@ export const Security = () => {
       }
       return errors;
     },
-    onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        await accountsPassword.changePassword(values.oldPassword, values.newPassword);
+        // TODO success message
+      } catch (error) {
+        // TODO snackbar?
+        alert(error);
+      }
+      setSubmitting(false);
     },
   });
 
@@ -123,7 +131,7 @@ export const Security = () => {
           </CardContent>
           <Divider />
           <CardActions className={classes.cardActions}>
-            <Button variant="contained" type="submit">
+            <Button variant="contained" type="submit" disabled={formik.isSubmitting}>
               Update password
             </Button>
           </CardActions>
