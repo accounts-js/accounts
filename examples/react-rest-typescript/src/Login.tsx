@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RouteComponentProps, Link as RouterLink } from 'react-router-dom';
 import {
   Button,
@@ -11,9 +11,11 @@ import {
   Link,
   TextField,
   Grid,
+  Snackbar,
 } from '@material-ui/core';
 import { useFormik, FormikErrors } from 'formik';
 import { accountsPassword } from './accounts';
+import { SnackBarContentError } from './components/SnackBarContentError';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -26,6 +28,9 @@ const useStyles = makeStyles(theme => ({
   divider: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
+  },
+  snackBarError: {
+    backgroundColor: theme.palette.error.dark,
   },
 }));
 
@@ -44,6 +49,7 @@ interface LoginValues {
 
 const Login = ({ history }: RouteComponentProps<{}>) => {
   const classes = useStyles();
+  const [error, setError] = useState<string | undefined>();
   const formik = useFormik<LoginValues>({
     initialValues: {
       email: '',
@@ -71,8 +77,7 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
         });
         history.push('/');
       } catch (error) {
-        // TODO snackbar?
-        alert(error);
+        setError(error.message);
       }
       setSubmitting(false);
     },
@@ -80,6 +85,21 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
 
   return (
     <Container maxWidth="sm" className={classes.container}>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        className={classes.snackBarError}
+        open={!!error}
+        ContentProps={{
+          'aria-describedby': 'message-id',
+        }}
+        onClose={() => setError(undefined)}
+      >
+        <SnackBarContentError message={error} />
+      </Snackbar>
+
       <Card>
         <CardContent className={classes.cardContent}>
           <form onSubmit={formik.handleSubmit}>
@@ -142,7 +162,6 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
                 </Grid>
               </Grid>
             </Grid>
-
             <Divider className={classes.divider} />
             <Link component={SignUpLink}>Don't have an account?</Link>
           </form>
