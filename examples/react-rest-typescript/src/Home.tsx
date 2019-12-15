@@ -1,16 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
-import {
-  Button,
-  Typography,
-  Card,
-  CardHeader,
-  CardContent,
-  CardActions,
-  Divider,
-  TextField,
-  Grid,
-} from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 
 import { accountsClient, accountsRest } from './accounts';
 
@@ -66,32 +56,6 @@ const Home = ({ history }: RouteComponentProps<{}>) => {
       <Button variant="contained" color="primary" onClick={onLogout}>
         Logout
       </Button>
-
-      <Card>
-        <CardHeader subheader="Change password" />
-        <Divider />
-        <CardContent>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <TextField label="Old password" variant="outlined" id="old-password" />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField label="New password" variant="outlined" id="new-password" />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Confirm new password"
-                variant="outlined"
-                id="confirm-new-password"
-              />
-            </Grid>
-          </Grid>
-        </CardContent>
-        <Divider />
-        <CardActions>
-          <Button variant="contained">Update password</Button>
-        </CardActions>
-      </Card>
     </div>
   );
 };
