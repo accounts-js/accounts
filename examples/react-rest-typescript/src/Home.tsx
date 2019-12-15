@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
   Button,
   Typography,
@@ -29,8 +29,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Home = ({ history }: RouteComponentProps<{}>) => {
+const Home = () => {
   const classes = useStyles();
+  const history = useHistory();
   const [user, setUser] = useState();
 
   useEffect(() => {
