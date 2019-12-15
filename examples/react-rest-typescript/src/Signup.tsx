@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { RouteComponentProps, Link as RouterLink } from 'react-router-dom';
 import {
-  FormControl,
-  InputLabel,
-  Input,
   Button,
   Typography,
   Container,
@@ -13,10 +10,12 @@ import {
   Divider,
   Link,
   Grid,
+  TextField,
+  Snackbar,
 } from '@material-ui/core';
-
+import { useFormik, FormikErrors } from 'formik';
 import { accountsPassword } from './accounts';
-import FormError from './components/FormError';
+import { SnackBarContentError } from './components/SnackBarContentError';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -36,7 +35,7 @@ const LogInLink = React.forwardRef<RouterLink, any>((props, ref) => (
   <RouterLink to="/login" {...props} ref={ref} />
 ));
 
-interface UserForm {
+interface SignupValues {
   firstName: string;
   lastName: string;
   email: string;
@@ -45,78 +44,129 @@ interface UserForm {
 
 const Signup = ({ history }: RouteComponentProps<{}>) => {
   const classes = useStyles();
-  const [error, setError] = useState<string | null>(null);
-  const [user, setUser] = useState<UserForm>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
+  const [error, setError] = useState<string | undefined>();
+  const formik = useFormik<SignupValues>({
+    initialValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+    },
+    validate: values => {
+      const errors: FormikErrors<SignupValues> = {};
+      if (!values.firstName) {
+        errors.firstName = 'Required';
+      }
+      if (!values.lastName) {
+        errors.lastName = 'Required';
+      }
+      if (!values.email) {
+        errors.email = 'Required';
+      }
+      if (!values.password) {
+        errors.password = 'Required';
+      }
+      return errors;
+    },
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        await accountsPassword.createUser({
+          firstName: values.firstName,
+          lastName: values.lastName,
+          email: values.email,
+          password: values.password,
+        });
+        history.push('/login');
+      } catch (error) {
+        setError(error.message);
+      }
+      setSubmitting(false);
+    },
   });
-
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
-    try {
-      await accountsPassword.createUser({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        password: user.password,
-      });
-      history.push('/login');
-    } catch (err) {
-      setError(err.message);
-    }
-  };
 
   return (
     <Container maxWidth="sm" className={classes.container}>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        open={!!error}
+        ContentProps={{
+          'aria-describedby': 'message-id',
+        }}
+        onClose={() => setError(undefined)}
+      >
+        <SnackBarContentError message={error} />
+      </Snackbar>
+
       <Card>
         <CardContent className={classes.cardContent}>
-          <form onSubmit={onSubmit}>
+          <form onSubmit={formik.handleSubmit}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Typography variant="h5">Sign up</Typography>
               </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="First name"
+                  variant="outlined"
+                  fullWidth={true}
+                  id="firstName"
+                  value={formik.values.firstName}
+                  onChange={formik.handleChange}
+                  error={Boolean(formik.errors.firstName && formik.touched.firstName)}
+                  helperText={formik.touched.firstName && formik.errors.firstName}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="Last name"
+                  variant="outlined"
+                  fullWidth={true}
+                  id="lastName"
+                  value={formik.values.lastName}
+                  onChange={formik.handleChange}
+                  error={Boolean(formik.errors.lastName && formik.touched.lastName)}
+                  helperText={formik.touched.lastName && formik.errors.lastName}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Email"
+                  variant="outlined"
+                  fullWidth={true}
+                  id="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  error={Boolean(formik.errors.email && formik.touched.email)}
+                  helperText={formik.touched.email && formik.errors.email}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Password"
+                  variant="outlined"
+                  fullWidth={true}
+                  type="password"
+                  id="password"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  error={Boolean(formik.errors.password && formik.touched.password)}
+                  helperText={formik.touched.password && formik.errors.password}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  disabled={formik.isSubmitting}
+                >
+                  Sign Up
+                </Button>
+              </Grid>
             </Grid>
-
-            <FormControl margin="normal">
-              <InputLabel htmlFor="firstName">First name</InputLabel>
-              <Input
-                id="firstName"
-                value={user.firstName}
-                onChange={e => setUser(prevState => ({ ...prevState, firstName: e.target.value }))}
-              />
-            </FormControl>
-            <FormControl margin="normal">
-              <InputLabel htmlFor="lastName">Last name</InputLabel>
-              <Input
-                id="lastName"
-                value={user.lastName}
-                onChange={e => setUser(prevState => ({ ...prevState, lastName: e.target.value }))}
-              />
-            </FormControl>
-            <FormControl margin="normal">
-              <InputLabel htmlFor="email">Email</InputLabel>
-              <Input
-                id="email"
-                value={user.email}
-                onChange={e => setUser(prevState => ({ ...prevState, email: e.target.value }))}
-              />
-            </FormControl>
-            <FormControl margin="normal">
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <Input
-                id="password"
-                type="password"
-                value={user.password}
-                onChange={e => setUser(prevState => ({ ...prevState, password: e.target.value }))}
-              />
-            </FormControl>
-            <Button variant="contained" color="primary" type="submit">
-              Sign Up
-            </Button>
-            {error && <FormError error={error!} />}
           </form>
           <Divider className={classes.divider} />
           <Link component={LogInLink}>Already have an account?</Link>

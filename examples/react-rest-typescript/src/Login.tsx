@@ -29,9 +29,6 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
-  snackBarError: {
-    backgroundColor: theme.palette.error.dark,
-  },
 }));
 
 const SignUpLink = React.forwardRef<RouterLink, any>((props, ref) => (
@@ -90,7 +87,6 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
           vertical: 'top',
           horizontal: 'center',
         }}
-        className={classes.snackBarError}
         open={!!error}
         ContentProps={{
           'aria-describedby': 'message-id',
