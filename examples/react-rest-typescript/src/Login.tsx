@@ -75,8 +75,8 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
         history.push('/');
       } catch (error) {
         setError(error.message);
+        setSubmitting(false);
       }
-      setSubmitting(false);
     },
   });
 

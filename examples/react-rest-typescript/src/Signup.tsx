@@ -79,8 +79,8 @@ const Signup = ({ history }: RouteComponentProps<{}>) => {
         history.push('/login');
       } catch (error) {
         setError(error.message);
+        setSubmitting(false);
       }
-      setSubmitting(false);
     },
   });
 
