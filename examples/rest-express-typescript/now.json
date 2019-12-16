@@ -1,7 +1,6 @@
 {
   "version": 2,
   "name": "rest-express-typescript",
-  "alias": "accounts-js-rest-express-typescript.now.sh",
   "builds": [
     {
       "src": "lib/index.js",
@@ -10,8 +9,11 @@
   ],
   "routes": [
     {
-      "src": "/.*",
-      "dest": "/index.js"
+      "src": ".*",
+      "dest": "/lib/index.js"
     }
-  ]
+  ],
+  "env": {
+    "MONGO_URL": "@accounts-js-rest-express"
+  }
 }

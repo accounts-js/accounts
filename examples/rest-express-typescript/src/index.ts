@@ -7,7 +7,7 @@ import { AccountsPassword } from '@accounts/password';
 import accountsExpress, { userLoader } from '@accounts/rest-express';
 import MongoDBInterface from '@accounts/mongo';
 
-mongoose.connect('mongodb://localhost:27017/accounts-js-rest-example', {
+mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/accounts-js-rest-example', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
