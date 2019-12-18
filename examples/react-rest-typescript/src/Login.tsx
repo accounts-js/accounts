@@ -16,6 +16,7 @@ import {
 import { useFormik, FormikErrors } from 'formik';
 import { accountsPassword } from './accounts';
 import { SnackBarContentError } from './components/SnackBarContentError';
+import { useAuth } from './components/AuthContext';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -46,6 +47,7 @@ interface LoginValues {
 
 const Login = ({ history }: RouteComponentProps<{}>) => {
   const classes = useStyles();
+  const { fetchUser } = useAuth();
   const [error, setError] = useState<string | undefined>();
   const formik = useFormik<LoginValues>({
     initialValues: {
@@ -72,6 +74,7 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
           password: values.password,
           code: values.code,
         });
+        await fetchUser();
         history.push('/');
       } catch (error) {
         setError(error.message);
