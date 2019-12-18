@@ -59,11 +59,6 @@ const Home = () => {
     await accountsRest.sendVerificationEmail(user.emails[0].address);
   };
 
-  const onLogout = async () => {
-    await accountsClient.logout();
-    history.push('/login');
-  };
-
   if (!user) {
     return null;
   }
@@ -84,10 +79,6 @@ const Home = () => {
               )}
             </React.Fragment>
           ))}
-
-          <Button variant="contained" color="primary" onClick={onLogout}>
-            Logout
-          </Button>
         </CardContent>
       </Card>
     </Container>
