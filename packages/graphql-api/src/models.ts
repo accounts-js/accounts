@@ -1,631 +1,458 @@
-/* tslint:disable */
-export type Maybe<T> = T | null;
-
-export interface CreateUserInput {
-  username?: Maybe<string>;
-
-  email?: Maybe<string>;
-
-  password?: Maybe<string>;
-}
-
-export interface TwoFactorSecretKeyInput {
-  ascii?: Maybe<string>;
-
-  base32?: Maybe<string>;
-
-  hex?: Maybe<string>;
-
-  qr_code_ascii?: Maybe<string>;
-
-  qr_code_hex?: Maybe<string>;
-
-  qr_code_base32?: Maybe<string>;
-
-  google_auth_qr?: Maybe<string>;
-
-  otpauth_url?: Maybe<string>;
-}
-
-export interface AuthenticateParamsInput {
-  access_token?: Maybe<string>;
-
-  access_token_secret?: Maybe<string>;
-
-  provider?: Maybe<string>;
-
-  password?: Maybe<string>;
-
-  user?: Maybe<UserInput>;
-
-  code?: Maybe<string>;
-}
-
-export interface UserInput {
-  id?: Maybe<string>;
-
-  email?: Maybe<string>;
-
-  username?: Maybe<string>;
-}
-
-// ====================================================
-// Types
-// ====================================================
-
-export interface Query {
-  twoFactorSecret?: Maybe<TwoFactorSecretKey>;
-
-  getUser?: Maybe<User>;
-}
-
-export interface TwoFactorSecretKey {
-  ascii?: Maybe<string>;
-
-  base32?: Maybe<string>;
-
-  hex?: Maybe<string>;
-
-  qr_code_ascii?: Maybe<string>;
-
-  qr_code_hex?: Maybe<string>;
-
-  qr_code_base32?: Maybe<string>;
-
-  google_auth_qr?: Maybe<string>;
-
-  otpauth_url?: Maybe<string>;
-}
-
-export interface User {
-  id: string;
-
-  emails?: Maybe<EmailRecord[]>;
-
-  username?: Maybe<string>;
-}
-
-export interface EmailRecord {
-  address?: Maybe<string>;
-
-  verified?: Maybe<boolean>;
-}
-
-export interface Mutation {
-  createUser?: Maybe<string>;
-
-  verifyEmail?: Maybe<boolean>;
-
-  resetPassword?: Maybe<LoginResult>;
-
-  sendVerificationEmail?: Maybe<boolean>;
-
-  sendResetPasswordEmail?: Maybe<boolean>;
-
-  changePassword?: Maybe<boolean>;
-
-  twoFactorSet?: Maybe<boolean>;
-
-  twoFactorUnset?: Maybe<boolean>;
-
-  impersonate?: Maybe<ImpersonateReturn>;
-
-  refreshTokens?: Maybe<LoginResult>;
-
-  logout?: Maybe<boolean>;
-
-  authenticate?: Maybe<LoginResult>;
-
-  verifyAuthentication?: Maybe<boolean>;
-}
-
-export interface LoginResult {
-  sessionId?: Maybe<string>;
-
-  tokens?: Maybe<Tokens>;
-}
-
-export interface Tokens {
-  refreshToken?: Maybe<string>;
-
-  accessToken?: Maybe<string>;
-}
-
-export interface ImpersonateReturn {
-  authorized?: Maybe<boolean>;
-
-  tokens?: Maybe<Tokens>;
-
-  user?: Maybe<User>;
-}
-
-// ====================================================
-// Arguments
-// ====================================================
-
-export interface CreateUserMutationArgs {
-  user: CreateUserInput;
-}
-export interface VerifyEmailMutationArgs {
-  token: string;
-}
-export interface ResetPasswordMutationArgs {
-  token: string;
-
-  newPassword: string;
-}
-export interface SendVerificationEmailMutationArgs {
-  email: string;
-}
-export interface SendResetPasswordEmailMutationArgs {
-  email: string;
-}
-export interface ChangePasswordMutationArgs {
-  oldPassword: string;
-
-  newPassword: string;
-}
-export interface TwoFactorSetMutationArgs {
-  secret: TwoFactorSecretKeyInput;
-
-  code: string;
-}
-export interface TwoFactorUnsetMutationArgs {
-  code: string;
-}
-export interface ImpersonateMutationArgs {
-  accessToken: string;
-
-  username: string;
-}
-export interface RefreshTokensMutationArgs {
-  accessToken: string;
-
-  refreshToken: string;
-}
-export interface AuthenticateMutationArgs {
-  serviceName: string;
-
-  params: AuthenticateParamsInput;
-}
-export interface VerifyAuthenticationMutationArgs {
-  serviceName: string;
-
-  params: AuthenticateParamsInput;
-}
-
+/* eslint-disable */
 import { GraphQLResolveInfo } from 'graphql';
+export type Maybe<T> = T | null;
+export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } &
+  { [P in K]-?: NonNullable<T[P]> };
 
-export type Resolver<Result, Parent = {}, TContext = {}, Args = {}> = (
-  parent: Parent,
-  args: Args,
+/** All built-in and custom scalars, mapped to their actual values */
+export type Scalars = {
+  ID: string;
+  String: string;
+  Boolean: boolean;
+  Int: number;
+  Float: number;
+};
+
+export type AuthenticateParamsInput = {
+  access_token?: Maybe<Scalars['String']>;
+  access_token_secret?: Maybe<Scalars['String']>;
+  provider?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  user?: Maybe<UserInput>;
+  code?: Maybe<Scalars['String']>;
+};
+
+export type CreateUserInput = {
+  username?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+};
+
+export type EmailRecord = {
+  __typename?: 'EmailRecord';
+  address?: Maybe<Scalars['String']>;
+  verified?: Maybe<Scalars['Boolean']>;
+};
+
+export type ImpersonateReturn = {
+  __typename?: 'ImpersonateReturn';
+  authorized?: Maybe<Scalars['Boolean']>;
+  tokens?: Maybe<Tokens>;
+  user?: Maybe<User>;
+};
+
+export type LoginResult = {
+  __typename?: 'LoginResult';
+  sessionId?: Maybe<Scalars['String']>;
+  tokens?: Maybe<Tokens>;
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createUser?: Maybe<Scalars['ID']>;
+  verifyEmail?: Maybe<Scalars['Boolean']>;
+  resetPassword?: Maybe<LoginResult>;
+  sendVerificationEmail?: Maybe<Scalars['Boolean']>;
+  sendResetPasswordEmail?: Maybe<Scalars['Boolean']>;
+  changePassword?: Maybe<Scalars['Boolean']>;
+  twoFactorSet?: Maybe<Scalars['Boolean']>;
+  twoFactorUnset?: Maybe<Scalars['Boolean']>;
+  impersonate?: Maybe<ImpersonateReturn>;
+  refreshTokens?: Maybe<LoginResult>;
+  logout?: Maybe<Scalars['Boolean']>;
+  authenticate?: Maybe<LoginResult>;
+  verifyAuthentication?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationCreateUserArgs = {
+  user: CreateUserInput;
+};
+
+export type MutationVerifyEmailArgs = {
+  token: Scalars['String'];
+};
+
+export type MutationResetPasswordArgs = {
+  token: Scalars['String'];
+  newPassword: Scalars['String'];
+};
+
+export type MutationSendVerificationEmailArgs = {
+  email: Scalars['String'];
+};
+
+export type MutationSendResetPasswordEmailArgs = {
+  email: Scalars['String'];
+};
+
+export type MutationChangePasswordArgs = {
+  oldPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+};
+
+export type MutationTwoFactorSetArgs = {
+  secret: TwoFactorSecretKeyInput;
+  code: Scalars['String'];
+};
+
+export type MutationTwoFactorUnsetArgs = {
+  code: Scalars['String'];
+};
+
+export type MutationImpersonateArgs = {
+  accessToken: Scalars['String'];
+  username: Scalars['String'];
+};
+
+export type MutationRefreshTokensArgs = {
+  accessToken: Scalars['String'];
+  refreshToken: Scalars['String'];
+};
+
+export type MutationAuthenticateArgs = {
+  serviceName: Scalars['String'];
+  params: AuthenticateParamsInput;
+};
+
+export type MutationVerifyAuthenticationArgs = {
+  serviceName: Scalars['String'];
+  params: AuthenticateParamsInput;
+};
+
+export type Query = {
+  __typename?: 'Query';
+  twoFactorSecret?: Maybe<TwoFactorSecretKey>;
+  getUser?: Maybe<User>;
+};
+
+export type Tokens = {
+  __typename?: 'Tokens';
+  refreshToken?: Maybe<Scalars['String']>;
+  accessToken?: Maybe<Scalars['String']>;
+};
+
+export type TwoFactorSecretKey = {
+  __typename?: 'TwoFactorSecretKey';
+  ascii?: Maybe<Scalars['String']>;
+  base32?: Maybe<Scalars['String']>;
+  hex?: Maybe<Scalars['String']>;
+  qr_code_ascii?: Maybe<Scalars['String']>;
+  qr_code_hex?: Maybe<Scalars['String']>;
+  qr_code_base32?: Maybe<Scalars['String']>;
+  google_auth_qr?: Maybe<Scalars['String']>;
+  otpauth_url?: Maybe<Scalars['String']>;
+};
+
+export type TwoFactorSecretKeyInput = {
+  ascii?: Maybe<Scalars['String']>;
+  base32?: Maybe<Scalars['String']>;
+  hex?: Maybe<Scalars['String']>;
+  qr_code_ascii?: Maybe<Scalars['String']>;
+  qr_code_hex?: Maybe<Scalars['String']>;
+  qr_code_base32?: Maybe<Scalars['String']>;
+  google_auth_qr?: Maybe<Scalars['String']>;
+  otpauth_url?: Maybe<Scalars['String']>;
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['ID'];
+  emails?: Maybe<Array<EmailRecord>>;
+  username?: Maybe<Scalars['String']>;
+};
+
+export type UserInput = {
+  id?: Maybe<Scalars['ID']>;
+  email?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+};
+
+export type ResolverTypeWrapper<T> = Promise<T> | T;
+
+export type ResolverFn<TResult, TParent, TContext, TArgs> = (
+  parent: TParent,
+  args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
-) => Promise<Result> | Result;
+) => Promise<TResult> | TResult;
 
-export interface ISubscriptionResolverObject<Result, Parent, TContext, Args> {
-  subscribe<R = Result, P = Parent>(
-    parent: P,
-    args: Args,
-    context: TContext,
-    info: GraphQLResolveInfo
-  ): AsyncIterator<R | Result> | Promise<AsyncIterator<R | Result>>;
-  resolve?<R = Result, P = Parent>(
-    parent: P,
-    args: Args,
-    context: TContext,
-    info: GraphQLResolveInfo
-  ): R | Result | Promise<R | Result>;
-}
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<
+  TResult,
+  TParent,
+  TContext,
+  TArgs
+>;
 
-export type SubscriptionResolver<Result, Parent = {}, TContext = {}, Args = {}> =
-  | ((...args: any[]) => ISubscriptionResolverObject<Result, Parent, TContext, Args>)
-  | ISubscriptionResolverObject<Result, Parent, TContext, Args>;
-
-export type TypeResolveFn<Types, Parent = {}, TContext = {}> = (
-  parent: Parent,
+export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
+  parent: TParent,
+  args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
-) => Maybe<Types>;
+) => AsyncIterator<TResult> | Promise<AsyncIterator<TResult>>;
 
-export type NextResolverFn<T> = () => Promise<T>;
-
-export type DirectiveResolverFn<TResult, TArgs = {}, TContext = {}> = (
-  next: NextResolverFn<TResult>,
-  source: any,
+export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
+  parent: TParent,
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
-export interface QueryResolvers<TContext = {}, TypeParent = {}> {
-  twoFactorSecret?: QueryTwoFactorSecretResolver<Maybe<TwoFactorSecretKey>, TypeParent, TContext>;
-
-  getUser?: QueryGetUserResolver<Maybe<User>, TypeParent, TContext>;
+export interface SubscriptionSubscriberObject<
+  TResult,
+  TKey extends string,
+  TParent,
+  TContext,
+  TArgs
+> {
+  subscribe: SubscriptionSubscribeFn<{ [key in TKey]: TResult }, TParent, TContext, TArgs>;
+  resolve?: SubscriptionResolveFn<TResult, { [key in TKey]: TResult }, TContext, TArgs>;
 }
 
-export type QueryTwoFactorSecretResolver<
-  R = Maybe<TwoFactorSecretKey>,
-  Parent = {},
-  TContext = {}
-> = Resolver<R, Parent, TContext>;
-export type QueryGetUserResolver<R = Maybe<User>, Parent = {}, TContext = {}> = Resolver<
-  R,
-  Parent,
-  TContext
->;
-
-export interface TwoFactorSecretKeyResolvers<TContext = {}, TypeParent = TwoFactorSecretKey> {
-  ascii?: TwoFactorSecretKeyAsciiResolver<Maybe<string>, TypeParent, TContext>;
-
-  base32?: TwoFactorSecretKeyBase32Resolver<Maybe<string>, TypeParent, TContext>;
-
-  hex?: TwoFactorSecretKeyHexResolver<Maybe<string>, TypeParent, TContext>;
-
-  qr_code_ascii?: TwoFactorSecretKeyQrCodeAsciiResolver<Maybe<string>, TypeParent, TContext>;
-
-  qr_code_hex?: TwoFactorSecretKeyQrCodeHexResolver<Maybe<string>, TypeParent, TContext>;
-
-  qr_code_base32?: TwoFactorSecretKeyQrCodeBase32Resolver<Maybe<string>, TypeParent, TContext>;
-
-  google_auth_qr?: TwoFactorSecretKeyGoogleAuthQrResolver<Maybe<string>, TypeParent, TContext>;
-
-  otpauth_url?: TwoFactorSecretKeyOtpauthUrlResolver<Maybe<string>, TypeParent, TContext>;
+export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs> {
+  subscribe: SubscriptionSubscribeFn<any, TParent, TContext, TArgs>;
+  resolve: SubscriptionResolveFn<TResult, any, TContext, TArgs>;
 }
 
-export type TwoFactorSecretKeyAsciiResolver<
-  R = Maybe<string>,
-  Parent = TwoFactorSecretKey,
-  TContext = {}
-> = Resolver<R, Parent, TContext>;
-export type TwoFactorSecretKeyBase32Resolver<
-  R = Maybe<string>,
-  Parent = TwoFactorSecretKey,
-  TContext = {}
-> = Resolver<R, Parent, TContext>;
-export type TwoFactorSecretKeyHexResolver<
-  R = Maybe<string>,
-  Parent = TwoFactorSecretKey,
-  TContext = {}
-> = Resolver<R, Parent, TContext>;
-export type TwoFactorSecretKeyQrCodeAsciiResolver<
-  R = Maybe<string>,
-  Parent = TwoFactorSecretKey,
-  TContext = {}
-> = Resolver<R, Parent, TContext>;
-export type TwoFactorSecretKeyQrCodeHexResolver<
-  R = Maybe<string>,
-  Parent = TwoFactorSecretKey,
-  TContext = {}
-> = Resolver<R, Parent, TContext>;
-export type TwoFactorSecretKeyQrCodeBase32Resolver<
-  R = Maybe<string>,
-  Parent = TwoFactorSecretKey,
-  TContext = {}
-> = Resolver<R, Parent, TContext>;
-export type TwoFactorSecretKeyGoogleAuthQrResolver<
-  R = Maybe<string>,
-  Parent = TwoFactorSecretKey,
-  TContext = {}
-> = Resolver<R, Parent, TContext>;
-export type TwoFactorSecretKeyOtpauthUrlResolver<
-  R = Maybe<string>,
-  Parent = TwoFactorSecretKey,
-  TContext = {}
-> = Resolver<R, Parent, TContext>;
+export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, TArgs> =
+  | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
+  | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
 
-export interface UserResolvers<TContext = {}, TypeParent = User> {
-  id?: UserIdResolver<string, TypeParent, TContext>;
+export type SubscriptionResolver<
+  TResult,
+  TKey extends string,
+  TParent = {},
+  TContext = {},
+  TArgs = {}
+> =
+  | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
+  | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
 
-  emails?: UserEmailsResolver<Maybe<EmailRecord[]>, TypeParent, TContext>;
+export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
+  parent: TParent,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => Maybe<TTypes>;
 
-  username?: UserUsernameResolver<Maybe<string>, TypeParent, TContext>;
-}
+export type NextResolverFn<T> = () => Promise<T>;
 
-export type UserIdResolver<R = string, Parent = User, TContext = {}> = Resolver<
-  R,
+export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs = {}> = (
+  next: NextResolverFn<TResult>,
+  parent: TParent,
+  args: TArgs,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => TResult | Promise<TResult>;
+
+/** Mapping between all available schema types and the resolvers types */
+export type ResolversTypes = {
+  Query: ResolverTypeWrapper<{}>;
+  TwoFactorSecretKey: ResolverTypeWrapper<TwoFactorSecretKey>;
+  String: ResolverTypeWrapper<Scalars['String']>;
+  User: ResolverTypeWrapper<User>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
+  EmailRecord: ResolverTypeWrapper<EmailRecord>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Mutation: ResolverTypeWrapper<{}>;
+  CreateUserInput: CreateUserInput;
+  LoginResult: ResolverTypeWrapper<LoginResult>;
+  Tokens: ResolverTypeWrapper<Tokens>;
+  TwoFactorSecretKeyInput: TwoFactorSecretKeyInput;
+  ImpersonateReturn: ResolverTypeWrapper<ImpersonateReturn>;
+  AuthenticateParamsInput: AuthenticateParamsInput;
+  UserInput: UserInput;
+};
+
+/** Mapping between all available schema types and the resolvers parents */
+export type ResolversParentTypes = {
+  Query: {};
+  TwoFactorSecretKey: TwoFactorSecretKey;
+  String: Scalars['String'];
+  User: User;
+  ID: Scalars['ID'];
+  EmailRecord: EmailRecord;
+  Boolean: Scalars['Boolean'];
+  Mutation: {};
+  CreateUserInput: CreateUserInput;
+  LoginResult: LoginResult;
+  Tokens: Tokens;
+  TwoFactorSecretKeyInput: TwoFactorSecretKeyInput;
+  ImpersonateReturn: ImpersonateReturn;
+  AuthenticateParamsInput: AuthenticateParamsInput;
+  UserInput: UserInput;
+};
+
+export type AuthDirectiveResolver<
+  Result,
   Parent,
-  TContext
->;
-export type UserEmailsResolver<R = Maybe<EmailRecord[]>, Parent = User, TContext = {}> = Resolver<
-  R,
-  Parent,
-  TContext
->;
-export type UserUsernameResolver<R = Maybe<string>, Parent = User, TContext = {}> = Resolver<
-  R,
-  Parent,
-  TContext
->;
+  ContextType = any,
+  Args = {}
+> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
-export interface EmailRecordResolvers<TContext = {}, TypeParent = EmailRecord> {
-  address?: EmailRecordAddressResolver<Maybe<string>, TypeParent, TContext>;
+export type EmailRecordResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['EmailRecord'] = ResolversParentTypes['EmailRecord']
+> = {
+  address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  verified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+};
 
-  verified?: EmailRecordVerifiedResolver<Maybe<boolean>, TypeParent, TContext>;
-}
+export type ImpersonateReturnResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ImpersonateReturn'] = ResolversParentTypes['ImpersonateReturn']
+> = {
+  authorized?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  tokens?: Resolver<Maybe<ResolversTypes['Tokens']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+};
 
-export type EmailRecordAddressResolver<
-  R = Maybe<string>,
-  Parent = EmailRecord,
-  TContext = {}
-> = Resolver<R, Parent, TContext>;
-export type EmailRecordVerifiedResolver<
-  R = Maybe<boolean>,
-  Parent = EmailRecord,
-  TContext = {}
-> = Resolver<R, Parent, TContext>;
+export type LoginResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['LoginResult'] = ResolversParentTypes['LoginResult']
+> = {
+  sessionId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tokens?: Resolver<Maybe<ResolversTypes['Tokens']>, ParentType, ContextType>;
+};
 
-export interface MutationResolvers<TContext = {}, TypeParent = {}> {
-  createUser?: MutationCreateUserResolver<Maybe<string>, TypeParent, TContext>;
-
-  verifyEmail?: MutationVerifyEmailResolver<Maybe<boolean>, TypeParent, TContext>;
-
-  resetPassword?: MutationResetPasswordResolver<Maybe<LoginResult>, TypeParent, TContext>;
-
-  sendVerificationEmail?: MutationSendVerificationEmailResolver<
-    Maybe<boolean>,
-    TypeParent,
-    TContext
+export type MutationResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
+> = {
+  createUser?: Resolver<
+    Maybe<ResolversTypes['ID']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateUserArgs, 'user'>
   >;
-
-  sendResetPasswordEmail?: MutationSendResetPasswordEmailResolver<
-    Maybe<boolean>,
-    TypeParent,
-    TContext
+  verifyEmail?: Resolver<
+    Maybe<ResolversTypes['Boolean']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationVerifyEmailArgs, 'token'>
   >;
+  resetPassword?: Resolver<
+    Maybe<ResolversTypes['LoginResult']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationResetPasswordArgs, 'token' | 'newPassword'>
+  >;
+  sendVerificationEmail?: Resolver<
+    Maybe<ResolversTypes['Boolean']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationSendVerificationEmailArgs, 'email'>
+  >;
+  sendResetPasswordEmail?: Resolver<
+    Maybe<ResolversTypes['Boolean']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationSendResetPasswordEmailArgs, 'email'>
+  >;
+  changePassword?: Resolver<
+    Maybe<ResolversTypes['Boolean']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationChangePasswordArgs, 'oldPassword' | 'newPassword'>
+  >;
+  twoFactorSet?: Resolver<
+    Maybe<ResolversTypes['Boolean']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationTwoFactorSetArgs, 'secret' | 'code'>
+  >;
+  twoFactorUnset?: Resolver<
+    Maybe<ResolversTypes['Boolean']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationTwoFactorUnsetArgs, 'code'>
+  >;
+  impersonate?: Resolver<
+    Maybe<ResolversTypes['ImpersonateReturn']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationImpersonateArgs, 'accessToken' | 'username'>
+  >;
+  refreshTokens?: Resolver<
+    Maybe<ResolversTypes['LoginResult']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationRefreshTokensArgs, 'accessToken' | 'refreshToken'>
+  >;
+  logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  authenticate?: Resolver<
+    Maybe<ResolversTypes['LoginResult']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationAuthenticateArgs, 'serviceName' | 'params'>
+  >;
+  verifyAuthentication?: Resolver<
+    Maybe<ResolversTypes['Boolean']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationVerifyAuthenticationArgs, 'serviceName' | 'params'>
+  >;
+};
 
-  changePassword?: MutationChangePasswordResolver<Maybe<boolean>, TypeParent, TContext>;
+export type QueryResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
+> = {
+  twoFactorSecret?: Resolver<Maybe<ResolversTypes['TwoFactorSecretKey']>, ParentType, ContextType>;
+  getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+};
 
-  twoFactorSet?: MutationTwoFactorSetResolver<Maybe<boolean>, TypeParent, TContext>;
+export type TokensResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Tokens'] = ResolversParentTypes['Tokens']
+> = {
+  refreshToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  accessToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+};
 
-  twoFactorUnset?: MutationTwoFactorUnsetResolver<Maybe<boolean>, TypeParent, TContext>;
+export type TwoFactorSecretKeyResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['TwoFactorSecretKey'] = ResolversParentTypes['TwoFactorSecretKey']
+> = {
+  ascii?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  base32?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  hex?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  qr_code_ascii?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  qr_code_hex?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  qr_code_base32?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  google_auth_qr?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  otpauth_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+};
 
-  impersonate?: MutationImpersonateResolver<Maybe<ImpersonateReturn>, TypeParent, TContext>;
+export type UserResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  emails?: Resolver<Maybe<Array<ResolversTypes['EmailRecord']>>, ParentType, ContextType>;
+  username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+};
 
-  refreshTokens?: MutationRefreshTokensResolver<Maybe<LoginResult>, TypeParent, TContext>;
+export type Resolvers<ContextType = any> = {
+  EmailRecord?: EmailRecordResolvers<ContextType>;
+  ImpersonateReturn?: ImpersonateReturnResolvers<ContextType>;
+  LoginResult?: LoginResultResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
+  Query?: QueryResolvers<ContextType>;
+  Tokens?: TokensResolvers<ContextType>;
+  TwoFactorSecretKey?: TwoFactorSecretKeyResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
+};
 
-  logout?: MutationLogoutResolver<Maybe<boolean>, TypeParent, TContext>;
+/**
+ * @deprecated
+ * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
+ */
+export type IResolvers<ContextType = any> = Resolvers<ContextType>;
+export type DirectiveResolvers<ContextType = any> = {
+  auth?: AuthDirectiveResolver<any, any, ContextType>;
+};
 
-  authenticate?: MutationAuthenticateResolver<Maybe<LoginResult>, TypeParent, TContext>;
-
-  verifyAuthentication?: MutationVerifyAuthenticationResolver<Maybe<boolean>, TypeParent, TContext>;
-}
-
-export type MutationCreateUserResolver<R = Maybe<string>, Parent = {}, TContext = {}> = Resolver<
-  R,
-  Parent,
-  TContext,
-  MutationCreateUserArgs
->;
-export interface MutationCreateUserArgs {
-  user: CreateUserInput;
-}
-
-export type MutationVerifyEmailResolver<R = Maybe<boolean>, Parent = {}, TContext = {}> = Resolver<
-  R,
-  Parent,
-  TContext,
-  MutationVerifyEmailArgs
->;
-export interface MutationVerifyEmailArgs {
-  token: string;
-}
-
-export type MutationResetPasswordResolver<
-  R = Maybe<LoginResult>,
-  Parent = {},
-  TContext = {}
-> = Resolver<R, Parent, TContext, MutationResetPasswordArgs>;
-export interface MutationResetPasswordArgs {
-  token: string;
-
-  newPassword: string;
-}
-
-export type MutationSendVerificationEmailResolver<
-  R = Maybe<boolean>,
-  Parent = {},
-  TContext = {}
-> = Resolver<R, Parent, TContext, MutationSendVerificationEmailArgs>;
-export interface MutationSendVerificationEmailArgs {
-  email: string;
-}
-
-export type MutationSendResetPasswordEmailResolver<
-  R = Maybe<boolean>,
-  Parent = {},
-  TContext = {}
-> = Resolver<R, Parent, TContext, MutationSendResetPasswordEmailArgs>;
-export interface MutationSendResetPasswordEmailArgs {
-  email: string;
-}
-
-export type MutationChangePasswordResolver<
-  R = Maybe<boolean>,
-  Parent = {},
-  TContext = {}
-> = Resolver<R, Parent, TContext, MutationChangePasswordArgs>;
-export interface MutationChangePasswordArgs {
-  oldPassword: string;
-
-  newPassword: string;
-}
-
-export type MutationTwoFactorSetResolver<R = Maybe<boolean>, Parent = {}, TContext = {}> = Resolver<
-  R,
-  Parent,
-  TContext,
-  MutationTwoFactorSetArgs
->;
-export interface MutationTwoFactorSetArgs {
-  secret: TwoFactorSecretKeyInput;
-
-  code: string;
-}
-
-export type MutationTwoFactorUnsetResolver<
-  R = Maybe<boolean>,
-  Parent = {},
-  TContext = {}
-> = Resolver<R, Parent, TContext, MutationTwoFactorUnsetArgs>;
-export interface MutationTwoFactorUnsetArgs {
-  code: string;
-}
-
-export type MutationImpersonateResolver<
-  R = Maybe<ImpersonateReturn>,
-  Parent = {},
-  TContext = {}
-> = Resolver<R, Parent, TContext, MutationImpersonateArgs>;
-export interface MutationImpersonateArgs {
-  accessToken: string;
-
-  username: string;
-}
-
-export type MutationRefreshTokensResolver<
-  R = Maybe<LoginResult>,
-  Parent = {},
-  TContext = {}
-> = Resolver<R, Parent, TContext, MutationRefreshTokensArgs>;
-export interface MutationRefreshTokensArgs {
-  accessToken: string;
-
-  refreshToken: string;
-}
-
-export type MutationLogoutResolver<R = Maybe<boolean>, Parent = {}, TContext = {}> = Resolver<
-  R,
-  Parent,
-  TContext
->;
-export type MutationAuthenticateResolver<
-  R = Maybe<LoginResult>,
-  Parent = {},
-  TContext = {}
-> = Resolver<R, Parent, TContext, MutationAuthenticateArgs>;
-export interface MutationAuthenticateArgs {
-  serviceName: string;
-
-  params: AuthenticateParamsInput;
-}
-
-export type MutationVerifyAuthenticationResolver<
-  R = Maybe<boolean>,
-  Parent = {},
-  TContext = {}
-> = Resolver<R, Parent, TContext, MutationVerifyAuthenticationArgs>;
-export interface MutationVerifyAuthenticationArgs {
-  serviceName: string;
-
-  params: AuthenticateParamsInput;
-}
-
-export interface LoginResultResolvers<TContext = {}, TypeParent = LoginResult> {
-  sessionId?: LoginResultSessionIdResolver<Maybe<string>, TypeParent, TContext>;
-
-  tokens?: LoginResultTokensResolver<Maybe<Tokens>, TypeParent, TContext>;
-}
-
-export type LoginResultSessionIdResolver<
-  R = Maybe<string>,
-  Parent = LoginResult,
-  TContext = {}
-> = Resolver<R, Parent, TContext>;
-export type LoginResultTokensResolver<
-  R = Maybe<Tokens>,
-  Parent = LoginResult,
-  TContext = {}
-> = Resolver<R, Parent, TContext>;
-
-export interface TokensResolvers<TContext = {}, TypeParent = Tokens> {
-  refreshToken?: TokensRefreshTokenResolver<Maybe<string>, TypeParent, TContext>;
-
-  accessToken?: TokensAccessTokenResolver<Maybe<string>, TypeParent, TContext>;
-}
-
-export type TokensRefreshTokenResolver<
-  R = Maybe<string>,
-  Parent = Tokens,
-  TContext = {}
-> = Resolver<R, Parent, TContext>;
-export type TokensAccessTokenResolver<R = Maybe<string>, Parent = Tokens, TContext = {}> = Resolver<
-  R,
-  Parent,
-  TContext
->;
-
-export interface ImpersonateReturnResolvers<TContext = {}, TypeParent = ImpersonateReturn> {
-  authorized?: ImpersonateReturnAuthorizedResolver<Maybe<boolean>, TypeParent, TContext>;
-
-  tokens?: ImpersonateReturnTokensResolver<Maybe<Tokens>, TypeParent, TContext>;
-
-  user?: ImpersonateReturnUserResolver<Maybe<User>, TypeParent, TContext>;
-}
-
-export type ImpersonateReturnAuthorizedResolver<
-  R = Maybe<boolean>,
-  Parent = ImpersonateReturn,
-  TContext = {}
-> = Resolver<R, Parent, TContext>;
-export type ImpersonateReturnTokensResolver<
-  R = Maybe<Tokens>,
-  Parent = ImpersonateReturn,
-  TContext = {}
-> = Resolver<R, Parent, TContext>;
-export type ImpersonateReturnUserResolver<
-  R = Maybe<User>,
-  Parent = ImpersonateReturn,
-  TContext = {}
-> = Resolver<R, Parent, TContext>;
-
-export type AuthDirectiveResolver<Result> = DirectiveResolverFn<
-  Result,
-  {},
-  {}
->; /** Directs the executor to skip this field or fragment when the `if` argument is true. */
-export type SkipDirectiveResolver<Result> = DirectiveResolverFn<Result, SkipDirectiveArgs, {}>;
-export interface SkipDirectiveArgs {
-  /** Skipped when true. */
-  if: boolean;
-}
-
-/** Directs the executor to include this field or fragment only when the `if` argument is true. */
-export type IncludeDirectiveResolver<Result> = DirectiveResolverFn<
-  Result,
-  IncludeDirectiveArgs,
-  {}
->;
-export interface IncludeDirectiveArgs {
-  /** Included when true. */
-  if: boolean;
-}
-
-/** Marks an element of a GraphQL schema as no longer supported. */
-export type DeprecatedDirectiveResolver<Result> = DirectiveResolverFn<
-  Result,
-  DeprecatedDirectiveArgs,
-  {}
->;
-export interface DeprecatedDirectiveArgs {
-  /** Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted using the Markdown syntax (as specified by [CommonMark](https://commonmark.org/). */
-  reason?: string;
-}
-
-export type IResolvers<TContext = {}> = {
-  Query?: QueryResolvers<TContext>;
-  TwoFactorSecretKey?: TwoFactorSecretKeyResolvers<TContext>;
-  User?: UserResolvers<TContext>;
-  EmailRecord?: EmailRecordResolvers<TContext>;
-  Mutation?: MutationResolvers<TContext>;
-  LoginResult?: LoginResultResolvers<TContext>;
-  Tokens?: TokensResolvers<TContext>;
-  ImpersonateReturn?: ImpersonateReturnResolvers<TContext>;
-} & { [typeName: string]: never };
-
-export type IDirectiveResolvers<Result> = {
-  auth?: AuthDirectiveResolver<Result>;
-  skip?: SkipDirectiveResolver<Result>;
-  include?: IncludeDirectiveResolver<Result>;
-  deprecated?: DeprecatedDirectiveResolver<Result>;
-} & { [directiveName: string]: never };
+/**
+ * @deprecated
+ * Use "DirectiveResolvers" root object instead. If you wish to get "IDirectiveResolvers", add "typesPrefix: I" to your config.
+ */
+export type IDirectiveResolvers<ContextType = any> = DirectiveResolvers<ContextType>;

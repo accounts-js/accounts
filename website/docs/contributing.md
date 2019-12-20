@@ -38,8 +38,7 @@ Alternatively, prepend your PR title with `[discuss]` to have a conversation aro
 
 1.  Must not break the **test suite** (`yarn test`), nor reduce **test coverage** (`yarn coverage`). If you're fixing a bug, include a test that would fail without your fix.
 
-2.  Must respect the **tslint.json** (`yarn lint`). Ideally your editor supports `tslint`. Especially since the project is quite new, feel free to query default rules with us that don't make sense, or disable rules in a particular scope when it makes sense, together with a comment explaining why.
-    You can find the config [here](https://github.com/accounts-js/tslint-config-accounts).
+2.  Must respect the **.eslintrc.js** (`yarn lint`). Ideally your editor supports `eslint`. Especially since the project is quite new, feel free to query default rules with us that don't make sense, or disable rules in a particular scope when it makes sense, together with a comment explaining why.
 
 3.  Must be **isolated**. Avoid grouping many, unrelated changes in a single PR.
 

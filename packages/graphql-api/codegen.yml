@@ -5,8 +5,9 @@ generates:
   ./src/models.ts:
     config:
       noNamespaces: true
+      noSchemaStitching: true
     plugins:
-      - add: /* tslint:disable */
-      - typescript-common
-      - typescript-server
+      - add: /* eslint-disable */
+      - typescript
       - typescript-resolvers
+      - typescript-operations

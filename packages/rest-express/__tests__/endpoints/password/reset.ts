@@ -34,13 +34,13 @@ describe('resetPassword', () => {
       await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.resetPassword).toBeCalledWith(
+      expect(accountsServer.getServices().password.resetPassword).toHaveBeenCalledWith(
         'token',
         'new-password',
         { ip: null, userAgent: '' }
       );
-      expect(res.json).toBeCalledWith(null);
-      expect(res.status).not.toBeCalled();
+      expect(res.json).toHaveBeenCalledWith(null);
+      expect(res.status).not.toHaveBeenCalled();
     });
 
     it('Sends error if it was thrown on resetPassword', async () => {
@@ -68,13 +68,13 @@ describe('resetPassword', () => {
       await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.resetPassword).toBeCalledWith(
+      expect(accountsServer.getServices().password.resetPassword).toHaveBeenCalledWith(
         'token',
         'new-password',
         { ip: null, userAgent: '' }
       );
-      expect(res.status).toBeCalledWith(400);
-      expect(res.json).toBeCalledWith(error);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith(error);
     });
   });
 
@@ -101,9 +101,11 @@ describe('resetPassword', () => {
       await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.sendResetPasswordEmail).toBeCalledWith('email');
-      expect(res.json).toBeCalledWith(null);
-      expect(res.status).not.toBeCalled();
+      expect(accountsServer.getServices().password.sendResetPasswordEmail).toHaveBeenCalledWith(
+        'email'
+      );
+      expect(res.json).toHaveBeenCalledWith(null);
+      expect(res.status).not.toHaveBeenCalled();
     });
 
     it('Sends error if it was thrown on sendResetPasswordEmail', async () => {
@@ -130,9 +132,11 @@ describe('resetPassword', () => {
       await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.sendResetPasswordEmail).toBeCalledWith('email');
-      expect(res.status).toBeCalledWith(400);
-      expect(res.json).toBeCalledWith(error);
+      expect(accountsServer.getServices().password.sendResetPasswordEmail).toHaveBeenCalledWith(
+        'email'
+      );
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith(error);
     });
   });
 });

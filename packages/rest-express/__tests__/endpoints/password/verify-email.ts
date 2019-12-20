@@ -33,9 +33,9 @@ describe('verifyEmail', () => {
       await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.verifyEmail).toBeCalledWith('token');
-      expect(res.json).toBeCalledWith(null);
-      expect(res.status).not.toBeCalled();
+      expect(accountsServer.getServices().password.verifyEmail).toHaveBeenCalledWith('token');
+      expect(res.json).toHaveBeenCalledWith(null);
+      expect(res.status).not.toHaveBeenCalled();
     });
 
     it('Sends error if it was thrown on verifyEmail', async () => {
@@ -62,9 +62,9 @@ describe('verifyEmail', () => {
       await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.verifyEmail).toBeCalledWith('token');
-      expect(res.status).toBeCalledWith(400);
-      expect(res.json).toBeCalledWith(error);
+      expect(accountsServer.getServices().password.verifyEmail).toHaveBeenCalledWith('token');
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith(error);
     });
   });
 
@@ -91,9 +91,11 @@ describe('verifyEmail', () => {
       await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.sendVerificationEmail).toBeCalledWith('email');
-      expect(res.json).toBeCalledWith(null);
-      expect(res.status).not.toBeCalled();
+      expect(accountsServer.getServices().password.sendVerificationEmail).toHaveBeenCalledWith(
+        'email'
+      );
+      expect(res.json).toHaveBeenCalledWith(null);
+      expect(res.status).not.toHaveBeenCalled();
     });
 
     it('Sends error if it was thrown on sendVerificationEmail', async () => {
@@ -120,9 +122,11 @@ describe('verifyEmail', () => {
       await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.sendVerificationEmail).toBeCalledWith('email');
-      expect(res.status).toBeCalledWith(400);
-      expect(res.json).toBeCalledWith(error);
+      expect(accountsServer.getServices().password.sendVerificationEmail).toHaveBeenCalledWith(
+        'email'
+      );
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith(error);
     });
   });
 });

@@ -8,5 +8,6 @@ yarn-error.log
 .vscode
 packages/*/package-lock.json
 schema.json
+.DS_Store
 
 build/

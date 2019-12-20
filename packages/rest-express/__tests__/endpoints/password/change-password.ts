@@ -34,21 +34,21 @@ describe('changePassword', () => {
       await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.changePassword).toBeCalledWith(
+      expect(accountsServer.getServices().password.changePassword).toHaveBeenCalledWith(
         'userId',
         'oldPassword',
         'newPassword'
       );
-      expect(res.json).toBeCalled();
-      expect(res.status).not.toBeCalled();
+      expect(res.json).toHaveBeenCalled();
+      expect(res.status).not.toHaveBeenCalled();
     });
 
     it('Sends error if no userId', async () => {
       const middleware = changePassword(null as any);
       await middleware({} as any, res);
 
-      expect(res.status).toBeCalledWith(401);
-      expect(res.json).toBeCalled();
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalled();
     });
 
     it('Sends error if it was thrown on twoFactorSecret', async () => {
@@ -76,13 +76,13 @@ describe('changePassword', () => {
       await middleware(req as any, res);
 
       expect(req).toEqual(reqCopy);
-      expect(accountsServer.getServices().password.changePassword).toBeCalledWith(
+      expect(accountsServer.getServices().password.changePassword).toHaveBeenCalledWith(
         'userId',
         'oldPassword',
         'newPassword'
       );
-      expect(res.status).toBeCalledWith(400);
-      expect(res.json).toBeCalledWith(error);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith(error);
     });
   });
 });

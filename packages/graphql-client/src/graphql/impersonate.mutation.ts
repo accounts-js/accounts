@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 
-export const impersonateMutation = gql`
+export const impersonateMutation = (userFieldsFragment: any) => gql`
+  ${userFieldsFragment}
   mutation impersonate($accessToken: String!, $username: String!) {
     impersonate(accessToken: $accessToken, username: $username) {
       authorized
@@ -8,14 +9,8 @@ export const impersonateMutation = gql`
         refreshToken
         accessToken
       }
-      # // TODO: Extract user into a fragment
       user {
-        id
-        emails {
-          address
-          verified
-        }
-        username
+        ...userFields
       }
     }
   }

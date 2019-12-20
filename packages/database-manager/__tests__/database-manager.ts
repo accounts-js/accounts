@@ -1,5 +1,6 @@
 import { DatabaseManager } from '../src';
 
+// eslint-disable-next-line jest/no-export
 export default class Database {
   public name: any;
 
@@ -128,7 +129,7 @@ describe('DatabaseManager configuration', () => {
     expect(() => (databaseManager as any).validateConfiguration({ userStorage: true })).toThrow();
   });
 
-  it('should throw if no sessionStorage specified', () => {
+  it('should not throw if sessionStorage specified', () => {
     expect(() =>
       (databaseManager as any).validateConfiguration({
         userStorage: true,

@@ -27,12 +27,12 @@ describe('serviceVerifyAuthentication', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.authenticateWithService).toBeCalledWith('sms', undefined, {
+    expect(accountsServer.authenticateWithService).toHaveBeenCalledWith('sms', undefined, {
       ip: null,
       userAgent: '',
     });
-    expect(res.json).toBeCalledWith(true);
-    expect(res.status).not.toBeCalled();
+    expect(res.json).toHaveBeenCalledWith(true);
+    expect(res.status).not.toHaveBeenCalled();
   });
 
   it('Sends error if it was thrown on loginWithService', async () => {
@@ -54,11 +54,11 @@ describe('serviceVerifyAuthentication', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.authenticateWithService).toBeCalledWith('sms', undefined, {
+    expect(accountsServer.authenticateWithService).toHaveBeenCalledWith('sms', undefined, {
       ip: null,
       userAgent: '',
     });
-    expect(res.status).toBeCalledWith(400);
-    expect(res.json).toBeCalledWith(error);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(error);
   });
 });

@@ -14,7 +14,7 @@ describe('getUser', () => {
     const user = {
       id: '1',
     };
-    const middleware = getUser({} as any);
+    const middleware = getUser();
 
     const req = {
       user,
@@ -28,7 +28,7 @@ describe('getUser', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(res.json).toBeCalledWith(user);
-    expect(res.status).not.toBeCalled();
+    expect(res.json).toHaveBeenCalledWith(user);
+    expect(res.status).not.toHaveBeenCalled();
   });
 });

@@ -24,9 +24,9 @@ describe('logout', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.logout).toBeCalledWith('token');
-    expect(res.json).toBeCalledWith(null);
-    expect(res.status).not.toBeCalled();
+    expect(accountsServer.logout).toHaveBeenCalledWith('token');
+    expect(res.json).toHaveBeenCalledWith(null);
+    expect(res.status).not.toHaveBeenCalled();
   });
 
   it('Sends error if it was thrown on logout', async () => {
@@ -45,8 +45,8 @@ describe('logout', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.logout).toBeCalledWith('token');
-    expect(res.status).toBeCalledWith(400);
-    expect(res.json).toBeCalledWith(error);
+    expect(accountsServer.logout).toHaveBeenCalledWith('token');
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(error);
   });
 });
