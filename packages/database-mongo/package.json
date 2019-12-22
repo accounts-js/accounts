@@ -39,7 +39,7 @@
   "dependencies": {
     "@accounts/types": "^0.20.1",
     "lodash": "^4.17.15",
-    "mongodb": "^3.3.4",
+    "mongodb": "^3.4.1",
     "tslib": "1.10.0"
   }
 }

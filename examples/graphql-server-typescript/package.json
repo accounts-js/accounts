@@ -22,7 +22,7 @@
     "graphql-toolkit": "0.6.8",
     "graphql-tools": "4.0.6",
     "lodash": "4.17.15",
-    "mongoose": "5.7.10",
+    "mongoose": "5.8.2",
     "tslib": "1.10.0"
   },
   "devDependencies": {
