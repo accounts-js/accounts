@@ -1,10 +1,17 @@
 import React from 'react';
-import { AppBar as MuiAppBar, Toolbar, Typography, Button } from '@material-ui/core';
+import { AppBar as MuiAppBar, Toolbar, Typography, Button, makeStyles } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import { useAuth } from './AuthContext';
 import { accountsClient } from '../accounts';
 
+const useStyles = makeStyles({
+  title: {
+    flexGrow: 1,
+  },
+});
+
 export const AppBar = () => {
+  const classes = useStyles();
   const { user, fetchUser } = useAuth();
   const history = useHistory();
 
@@ -17,10 +24,11 @@ export const AppBar = () => {
   return (
     <MuiAppBar position="static">
       <Toolbar>
-        <Typography variant="h6">Accounts-js demo</Typography>
-        {/* TODO style */}
+        <Typography variant="h6" className={classes.title}>
+          Accounts-js demo
+        </Typography>
         {user && (
-          <Button variant="contained" onClick={onLogout}>
+          <Button color="inherit" onClick={onLogout}>
             Logout
           </Button>
         )}
