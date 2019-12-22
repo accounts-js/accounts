@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import { Typography, Container, makeStyles, Link } from '@material-ui/core';
+import { Typography, makeStyles, Link } from '@material-ui/core';
 import { accountsRest } from './accounts';
 import FormError from './components/FormError';
+import { UnauthenticatedContainer } from './components/UnauthenticatedContainer';
 
 const useStyles = makeStyles(theme => ({
-  container: {
-    paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
-    textAlign: 'center',
-  },
   link: {
     marginTop: theme.spacing(1),
     display: 'block',
@@ -41,13 +37,13 @@ const VerifyEmail = () => {
   }, []);
 
   return (
-    <Container maxWidth="md" className={classes.container}>
+    <UnauthenticatedContainer>
       {error && <FormError error={error!} />}
       {success && <Typography color="primary">Your email has been verified</Typography>}
       <Link component={HomeLink} className={classes.link}>
         Go Home
       </Link>
-    </Container>
+    </UnauthenticatedContainer>
   );
 };
 

@@ -3,7 +3,6 @@ import { RouteComponentProps, Link as RouterLink } from 'react-router-dom';
 import {
   Button,
   Typography,
-  Container,
   makeStyles,
   Card,
   CardContent,
@@ -17,12 +16,9 @@ import { useFormik, FormikErrors } from 'formik';
 import { accountsPassword } from './accounts';
 import { SnackBarContentError } from './components/SnackBarContentError';
 import { useAuth } from './components/AuthContext';
+import { UnauthenticatedContainer } from './components/UnauthenticatedContainer';
 
 const useStyles = makeStyles(theme => ({
-  container: {
-    paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
-  },
   cardContent: {
     padding: theme.spacing(3),
   },
@@ -84,7 +80,7 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
   });
 
   return (
-    <Container maxWidth="sm" className={classes.container}>
+    <UnauthenticatedContainer>
       <Snackbar
         anchorOrigin={{
           vertical: 'top',
@@ -162,7 +158,7 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
           <Link component={SignUpLink}>Don't have an account?</Link>
         </CardContent>
       </Card>
-    </Container>
+    </UnauthenticatedContainer>
   );
 };
 

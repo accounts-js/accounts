@@ -5,7 +5,6 @@ import {
   Typography,
   Snackbar,
   makeStyles,
-  Container,
   Card,
   CardContent,
   Grid,
@@ -17,12 +16,9 @@ import { useFormik, FormikErrors } from 'formik';
 import { accountsRest } from './accounts';
 import { SnackBarContentError } from './components/SnackBarContentError';
 import { SnackBarContentSuccess } from './components/SnackBarContentSuccess';
+import { UnauthenticatedContainer } from './components/UnauthenticatedContainer';
 
 const useStyles = makeStyles(theme => ({
-  container: {
-    paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
-  },
   cardContent: {
     padding: theme.spacing(3),
   },
@@ -92,7 +88,7 @@ const ResetPassword = ({ match }: RouteComponentProps<RouteMatchProps>) => {
   });
 
   return (
-    <Container maxWidth="sm" className={classes.container}>
+    <UnauthenticatedContainer>
       <Snackbar
         anchorOrigin={{
           vertical: 'top',
@@ -186,7 +182,7 @@ const ResetPassword = ({ match }: RouteComponentProps<RouteMatchProps>) => {
           <Link component={LogInLink}>Login</Link>
         </CardContent>
       </Card>
-    </Container>
+    </UnauthenticatedContainer>
   );
 };
 

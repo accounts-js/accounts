@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   Typography,
-  Container,
   makeStyles,
   Card,
   CardContent,
@@ -14,12 +13,9 @@ import {
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import SendIcon from '@material-ui/icons/Send';
 import { accountsClient, accountsRest } from './accounts';
+import { AuthenticatedContainer } from './components/AuthenticatedContainer';
 
 const useStyles = makeStyles(theme => ({
-  container: {
-    paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
-  },
   card: {
     marginTop: theme.spacing(3),
   },
@@ -78,7 +74,7 @@ const Home = () => {
     return null;
   }
   return (
-    <Container maxWidth="sm" className={classes.container}>
+    <AuthenticatedContainer>
       <Typography variant="h5">Account Details</Typography>
       <Card className={classes.card}>
         <CardHeader subheader="Emails" className={classes.cardHeader} />
@@ -112,7 +108,7 @@ const Home = () => {
           ))}
         </CardContent>
       </Card>
-    </Container>
+    </AuthenticatedContainer>
   );
 };
 

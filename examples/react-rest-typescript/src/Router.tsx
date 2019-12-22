@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import { CssBaseline } from '@material-ui/core';
 import { AuthProvider, useAuth } from './components/AuthContext';
-import { AppBar } from './components/AppBar';
 import Signup from './Signup';
 import Login from './Login';
 import Home from './Home';
@@ -39,10 +38,11 @@ const Router = () => {
       <AuthProvider>
         <CssBaseline />
 
-        <AppBar />
-
         {/* Authenticated routes */}
         <PrivateRoute exact path="/">
+          <Home />
+        </PrivateRoute>
+        <PrivateRoute path="/emails">
           <Home />
         </PrivateRoute>
         <PrivateRoute path="/security">
