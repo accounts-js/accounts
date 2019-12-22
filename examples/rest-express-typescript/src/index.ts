@@ -9,11 +9,13 @@ import MongoDBInterface from '@accounts/mongo';
 
 mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/accounts-js-rest-example', {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
+  // We can't set this variable to true since there is an issue and mongodb fail to connect in a lambda environment
+  // useUnifiedTopology: true,
 });
 const db = mongoose.connection;
 
 const app = express();
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
