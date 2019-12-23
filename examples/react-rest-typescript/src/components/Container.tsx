@@ -5,7 +5,9 @@ const useStyles = makeStyles(theme => ({
   container: {
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
-    marginTop: 64,
+    [theme.breakpoints.down('xs')]: {
+      marginTop: 64,
+    },
   },
 }));
 

@@ -16,6 +16,9 @@ import { accountsClient, accountsRest } from './accounts';
 import { AuthenticatedContainer } from './components/AuthenticatedContainer';
 
 const useStyles = makeStyles(theme => ({
+  divider: {
+    marginTop: theme.spacing(2),
+  },
   card: {
     marginTop: theme.spacing(3),
   },
@@ -76,7 +79,7 @@ const Home = () => {
   return (
     <AuthenticatedContainer>
       <Typography variant="h5">Account Details</Typography>
-      <Divider />
+      <Divider className={classes.divider} />
       <Card className={classes.card}>
         <CardHeader subheader="Emails" className={classes.cardHeader} />
         <Divider />
