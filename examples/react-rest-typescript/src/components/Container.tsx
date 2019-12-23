@@ -14,7 +14,7 @@ interface ContainerProps {
   maxWidth?: 'sm' | 'md';
 }
 
-export const Container = ({ children, maxWidth = 'md' }: ContainerProps) => {
+export const Container = ({ children, maxWidth }: ContainerProps) => {
   const classes = useStyles();
 
   return (

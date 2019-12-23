@@ -76,6 +76,7 @@ const Home = () => {
   return (
     <AuthenticatedContainer>
       <Typography variant="h5">Account Details</Typography>
+      <Divider />
       <Card className={classes.card}>
         <CardHeader subheader="Emails" className={classes.cardHeader} />
         <Divider />

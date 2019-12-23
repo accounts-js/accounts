@@ -7,10 +7,8 @@ import {
   makeStyles,
   IconButton,
 } from '@material-ui/core';
-import { useHistory } from 'react-router';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useAuth } from './AuthContext';
-import { accountsClient } from '../accounts';
 
 const drawerWidth = 240;
 
@@ -34,18 +32,12 @@ const useStyles = makeStyles(theme => ({
 
 interface AppBarProps {
   onDrawerToggle?: () => void;
+  onLogout?: () => void;
 }
 
-export const AppBar = ({ onDrawerToggle }: AppBarProps) => {
+export const AppBar = ({ onDrawerToggle, onLogout }: AppBarProps) => {
   const classes = useStyles();
-  const { user, fetchUser } = useAuth();
-  const history = useHistory();
-
-  const onLogout = async () => {
-    await accountsClient.logout();
-    await fetchUser();
-    history.push('/login');
-  };
+  const { user } = useAuth();
 
   return (
     <MuiAppBar color="default" position="fixed" className={classes.appBar}>
@@ -61,9 +53,7 @@ export const AppBar = ({ onDrawerToggle }: AppBarProps) => {
             <MenuIcon />
           </IconButton>
         )}
-        <Typography variant="h6" className={classes.title}>
-          Accounts-js demo
-        </Typography>
+        <Typography variant="h6" className={classes.title} />
         {user && (
           <Button color="inherit" onClick={onLogout}>
             Logout
