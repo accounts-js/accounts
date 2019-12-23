@@ -30,13 +30,13 @@
     "@types/jest": "24.0.24",
     "@types/node": "12.12.14",
     "jest": "24.9.0",
-    "pg": "7.12.1"
+    "pg": "7.15.1"
   },
   "dependencies": {
     "@accounts/types": "^0.20.1",
     "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
     "tslib": "1.10.0",
-    "typeorm": "^0.2.18"
+    "typeorm": "^0.2.22"
   }
 }

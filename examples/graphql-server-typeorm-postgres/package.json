@@ -21,14 +21,14 @@
     "apollo-server": "2.9.7",
     "graphql": "14.5.8",
     "graphql-toolkit": "0.6.8",
-    "pg": "7.12.1",
-    "typeorm": "0.2.20"
+    "pg": "7.15.1",
+    "typeorm": "0.2.22"
   },
   "devDependencies": {
     "@accounts/types": "^0.20.1",
     "@types/node": "12.12.7",
     "nodemon": "2.0.2",
     "ts-node": "8.5.4",
-    "typescript": "3.7.3"
+    "typescript": "3.7.4"
   }
 }
