@@ -18,8 +18,10 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
   },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
+  logo: {
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    maxWidth: '100%',
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -39,7 +41,11 @@ const useStyles = makeStyles(theme => ({
   drawerPaper: {
     width: drawerWidth,
   },
-  toolbar: theme.mixins.toolbar,
+  toolbar: {
+    ...theme.mixins.toolbar,
+    display: 'flex',
+    alignItems: 'center',
+  },
 }));
 
 interface AuthenticatedContainerProps {
@@ -57,7 +63,9 @@ export const AuthenticatedContainer = ({ children }: AuthenticatedContainerProps
 
   const drawer = (
     <div>
-      <div className={classes.toolbar} />
+      <div className={classes.toolbar}>
+        <img src="/logo.png" className={classes.logo} />
+      </div>
       <Divider />
       <List>
         <ListItem button onClick={() => history.push('/')}>

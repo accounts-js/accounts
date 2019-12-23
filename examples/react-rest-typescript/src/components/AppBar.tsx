@@ -12,9 +12,14 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { useAuth } from './AuthContext';
 import { accountsClient } from '../accounts';
 
+const drawerWidth = 240;
+
 const useStyles = makeStyles(theme => ({
   appBar: {
-    zIndex: theme.zIndex.drawer + 1,
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -43,7 +48,7 @@ export const AppBar = ({ onDrawerToggle }: AppBarProps) => {
   };
 
   return (
-    <MuiAppBar position="fixed" className={classes.appBar}>
+    <MuiAppBar color="default" position="fixed" className={classes.appBar}>
       <Toolbar>
         {user && (
           <IconButton
