@@ -32,8 +32,8 @@
     "@material-ui/styles": "4.7.1",
     "formik": "2.0.8",
     "qrcode.react": "1.0.0",
-    "react": "16.11.0",
-    "react-dom": "16.11.0",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
     "react-router-dom": "5.1.2",
     "tslib": "1.10.0"
   },
