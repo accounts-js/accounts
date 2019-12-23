@@ -71,7 +71,7 @@ const Home = () => {
   };
 
   if (!user) {
-    return null;
+    return <AuthenticatedContainer>Loading ...</AuthenticatedContainer>;
   }
   return (
     <AuthenticatedContainer>
