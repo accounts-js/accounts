@@ -96,7 +96,7 @@ const Home = () => {
                 >
                   <FiberManualRecordIcon
                     className={classes.emailItemDot}
-                    color={email.verified ? 'primary' : 'error'}
+                    color={email.verified ? 'secondary' : 'error'}
                   />
                 </Tooltip>
                 <Typography>{email.address}</Typography>

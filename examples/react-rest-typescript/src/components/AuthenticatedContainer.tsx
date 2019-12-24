@@ -64,7 +64,7 @@ const useStyles = makeStyles(theme => ({
     },
   },
   listItemSelected: {
-    color: theme.palette.primary.main,
+    color: theme.palette.secondary.main,
     backgroundColor: 'transparent !important',
   },
 }));
