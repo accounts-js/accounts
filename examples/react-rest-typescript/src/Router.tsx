@@ -7,6 +7,7 @@ import Login from './Login';
 import Home from './Home';
 import ResetPassword from './ResetPassword';
 import VerifyEmail from './VerifyEmail';
+import { Email } from './Email';
 import { Security } from './Security';
 
 // A wrapper for <Route> that redirects to the login
@@ -43,7 +44,7 @@ const Router = () => {
           <Home />
         </PrivateRoute>
         <PrivateRoute path="/emails">
-          <Home />
+          <Email />
         </PrivateRoute>
         <PrivateRoute path="/security">
           <Security />
