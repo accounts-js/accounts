@@ -26,6 +26,10 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
+  logo: {
+    maxWidth: '100%',
+    width: 250,
+  },
 }));
 
 const SignUpLink = React.forwardRef<RouterLink, any>((props, ref) => (
@@ -96,6 +100,9 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
         <CardContent className={classes.cardContent}>
           <form onSubmit={formik.handleSubmit}>
             <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <img src="/logo.png" alt="Logo" className={classes.logo} />
+              </Grid>
               <Grid item xs={12}>
                 <Typography variant="h5">Sign in</Typography>
               </Grid>

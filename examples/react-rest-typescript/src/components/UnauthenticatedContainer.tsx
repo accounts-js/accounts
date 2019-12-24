@@ -1,11 +1,18 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core';
-import { Container } from './Container';
-import { AppBar } from './AppBar';
+import { makeStyles, Container } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
+  },
+  container: {
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
+    [theme.breakpoints.up('sm')]: {
+      display: 'flex',
+      height: '100vh',
+      alignItems: 'center',
+    },
   },
 }));
 
@@ -18,11 +25,9 @@ export const UnauthenticatedContainer = ({ children }: UnauthenticatedContainerP
 
   return (
     <div className={classes.root}>
-      <nav>
-        <AppBar />
-      </nav>
-
-      <Container maxWidth="sm">{children}</Container>
+      <Container maxWidth="sm" className={classes.container}>
+        {children}
+      </Container>
     </div>
   );
 };
