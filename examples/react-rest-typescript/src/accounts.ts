@@ -3,7 +3,7 @@ import { AccountsClientPassword } from '@accounts/client-password';
 import { RestClient } from '@accounts/rest-client';
 
 const accountsRest = new RestClient({
-  apiHost: 'http://localhost:4000',
+  apiHost: process.env.REACT_APP_API_URL!,
   rootPath: '/accounts',
 });
 const accountsClient = new AccountsClient({}, accountsRest);
