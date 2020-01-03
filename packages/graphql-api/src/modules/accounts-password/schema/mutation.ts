@@ -9,6 +9,7 @@ export default (config: AccountsPasswordModuleConfig) => gql`
     resetPassword(token: String!, newPassword: String!): LoginResult
     sendVerificationEmail(email: String!): Boolean
     sendResetPasswordEmail(email: String!): Boolean
+    addEmail(newEmail: String!): Boolean
     changePassword(oldPassword: String!, newPassword: String!): Boolean
     twoFactorSet(secret: TwoFactorSecretKeyInput!, code: String!): Boolean
     twoFactorUnset(code: String!): Boolean

@@ -132,6 +132,13 @@ export default class GraphQLClient implements TransportInterface {
   /**
    * @inheritDoc
    */
+  public async addEmail(newEmail: string): Promise<void> {
+    return this.mutate(changePasswordMutation, 'addEmail', { newEmail });
+  }
+
+  /**
+   * @inheritDoc
+   */
   public async changePassword(oldPassword: string, newPassword: string): Promise<void> {
     return this.mutate(changePasswordMutation, 'changePassword', { oldPassword, newPassword });
   }

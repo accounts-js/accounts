@@ -188,7 +188,7 @@ export default class AccountsPassword implements AuthenticationService {
    * Defaults to false.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
+  public addEmail(userId: string, newEmail: string, verified: boolean = false): Promise<void> {
     if (!this.options.validateEmail(newEmail)) {
       throw new Error(this.options.errors.invalidEmail);
     }
