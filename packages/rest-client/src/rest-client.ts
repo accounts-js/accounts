@@ -181,6 +181,16 @@ export class RestClient implements TransportInterface {
     return this.fetch('password/sendResetPasswordEmail', args, customHeaders);
   }
 
+  public addEmail(newEmail: string, customHeaders?: object): Promise<void> {
+    const args = {
+      method: 'POST',
+      body: JSON.stringify({
+        newEmail,
+      }),
+    };
+    return this.authFetch('password/addEmail', args, customHeaders);
+  }
+
   public changePassword(
     oldPassword: string,
     newPassword: string,
