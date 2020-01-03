@@ -17,7 +17,7 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import SendIcon from '@material-ui/icons/Send';
 import { useFormik, FormikErrors } from 'formik';
 import { User } from '@accounts/types';
-import { accountsClient, accountsRest } from './accounts';
+import { accountsClient, accountsRest, accountsPassword } from './accounts';
 import { AuthenticatedContainer } from './components/AuthenticatedContainer';
 
 const useStyles = makeStyles(theme => ({
@@ -41,6 +41,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+    minHeight: 48,
   },
   emailItemPart: {
     display: 'flex',
@@ -70,8 +71,9 @@ export const Email = () => {
     },
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        // TODO send email to server
-        // TODO refetch user to show the new email
+        await accountsPassword.addEmail(values.newEmail);
+        await fetchUser();
+        alert('New email added');
       } catch (error) {
         alert(error);
       }
