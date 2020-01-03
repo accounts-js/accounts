@@ -13,6 +13,7 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import SendIcon from '@material-ui/icons/Send';
 import { accountsClient, accountsRest } from './accounts';
 import { AuthenticatedContainer } from './components/AuthenticatedContainer';
+import { User } from '@accounts/types';
 
 const useStyles = makeStyles(theme => ({
   divider: {
@@ -43,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 
 export const Email = () => {
   const classes = useStyles();
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<User>();
 
   useEffect(() => {
     fetchUser();
@@ -55,8 +56,8 @@ export const Email = () => {
     setUser(user);
   };
 
-  const onResendEmail = async () => {
-    await accountsRest.sendVerificationEmail(user.emails[0].address);
+  const onResendEmail = async (address: string) => {
+    await accountsRest.sendVerificationEmail(address);
     alert('Verification email sent');
   };
 
@@ -71,32 +72,33 @@ export const Email = () => {
         <CardHeader subheader="Emails" className={classes.cardHeader} />
         <Divider />
         <CardContent className={classes.cardContent}>
-          {user.emails.map((email: any, index: number) => (
-            <div key={index} className={classes.emailItem}>
-              <div className={classes.emailItemPart}>
-                <Tooltip
-                  arrow
-                  placement="top-start"
-                  title={
-                    email.verified ? 'Your email is verified' : 'You need to verify your email'
-                  }
-                >
-                  <FiberManualRecordIcon
-                    className={classes.emailItemDot}
-                    color={email.verified ? 'secondary' : 'error'}
-                  />
-                </Tooltip>
-                <Typography>{email.address}</Typography>
+          {user.emails &&
+            user.emails.map(email => (
+              <div key={email.address} className={classes.emailItem}>
+                <div className={classes.emailItemPart}>
+                  <Tooltip
+                    arrow
+                    placement="top-start"
+                    title={
+                      email.verified ? 'Your email is verified' : 'You need to verify your email'
+                    }
+                  >
+                    <FiberManualRecordIcon
+                      className={classes.emailItemDot}
+                      color={email.verified ? 'secondary' : 'error'}
+                    />
+                  </Tooltip>
+                  <Typography>{email.address}</Typography>
+                </div>
+                {!email.verified && (
+                  <Tooltip arrow placement="top-end" title="Resend verification email">
+                    <IconButton aria-label="Send" onClick={() => onResendEmail(email.address)}>
+                      <SendIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
               </div>
-              {!email.verified && (
-                <Tooltip arrow placement="top-end" title="Resend verification email">
-                  <IconButton aria-label="Send" onClick={onResendEmail}>
-                    <SendIcon />
-                  </IconButton>
-                </Tooltip>
-              )}
-            </div>
-          ))}
+            ))}
         </CardContent>
       </Card>
     </AuthenticatedContainer>
