@@ -8,12 +8,17 @@ import {
   Divider,
   Tooltip,
   IconButton,
+  CardActions,
+  Button,
+  Grid,
+  TextField,
 } from '@material-ui/core';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import SendIcon from '@material-ui/icons/Send';
+import { useFormik, FormikErrors } from 'formik';
+import { User } from '@accounts/types';
 import { accountsClient, accountsRest } from './accounts';
 import { AuthenticatedContainer } from './components/AuthenticatedContainer';
-import { User } from '@accounts/types';
 
 const useStyles = makeStyles(theme => ({
   divider: {
@@ -29,6 +34,9 @@ const useStyles = makeStyles(theme => ({
   cardContent: {
     padding: theme.spacing(3),
   },
+  cardActions: {
+    padding: theme.spacing(3),
+  },
   emailItem: {
     display: 'flex',
     alignItems: 'center',
@@ -42,9 +50,34 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+interface AddEmailValues {
+  newEmail: string;
+}
+
 export const Email = () => {
   const classes = useStyles();
   const [user, setUser] = useState<User>();
+  const formik = useFormik<AddEmailValues>({
+    initialValues: {
+      newEmail: '',
+    },
+    validate: values => {
+      const errors: FormikErrors<AddEmailValues> = {};
+      if (!values.newEmail) {
+        errors.newEmail = 'Required';
+      }
+      return errors;
+    },
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        // TODO send email to server
+        // TODO refetch user to show the new email
+      } catch (error) {
+        alert(error);
+      }
+      setSubmitting(false);
+    },
+  });
 
   useEffect(() => {
     fetchUser();
@@ -100,6 +133,36 @@ export const Email = () => {
               </div>
             ))}
         </CardContent>
+      </Card>
+
+      <Card className={classes.card}>
+        <form onSubmit={formik.handleSubmit}>
+          <CardHeader subheader="Add secondary emails" className={classes.cardHeader} />
+          <Divider />
+          <CardContent className={classes.cardContent}>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <TextField
+                  label="Add email address"
+                  variant="outlined"
+                  fullWidth={true}
+                  id="newEmail"
+                  type="email"
+                  value={formik.values.newEmail}
+                  onChange={formik.handleChange}
+                  error={Boolean(formik.errors.newEmail && formik.touched.newEmail)}
+                  helperText={formik.touched.newEmail && formik.errors.newEmail}
+                />
+              </Grid>
+            </Grid>
+          </CardContent>
+          <Divider />
+          <CardActions className={classes.cardActions}>
+            <Button variant="contained" type="submit" disabled={formik.isSubmitting}>
+              Add email
+            </Button>
+          </CardActions>
+        </form>
       </Card>
     </AuthenticatedContainer>
   );
