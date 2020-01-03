@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import { Container } from './Container';
 import { AppBar } from './AppBar';
-import { accountsClient } from '../accounts';
 import { useAuth } from './AuthContext';
 import { Drawer } from './Drawer';
 
@@ -37,7 +36,7 @@ interface AuthenticatedContainerProps {
 export const AuthenticatedContainer = ({ children }: AuthenticatedContainerProps) => {
   const classes = useStyles();
   const history = useHistory();
-  const { fetchUser } = useAuth();
+  const { logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const onDrawerToggle = () => {
@@ -45,8 +44,7 @@ export const AuthenticatedContainer = ({ children }: AuthenticatedContainerProps
   };
 
   const onLogout = async () => {
-    await accountsClient.logout();
-    await fetchUser();
+    await logout();
     history.push('/login');
   };
 
