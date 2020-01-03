@@ -13,7 +13,6 @@ import {
   Snackbar,
 } from '@material-ui/core';
 import { useFormik, FormikErrors } from 'formik';
-import { accountsPassword } from './accounts';
 import { SnackBarContentError } from './components/SnackBarContentError';
 import { useAuth } from './components/AuthContext';
 import { UnauthenticatedContainer } from './components/UnauthenticatedContainer';
@@ -47,7 +46,7 @@ interface LoginValues {
 
 const Login = ({ history }: RouteComponentProps<{}>) => {
   const classes = useStyles();
-  const { fetchUser } = useAuth();
+  const { loginWithService } = useAuth();
   const [error, setError] = useState<string | undefined>();
   const formik = useFormik<LoginValues>({
     initialValues: {
@@ -67,14 +66,13 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
     },
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        await accountsPassword.login({
+        await loginWithService('password', {
           user: {
             email: values.email,
           },
           password: values.password,
           code: values.code,
         });
-        await fetchUser();
         history.push('/');
       } catch (error) {
         setError(error.message);
