@@ -54,6 +54,7 @@ export type Mutation = {
   resetPassword?: Maybe<LoginResult>;
   sendVerificationEmail?: Maybe<Scalars['Boolean']>;
   sendResetPasswordEmail?: Maybe<Scalars['Boolean']>;
+  addEmail?: Maybe<Scalars['Boolean']>;
   changePassword?: Maybe<Scalars['Boolean']>;
   twoFactorSet?: Maybe<Scalars['Boolean']>;
   twoFactorUnset?: Maybe<Scalars['Boolean']>;
@@ -83,6 +84,10 @@ export type MutationSendVerificationEmailArgs = {
 
 export type MutationSendResetPasswordEmailArgs = {
   email: Scalars['String'];
+};
+
+export type MutationAddEmailArgs = {
+  newEmail: Scalars['String'];
 };
 
 export type MutationChangePasswordArgs = {
@@ -346,6 +351,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationSendResetPasswordEmailArgs, 'email'>
+  >;
+  addEmail?: Resolver<
+    Maybe<ResolversTypes['Boolean']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationAddEmailArgs, 'newEmail'>
   >;
   changePassword?: Resolver<
     Maybe<ResolversTypes['Boolean']>,

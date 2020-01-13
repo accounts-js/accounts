@@ -12,6 +12,7 @@ import { serviceVerifyAuthentication } from './endpoints/verify-authentication';
 import { registerPassword } from './endpoints/password/register';
 import { twoFactorSecret, twoFactorSet, twoFactorUnset } from './endpoints/password/two-factor';
 import { changePassword } from './endpoints/password/change-password';
+import { addEmail } from './endpoints/password/add-email';
 import { userLoader } from './user-loader';
 import { AccountsExpressOptions } from './types';
 
@@ -59,6 +60,8 @@ const accountsExpress = (
     router.post(`${path}/password/sendVerificationEmail`, sendVerificationEmail(accountsServer));
 
     router.post(`${path}/password/sendResetPasswordEmail`, sendResetPasswordEmail(accountsServer));
+
+    router.post(`${path}/password/addEmail`, userLoader(accountsServer), addEmail(accountsServer));
 
     router.post(
       `${path}/password/changePassword`,

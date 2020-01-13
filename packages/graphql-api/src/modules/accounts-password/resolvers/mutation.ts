@@ -5,6 +5,15 @@ import { AccountsModuleContext } from '../../accounts';
 import { MutationResolvers } from '../../../models';
 
 export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> = {
+  addEmail: async (_, { newEmail }, { user, injector }) => {
+    if (!(user && user.id)) {
+      throw new Error('Unauthorized');
+    }
+
+    const userId = user.id;
+    await injector.get(AccountsPassword).addEmail(userId, newEmail);
+    return null;
+  },
   changePassword: async (_, { oldPassword, newPassword }, { user, injector }) => {
     if (!(user && user.id)) {
       throw new Error('Unauthorized');

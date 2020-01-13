@@ -7,6 +7,7 @@ describe('accounts-password resolvers mutation', () => {
     options: {},
   };
   const accountsPasswordMock = {
+    addEmail: jest.fn(),
     changePassword: jest.fn(),
     createUser: jest.fn(),
     resetPassword: jest.fn(),
@@ -27,6 +28,22 @@ describe('accounts-password resolvers mutation', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  describe('addEmail', () => {
+    const newEmail = 'newEmailTest';
+
+    it('should throw if no user in context', async () => {
+      await expect(Mutation.addEmail!({}, { newEmail }, {} as any, {} as any)).rejects.toThrowError(
+        'Unauthorized'
+      );
+    });
+
+    it('should call addEmail', async () => {
+      await Mutation.addEmail!({}, { newEmail }, { user, injector } as any, {} as any);
+      expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
+      expect(accountsPasswordMock.addEmail).toHaveBeenCalledWith(user.id, newEmail);
+    });
   });
 
   describe('changePassword', () => {

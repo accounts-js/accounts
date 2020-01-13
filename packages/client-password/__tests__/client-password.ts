@@ -7,6 +7,7 @@ const mockedClient = {
     resetPassword: jest.fn(),
     sendVerificationEmail: jest.fn(),
     verifyEmail: jest.fn(),
+    addEmail: jest.fn(),
     changePassword: jest.fn(),
   },
   loginWithService: jest.fn(),
@@ -100,6 +101,13 @@ describe('AccountsClientPassword', () => {
     it('should call transport', async () => {
       await accountsPassword.verifyEmail(user.email);
       expect(mockedClient.transport.verifyEmail).toHaveBeenCalledWith(user.email);
+    });
+  });
+
+  describe('addEmail', () => {
+    it('should call transport', async () => {
+      await accountsPassword.addEmail(user.email);
+      expect(mockedClient.transport.addEmail).toHaveBeenCalledWith(user.email);
     });
   });
 

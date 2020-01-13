@@ -23,6 +23,7 @@ export interface TransportInterface {
   sendResetPasswordEmail(email: string): Promise<void>;
   sendVerificationEmail(email: string): Promise<void>;
   resetPassword(token: string, newPassword: string): Promise<LoginResult | null>;
+  addEmail(newEmail: string): Promise<void>;
   changePassword(oldPassword: string, newPassword: string): Promise<void>;
   impersonate(
     token: string,
