@@ -3,4 +3,5 @@ lib
 build
 package.json
 packages/graphql-api/schema.json
+packages/graphql-api/src/models.ts
 website/.docusaurus

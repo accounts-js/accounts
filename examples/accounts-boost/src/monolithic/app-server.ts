@@ -3,9 +3,11 @@ import { mergeTypeDefs, mergeResolvers } from 'graphql-toolkit';
 import { ApolloServer } from 'apollo-server';
 
 (async () => {
-  const accounts = (await accountsBoost({
-    tokenSecret: 'terrible secret',
-  })).graphql();
+  const accounts = (
+    await accountsBoost({
+      tokenSecret: 'terrible secret',
+    })
+  ).graphql();
 
   const typeDefs = `
     type PrivateType @auth {
