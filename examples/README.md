@@ -1,6 +1,8 @@
-Accounts-js examples
+# Accounts-js examples
 
-This repository provides examples on how to use the [accounts-js](https://github.com/accounts-js/accounts) packages.
+This folder provides examples on how to use the [accounts-js](https://github.com/accounts-js/accounts) packages.
+
+## Examples
 
 REST Server + REST client example:
 
@@ -16,5 +18,3 @@ Other examples:
 
 - Accounts Boost [accounts-boost](./accounts-boost)
 - Typeorm + PostgreSQL example [graphql-server-typeorm-postgres](./graphql-server-typeorm-postgres)
-
-Please go to corresponding packages and see its README.

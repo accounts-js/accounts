@@ -4,13 +4,17 @@ This example demonstrate how to use [accounts-js](https://github.com/accounts-js
 
 You must have a mongodb server running before starting the server.
 
-## Getting Started
+## Setup example
 
-```
-git clone https://github.com/accounts-js/examples.git
-cd examples/rest-express-typescript
-yarn install
-```
+In order to be able to run this example on your machine you first need to do the following steps:
+
+- Clone the repository `git clone git@github.com:accounts-js/accounts.git`
+- Install project dependencies: `yarn`
+- Link together all the packages: `yarn setup`
+- Compile the packages `yarn compile`
+- Go to the example folder `cd examples/rest-express-typescript`
+
+## Getting Started
 
 Start the app.
 
