@@ -1,4 +1,6 @@
-export * from './types/database-interface';
+export * from './types/database-interface/database-interface';
+export * from './types/database-interface/sessions';
+export * from './types/database-interface/password';
 export * from './types/connection-informations';
 export * from './types/tokens';
 export * from './types/token-record';

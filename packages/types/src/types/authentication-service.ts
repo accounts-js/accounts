@@ -1,5 +1,5 @@
 import { User } from './user';
-import { DatabaseInterface } from './database-interface';
+import { DatabaseInterface } from './database-interface/database-interface';
 
 // TODO : Fix circular dependency for better type checking
 // import AccountsServer from '@accounts/server';
