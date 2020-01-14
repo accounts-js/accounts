@@ -3,7 +3,7 @@ import { CreateUser } from '../create-user';
 import { DatabaseInterfaceSessions } from './sessions';
 import { DatabaseInterfacePassword } from './password';
 
-export interface DatabaseInterface extends DatabaseInterfaceSessions, DatabaseInterfacePassword {
+export interface DatabaseInterface {
   // Find user by identity fields
   findUserByEmail(email: string): Promise<User | null>;
 
@@ -24,4 +24,9 @@ export interface DatabaseInterface extends DatabaseInterfaceSessions, DatabaseIn
   unsetService(userId: string, serviceName: string): Promise<void>;
 
   setUserDeactivated(userId: string, deactivated: boolean): Promise<void>;
+
+  sessions: DatabaseInterfaceSessions;
+
+  // Services
+  password: DatabaseInterfacePassword;
 }
