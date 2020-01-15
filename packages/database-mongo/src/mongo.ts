@@ -6,19 +6,7 @@ import { AccountsMongoOptions, MongoUser } from './types';
 import { MongoSessions } from './sessions';
 import { MongoPassword } from './services/password';
 import { toMongoID } from './utils';
-
-export const defaultOptions = {
-  collectionName: 'users',
-  sessionCollectionName: 'sessions',
-  timestamps: {
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-  },
-  convertUserIdToMongoObjectId: true,
-  convertSessionIdToMongoObjectId: true,
-  caseSensitiveUserName: true,
-  dateProvider: (date?: Date) => (date ? date.getTime() : Date.now()),
-};
+import { defaultOptions } from './options';
 
 export class Mongo implements DatabaseInterface {
   // Options of Mongo class

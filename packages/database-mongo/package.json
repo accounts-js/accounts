@@ -32,6 +32,7 @@
     "@accounts/database-tests": "^0.21.0",
     "@types/jest": "24.0.25",
     "@types/lodash": "4.14.149",
+    "@types/lodash.merge": "4.6.6",
     "@types/mongodb": "3.3.14",
     "@types/node": "12.12.14",
     "jest": "24.9.0"
@@ -39,6 +40,7 @@
   "dependencies": {
     "@accounts/types": "^0.21.0",
     "lodash": "^4.17.15",
+    "lodash.merge": "^4.6.2",
     "mongodb": "^3.4.1",
     "tslib": "1.10.0"
   }

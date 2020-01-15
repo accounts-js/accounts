@@ -1,7 +1,8 @@
 import { Db, Collection, ObjectID } from 'mongodb';
+import merge from 'lodash.merge';
 import { DatabaseInterfaceSessions, ConnectionInformations, Session } from '@accounts/types';
 import { AccountsMongoOptions } from './types';
-import { defaultOptions } from './mongo';
+import { defaultOptions } from './options';
 import { toMongoID } from './utils';
 
 export class MongoSessions implements DatabaseInterfaceSessions {
@@ -12,9 +13,9 @@ export class MongoSessions implements DatabaseInterfaceSessions {
   // Session collection
   private sessionCollection: Collection;
 
-  constructor(db: Db, options: AccountsMongoOptions & typeof defaultOptions) {
+  constructor(db: Db, options: AccountsMongoOptions) {
     this.db = db;
-    this.options = options;
+    this.options = merge({ ...defaultOptions }, options);
     this.sessionCollection = this.db.collection(this.options.sessionCollectionName);
   }
 
