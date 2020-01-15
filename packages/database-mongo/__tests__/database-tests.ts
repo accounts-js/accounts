@@ -27,7 +27,10 @@ export class DatabaseTests {
 
   public createConnection = async () => {
     const url = 'mongodb://localhost:27017';
-    this.client = await mongodb.MongoClient.connect(url, { useNewUrlParser: true });
+    this.client = await mongodb.MongoClient.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     this.db = this.client.db('accounts-mongo-tests');
     this.database = new Mongo(this.db, this.options);
   };

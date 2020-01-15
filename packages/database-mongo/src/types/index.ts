@@ -23,7 +23,7 @@ export interface AccountsMongoOptions {
    */
   convertSessionIdToMongoObjectId?: boolean;
   /**
-   * Perform case intensitive query for user name, default 'true'.
+   * Perform case insensitive query for user name, default 'true'.
    */
   caseSensitiveUserName?: boolean;
   /**
