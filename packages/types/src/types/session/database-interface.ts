@@ -1,4 +1,4 @@
-import { Session } from '../session';
+import { Session } from './session';
 import { ConnectionInformations } from '../connection-informations';
 
 export interface DatabaseInterfaceSessions {

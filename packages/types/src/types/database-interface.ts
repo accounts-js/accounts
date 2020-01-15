@@ -1,7 +1,7 @@
-import { User } from '../user';
-import { CreateUser } from '../create-user';
-import { DatabaseInterfaceSessions } from './sessions';
-import { DatabaseInterfacePassword } from './password';
+import { User } from './user';
+import { CreateUser } from './create-user';
+import { DatabaseInterfaceSessions } from './session/database-interface';
+import { DatabaseInterfaceServicePassword } from './services/password/database-interface';
 
 export interface DatabaseInterface {
   // Find user by identity fields
@@ -28,5 +28,5 @@ export interface DatabaseInterface {
   sessions: DatabaseInterfaceSessions;
 
   // Services
-  password: DatabaseInterfacePassword;
+  password: DatabaseInterfaceServicePassword;
 }

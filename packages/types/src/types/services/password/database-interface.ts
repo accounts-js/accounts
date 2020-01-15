@@ -1,6 +1,6 @@
-import { User } from '../user';
+import { User } from '../../user';
 
-export interface DatabaseInterfacePassword {
+export interface DatabaseInterfaceServicePassword {
   findUserByResetPasswordToken(token: string): Promise<User | null>;
 
   findUserByEmailVerificationToken(token: string): Promise<User | null>;
