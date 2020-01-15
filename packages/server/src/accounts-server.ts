@@ -182,7 +182,7 @@ Please change it with a strong random token.`);
   public async loginWithUser(user: User, infos: ConnectionInformations): Promise<LoginResult> {
     const { ip, userAgent } = infos;
     const token = await this.createSessionToken(user);
-    const sessionId = await this.db.createSession(user.id, token, {
+    const sessionId = await this.db.sessions.createSession(user.id, token, {
       ip,
       userAgent,
     });
@@ -269,7 +269,7 @@ Please change it with a strong random token.`);
       }
 
       const token = generateRandomToken();
-      const newSessionId = await this.db.createSession(
+      const newSessionId = await this.db.sessions.createSession(
         impersonatedUser.id,
         token,
         {
@@ -333,7 +333,7 @@ Please change it with a strong random token.`);
         throw new Error('Tokens are not valid');
       }
 
-      const session: Session | null = await this.db.findSessionByToken(sessionToken);
+      const session: Session | null = await this.db.sessions.findSessionByToken(sessionToken);
       if (!session) {
         throw new Error('Session not found');
       }
@@ -350,7 +350,7 @@ Please change it with a strong random token.`);
         }
 
         const tokens = this.createTokens({ token: newToken || sessionToken, userId: user.id });
-        await this.db.updateSession(session.id, { ip, userAgent }, newToken);
+        await this.db.sessions.updateSession(session.id, { ip, userAgent }, newToken);
 
         const result = {
           sessionId: session.id,
@@ -414,7 +414,7 @@ Please change it with a strong random token.`);
       const session: Session = await this.findSessionByAccessToken(accessToken);
 
       if (session.valid) {
-        await this.db.invalidateSession(session.id);
+        await this.db.sessions.invalidateSession(session.id);
         this.hooks.emit(ServerHooks.LogoutSuccess, {
           session,
           accessToken,
@@ -483,7 +483,7 @@ Please change it with a strong random token.`);
       throw new Error('Tokens are not valid');
     }
 
-    const session: Session | null = await this.db.findSessionByToken(sessionToken);
+    const session: Session | null = await this.db.sessions.findSessionByToken(sessionToken);
     if (!session) {
       throw new Error('Session not found');
     }

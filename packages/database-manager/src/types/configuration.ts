@@ -1,6 +1,11 @@
-import { DatabaseInterface, DatabaseInterfaceSessions } from '@accounts/types';
+import {
+  DatabaseInterface,
+  DatabaseInterfaceSessions,
+  DatabaseInterfaceServicePassword,
+} from '@accounts/types';
 
 export interface Configuration {
   userStorage: DatabaseInterface;
-  sessionStorage: DatabaseInterface | DatabaseInterfaceSessions;
+  sessionStorage?: DatabaseInterfaceSessions;
+  servicePassword?: DatabaseInterfaceServicePassword;
 }

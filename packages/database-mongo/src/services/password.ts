@@ -1,11 +1,11 @@
 import { Db, Collection } from 'mongodb';
-import { User, DatabaseInterfacePassword } from '@accounts/types';
+import { User, DatabaseInterfaceServicePassword } from '@accounts/types';
 import { get } from 'lodash';
 import { defaultOptions } from '../mongo';
 import { toMongoID } from '../utils';
 import { AccountsMongoOptions } from '../types';
 
-export class MongoPassword implements DatabaseInterfacePassword {
+export class MongoPassword implements DatabaseInterfaceServicePassword {
   // Db object
   private db: Db;
   // Options of Mongo class

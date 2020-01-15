@@ -192,7 +192,7 @@ export default class AccountsPassword implements AuthenticationService {
     if (!this.options.validateEmail(newEmail)) {
       throw new Error(this.options.errors.invalidEmail);
     }
-    return this.db.addEmail(userId, newEmail, verified);
+    return this.db.password.addEmail(userId, newEmail, verified);
   }
 
   /**
@@ -203,7 +203,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @returns {Promise<void>} - Return a Promise.
    */
   public removeEmail(userId: string, email: string): Promise<void> {
-    return this.db.removeEmail(userId, email);
+    return this.db.password.removeEmail(userId, email);
   }
 
   /**
@@ -216,7 +216,7 @@ export default class AccountsPassword implements AuthenticationService {
       throw new Error(this.options.errors.invalidToken);
     }
 
-    const user = await this.db.findUserByEmailVerificationToken(token);
+    const user = await this.db.password.findUserByEmailVerificationToken(token);
     if (!user) {
       throw new Error(this.options.errors.verifyEmailLinkExpired);
     }
@@ -231,7 +231,7 @@ export default class AccountsPassword implements AuthenticationService {
     if (!emailRecord) {
       throw new Error(this.options.errors.verifyEmailLinkUnknownAddress);
     }
-    await this.db.verifyEmail(user.id, emailRecord.address);
+    await this.db.password.verifyEmail(user.id, emailRecord.address);
   }
 
   /**
@@ -252,7 +252,7 @@ export default class AccountsPassword implements AuthenticationService {
       throw new Error(this.options.errors.invalidNewPassword);
     }
 
-    const user = await this.db.findUserByResetPasswordToken(token);
+    const user = await this.db.password.findUserByResetPasswordToken(token);
     if (!user) {
       throw new Error(this.options.errors.resetPasswordLinkExpired);
     }
@@ -284,18 +284,18 @@ export default class AccountsPassword implements AuthenticationService {
 
     const password = await this.hashAndBcryptPassword(newPassword);
     // Change the user password and remove the old token
-    await this.db.setResetPassword(user.id, resetTokenRecord.address, password, token);
+    await this.db.password.setResetPassword(user.id, resetTokenRecord.address, password, token);
 
     this.server.getHooks().emit(ServerHooks.ResetPasswordSuccess, user);
 
     // If user clicked on an enrollment link we can verify his email
     if (resetTokenRecord.reason === 'enroll') {
-      await this.db.verifyEmail(user.id, resetTokenRecord.address);
+      await this.db.password.verifyEmail(user.id, resetTokenRecord.address);
     }
 
     // Changing the password should invalidate existing sessions
     if (this.options.invalidateAllSessionsAfterPasswordReset) {
-      await this.db.invalidateAllSessions(user.id);
+      await this.db.sessions.invalidateAllSessions(user.id);
     }
 
     if (this.options.notifyUserAfterPasswordChanged) {
@@ -329,7 +329,7 @@ export default class AccountsPassword implements AuthenticationService {
    */
   public async setPassword(userId: string, newPassword: string): Promise<void> {
     const password = await bcryptPassword(newPassword);
-    return this.db.setPassword(userId, password);
+    return this.db.password.setPassword(userId, password);
   }
 
   /**
@@ -352,12 +352,12 @@ export default class AccountsPassword implements AuthenticationService {
     const user = await this.passwordAuthenticator({ id: userId }, oldPassword);
 
     const password = await bcryptPassword(newPassword);
-    await this.db.setPassword(userId, password);
+    await this.db.password.setPassword(userId, password);
 
     this.server.getHooks().emit(ServerHooks.ChangePasswordSuccess, user);
 
     if (this.options.invalidateAllSessionsAfterPasswordChanged) {
-      await this.db.invalidateAllSessions(user.id);
+      await this.db.sessions.invalidateAllSessions(user.id);
     }
 
     if (this.options.notifyUserAfterPasswordChanged) {
@@ -410,7 +410,7 @@ export default class AccountsPassword implements AuthenticationService {
     }
 
     const token = generateRandomToken();
-    await this.db.addEmailVerificationToken(user.id, address, token);
+    await this.db.password.addEmailVerificationToken(user.id, address, token);
 
     const resetPasswordMail = this.server.prepareMail(
       address,
@@ -445,7 +445,7 @@ export default class AccountsPassword implements AuthenticationService {
       throw new Error(this.options.errors.userNotFound);
     }
     const token = generateRandomToken();
-    await this.db.addResetPasswordToken(user.id, address, token, 'reset');
+    await this.db.password.addResetPasswordToken(user.id, address, token, 'reset');
 
     const resetPasswordMail = this.server.prepareMail(
       address,
@@ -477,7 +477,7 @@ export default class AccountsPassword implements AuthenticationService {
       throw new Error(this.options.errors.userNotFound);
     }
     const token = generateRandomToken();
-    await this.db.addResetPasswordToken(user.id, address, token, 'enroll');
+    await this.db.password.addResetPasswordToken(user.id, address, token, 'enroll');
 
     const enrollmentMail = this.server.prepareMail(
       address,
@@ -584,7 +584,7 @@ export default class AccountsPassword implements AuthenticationService {
       );
     }
 
-    const hash = await this.db.findPasswordHash(foundUser.id);
+    const hash = await this.db.password.findPasswordHash(foundUser.id);
     if (!hash) {
       throw new Error(this.options.errors.noPasswordSet);
     }
