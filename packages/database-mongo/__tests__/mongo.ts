@@ -1,6 +1,6 @@
 import { ObjectID, ObjectId } from 'mongodb';
-import { Mongo } from '../src';
-import { DatabaseTests } from './database-tests';
+import { Mongo } from '../src/mongo';
+import { DatabaseTests } from './test-utils';
 
 const databaseTests = new DatabaseTests();
 

@@ -1,4 +1,4 @@
-import { DatabaseTests } from '../database-tests';
+import { DatabaseTests } from '../test-utils';
 import { MongoPassword } from '../../src/services/password';
 
 const databaseTests = new DatabaseTests();

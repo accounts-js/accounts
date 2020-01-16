@@ -1,6 +1,6 @@
 import { ObjectID } from 'mongodb';
 import { randomBytes } from 'crypto';
-import { DatabaseTests } from './database-tests';
+import { DatabaseTests } from './test-utils';
 import { MongoSessions } from '../src/sessions';
 
 const generateRandomToken = (length = 43): string => randomBytes(length).toString('hex');
