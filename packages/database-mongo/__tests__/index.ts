@@ -1,6 +1,4 @@
-import { randomBytes } from 'crypto';
 import { ObjectID, ObjectId } from 'mongodb';
-
 import { Mongo } from '../src';
 import { DatabaseTests } from './database-tests';
 
