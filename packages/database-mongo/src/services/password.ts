@@ -1,7 +1,9 @@
 import { Db, Collection } from 'mongodb';
 import { User, DatabaseInterfaceServicePassword } from '@accounts/types';
+// TODO remove lodash
 import { get } from 'lodash';
-import { defaultOptions } from '../mongo';
+import merge from 'lodash.merge';
+import { defaultOptions } from '../options';
 import { toMongoID } from '../utils';
 import { AccountsMongoOptions } from '../types';
 
@@ -13,9 +15,9 @@ export class MongoPassword implements DatabaseInterfaceServicePassword {
   // User collection
   private userCollection: Collection;
 
-  constructor(db: Db, options: AccountsMongoOptions & typeof defaultOptions) {
+  constructor(db: Db, options: AccountsMongoOptions) {
     this.db = db;
-    this.options = options;
+    this.options = merge({ ...defaultOptions }, options);
     this.userCollection = this.db.collection(this.options.collectionName);
   }
 

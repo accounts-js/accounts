@@ -182,6 +182,27 @@ describe('sessions', () => {
     });
   });
 
+  describe('invalidateSession', () => {
+    it('should not convert id', async () => {
+      const mongoOptions = new MongoSessions(databaseTests.db, {
+        convertSessionIdToMongoObjectId: false,
+      });
+      await mongoOptions.invalidateSession('toto');
+    });
+
+    it('invalidates a session', async () => {
+      const token = generateRandomToken();
+      const sessionId = await databaseTests.database.sessions.createSession(session.userId, token, {
+        ip: session.ip,
+        userAgent: session.userAgent,
+      });
+      await databaseTests.database.sessions.invalidateSession(sessionId);
+      const ret = await databaseTests.database.sessions.findSessionById(sessionId);
+      expect(ret!.valid).toEqual(false);
+      expect(ret!.createdAt).not.toEqual(ret!.updatedAt);
+    });
+  });
+
   describe('invalidateAllSessions', () => {
     it('invalidates all sessions', async () => {
       const sessionId1 = await databaseTests.database.sessions.createSession(
