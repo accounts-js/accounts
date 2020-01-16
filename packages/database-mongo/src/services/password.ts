@@ -1,7 +1,5 @@
 import { Db, Collection } from 'mongodb';
 import { User, DatabaseInterfaceServicePassword } from '@accounts/types';
-// TODO remove lodash
-import { get } from 'lodash';
 import merge from 'lodash.merge';
 import { defaultOptions } from '../options';
 import { toMongoID } from '../utils';
@@ -55,11 +53,7 @@ export class MongoPassword implements DatabaseInterfaceServicePassword {
   public async findPasswordHash(userId: string): Promise<string | null> {
     const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     const user = await this.userCollection.findOne({ _id: id });
-    if (user) {
-      // TODO convert to ? to remove lodash dependency
-      return get(user, 'services.password.bcrypt');
-    }
-    return null;
+    return user?.services?.password?.bcrypt || null;
   }
 
   public async setPassword(userId: string, newPassword: string): Promise<void> {
