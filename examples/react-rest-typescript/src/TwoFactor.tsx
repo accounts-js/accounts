@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import QRCode from 'qrcode.react';
 import { useFormik, FormikErrors } from 'formik';
-import { accountsRest } from './accounts';
+import { accountsClient, accountsRest } from './accounts';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -36,13 +36,20 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+interface OTP {
+  mfaToken: string;
+  id: string;
+  otpauthUri: string;
+  secret: string;
+}
+
 interface TwoFactorValues {
   oneTimeCode: string;
 }
 
 export const TwoFactor = () => {
   const classes = useStyles();
-  const [secret, setSecret] = useState();
+  const [secret, setSecret] = useState<OTP>();
   const formik = useFormik<TwoFactorValues>({
     initialValues: {
       oneTimeCode: '',
@@ -55,8 +62,14 @@ export const TwoFactor = () => {
       return errors;
     },
     onSubmit: async (values, { setSubmitting }) => {
+      if (!secret) return;
+
       try {
-        await accountsRest.twoFactorSet(secret, values.oneTimeCode);
+        const res = await accountsRest.loginWithService('mfa', {
+          mfaToken: secret.mfaToken,
+          code: values.oneTimeCode,
+        });
+        console.log(res);
         // TODO success message
       } catch (error) {
         // TODO snackbar?
@@ -85,8 +98,8 @@ export const TwoFactor = () => {
         <CardHeader subheader="Two-factor authentication" className={classes.cardHeader} />
         <Divider />
         <CardContent className={classes.cardContent}>
-          <Typography gutterBottom>Authenticator secret: {secret.base32}</Typography>
-          <QRCode className={classes.qrCode} value={secret.otpauth_url} />
+          <Typography gutterBottom>Authenticator secret: {secret.secret}</Typography>
+          <QRCode className={classes.qrCode} value={secret.otpauthUri} />
           <TextField
             label="Authenticator code"
             variant="outlined"
