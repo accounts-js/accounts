@@ -1,6 +1,6 @@
 {
   "name": "@examples/react-graphql-typescript",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "private": true,
   "scripts": {
     "start": "SKIP_PREFLIGHT_CHECK=true react-scripts start",
@@ -24,12 +24,12 @@
     ]
   },
   "dependencies": {
-    "@accounts/apollo-link": "^0.20.0",
-    "@accounts/client": "^0.20.0",
-    "@accounts/client-password": "^0.20.0",
-    "@accounts/graphql-client": "^0.20.0",
-    "@apollo/react-hooks": "3.1.3",
-    "@material-ui/core": "4.7.2",
+    "@accounts/apollo-link": "^0.21.0",
+    "@accounts/client": "^0.21.0",
+    "@accounts/client-password": "^0.21.0",
+    "@accounts/graphql-client": "^0.21.0",
+    "@apollo/react-hooks": "3.1.2",
+    "@material-ui/core": "4.8.1",
     "@material-ui/styles": "4.7.1",
     "apollo-cache-inmemory": "1.6.3",
     "apollo-client": "2.6.4",
@@ -45,12 +45,12 @@
   },
   "devDependencies": {
     "@types/node": "12.12.7",
-    "@types/qrcode.react": "0.9.0",
-    "@types/react": "16.9.16",
+    "@types/qrcode.react": "1.0.0",
+    "@types/react": "16.9.17",
     "@types/react-dom": "16.9.4",
     "@types/react-router": "5.1.3",
     "@types/react-router-dom": "5.1.3",
     "react-scripts": "3.3.0",
-    "typescript": "3.7.3"
+    "typescript": "3.7.4"
   }
 }

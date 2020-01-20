@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "name": "rest-express-typescript",
+  "builds": [
+    {
+      "src": "lib/index.js",
+      "use": "@now/node-server"
+    }
+  ],
+  "routes": [
+    {
+      "src": ".*",
+      "dest": "/lib/index.js"
+    }
+  ],
+  "env": {
+    "MONGO_URL": "@accounts-js-rest-express"
+  }
+}

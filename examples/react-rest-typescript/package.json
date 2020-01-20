@@ -1,6 +1,6 @@
 {
   "name": "@examples/react-rest-typescript",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "private": true,
   "scripts": {
     "start": "SKIP_PREFLIGHT_CHECK=true react-scripts start",
@@ -24,12 +24,13 @@
     ]
   },
   "dependencies": {
-    "@accounts/client": "^0.20.0",
-    "@accounts/client-password": "^0.20.0",
-    "@accounts/rest-client": "^0.20.0",
-    "@material-ui/core": "4.7.2",
+    "@accounts/client": "^0.21.0",
+    "@accounts/client-password": "^0.21.0",
+    "@accounts/rest-client": "^0.21.0",
+    "@material-ui/core": "4.8.1",
     "@material-ui/icons": "4.5.1",
     "@material-ui/styles": "4.7.1",
+    "formik": "2.0.8",
     "qrcode.react": "1.0.0",
     "react": "16.12.0",
     "react-dom": "16.12.0",
@@ -38,12 +39,12 @@
   },
   "devDependencies": {
     "@types/node": "12.12.7",
-    "@types/qrcode.react": "0.9.0",
-    "@types/react": "16.9.16",
+    "@types/qrcode.react": "1.0.0",
+    "@types/react": "16.9.17",
     "@types/react-dom": "16.9.4",
     "@types/react-router": "5.1.3",
     "@types/react-router-dom": "5.1.3",
     "react-scripts": "3.3.0",
-    "typescript": "3.7.3"
+    "typescript": "3.7.4"
   }
 }

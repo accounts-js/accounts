@@ -68,6 +68,14 @@ export class AccountsClientPassword {
   }
 
   /**
+   * Add an email address for a user. Must be logged in.
+   * @param {string} newEmail - A new email address for the user.
+   */
+  public addEmail(newEmail: string): Promise<void> {
+    return this.client.transport.addEmail(newEmail);
+  }
+
+  /**
    * Change the current user's password. Must be logged in.
    * @param {string} oldPassword - The user's current password.
    * @param {string} newPassword - A new password for the user.

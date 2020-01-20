@@ -1,7 +1,7 @@
 {
   "name": "@examples/graphql-server-typescript",
   "private": true,
-  "version": "0.20.0",
+  "version": "0.21.0",
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
@@ -10,26 +10,26 @@
     "test": "yarn build"
   },
   "dependencies": {
-    "@accounts/database-manager": "^0.20.0",
-    "@accounts/graphql-api": "^0.20.0",
-    "@accounts/mongo": "^0.20.0",
-    "@accounts/password": "^0.20.0",
-    "@accounts/rest-express": "^0.20.0",
-    "@accounts/server": "^0.20.0",
+    "@accounts/database-manager": "^0.21.0",
+    "@accounts/graphql-api": "^0.21.0",
+    "@accounts/mongo": "^0.21.0",
+    "@accounts/password": "^0.21.0",
+    "@accounts/rest-express": "^0.21.0",
+    "@accounts/server": "^0.21.0",
     "@graphql-modules/core": "0.7.13",
     "apollo-server": "2.9.13",
     "graphql": "14.5.8",
     "graphql-toolkit": "0.6.8",
     "graphql-tools": "4.0.6",
     "lodash": "4.17.15",
-    "mongoose": "5.8.1",
+    "mongoose": "5.8.3",
     "tslib": "1.10.0"
   },
   "devDependencies": {
-    "@types/mongoose": "5.5.34",
+    "@types/mongoose": "5.5.35",
     "@types/node": "12.12.7",
     "nodemon": "2.0.2",
     "ts-node": "8.5.4",
-    "typescript": "3.7.3"
+    "typescript": "3.7.4"
   }
 }

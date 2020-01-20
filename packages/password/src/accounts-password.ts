@@ -69,6 +69,11 @@ export interface AccountsPasswordOptions {
    */
   invalidateAllSessionsAfterPasswordChanged?: boolean;
   /**
+   * Will automatically send a verification email after signup.
+   * Default to false.
+   */
+  sendVerificationEmailAfterSignup?: boolean;
+  /**
    * Function that will validate the user object during `createUser`.
    * The user returned from this function will be directly inserted in the database so be careful when you whitelist the fields,
    * By default we only allow `username`, `email` and `password` fields.
@@ -116,6 +121,7 @@ const defaultOptions = {
     return Boolean(isValid);
   },
   errors,
+  sendVerificationEmailAfterSignup: false,
 };
 
 export default class AccountsPassword implements AuthenticationService {
@@ -182,7 +188,7 @@ export default class AccountsPassword implements AuthenticationService {
    * Defaults to false.
    * @returns {Promise<void>} - Return a Promise.
    */
-  public addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
+  public addEmail(userId: string, newEmail: string, verified = false): Promise<void> {
     if (!this.options.validateEmail(newEmail)) {
       throw new Error(this.options.errors.invalidEmail);
     }
@@ -531,6 +537,9 @@ export default class AccountsPassword implements AuthenticationService {
       const userId = await this.db.createUser(user);
 
       defer(async () => {
+        if (this.options.sendVerificationEmailAfterSignup && user.email)
+          this.sendVerificationEmail(user.email);
+
         const userRecord = (await this.db.findUserById(userId)) as User;
         this.server.getHooks().emit(ServerHooks.CreateUserSuccess, userRecord);
       });

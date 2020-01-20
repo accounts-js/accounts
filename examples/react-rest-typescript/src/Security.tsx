@@ -1,38 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import { Authenticator } from '@accounts/types';
-import { accountsClient } from './accounts';
+import React from 'react';
+import { Typography, Divider, makeStyles } from '@material-ui/core';
+import { TwoFactor } from './TwoFactor';
+import { ChangePassword } from './ChangePassword';
+import { AuthenticatedContainer } from './components/AuthenticatedContainer';
+
+const useStyles = makeStyles(theme => ({
+  divider: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 export const Security = () => {
-  const [authenticators, setAuthenticators] = useState<Authenticator[]>([]);
-
-  useEffect(() => {
-    const fetchAuthenticators = async () => {
-      const data = await accountsClient.authenticators();
-      setAuthenticators(data);
-      console.log(data);
-    };
-
-    fetchAuthenticators();
-  }, []);
+  const classes = useStyles();
 
   return (
-    <div>
-      <h1>TWO-FACTOR AUTHENTICATION</h1>
-      {authenticators.map(authenticator => {
-        if (authenticator.type === 'otp') {
-          return (
-            <div key={authenticator.id}>
-              <p>
-                <FiberManualRecordIcon color="primary" /> Authenticator App
-              </p>
-              <p>Created at: {(authenticator as any).createdAt}</p>
-              <p>Activated at: {authenticator.activatedAt}</p>
-            </div>
-          );
-        }
-        return null;
-      })}
-    </div>
+    <AuthenticatedContainer>
+      <Typography variant="h5">Security</Typography>
+      <Divider className={classes.divider} />
+      <ChangePassword />
+      <TwoFactor />
+    </AuthenticatedContainer>
   );
 };

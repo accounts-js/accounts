@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "name": "react-rest-typescript",
+  "build": {
+    "env": {
+      "REACT_APP_API_URL": "https://rest-express-typescript.accounts-js.now.sh"
+    }
+  }
+}

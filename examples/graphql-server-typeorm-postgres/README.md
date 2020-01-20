@@ -2,6 +2,16 @@
 
 This example demonstrate how to use [accounts-js](https://github.com/accounts-js/accounts) with PostgreSQL thanks to the amazing [@accounts/typeorm](https://www.npmjs.com/package/@accounts/typeorm) plugin built by (https://github.com/birkir/)[@birkir]for his awesome project: (https://github.com/birkir/prime)[PrimeCMS].
 
+## Setup example
+
+In order to be able to run this example on your machine you first need to do the following steps:
+
+- Clone the repository `git clone git@github.com:accounts-js/accounts.git`
+- Install project dependencies: `yarn`
+- Link together all the packages: `yarn setup`
+- Compile the packages `yarn compile`
+- Go to the example folder `cd examples/graphql-server-typeorm-postgres`
+
 ## Prerequisites
 
 If you're on a mac, you will probably already have postgres installed as a brew service.
@@ -16,12 +26,6 @@ docker-compose up -d
 to start a new one.
 
 ## Getting Started
-
-```bash
-git clone https://github.com/accounts-js/accounts-js.git
-cd examples/graphql-server-typeorm-postgres
-yarn install
-```
 
 Start the app.
 

@@ -14,6 +14,7 @@ import { twoFactorSecret, twoFactorSet, twoFactorUnset } from './endpoints/passw
 import { changePassword } from './endpoints/password/change-password';
 import { associate } from './endpoints/mfa/associate';
 import { authenticators } from './endpoints/mfa/authenticators';
+import { addEmail } from './endpoints/password/add-email';
 import { userLoader } from './user-loader';
 import { AccountsExpressOptions } from './types';
 
@@ -69,6 +70,8 @@ const accountsExpress = (
     router.post(`${path}/password/sendVerificationEmail`, sendVerificationEmail(accountsServer));
 
     router.post(`${path}/password/sendResetPasswordEmail`, sendResetPasswordEmail(accountsServer));
+
+    router.post(`${path}/password/addEmail`, userLoader(accountsServer), addEmail(accountsServer));
 
     router.post(
       `${path}/password/changePassword`,

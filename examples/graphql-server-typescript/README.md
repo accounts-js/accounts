@@ -2,6 +2,16 @@
 
 This example demonstrate how to use [accounts-js](https://github.com/accounts-js/accounts).
 
+## Setup example
+
+In order to be able to run this example on your machine you first need to do the following steps:
+
+- Clone the repository `git clone git@github.com:accounts-js/accounts.git`
+- Install project dependencies: `yarn`
+- Link together all the packages: `yarn setup`
+- Compile the packages `yarn compile`
+- Go to the example folder `cd examples/graphql-server-typescript`
+
 ## Prerequisites
 
 You will need a MongoDB server to run this server. If you don't have a MongoDB server running already, and you have Docker & Docker Compose, you can do
@@ -13,12 +23,6 @@ docker-compose up -d
 to start a new one.
 
 ## Getting Started
-
-```bash
-git clone https://github.com/accounts-js/examples.git
-cd examples/graphql-server-typescript
-yarn install
-```
 
 Start the app.
 

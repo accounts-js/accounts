@@ -202,6 +202,17 @@ describe('RestClient', () => {
         ));
   });
 
+  describe('addEmail', () => {
+    it('should call fetch with addEmail path', () =>
+      restClient
+        .addEmail('newEmail')
+        .then(() =>
+          expect((window.fetch as jest.Mock).mock.calls[0][0]).toBe(
+            'http://localhost:3000/accounts/password/addEmail'
+          )
+        ));
+  });
+
   describe('changePassword', () => {
     it('should call fetch with changePassword path', () =>
       restClient

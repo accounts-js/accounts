@@ -2,13 +2,17 @@
 
 This example demonstrate how to use [accounts-js](https://github.com/accounts-js/accounts).
 
-## Getting Started
+## Setup example
 
-```bash
-git clone https://github.com/accounts-js/examples.git
-cd examples/react-graphql-typescript
-yarn install
-```
+In order to be able to run this example on your machine you first need to do the following steps:
+
+- Clone the repository `git clone git@github.com:accounts-js/accounts.git`
+- Install project dependencies: `yarn`
+- Link together all the packages: `yarn setup`
+- Compile the packages `yarn compile`
+- Go to the example folder `cd examples/react-graphql-typescript`
+
+## Getting Started
 
 If you haven't started the example server side, [go ahead to start it first](../graphql-server-typescript).
 
