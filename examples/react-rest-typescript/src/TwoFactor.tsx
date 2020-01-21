@@ -7,12 +7,10 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  CardActions,
-  TextField,
 } from '@material-ui/core';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { Authenticator } from '@accounts/types';
-import { accountsClient, accountsRest } from './accounts';
+import { accountsClient } from './accounts';
 import { useHistory } from 'react-router';
 
 const useStyles = makeStyles(theme => ({

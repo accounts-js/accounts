@@ -10,6 +10,7 @@ import {
   CardActions,
   TextField,
 } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 import QRCode from 'qrcode.react';
 import { useFormik, FormikErrors } from 'formik';
 import { accountsClient, accountsRest } from './accounts';
@@ -34,6 +35,9 @@ const useStyles = makeStyles(theme => ({
   textField: {
     marginTop: theme.spacing(2),
   },
+  alertError: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
 interface OTP {
@@ -50,6 +54,7 @@ interface TwoFactorOtpValues {
 export const TwoFactorOtp = () => {
   const classes = useStyles();
   const [secret, setSecret] = useState<OTP>();
+  const [error, setError] = useState<string>();
   const formik = useFormik<TwoFactorOtpValues>({
     initialValues: {
       oneTimeCode: '',
@@ -72,8 +77,7 @@ export const TwoFactorOtp = () => {
         console.log(res);
         // TODO success message
       } catch (error) {
-        // TODO snackbar?
-        alert(error);
+        setError(error.message);
       }
       setSubmitting(false);
     },
@@ -115,6 +119,11 @@ export const TwoFactorOtp = () => {
                 : 'Scan the code with your Two-Factor app and enter the one time password to confirm'
             }
           />
+          {error && (
+            <Alert severity="error" className={classes.alertError}>
+              {error}
+            </Alert>
+          )}
         </CardContent>
         <Divider />
         <CardActions className={classes.cardActions}>
