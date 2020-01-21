@@ -62,7 +62,7 @@ export const TwoFactor = () => {
           if (authenticator.type === 'otp') {
             return (
               <div key={authenticator.id} className={classes.authenticatorItem}>
-                <div key={authenticator.id} className={classes.authenticatorItemTitle}>
+                <div className={classes.authenticatorItemTitle}>
                   <FiberManualRecordIcon
                     className={classes.authenticatorItemDot}
                     color={authenticator.active ? 'secondary' : 'error'}
