@@ -14,8 +14,12 @@ import { Alert } from '@material-ui/lab';
 import QRCode from 'qrcode.react';
 import { useFormik, FormikErrors } from 'formik';
 import { accountsClient, accountsRest } from './accounts';
+import { AuthenticatedContainer } from './components/AuthenticatedContainer';
 
 const useStyles = makeStyles(theme => ({
+  divider: {
+    marginTop: theme.spacing(2),
+  },
   card: {
     marginTop: theme.spacing(3),
   },
@@ -75,7 +79,7 @@ export const TwoFactorOtp = () => {
           code: values.oneTimeCode,
         });
         console.log(res);
-        // TODO success message
+        // TODO success message or redirect to the MFA page
       } catch (error) {
         setError(error.message);
       }
@@ -96,42 +100,47 @@ export const TwoFactorOtp = () => {
   if (!secret) {
     return null;
   }
+
   return (
-    <Card className={classes.card}>
-      <form onSubmit={formik.handleSubmit}>
-        <CardHeader subheader="Two-factor authentication" className={classes.cardHeader} />
-        <Divider />
-        <CardContent className={classes.cardContent}>
-          <Typography gutterBottom>Authenticator secret: {secret.secret}</Typography>
-          <QRCode className={classes.qrCode} value={secret.otpauthUri} />
-          <TextField
-            label="Authenticator code"
-            variant="outlined"
-            fullWidth={true}
-            className={classes.textField}
-            id="oneTimeCode"
-            value={formik.values.oneTimeCode}
-            onChange={formik.handleChange}
-            error={Boolean(formik.errors.oneTimeCode && formik.touched.oneTimeCode)}
-            helperText={
-              formik.touched.oneTimeCode && formik.errors.oneTimeCode
-                ? formik.errors.oneTimeCode
-                : 'Scan the code with your Two-Factor app and enter the one time password to confirm'
-            }
-          />
-          {error && (
-            <Alert severity="error" className={classes.alertError}>
-              {error}
-            </Alert>
-          )}
-        </CardContent>
-        <Divider />
-        <CardActions className={classes.cardActions}>
-          <Button variant="contained" type="submit" disabled={formik.isSubmitting}>
-            Submit
-          </Button>
-        </CardActions>
-      </form>
-    </Card>
+    <AuthenticatedContainer>
+      <Typography variant="h5">Authenticator App</Typography>
+      <Divider className={classes.divider} />
+      <Card className={classes.card}>
+        <form onSubmit={formik.handleSubmit}>
+          <CardHeader subheader="Configuration" className={classes.cardHeader} />
+          <Divider />
+          <CardContent className={classes.cardContent}>
+            <Typography gutterBottom>Authenticator secret: {secret.secret}</Typography>
+            <QRCode className={classes.qrCode} value={secret.otpauthUri} />
+            <TextField
+              label="Authenticator code"
+              variant="outlined"
+              fullWidth={true}
+              className={classes.textField}
+              id="oneTimeCode"
+              value={formik.values.oneTimeCode}
+              onChange={formik.handleChange}
+              error={Boolean(formik.errors.oneTimeCode && formik.touched.oneTimeCode)}
+              helperText={
+                formik.touched.oneTimeCode && formik.errors.oneTimeCode
+                  ? formik.errors.oneTimeCode
+                  : 'Scan the code with your Two-Factor app and enter the one time password to confirm'
+              }
+            />
+            {error && (
+              <Alert severity="error" className={classes.alertError}>
+                {error}
+              </Alert>
+            )}
+          </CardContent>
+          <Divider />
+          <CardActions className={classes.cardActions}>
+            <Button variant="contained" type="submit" disabled={formik.isSubmitting}>
+              Submit
+            </Button>
+          </CardActions>
+        </form>
+      </Card>
+    </AuthenticatedContainer>
   );
 };
