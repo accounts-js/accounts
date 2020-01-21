@@ -10,9 +10,10 @@ import {
   CardActions,
   TextField,
 } from '@material-ui/core';
-import QRCode from 'qrcode.react';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { Authenticator } from '@accounts/types';
 import { accountsClient, accountsRest } from './accounts';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -25,19 +26,23 @@ const useStyles = makeStyles(theme => ({
   cardContent: {
     padding: theme.spacing(3),
   },
-  cardActions: {
-    padding: theme.spacing(3),
+  authenticatorItem: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    minHeight: 48,
   },
-  qrCode: {
-    marginTop: theme.spacing(2),
+  authenticatorItemTitle: {
+    display: 'flex',
   },
-  textField: {
-    marginTop: theme.spacing(2),
+  authenticatorItemDot: {
+    marginRight: theme.spacing(2),
   },
 }));
 
 export const TwoFactor = () => {
   const classes = useStyles();
+  const history = useHistory();
   const [authenticators, setAuthenticators] = useState<Authenticator[]>([]);
 
   useEffect(() => {
@@ -58,12 +63,31 @@ export const TwoFactor = () => {
         {authenticators.map(authenticator => {
           if (authenticator.type === 'otp') {
             return (
-              <div key={authenticator.id}>
-                {/* <p>
-            <FiberManualRecordIcon color="primary" /> Authenticator App
-          </p> */}
-                <p>Created at: {(authenticator as any).createdAt}</p>
-                <p>Activated at: {authenticator.activatedAt}</p>
+              <div key={authenticator.id} className={classes.authenticatorItem}>
+                <div key={authenticator.id} className={classes.authenticatorItemTitle}>
+                  <FiberManualRecordIcon
+                    className={classes.authenticatorItemDot}
+                    color={authenticator.active ? 'secondary' : 'error'}
+                  />
+                  <Typography>Authenticator App</Typography>
+                </div>
+                {authenticator.active ? (
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() => history.push(`/security/mfa/${authenticator.id}`)}
+                  >
+                    Configure
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() => history.push('/security/mfa/otp')}
+                  >
+                    Add
+                  </Button>
+                )}
               </div>
             );
           }
