@@ -11,6 +11,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
+import { useHistory } from 'react-router';
 import QRCode from 'qrcode.react';
 import { useFormik, FormikErrors } from 'formik';
 import { accountsClient, accountsRest } from './accounts';
@@ -57,6 +58,7 @@ interface TwoFactorOtpValues {
 
 export const TwoFactorOtp = () => {
   const classes = useStyles();
+  const history = useHistory();
   const [secret, setSecret] = useState<OTP>();
   const [error, setError] = useState<string>();
   const formik = useFormik<TwoFactorOtpValues>({
@@ -74,12 +76,11 @@ export const TwoFactorOtp = () => {
       if (!secret) return;
 
       try {
-        const res = await accountsRest.loginWithService('mfa', {
+        await accountsRest.loginWithService('mfa', {
           mfaToken: secret.mfaToken,
           code: values.oneTimeCode,
         });
-        console.log(res);
-        // TODO success message or redirect to the MFA page
+        history.push('/security');
       } catch (error) {
         setError(error.message);
       }
