@@ -178,10 +178,7 @@ describe('AccountsServer', () => {
         {}
       );
 
-      const { accessToken } = await accountsServer.createTokens({
-        token: '456',
-        userId: user.userId,
-      });
+      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
       await accountsServer.logout(accessToken);
       expect(invalidateSession).toHaveBeenCalledWith('456');
     });
@@ -285,10 +282,7 @@ describe('AccountsServer', () => {
       );
       accountsServer.on(ServerHooks.LogoutSuccess, hookSpy);
 
-      const { accessToken } = await accountsServer.createTokens({
-        token: '456',
-        userId: user.userId,
-      });
+      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
       await accountsServer.logout(accessToken);
       await delay(10);
       expect(hookSpy).toHaveBeenCalled();
@@ -314,7 +308,7 @@ describe('AccountsServer', () => {
       accountsServer.on(ServerHooks.LogoutError, hookSpy);
 
       try {
-        const { accessToken } = await accountsServer.createTokens({ token: '456', userId: '122' });
+        const { accessToken } = accountsServer.createTokens({ token: '456', userId: '122' });
         await accountsServer.logout(accessToken);
       } catch (err) {
         // nothing to do
@@ -347,10 +341,7 @@ describe('AccountsServer', () => {
       );
       accountsServer.on(ServerHooks.ResumeSessionSuccess, hookSpy);
 
-      const { accessToken } = await accountsServer.createTokens({
-        token: '456',
-        userId: user.userId,
-      });
+      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
       await accountsServer.resumeSession(accessToken);
       await delay(10);
       expect(hookSpy).toHaveBeenCalled();
@@ -380,10 +371,7 @@ describe('AccountsServer', () => {
       );
       accountsServer.on(ServerHooks.ResumeSessionError, hookSpy);
 
-      const { accessToken } = await accountsServer.createTokens({
-        token: '456',
-        userId: user.userId,
-      });
+      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
 
       try {
         await accountsServer.resumeSession(accessToken);
@@ -413,10 +401,7 @@ describe('AccountsServer', () => {
       );
       accountsServer.on(ServerHooks.ResumeSessionError, hookSpy);
 
-      const { accessToken } = await accountsServer.createTokens({
-        token: '456',
-        userId: user.userId,
-      });
+      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
 
       try {
         await accountsServer.resumeSession(accessToken);
@@ -444,7 +429,7 @@ describe('AccountsServer', () => {
       accountsServer.on(ServerHooks.RefreshTokensError, hookSpy);
 
       try {
-        const { accessToken, refreshToken } = await accountsServer.createTokens({
+        const { accessToken, refreshToken } = accountsServer.createTokens({
           token: '456',
           userId: 'userId',
         });
@@ -480,11 +465,11 @@ describe('AccountsServer', () => {
       );
       accountsServer.on(ServerHooks.RefreshTokensSuccess, hookSpy);
 
-      const { accessToken, refreshToken } = await accountsServer.createTokens({
+      const { accessToken, refreshToken } = accountsServer.createTokens({
         token: '456',
         userId: user.userId,
       });
-      accountsServer.createTokens = async () => ({
+      accountsServer.createTokens = () => ({
         accessToken: 'newAccessToken',
         refreshToken: 'newRefreshToken',
       });
@@ -534,7 +519,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken } = await accountsServer.createTokens({ token: '456', userId: user.id });
+      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.id });
       const hookSpy = jest.fn(() => null);
       accountsServer.on(ServerHooks.ImpersonationSuccess, hookSpy);
 
@@ -579,11 +564,11 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken, refreshToken } = await accountsServer.createTokens({
+      const { accessToken, refreshToken } = accountsServer.createTokens({
         token: '456',
         userId: user.userId,
       });
-      accountsServer.createTokens = async () => ({
+      accountsServer.createTokens = () => ({
         accessToken: 'newAccessToken',
         refreshToken: 'newRefreshToken',
       });
@@ -627,11 +612,11 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken, refreshToken } = await accountsServer.createTokens({
+      const { accessToken, refreshToken } = accountsServer.createTokens({
         token: '456',
         userId: user.userId,
       });
-      accountsServer.createTokens = async () => ({
+      accountsServer.createTokens = () => ({
         accessToken: 'newAccessToken',
         refreshToken: 'newRefreshToken',
       });
@@ -683,7 +668,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken, refreshToken } = await accountsServer.createTokens({
+      const { accessToken, refreshToken } = accountsServer.createTokens({
         token: '123',
         userId: '213',
       });
@@ -705,7 +690,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken, refreshToken } = await accountsServer.createTokens({
+      const { accessToken, refreshToken } = accountsServer.createTokens({
         token: '456',
         userId: 'user',
       });
@@ -731,7 +716,7 @@ describe('AccountsServer', () => {
         {}
       );
 
-      const { accessToken, refreshToken } = await accountsServer.createTokens({
+      const { accessToken, refreshToken } = accountsServer.createTokens({
         token: '456',
         userId: 'user',
       });
@@ -779,7 +764,7 @@ describe('AccountsServer', () => {
         {}
       );
 
-      const { accessToken } = await accountsServer.createTokens({
+      const { accessToken } = accountsServer.createTokens({
         token: '456',
         userId: 'user',
       });
@@ -799,7 +784,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken } = await accountsServer.createTokens({
+      const { accessToken } = accountsServer.createTokens({
         token: '456',
         userId: 'user',
       });
@@ -843,7 +828,7 @@ describe('AccountsServer', () => {
         {}
       );
 
-      const { accessToken } = await accountsServer.createTokens({ token: '456', userId: 'user' });
+      const { accessToken } = accountsServer.createTokens({ token: '456', userId: 'user' });
       await expect(accountsServer.resumeSession(accessToken)).rejects.toThrowError(
         'User not found'
       );
@@ -870,10 +855,7 @@ describe('AccountsServer', () => {
         {}
       );
 
-      const { accessToken } = await accountsServer.createTokens({
-        token: '456',
-        userId: user.userId,
-      });
+      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
       await expect(accountsServer.resumeSession(accessToken)).rejects.toThrowError(
         'Invalid Session'
       );
@@ -900,10 +882,7 @@ describe('AccountsServer', () => {
         {}
       );
 
-      const { accessToken } = await accountsServer.createTokens({
-        token: '456',
-        userId: user.userId,
-      });
+      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
       const foundUser = await accountsServer.resumeSession(accessToken);
       expect(foundUser).toEqual(user);
     });
@@ -982,7 +961,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken } = await accountsServer.createTokens({ token: '456', userId: 'user' });
+      const { accessToken } = accountsServer.createTokens({ token: '456', userId: 'user' });
 
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
@@ -1005,7 +984,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken } = await accountsServer.createTokens({ token: '456', userId: 'user' });
+      const { accessToken } = accountsServer.createTokens({ token: '456', userId: 'user' });
 
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
@@ -1032,7 +1011,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken } = await accountsServer.createTokens({ token: '456', userId: 'user' });
+      const { accessToken } = accountsServer.createTokens({ token: '456', userId: 'user' });
 
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
@@ -1056,7 +1035,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken } = await accountsServer.createTokens({ token: '456', userId: 'user' });
+      const { accessToken } = accountsServer.createTokens({ token: '456', userId: 'user' });
 
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
@@ -1087,7 +1066,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken } = await accountsServer.createTokens({ token: '456', userId: 'user' });
+      const { accessToken } = accountsServer.createTokens({ token: '456', userId: 'user' });
 
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
@@ -1124,7 +1103,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken } = await accountsServer.createTokens({ token: '456', userId: user.id });
+      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.id });
 
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({

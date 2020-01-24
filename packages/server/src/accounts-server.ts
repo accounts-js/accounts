@@ -187,7 +187,7 @@ Please change it with a strong random token.`);
       userAgent,
     });
 
-    const { accessToken, refreshToken } = await this.createTokens({
+    const { accessToken, refreshToken } = this.createTokens({
       token,
       userId: user.id,
     });
@@ -279,7 +279,7 @@ Please change it with a strong random token.`);
         { impersonatorUserId: user.id }
       );
 
-      const impersonationTokens = await this.createTokens({
+      const impersonationTokens = this.createTokens({
         token: newSessionId,
         isImpersonated: true,
         userId: user.id,
@@ -349,10 +349,7 @@ Please change it with a strong random token.`);
           newToken = await this.createSessionToken(user);
         }
 
-        const tokens = await this.createTokens({
-          token: newToken || sessionToken,
-          userId: user.id,
-        });
+        const tokens = this.createTokens({ token: newToken || sessionToken, userId: user.id });
         await this.db.updateSession(session.id, { ip, userAgent }, newToken);
 
         const result = {
@@ -378,9 +375,9 @@ Please change it with a strong random token.`);
    * @description Refresh a user token.
    * @param {string} token - User session token.
    * @param {boolean} isImpersonated - Should be true if impersonating another user.
-   * @returns {Promise<Tokens>} - Return a new accessToken and refreshToken.
+   * @returns {<Tokens>} - Return a new accessToken and refreshToken.
    */
-  public async createTokens({
+  public createTokens({
     token,
     isImpersonated = false,
     userId,
@@ -388,7 +385,7 @@ Please change it with a strong random token.`);
     token: string;
     isImpersonated?: boolean;
     userId: string;
-  }): Promise<Tokens> {
+  }): Tokens {
     const { tokenConfigs } = this.options;
     const jwtData: JwtData = {
       token,
