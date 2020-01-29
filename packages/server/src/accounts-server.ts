@@ -225,7 +225,7 @@ Please change it with a strong random token.`);
       }
 
       try {
-        jwt.verify(accessToken, this.options.tokenSecret);
+        jwt.verify(accessToken, this.getSecretOrPublicKey());
       } catch (err) {
         throw new Error('Access token is not valid');
       }
@@ -324,8 +324,8 @@ Please change it with a strong random token.`);
 
       let sessionToken: string;
       try {
-        jwt.verify(refreshToken, this.options.tokenSecret);
-        const decodedAccessToken = jwt.verify(accessToken, this.options.tokenSecret, {
+        jwt.verify(refreshToken, this.getSecretOrPublicKey());
+        const decodedAccessToken = jwt.verify(accessToken, this.getSecretOrPublicKey(), {
           ignoreExpiration: true,
         }) as { data: JwtData };
         sessionToken = decodedAccessToken.data.token;
@@ -375,7 +375,7 @@ Please change it with a strong random token.`);
    * @description Refresh a user token.
    * @param {string} token - User session token.
    * @param {boolean} isImpersonated - Should be true if impersonating another user.
-   * @returns {Promise<Object>} - Return a new accessToken and refreshToken.
+   * @returns {<Tokens>} - Return a new accessToken and refreshToken.
    */
   public createTokens({
     token,
@@ -386,7 +386,7 @@ Please change it with a strong random token.`);
     isImpersonated?: boolean;
     userId: string;
   }): Tokens {
-    const { tokenSecret, tokenConfigs } = this.options;
+    const { tokenConfigs } = this.options;
     const jwtData: JwtData = {
       token,
       isImpersonated,
@@ -394,11 +394,11 @@ Please change it with a strong random token.`);
     };
     const accessToken = generateAccessToken({
       data: jwtData,
-      secret: tokenSecret,
+      secret: this.getSecretOrPrivateKey(),
       config: tokenConfigs.accessToken,
     });
     const refreshToken = generateRefreshToken({
-      secret: tokenSecret,
+      secret: this.getSecretOrPrivateKey(),
       config: tokenConfigs.refreshToken,
     });
     return { accessToken, refreshToken };
@@ -475,7 +475,7 @@ Please change it with a strong random token.`);
 
     let sessionToken: string;
     try {
-      const decodedAccessToken = jwt.verify(accessToken, this.options.tokenSecret) as {
+      const decodedAccessToken = jwt.verify(accessToken, this.getSecretOrPublicKey()) as {
         data: JwtData;
       };
       sessionToken = decodedAccessToken.data.token;
@@ -569,6 +569,18 @@ Please change it with a strong random token.`);
     return this.options.tokenCreator
       ? this.options.tokenCreator.createToken(user)
       : generateRandomToken();
+  }
+
+  private getSecretOrPublicKey(): jwt.Secret {
+    return typeof this.options.tokenSecret === 'string'
+      ? this.options.tokenSecret
+      : this.options.tokenSecret.publicKey;
+  }
+
+  private getSecretOrPrivateKey(): jwt.Secret {
+    return typeof this.options.tokenSecret === 'string'
+      ? this.options.tokenSecret
+      : this.options.tokenSecret.privateKey;
   }
 }
 

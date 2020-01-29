@@ -1166,4 +1166,58 @@ describe('AccountsServer', () => {
       expect(modifiedUser.username).toBeUndefined();
     });
   });
+
+  describe('getSecretOrPublicKey', () => {
+    it('return secert', async () => {
+      const accountsServer: any = new AccountsServer(
+        {
+          db: {} as any,
+          tokenSecret: 'secret1',
+        },
+        {}
+      );
+      expect(accountsServer.getSecretOrPublicKey()).toEqual('secret1');
+    });
+
+    it('return public key', async () => {
+      const accountsServer: any = new AccountsServer(
+        {
+          db: {} as any,
+          tokenSecret: {
+            publicKey: 'publicKey1',
+            privateKey: 'privateKey1',
+          },
+        },
+        {}
+      );
+      expect(accountsServer.getSecretOrPublicKey()).toEqual('publicKey1');
+    });
+  });
+
+  describe('getSecretOrPrivateKey', () => {
+    it('return secert', async () => {
+      const accountsServer: any = new AccountsServer(
+        {
+          db: {} as any,
+          tokenSecret: 'secret1',
+        },
+        {}
+      );
+      expect(accountsServer.getSecretOrPrivateKey()).toEqual('secret1');
+    });
+
+    it('return private key', async () => {
+      const accountsServer: any = new AccountsServer(
+        {
+          db: {} as any,
+          tokenSecret: {
+            publicKey: 'publicKey1',
+            privateKey: 'privateKey1',
+          },
+        },
+        {}
+      );
+      expect(accountsServer.getSecretOrPrivateKey()).toEqual('privateKey1');
+    });
+  });
 });
