@@ -1,9 +1,11 @@
 import { User } from './user';
-import { Session } from './session';
 import { CreateUser } from './create-user';
-import { ConnectionInformations } from './connection-informations';
+import { DatabaseInterfaceSessions } from './session/database-interface';
+import { DatabaseInterfaceServicePassword } from './services/password/database-interface';
 
-export interface DatabaseInterface extends DatabaseInterfaceSessions {
+export interface DatabaseInterface
+  extends DatabaseInterfaceSessions,
+    DatabaseInterfaceServicePassword {
   // Find user by identity fields
   findUserByEmail(email: string): Promise<User | null>;
 
@@ -23,60 +25,5 @@ export interface DatabaseInterface extends DatabaseInterfaceSessions {
 
   unsetService(userId: string, serviceName: string): Promise<void>;
 
-  // Password related operation
-  findPasswordHash(userId: string): Promise<string | null>;
-
-  findUserByResetPasswordToken(token: string): Promise<User | null>;
-
-  setPassword(userId: string, newPassword: string): Promise<void>;
-
-  addResetPasswordToken(
-    userId: string,
-    email: string,
-    token: string,
-    reason: string
-  ): Promise<void>;
-
-  setResetPassword(
-    userId: string,
-    email: string,
-    newPassword: string,
-    token: string
-  ): Promise<void>;
-
-  // Email related operations
-  findUserByEmailVerificationToken(token: string): Promise<User | null>;
-
-  addEmail(userId: string, newEmail: string, verified: boolean): Promise<void>;
-
-  removeEmail(userId: string, email: string): Promise<void>;
-
-  verifyEmail(userId: string, email: string): Promise<void>;
-
-  addEmailVerificationToken(userId: string, email: string, token: string): Promise<void>;
-
   setUserDeactivated(userId: string, deactivated: boolean): Promise<void>;
-}
-
-export interface DatabaseInterfaceSessions {
-  findSessionById(sessionId: string): Promise<Session | null>;
-
-  findSessionByToken(token: string): Promise<Session | null>;
-
-  createSession(
-    userId: string,
-    token: string,
-    connection: ConnectionInformations,
-    extraData?: object
-  ): Promise<string>;
-
-  updateSession(
-    sessionId: string,
-    connection: ConnectionInformations,
-    newToken?: string
-  ): Promise<void>;
-
-  invalidateSession(sessionId: string): Promise<void>;
-
-  invalidateAllSessions(userId: string): Promise<void>;
 }
