@@ -20,7 +20,6 @@ describe('sessions', () => {
 
   describe('findSessionById', () => {
     it('should return null for not found session', async () => {
-      // TODO create a new class
       const ret = await databaseTests.database.findSessionById('589871d1c9393d445745a57c');
       expect(ret).not.toBeTruthy();
     });

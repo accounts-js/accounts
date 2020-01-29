@@ -191,14 +191,14 @@ describe('services/password', () => {
   });
 
   describe('removeEmail', () => {
-    // it('should not convert id', async () => {
-    //   const mongoOptions = new Mongo(databaseTests.db, {
-    //     convertUserIdToMongoObjectId: false,
-    //     idProvider: () => new ObjectId().toString(),
-    //   });
-    //   const userId = await mongoOptions.createUser(user);
-    //   await mongoOptions.removeEmail(userId, 'hey');
-    // });
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertUserIdToMongoObjectId: false,
+        idProvider: () => new ObjectId().toString(),
+      });
+      const userId = await mongoOptions.createUser(user);
+      await mongoOptions.removeEmail(userId, 'hey');
+    });
 
     it('should throw if user is not found', async () => {
       await expect(
@@ -229,12 +229,12 @@ describe('services/password', () => {
   });
 
   describe('verifyEmail', () => {
-    // it('should not convert id', async () => {
-    //   const mongoOptions = new Mongo(databaseTests.db, {
-    //     convertUserIdToMongoObjectId: false,
-    //   });
-    //   await expect(mongoOptions.verifyEmail('toto', 'hey')).rejects.toThrowError('User not found');
-    // });
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertUserIdToMongoObjectId: false,
+      });
+      await expect(mongoOptions.verifyEmail('toto', 'hey')).rejects.toThrowError('User not found');
+    });
 
     it('should throw if user is not found', async () => {
       await expect(
