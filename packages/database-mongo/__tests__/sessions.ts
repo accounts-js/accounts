@@ -26,7 +26,10 @@ describe('sessions', () => {
     });
 
     it('should find session', async () => {
-      const sessionId = await databaseTests.database.createSession(session.userId, 'token');
+      const sessionId = await databaseTests.database.createSession(session.userId, 'token', {
+        ip: session.ip,
+        userAgent: session.userAgent,
+      });
       const ret = await databaseTests.database.findSessionById(sessionId);
       expect(ret).toBeTruthy();
     });
