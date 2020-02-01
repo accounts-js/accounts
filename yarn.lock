@@ -1281,10 +1281,29 @@
     graphql-toolkit "0.5.16"
     tslib "1.10.0"
 
+"@graphql-modules/core@0.7.14":
+  version "0.7.14"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.7.14.tgz#3a9598b948f3ae95843645a92e6cde3b8c643490"
+  integrity sha512-Gvfqb9bkJHbXrscWm7fFMFjvCI570/hDT9uuew3AlMPgZ6O25Dff9o3Wy3Ekxh5k0fBZb3i9rKdCPpFMhwJGpA==
+  dependencies:
+    "@graphql-modules/di" "0.7.14"
+    "@graphql-toolkit/common" "0.8.0"
+    "@graphql-toolkit/schema-merging" "0.8.0"
+    apollo-server-caching "0.5.1"
+    tslib "1.10.0"
+
 "@graphql-modules/di@0.7.13":
   version "0.7.13"
   resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.7.13.tgz#513949cca7121fb372e248f663fc97d916080216"
   integrity sha512-/WEFjDcrSnXfUS1IA8FwAnI+KQSB5FoBYYlvSQ6hUzD5WYk0Ge34Xt2JVUAlhmRDlgpHlErlFLW6ZhTsKA22/Q==
+  dependencies:
+    events "3.0.0"
+    tslib "1.10.0"
+
+"@graphql-modules/di@0.7.14":
+  version "0.7.14"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.7.14.tgz#1bbaf5d3f95b6c407a545e4dfd8627c4d21c4cab"
+  integrity sha512-77CM5oYdcEt7ZVwh6e2TV1eH62V0tBna9ektmwdTSLxx8yDYrArWwbio33IoNaS0DmzlHpekz5ouONCKt3M0hg==
   dependencies:
     events "3.0.0"
     tslib "1.10.0"
@@ -1332,6 +1351,16 @@
   dependencies:
     "@kamilkisiela/graphql-tools" "4.0.6"
     aggregate-error "3.0.1"
+    lodash "4.17.15"
+
+"@graphql-toolkit/common@0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@graphql-toolkit/common/-/common-0.8.0.tgz#2bc21effaea0c35a65d464ba35bca24bae5c40d9"
+  integrity sha512-Dhr5dt5HbQe63t8teo0MEt1YnYQhfIKfbm25lZLCXxwR6aPfetzRUEfTDFrrlP+ltTA7JU7ujk9DjsEZM4uxAw==
+  dependencies:
+    "@kamilkisiela/graphql-tools" "4.0.6"
+    aggregate-error "3.0.1"
+    is-glob "4.0.1"
     lodash "4.17.15"
 
 "@graphql-toolkit/core@0.6.6":
@@ -1459,6 +1488,16 @@
   integrity sha512-/QhyfscZLqJLOgM0fD9Dxb5ps9OYyaOPxNS2mgjvX++jbNkJW2128b3KrB0nJzFdVEiOllRoaYHGKM4w8lvhmg==
   dependencies:
     "@graphql-toolkit/common" "0.6.8"
+    "@kamilkisiela/graphql-tools" "4.0.6"
+    deepmerge "4.2.2"
+    tslib "1.10.0"
+
+"@graphql-toolkit/schema-merging@0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@graphql-toolkit/schema-merging/-/schema-merging-0.8.0.tgz#8ad00ec4cb87c249b1daa0abcfa1005b53865dba"
+  integrity sha512-u9gOoYux6DfckuEdv9jg+r3iLY6RFjzej5moRtJPowjbHBGOP/QbrY4W+0HiPa5QcOxJYj1sGc3FvSJC/HViyw==
+  dependencies:
+    "@graphql-toolkit/common" "0.8.0"
     "@kamilkisiela/graphql-tools" "4.0.6"
     deepmerge "4.2.2"
     tslib "1.10.0"
@@ -3842,7 +3881,7 @@ apollo-server-caching@0.5.0, apollo-server-caching@^0.5.0:
   dependencies:
     lru-cache "^5.0.0"
 
-apollo-server-caching@^0.5.1:
+apollo-server-caching@0.5.1, apollo-server-caching@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/apollo-server-caching/-/apollo-server-caching-0.5.1.tgz#5cd0536ad5473abb667cc82b59bc56b96fb35db6"
   integrity sha512-L7LHZ3k9Ao5OSf2WStvQhxdsNVplRQi7kCAPfqf9Z3GBEnQ2uaL0EgO0hSmtVHfXTbk5CTRziMT1Pe87bXrFIw==
