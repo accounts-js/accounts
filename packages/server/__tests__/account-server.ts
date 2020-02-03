@@ -142,7 +142,7 @@ describe('AccountsServer', () => {
           } as any,
           tokenSecret: 'secret1',
           jwtPayloadCreator: {
-            createPayload: async (user, data) => {
+            createPayload: async (data, user) => {
               return { data, username: user.username };
             },
           },
