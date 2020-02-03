@@ -141,14 +141,20 @@ describe('AccountsServer', () => {
             createSession: () => Promise.resolve('sessionId'),
           } as any,
           tokenSecret: 'secret1',
+          jwtPayloadCreator: {
+            createPayload: async (user, data) => {
+              return { data, username: user.username };
+            },
+          },
         },
         {}
       );
 
       const res = await accountsServer.loginWithUser(user, {});
       const { accessToken, refreshToken } = res.tokens;
-      const decodedAccessToken: { data: JwtData } = jwtDecode(accessToken);
+      const decodedAccessToken: { data: JwtData; username: string } = jwtDecode(accessToken);
       expect(decodedAccessToken.data.token).toBeTruthy();
+      expect(decodedAccessToken.username).toEqual(user.username);
       expect(accessToken).toBeTruthy();
       expect(refreshToken).toBeTruthy();
     });
@@ -158,8 +164,9 @@ describe('AccountsServer', () => {
     it('invalidates session', async () => {
       const invalidateSession = jest.fn(() => Promise.resolve());
       const user = {
-        userId: '123',
+        id: '123',
         username: 'username',
+        deactivated: false,
       };
 
       const accountsServer = new AccountsServer(
@@ -178,7 +185,7 @@ describe('AccountsServer', () => {
         {}
       );
 
-      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
+      const { accessToken } = await accountsServer.createTokens({ token: '456', user });
       await accountsServer.logout(accessToken);
       expect(invalidateSession).toHaveBeenCalledWith('456');
     });
@@ -258,8 +265,9 @@ describe('AccountsServer', () => {
 
     it('ServerHooks.LogoutSuccess', async () => {
       const user = {
-        userId: '123',
+        id: '123',
         username: 'username',
+        deactivated: false,
       };
 
       const hookSpy = jest.fn(() => null);
@@ -282,13 +290,19 @@ describe('AccountsServer', () => {
       );
       accountsServer.on(ServerHooks.LogoutSuccess, hookSpy);
 
-      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
+      const { accessToken } = await accountsServer.createTokens({ token: '456', user });
       await accountsServer.logout(accessToken);
       await delay(10);
       expect(hookSpy).toHaveBeenCalled();
     });
 
     it('ServerHooks.LogoutError', async () => {
+      const user = {
+        id: '122',
+        username: 'username',
+        deactivated: false,
+      };
+
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
         {
@@ -308,7 +322,7 @@ describe('AccountsServer', () => {
       accountsServer.on(ServerHooks.LogoutError, hookSpy);
 
       try {
-        const { accessToken } = accountsServer.createTokens({ token: '456', userId: '122' });
+        const { accessToken } = await accountsServer.createTokens({ token: '456', user });
         await accountsServer.logout(accessToken);
       } catch (err) {
         // nothing to do
@@ -319,8 +333,9 @@ describe('AccountsServer', () => {
 
     it('ServerHooks.ResumeSessionSuccess', async () => {
       const user = {
-        userId: '123',
+        id: '123',
         username: 'username',
+        deactivated: false,
       };
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
@@ -341,7 +356,7 @@ describe('AccountsServer', () => {
       );
       accountsServer.on(ServerHooks.ResumeSessionSuccess, hookSpy);
 
-      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
+      const { accessToken } = await accountsServer.createTokens({ token: '456', user });
       await accountsServer.resumeSession(accessToken);
       await delay(10);
       expect(hookSpy).toHaveBeenCalled();
@@ -349,8 +364,9 @@ describe('AccountsServer', () => {
 
     it('ServerHooks.ResumeSessionError with invalid session', async () => {
       const user = {
-        userId: '123',
+        id: '123',
         username: 'username',
+        deactivated: false,
       };
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
@@ -371,7 +387,7 @@ describe('AccountsServer', () => {
       );
       accountsServer.on(ServerHooks.ResumeSessionError, hookSpy);
 
-      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
+      const { accessToken } = await accountsServer.createTokens({ token: '456', user });
 
       try {
         await accountsServer.resumeSession(accessToken);
@@ -384,8 +400,9 @@ describe('AccountsServer', () => {
 
     it('ServerHooks.ResumeSessionError with invalid errored session', async () => {
       const user = {
-        userId: '123',
+        id: '123',
         username: 'username',
+        deactivated: false,
       };
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
@@ -401,7 +418,7 @@ describe('AccountsServer', () => {
       );
       accountsServer.on(ServerHooks.ResumeSessionError, hookSpy);
 
-      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
+      const { accessToken } = await accountsServer.createTokens({ token: '456', user });
 
       try {
         await accountsServer.resumeSession(accessToken);
@@ -429,9 +446,12 @@ describe('AccountsServer', () => {
       accountsServer.on(ServerHooks.RefreshTokensError, hookSpy);
 
       try {
-        const { accessToken, refreshToken } = accountsServer.createTokens({
+        const { accessToken, refreshToken } = await accountsServer.createTokens({
           token: '456',
-          userId: 'userId',
+          user: {
+            id: 'userId',
+            deactivated: false,
+          },
         });
         await accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'userAgent');
       } catch (err) {
@@ -443,8 +463,9 @@ describe('AccountsServer', () => {
 
     it('ServerHooks.RefreshTokensSuccess', async () => {
       const user = {
-        userId: '123',
+        id: '123',
         username: 'username',
+        deactivated: false,
       };
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
@@ -465,11 +486,11 @@ describe('AccountsServer', () => {
       );
       accountsServer.on(ServerHooks.RefreshTokensSuccess, hookSpy);
 
-      const { accessToken, refreshToken } = accountsServer.createTokens({
+      const { accessToken, refreshToken } = await accountsServer.createTokens({
         token: '456',
-        userId: user.userId,
+        user,
       });
-      accountsServer.createTokens = () => ({
+      accountsServer.createTokens = async () => ({
         accessToken: 'newAccessToken',
         refreshToken: 'newRefreshToken',
       });
@@ -502,7 +523,7 @@ describe('AccountsServer', () => {
     });
 
     it('ServerHooks.ImpersonationSuccess', async () => {
-      const user = { username: 'myUser', id: '123' };
+      const user = { username: 'myUser', id: '123', deactivated: false };
       const impersonatedUser = { username: 'impUser', id: '456' };
       const findUserById = jest.fn();
       findUserById.mockReturnValueOnce(user).mockReturnValueOnce(impersonatedUser);
@@ -519,7 +540,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.id });
+      const { accessToken } = await accountsServer.createTokens({ token: '456', user });
       const hookSpy = jest.fn(() => null);
       accountsServer.on(ServerHooks.ImpersonationSuccess, hookSpy);
 
@@ -528,11 +549,11 @@ describe('AccountsServer', () => {
           valid: true,
           userId: '123',
         } as any);
-      accountsServer.createTokens = ({ token, isImpersonated = false, userId }) =>
+      accountsServer.createTokens = ({ token, isImpersonated = false, user }) =>
         ({
           isImpersonated,
           token,
-          userId,
+          user,
         } as any);
 
       await accountsServer.impersonate(accessToken, { userId: 'userId' }, 'ip', 'user agent');
@@ -545,8 +566,9 @@ describe('AccountsServer', () => {
     it('updates session and returns new tokens and user', async () => {
       const updateSession = jest.fn(() => Promise.resolve());
       const user = {
-        userId: '123',
+        id: '123',
         username: 'username',
+        deactivated: false,
       };
       const accountsServer = new AccountsServer(
         {
@@ -564,11 +586,11 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken, refreshToken } = accountsServer.createTokens({
+      const { accessToken, refreshToken } = await accountsServer.createTokens({
         token: '456',
-        userId: user.userId,
+        user,
       });
-      accountsServer.createTokens = () => ({
+      accountsServer.createTokens = async () => ({
         accessToken: 'newAccessToken',
         refreshToken: 'newRefreshToken',
       });
@@ -578,17 +600,15 @@ describe('AccountsServer', () => {
         { ip: 'ip', userAgent: 'user agent' },
         undefined,
       ]);
-      expect((res as any).user).toEqual({
-        userId: '123',
-        username: 'username',
-      });
+      expect((res as any).user).toEqual(user);
     });
 
     it('updates session and returns new tokens and user with new session token', async () => {
       const updateSession = jest.fn(() => Promise.resolve());
       const user = {
-        userId: '123',
+        id: '123',
         username: 'username',
+        deactivated: false,
       };
       const accountsServer = new AccountsServer(
         {
@@ -612,11 +632,11 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken, refreshToken } = accountsServer.createTokens({
+      const { accessToken, refreshToken } = await accountsServer.createTokens({
         token: '456',
-        userId: user.userId,
+        user,
       });
-      accountsServer.createTokens = () => ({
+      accountsServer.createTokens = async () => ({
         accessToken: 'newAccessToken',
         refreshToken: 'newRefreshToken',
       });
@@ -627,10 +647,7 @@ describe('AccountsServer', () => {
         { ip: 'ip', userAgent: 'user agent' },
         '123',
       ]);
-      expect((res as any).user).toEqual({
-        userId: '123',
-        username: 'username',
-      });
+      expect((res as any).user).toEqual(user);
     });
 
     it('requires access and refresh tokens', async () => {
@@ -668,9 +685,12 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken, refreshToken } = accountsServer.createTokens({
+      const { accessToken, refreshToken } = await accountsServer.createTokens({
         token: '123',
-        userId: '213',
+        user: {
+          id: '213',
+          deactivated: false,
+        },
       });
       await expect(
         accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent')
@@ -690,9 +710,12 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken, refreshToken } = accountsServer.createTokens({
+      const { accessToken, refreshToken } = await accountsServer.createTokens({
         token: '456',
-        userId: 'user',
+        user: {
+          id: 'userId',
+          deactivated: false,
+        },
       });
       await expect(
         accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent')
@@ -716,9 +739,12 @@ describe('AccountsServer', () => {
         {}
       );
 
-      const { accessToken, refreshToken } = accountsServer.createTokens({
+      const { accessToken, refreshToken } = await accountsServer.createTokens({
         token: '456',
-        userId: 'user',
+        user: {
+          id: 'userId',
+          deactivated: false,
+        },
       });
       await expect(
         accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent')
@@ -764,9 +790,12 @@ describe('AccountsServer', () => {
         {}
       );
 
-      const { accessToken } = accountsServer.createTokens({
+      const { accessToken } = await accountsServer.createTokens({
         token: '456',
-        userId: 'user',
+        user: {
+          id: 'userId',
+          deactivated: false,
+        },
       });
       await expect(accountsServer.logout(accessToken)).rejects.toThrowError('Session not found');
     });
@@ -784,9 +813,12 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken } = accountsServer.createTokens({
+      const { accessToken } = await accountsServer.createTokens({
         token: '456',
-        userId: 'user',
+        user: {
+          id: 'userId',
+          deactivated: false,
+        },
       });
       await expect(accountsServer.logout(accessToken)).rejects.toThrowError(
         'Session is no longer valid'
@@ -828,7 +860,13 @@ describe('AccountsServer', () => {
         {}
       );
 
-      const { accessToken } = accountsServer.createTokens({ token: '456', userId: 'user' });
+      const { accessToken } = await accountsServer.createTokens({
+        token: '456',
+        user: {
+          id: 'userId',
+          deactivated: false,
+        },
+      });
       await expect(accountsServer.resumeSession(accessToken)).rejects.toThrowError(
         'User not found'
       );
@@ -836,8 +874,9 @@ describe('AccountsServer', () => {
 
     it('should throw if session is not valid', async () => {
       const user = {
-        userId: '123',
+        id: '123',
         username: 'username',
+        deactivated: false,
       };
       const accountsServer = new AccountsServer(
         {
@@ -855,7 +894,7 @@ describe('AccountsServer', () => {
         {}
       );
 
-      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
+      const { accessToken } = await accountsServer.createTokens({ token: '456', user });
       await expect(accountsServer.resumeSession(accessToken)).rejects.toThrowError(
         'Invalid Session'
       );
@@ -863,8 +902,9 @@ describe('AccountsServer', () => {
 
     it('return user', async () => {
       const user = {
-        userId: '123',
+        id: '123',
         username: 'username',
+        deactivated: false,
       };
       const accountsServer = new AccountsServer(
         {
@@ -882,7 +922,7 @@ describe('AccountsServer', () => {
         {}
       );
 
-      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.userId });
+      const { accessToken } = await accountsServer.createTokens({ token: '456', user });
       const foundUser = await accountsServer.resumeSession(accessToken);
       expect(foundUser).toEqual(user);
     });
@@ -919,7 +959,7 @@ describe('AccountsServer', () => {
   });
 
   describe('impersonate', () => {
-    const user = { username: 'myUser', id: '123' };
+    const user = { username: 'myUser', id: '123', deactivated: false };
     const impersonatedUser = { username: 'impUser', id: '456' };
     const someUser = { username: 'someUser', id: '789' };
 
@@ -961,7 +1001,13 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken } = accountsServer.createTokens({ token: '456', userId: 'user' });
+      const { accessToken } = await accountsServer.createTokens({
+        token: '456',
+        user: {
+          id: 'userId',
+          deactivated: false,
+        },
+      });
 
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
@@ -984,7 +1030,13 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken } = accountsServer.createTokens({ token: '456', userId: 'user' });
+      const { accessToken } = await accountsServer.createTokens({
+        token: '456',
+        user: {
+          id: 'userId',
+          deactivated: false,
+        },
+      });
 
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
@@ -1011,7 +1063,13 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken } = accountsServer.createTokens({ token: '456', userId: 'user' });
+      const { accessToken } = await accountsServer.createTokens({
+        token: '456',
+        user: {
+          id: 'userId',
+          deactivated: false,
+        },
+      });
 
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
@@ -1035,7 +1093,13 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken } = accountsServer.createTokens({ token: '456', userId: 'user' });
+      const { accessToken } = await accountsServer.createTokens({
+        token: '456',
+        user: {
+          id: 'userId',
+          deactivated: false,
+        },
+      });
 
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
@@ -1066,7 +1130,13 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken } = accountsServer.createTokens({ token: '456', userId: 'user' });
+      const { accessToken } = await accountsServer.createTokens({
+        token: '456',
+        user: {
+          id: 'userId',
+          deactivated: false,
+        },
+      });
 
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({
@@ -1103,7 +1173,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      const { accessToken } = accountsServer.createTokens({ token: '456', userId: user.id });
+      const { accessToken } = await accountsServer.createTokens({ token: '456', user });
 
       accountsServer.findSessionByAccessToken = () =>
         Promise.resolve({

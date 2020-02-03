@@ -21,6 +21,7 @@ import { ServerHooks } from './utils/server-hooks';
 import { AccountsServerOptions } from './types/accounts-server-options';
 import { JwtData } from './types/jwt-data';
 import { EmailTemplateType } from './types/email-template-type';
+import { JwtPayload } from './types/jwt-payload';
 
 const defaultOptions = {
   ambiguousErrorMessages: true,
@@ -174,9 +175,8 @@ Please change it with a strong random token.`);
    * @description Server use only.
    * This method creates a session without authenticating any user identity.
    * Any authentication should happen before calling this function.
-   * @param {User} userId - The user object.
-   * @param {string} ip - User's ip.
-   * @param {string} userAgent - User's client agent.
+   * @param {User} user - The user object.
+   * @param {ConnectionInformations} infos - User's connection informations.
    * @returns {Promise<LoginResult>} - Session tokens and user object.
    */
   public async loginWithUser(user: User, infos: ConnectionInformations): Promise<LoginResult> {
@@ -187,9 +187,9 @@ Please change it with a strong random token.`);
       userAgent,
     });
 
-    const { accessToken, refreshToken } = this.createTokens({
+    const { accessToken, refreshToken } = await this.createTokens({
       token,
-      userId: user.id,
+      user,
     });
 
     return {
@@ -279,10 +279,10 @@ Please change it with a strong random token.`);
         { impersonatorUserId: user.id }
       );
 
-      const impersonationTokens = this.createTokens({
+      const impersonationTokens = await this.createTokens({
         token: newSessionId,
         isImpersonated: true,
-        userId: user.id,
+        user,
       });
       const impersonationResult = {
         authorized: true,
@@ -349,7 +349,7 @@ Please change it with a strong random token.`);
           newToken = await this.createSessionToken(user);
         }
 
-        const tokens = this.createTokens({ token: newToken || sessionToken, userId: user.id });
+        const tokens = await this.createTokens({ token: newToken || sessionToken, user });
         await this.db.updateSession(session.id, { ip, userAgent }, newToken);
 
         const result = {
@@ -375,25 +375,27 @@ Please change it with a strong random token.`);
    * @description Refresh a user token.
    * @param {string} token - User session token.
    * @param {boolean} isImpersonated - Should be true if impersonating another user.
-   * @returns {<Tokens>} - Return a new accessToken and refreshToken.
+   * @param {User} user - The user object.
+   * @returns {Promise<Tokens>} - Return a new accessToken and refreshToken.
    */
-  public createTokens({
+  public async createTokens({
     token,
     isImpersonated = false,
-    userId,
+    user,
   }: {
     token: string;
     isImpersonated?: boolean;
-    userId: string;
-  }): Tokens {
+    user: User;
+  }): Promise<Tokens> {
     const { tokenConfigs } = this.options;
     const jwtData: JwtData = {
       token,
       isImpersonated,
-      userId,
+      userId: user.id,
     };
+
     const accessToken = generateAccessToken({
-      data: jwtData,
+      payload: await this.createJwtPayload(jwtData, user),
       secret: this.getSecretOrPrivateKey(),
       config: tokenConfigs.accessToken,
     });
@@ -401,6 +403,7 @@ Please change it with a strong random token.`);
       secret: this.getSecretOrPrivateKey(),
       config: tokenConfigs.refreshToken,
     });
+
     return { accessToken, refreshToken };
   }
 
@@ -569,6 +572,13 @@ Please change it with a strong random token.`);
     return this.options.tokenCreator
       ? this.options.tokenCreator.createToken(user)
       : generateRandomToken();
+  }
+
+  private async createJwtPayload(data: JwtData, user: User): Promise<JwtPayload> {
+    if (this.options.jwtPayloadCreator) {
+      return await this.options.jwtPayloadCreator.createPayload(user, data);
+    }
+    return { data };
   }
 
   private getSecretOrPublicKey(): jwt.Secret {
