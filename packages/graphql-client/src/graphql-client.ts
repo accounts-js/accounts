@@ -1,5 +1,6 @@
 import { AccountsClient, TransportInterface } from '@accounts/client';
 import { CreateUser, ImpersonationResult, LoginResult, User } from '@accounts/types';
+import { print } from 'graphql';
 import gql from 'graphql-tag';
 import { authenticateWithServiceMutation } from './graphql/authenticate-with-service.mutation';
 import { changePasswordMutation } from './graphql/change-password.mutation';
@@ -15,11 +16,8 @@ import { sendResetPasswordEmailMutation } from './graphql/send-reset-password-em
 import { sendVerificationEmailMutation } from './graphql/send-verification-email.mutation';
 import { twoFactorSetMutation } from './graphql/two-factor-set.mutation';
 import { twoFactorUnsetMutation } from './graphql/two-factor-unset.mutation';
-import { impersonateMutation } from './graphql/impersonate.mutation';
-import { getUserQuery } from './graphql/get-user.query';
-import { GraphQLErrorList } from './GraphQLErrorList';
-import { print } from 'graphql';
 import { verifyEmailMutation } from './graphql/verify-email.mutation';
+import { GraphQLErrorList } from './GraphQLErrorList';
 
 export interface AuthenticateParams {
   [key: string]: string | object;
