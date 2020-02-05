@@ -60,7 +60,7 @@ export class AccountsClientPassword {
   }
 
   /**
-   * Marks the user's email address as verified.
+   * Marks the user's email address as verified using a token received in email.
    * @param {string} token - The token retrieved from the verification URL.
    */
   public verifyEmail(token: string): Promise<void> {
