@@ -38,7 +38,7 @@ The `@accounts/client-password` module exposes a set of methods that can be used
 Create a new account for the user.
 
 ```javascript
-accountsPassword.createUser({
+await accountsPassword.createUser({
   email: user.email,
   password: user.password,
   // You can also add some custom fields
@@ -50,7 +50,7 @@ accountsPassword.createUser({
 Change the current user's password. Must be logged in.
 
 ```javascript
-accountsPassword.changePassword('oldPassword', 'newPassword');
+await accountsPassword.changePassword('oldPassword', 'newPassword');
 ```
 
 ### Forgot password
@@ -59,9 +59,9 @@ In order to reset a user password, the first step is to send an email to the use
 
 ```javascript
 // Request a forgot password email
-accountsPassword.requestPasswordReset('email');
+await accountsPassword.requestPasswordReset('email');
 // Reset the password for a user using a token received in email
-accountsPassword.resetPassword('token', 'newPassword');
+await accountsPassword.resetPassword('token', 'newPassword');
 ```
 
 ### Verify email
@@ -70,9 +70,9 @@ When a user is created, his email will be marked as unverified. To verify the us
 
 ```javascript
 // Send an email with a link the user can use verify their email address.
-accountsPassword.requestVerificationEmail('email');
+await accountsPassword.requestVerificationEmail('email');
 // Marks the user's email address as verified using a token received in email
-accountsPassword.verifyEmail('token');
+await accountsPassword.verifyEmail('token');
 ```
 
 ### Add another email
@@ -80,7 +80,7 @@ accountsPassword.verifyEmail('token');
 Add an email address for a user. Must be logged in.
 
 ```javascript
-accountsPassword.addEmail('newEmail');
+await accountsPassword.addEmail('newEmail');
 ```
 
 ## Hashing the password client side
