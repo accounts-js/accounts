@@ -9,7 +9,7 @@ sidebar_label: Client
 
 ## Install
 
-Add `@accounts/client-password`Ï to your app with yarn or npm:
+Add `@accounts/client-password` to your app with yarn or npm:
 
 ```
 # With yarn
