@@ -8,7 +8,7 @@
 module.exports = {
   docs: {
     Introduction: ['introduction', 'contributing'],
-    'Getting started': ['getting-started', 'email'],
+    'Getting started': ['getting-started', 'email', 'client'],
     Transports: [
       'transports/graphql',
       {
