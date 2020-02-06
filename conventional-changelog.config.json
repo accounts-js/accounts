@@ -1,7 +1,5 @@
 {
-  "writerOpts": {
-    "headerPartial": ""
-  },
+  "writerOpts": {},
   "options": {
     "preset": {
       "name": "conventionalcommits",
