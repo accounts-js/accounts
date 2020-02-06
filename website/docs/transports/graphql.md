@@ -284,16 +284,72 @@ yarn add @accounts/graphql-client
 
 ```js
 import { ApolloClient } from 'apollo-client';
+import { AccountsClient } from '@accounts/client';
+import { AccountsClientPassword } from '@accounts/client-password';
 import { AccountsGraphQLClient } from '@accounts/graphql-client';
 
+// Create Apollo client
 const apolloClient = new ApolloClient({
   // apollo options
 });
 
-const accountsGraphQL = new GraphQLClient({
+// Create your transport
+const accountsGraphQL = new AccountsGraphQLClient({
   graphQLClient: apolloClient,
-  // other options
+  //other options like 'userFieldsFragment'
 });
+
+// Create the AccountsClient
+const accountsClient = new AccountsClient(
+  {
+    // accountsClient Options
+  },
+  accountsGraphQL
+);
+
+// Create service client
+const passwordClient = new AccountsClientPassword(accountsClient);
+```
+
+### Error Handling
+
+The AccountsGraphQLClient will throw errors when the graphql query/mutation returns them. Because there could be multiple `GraphQLError`s, these errors will be wrapped into a `GraphQLErrorList` object.
+
+```js
+import { GraphQLErrorList } from '@accounts/graphql-client';
+
+async function registerUser() {
+  try {
+    passwordClient.createUser({ email: 'foo@foobar.com', password: 'foo' });
+  } catch (e) {
+    if (e instanceof GraphQLErrorList) {
+      // the message will format the errors in a list
+      console.log(error.message);
+      /* example: 
+         GraphQLErrorList - 1 errors in mutation: 
+          mutation impersonate($accessToken: String!, $username: String!) {
+            impersonate(accessToken: $accessToken, username: $username) {
+              authorized
+              tokens {
+                refreshToken
+                accessToken
+              }
+              user {
+                id
+                email
+                username
+              }
+            }
+          }
+
+              - Cannot query field "email" on type "User". Did you mean "emails"?
+      */
+
+      // Alternatively, the list of errors is accessible on the "errors" property
+      error.errors.forEach(graphQLError => console.log(graphQLError));
+    }
+  }
+}
 ```
 
 ## Using with Apollo Link

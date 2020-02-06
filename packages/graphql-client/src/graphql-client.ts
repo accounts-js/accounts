@@ -1,5 +1,6 @@
 import { AccountsClient, TransportInterface } from '@accounts/client';
 import { CreateUser, ImpersonationResult, LoginResult, User } from '@accounts/types';
+import { print } from 'graphql';
 import gql from 'graphql-tag';
 import { authenticateWithServiceMutation } from './graphql/authenticate-with-service.mutation';
 import { changePasswordMutation } from './graphql/change-password.mutation';
@@ -16,6 +17,7 @@ import { sendVerificationEmailMutation } from './graphql/send-verification-email
 import { twoFactorSetMutation } from './graphql/two-factor-set.mutation';
 import { twoFactorUnsetMutation } from './graphql/two-factor-unset.mutation';
 import { verifyEmailMutation } from './graphql/verify-email.mutation';
+import { GraphQLErrorList } from './GraphQLErrorList';
 
 export interface AuthenticateParams {
   [key: string]: string | object;
@@ -181,7 +183,7 @@ export default class GraphQLClient implements TransportInterface {
         ? await this.client.getTokens()
         : await this.client.refreshSession();
 
-    const { data } = await this.options.graphQLClient.mutate({
+    const { data, errors } = await this.options.graphQLClient.mutate({
       mutation,
       variables,
       context: {
@@ -190,13 +192,18 @@ export default class GraphQLClient implements TransportInterface {
         },
       },
     });
+
+    if (errors) {
+      throw new GraphQLErrorList(errors, `in mutation: \r\n ${print(mutation)}`);
+    }
+
     return data[resultField];
   }
 
   private async query(query: any, resultField: any, variables: any = {}) {
     const tokens = await this.client.refreshSession();
 
-    const { data } = await this.options.graphQLClient.query({
+    const { data, errors } = await this.options.graphQLClient.query({
       query,
       variables,
       fetchPolicy: 'network-only',
@@ -206,6 +213,11 @@ export default class GraphQLClient implements TransportInterface {
         },
       },
     });
+
+    if (errors) {
+      throw new GraphQLErrorList(errors, `in query: \r\n ${print(query)}`);
+    }
+
     return data[resultField];
   }
 }
