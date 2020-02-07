@@ -19,12 +19,10 @@ export const impersonate = (accountsServer: AccountsServer) => async (
     } = req.body;
     const userAgent = getUserAgent(req);
     const ip = requestIp.getClientIp(req);
-    const impersonateRes = await accountsServer.impersonate(
-      accessToken,
-      impersonated,
+    const impersonateRes = await accountsServer.impersonate(accessToken, impersonated, {
       ip,
-      userAgent
-    );
+      userAgent,
+    });
     res.json(impersonateRes);
   } catch (err) {
     sendError(res, err);

@@ -175,17 +175,12 @@ Please change it with a strong random token.`);
    * This method creates a session without authenticating any user identity.
    * Any authentication should happen before calling this function.
    * @param {User} userId - The user object.
-   * @param {string} ip - User's ip.
-   * @param {string} userAgent - User's client agent.
-   * @returns {Promise<LoginResult>} - Session tokens and user object.
+   * @param {ConnectionInformations} infos - User connection informations.
+   * @returns {Promise<LoginResult>} - Session id and tokens.
    */
   public async loginWithUser(user: User, infos: ConnectionInformations): Promise<LoginResult> {
-    const { ip, userAgent } = infos;
     const token = await this.createSessionToken(user);
-    const sessionId = await this.db.createSession(user.id, token, {
-      ip,
-      userAgent,
-    });
+    const sessionId = await this.db.createSession(user.id, token, infos);
 
     const { accessToken, refreshToken } = this.createTokens({
       token,
@@ -205,8 +200,7 @@ Please change it with a strong random token.`);
    * @description Impersonate to another user.
    * @param {string} accessToken - User access token.
    * @param {object} impersonated - impersonated user.
-   * @param {string} ip - The user ip.
-   * @param {string} userAgent - User user agent.
+   * @param {ConnectionInformations} infos - User connection informations.
    * @returns {Promise<Object>} - ImpersonationResult
    */
   public async impersonate(
@@ -216,8 +210,7 @@ Please change it with a strong random token.`);
       username?: string;
       email?: string;
     },
-    ip: string,
-    userAgent: string
+    infos: ConnectionInformations
   ): Promise<ImpersonationResult> {
     try {
       if (!isString(accessToken)) {
@@ -269,15 +262,9 @@ Please change it with a strong random token.`);
       }
 
       const token = generateRandomToken();
-      const newSessionId = await this.db.createSession(
-        impersonatedUser.id,
-        token,
-        {
-          ip,
-          userAgent,
-        },
-        { impersonatorUserId: user.id }
-      );
+      const newSessionId = await this.db.createSession(impersonatedUser.id, token, infos, {
+        impersonatorUserId: user.id,
+      });
 
       const impersonationTokens = this.createTokens({
         token: newSessionId,
@@ -307,15 +294,13 @@ Please change it with a strong random token.`);
    * @description Refresh a user token.
    * @param {string} accessToken - User access token.
    * @param {string} refreshToken - User refresh token.
-   * @param {string} ip - User ip.
-   * @param {string} userAgent - User user agent.
+   * @param {ConnectionInformations} infos - User connection informations.
    * @returns {Promise<Object>} - LoginResult.
    */
   public async refreshTokens(
     accessToken: string,
     refreshToken: string,
-    ip: string,
-    userAgent: string
+    infos: ConnectionInformations
   ): Promise<LoginResult> {
     try {
       if (!isString(accessToken) || !isString(refreshToken)) {
@@ -350,11 +335,10 @@ Please change it with a strong random token.`);
         }
 
         const tokens = this.createTokens({ token: newToken || sessionToken, userId: user.id });
-        await this.db.updateSession(session.id, { ip, userAgent }, newToken);
+        await this.db.updateSession(session.id, infos, newToken);
 
         const result = {
           sessionId: session.id,
-          user: this.sanitizeUser(user),
           tokens,
         };
 
