@@ -90,8 +90,7 @@ export class AccountsSession {
       const result = await this.accountsServer.refreshTokens(
         tokens.accessToken,
         tokens.refreshToken,
-        requestIp.getClientIp(req),
-        getUserAgent(req)
+        { ip: requestIp.getClientIp(req), userAgent: getUserAgent(req) }
       );
 
       this.set(req, result.tokens);

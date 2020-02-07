@@ -12,12 +12,10 @@ export const refreshAccessToken = (accountsServer: AccountsServer) => async (
     const { accessToken, refreshToken } = req.body;
     const userAgent = getUserAgent(req);
     const ip = requestIp.getClientIp(req);
-    const refreshedSession = await accountsServer.refreshTokens(
-      accessToken,
-      refreshToken,
+    const refreshedSession = await accountsServer.refreshTokens(accessToken, refreshToken, {
       ip,
-      userAgent
-    );
+      userAgent,
+    });
     res.json(refreshedSession);
   } catch (err) {
     sendError(res, err);
