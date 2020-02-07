@@ -594,12 +594,15 @@ describe('AccountsServer', () => {
       });
       expect(updateSession.mock.calls[0]).toEqual([
         '456',
-        { ip: 'ip', userAgent: 'user agent' },
+        { ip: 'ip', userAgent: 'userAgent' },
         undefined,
       ]);
-      expect((res as any).user).toEqual({
-        userId: '123',
-        username: 'username',
+      expect(res).toEqual({
+        sessionId: '456',
+        tokens: {
+          accessToken: 'newAccessToken',
+          refreshToken: 'newRefreshToken',
+        },
       });
     });
 
@@ -646,12 +649,15 @@ describe('AccountsServer', () => {
       });
       expect(updateSession.mock.calls[0]).toEqual([
         '456',
-        { ip: 'ip', userAgent: 'user agent' },
+        { ip: 'ip', userAgent: 'userAgent' },
         '123',
       ]);
-      expect((res as any).user).toEqual({
-        userId: '123',
-        username: 'username',
+      expect(res).toEqual({
+        sessionId: '456',
+        tokens: {
+          accessToken: 'newAccessToken',
+          refreshToken: 'newRefreshToken',
+        },
       });
     });
 
@@ -1204,7 +1210,7 @@ describe('AccountsServer', () => {
       expect(createSession).toHaveBeenCalledWith(
         expect.any(String),
         expect.any(String),
-        { ip: 'ip', userAgent: 'user agent' },
+        { ip: 'ip', userAgent: 'userAgent' },
         {
           impersonatorUserId: user.id,
         }
