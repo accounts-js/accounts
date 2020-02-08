@@ -17,36 +17,38 @@ yarn add @accounts/mongo
 
 ## Usage
 
+In order to use the mongo adaptor in your project, you will need to pass a valid mongo connection to `@accounts/mongo`:
+
 ```javascript
+import { MongoClient } from 'mongodb';
 import { AccountsServer } from '@accounts/server';
 import { Mongo } from '@accounts/mongo';
-
-// If you are using mongoose
-mongoose.connect(process.env.MONGO_URL);
-const db = mongoose.connection;
-
-// If you are using mongodb 2.x
-const db = await mongodb.MongoClient.connect(process.env.MONGO_URL);
 
 // If you are using mongodb 3.x
 const client = await mongodb.MongoClient.connect(process.env.MONGO_URL);
 const db = client.db('my-db-name');
+
+// If you are using mongodb 2.x
+const db = await mongodb.MongoClient.connect(process.env.MONGO_URL);
+
+const accountsMongo = new Mongo(db, options);
+const accountsServer = new AccountsServer({ db: accountsMongo });
+```
+
+## Usage with mongoose
+
+If you are using mongoose in your application, you can reuse the mongoose connection like this:
+
+```javascript
+import mongoose from 'mongoose';
+import { AccountsServer } from '@accounts/server';
+import { Mongo } from '@accounts/mongo';
+
+mongoose.connect(process.env.MONGO_URL);
+const db = mongoose.connection;
 
 const accountsMongo = new Mongo(db, options);
 const accountsServer = new AccountsServer({ db: accountsMongo });
 ```
 
 The users will be saved under the `users` collection.
-
-## Options
-
-| Property                        |          Type          |                         Default                         | Description                                                   |
-| ------------------------------- | :--------------------: | :-----------------------------------------------------: | ------------------------------------------------------------- |
-| collectionName                  |         String         |                          users                          | The users collection name.                                    |
-| sessionCollectionName           |         String         |                        sessions                         | The sessions collection name.                                 |
-| timestamps                      |         Object         |  `{ createdAt: 'createdAt', updatedAt: 'updatedAt' }`   | The timestamps for the users and sessions collection.         |
-| convertUserIdToMongoObjectId    |        Boolean         |                          true                           | Should the user collection use \_id as string or ObjectId.    |
-| convertSessionIdToMongoObjectId |        Boolean         |                          true                           | Should the session collection use \_id as string or ObjectId. |
-| caseSensitiveUserName           |        Boolean         |                          true                           | Perform case intensitive query for user name.                 |
-| idProvider                      |        Function        |                                                         | Function that generate the id for new objects.                |
-| dateProvider                    | `(date?: Date) => any` | `(date?: Date) => (date ? date.getTime() : Date.now())` | Function that generate the date for the timestamps.           |
