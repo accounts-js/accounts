@@ -13,7 +13,7 @@ _Note: The packages within this repo are under active development — expect bre
 
 **[Documentation](https://accounts-js.netlify.com/docs/getting-started)**
 
-**[Api Documentation](https://accounts-js.netlify.com/docs/api/server/api-readme)**
+**[Api Documentation](https://accounts-js.netlify.com/docs/api/server/index)**
 
 **[Examples](https://github.com/accounts-js/accounts/tree/master/examples)**
 
