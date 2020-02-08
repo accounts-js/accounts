@@ -1,6 +1,7 @@
 const { readdirSync } = require('fs');
 const { resolve } = require('path');
 
+const packagesDir = resolve(__dirname, '..', 'packages');
 const apiDocsDir = resolve(__dirname, '..', 'website', 'docs', 'api');
 
 const dirs = readdirSync(apiDocsDir);
@@ -8,25 +9,18 @@ const dirs = readdirSync(apiDocsDir);
 const generatedApi = {};
 
 dirs.forEach(dir => {
-  const generatedSidebar = require(resolve(
-    __dirname,
-    '..',
-    'website',
-    'docs',
-    'api',
-    dir,
-    'sidebars'
-  ));
-  generatedApi[dir] = [];
+  const packageName = require(resolve(packagesDir, dir, 'package.json')).name;
+  const generatedSidebar = require(resolve(apiDocsDir, dir, 'sidebars'));
+  generatedApi[packageName] = [];
   if (Object.keys(generatedSidebar.docs).length > 0) {
-    generatedApi[dir] = Object.keys(generatedSidebar.docs).map(key => ({
+    generatedApi[packageName] = Object.keys(generatedSidebar.docs).map(key => ({
       type: 'category',
       label: key,
       items: generatedSidebar.docs[key],
     }));
   }
-  generatedApi[dir].unshift(`api/${dir}/globals`);
-  generatedApi[dir].unshift(`api/${dir}/index`);
+  generatedApi[packageName].unshift(`api/${dir}/globals`);
+  generatedApi[packageName].unshift(`api/${dir}/index`);
 });
 
 module.exports = {
