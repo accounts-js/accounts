@@ -85,17 +85,17 @@ export interface AccountsPasswordOptions {
    * Function that check if the email is a valid email.
    * This function will be called when you call `createUser` and `addEmail`.
    */
-  validateEmail?(email?: string): boolean;
+  validateEmail?: (email?: string) => boolean;
   /**
    * Function that check if the password is valid.
    * This function will be called when you call `createUser` and `changePassword`.
    */
-  validatePassword?(password?: PasswordType): boolean;
+  validatePassword?: (password?: PasswordType) => boolean;
   /**
    * Function that check if the username is a valid username.
    * This function will be called when you call `createUser`.
    */
-  validateUsername?(username?: string): boolean;
+  validateUsername?: (username?: string) => boolean;
 }
 
 const defaultOptions = {

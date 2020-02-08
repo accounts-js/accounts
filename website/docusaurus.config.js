@@ -25,7 +25,7 @@ module.exports = {
       links: [
         { to: 'docs/introduction', label: 'Documentation', position: 'right' },
         {
-          to: 'docs/api/server/api-readme',
+          to: 'docs/api/server/index',
           label: 'Api reference',
           position: 'right',
         },
