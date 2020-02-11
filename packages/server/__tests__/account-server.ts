@@ -146,11 +146,15 @@ describe('AccountsServer', () => {
       );
 
       const res = await accountsServer.loginWithUser(user, {});
-      const { accessToken, refreshToken } = res.tokens;
+      const {
+        user: loggedInUser,
+        tokens: { accessToken, refreshToken },
+      } = res;
       const decodedAccessToken: { data: JwtData } = jwtDecode(accessToken);
       expect(decodedAccessToken.data.token).toBeTruthy();
       expect(accessToken).toBeTruthy();
       expect(refreshToken).toBeTruthy();
+      expect(loggedInUser.id).toBe(user.id);
     });
   });
 
