@@ -607,6 +607,7 @@ describe('AccountsServer', () => {
           accessToken: 'newAccessToken',
           refreshToken: 'newRefreshToken',
         },
+        user,
       });
     });
 
@@ -662,6 +663,7 @@ describe('AccountsServer', () => {
           accessToken: 'newAccessToken',
           refreshToken: 'newRefreshToken',
         },
+        user,
       });
     });
 
