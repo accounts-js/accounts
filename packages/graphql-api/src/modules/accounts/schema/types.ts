@@ -12,6 +12,7 @@ export default ({ userAsInterface }: AccountsModuleConfig) => gql`
   type LoginResult {
     sessionId: String
     tokens: Tokens
+    user: User
   }
 
   type ImpersonateReturn {
