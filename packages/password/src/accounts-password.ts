@@ -30,6 +30,9 @@ export interface AccountsPasswordOptions {
    * Two factor options passed down to the @accounts/two-factor service.
    */
   twoFactor?: AccountsTwoFactorOptions;
+  /**
+   * Set an hash algorithm for the password to be encrypted server side.
+   */
   passwordHashAlgorithm?: HashAlgorithm;
   /**
    * The number of milliseconds from when a link to verify the user email is sent until token expires and user can't verify his email with the link anymore.

@@ -13,11 +13,6 @@ describe('encryption', () => {
       const password = 'pass';
       expect(hashPassword(password, 'sha256')).not.toBe(password);
     });
-
-    it('should return the digest password', () => {
-      const password = { digest: 'pass' };
-      expect(hashPassword(password as any, 'sha256')).toBe(password.digest);
-    });
   });
 
   describe('verifyPassword', () => {
