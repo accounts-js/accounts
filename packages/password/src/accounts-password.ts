@@ -10,7 +10,6 @@ import {
   ConnectionInformations,
   LoginResult,
   CreateUserServicePassword,
-  PasswordType,
   LoginUserPasswordService,
 } from '@accounts/types';
 import { TwoFactor, AccountsTwoFactorOptions, getUserTwoFactorService } from '@accounts/two-factor';
@@ -31,6 +30,9 @@ export interface AccountsPasswordOptions {
    * Two factor options passed down to the @accounts/two-factor service.
    */
   twoFactor?: AccountsTwoFactorOptions;
+  /**
+   * Set an hash algorithm for the password to be encrypted server side.
+   */
   passwordHashAlgorithm?: HashAlgorithm;
   /**
    * The number of milliseconds from when a link to verify the user email is sent until token expires and user can't verify his email with the link anymore.
@@ -93,7 +95,7 @@ export interface AccountsPasswordOptions {
    * Function that check if the password is valid.
    * This function will be called when you call `createUser` and `changePassword`.
    */
-  validatePassword?: (password?: PasswordType) => boolean;
+  validatePassword?: (password?: string) => boolean;
   /**
    * Function that check if the username is a valid username.
    * This function will be called when you call `createUser`.
@@ -115,7 +117,7 @@ const defaultOptions = {
   validateEmail(email?: string): boolean {
     return !isEmpty(trim(email)) && isEmail(email);
   },
-  validatePassword(password?: PasswordType): boolean {
+  validatePassword(password?: string): boolean {
     return !isEmpty(password);
   },
   validateUsername(username?: string): boolean {
@@ -245,7 +247,7 @@ export default class AccountsPassword implements AuthenticationService {
    */
   public async resetPassword(
     token: string,
-    newPassword: PasswordType,
+    newPassword: string,
     infos: ConnectionInformations
   ): Promise<LoginResult | null> {
     if (!token || !isString(token)) {
@@ -560,7 +562,7 @@ export default class AccountsPassword implements AuthenticationService {
 
   private async passwordAuthenticator(
     user: string | LoginUserIdentity,
-    password: PasswordType
+    password: string
   ): Promise<User> {
     const { username, email, id } = isString(user)
       ? this.toUsernameAndEmail({ user })
@@ -607,9 +609,9 @@ export default class AccountsPassword implements AuthenticationService {
     return foundUser;
   }
 
-  private async hashAndBcryptPassword(password: PasswordType): Promise<string> {
+  private async hashAndBcryptPassword(password: string): Promise<string> {
     const hashAlgorithm = this.options.passwordHashAlgorithm;
-    const hashedPassword: any = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
+    const hashedPassword = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
     return bcryptPassword(hashedPassword);
   }
 

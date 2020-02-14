@@ -1,6 +1,5 @@
 import * as bcrypt from 'bcryptjs';
 import { createHash } from 'crypto';
-import { PasswordType } from '@accounts/types';
 
 export const bcryptPassword = async (password: string): Promise<string> => {
   const salt = await bcrypt.genSalt(10);
@@ -8,14 +7,10 @@ export const bcryptPassword = async (password: string): Promise<string> => {
   return hash;
 };
 
-export const hashPassword = (password: PasswordType, algorithm: string) => {
-  if (typeof password === 'string') {
-    const hash = createHash(algorithm);
-    hash.update(password);
-    return hash.digest('hex');
-  }
-
-  return password.digest;
+export const hashPassword = (password: string, algorithm: string) => {
+  const hash = createHash(algorithm);
+  hash.update(password);
+  return hash.digest('hex');
 };
 
 export const verifyPassword = async (password: string, hash: string): Promise<boolean> =>
