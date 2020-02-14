@@ -9,6 +9,10 @@ export const accountsLink = (accountsClientFactory: AccountsClientFactory): Apol
     const accountsClient = await accountsClientFactory();
     const headers = { ...headersWithoutTokens };
 
+    /**
+     * We have to check this condition to avoid an infinite loop
+     * during the refresh token operation
+     */
     if (req.operationName !== 'refreshTokens') {
       const tokens = await accountsClient.refreshSession();
       if (tokens) {
