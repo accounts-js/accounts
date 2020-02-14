@@ -1,5 +1,5 @@
 import { AccountsClient } from '@accounts/client';
-import { LoginResult, CreateUserServicePassword } from '@accounts/types';
+import { LoginResult, CreateUserServicePassword, LoginUserPasswordService } from '@accounts/types';
 import { AccountsClientPasswordOptions } from './types';
 
 export class AccountsClientPassword {
@@ -25,8 +25,8 @@ export class AccountsClientPassword {
   /**
    * Log the user in with a password.
    */
-  public async login(user: any): Promise<LoginResult> {
-    const hashedPassword = this.hashPassword(user.password);
+  public async login(user: LoginUserPasswordService): Promise<LoginResult> {
+    const hashedPassword = this.hashPassword(user.password as string);
     return this.client.loginWithService('password', {
       ...user,
       password: hashedPassword,

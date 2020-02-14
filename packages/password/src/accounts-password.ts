@@ -10,6 +10,8 @@ import {
   ConnectionInformations,
   LoginResult,
   CreateUserServicePassword,
+  PasswordType,
+  LoginUserPasswordService,
 } from '@accounts/types';
 import { TwoFactor, AccountsTwoFactorOptions, getUserTwoFactorService } from '@accounts/two-factor';
 import { AccountsServer, ServerHooks, generateRandomToken } from '@accounts/server';
@@ -21,7 +23,7 @@ import {
   verifyPassword,
   isEmail,
 } from './utils';
-import { PasswordLoginType, PasswordType, ErrorMessages } from './types';
+import { ErrorMessages } from './types';
 import { errors } from './errors';
 
 export interface AccountsPasswordOptions {
@@ -142,7 +144,7 @@ export default class AccountsPassword implements AuthenticationService {
     this.twoFactor.setStore(store);
   }
 
-  public async authenticate(params: PasswordLoginType): Promise<User> {
+  public async authenticate(params: LoginUserPasswordService): Promise<User> {
     const { user, password, code } = params;
     if (!user || !password) {
       throw new Error(this.options.errors.unrecognizedOptionsForLogin);
