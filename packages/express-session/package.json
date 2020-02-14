@@ -37,12 +37,12 @@
     "@accounts/server": "^0.22.0",
     "@types/express": "4.17.2",
     "@types/express-session": "1.15.16",
-    "@types/jest": "24.0.25",
+    "@types/jest": "25.1.2",
     "@types/lodash": "4.14.149",
     "@types/request-ip": "0.0.34",
     "express": "4.17.1",
     "express-session": "1.17.0",
-    "jest": "24.9.0"
+    "jest": "25.1.0"
   },
   "peerDependencies": {
     "@accounts/server": "^0.19.0",

@@ -34,11 +34,11 @@
   "devDependencies": {
     "@accounts/database-tests": "^0.22.0",
     "@types/ioredis": "4.14.6",
-    "@types/jest": "24.0.25",
+    "@types/jest": "25.1.2",
     "@types/lodash": "4.14.149",
     "@types/node": "12.12.14",
     "@types/shortid": "0.0.29",
-    "jest": "24.9.0"
+    "jest": "25.1.0"
   },
   "dependencies": {
     "@accounts/types": "^0.22.0",
