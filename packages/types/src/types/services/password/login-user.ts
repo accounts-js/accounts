@@ -1,9 +1,8 @@
 import { LoginUserIdentity } from '../../login-user-identity';
-import { PasswordType } from './password-type';
 
 export interface LoginUserPasswordService {
   user: string | LoginUserIdentity;
-  password: PasswordType;
+  password: string;
   // 2FA code
   code?: string;
 }
