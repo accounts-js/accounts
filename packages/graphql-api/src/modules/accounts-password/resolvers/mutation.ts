@@ -1,5 +1,6 @@
 import { ModuleContext } from '@graphql-modules/core';
-import { AccountsPassword, PasswordCreateUserType } from '@accounts/password';
+import { CreateUserServicePassword } from '@accounts/types';
+import { AccountsPassword } from '@accounts/password';
 import { AccountsServer } from '@accounts/server';
 import { AccountsModuleContext } from '../../accounts';
 import { MutationResolvers } from '../../../models';
@@ -24,7 +25,9 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
     return null;
   },
   createUser: async (_, { user }, { injector }) => {
-    const userId = await injector.get(AccountsPassword).createUser(user as PasswordCreateUserType);
+    const userId = await injector
+      .get(AccountsPassword)
+      .createUser(user as CreateUserServicePassword);
     return injector.get(AccountsServer).options.ambiguousErrorMessages ? null : userId;
   },
   twoFactorSet: async (_, { code, secret }, { user, injector }) => {

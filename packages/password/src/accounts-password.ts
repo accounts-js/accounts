@@ -9,6 +9,7 @@ import {
   HashAlgorithm,
   ConnectionInformations,
   LoginResult,
+  CreateUserServicePassword,
 } from '@accounts/types';
 import { TwoFactor, AccountsTwoFactorOptions, getUserTwoFactorService } from '@accounts/two-factor';
 import { AccountsServer, ServerHooks, generateRandomToken } from '@accounts/server';
@@ -20,7 +21,7 @@ import {
   verifyPassword,
   isEmail,
 } from './utils';
-import { PasswordCreateUserType, PasswordLoginType, PasswordType, ErrorMessages } from './types';
+import { PasswordLoginType, PasswordType, ErrorMessages } from './types';
 import { errors } from './errors';
 
 export interface AccountsPasswordOptions {
@@ -79,8 +80,8 @@ export interface AccountsPasswordOptions {
    * By default we only allow `username`, `email` and `password` fields.
    */
   validateNewUser?: (
-    user: PasswordCreateUserType
-  ) => Promise<PasswordCreateUserType> | PasswordCreateUserType;
+    user: CreateUserServicePassword
+  ) => Promise<CreateUserServicePassword> | CreateUserServicePassword;
   /**
    * Function that check if the email is a valid email.
    * This function will be called when you call `createUser` and `addEmail`.
@@ -496,7 +497,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @param user - The user object.
    * @returns Return the id of user created.
    */
-  public async createUser(user: PasswordCreateUserType): Promise<string> {
+  public async createUser(user: CreateUserServicePassword): Promise<string> {
     if (!user.username && !user.email) {
       throw new Error(this.options.errors.usernameOrEmailRequired);
     }
@@ -527,7 +528,7 @@ export default class AccountsPassword implements AuthenticationService {
     // If user does not provide the validate function only allow some fields
     user = this.options.validateNewUser
       ? await this.options.validateNewUser(user)
-      : pick<PasswordCreateUserType, 'username' | 'email' | 'password'>(user, [
+      : pick<CreateUserServicePassword, 'username' | 'email' | 'password'>(user, [
           'username',
           'email',
           'password',
