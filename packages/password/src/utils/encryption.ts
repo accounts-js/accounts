@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcryptjs';
 import { createHash } from 'crypto';
-import { PasswordType } from '../types/password-type';
+import { PasswordType } from '@accounts/types';
 
 export const bcryptPassword = async (password: string): Promise<string> => {
   const salt = await bcrypt.genSalt(10);

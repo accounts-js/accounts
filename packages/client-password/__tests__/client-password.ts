@@ -60,7 +60,7 @@ describe('AccountsClientPassword', () => {
 
   describe('login', () => {
     it('should hash password and call client', async () => {
-      await accountsPassword.login(user);
+      await accountsPassword.login(user as any);
       expect(accountsPassword.hashPassword).toHaveBeenCalledTimes(1);
       expect(accountsPassword.hashPassword).toHaveBeenCalledWith(user.password);
       expect(mockedClient.loginWithService).toHaveBeenCalledTimes(1);

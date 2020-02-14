@@ -13,4 +13,7 @@ export * from './types/authentication-service';
 export * from './types/hash-algorithm';
 export * from './types/session/database-interface';
 export * from './types/session/session';
+export * from './types/services/password/create-user';
 export * from './types/services/password/database-interface';
+export * from './types/services/password/login-user';
+export * from './types/services/password/password-type';
