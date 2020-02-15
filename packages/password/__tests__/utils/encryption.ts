@@ -1,17 +1,10 @@
-import { bcryptPassword, hashPassword, verifyPassword } from '../../src/utils/encryption';
+import { bcryptPassword, verifyPassword } from '../../src/utils/encryption';
 
 describe('encryption', () => {
   describe('bcryptPassword', () => {
     it('should return the hashed password', () => {
       const password = 'pass';
       expect(bcryptPassword(password)).not.toBe(password);
-    });
-  });
-
-  describe('hashPassword', () => {
-    it('should return the hashed password', () => {
-      const password = 'pass';
-      expect(hashPassword(password, 'sha256')).not.toBe(password);
     });
   });
 
