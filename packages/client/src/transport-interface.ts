@@ -1,9 +1,15 @@
-import { LoginResult, ImpersonationResult, CreateUser, User } from '@accounts/types';
+import {
+  LoginResult,
+  ImpersonationResult,
+  CreateUser,
+  User,
+  CreateUserResult,
+} from '@accounts/types';
 import { AccountsClient } from './accounts-client';
 
 export interface TransportInterface {
   client: AccountsClient;
-  createUser(user: CreateUser): Promise<string>;
+  createUser(user: CreateUser): Promise<CreateUserResult>;
   authenticateWithService(
     service: string,
     authenticateParams: {

@@ -40,7 +40,7 @@ describe('registerPassword', () => {
     expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
       username: 'toto',
     });
-    expect(res.json).toHaveBeenCalledWith('1');
+    expect(res.json).toHaveBeenCalledWith({ userId: '1' });
     expect(res.status).not.toHaveBeenCalled();
   });
 
@@ -74,7 +74,7 @@ describe('registerPassword', () => {
     expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
       username: 'toto',
     });
-    expect(res.json).toHaveBeenCalledWith(null);
+    expect(res.json).toHaveBeenCalledWith({ userId: null });
     expect(res.status).not.toHaveBeenCalled();
   });
 

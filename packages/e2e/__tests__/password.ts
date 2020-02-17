@@ -14,7 +14,7 @@ Object.keys(servers).forEach(key => {
 
     describe('create a new user', () => {
       it('should create a new user with email and password', async () => {
-        const userId = await server.accountsClientPassword.createUser({
+        const { userId } = await server.accountsClientPassword.createUser({
           email: user.email,
           password: user.password,
         });
