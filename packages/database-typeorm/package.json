@@ -27,9 +27,9 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/database-tests": "^0.22.0",
-    "@types/jest": "24.0.25",
+    "@types/jest": "25.1.2",
     "@types/node": "12.12.14",
-    "jest": "24.9.0",
+    "jest": "25.1.0",
     "pg": "7.15.1"
   },
   "dependencies": {

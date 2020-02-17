@@ -1,5 +1,6 @@
 import { ModuleContext } from '@graphql-modules/core';
-import { AccountsPassword, PasswordCreateUserType } from '@accounts/password';
+import { CreateUserServicePassword } from '@accounts/types';
+import { AccountsPassword } from '@accounts/password';
 import { AccountsServer } from '@accounts/server';
 import { AccountsModuleContext } from '../../accounts';
 import { MutationResolvers } from '../../../models';
@@ -28,7 +29,7 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
     const accountsServer = injector.get(AccountsServer);
     const accountsPassword = injector.get(AccountsPassword);
 
-    const userId = await accountsPassword.createUser(user as PasswordCreateUserType);
+    const userId = await accountsPassword.createUser(user as CreateUserServicePassword);
 
     if (!accountsServer.options.enableAutologin) {
       return {

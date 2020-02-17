@@ -29,7 +29,7 @@
     "@types/mongoose": "5.5.35",
     "@types/node": "12.12.7",
     "nodemon": "2.0.2",
-    "ts-node": "8.5.4",
-    "typescript": "3.7.4"
+    "ts-node": "8.6.2",
+    "typescript": "3.7.5"
   }
 }

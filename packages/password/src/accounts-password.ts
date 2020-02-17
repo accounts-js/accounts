@@ -6,21 +6,21 @@ import {
   TokenRecord,
   DatabaseInterface,
   AuthenticationService,
-  HashAlgorithm,
   ConnectionInformations,
   LoginResult,
+  CreateUserServicePassword,
+  LoginUserPasswordService,
 } from '@accounts/types';
 import { TwoFactor, AccountsTwoFactorOptions, getUserTwoFactorService } from '@accounts/two-factor';
 import { AccountsServer, ServerHooks, generateRandomToken } from '@accounts/server';
 import {
   getUserResetTokens,
   getUserVerificationTokens,
-  hashPassword,
   bcryptPassword,
   verifyPassword,
   isEmail,
 } from './utils';
-import { PasswordCreateUserType, PasswordLoginType, PasswordType, ErrorMessages } from './types';
+import { ErrorMessages } from './types';
 import { errors } from './errors';
 
 export interface AccountsPasswordOptions {
@@ -28,7 +28,6 @@ export interface AccountsPasswordOptions {
    * Two factor options passed down to the @accounts/two-factor service.
    */
   twoFactor?: AccountsTwoFactorOptions;
-  passwordHashAlgorithm?: HashAlgorithm;
   /**
    * The number of milliseconds from when a link to verify the user email is sent until token expires and user can't verify his email with the link anymore.
    * Defaults to 3 days.
@@ -79,8 +78,8 @@ export interface AccountsPasswordOptions {
    * By default we only allow `username`, `email` and `password` fields.
    */
   validateNewUser?: (
-    user: PasswordCreateUserType
-  ) => Promise<PasswordCreateUserType> | PasswordCreateUserType;
+    user: CreateUserServicePassword
+  ) => Promise<CreateUserServicePassword> | CreateUserServicePassword;
   /**
    * Function that check if the email is a valid email.
    * This function will be called when you call `createUser` and `addEmail`.
@@ -90,12 +89,23 @@ export interface AccountsPasswordOptions {
    * Function that check if the password is valid.
    * This function will be called when you call `createUser` and `changePassword`.
    */
-  validatePassword?: (password?: PasswordType) => boolean;
+  validatePassword?: (password?: string) => boolean;
   /**
    * Function that check if the username is a valid username.
    * This function will be called when you call `createUser`.
    */
   validateUsername?: (username?: string) => boolean;
+  /**
+   * Function called to hash the user password, the password returned will be saved
+   * in the database directly. By default we use bcrypt to hash the password.
+   * Use this option alongside `verifyPassword` if you want to use argon2 for example.
+   */
+  hashPassword?: (password: string) => Promise<string>;
+  /**
+   * Function called to verify the password hash. By default we use bcrypt to hash the password.
+   * Use this option alongside `hashPassword` if you want to use argon2 for example.
+   */
+  verifyPassword?: (password: string, hash: string) => Promise<boolean>;
 }
 
 const defaultOptions = {
@@ -109,10 +119,12 @@ const defaultOptions = {
   returnTokensAfterResetPassword: false,
   invalidateAllSessionsAfterPasswordReset: true,
   invalidateAllSessionsAfterPasswordChanged: false,
+  errors,
+  sendVerificationEmailAfterSignup: false,
   validateEmail(email?: string): boolean {
     return !isEmpty(trim(email)) && isEmail(email);
   },
-  validatePassword(password?: PasswordType): boolean {
+  validatePassword(password?: string): boolean {
     return !isEmpty(password);
   },
   validateUsername(username?: string): boolean {
@@ -120,8 +132,8 @@ const defaultOptions = {
     const isValid = username && !isEmpty(trim(username)) && usernameRegex.test(username);
     return Boolean(isValid);
   },
-  errors,
-  sendVerificationEmailAfterSignup: false,
+  hashPassword: bcryptPassword,
+  verifyPassword,
 };
 
 export default class AccountsPassword implements AuthenticationService {
@@ -141,7 +153,7 @@ export default class AccountsPassword implements AuthenticationService {
     this.twoFactor.setStore(store);
   }
 
-  public async authenticate(params: PasswordLoginType): Promise<User> {
+  public async authenticate(params: LoginUserPasswordService): Promise<User> {
     const { user, password, code } = params;
     if (!user || !password) {
       throw new Error(this.options.errors.unrecognizedOptionsForLogin);
@@ -242,7 +254,7 @@ export default class AccountsPassword implements AuthenticationService {
    */
   public async resetPassword(
     token: string,
-    newPassword: PasswordType,
+    newPassword: string,
     infos: ConnectionInformations
   ): Promise<LoginResult | null> {
     if (!token || !isString(token)) {
@@ -282,7 +294,7 @@ export default class AccountsPassword implements AuthenticationService {
       throw new Error(this.options.errors.resetPasswordLinkUnknownAddress);
     }
 
-    const password = await this.hashAndBcryptPassword(newPassword);
+    const password = await this.options.hashPassword(newPassword);
     // Change the user password and remove the old token
     await this.db.setResetPassword(user.id, resetTokenRecord.address, password, token);
 
@@ -328,7 +340,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @returns {Promise<void>} - Return a Promise.
    */
   public async setPassword(userId: string, newPassword: string): Promise<void> {
-    const password = await bcryptPassword(newPassword);
+    const password = await this.options.hashPassword(newPassword);
     return this.db.setPassword(userId, password);
   }
 
@@ -351,7 +363,7 @@ export default class AccountsPassword implements AuthenticationService {
 
     const user = await this.passwordAuthenticator({ id: userId }, oldPassword);
 
-    const password = await bcryptPassword(newPassword);
+    const password = await this.options.hashPassword(newPassword);
     await this.db.setPassword(userId, password);
 
     this.server.getHooks().emit(ServerHooks.ChangePasswordSuccess, user);
@@ -496,7 +508,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @param user - The user object.
    * @returns Return the id of user created.
    */
-  public async createUser(user: PasswordCreateUserType): Promise<string> {
+  public async createUser(user: CreateUserServicePassword): Promise<string> {
     if (!user.username && !user.email) {
       throw new Error(this.options.errors.usernameOrEmailRequired);
     }
@@ -521,13 +533,13 @@ export default class AccountsPassword implements AuthenticationService {
       if (!this.options.validatePassword(user.password)) {
         throw new Error(this.options.errors.invalidPassword);
       }
-      user.password = await this.hashAndBcryptPassword(user.password);
+      user.password = await this.options.hashPassword(user.password);
     }
 
     // If user does not provide the validate function only allow some fields
     user = this.options.validateNewUser
       ? await this.options.validateNewUser(user)
-      : pick<PasswordCreateUserType, 'username' | 'email' | 'password'>(user, [
+      : pick<CreateUserServicePassword, 'username' | 'email' | 'password'>(user, [
           'username',
           'email',
           'password',
@@ -557,7 +569,7 @@ export default class AccountsPassword implements AuthenticationService {
 
   private async passwordAuthenticator(
     user: string | LoginUserIdentity,
-    password: PasswordType
+    password: string
   ): Promise<User> {
     const { username, email, id } = isString(user)
       ? this.toUsernameAndEmail({ user })
@@ -589,9 +601,7 @@ export default class AccountsPassword implements AuthenticationService {
       throw new Error(this.options.errors.noPasswordSet);
     }
 
-    const hashAlgorithm = this.options.passwordHashAlgorithm;
-    const pass: any = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
-    const isPasswordValid = await verifyPassword(pass, hash);
+    const isPasswordValid = await this.options.verifyPassword(password, hash);
 
     if (!isPasswordValid) {
       throw new Error(
@@ -602,12 +612,6 @@ export default class AccountsPassword implements AuthenticationService {
     }
 
     return foundUser;
-  }
-
-  private async hashAndBcryptPassword(password: PasswordType): Promise<string> {
-    const hashAlgorithm = this.options.passwordHashAlgorithm;
-    const hashedPassword: any = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
-    return bcryptPassword(hashedPassword);
   }
 
   /**

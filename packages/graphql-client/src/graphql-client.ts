@@ -189,13 +189,16 @@ export default class GraphQLClient implements TransportInterface {
         ? await this.client.getTokens()
         : await this.client.refreshSession();
 
+    const headers: { Authorization?: string } = {};
+    if (tokens) {
+      headers.Authorization = `Bearer ${tokens.accessToken}`;
+    }
+
     const { data, errors } = await this.options.graphQLClient.mutate({
       mutation,
       variables,
       context: {
-        headers: {
-          Authorization: tokens ? 'Bearer ' + tokens.accessToken : '',
-        },
+        headers,
       },
     });
 
@@ -209,14 +212,17 @@ export default class GraphQLClient implements TransportInterface {
   private async query(query: any, resultField: any, variables: any = {}) {
     const tokens = await this.client.refreshSession();
 
+    const headers: { Authorization?: string } = {};
+    if (tokens) {
+      headers.Authorization = `Bearer ${tokens.accessToken}`;
+    }
+
     const { data, errors } = await this.options.graphQLClient.query({
       query,
       variables,
       fetchPolicy: 'network-only',
       context: {
-        headers: {
-          Authorization: tokens ? 'Bearer ' + tokens.accessToken : '',
-        },
+        headers,
       },
     });
 

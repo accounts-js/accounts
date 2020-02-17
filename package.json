@@ -1,6 +1,6 @@
 {
   "private": true,
-  "version": "0.21.1",
+  "version": "0.22.0",
   "scripts": {
     "setup": "lerna bootstrap; yarn run link",
     "start": "lerna exec -- yarn start",
@@ -75,8 +75,8 @@
     "lint-staged": "9.5.0",
     "opencollective": "1.0.3",
     "prettier": "1.19.1",
-    "ts-jest": "24.2.0",
-    "typescript": "3.7.4"
+    "ts-jest": "25.2.0",
+    "typescript": "3.7.5"
   },
   "collective": {
     "type": "opencollective",
