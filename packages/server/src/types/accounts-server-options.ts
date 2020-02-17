@@ -35,4 +35,5 @@ export interface AccountsServerOptions {
    * Creates a new session token each time a user refreshes his access token
    */
   createNewSessionTokenOnRefresh?: boolean;
+  enableAutologin?: boolean;
 }

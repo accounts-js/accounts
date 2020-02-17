@@ -11,6 +11,11 @@ export default gql`
     tokens: Tokens
   }
 
+  type CreateUserResult {
+    userId: ID
+    loginResult: LoginResult
+  }
+
   type TwoFactorSecretKey {
     ascii: String
     base32: String

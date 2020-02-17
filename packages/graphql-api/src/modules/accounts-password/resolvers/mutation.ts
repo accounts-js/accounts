@@ -25,9 +25,22 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
   },
   createUser: async (_, { user }, ctx) => {
     const { ip, userAgent, injector } = ctx;
-    await injector.get(AccountsPassword).createUser(user as PasswordCreateUserType);
+    const accountsServer = injector.get(AccountsServer);
+    const accountsPassword = injector.get(AccountsPassword);
+
+    const userId = await accountsPassword.createUser(user as PasswordCreateUserType);
+
+    if (!accountsServer.options.enableAutologin) {
+      return {
+        userId: accountsServer.options.ambiguousErrorMessages ? null : userId,
+      };
+    }
+
+    // When initializing AccountsServer we check that enableAutologin and ambiguousErrorMessages options
+    // are not enabled at the same time
+
     const { password, ...rest } = user;
-    return await injector.get(AccountsServer).loginWithService(
+    const loginResult = await accountsServer.loginWithService(
       'password',
       { user: rest, password },
       {
@@ -35,6 +48,11 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
         userAgent,
       }
     );
+
+    return {
+      userId,
+      loginResult,
+    };
   },
   twoFactorSet: async (_, { code, secret }, { user, injector }) => {
     // Make sure user is logged in
