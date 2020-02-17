@@ -49,7 +49,7 @@ export type LoginResult = {
 
 export type Mutation = {
    __typename?: 'Mutation',
-  createUser?: Maybe<Scalars['ID']>,
+  createUser?: Maybe<LoginResult>,
   verifyEmail?: Maybe<Scalars['Boolean']>,
   resetPassword?: Maybe<LoginResult>,
   sendVerificationEmail?: Maybe<Scalars['Boolean']>,
@@ -303,7 +303,7 @@ export type LoginResultResolvers<ContextType = any, ParentType extends Resolvers
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createUser?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'user'>>,
+  createUser?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'user'>>,
   verifyEmail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationVerifyEmailArgs, 'token'>>,
   resetPassword?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'token' | 'newPassword'>>,
   sendVerificationEmail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSendVerificationEmailArgs, 'email'>>,
