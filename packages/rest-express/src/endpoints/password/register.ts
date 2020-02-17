@@ -1,15 +1,45 @@
 import * as express from 'express';
 import { AccountsServer } from '@accounts/server';
+import { AccountsPassword } from '@accounts/password';
 import { sendError } from '../../utils/send-error';
+import { CreateUserResult } from '@accounts/types';
+import { getUserAgent } from '../../utils/get-user-agent';
+import * as requestIp from 'request-ip';
 
 export const registerPassword = (accountsServer: AccountsServer) => async (
   req: express.Request,
   res: express.Response
 ) => {
   try {
-    const password: any = accountsServer.getServices().password;
-    const userId = await password.createUser(req.body.user);
-    res.json(accountsServer.options.ambiguousErrorMessages ? null : userId);
+    const accountsPassword = accountsServer.getServices().password as AccountsPassword;
+    const userId = await accountsPassword.createUser(req.body.user);
+
+    if (!accountsServer.options.enableAutologin) {
+      return res.json({
+        userId: accountsServer.options.ambiguousErrorMessages ? null : userId,
+      } as CreateUserResult);
+    }
+
+    // When initializing AccountsServer we check that enableAutologin and ambiguousErrorMessages options
+    // are not enabled at the same time
+
+    const userAgent = getUserAgent(req);
+    const ip = requestIp.getClientIp(req);
+
+    const { password, ...rest } = req.body.user;
+    const loginResult = await accountsServer.loginWithService(
+      'password',
+      { user: rest, password },
+      {
+        ip,
+        userAgent,
+      }
+    );
+
+    return res.json({
+      userId,
+      loginResult,
+    } as CreateUserResult);
   } catch (err) {
     sendError(res, err);
   }
