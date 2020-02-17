@@ -29,7 +29,6 @@ export interface AccountsModuleConfig {
   headerName?: string;
   userAsInterface?: boolean;
   excludeAddUserInContext?: boolean;
-  enableAutoLogin?: boolean;
 }
 
 export interface AccountsModuleContext<IUser = User> {
