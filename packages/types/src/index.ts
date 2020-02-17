@@ -4,6 +4,7 @@ export * from './types/tokens';
 export * from './types/token-record';
 export * from './types/user';
 export * from './types/create-user';
+export * from './types/create-user-result';
 export * from './types/email-record';
 export * from './types/login-result';
 export * from './types/impersonation-result';
