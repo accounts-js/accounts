@@ -209,10 +209,12 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {boolean} [verified] - Whether the new email address should be marked as verified.
    * Defaults to false.
    * @returns {Promise<void>} - Return a Promise.
+   *
+   * @throws {InvalidEmail} Email validation via option `validateEmail` failed.
    */
   public addEmail(userId: string, newEmail: string, verified = false): Promise<void> {
     if (!this.options.validateEmail(newEmail)) {
-      throw new Error(this.options.errors.invalidEmail);
+      throw new AccountsJsError(this.options.errors.invalidEmail, `InvalidEmail`);
     }
     return this.db.addEmail(userId, newEmail, verified);
   }
@@ -232,26 +234,38 @@ export default class AccountsPassword implements AuthenticationService {
    * @description Marks the user's email address as verified.
    * @param {string} token - The token retrieved from the verification URL.
    * @returns {Promise<void>} - Return a Promise.
+   *
+   * @throws {InvalidToken} Will throw if token validation failed.
+   * @throws {VerifyEmailLinkExpired} The token does not exist or is expired.
    */
   public async verifyEmail(token: string): Promise<void> {
     if (!token || !isString(token)) {
-      throw new Error(this.options.errors.invalidToken);
+      throw new AccountsJsError(this.options.errors.invalidToken, `InvalidToken`);
     }
 
     const user = await this.db.findUserByEmailVerificationToken(token);
     if (!user) {
-      throw new Error(this.options.errors.verifyEmailLinkExpired);
+      throw new AccountsJsError(
+        this.options.errors.verifyEmailLinkExpired,
+        `VerifyEmailLinkExpired`
+      );
     }
 
     const verificationTokens = getUserVerificationTokens(user);
     const tokenRecord = find(verificationTokens, (t: TokenRecord) => t.token === token);
     if (!tokenRecord || this.isTokenExpired(tokenRecord, this.options.verifyEmailTokenExpiration)) {
-      throw new Error(this.options.errors.verifyEmailLinkExpired);
+      throw new AccountsJsError(
+        this.options.errors.verifyEmailLinkExpired,
+        `VerifyEmailLinkExpired`
+      );
     }
 
     const emailRecord = find(user.emails, (e: EmailRecord) => e.address === tokenRecord.address);
     if (!emailRecord) {
-      throw new Error(this.options.errors.verifyEmailLinkUnknownAddress);
+      throw new AccountsJsError(
+        this.options.errors.verifyEmailLinkExpired,
+        `VerifyEmailLinkExpired`
+      );
     }
     await this.db.verifyEmail(user.id, emailRecord.address);
   }
