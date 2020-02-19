@@ -23,6 +23,16 @@ import {
 import { ErrorMessages } from './types';
 import { errors } from './errors';
 
+class AccountsJsError extends Error {
+  public code: string;
+
+  constructor(message: string, code: string) {
+    super(message);
+    this.code = code;
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}
+
 export interface AccountsPasswordOptions {
   /**
    * Two factor options passed down to the @accounts/two-factor service.
@@ -507,31 +517,41 @@ export default class AccountsPassword implements AuthenticationService {
    * @description Create a new user.
    * @param user - The user object.
    * @returns Return the id of user created.
+   *
+   * @throws {UsernameOrEmailRequired} Will throw if no username or email is.
+   * @throws {InvalidUsername} Username validation via option `validateUsername` failed.
+   * @throws {InvalidEmail} Email validation via option `validateEmail` failed.
+   * @throws {UsernameAlreadyExists} Username already exist in the database.
+   * @throws {EmailAlreadyExists} Email already exist in the database.
+   * @throws {InvalidPassword} Email already exist in the database.
    */
   public async createUser(user: CreateUserServicePassword): Promise<string> {
     if (!user.username && !user.email) {
-      throw new Error(this.options.errors.usernameOrEmailRequired);
+      throw new AccountsJsError(
+        this.options.errors.usernameOrEmailRequired,
+        `UsernameOrEmailRequired`
+      );
     }
 
     if (user.username && !this.options.validateUsername(user.username)) {
-      throw new Error(this.options.errors.invalidUsername);
+      throw new AccountsJsError(this.options.errors.invalidUsername, 'InvalidUsername');
     }
 
     if (user.email && !this.options.validateEmail(user.email)) {
-      throw new Error(this.options.errors.invalidEmail);
+      throw new AccountsJsError(this.options.errors.invalidEmail, 'InvalidEmail');
     }
 
     if (user.username && (await this.db.findUserByUsername(user.username))) {
-      throw new Error(this.options.errors.usernameAlreadyExists);
+      throw new AccountsJsError(this.options.errors.usernameAlreadyExists, 'UsernameAlreadyExists');
     }
 
     if (user.email && (await this.db.findUserByEmail(user.email))) {
-      throw new Error(this.options.errors.emailAlreadyExists);
+      throw new AccountsJsError(this.options.errors.emailAlreadyExists, 'EmailAlreadyExists');
     }
 
     if (user.password) {
       if (!this.options.validatePassword(user.password)) {
-        throw new Error(this.options.errors.invalidPassword);
+        throw new AccountsJsError(this.options.errors.invalidPassword, 'InvalidPassword');
       }
       user.password = await this.options.hashPassword(user.password);
     }
