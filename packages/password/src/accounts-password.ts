@@ -441,10 +441,13 @@ export default class AccountsPassword implements AuthenticationService {
    * Defaults to the first unverified email in the list.
    * If the address is already verified we do not send any email.
    * @returns {Promise<void>} - Return a Promise.
+   *
+   * @throws {InvalidEmail} Will throw if email validation failed.
+   * @throws {UserNotFound} Will throw if user is not found. If option `ambiguousErrorMessages` is true, this will never throw.
    */
   public async sendVerificationEmail(address: string): Promise<void> {
     if (!address || !isString(address)) {
-      throw new Error(this.options.errors.invalidEmail);
+      throw new AccountsJsError(this.options.errors.invalidEmail, `InvalidEmail`);
     }
 
     const user = await this.db.findUserByEmail(address);
@@ -453,7 +456,7 @@ export default class AccountsPassword implements AuthenticationService {
       if (this.server.options.ambiguousErrorMessages) {
         return;
       }
-      throw new Error(this.options.errors.userNotFound);
+      throw new AccountsJsError(this.options.errors.userNotFound, `UserNotFound`);
     }
 
     // Do not send an email if the address is already verified
@@ -486,10 +489,13 @@ export default class AccountsPassword implements AuthenticationService {
    * This address must be in the user's emails list.
    * Defaults to the first email in the list.
    * @returns {Promise<void>} - Return a Promise.
+   *
+   * @throws {InvalidEmail} Will throw if email validation failed.
+   * @throws {UserNotFound} Will throw if user is not found. If option `ambiguousErrorMessages` is true, this will never throw.
    */
   public async sendResetPasswordEmail(address: string): Promise<void> {
     if (!address || !isString(address)) {
-      throw new Error(this.options.errors.invalidEmail);
+      throw new AccountsJsError(this.options.errors.invalidEmail, `InvalidEmail`);
     }
 
     const user = await this.db.findUserByEmail(address);
@@ -498,7 +504,7 @@ export default class AccountsPassword implements AuthenticationService {
       if (this.server.options.ambiguousErrorMessages) {
         return;
       }
-      throw new Error(this.options.errors.userNotFound);
+      throw new AccountsJsError(this.options.errors.userNotFound, `UserNotFound`);
     }
     const token = generateRandomToken();
     await this.db.addResetPasswordToken(user.id, address, token, 'reset');
@@ -522,15 +528,18 @@ export default class AccountsPassword implements AuthenticationService {
    * This address must be in the user's emails list.
    * Defaults to the first email in the list.
    * @returns {Promise<void>} - Return a Promise.
+   *
+   * @throws {InvalidEmail} Will throw if email validation failed.
+   * @throws {UserNotFound} Will throw if user is not found. If option `ambiguousErrorMessages` is true, this will never throw.
    */
   public async sendEnrollmentEmail(address: string): Promise<void> {
     if (!address || !isString(address)) {
-      throw new Error(this.options.errors.invalidEmail);
+      throw new AccountsJsError(this.options.errors.invalidEmail, `InvalidEmail`);
     }
 
     const user = await this.db.findUserByEmail(address);
     if (!user) {
-      throw new Error(this.options.errors.userNotFound);
+      throw new AccountsJsError(this.options.errors.userNotFound, `UserNotFound`);
     }
     const token = generateRandomToken();
     await this.db.addResetPasswordToken(user.id, address, token, 'enroll');
