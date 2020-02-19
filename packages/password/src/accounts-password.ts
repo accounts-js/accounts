@@ -248,6 +248,7 @@ export default class AccountsPassword implements AuthenticationService {
 
   /**
    * @description Reset the password for a user using a token received in email.
+   * It will trigger the `validatePassword` option and throw if password is invalid.
    * @param {string} token - The token retrieved from the reset password URL.
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<LoginResult | null>} - If `returnTokensAfterResetPassword` option is true return the session tokens and user object, otherwise return null.
@@ -260,7 +261,7 @@ export default class AccountsPassword implements AuthenticationService {
     if (!token || !isString(token)) {
       throw new Error(this.options.errors.invalidToken);
     }
-    if (!newPassword || !isString(newPassword)) {
+    if (!this.options.validatePassword(newPassword)) {
       throw new Error(this.options.errors.invalidNewPassword);
     }
 
