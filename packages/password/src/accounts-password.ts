@@ -392,6 +392,9 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {string} oldPassword - The user's current password.
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
+   *
+   * @throws {InvalidPassword} Password validation via option `validatePassword` failed.
+   * @throws {NoEmailSet} User has no email set.
    */
   public async changePassword(
     userId: string,
@@ -399,7 +402,7 @@ export default class AccountsPassword implements AuthenticationService {
     newPassword: string
   ): Promise<void> {
     if (!this.options.validatePassword(newPassword)) {
-      throw new Error(this.options.errors.invalidPassword);
+      throw new AccountsJsError(this.options.errors.invalidPassword, `InvalidPassword`);
     }
 
     const user = await this.passwordAuthenticator({ id: userId }, oldPassword);
@@ -416,7 +419,7 @@ export default class AccountsPassword implements AuthenticationService {
     if (this.options.notifyUserAfterPasswordChanged) {
       const address = user.emails && user.emails[0].address;
       if (!address) {
-        throw new Error(this.options.errors.noEmailSet);
+        throw new AccountsJsError(this.options.errors.noEmailSet, `NoEmailSet`);
       }
 
       const passwordChangedMail = this.server.prepareMail(
@@ -554,7 +557,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @throws {InvalidEmail} Email validation via option `validateEmail` failed.
    * @throws {UsernameAlreadyExists} Username already exist in the database.
    * @throws {EmailAlreadyExists} Email already exist in the database.
-   * @throws {InvalidPassword} Email already exist in the database.
+   * @throws {InvalidPassword} Password validation via option `validatePassword` failed.
    */
   public async createUser(user: CreateUserServicePassword): Promise<string> {
     if (!user.username && !user.email) {
