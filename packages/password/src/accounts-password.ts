@@ -23,6 +23,7 @@ import {
 import { ErrorMessages } from './types';
 import { errors } from './errors';
 
+// TODO update docs and show how to handle these errors
 class AccountsJsError extends Error {
   public code: string;
 
@@ -276,6 +277,12 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {string} token - The token retrieved from the reset password URL.
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<LoginResult | null>} - If `returnTokensAfterResetPassword` option is true return the session tokens and user object, otherwise return null.
+   *
+   * @throws {InvalidToken} Will throw if token validation failed.
+   * @throws {InvalidNewPassword} Will throw if new password validation failed.
+   * @throws {ResetPasswordLinkExpired} The token does not exist or is expired.
+   * @throws {ResetPasswordLinkUnknownAddress} The token is valid but no email address found for the entry.
+   * @throws {NoEmailSet} User has no email set.
    */
   public async resetPassword(
     token: string,
@@ -283,15 +290,18 @@ export default class AccountsPassword implements AuthenticationService {
     infos: ConnectionInformations
   ): Promise<LoginResult | null> {
     if (!token || !isString(token)) {
-      throw new Error(this.options.errors.invalidToken);
+      throw new AccountsJsError(this.options.errors.invalidToken, `InvalidToken`);
     }
     if (!newPassword || !isString(newPassword)) {
-      throw new Error(this.options.errors.invalidNewPassword);
+      throw new AccountsJsError(this.options.errors.invalidNewPassword, `InvalidNewPassword`);
     }
 
     const user = await this.db.findUserByResetPasswordToken(token);
     if (!user) {
-      throw new Error(this.options.errors.resetPasswordLinkExpired);
+      throw new AccountsJsError(
+        this.options.errors.resetPasswordLinkExpired,
+        `ResetPasswordLinkExpired`
+      );
     }
 
     const resetTokens = getUserResetTokens(user);
@@ -306,7 +316,10 @@ export default class AccountsPassword implements AuthenticationService {
           : this.options.passwordResetTokenExpiration
       )
     ) {
-      throw new Error(this.options.errors.resetPasswordLinkExpired);
+      throw new AccountsJsError(
+        this.options.errors.resetPasswordLinkExpired,
+        `ResetPasswordLinkExpired`
+      );
     }
 
     const emails = user.emails || [];
@@ -316,7 +329,10 @@ export default class AccountsPassword implements AuthenticationService {
         resetTokenRecord.address
       )
     ) {
-      throw new Error(this.options.errors.resetPasswordLinkUnknownAddress);
+      throw new AccountsJsError(
+        this.options.errors.resetPasswordLinkUnknownAddress,
+        `ResetPasswordLinkUnknownAddress`
+      );
     }
 
     const password = await this.options.hashPassword(newPassword);
@@ -338,7 +354,7 @@ export default class AccountsPassword implements AuthenticationService {
     if (this.options.notifyUserAfterPasswordChanged) {
       const address = user.emails && user.emails[0].address;
       if (!address) {
-        throw new Error(this.options.errors.noEmailSet);
+        throw new AccountsJsError(this.options.errors.noEmailSet, `NoEmailSet`);
       }
 
       const passwordChangedMail = this.server.prepareMail(
