@@ -237,6 +237,7 @@ export default class AccountsPassword implements AuthenticationService {
    *
    * @throws {InvalidToken} Will throw if token validation failed.
    * @throws {VerifyEmailLinkExpired} The token does not exist or is expired.
+   * @throws {VerifyEmailLinkUnknownAddress} The token is valid but no email address found for the entry.
    */
   public async verifyEmail(token: string): Promise<void> {
     if (!token || !isString(token)) {
@@ -263,8 +264,8 @@ export default class AccountsPassword implements AuthenticationService {
     const emailRecord = find(user.emails, (e: EmailRecord) => e.address === tokenRecord.address);
     if (!emailRecord) {
       throw new AccountsJsError(
-        this.options.errors.verifyEmailLinkExpired,
-        `VerifyEmailLinkExpired`
+        this.options.errors.verifyEmailLinkUnknownAddress,
+        `VerifyEmailLinkUnknownAddress`
       );
     }
     await this.db.verifyEmail(user.id, emailRecord.address);
