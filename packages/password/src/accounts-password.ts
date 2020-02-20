@@ -34,6 +34,14 @@ class AccountsJsError extends Error {
   }
 }
 
+enum CreateUserErrors {
+  InvalidUsername = 'InvalidUsername',
+  InvalidEmail = 'InvalidEmail',
+  InvalidPassword = 'InvalidPassword',
+  EmailAlreadyExists = 'EmailAlreadyExists',
+  UsernameAlreadyExists = 'UsernameAlreadyExists',
+}
+
 export interface AccountsPasswordOptions {
   /**
    * Two factor options passed down to the @accounts/two-factor service.
@@ -577,24 +585,36 @@ export default class AccountsPassword implements AuthenticationService {
     }
 
     if (user.username && !this.options.validateUsername(user.username)) {
-      throw new AccountsJsError(this.options.errors.invalidUsername, 'InvalidUsername');
+      throw new AccountsJsError(
+        this.options.errors.invalidUsername,
+        CreateUserErrors.InvalidUsername
+      );
     }
 
     if (user.email && !this.options.validateEmail(user.email)) {
-      throw new AccountsJsError(this.options.errors.invalidEmail, 'InvalidEmail');
+      throw new AccountsJsError(this.options.errors.invalidEmail, CreateUserErrors.InvalidEmail);
     }
 
     if (user.username && (await this.db.findUserByUsername(user.username))) {
-      throw new AccountsJsError(this.options.errors.usernameAlreadyExists, 'UsernameAlreadyExists');
+      throw new AccountsJsError(
+        this.options.errors.usernameAlreadyExists,
+        CreateUserErrors.UsernameAlreadyExists
+      );
     }
 
     if (user.email && (await this.db.findUserByEmail(user.email))) {
-      throw new AccountsJsError(this.options.errors.emailAlreadyExists, 'EmailAlreadyExists');
+      throw new AccountsJsError(
+        this.options.errors.emailAlreadyExists,
+        CreateUserErrors.EmailAlreadyExists
+      );
     }
 
     if (user.password) {
       if (!this.options.validatePassword(user.password)) {
-        throw new AccountsJsError(this.options.errors.invalidPassword, 'InvalidPassword');
+        throw new AccountsJsError(
+          this.options.errors.invalidPassword,
+          CreateUserErrors.InvalidPassword
+        );
       }
       user.password = await this.options.hashPassword(user.password);
     }
