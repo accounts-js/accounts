@@ -72,6 +72,11 @@ enum SendVerificationEmailErrors {
   UserNotFound = 'UserNotFound',
 }
 
+enum SendResetPasswordEmailErrors {
+  InvalidEmail = 'InvalidEmail',
+  UserNotFound = 'UserNotFound',
+}
+
 export interface AccountsPasswordOptions {
   /**
    * Two factor options passed down to the @accounts/two-factor service.
@@ -545,7 +550,10 @@ export default class AccountsPassword implements AuthenticationService {
    */
   public async sendResetPasswordEmail(address: string): Promise<void> {
     if (!address || !isString(address)) {
-      throw new AccountsJsError(this.options.errors.invalidEmail, `InvalidEmail`);
+      throw new AccountsJsError(
+        this.options.errors.invalidEmail,
+        SendResetPasswordEmailErrors.InvalidEmail
+      );
     }
 
     const user = await this.db.findUserByEmail(address);
@@ -554,7 +562,10 @@ export default class AccountsPassword implements AuthenticationService {
       if (this.server.options.ambiguousErrorMessages) {
         return;
       }
-      throw new AccountsJsError(this.options.errors.userNotFound, `UserNotFound`);
+      throw new AccountsJsError(
+        this.options.errors.userNotFound,
+        SendResetPasswordEmailErrors.UserNotFound
+      );
     }
     const token = generateRandomToken();
     await this.db.addResetPasswordToken(user.id, address, token, 'reset');
