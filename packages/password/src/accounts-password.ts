@@ -62,6 +62,11 @@ enum ResetPasswordErrors {
   NoEmailSet = 'NoEmailSet',
 }
 
+enum ChangePasswordErrors {
+  InvalidPassword = 'InvalidPassword',
+  NoEmailSet = 'NoEmailSet',
+}
+
 export interface AccountsPasswordOptions {
   /**
    * Two factor options passed down to the @accounts/two-factor service.
@@ -433,7 +438,10 @@ export default class AccountsPassword implements AuthenticationService {
     newPassword: string
   ): Promise<void> {
     if (!this.options.validatePassword(newPassword)) {
-      throw new AccountsJsError(this.options.errors.invalidPassword, `InvalidPassword`);
+      throw new AccountsJsError(
+        this.options.errors.invalidPassword,
+        ChangePasswordErrors.InvalidPassword
+      );
     }
 
     const user = await this.passwordAuthenticator({ id: userId }, oldPassword);
@@ -450,7 +458,7 @@ export default class AccountsPassword implements AuthenticationService {
     if (this.options.notifyUserAfterPasswordChanged) {
       const address = user.emails && user.emails[0].address;
       if (!address) {
-        throw new AccountsJsError(this.options.errors.noEmailSet, `NoEmailSet`);
+        throw new AccountsJsError(this.options.errors.noEmailSet, ChangePasswordErrors.NoEmailSet);
       }
 
       const passwordChangedMail = this.server.prepareMail(
