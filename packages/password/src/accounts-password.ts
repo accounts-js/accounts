@@ -23,6 +23,7 @@ import {
 import { ErrorMessages } from './types';
 import { errors } from './errors';
 
+// TODO move this to another package
 // TODO update docs and show how to handle these errors
 class AccountsJsError extends Error {
   public code: string;
@@ -34,6 +35,7 @@ class AccountsJsError extends Error {
   }
 }
 
+// TODO move it to a separate file
 enum CreateUserErrors {
   InvalidUsername = 'InvalidUsername',
   InvalidEmail = 'InvalidEmail',
