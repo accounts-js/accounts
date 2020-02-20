@@ -21,7 +21,16 @@ import {
   isEmail,
 } from './utils';
 import { ErrorMessages } from './types';
-import { errors } from './errors';
+import {
+  errors,
+  AddEmailErrors,
+  ChangePasswordErrors,
+  CreateUserErrors,
+  ResetPasswordErrors,
+  SendVerificationEmailErrors,
+  SendResetPasswordEmailErrors,
+  VerifyEmailErrors,
+} from './errors';
 
 // TODO move this to another package
 // TODO update docs and show how to handle these errors
@@ -33,48 +42,6 @@ class AccountsJsError extends Error {
     this.code = code;
     Object.setPrototypeOf(this, new.target.prototype);
   }
-}
-
-// TODO move it to a separate file
-enum CreateUserErrors {
-  InvalidUsername = 'InvalidUsername',
-  InvalidEmail = 'InvalidEmail',
-  InvalidPassword = 'InvalidPassword',
-  EmailAlreadyExists = 'EmailAlreadyExists',
-  UsernameAlreadyExists = 'UsernameAlreadyExists',
-}
-
-enum AddEmailErrors {
-  InvalidEmail = 'InvalidEmail',
-}
-
-enum VerifyEmailErrors {
-  InvalidToken = 'InvalidToken',
-  VerifyEmailLinkExpired = 'VerifyEmailLinkExpired',
-  VerifyEmailLinkUnknownAddress = 'VerifyEmailLinkUnknownAddress',
-}
-
-enum ResetPasswordErrors {
-  InvalidToken = 'InvalidToken',
-  InvalidNewPassword = 'InvalidNewPassword',
-  ResetPasswordLinkExpired = 'ResetPasswordLinkExpired',
-  ResetPasswordLinkUnknownAddress = 'ResetPasswordLinkUnknownAddress',
-  NoEmailSet = 'NoEmailSet',
-}
-
-enum ChangePasswordErrors {
-  InvalidPassword = 'InvalidPassword',
-  NoEmailSet = 'NoEmailSet',
-}
-
-enum SendVerificationEmailErrors {
-  InvalidEmail = 'InvalidEmail',
-  UserNotFound = 'UserNotFound',
-}
-
-enum SendResetPasswordEmailErrors {
-  InvalidEmail = 'InvalidEmail',
-  UserNotFound = 'UserNotFound',
 }
 
 export interface AccountsPasswordOptions {

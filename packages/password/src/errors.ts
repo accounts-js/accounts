@@ -21,3 +21,44 @@ export const errors: ErrorMessages = {
   emailAlreadyExists: 'Email already exists',
   usernameOrEmailRequired: 'Username or Email is required',
 };
+
+export enum CreateUserErrors {
+  InvalidUsername = 'InvalidUsername',
+  InvalidEmail = 'InvalidEmail',
+  InvalidPassword = 'InvalidPassword',
+  EmailAlreadyExists = 'EmailAlreadyExists',
+  UsernameAlreadyExists = 'UsernameAlreadyExists',
+}
+
+export enum AddEmailErrors {
+  InvalidEmail = 'InvalidEmail',
+}
+
+export enum VerifyEmailErrors {
+  InvalidToken = 'InvalidToken',
+  VerifyEmailLinkExpired = 'VerifyEmailLinkExpired',
+  VerifyEmailLinkUnknownAddress = 'VerifyEmailLinkUnknownAddress',
+}
+
+export enum ResetPasswordErrors {
+  InvalidToken = 'InvalidToken',
+  InvalidNewPassword = 'InvalidNewPassword',
+  ResetPasswordLinkExpired = 'ResetPasswordLinkExpired',
+  ResetPasswordLinkUnknownAddress = 'ResetPasswordLinkUnknownAddress',
+  NoEmailSet = 'NoEmailSet',
+}
+
+export enum ChangePasswordErrors {
+  InvalidPassword = 'InvalidPassword',
+  NoEmailSet = 'NoEmailSet',
+}
+
+export enum SendVerificationEmailErrors {
+  InvalidEmail = 'InvalidEmail',
+  UserNotFound = 'UserNotFound',
+}
+
+export enum SendResetPasswordEmailErrors {
+  InvalidEmail = 'InvalidEmail',
+  UserNotFound = 'UserNotFound',
+}
