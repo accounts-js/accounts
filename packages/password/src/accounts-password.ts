@@ -29,8 +29,10 @@ import { ErrorMessages } from './types';
 import {
   errors,
   AddEmailErrors,
+  AuthenticateErrors,
   ChangePasswordErrors,
   CreateUserErrors,
+  PasswordAuthenticatorErrors,
   ResetPasswordErrors,
   SendVerificationEmailErrors,
   SendResetPasswordEmailErrors,
@@ -170,10 +172,13 @@ export default class AccountsPassword implements AuthenticationService {
   public async authenticate(params: LoginUserPasswordService): Promise<User> {
     const { user, password, code } = params;
     if (!user || !password) {
-      throw new Error(this.options.errors.unrecognizedOptionsForLogin);
+      throw new AccountsJsError(
+        this.options.errors.unrecognizedOptionsForLogin,
+        AuthenticateErrors.UnrecognizedOptionsForLogin
+      );
     }
     if ((!isString(user) && !isPlainObject(user)) || !isString(password)) {
-      throw new Error(this.options.errors.matchFailed);
+      throw new AccountsJsError(this.options.errors.matchFailed, AuthenticateErrors.MatchFailed);
     }
 
     const foundUser = await this.passwordAuthenticator(user, password);
@@ -685,26 +690,41 @@ export default class AccountsPassword implements AuthenticationService {
     }
 
     if (!foundUser) {
-      throw new Error(
-        this.server.options.ambiguousErrorMessages
-          ? this.options.errors.invalidCredentials
-          : this.options.errors.userNotFound
-      );
+      if (this.server.options.ambiguousErrorMessages) {
+        throw new AccountsJsError(
+          this.options.errors.invalidCredentials,
+          PasswordAuthenticatorErrors.InvalidCredentials
+        );
+      } else {
+        throw new AccountsJsError(
+          this.options.errors.userNotFound,
+          PasswordAuthenticatorErrors.UserNotFound
+        );
+      }
     }
 
     const hash = await this.db.findPasswordHash(foundUser.id);
     if (!hash) {
-      throw new Error(this.options.errors.noPasswordSet);
+      throw new AccountsJsError(
+        this.options.errors.noPasswordSet,
+        PasswordAuthenticatorErrors.NoPasswordSet
+      );
     }
 
     const isPasswordValid = await this.options.verifyPassword(password, hash);
 
     if (!isPasswordValid) {
-      throw new Error(
-        this.server.options.ambiguousErrorMessages
-          ? this.options.errors.invalidCredentials
-          : this.options.errors.incorrectPassword
-      );
+      if (this.server.options.ambiguousErrorMessages) {
+        throw new AccountsJsError(
+          this.options.errors.invalidCredentials,
+          PasswordAuthenticatorErrors.InvalidCredentials
+        );
+      } else {
+        throw new AccountsJsError(
+          this.options.errors.incorrectPassword,
+          PasswordAuthenticatorErrors.IncorrectPassword
+        );
+      }
     }
 
     return foundUser;

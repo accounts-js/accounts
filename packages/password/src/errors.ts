@@ -48,9 +48,31 @@ export enum ResetPasswordErrors {
   NoEmailSet = 'NoEmailSet',
 }
 
+export enum PasswordAuthenticatorErrors {
+  InvalidCredentials = 'InvalidCredentials',
+  UserNotFound = 'UserNotFound',
+  IncorrectPassword = 'IncorrectPassword',
+  NoPasswordSet = 'NoPasswordSet',
+}
+
+export enum AuthenticateErrors {
+  UnrecognizedOptionsForLogin = 'UnrecognizedOptionsForLogin',
+  MatchFailed = 'MatchFailed',
+  // thrown by PasswordAuthenticatorErrors
+  InvalidCredentials = 'InvalidCredentials',
+  UserNotFound = 'UserNotFound',
+  IncorrectPassword = 'IncorrectPassword',
+  NoPasswordSet = 'NoPasswordSet',
+}
+
 export enum ChangePasswordErrors {
   InvalidPassword = 'InvalidPassword',
   NoEmailSet = 'NoEmailSet',
+  // thrown by PasswordAuthenticatorErrors
+  InvalidCredentials = 'InvalidCredentials',
+  UserNotFound = 'UserNotFound',
+  IncorrectPassword = 'IncorrectPassword',
+  NoPasswordSet = 'NoPasswordSet',
 }
 
 export enum SendVerificationEmailErrors {
