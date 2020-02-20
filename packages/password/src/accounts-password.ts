@@ -44,6 +44,16 @@ enum CreateUserErrors {
   UsernameAlreadyExists = 'UsernameAlreadyExists',
 }
 
+enum AddEmailErrors {
+  InvalidEmail = 'InvalidEmail',
+}
+
+enum VerifyEmailErrors {
+  InvalidToken = 'InvalidToken',
+  VerifyEmailLinkExpired = 'VerifyEmailLinkExpired',
+  VerifyEmailLinkUnknownAddress = 'VerifyEmailLinkUnknownAddress',
+}
+
 export interface AccountsPasswordOptions {
   /**
    * Two factor options passed down to the @accounts/two-factor service.
@@ -225,7 +235,7 @@ export default class AccountsPassword implements AuthenticationService {
    */
   public addEmail(userId: string, newEmail: string, verified = false): Promise<void> {
     if (!this.options.validateEmail(newEmail)) {
-      throw new AccountsJsError(this.options.errors.invalidEmail, `InvalidEmail`);
+      throw new AccountsJsError(this.options.errors.invalidEmail, AddEmailErrors.InvalidEmail);
     }
     return this.db.addEmail(userId, newEmail, verified);
   }
@@ -252,14 +262,14 @@ export default class AccountsPassword implements AuthenticationService {
    */
   public async verifyEmail(token: string): Promise<void> {
     if (!token || !isString(token)) {
-      throw new AccountsJsError(this.options.errors.invalidToken, `InvalidToken`);
+      throw new AccountsJsError(this.options.errors.invalidToken, VerifyEmailErrors.InvalidToken);
     }
 
     const user = await this.db.findUserByEmailVerificationToken(token);
     if (!user) {
       throw new AccountsJsError(
         this.options.errors.verifyEmailLinkExpired,
-        `VerifyEmailLinkExpired`
+        VerifyEmailErrors.VerifyEmailLinkExpired
       );
     }
 
@@ -268,7 +278,7 @@ export default class AccountsPassword implements AuthenticationService {
     if (!tokenRecord || this.isTokenExpired(tokenRecord, this.options.verifyEmailTokenExpiration)) {
       throw new AccountsJsError(
         this.options.errors.verifyEmailLinkExpired,
-        `VerifyEmailLinkExpired`
+        VerifyEmailErrors.VerifyEmailLinkExpired
       );
     }
 
@@ -276,7 +286,7 @@ export default class AccountsPassword implements AuthenticationService {
     if (!emailRecord) {
       throw new AccountsJsError(
         this.options.errors.verifyEmailLinkUnknownAddress,
-        `VerifyEmailLinkUnknownAddress`
+        VerifyEmailErrors.VerifyEmailLinkUnknownAddress
       );
     }
     await this.db.verifyEmail(user.id, emailRecord.address);
