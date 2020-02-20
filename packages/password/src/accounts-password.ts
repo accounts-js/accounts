@@ -12,7 +12,12 @@ import {
   LoginUserPasswordService,
 } from '@accounts/types';
 import { TwoFactor, AccountsTwoFactorOptions, getUserTwoFactorService } from '@accounts/two-factor';
-import { AccountsServer, ServerHooks, generateRandomToken } from '@accounts/server';
+import {
+  AccountsServer,
+  ServerHooks,
+  generateRandomToken,
+  AccountsJsError,
+} from '@accounts/server';
 import {
   getUserResetTokens,
   getUserVerificationTokens,
@@ -31,18 +36,6 @@ import {
   SendResetPasswordEmailErrors,
   VerifyEmailErrors,
 } from './errors';
-
-// TODO move this to another package
-// TODO update docs and show how to handle these errors
-class AccountsJsError extends Error {
-  public code: string;
-
-  constructor(message: string, code: string) {
-    super(message);
-    this.code = code;
-    Object.setPrototypeOf(this, new.target.prototype);
-  }
-}
 
 export interface AccountsPasswordOptions {
   /**

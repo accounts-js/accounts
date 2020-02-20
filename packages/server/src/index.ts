@@ -3,6 +3,7 @@ export { AccountsServerOptions } from './types/accounts-server-options';
 export { generateRandomToken } from './utils/tokens';
 export { getFirstUserEmail } from './utils/get-first-user-email';
 export { ServerHooks } from './utils/server-hooks';
+export { AccountsJsError } from './utils/accounts-error';
 
 export default AccountsServer;
 export { AccountsServer };
