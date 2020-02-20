@@ -54,6 +54,14 @@ enum VerifyEmailErrors {
   VerifyEmailLinkUnknownAddress = 'VerifyEmailLinkUnknownAddress',
 }
 
+enum ResetPasswordErrors {
+  InvalidToken = 'InvalidToken',
+  InvalidNewPassword = 'InvalidNewPassword',
+  ResetPasswordLinkExpired = 'ResetPasswordLinkExpired',
+  ResetPasswordLinkUnknownAddress = 'ResetPasswordLinkUnknownAddress',
+  NoEmailSet = 'NoEmailSet',
+}
+
 export interface AccountsPasswordOptions {
   /**
    * Two factor options passed down to the @accounts/two-factor service.
@@ -310,17 +318,20 @@ export default class AccountsPassword implements AuthenticationService {
     infos: ConnectionInformations
   ): Promise<LoginResult | null> {
     if (!token || !isString(token)) {
-      throw new AccountsJsError(this.options.errors.invalidToken, `InvalidToken`);
+      throw new AccountsJsError(this.options.errors.invalidToken, ResetPasswordErrors.InvalidToken);
     }
     if (!newPassword || !isString(newPassword)) {
-      throw new AccountsJsError(this.options.errors.invalidNewPassword, `InvalidNewPassword`);
+      throw new AccountsJsError(
+        this.options.errors.invalidNewPassword,
+        ResetPasswordErrors.InvalidNewPassword
+      );
     }
 
     const user = await this.db.findUserByResetPasswordToken(token);
     if (!user) {
       throw new AccountsJsError(
         this.options.errors.resetPasswordLinkExpired,
-        `ResetPasswordLinkExpired`
+        ResetPasswordErrors.ResetPasswordLinkExpired
       );
     }
 
@@ -338,7 +349,7 @@ export default class AccountsPassword implements AuthenticationService {
     ) {
       throw new AccountsJsError(
         this.options.errors.resetPasswordLinkExpired,
-        `ResetPasswordLinkExpired`
+        ResetPasswordErrors.ResetPasswordLinkExpired
       );
     }
 
@@ -351,7 +362,7 @@ export default class AccountsPassword implements AuthenticationService {
     ) {
       throw new AccountsJsError(
         this.options.errors.resetPasswordLinkUnknownAddress,
-        `ResetPasswordLinkUnknownAddress`
+        ResetPasswordErrors.ResetPasswordLinkUnknownAddress
       );
     }
 
@@ -374,7 +385,7 @@ export default class AccountsPassword implements AuthenticationService {
     if (this.options.notifyUserAfterPasswordChanged) {
       const address = user.emails && user.emails[0].address;
       if (!address) {
-        throw new AccountsJsError(this.options.errors.noEmailSet, `NoEmailSet`);
+        throw new AccountsJsError(this.options.errors.noEmailSet, ResetPasswordErrors.NoEmailSet);
       }
 
       const passwordChangedMail = this.server.prepareMail(
