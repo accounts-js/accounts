@@ -7,6 +7,7 @@ import {
   ImpersonationResult,
   LoginUserIdentity,
 } from '@accounts/types';
+import { AccountsJsError } from './accounts-error';
 
 export interface OptionsType {
   apiHost: string;
@@ -37,7 +38,12 @@ export class RestClient implements TransportInterface {
 
     if (res) {
       if (res.status >= 400 && res.status < 600) {
-        const { message } = await res.json();
+        const { message, code } = await res.json();
+        // If code is present it means the server returned an `AccountsJsError` error
+        // so we can safely do the same on the client
+        if (code) {
+          throw new AccountsJsError(message, code);
+        }
         throw new Error(message);
       }
       return res.json();
