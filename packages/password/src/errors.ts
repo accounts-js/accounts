@@ -38,8 +38,17 @@ export enum AddEmailErrors {
 }
 
 export enum VerifyEmailErrors {
+  /**
+   * Will throw if token validation failed.
+   */
   InvalidToken = 'InvalidToken',
+  /**
+   * The token does not exist or is expired.
+   */
   VerifyEmailLinkExpired = 'VerifyEmailLinkExpired',
+  /**
+   * The token is valid but no email address found for the entry.
+   */
   VerifyEmailLinkUnknownAddress = 'VerifyEmailLinkUnknownAddress',
 }
 

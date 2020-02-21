@@ -242,10 +242,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @description Marks the user's email address as verified.
    * @param {string} token - The token retrieved from the verification URL.
    * @returns {Promise<void>} - Return a Promise.
-   *
-   * @throws {InvalidToken} Will throw if token validation failed.
-   * @throws {VerifyEmailLinkExpired} The token does not exist or is expired.
-   * @throws {VerifyEmailLinkUnknownAddress} The token is valid but no email address found for the entry.
+   * @throws {@link VerifyEmailErrors}
    */
   public async verifyEmail(token: string): Promise<void> {
     if (!token || !isString(token)) {
