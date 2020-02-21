@@ -41,10 +41,25 @@ export enum VerifyEmailErrors {
 }
 
 export enum ResetPasswordErrors {
+  /**
+   * Will throw if token validation failed.
+   */
   InvalidToken = 'InvalidToken',
+  /**
+   * Password validation via option `validatePassword` failed.
+   */
   InvalidNewPassword = 'InvalidNewPassword',
+  /**
+   * The token does not exist or is expired.
+   */
   ResetPasswordLinkExpired = 'ResetPasswordLinkExpired',
+  /**
+   * The token is valid but no email address found for the entry.
+   */
   ResetPasswordLinkUnknownAddress = 'ResetPasswordLinkUnknownAddress',
+  /**
+   * User has no email set.
+   */
   NoEmailSet = 'NoEmailSet',
 }
 

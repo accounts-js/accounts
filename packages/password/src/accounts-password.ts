@@ -285,13 +285,8 @@ export default class AccountsPassword implements AuthenticationService {
    * It will trigger the `validatePassword` option and throw if password is invalid.
    * @param {string} token - The token retrieved from the reset password URL.
    * @param {string} newPassword - A new password for the user.
+   * @throws {@link ResetPasswordErrors}
    * @returns {Promise<LoginResult | null>} - If `returnTokensAfterResetPassword` option is true return the session tokens and user object, otherwise return null.
-   *
-   * @throws {InvalidToken} Will throw if token validation failed.
-   * @throws {InvalidNewPassword} Will throw if new password validation failed.
-   * @throws {ResetPasswordLinkExpired} The token does not exist or is expired.
-   * @throws {ResetPasswordLinkUnknownAddress} The token is valid but no email address found for the entry.
-   * @throws {NoEmailSet} User has no email set.
    */
   public async resetPassword(
     token: string,
