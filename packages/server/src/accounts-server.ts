@@ -22,7 +22,12 @@ import { AccountsServerOptions } from './types/accounts-server-options';
 import { JwtData } from './types/jwt-data';
 import { EmailTemplateType } from './types/email-template-type';
 import { AccountsJsError } from './utils/accounts-error';
-import { AuthenticateWithServiceErrors, LoginWithServiceErrors } from './errors';
+import {
+  AuthenticateWithServiceErrors,
+  LoginWithServiceErrors,
+  ImpersonateErrors,
+  FindSessionByAccessTokenErrors,
+} from './errors';
 
 const defaultOptions = {
   ambiguousErrorMessages: true,
@@ -229,6 +234,7 @@ Please change it with a strong random token.`);
    * @param {object} impersonated - impersonated user.
    * @param {ConnectionInformations} infos - User connection informations.
    * @returns {Promise<Object>} - ImpersonationResult
+   * @throws {@link LoginWithServiceErrors}
    */
   public async impersonate(
     accessToken: string,
@@ -240,26 +246,19 @@ Please change it with a strong random token.`);
     infos: ConnectionInformations
   ): Promise<ImpersonationResult> {
     try {
-      if (!isString(accessToken)) {
-        throw new Error('An access token is required');
-      }
-
-      try {
-        jwt.verify(accessToken, this.getSecretOrPublicKey());
-      } catch (err) {
-        throw new Error('Access token is not valid');
-      }
-
       const session = await this.findSessionByAccessToken(accessToken);
 
       if (!session.valid) {
-        throw new Error('Session is not valid for user');
+        throw new AccountsJsError(
+          'Session is not valid for user',
+          ImpersonateErrors.InvalidSession
+        );
       }
 
       const user = await this.db.findUserById(session.userId);
 
       if (!user) {
-        throw new Error('User not found');
+        throw new AccountsJsError('User not found', ImpersonateErrors.UserNotFound);
       }
 
       let impersonatedUser;
@@ -275,7 +274,10 @@ Please change it with a strong random token.`);
         if (this.options.ambiguousErrorMessages) {
           return { authorized: false };
         }
-        throw new Error(`Impersonated user not found`);
+        throw new AccountsJsError(
+          `Impersonated user not found`,
+          ImpersonateErrors.ImpersonatedUserNotFound
+        );
       }
 
       if (!this.options.impersonationAuthorize) {
@@ -478,10 +480,14 @@ Please change it with a strong random token.`);
    * @description Find a session by his token.
    * @param {string} accessToken
    * @returns {Promise<Session>} - Return a session.
+   * @throws {@link FindSessionByAccessTokenErrors}
    */
   public async findSessionByAccessToken(accessToken: string): Promise<Session> {
     if (!isString(accessToken)) {
-      throw new Error('An accessToken is required');
+      throw new AccountsJsError(
+        'An accessToken is required',
+        FindSessionByAccessTokenErrors.InvalidToken
+      );
     }
 
     let sessionToken: string;
@@ -491,12 +497,18 @@ Please change it with a strong random token.`);
       };
       sessionToken = decodedAccessToken.data.token;
     } catch (err) {
-      throw new Error('Tokens are not valid');
+      throw new AccountsJsError(
+        'Tokens are not valid',
+        FindSessionByAccessTokenErrors.TokenVerificationFailed
+      );
     }
 
     const session: Session | null = await this.db.findSessionByToken(sessionToken);
     if (!session) {
-      throw new Error('Session not found');
+      throw new AccountsJsError(
+        'Session not found',
+        FindSessionByAccessTokenErrors.SessionNotFound
+      );
     }
 
     return session;
