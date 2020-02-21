@@ -982,7 +982,7 @@ describe('AccountsServer', () => {
           ip: 'ip',
           userAgent: 'userAgent',
         })
-      ).rejects.toThrowError('An access token is required');
+      ).rejects.toThrowError('An accessToken is required');
     });
 
     it('throws error if access token is not valid', async () => {
@@ -1003,7 +1003,7 @@ describe('AccountsServer', () => {
             userAgent: 'userAgent',
           }
         )
-      ).rejects.toThrowError('Access token is not valid');
+      ).rejects.toThrowError('Tokens are not valid');
     });
 
     it('throws error if session is not valid', async () => {
