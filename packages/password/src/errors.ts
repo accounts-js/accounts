@@ -23,10 +23,29 @@ export const errors: ErrorMessages = {
 };
 
 export enum CreateUserErrors {
+  /**
+   * Will throw if no username or email is provided.
+   */
+  UsernameOrEmailRequired = 'UsernameOrEmailRequired',
+  /**
+   * Username validation via option `validateUsername` failed.
+   */
   InvalidUsername = 'InvalidUsername',
+  /**
+   * Email validation via option `validateEmail` failed.
+   */
   InvalidEmail = 'InvalidEmail',
+  /**
+   * Password validation via option `validatePassword` failed.
+   */
   InvalidPassword = 'InvalidPassword',
+  /**
+   * Email already exist in the database.
+   */
   EmailAlreadyExists = 'EmailAlreadyExists',
+  /**
+   * Username already exist in the database.
+   */
   UsernameAlreadyExists = 'UsernameAlreadyExists',
 }
 
@@ -109,11 +128,37 @@ export enum ChangePasswordErrors {
 }
 
 export enum SendVerificationEmailErrors {
+  /**
+   * Will throw if email validation failed.
+   */
   InvalidEmail = 'InvalidEmail',
+  /**
+   * Will throw if user is not found.
+   * If option `ambiguousErrorMessages` is true, this will never throw.
+   */
   UserNotFound = 'UserNotFound',
 }
 
 export enum SendResetPasswordEmailErrors {
+  /**
+   * Will throw if email validation failed.
+   */
   InvalidEmail = 'InvalidEmail',
+  /**
+   * Will throw if user is not found.
+   * If option `ambiguousErrorMessages` is true, this will never throw.
+   */
+  UserNotFound = 'UserNotFound',
+}
+
+export enum SendEnrollmentEmailErrors {
+  /**
+   * Will throw if email validation failed.
+   */
+  InvalidEmail = 'InvalidEmail',
+  /**
+   * Will throw if user is not found.
+   * If option `ambiguousErrorMessages` is true, this will never throw.
+   */
   UserNotFound = 'UserNotFound',
 }
