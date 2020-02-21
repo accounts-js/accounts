@@ -21,6 +21,8 @@ import { ServerHooks } from './utils/server-hooks';
 import { AccountsServerOptions } from './types/accounts-server-options';
 import { JwtData } from './types/jwt-data';
 import { EmailTemplateType } from './types/email-template-type';
+import { AccountsJsError } from './utils/accounts-error';
+import { AuthenticateWithServiceErrors } from './errors';
 
 const defaultOptions = {
   ambiguousErrorMessages: true,
@@ -97,6 +99,10 @@ Please change it with a strong random token.`);
     return () => this.hooks.off(eventName, callback);
   }
 
+  /**
+   * @description Try to authenticate the user for a given service
+   * @throws {@link AuthenticateWithServiceErrors}
+   */
   public async authenticateWithService(
     serviceName: string,
     params: any,
@@ -112,16 +118,25 @@ Please change it with a strong random token.`);
     };
     try {
       if (!this.services[serviceName]) {
-        throw new Error(`No service with the name ${serviceName} was registered.`);
+        throw new AccountsJsError(
+          `No service with the name ${serviceName} was registered.`,
+          AuthenticateWithServiceErrors.ServiceNotFound
+        );
       }
 
       const user: User | null = await this.services[serviceName].authenticate(params);
       hooksInfo.user = user;
       if (!user) {
-        throw new Error(`Service ${serviceName} was not able to authenticate user`);
+        throw new AccountsJsError(
+          `Service ${serviceName} was not able to authenticate user`,
+          AuthenticateWithServiceErrors.AuthenticationFailed
+        );
       }
       if (user.deactivated) {
-        throw new Error('Your account has been deactivated');
+        throw new AccountsJsError(
+          'Your account has been deactivated',
+          AuthenticateWithServiceErrors.UserDeactivated
+        );
       }
 
       this.hooks.emit(ServerHooks.AuthenticateSuccess, hooksInfo);
