@@ -31,6 +31,9 @@ export enum CreateUserErrors {
 }
 
 export enum AddEmailErrors {
+  /**
+   * Email validation via option `validateEmail` failed.
+   */
   InvalidEmail = 'InvalidEmail',
 }
 

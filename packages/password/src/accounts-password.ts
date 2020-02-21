@@ -218,8 +218,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {boolean} [verified] - Whether the new email address should be marked as verified.
    * Defaults to false.
    * @returns {Promise<void>} - Return a Promise.
-   *
-   * @throws {InvalidEmail} Email validation via option `validateEmail` failed.
+   * @throws {@link AddEmailErrors}
    */
   public addEmail(userId: string, newEmail: string, verified = false): Promise<void> {
     if (!this.options.validateEmail(newEmail)) {
@@ -285,8 +284,8 @@ export default class AccountsPassword implements AuthenticationService {
    * It will trigger the `validatePassword` option and throw if password is invalid.
    * @param {string} token - The token retrieved from the reset password URL.
    * @param {string} newPassword - A new password for the user.
-   * @throws {@link ResetPasswordErrors}
    * @returns {Promise<LoginResult | null>} - If `returnTokensAfterResetPassword` option is true return the session tokens and user object, otherwise return null.
+   * @throws {@link ResetPasswordErrors}
    */
   public async resetPassword(
     token: string,
