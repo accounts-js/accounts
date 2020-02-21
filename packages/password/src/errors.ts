@@ -93,7 +93,13 @@ export enum AuthenticateErrors {
 }
 
 export enum ChangePasswordErrors {
+  /**
+   * Password validation via option `validatePassword` failed.
+   */
   InvalidPassword = 'InvalidPassword',
+  /**
+   * User has no email set.
+   */
   NoEmailSet = 'NoEmailSet',
   // thrown by PasswordAuthenticatorErrors
   InvalidCredentials = 'InvalidCredentials',

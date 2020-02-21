@@ -395,9 +395,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {string} oldPassword - The user's current password.
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
-   *
-   * @throws {InvalidPassword} Password validation via option `validatePassword` failed.
-   * @throws {NoEmailSet} User has no email set.
+   * @throws {@link ChangePasswordErrors}
    */
   public async changePassword(
     userId: string,
