@@ -430,6 +430,7 @@ Please change it with a strong random token.`);
    * @description Logout a user and invalidate his session.
    * @param {string} accessToken - User access token.
    * @returns {Promise<void>} - Return a promise.
+   * @throws {@link LogoutErrors}
    */
   public async logout(accessToken: string): Promise<void> {
     try {
