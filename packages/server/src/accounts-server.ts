@@ -29,6 +29,7 @@ import {
   FindSessionByAccessTokenErrors,
   RefreshTokensErrors,
   LogoutErrors,
+  ResumeSessionErrors,
 } from './errors';
 
 const defaultOptions = {
@@ -452,6 +453,9 @@ Please change it with a strong random token.`);
     }
   }
 
+  /**
+   * @throws {@link ResumeSessionErrors}
+   */
   public async resumeSession(accessToken: string): Promise<User> {
     try {
       const session: Session = await this.findSessionByAccessToken(accessToken);
@@ -460,7 +464,7 @@ Please change it with a strong random token.`);
         const user = await this.db.findUserById(session.userId);
 
         if (!user) {
-          throw new Error('User not found');
+          throw new AccountsJsError('User not found', ResumeSessionErrors.UserNotFound);
         }
 
         if (this.options.resumeSessionValidator) {
@@ -476,9 +480,12 @@ Please change it with a strong random token.`);
         return this.sanitizeUser(user);
       }
 
-      this.hooks.emit(ServerHooks.ResumeSessionError, new Error('Invalid Session'));
+      this.hooks.emit(
+        ServerHooks.ResumeSessionError,
+        new AccountsJsError('Invalid Session', ResumeSessionErrors.InvalidSession)
+      );
 
-      throw new Error('Invalid Session');
+      throw new AccountsJsError('Invalid Session', ResumeSessionErrors.InvalidSession);
     } catch (e) {
       this.hooks.emit(ServerHooks.ResumeSessionError, e);
 

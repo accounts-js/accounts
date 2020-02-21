@@ -114,3 +114,27 @@ export enum FindSessionByAccessTokenErrors {
    */
   SessionNotFound = 'SessionNotFound',
 }
+
+export enum ResumeSessionErrors {
+  /**
+   * Will throw if user is not found.
+   */
+  UserNotFound = 'UserNotFound',
+  /**
+   * Session is not valid
+   */
+  InvalidSession = 'InvalidSession',
+  // Thrown by FindSessionByAccessTokenErrors
+  /**
+   * Will throw if access token is missing.
+   */
+  InvalidToken = 'InvalidToken',
+  /**
+   * Will throw if verification of the access token failed.
+   */
+  TokenVerificationFailed = 'TokenVerificationFailed',
+  /**
+   * Will throw if session is not found.
+   */
+  SessionNotFound = 'SessionNotFound',
+}
