@@ -28,6 +28,7 @@ import {
   ImpersonateErrors,
   FindSessionByAccessTokenErrors,
   RefreshTokensErrors,
+  LogoutErrors,
 } from './errors';
 
 const defaultOptions = {
@@ -441,7 +442,7 @@ Please change it with a strong random token.`);
           accessToken,
         });
       } else {
-        throw new Error('Session is no longer valid');
+        throw new AccountsJsError('Session is no longer valid', LogoutErrors.InvalidSession);
       }
     } catch (error) {
       this.hooks.emit(ServerHooks.LogoutError, error);
