@@ -57,6 +57,29 @@ export enum ImpersonateErrors {
   SessionNotFound = 'SessionNotFound',
 }
 
+export enum RefreshTokensErrors {
+  /**
+   * Will throw if access or refresh token are missing.
+   */
+  InvalidTokens = 'InvalidTokens',
+  /**
+   * Will throw if verification of the access token or refresh token failed.
+   */
+  TokenVerificationFailed = 'TokenVerificationFailed',
+  /**
+   * Will throw if session is not found.
+   */
+  SessionNotFound = 'SessionNotFound',
+  /**
+   * Will throw if user is not found.
+   */
+  UserNotFound = 'UserNotFound',
+  /**
+   * Session is not valid
+   */
+  InvalidSession = 'InvalidSession',
+}
+
 export enum FindSessionByAccessTokenErrors {
   /**
    * Will throw if access token is missing.

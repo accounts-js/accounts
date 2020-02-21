@@ -27,6 +27,7 @@ import {
   LoginWithServiceErrors,
   ImpersonateErrors,
   FindSessionByAccessTokenErrors,
+  RefreshTokensErrors,
 } from './errors';
 
 const defaultOptions = {
@@ -325,6 +326,7 @@ Please change it with a strong random token.`);
    * @param {string} refreshToken - User refresh token.
    * @param {ConnectionInformations} infos - User connection informations.
    * @returns {Promise<Object>} - LoginResult.
+   * @throws {@link RefreshTokensErrors}
    */
   public async refreshTokens(
     accessToken: string,
@@ -333,7 +335,10 @@ Please change it with a strong random token.`);
   ): Promise<LoginResult> {
     try {
       if (!isString(accessToken) || !isString(refreshToken)) {
-        throw new Error('An accessToken and refreshToken are required');
+        throw new AccountsJsError(
+          'An accessToken and refreshToken are required',
+          RefreshTokensErrors.InvalidTokens
+        );
       }
 
       let sessionToken: string;
@@ -344,18 +349,21 @@ Please change it with a strong random token.`);
         }) as { data: JwtData };
         sessionToken = decodedAccessToken.data.token;
       } catch (err) {
-        throw new Error('Tokens are not valid');
+        throw new AccountsJsError(
+          'Tokens are not valid',
+          RefreshTokensErrors.TokenVerificationFailed
+        );
       }
 
       const session: Session | null = await this.db.findSessionByToken(sessionToken);
       if (!session) {
-        throw new Error('Session not found');
+        throw new AccountsJsError('Session not found', RefreshTokensErrors.SessionNotFound);
       }
 
       if (session.valid) {
         const user = await this.db.findUserById(session.userId);
         if (!user) {
-          throw new Error('User not found');
+          throw new AccountsJsError('User not found', RefreshTokensErrors.UserNotFound);
         }
 
         let newToken;
@@ -375,7 +383,7 @@ Please change it with a strong random token.`);
 
         return result;
       } else {
-        throw new Error('Session is no longer valid');
+        throw new AccountsJsError('Session is no longer valid', RefreshTokensErrors.InvalidSession);
       }
     } catch (err) {
       this.hooks.emit(ServerHooks.RefreshTokensError, err);
