@@ -148,7 +148,7 @@ await accountsRest.loginWithService('mfa', {
 
 If the call was successful, the authenticator is now activated and will be required next time the user try to login.
 
-### Examples
+## Examples
 
 To see how to integrate the package into your app you can check these examples:
 
