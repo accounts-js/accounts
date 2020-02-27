@@ -48,7 +48,26 @@ const accountsServer = new AccountsServer(
 );
 ```
 
-### Examples
+## Options
+
+```typescript
+interface AuthenticatorOtpOptions {
+  /**
+   * Two factor app name that will be displayed inside the user authenticator app.
+   */
+  appName?: string;
+
+  /**
+   * Two factor user name that will be displayed inside the user authenticator app,
+   * usually a name, email etc..
+   * Will be called every time a user register a new device.
+   * That way you can display something like "Github (leo@accountsjs.com)" in the authenticator app.
+   */
+  userName?: (userId: string) => Promise<string> | string;
+}
+```
+
+## Examples
 
 To see how to integrate the package into your app you can check these examples:
 
