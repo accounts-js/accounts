@@ -57,13 +57,10 @@ You are using the default secret "${this.options.tokenSecret}" which is not secu
 Please change it with a strong random token.`);
     }
     if (this.options.ambiguousErrorMessages && this.options.enableAutologin) {
-      console.warn(
+      throw new Error(
         `Can't enable autologin when ambiguous error messages are enabled (https://accounts-js.netlify.com/docs/api/server/globals#ambiguouserrormessages).
-Please set ambiguousErrorMessages to false to be able to use autologin
-enableAutologin flag is reset to false now`
+Please set ambiguousErrorMessages to false to be able to use autologin.`
       );
-
-      this.options.enableAutologin = false;
     }
 
     this.services = services || {};
