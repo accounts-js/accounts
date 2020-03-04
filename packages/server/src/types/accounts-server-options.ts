@@ -35,5 +35,9 @@ export interface AccountsServerOptions {
    * Creates a new session token each time a user refreshes his access token
    */
   createNewSessionTokenOnRefresh?: boolean;
+  /**
+   * If this flag is set to true - user will be automatically logged in after registration.
+   * LoginResult data will be included into registration response.
+   */
   enableAutologin?: boolean;
 }
