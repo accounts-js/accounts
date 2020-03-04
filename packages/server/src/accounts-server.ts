@@ -228,6 +228,7 @@ Please change it with a strong random token.`);
         refreshToken,
         accessToken,
       },
+      user,
     };
   }
 
@@ -379,6 +380,7 @@ Please change it with a strong random token.`);
         const result = {
           sessionId: session.id,
           tokens,
+          user,
         };
 
         this.hooks.emit(ServerHooks.RefreshTokensSuccess, result);
