@@ -26,15 +26,18 @@ export const registerPassword = (accountsServer: AccountsServer) => async (
     const userAgent = getUserAgent(req);
     const ip = requestIp.getClientIp(req);
 
-    const { password, ...rest } = req.body.user;
-    const loginResult = await accountsServer.loginWithService(
-      'password',
-      { user: rest, password },
-      {
-        ip,
-        userAgent,
-      }
-    );
+    const createdUser = await accountsServer.findUserById(userId);
+
+    // If we are here - user must be created successfully
+    // Explicitly checking this to say this to Typescript compiler
+    if (!createdUser) {
+      throw new Error('User not found');
+    }
+
+    const loginResult = await accountsServer.loginWithUser(createdUser, {
+      ip,
+      userAgent,
+    });
 
     return res.json({
       userId,

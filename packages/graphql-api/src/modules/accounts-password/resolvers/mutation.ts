@@ -40,15 +40,18 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
     // When initializing AccountsServer we check that enableAutologin and ambiguousErrorMessages options
     // are not enabled at the same time
 
-    const { password, ...rest } = user;
-    const loginResult = await accountsServer.loginWithService(
-      'password',
-      { user: rest, password },
-      {
-        ip,
-        userAgent,
-      }
-    );
+    const createdUser = await accountsServer.findUserById(userId);
+
+    // If we are here - user must be created successfully
+    // Explicitly checking this to say this to Typescript compiler
+    if (!createdUser) {
+      throw new Error('User not found');
+    }
+
+    const loginResult = await accountsServer.loginWithUser(createdUser, {
+      ip,
+      userAgent,
+    });
 
     return {
       userId,
