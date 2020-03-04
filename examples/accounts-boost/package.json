@@ -1,7 +1,7 @@
 {
   "name": "@examples/accounts-boost",
   "private": true,
-  "version": "0.23.0",
+  "version": "0.24.0",
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
@@ -13,7 +13,7 @@
     "test": "yarn build"
   },
   "dependencies": {
-    "@accounts/boost": "^0.23.0",
+    "@accounts/boost": "^0.24.0",
     "apollo-link-context": "1.0.19",
     "apollo-link-http": "1.5.16",
     "apollo-server": "2.9.7",
