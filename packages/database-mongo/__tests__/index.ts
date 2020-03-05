@@ -313,6 +313,7 @@ describe('Mongo', () => {
   });
 
   describe('addEmail', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
@@ -349,6 +350,7 @@ describe('Mongo', () => {
   });
 
   describe('removeEmail', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
@@ -470,6 +472,7 @@ describe('Mongo', () => {
   });
 
   describe('setService', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
@@ -612,6 +615,7 @@ describe('Mongo', () => {
   });
 
   describe('updateSession', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertSessionIdToMongoObjectId: false,
@@ -670,6 +674,7 @@ describe('Mongo', () => {
   });
 
   describe('invalidateSession', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertSessionIdToMongoObjectId: false,
@@ -721,6 +726,7 @@ describe('Mongo', () => {
   });
 
   describe('addEmailVerificationToken', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
@@ -743,6 +749,7 @@ describe('Mongo', () => {
   });
 
   describe('addResetPasswordToken', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
@@ -780,6 +787,7 @@ describe('Mongo', () => {
   });
 
   describe('setUserDeactivated', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,

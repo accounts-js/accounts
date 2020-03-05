@@ -3,7 +3,7 @@ import { CreateUserServicePassword } from '@accounts/types';
 import { AccountsPassword, CreateUserErrors } from '@accounts/password';
 import { AccountsServer, AccountsJsError } from '@accounts/server';
 import { AccountsModuleContext } from '../../accounts';
-import { MutationResolvers, User } from '../../../models';
+import { MutationResolvers } from '../../../models';
 
 export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> = {
   addEmail: async (_, { newEmail }, { user, injector }) => {

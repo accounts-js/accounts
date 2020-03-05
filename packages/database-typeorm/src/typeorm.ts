@@ -275,6 +275,7 @@ export class AccountsTypeorm implements DatabaseInterface {
     userId: string,
     email: string,
     newPassword: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     token?: string
   ): Promise<void> {
     await this.setPassword(userId, newPassword);
