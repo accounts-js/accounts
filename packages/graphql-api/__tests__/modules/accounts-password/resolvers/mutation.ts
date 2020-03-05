@@ -139,11 +139,6 @@ describe('accounts-password resolvers mutation', () => {
       await expect(
         Mutation.createUser!({}, { user } as any, { injector } as any, {} as any)
       ).rejects.toThrowError('AnyError');
-      // const res = await Mutation.createUser!({}, { user } as any, { injector } as any, {} as any);
-      // expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
-      // expect(injector.get).toHaveBeenCalledWith(AccountsServer);
-      // expect(createdUserMock).toHaveBeenCalledWith(user);
-      // expect(res).toEqual({});
     });
 
     it('should automatically login user after registration if enableAutologin flag is set to true', async () => {
