@@ -1,5 +1,10 @@
 import { AccountsClient } from '@accounts/client';
-import { LoginResult, CreateUserServicePassword, LoginUserPasswordService } from '@accounts/types';
+import {
+  LoginResult,
+  CreateUserServicePassword,
+  CreateUserResult,
+  LoginUserPasswordService,
+} from '@accounts/types';
 import { AccountsClientPasswordOptions } from './types';
 
 export class AccountsClientPassword {
@@ -17,7 +22,7 @@ export class AccountsClientPassword {
   /**
    * Create a new user.
    */
-  public async createUser(user: CreateUserServicePassword): Promise<string> {
+  public async createUser(user: CreateUserServicePassword): Promise<CreateUserResult> {
     const hashedPassword = this.hashPassword(user.password);
     return this.client.transport.createUser({ ...user, password: hashedPassword });
   }

@@ -6,6 +6,7 @@ import {
   CreateUser,
   ImpersonationResult,
   LoginUserIdentity,
+  CreateUserResult,
 } from '@accounts/types';
 import { AccountsJsError } from './accounts-error';
 
@@ -134,7 +135,7 @@ export class RestClient implements TransportInterface {
     return this.authFetch('user', args, customHeaders);
   }
 
-  public async createUser(user: CreateUser, customHeaders?: object): Promise<string> {
+  public async createUser(user: CreateUser, customHeaders?: object): Promise<CreateUserResult> {
     const args = {
       method: 'POST',
       body: JSON.stringify({ user }),

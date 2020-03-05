@@ -3,7 +3,7 @@ import { CreateUserServicePassword } from '@accounts/types';
 import { AccountsPassword } from '@accounts/password';
 import { AccountsServer } from '@accounts/server';
 import { AccountsModuleContext } from '../../accounts';
-import { MutationResolvers } from '../../../models';
+import { MutationResolvers, User } from '../../../models';
 
 export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> = {
   addEmail: async (_, { newEmail }, { user, injector }) => {
@@ -24,11 +24,35 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
     await injector.get(AccountsPassword).changePassword(userId, oldPassword, newPassword);
     return null;
   },
-  createUser: async (_, { user }, { injector }) => {
-    const userId = await injector
-      .get(AccountsPassword)
-      .createUser(user as CreateUserServicePassword);
-    return injector.get(AccountsServer).options.ambiguousErrorMessages ? null : userId;
+  createUser: async (_, { user }, ctx) => {
+    const { ip, userAgent, injector } = ctx;
+    const accountsServer = injector.get(AccountsServer);
+    const accountsPassword = injector.get(AccountsPassword);
+
+    const userId = await accountsPassword.createUser(user as CreateUserServicePassword);
+
+    if (!accountsServer.options.enableAutologin) {
+      return {
+        userId: accountsServer.options.ambiguousErrorMessages ? null : userId,
+      };
+    }
+
+    // When initializing AccountsServer we check that enableAutologin and ambiguousErrorMessages options
+    // are not enabled at the same time
+
+    const createdUser = await accountsServer.findUserById(userId);
+
+    // If we are here - user must be created successfully
+    // Explicitly saying this to Typescript compiler
+    const loginResult = await accountsServer.loginWithUser(createdUser!, {
+      ip,
+      userAgent,
+    });
+
+    return {
+      userId,
+      loginResult,
+    };
   },
   twoFactorSet: async (_, { code, secret }, { user, injector }) => {
     // Make sure user is logged in

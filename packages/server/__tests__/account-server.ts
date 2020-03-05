@@ -17,6 +17,20 @@ describe('AccountsServer', () => {
     it('throws on invalid db', async () => {
       expect(() => new AccountsServer({} as any, {})).toThrowError('A database driver is required');
     });
+
+    it('should throw if ambiguousErrorMessages and enableAutologin flags enabled at the same time', async () => {
+      expect(
+        () =>
+          new AccountsServer(
+            {
+              db: {},
+              enableAutologin: true,
+              ambiguousErrorMessages: true,
+            } as any,
+            {}
+          )
+      ).toThrowError();
+    });
   });
 
   describe('getServices', () => {

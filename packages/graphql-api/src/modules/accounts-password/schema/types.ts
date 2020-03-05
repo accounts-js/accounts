@@ -12,6 +12,13 @@ export default gql`
     user: User
   }
 
+  type CreateUserResult {
+    # Will be returned only if ambiguousErrorMessages is set to false.
+    userId: ID
+    # Will be returned only if enableAutologin is set to true.
+    loginResult: LoginResult
+  }
+
   type TwoFactorSecretKey {
     ascii: String
     base32: String

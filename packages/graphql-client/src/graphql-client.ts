@@ -1,5 +1,11 @@
 import { AccountsClient, TransportInterface } from '@accounts/client';
-import { CreateUser, ImpersonationResult, LoginResult, User } from '@accounts/types';
+import {
+  CreateUser,
+  ImpersonationResult,
+  LoginResult,
+  User,
+  CreateUserResult,
+} from '@accounts/types';
 import { print } from 'graphql';
 import gql from 'graphql-tag';
 import { authenticateWithServiceMutation } from './graphql/authenticate-with-service.mutation';
@@ -52,10 +58,10 @@ export default class GraphQLClient implements TransportInterface {
    * Create a user with basic user info
    *
    * @param {CreateUser} user user object
-   * @returns {Promise<string>} user's ID
+   * @returns {Promise<CreateUserResult>} contains user's ID and LoginResult object if autologin is enabled
    * @memberof GraphQLClient
    */
-  public async createUser(user: CreateUser): Promise<string> {
+  public async createUser(user: CreateUser): Promise<CreateUserResult> {
     return this.mutate(createUserMutation, 'createUser', { user });
   }
 
