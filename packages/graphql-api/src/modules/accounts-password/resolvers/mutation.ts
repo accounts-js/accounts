@@ -42,9 +42,7 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
         (error.code === CreateUserErrors.EmailAlreadyExists ||
           error.code === CreateUserErrors.UsernameAlreadyExists)
       ) {
-        return {
-          userId: null,
-        };
+        return {};
       }
       throw error;
     }
