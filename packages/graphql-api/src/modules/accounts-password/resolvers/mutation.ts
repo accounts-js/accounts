@@ -1,7 +1,7 @@
 import { ModuleContext } from '@graphql-modules/core';
 import { CreateUserServicePassword } from '@accounts/types';
-import { AccountsPassword } from '@accounts/password';
-import { AccountsServer } from '@accounts/server';
+import { AccountsPassword, CreateUserErrors } from '@accounts/password';
+import { AccountsServer, AccountsJsError } from '@accounts/server';
 import { AccountsModuleContext } from '../../accounts';
 import { MutationResolvers, User } from '../../../models';
 
@@ -29,7 +29,25 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
     const accountsServer = injector.get(AccountsServer);
     const accountsPassword = injector.get(AccountsPassword);
 
-    const userId = await accountsPassword.createUser(user as CreateUserServicePassword);
+    let userId: string;
+
+    try {
+      userId = await accountsPassword.createUser(user as CreateUserServicePassword);
+    } catch (error) {
+      // If ambiguousErrorMessages is true we obfuscate the email or username already exist error
+      // to prevent user enumeration during user creation
+      if (
+        accountsServer.options.ambiguousErrorMessages &&
+        error instanceof AccountsJsError &&
+        (error.code === CreateUserErrors.EmailAlreadyExists ||
+          error.code === CreateUserErrors.UsernameAlreadyExists)
+      ) {
+        return {
+          userId: null,
+        };
+      }
+      throw error;
+    }
 
     if (!accountsServer.options.enableAutologin) {
       return {
