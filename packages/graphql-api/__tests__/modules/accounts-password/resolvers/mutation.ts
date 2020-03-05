@@ -1,4 +1,4 @@
-import { AccountsServer } from '@accounts/server';
+import { AccountsServer, AccountsJsError } from '@accounts/server';
 import { AccountsPassword } from '@accounts/password';
 import { LoginResult } from '@accounts/types';
 import { Mutation } from '../../../../src/modules/accounts-password/resolvers/mutation';
@@ -21,14 +21,15 @@ describe('accounts-password resolvers mutation', () => {
       unset: jest.fn(),
     },
   };
-  const injector = {
-    get: jest.fn(arg => (arg === AccountsPassword ? accountsPasswordMock : accountsServerMock)),
-  };
+  let injector: { get: jest.Mock };
   const user = { id: 'idTest' };
   const ip = 'ipTest';
   const userAgent = 'userAgentTest';
 
   beforeEach(() => {
+    injector = {
+      get: jest.fn(arg => (arg === AccountsPassword ? accountsPasswordMock : accountsServerMock)),
+    };
     jest.clearAllMocks();
   });
 
@@ -80,6 +81,69 @@ describe('accounts-password resolvers mutation', () => {
       expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
       expect(injector.get).toHaveBeenCalledWith(AccountsServer);
       expect(accountsPasswordMock.createUser).toHaveBeenCalledWith(user);
+    });
+
+    it('should call createUser and obfuscate EmailAlreadyExists error if server have ambiguousErrorMessages', async () => {
+      const createdUserMock = jest.fn(() => {
+        throw new AccountsJsError('EmailAlreadyExists', 'EmailAlreadyExists');
+      });
+      injector.get = jest.fn(arg =>
+        arg === AccountsPassword
+          ? {
+              createUser: createdUserMock,
+            }
+          : {
+              options: { ambiguousErrorMessages: true },
+            }
+      );
+      const res = await Mutation.createUser!({}, { user } as any, { injector } as any, {} as any);
+      expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
+      expect(injector.get).toHaveBeenCalledWith(AccountsServer);
+      expect(createdUserMock).toHaveBeenCalledWith(user);
+      expect(res).toEqual({});
+    });
+
+    it('should call createUser and obfuscate UsernameAlreadyExists error if server have ambiguousErrorMessages', async () => {
+      const createdUserMock = jest.fn(() => {
+        throw new AccountsJsError('UsernameAlreadyExists', 'UsernameAlreadyExists');
+      });
+      injector.get = jest.fn(arg =>
+        arg === AccountsPassword
+          ? {
+              createUser: createdUserMock,
+            }
+          : {
+              options: { ambiguousErrorMessages: true },
+            }
+      );
+      const res = await Mutation.createUser!({}, { user } as any, { injector } as any, {} as any);
+      expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
+      expect(injector.get).toHaveBeenCalledWith(AccountsServer);
+      expect(createdUserMock).toHaveBeenCalledWith(user);
+      expect(res).toEqual({});
+    });
+
+    it('should rethrow all errors if server have ambiguousErrorMessages', async () => {
+      const createdUserMock = jest.fn(() => {
+        throw new AccountsJsError('AnyError', 'AnyError');
+      });
+      injector.get = jest.fn(arg =>
+        arg === AccountsPassword
+          ? {
+              createUser: createdUserMock,
+            }
+          : {
+              options: { ambiguousErrorMessages: true },
+            }
+      );
+      await expect(
+        Mutation.createUser!({}, { user } as any, { injector } as any, {} as any)
+      ).rejects.toThrowError('AnyError');
+      // const res = await Mutation.createUser!({}, { user } as any, { injector } as any, {} as any);
+      // expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
+      // expect(injector.get).toHaveBeenCalledWith(AccountsServer);
+      // expect(createdUserMock).toHaveBeenCalledWith(user);
+      // expect(res).toEqual({});
     });
 
     it('should automatically login user after registration if enableAutologin flag is set to true', async () => {
