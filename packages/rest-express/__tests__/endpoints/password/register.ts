@@ -45,7 +45,7 @@ describe('registerPassword', () => {
     expect(res.status).not.toHaveBeenCalled();
   });
 
-  it('calls password.createUser and returns null if server have ambiguousErrorMessages', async () => {
+  it('calls password.createUser and obfuscate user id if server have ambiguousErrorMessages', async () => {
     const userId = '1';
     const passwordService = {
       createUser: jest.fn(() => userId),
@@ -75,7 +75,7 @@ describe('registerPassword', () => {
     expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
       username: 'toto',
     });
-    expect(res.json).toHaveBeenCalledWith({ userId: null });
+    expect(res.json).toHaveBeenCalledWith({});
     expect(res.status).not.toHaveBeenCalled();
   });
 
@@ -145,6 +145,7 @@ describe('registerPassword', () => {
       }),
     };
     const accountsServer = {
+      options: {},
       getServices: () => ({
         password: passwordService,
       }),
