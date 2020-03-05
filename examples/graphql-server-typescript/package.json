@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@types/mongoose": "5.5.35",
-    "@types/node": "12.12.7",
+    "@types/node": "13.7.7",
     "nodemon": "2.0.2",
     "ts-node": "8.6.2",
     "typescript": "3.7.5"

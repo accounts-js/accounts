@@ -11,8 +11,9 @@ export const registerPassword = (accountsServer: AccountsServer) => async (
   res: express.Response
 ) => {
   try {
+    const { user } = req.body;
     const accountsPassword = accountsServer.getServices().password as AccountsPassword;
-    const userId = await accountsPassword.createUser(req.body.user);
+    const userId = await accountsPassword.createUser(user);
 
     if (!accountsServer.options.enableAutologin) {
       return res.json({

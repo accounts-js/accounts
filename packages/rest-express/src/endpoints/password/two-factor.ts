@@ -1,5 +1,6 @@
 import * as express from 'express';
 import { AccountsServer } from '@accounts/server';
+import { AccountsPassword } from '@accounts/password';
 import { sendError } from '../../utils/send-error';
 
 export const twoFactorSecret = (accountsServer: AccountsServer) => async (
@@ -7,8 +8,8 @@ export const twoFactorSecret = (accountsServer: AccountsServer) => async (
   res: express.Response
 ) => {
   try {
-    const password: any = accountsServer.getServices().password;
-    const secret = await password.twoFactor.getNewAuthSecret();
+    const accountsPassword = accountsServer.getServices().password as AccountsPassword;
+    const secret = await accountsPassword.twoFactor.getNewAuthSecret();
     res.json({ secret });
   } catch (err) {
     sendError(res, err);
@@ -20,13 +21,14 @@ export const twoFactorSet = (accountsServer: AccountsServer) => async (
   res: express.Response
 ) => {
   try {
-    if (!(req as any).userId) {
+    const userId: string | undefined = (req as any).userId;
+    if (!userId) {
       res.status(401);
       res.json({ message: 'Unauthorized' });
       return;
     }
-    const password: any = accountsServer.getServices().password;
-    await password.twoFactor.set((req as any).userId, req.body.secret, req.body.code);
+    const accountsPassword = accountsServer.getServices().password as AccountsPassword;
+    await accountsPassword.twoFactor.set(userId, req.body.secret, req.body.code);
     res.json({});
   } catch (err) {
     sendError(res, err);
@@ -38,13 +40,15 @@ export const twoFactorUnset = (accountsServer: AccountsServer) => async (
   res: express.Response
 ) => {
   try {
-    if (!(req as any).userId) {
+    const userId: string | undefined = (req as any).userId;
+    if (!userId) {
       res.status(401);
       res.json({ message: 'Unauthorized' });
       return;
     }
-    const password: any = accountsServer.getServices().password;
-    await password.twoFactor.unset((req as any).userId, req.body.code);
+    const { code } = req.body;
+    const accountsPassword = accountsServer.getServices().password as AccountsPassword;
+    await accountsPassword.twoFactor.unset(userId, code);
     res.json({});
   } catch (err) {
     sendError(res, err);
