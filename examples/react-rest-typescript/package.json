@@ -32,17 +32,17 @@
     "@material-ui/styles": "4.7.1",
     "formik": "2.0.8",
     "qrcode.react": "1.0.0",
-    "react": "16.12.0",
-    "react-dom": "16.12.0",
+    "react": "16.13.0",
+    "react-dom": "16.13.0",
     "react-router-dom": "5.1.2",
     "tslib": "1.10.0"
   },
   "devDependencies": {
-    "@types/node": "12.12.7",
+    "@types/node": "13.7.7",
     "@types/qrcode.react": "1.0.0",
-    "@types/react": "16.9.17",
-    "@types/react-dom": "16.9.4",
-    "@types/react-router": "5.1.3",
+    "@types/react": "16.9.23",
+    "@types/react-dom": "16.9.5",
+    "@types/react-router": "5.1.4",
     "@types/react-router-dom": "5.1.3",
     "react-scripts": "3.3.0",
     "typescript": "3.7.5"
