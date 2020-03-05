@@ -3,7 +3,7 @@ import { CreateUserServicePassword } from '@accounts/types';
 import { AccountsPassword } from '@accounts/password';
 import { AccountsServer } from '@accounts/server';
 import { AccountsModuleContext } from '../../accounts';
-import { MutationResolvers } from '../../../models';
+import { MutationResolvers, User } from '../../../models';
 
 export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> = {
   addEmail: async (_, { newEmail }, { user, injector }) => {
@@ -43,12 +43,8 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
     const createdUser = await accountsServer.findUserById(userId);
 
     // If we are here - user must be created successfully
-    // Explicitly checking this to say this to Typescript compiler
-    if (!createdUser) {
-      throw new Error('User not found');
-    }
-
-    const loginResult = await accountsServer.loginWithUser(createdUser, {
+    // Explicitly saying this to Typescript compiler
+    const loginResult = await accountsServer.loginWithUser(createdUser!, {
       ip,
       userAgent,
     });

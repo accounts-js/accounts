@@ -29,12 +29,8 @@ export const registerPassword = (accountsServer: AccountsServer) => async (
     const createdUser = await accountsServer.findUserById(userId);
 
     // If we are here - user must be created successfully
-    // Explicitly checking this to say this to Typescript compiler
-    if (!createdUser) {
-      throw new Error('User not found');
-    }
-
-    const loginResult = await accountsServer.loginWithUser(createdUser, {
+    // Explicitly saying this to Typescript compiler
+    const loginResult = await accountsServer.loginWithUser(createdUser!, {
       ip,
       userAgent,
     });
