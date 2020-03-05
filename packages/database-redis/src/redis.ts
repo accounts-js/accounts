@@ -31,6 +31,7 @@ export class RedisSessions implements DatabaseInterfaceSessions {
     userId: string,
     token: string,
     connection: ConnectionInformations = {},
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     extraData?: object
   ): Promise<string> {
     const sessionId = this.options.idProvider();
