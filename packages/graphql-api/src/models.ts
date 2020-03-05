@@ -51,6 +51,7 @@ export type LoginResult = {
    __typename?: 'LoginResult',
   sessionId?: Maybe<Scalars['String']>,
   tokens?: Maybe<Tokens>,
+  user?: Maybe<User>,
 };
 
 export type Mutation = {
@@ -313,6 +314,7 @@ export type ImpersonateReturnResolvers<ContextType = any, ParentType extends Res
 export type LoginResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginResult'] = ResolversParentTypes['LoginResult']> = {
   sessionId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   tokens?: Resolver<Maybe<ResolversTypes['Tokens']>, ParentType, ContextType>,
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {

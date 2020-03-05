@@ -146,11 +146,15 @@ describe('AccountsServer', () => {
       );
 
       const res = await accountsServer.loginWithUser(user, {});
-      const { accessToken, refreshToken } = res.tokens;
+      const {
+        user: loggedInUser,
+        tokens: { accessToken, refreshToken },
+      } = res;
       const decodedAccessToken: { data: JwtData } = jwtDecode(accessToken);
       expect(decodedAccessToken.data.token).toBeTruthy();
       expect(accessToken).toBeTruthy();
       expect(refreshToken).toBeTruthy();
+      expect(loggedInUser.id).toBe(user.id);
     });
   });
 
@@ -603,6 +607,7 @@ describe('AccountsServer', () => {
           accessToken: 'newAccessToken',
           refreshToken: 'newRefreshToken',
         },
+        user,
       });
     });
 
@@ -658,6 +663,7 @@ describe('AccountsServer', () => {
           accessToken: 'newAccessToken',
           refreshToken: 'newRefreshToken',
         },
+        user,
       });
     });
 
@@ -982,7 +988,7 @@ describe('AccountsServer', () => {
           ip: 'ip',
           userAgent: 'userAgent',
         })
-      ).rejects.toThrowError('An access token is required');
+      ).rejects.toThrowError('An accessToken is required');
     });
 
     it('throws error if access token is not valid', async () => {
@@ -1003,7 +1009,7 @@ describe('AccountsServer', () => {
             userAgent: 'userAgent',
           }
         )
-      ).rejects.toThrowError('Access token is not valid');
+      ).rejects.toThrowError('Tokens are not valid');
     });
 
     it('throws error if session is not valid', async () => {

@@ -9,6 +9,7 @@ export default gql`
   type LoginResult {
     sessionId: String
     tokens: Tokens
+    user: User
   }
 
   type CreateUserResult {

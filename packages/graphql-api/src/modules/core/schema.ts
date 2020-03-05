@@ -21,5 +21,6 @@ export default ({ userAsInterface }: CoreAccountsModuleConfig) => gql`
   type LoginResult {
     sessionId: String
     tokens: Tokens
+    user: User
   }
 `;

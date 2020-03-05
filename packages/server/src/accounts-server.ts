@@ -21,6 +21,16 @@ import { ServerHooks } from './utils/server-hooks';
 import { AccountsServerOptions } from './types/accounts-server-options';
 import { JwtData } from './types/jwt-data';
 import { EmailTemplateType } from './types/email-template-type';
+import { AccountsJsError } from './utils/accounts-error';
+import {
+  AuthenticateWithServiceErrors,
+  LoginWithServiceErrors,
+  ImpersonateErrors,
+  FindSessionByAccessTokenErrors,
+  RefreshTokensErrors,
+  LogoutErrors,
+  ResumeSessionErrors,
+} from './errors';
 
 const defaultOptions = {
   ambiguousErrorMessages: true,
@@ -103,6 +113,10 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     return () => this.hooks.off(eventName, callback);
   }
 
+  /**
+   * @description Try to authenticate the user for a given service
+   * @throws {@link AuthenticateWithServiceErrors}
+   */
   public async authenticateWithService(
     serviceName: string,
     params: any,
@@ -118,16 +132,25 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     };
     try {
       if (!this.services[serviceName]) {
-        throw new Error(`No service with the name ${serviceName} was registered.`);
+        throw new AccountsJsError(
+          `No service with the name ${serviceName} was registered.`,
+          AuthenticateWithServiceErrors.ServiceNotFound
+        );
       }
 
       const user: User | null = await this.services[serviceName].authenticate(params);
       hooksInfo.user = user;
       if (!user) {
-        throw new Error(`Service ${serviceName} was not able to authenticate user`);
+        throw new AccountsJsError(
+          `Service ${serviceName} was not able to authenticate user`,
+          AuthenticateWithServiceErrors.AuthenticationFailed
+        );
       }
       if (user.deactivated) {
-        throw new Error('Your account has been deactivated');
+        throw new AccountsJsError(
+          'Your account has been deactivated',
+          AuthenticateWithServiceErrors.UserDeactivated
+        );
       }
 
       this.hooks.emit(ServerHooks.AuthenticateSuccess, hooksInfo);
@@ -138,6 +161,9 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     }
   }
 
+  /**
+   * @throws {@link LoginWithServiceErrors}
+   */
   public async loginWithService(
     serviceName: string,
     params: any,
@@ -153,16 +179,25 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     };
     try {
       if (!this.services[serviceName]) {
-        throw new Error(`No service with the name ${serviceName} was registered.`);
+        throw new AccountsJsError(
+          `No service with the name ${serviceName} was registered.`,
+          LoginWithServiceErrors.ServiceNotFound
+        );
       }
 
       const user: User | null = await this.services[serviceName].authenticate(params);
       hooksInfo.user = user;
       if (!user) {
-        throw new Error(`Service ${serviceName} was not able to authenticate user`);
+        throw new AccountsJsError(
+          `Service ${serviceName} was not able to authenticate user`,
+          LoginWithServiceErrors.AuthenticationFailed
+        );
       }
       if (user.deactivated) {
-        throw new Error('Your account has been deactivated');
+        throw new AccountsJsError(
+          'Your account has been deactivated',
+          LoginWithServiceErrors.UserDeactivated
+        );
       }
 
       // Let the user validate the login attempt
@@ -199,6 +234,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         refreshToken,
         accessToken,
       },
+      user,
     };
   }
 
@@ -208,6 +244,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
    * @param {object} impersonated - impersonated user.
    * @param {ConnectionInformations} infos - User connection informations.
    * @returns {Promise<Object>} - ImpersonationResult
+   * @throws {@link LoginWithServiceErrors}
    */
   public async impersonate(
     accessToken: string,
@@ -219,26 +256,19 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     infos: ConnectionInformations
   ): Promise<ImpersonationResult> {
     try {
-      if (!isString(accessToken)) {
-        throw new Error('An access token is required');
-      }
-
-      try {
-        jwt.verify(accessToken, this.getSecretOrPublicKey());
-      } catch (err) {
-        throw new Error('Access token is not valid');
-      }
-
       const session = await this.findSessionByAccessToken(accessToken);
 
       if (!session.valid) {
-        throw new Error('Session is not valid for user');
+        throw new AccountsJsError(
+          'Session is not valid for user',
+          ImpersonateErrors.InvalidSession
+        );
       }
 
       const user = await this.db.findUserById(session.userId);
 
       if (!user) {
-        throw new Error('User not found');
+        throw new AccountsJsError('User not found', ImpersonateErrors.UserNotFound);
       }
 
       let impersonatedUser;
@@ -254,7 +284,10 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         if (this.options.ambiguousErrorMessages) {
           return { authorized: false };
         }
-        throw new Error(`Impersonated user not found`);
+        throw new AccountsJsError(
+          `Impersonated user not found`,
+          ImpersonateErrors.ImpersonatedUserNotFound
+        );
       }
 
       if (!this.options.impersonationAuthorize) {
@@ -302,6 +335,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
    * @param {string} refreshToken - User refresh token.
    * @param {ConnectionInformations} infos - User connection informations.
    * @returns {Promise<Object>} - LoginResult.
+   * @throws {@link RefreshTokensErrors}
    */
   public async refreshTokens(
     accessToken: string,
@@ -310,7 +344,10 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
   ): Promise<LoginResult> {
     try {
       if (!isString(accessToken) || !isString(refreshToken)) {
-        throw new Error('An accessToken and refreshToken are required');
+        throw new AccountsJsError(
+          'An accessToken and refreshToken are required',
+          RefreshTokensErrors.InvalidTokens
+        );
       }
 
       let sessionToken: string;
@@ -321,18 +358,21 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         }) as { data: JwtData };
         sessionToken = decodedAccessToken.data.token;
       } catch (err) {
-        throw new Error('Tokens are not valid');
+        throw new AccountsJsError(
+          'Tokens are not valid',
+          RefreshTokensErrors.TokenVerificationFailed
+        );
       }
 
       const session: Session | null = await this.db.findSessionByToken(sessionToken);
       if (!session) {
-        throw new Error('Session not found');
+        throw new AccountsJsError('Session not found', RefreshTokensErrors.SessionNotFound);
       }
 
       if (session.valid) {
         const user = await this.db.findUserById(session.userId);
         if (!user) {
-          throw new Error('User not found');
+          throw new AccountsJsError('User not found', RefreshTokensErrors.UserNotFound);
         }
 
         let newToken;
@@ -346,13 +386,14 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         const result = {
           sessionId: session.id,
           tokens,
+          user,
         };
 
         this.hooks.emit(ServerHooks.RefreshTokensSuccess, result);
 
         return result;
       } else {
-        throw new Error('Session is no longer valid');
+        throw new AccountsJsError('Session is no longer valid', RefreshTokensErrors.InvalidSession);
       }
     } catch (err) {
       this.hooks.emit(ServerHooks.RefreshTokensError, err);
@@ -398,6 +439,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
    * @description Logout a user and invalidate his session.
    * @param {string} accessToken - User access token.
    * @returns {Promise<void>} - Return a promise.
+   * @throws {@link LogoutErrors}
    */
   public async logout(accessToken: string): Promise<void> {
     try {
@@ -410,7 +452,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
           accessToken,
         });
       } else {
-        throw new Error('Session is no longer valid');
+        throw new AccountsJsError('Session is no longer valid', LogoutErrors.InvalidSession);
       }
     } catch (error) {
       this.hooks.emit(ServerHooks.LogoutError, error);
@@ -419,6 +461,9 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     }
   }
 
+  /**
+   * @throws {@link ResumeSessionErrors}
+   */
   public async resumeSession(accessToken: string): Promise<User> {
     try {
       const session: Session = await this.findSessionByAccessToken(accessToken);
@@ -427,7 +472,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         const user = await this.db.findUserById(session.userId);
 
         if (!user) {
-          throw new Error('User not found');
+          throw new AccountsJsError('User not found', ResumeSessionErrors.UserNotFound);
         }
 
         if (this.options.resumeSessionValidator) {
@@ -443,9 +488,12 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         return this.sanitizeUser(user);
       }
 
-      this.hooks.emit(ServerHooks.ResumeSessionError, new Error('Invalid Session'));
+      this.hooks.emit(
+        ServerHooks.ResumeSessionError,
+        new AccountsJsError('Invalid Session', ResumeSessionErrors.InvalidSession)
+      );
 
-      throw new Error('Invalid Session');
+      throw new AccountsJsError('Invalid Session', ResumeSessionErrors.InvalidSession);
     } catch (e) {
       this.hooks.emit(ServerHooks.ResumeSessionError, e);
 
@@ -457,10 +505,14 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
    * @description Find a session by his token.
    * @param {string} accessToken
    * @returns {Promise<Session>} - Return a session.
+   * @throws {@link FindSessionByAccessTokenErrors}
    */
   public async findSessionByAccessToken(accessToken: string): Promise<Session> {
     if (!isString(accessToken)) {
-      throw new Error('An accessToken is required');
+      throw new AccountsJsError(
+        'An accessToken is required',
+        FindSessionByAccessTokenErrors.InvalidToken
+      );
     }
 
     let sessionToken: string;
@@ -470,12 +522,18 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       };
       sessionToken = decodedAccessToken.data.token;
     } catch (err) {
-      throw new Error('Tokens are not valid');
+      throw new AccountsJsError(
+        'Tokens are not valid',
+        FindSessionByAccessTokenErrors.TokenVerificationFailed
+      );
     }
 
     const session: Session | null = await this.db.findSessionByToken(sessionToken);
     if (!session) {
-      throw new Error('Session not found');
+      throw new AccountsJsError(
+        'Session not found',
+        FindSessionByAccessTokenErrors.SessionNotFound
+      );
     }
 
     return session;
