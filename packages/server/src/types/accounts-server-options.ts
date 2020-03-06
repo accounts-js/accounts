@@ -6,7 +6,8 @@ import { ResumeSessionValidator } from './resume-session-validator';
 import { PrepareMailFunction } from './prepare-mail-function';
 import { SendMailType } from './send-mail-type';
 import { TokenCreator } from './token-creator';
-import { JwtPayloadCreator } from './jwt-payload-creator';
+import { JwtData } from './jwt-data';
+import { JwtPayload } from './jwt-payload';
 
 export interface AccountsServerOptions {
   /**
@@ -36,5 +37,8 @@ export interface AccountsServerOptions {
    * Creates a new session token each time a user refreshes his access token
    */
   createNewSessionTokenOnRefresh?: boolean;
-  jwtPayloadCreator?: JwtPayloadCreator;
+  /**
+   * Function to add addition information in jwt payload of accessToken
+   */
+  createPayload?: (data: JwtData, user: User) => Promise<Record<string, any>>;
 }

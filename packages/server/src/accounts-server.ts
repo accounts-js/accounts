@@ -575,8 +575,11 @@ Please change it with a strong random token.`);
   }
 
   private async createJwtPayload(data: JwtData, user: User): Promise<JwtPayload> {
-    if (this.options.jwtPayloadCreator) {
-      return await this.options.jwtPayloadCreator.createPayload(data, user);
+    if (this.options.createPayload) {
+      return {
+        ...(await this.options.createPayload(data, user)),
+        data,
+      };
     }
     return { data };
   }
