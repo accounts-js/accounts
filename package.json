@@ -76,7 +76,7 @@
     "opencollective": "1.0.3",
     "prettier": "1.19.1",
     "ts-jest": "25.2.0",
-    "typescript": "3.7.5"
+    "typescript": "3.8.3"
   },
   "collective": {
     "type": "opencollective",

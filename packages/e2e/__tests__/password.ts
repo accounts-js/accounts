@@ -18,7 +18,8 @@ Object.keys(servers).forEach(key => {
           email: user.email,
           password: user.password,
         });
-        expect(userId).toBeNull();
+        // User id will be null for graphql and undefined for rest
+        expect(userId === null || userId === undefined).toBeTruthy();
       });
     });
 

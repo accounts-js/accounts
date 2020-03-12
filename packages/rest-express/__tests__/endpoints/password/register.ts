@@ -1,5 +1,6 @@
 import { registerPassword } from '../../../src/endpoints/password/register';
 import { LoginResult } from '@accounts/types';
+import { AccountsJsError } from '@accounts/server';
 
 const res: any = {
   json: jest.fn(),
@@ -45,7 +46,7 @@ describe('registerPassword', () => {
     expect(res.status).not.toHaveBeenCalled();
   });
 
-  it('calls password.createUser and returns null if server have ambiguousErrorMessages', async () => {
+  it('calls password.createUser and obfuscate user id if server have ambiguousErrorMessages', async () => {
     const userId = '1';
     const passwordService = {
       createUser: jest.fn(() => userId),
@@ -75,7 +76,77 @@ describe('registerPassword', () => {
     expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
       username: 'toto',
     });
-    expect(res.json).toHaveBeenCalledWith({ userId: null });
+    expect(res.json).toHaveBeenCalledWith({});
+    expect(res.status).not.toHaveBeenCalled();
+  });
+
+  it('calls password.createUser and obfuscate EmailAlreadyExists error if server have ambiguousErrorMessages', async () => {
+    const passwordService = {
+      createUser: jest.fn(() => {
+        throw new AccountsJsError('EmailAlreadyExists', 'EmailAlreadyExists');
+      }),
+    };
+    const accountsServer = {
+      options: { ambiguousErrorMessages: true },
+      getServices: () => ({
+        password: passwordService,
+      }),
+    };
+    const middleware = registerPassword(accountsServer as any);
+
+    const req = {
+      body: {
+        user: {
+          username: 'toto',
+        },
+        extraFieldThatShouldNotBePassed: 'hey',
+      },
+      headers: {},
+    };
+    const reqCopy = { ...req };
+
+    await middleware(req as any, res);
+
+    expect(req).toEqual(reqCopy);
+    expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
+      username: 'toto',
+    });
+    expect(res.json).toHaveBeenCalledWith({});
+    expect(res.status).not.toHaveBeenCalled();
+  });
+
+  it('calls password.createUser and obfuscate UsernameAlreadyExists error if server have ambiguousErrorMessages', async () => {
+    const passwordService = {
+      createUser: jest.fn(() => {
+        throw new AccountsJsError('UsernameAlreadyExists', 'UsernameAlreadyExists');
+      }),
+    };
+    const accountsServer = {
+      options: { ambiguousErrorMessages: true },
+      getServices: () => ({
+        password: passwordService,
+      }),
+    };
+    const middleware = registerPassword(accountsServer as any);
+
+    const req = {
+      body: {
+        user: {
+          username: 'toto',
+        },
+        extraFieldThatShouldNotBePassed: 'hey',
+      },
+      headers: {},
+    };
+    const reqCopy = { ...req };
+
+    await middleware(req as any, res);
+
+    expect(req).toEqual(reqCopy);
+    expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
+      username: 'toto',
+    });
+    expect(res.json).toHaveBeenCalledWith({});
     expect(res.status).not.toHaveBeenCalled();
   });
 
@@ -145,6 +216,7 @@ describe('registerPassword', () => {
       }),
     };
     const accountsServer = {
+      options: {},
       getServices: () => ({
         password: passwordService,
       }),
