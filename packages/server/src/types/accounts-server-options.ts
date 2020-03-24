@@ -41,4 +41,9 @@ export interface AccountsServerOptions {
    * Function to add addition information in jwt payload of accessToken
    */
   createPayload?: (data: JwtData, user: User) => Promise<Record<string, any>>;
+  /**
+   * If this flag is set to true - user will be automatically logged in after registration.
+   * LoginResult data will be included into registration response.
+   */
+  enableAutologin?: boolean;
 }

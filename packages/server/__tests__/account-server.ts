@@ -17,6 +17,20 @@ describe('AccountsServer', () => {
     it('throws on invalid db', async () => {
       expect(() => new AccountsServer({} as any, {})).toThrowError('A database driver is required');
     });
+
+    it('should throw if ambiguousErrorMessages and enableAutologin flags enabled at the same time', async () => {
+      expect(
+        () =>
+          new AccountsServer(
+            {
+              db: {},
+              enableAutologin: true,
+              ambiguousErrorMessages: true,
+            } as any,
+            {}
+          )
+      ).toThrowError();
+    });
   });
 
   describe('getServices', () => {
@@ -149,12 +163,16 @@ describe('AccountsServer', () => {
       );
 
       const res = await accountsServer.loginWithUser(user, {});
-      const { accessToken, refreshToken } = res.tokens;
+      const {
+        user: loggedInUser,
+        tokens: { accessToken, refreshToken },
+      } = res;
       const decodedAccessToken: { data: JwtData; username: string } = jwtDecode(accessToken);
       expect(decodedAccessToken.data.token).toBeTruthy();
       expect(decodedAccessToken.username).toEqual(user.username);
       expect(accessToken).toBeTruthy();
       expect(refreshToken).toBeTruthy();
+      expect(loggedInUser.id).toBe(user.id);
     });
   });
 
@@ -451,7 +469,10 @@ describe('AccountsServer', () => {
             deactivated: false,
           },
         });
-        await accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'userAgent');
+        await accountsServer.refreshTokens(accessToken, refreshToken, {
+          ip: 'ip',
+          userAgent: 'userAgent',
+        });
       } catch (err) {
         // nothing to do
       }
@@ -493,7 +514,10 @@ describe('AccountsServer', () => {
         refreshToken: 'newRefreshToken',
       });
 
-      await accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
+      await accountsServer.refreshTokens(accessToken, refreshToken, {
+        ip: 'ip',
+        userAgent: 'userAgent',
+      });
       await delay(10);
       expect(hookSpy).toHaveBeenCalled();
     });
@@ -512,7 +536,10 @@ describe('AccountsServer', () => {
       try {
         const accessToken = null as any;
         const impersonated = null as any;
-        await accountsServer.impersonate(accessToken, impersonated, 'ip', 'user agent');
+        await accountsServer.impersonate(accessToken, impersonated, {
+          ip: 'ip',
+          userAgent: 'userAgent',
+        });
       } catch (err) {
         // nothing to do
       }
@@ -554,7 +581,14 @@ describe('AccountsServer', () => {
           user,
         } as any);
 
-      await accountsServer.impersonate(accessToken, { userId: 'userId' }, 'ip', 'user agent');
+      await accountsServer.impersonate(
+        accessToken,
+        { userId: 'userId' },
+        {
+          ip: 'ip',
+          userAgent: 'userAgent',
+        }
+      );
       await delay(10);
       expect(hookSpy).toHaveBeenCalled();
     });
@@ -592,13 +626,23 @@ describe('AccountsServer', () => {
         accessToken: 'newAccessToken',
         refreshToken: 'newRefreshToken',
       });
-      const res = await accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
+      const res = await accountsServer.refreshTokens(accessToken, refreshToken, {
+        ip: 'ip',
+        userAgent: 'userAgent',
+      });
       expect(updateSession.mock.calls[0]).toEqual([
         '456',
-        { ip: 'ip', userAgent: 'user agent' },
+        { ip: 'ip', userAgent: 'userAgent' },
         undefined,
       ]);
-      expect((res as any).user).toEqual(user);
+      expect(res).toEqual({
+        sessionId: '456',
+        tokens: {
+          accessToken: 'newAccessToken',
+          refreshToken: 'newRefreshToken',
+        },
+        user,
+      });
     });
 
     it('updates session and returns new tokens and user with new session token', async () => {
@@ -639,13 +683,23 @@ describe('AccountsServer', () => {
         refreshToken: 'newRefreshToken',
       });
 
-      const res = await accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent');
+      const res = await accountsServer.refreshTokens(accessToken, refreshToken, {
+        ip: 'ip',
+        userAgent: 'userAgent',
+      });
       expect(updateSession.mock.calls[0]).toEqual([
         '456',
-        { ip: 'ip', userAgent: 'user agent' },
+        { ip: 'ip', userAgent: 'userAgent' },
         '123',
       ]);
-      expect((res as any).user).toEqual(user);
+      expect(res).toEqual({
+        sessionId: '456',
+        tokens: {
+          accessToken: 'newAccessToken',
+          refreshToken: 'newRefreshToken',
+        },
+        user,
+      });
     });
 
     it('requires access and refresh tokens', async () => {
@@ -657,7 +711,10 @@ describe('AccountsServer', () => {
         {}
       );
       await expect(
-        accountsServer.refreshTokens(null as any, null as any, 'ip', 'user agent')
+        accountsServer.refreshTokens(null as any, null as any, {
+          ip: 'ip',
+          userAgent: 'userAgent',
+        })
       ).rejects.toThrowError('An accessToken and refreshToken are required');
     });
     it('throws error if tokens are not valid', async () => {
@@ -669,7 +726,10 @@ describe('AccountsServer', () => {
         {}
       );
       await expect(
-        accountsServer.refreshTokens('bad access token', 'bad refresh token', 'ip', 'user agent')
+        accountsServer.refreshTokens('bad access token', 'bad refresh token', {
+          ip: 'ip',
+          userAgent: 'userAgent',
+        })
       ).rejects.toThrowError('Tokens are not valid');
     });
 
@@ -691,7 +751,10 @@ describe('AccountsServer', () => {
         },
       });
       await expect(
-        accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent')
+        accountsServer.refreshTokens(accessToken, refreshToken, {
+          ip: 'ip',
+          userAgent: 'userAgent',
+        })
       ).rejects.toThrowError('Session not found');
     });
 
@@ -716,7 +779,10 @@ describe('AccountsServer', () => {
         },
       });
       await expect(
-        accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent')
+        accountsServer.refreshTokens(accessToken, refreshToken, {
+          ip: 'ip',
+          userAgent: 'userAgent',
+        })
       ).rejects.toThrowError('Session is no longer valid');
     });
 
@@ -745,7 +811,10 @@ describe('AccountsServer', () => {
         },
       });
       await expect(
-        accountsServer.refreshTokens(accessToken, refreshToken, 'ip', 'user agent')
+        accountsServer.refreshTokens(accessToken, refreshToken, {
+          ip: 'ip',
+          userAgent: 'userAgent',
+        })
       ).rejects.toThrowError('User not found');
     });
   });
@@ -973,8 +1042,11 @@ describe('AccountsServer', () => {
       const accessToken = null as any;
       const impersonated = null as any;
       await expect(
-        accountsServer.impersonate(accessToken, impersonated, 'ip', 'user agent')
-      ).rejects.toThrowError('An access token is required');
+        accountsServer.impersonate(accessToken, impersonated, {
+          ip: 'ip',
+          userAgent: 'userAgent',
+        })
+      ).rejects.toThrowError('An accessToken is required');
     });
 
     it('throws error if access token is not valid', async () => {
@@ -987,8 +1059,15 @@ describe('AccountsServer', () => {
       );
 
       await expect(
-        accountsServer.impersonate('invalidToken', {}, 'ip', 'user agent')
-      ).rejects.toThrowError('Access token is not valid');
+        accountsServer.impersonate(
+          'invalidToken',
+          {},
+          {
+            ip: 'ip',
+            userAgent: 'userAgent',
+          }
+        )
+      ).rejects.toThrowError('Tokens are not valid');
     });
 
     it('throws error if session is not valid', async () => {
@@ -1014,7 +1093,14 @@ describe('AccountsServer', () => {
         } as any);
 
       await expect(
-        accountsServer.impersonate(accessToken, {}, 'ip', 'user agent')
+        accountsServer.impersonate(
+          accessToken,
+          {},
+          {
+            ip: 'ip',
+            userAgent: 'userAgent',
+          }
+        )
       ).rejects.toThrowError('Session is not valid for user');
     });
 
@@ -1043,7 +1129,14 @@ describe('AccountsServer', () => {
         } as any);
 
       await expect(
-        accountsServer.impersonate(accessToken, { userId: 'userId' }, 'ip', 'user agent')
+        accountsServer.impersonate(
+          accessToken,
+          { userId: 'userId' },
+          {
+            ip: 'ip',
+            userAgent: 'userAgent',
+          }
+        )
       ).rejects.toThrowError('User not found');
     });
 
@@ -1076,7 +1169,14 @@ describe('AccountsServer', () => {
         } as any);
 
       await expect(
-        accountsServer.impersonate(accessToken, { userId: 'userId' }, 'ip', 'user agent')
+        accountsServer.impersonate(
+          accessToken,
+          { userId: 'userId' },
+          {
+            ip: 'ip',
+            userAgent: 'userAgent',
+          }
+        )
       ).rejects.toThrowError('Impersonated user not found');
     });
 
@@ -1108,8 +1208,10 @@ describe('AccountsServer', () => {
       const res = await accountsServer.impersonate(
         accessToken,
         { userId: 'userId' },
-        'ip',
-        'user agent'
+        {
+          ip: 'ip',
+          userAgent: 'userAgent',
+        }
       );
       expect(res.authorized).toEqual(false);
     });
@@ -1148,8 +1250,10 @@ describe('AccountsServer', () => {
       const res = await accountsServer.impersonate(
         accessToken,
         { userId: 'userId' },
-        'ip',
-        'user agent'
+        {
+          ip: 'ip',
+          userAgent: 'userAgent',
+        }
       );
       expect(res.authorized).toEqual(false);
     });
@@ -1187,8 +1291,10 @@ describe('AccountsServer', () => {
       const res = await accountsServer.impersonate(
         accessToken,
         { userId: 'userId' },
-        'ip',
-        'user agent'
+        {
+          ip: 'ip',
+          userAgent: 'userAgent',
+        }
       );
       expect(res).toEqual({
         authorized: true,
@@ -1198,7 +1304,7 @@ describe('AccountsServer', () => {
       expect(createSession).toHaveBeenCalledWith(
         expect.any(String),
         expect.any(String),
-        { ip: 'ip', userAgent: 'user agent' },
+        { ip: 'ip', userAgent: 'userAgent' },
         {
           impersonatorUserId: user.id,
         }

@@ -6,29 +6,45 @@ import {
   TokenRecord,
   DatabaseInterface,
   AuthenticationService,
-  HashAlgorithm,
   ConnectionInformations,
   LoginResult,
+  CreateUserServicePassword,
+  LoginUserPasswordService,
 } from '@accounts/types';
 import { TwoFactor, AccountsTwoFactorOptions, getUserTwoFactorService } from '@accounts/two-factor';
-import { AccountsServer, ServerHooks, generateRandomToken } from '@accounts/server';
+import {
+  AccountsServer,
+  ServerHooks,
+  generateRandomToken,
+  AccountsJsError,
+} from '@accounts/server';
 import {
   getUserResetTokens,
   getUserVerificationTokens,
-  hashPassword,
   bcryptPassword,
   verifyPassword,
   isEmail,
 } from './utils';
-import { PasswordCreateUserType, PasswordLoginType, PasswordType, ErrorMessages } from './types';
-import { errors } from './errors';
+import { ErrorMessages } from './types';
+import {
+  errors,
+  AddEmailErrors,
+  AuthenticateErrors,
+  ChangePasswordErrors,
+  CreateUserErrors,
+  PasswordAuthenticatorErrors,
+  ResetPasswordErrors,
+  SendVerificationEmailErrors,
+  SendResetPasswordEmailErrors,
+  SendEnrollmentEmailErrors,
+  VerifyEmailErrors,
+} from './errors';
 
 export interface AccountsPasswordOptions {
   /**
    * Two factor options passed down to the @accounts/two-factor service.
    */
   twoFactor?: AccountsTwoFactorOptions;
-  passwordHashAlgorithm?: HashAlgorithm;
   /**
    * The number of milliseconds from when a link to verify the user email is sent until token expires and user can't verify his email with the link anymore.
    * Defaults to 3 days.
@@ -79,23 +95,34 @@ export interface AccountsPasswordOptions {
    * By default we only allow `username`, `email` and `password` fields.
    */
   validateNewUser?: (
-    user: PasswordCreateUserType
-  ) => Promise<PasswordCreateUserType> | PasswordCreateUserType;
+    user: CreateUserServicePassword
+  ) => Promise<CreateUserServicePassword> | CreateUserServicePassword;
   /**
    * Function that check if the email is a valid email.
    * This function will be called when you call `createUser` and `addEmail`.
    */
-  validateEmail?(email?: string): boolean;
+  validateEmail?: (email?: string) => boolean;
   /**
    * Function that check if the password is valid.
    * This function will be called when you call `createUser` and `changePassword`.
    */
-  validatePassword?(password?: PasswordType): boolean;
+  validatePassword?: (password?: string) => boolean;
   /**
    * Function that check if the username is a valid username.
    * This function will be called when you call `createUser`.
    */
-  validateUsername?(username?: string): boolean;
+  validateUsername?: (username?: string) => boolean;
+  /**
+   * Function called to hash the user password, the password returned will be saved
+   * in the database directly. By default we use bcrypt to hash the password.
+   * Use this option alongside `verifyPassword` if you want to use argon2 for example.
+   */
+  hashPassword?: (password: string) => Promise<string>;
+  /**
+   * Function called to verify the password hash. By default we use bcrypt to hash the password.
+   * Use this option alongside `hashPassword` if you want to use argon2 for example.
+   */
+  verifyPassword?: (password: string, hash: string) => Promise<boolean>;
 }
 
 const defaultOptions = {
@@ -109,10 +136,12 @@ const defaultOptions = {
   returnTokensAfterResetPassword: false,
   invalidateAllSessionsAfterPasswordReset: true,
   invalidateAllSessionsAfterPasswordChanged: false,
+  errors,
+  sendVerificationEmailAfterSignup: false,
   validateEmail(email?: string): boolean {
     return !isEmpty(trim(email)) && isEmail(email);
   },
-  validatePassword(password?: PasswordType): boolean {
+  validatePassword(password?: string): boolean {
     return !isEmpty(password);
   },
   validateUsername(username?: string): boolean {
@@ -120,8 +149,8 @@ const defaultOptions = {
     const isValid = username && !isEmpty(trim(username)) && usernameRegex.test(username);
     return Boolean(isValid);
   },
-  errors,
-  sendVerificationEmailAfterSignup: false,
+  hashPassword: bcryptPassword,
+  verifyPassword,
 };
 
 export default class AccountsPassword implements AuthenticationService {
@@ -141,13 +170,16 @@ export default class AccountsPassword implements AuthenticationService {
     this.twoFactor.setStore(store);
   }
 
-  public async authenticate(params: PasswordLoginType): Promise<User> {
+  public async authenticate(params: LoginUserPasswordService): Promise<User> {
     const { user, password, code } = params;
     if (!user || !password) {
-      throw new Error(this.options.errors.unrecognizedOptionsForLogin);
+      throw new AccountsJsError(
+        this.options.errors.unrecognizedOptionsForLogin,
+        AuthenticateErrors.UnrecognizedOptionsForLogin
+      );
     }
     if ((!isString(user) && !isPlainObject(user)) || !isString(password)) {
-      throw new Error(this.options.errors.matchFailed);
+      throw new AccountsJsError(this.options.errors.matchFailed, AuthenticateErrors.MatchFailed);
     }
 
     const foundUser = await this.passwordAuthenticator(user, password);
@@ -187,10 +219,11 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {boolean} [verified] - Whether the new email address should be marked as verified.
    * Defaults to false.
    * @returns {Promise<void>} - Return a Promise.
+   * @throws {@link AddEmailErrors}
    */
   public addEmail(userId: string, newEmail: string, verified = false): Promise<void> {
     if (!this.options.validateEmail(newEmail)) {
-      throw new Error(this.options.errors.invalidEmail);
+      throw new AccountsJsError(this.options.errors.invalidEmail, AddEmailErrors.InvalidEmail);
     }
     return this.db.addEmail(userId, newEmail, verified);
   }
@@ -210,51 +243,69 @@ export default class AccountsPassword implements AuthenticationService {
    * @description Marks the user's email address as verified.
    * @param {string} token - The token retrieved from the verification URL.
    * @returns {Promise<void>} - Return a Promise.
+   * @throws {@link VerifyEmailErrors}
    */
   public async verifyEmail(token: string): Promise<void> {
     if (!token || !isString(token)) {
-      throw new Error(this.options.errors.invalidToken);
+      throw new AccountsJsError(this.options.errors.invalidToken, VerifyEmailErrors.InvalidToken);
     }
 
     const user = await this.db.findUserByEmailVerificationToken(token);
     if (!user) {
-      throw new Error(this.options.errors.verifyEmailLinkExpired);
+      throw new AccountsJsError(
+        this.options.errors.verifyEmailLinkExpired,
+        VerifyEmailErrors.VerifyEmailLinkExpired
+      );
     }
 
     const verificationTokens = getUserVerificationTokens(user);
     const tokenRecord = find(verificationTokens, (t: TokenRecord) => t.token === token);
     if (!tokenRecord || this.isTokenExpired(tokenRecord, this.options.verifyEmailTokenExpiration)) {
-      throw new Error(this.options.errors.verifyEmailLinkExpired);
+      throw new AccountsJsError(
+        this.options.errors.verifyEmailLinkExpired,
+        VerifyEmailErrors.VerifyEmailLinkExpired
+      );
     }
 
     const emailRecord = find(user.emails, (e: EmailRecord) => e.address === tokenRecord.address);
     if (!emailRecord) {
-      throw new Error(this.options.errors.verifyEmailLinkUnknownAddress);
+      throw new AccountsJsError(
+        this.options.errors.verifyEmailLinkUnknownAddress,
+        VerifyEmailErrors.VerifyEmailLinkUnknownAddress
+      );
     }
     await this.db.verifyEmail(user.id, emailRecord.address);
   }
 
   /**
    * @description Reset the password for a user using a token received in email.
+   * It will trigger the `validatePassword` option and throw if password is invalid.
    * @param {string} token - The token retrieved from the reset password URL.
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<LoginResult | null>} - If `returnTokensAfterResetPassword` option is true return the session tokens and user object, otherwise return null.
+   * @throws {@link ResetPasswordErrors}
    */
   public async resetPassword(
     token: string,
-    newPassword: PasswordType,
+    newPassword: string,
     infos: ConnectionInformations
   ): Promise<LoginResult | null> {
     if (!token || !isString(token)) {
-      throw new Error(this.options.errors.invalidToken);
+      throw new AccountsJsError(this.options.errors.invalidToken, ResetPasswordErrors.InvalidToken);
     }
-    if (!newPassword || !isString(newPassword)) {
-      throw new Error(this.options.errors.invalidNewPassword);
+    if (!this.options.validatePassword(newPassword)) {
+      throw new AccountsJsError(
+        this.options.errors.invalidNewPassword,
+        ResetPasswordErrors.InvalidNewPassword
+      );
     }
 
     const user = await this.db.findUserByResetPasswordToken(token);
     if (!user) {
-      throw new Error(this.options.errors.resetPasswordLinkExpired);
+      throw new AccountsJsError(
+        this.options.errors.resetPasswordLinkExpired,
+        ResetPasswordErrors.ResetPasswordLinkExpired
+      );
     }
 
     const resetTokens = getUserResetTokens(user);
@@ -269,7 +320,10 @@ export default class AccountsPassword implements AuthenticationService {
           : this.options.passwordResetTokenExpiration
       )
     ) {
-      throw new Error(this.options.errors.resetPasswordLinkExpired);
+      throw new AccountsJsError(
+        this.options.errors.resetPasswordLinkExpired,
+        ResetPasswordErrors.ResetPasswordLinkExpired
+      );
     }
 
     const emails = user.emails || [];
@@ -279,10 +333,13 @@ export default class AccountsPassword implements AuthenticationService {
         resetTokenRecord.address
       )
     ) {
-      throw new Error(this.options.errors.resetPasswordLinkUnknownAddress);
+      throw new AccountsJsError(
+        this.options.errors.resetPasswordLinkUnknownAddress,
+        ResetPasswordErrors.ResetPasswordLinkUnknownAddress
+      );
     }
 
-    const password = await this.hashAndBcryptPassword(newPassword);
+    const password = await this.options.hashPassword(newPassword);
     // Change the user password and remove the old token
     await this.db.setResetPassword(user.id, resetTokenRecord.address, password, token);
 
@@ -301,7 +358,7 @@ export default class AccountsPassword implements AuthenticationService {
     if (this.options.notifyUserAfterPasswordChanged) {
       const address = user.emails && user.emails[0].address;
       if (!address) {
-        throw new Error(this.options.errors.noEmailSet);
+        throw new AccountsJsError(this.options.errors.noEmailSet, ResetPasswordErrors.NoEmailSet);
       }
 
       const passwordChangedMail = this.server.prepareMail(
@@ -328,7 +385,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @returns {Promise<void>} - Return a Promise.
    */
   public async setPassword(userId: string, newPassword: string): Promise<void> {
-    const password = await bcryptPassword(newPassword);
+    const password = await this.options.hashPassword(newPassword);
     return this.db.setPassword(userId, password);
   }
 
@@ -339,6 +396,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {string} oldPassword - The user's current password.
    * @param {string} newPassword - A new password for the user.
    * @returns {Promise<void>} - Return a Promise.
+   * @throws {@link ChangePasswordErrors}
    */
   public async changePassword(
     userId: string,
@@ -346,12 +404,15 @@ export default class AccountsPassword implements AuthenticationService {
     newPassword: string
   ): Promise<void> {
     if (!this.options.validatePassword(newPassword)) {
-      throw new Error(this.options.errors.invalidPassword);
+      throw new AccountsJsError(
+        this.options.errors.invalidPassword,
+        ChangePasswordErrors.InvalidPassword
+      );
     }
 
     const user = await this.passwordAuthenticator({ id: userId }, oldPassword);
 
-    const password = await bcryptPassword(newPassword);
+    const password = await this.options.hashPassword(newPassword);
     await this.db.setPassword(userId, password);
 
     this.server.getHooks().emit(ServerHooks.ChangePasswordSuccess, user);
@@ -363,7 +424,7 @@ export default class AccountsPassword implements AuthenticationService {
     if (this.options.notifyUserAfterPasswordChanged) {
       const address = user.emails && user.emails[0].address;
       if (!address) {
-        throw new Error(this.options.errors.noEmailSet);
+        throw new AccountsJsError(this.options.errors.noEmailSet, ChangePasswordErrors.NoEmailSet);
       }
 
       const passwordChangedMail = this.server.prepareMail(
@@ -385,10 +446,14 @@ export default class AccountsPassword implements AuthenticationService {
    * Defaults to the first unverified email in the list.
    * If the address is already verified we do not send any email.
    * @returns {Promise<void>} - Return a Promise.
+   * @throws {@link SendVerificationEmailErrors}
    */
   public async sendVerificationEmail(address: string): Promise<void> {
     if (!address || !isString(address)) {
-      throw new Error(this.options.errors.invalidEmail);
+      throw new AccountsJsError(
+        this.options.errors.invalidEmail,
+        SendVerificationEmailErrors.InvalidEmail
+      );
     }
 
     const user = await this.db.findUserByEmail(address);
@@ -397,7 +462,10 @@ export default class AccountsPassword implements AuthenticationService {
       if (this.server.options.ambiguousErrorMessages) {
         return;
       }
-      throw new Error(this.options.errors.userNotFound);
+      throw new AccountsJsError(
+        this.options.errors.userNotFound,
+        SendVerificationEmailErrors.UserNotFound
+      );
     }
 
     // Do not send an email if the address is already verified
@@ -430,10 +498,14 @@ export default class AccountsPassword implements AuthenticationService {
    * This address must be in the user's emails list.
    * Defaults to the first email in the list.
    * @returns {Promise<void>} - Return a Promise.
+   * @throws {@link SendResetPasswordEmailErrors}
    */
   public async sendResetPasswordEmail(address: string): Promise<void> {
     if (!address || !isString(address)) {
-      throw new Error(this.options.errors.invalidEmail);
+      throw new AccountsJsError(
+        this.options.errors.invalidEmail,
+        SendResetPasswordEmailErrors.InvalidEmail
+      );
     }
 
     const user = await this.db.findUserByEmail(address);
@@ -442,7 +514,10 @@ export default class AccountsPassword implements AuthenticationService {
       if (this.server.options.ambiguousErrorMessages) {
         return;
       }
-      throw new Error(this.options.errors.userNotFound);
+      throw new AccountsJsError(
+        this.options.errors.userNotFound,
+        SendResetPasswordEmailErrors.UserNotFound
+      );
     }
     const token = generateRandomToken();
     await this.db.addResetPasswordToken(user.id, address, token, 'reset');
@@ -466,15 +541,22 @@ export default class AccountsPassword implements AuthenticationService {
    * This address must be in the user's emails list.
    * Defaults to the first email in the list.
    * @returns {Promise<void>} - Return a Promise.
+   * @throws {@link SendEnrollmentEmailErrors}
    */
   public async sendEnrollmentEmail(address: string): Promise<void> {
     if (!address || !isString(address)) {
-      throw new Error(this.options.errors.invalidEmail);
+      throw new AccountsJsError(
+        this.options.errors.invalidEmail,
+        SendEnrollmentEmailErrors.InvalidEmail
+      );
     }
 
     const user = await this.db.findUserByEmail(address);
     if (!user) {
-      throw new Error(this.options.errors.userNotFound);
+      throw new AccountsJsError(
+        this.options.errors.userNotFound,
+        SendEnrollmentEmailErrors.UserNotFound
+      );
     }
     const token = generateRandomToken();
     await this.db.addResetPasswordToken(user.id, address, token, 'enroll');
@@ -495,39 +577,55 @@ export default class AccountsPassword implements AuthenticationService {
    * @description Create a new user.
    * @param user - The user object.
    * @returns Return the id of user created.
+   * @throws {@link CreateUserErrors}
    */
-  public async createUser(user: PasswordCreateUserType): Promise<string> {
+  public async createUser(user: CreateUserServicePassword): Promise<string> {
     if (!user.username && !user.email) {
-      throw new Error(this.options.errors.usernameOrEmailRequired);
+      throw new AccountsJsError(
+        this.options.errors.usernameOrEmailRequired,
+        CreateUserErrors.UsernameOrEmailRequired
+      );
     }
 
     if (user.username && !this.options.validateUsername(user.username)) {
-      throw new Error(this.options.errors.invalidUsername);
+      throw new AccountsJsError(
+        this.options.errors.invalidUsername,
+        CreateUserErrors.InvalidUsername
+      );
     }
 
     if (user.email && !this.options.validateEmail(user.email)) {
-      throw new Error(this.options.errors.invalidEmail);
+      throw new AccountsJsError(this.options.errors.invalidEmail, CreateUserErrors.InvalidEmail);
     }
 
     if (user.username && (await this.db.findUserByUsername(user.username))) {
-      throw new Error(this.options.errors.usernameAlreadyExists);
+      throw new AccountsJsError(
+        this.options.errors.usernameAlreadyExists,
+        CreateUserErrors.UsernameAlreadyExists
+      );
     }
 
     if (user.email && (await this.db.findUserByEmail(user.email))) {
-      throw new Error(this.options.errors.emailAlreadyExists);
+      throw new AccountsJsError(
+        this.options.errors.emailAlreadyExists,
+        CreateUserErrors.EmailAlreadyExists
+      );
     }
 
     if (user.password) {
       if (!this.options.validatePassword(user.password)) {
-        throw new Error(this.options.errors.invalidPassword);
+        throw new AccountsJsError(
+          this.options.errors.invalidPassword,
+          CreateUserErrors.InvalidPassword
+        );
       }
-      user.password = await this.hashAndBcryptPassword(user.password);
+      user.password = await this.options.hashPassword(user.password);
     }
 
     // If user does not provide the validate function only allow some fields
     user = this.options.validateNewUser
       ? await this.options.validateNewUser(user)
-      : pick<PasswordCreateUserType, 'username' | 'email' | 'password'>(user, [
+      : pick<CreateUserServicePassword, 'username' | 'email' | 'password'>(user, [
           'username',
           'email',
           'password',
@@ -557,7 +655,7 @@ export default class AccountsPassword implements AuthenticationService {
 
   private async passwordAuthenticator(
     user: string | LoginUserIdentity,
-    password: PasswordType
+    password: string
   ): Promise<User> {
     const { username, email, id } = isString(user)
       ? this.toUsernameAndEmail({ user })
@@ -577,37 +675,44 @@ export default class AccountsPassword implements AuthenticationService {
     }
 
     if (!foundUser) {
-      throw new Error(
-        this.server.options.ambiguousErrorMessages
-          ? this.options.errors.invalidCredentials
-          : this.options.errors.userNotFound
-      );
+      if (this.server.options.ambiguousErrorMessages) {
+        throw new AccountsJsError(
+          this.options.errors.invalidCredentials,
+          PasswordAuthenticatorErrors.InvalidCredentials
+        );
+      } else {
+        throw new AccountsJsError(
+          this.options.errors.userNotFound,
+          PasswordAuthenticatorErrors.UserNotFound
+        );
+      }
     }
 
     const hash = await this.db.findPasswordHash(foundUser.id);
     if (!hash) {
-      throw new Error(this.options.errors.noPasswordSet);
-    }
-
-    const hashAlgorithm = this.options.passwordHashAlgorithm;
-    const pass: any = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
-    const isPasswordValid = await verifyPassword(pass, hash);
-
-    if (!isPasswordValid) {
-      throw new Error(
-        this.server.options.ambiguousErrorMessages
-          ? this.options.errors.invalidCredentials
-          : this.options.errors.incorrectPassword
+      throw new AccountsJsError(
+        this.options.errors.noPasswordSet,
+        PasswordAuthenticatorErrors.NoPasswordSet
       );
     }
 
-    return foundUser;
-  }
+    const isPasswordValid = await this.options.verifyPassword(password, hash);
 
-  private async hashAndBcryptPassword(password: PasswordType): Promise<string> {
-    const hashAlgorithm = this.options.passwordHashAlgorithm;
-    const hashedPassword: any = hashAlgorithm ? hashPassword(password, hashAlgorithm) : password;
-    return bcryptPassword(hashedPassword);
+    if (!isPasswordValid) {
+      if (this.server.options.ambiguousErrorMessages) {
+        throw new AccountsJsError(
+          this.options.errors.invalidCredentials,
+          PasswordAuthenticatorErrors.InvalidCredentials
+        );
+      } else {
+        throw new AccountsJsError(
+          this.options.errors.incorrectPassword,
+          PasswordAuthenticatorErrors.IncorrectPassword
+        );
+      }
+    }
+
+    return foundUser;
   }
 
   /**

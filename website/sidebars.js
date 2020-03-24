@@ -1,14 +1,32 @@
-/**
- * Copyright (c) 2017-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
+const { readdirSync } = require('fs');
+const { resolve } = require('path');
+
+const packagesDir = resolve(__dirname, '..', 'packages');
+const apiDocsDir = resolve(__dirname, '..', 'website', 'docs', 'api');
+
+const dirs = readdirSync(apiDocsDir);
+
+const generatedApi = {};
+
+dirs.forEach(dir => {
+  const packageName = require(resolve(packagesDir, dir, 'package.json')).name;
+  const generatedSidebar = require(resolve(apiDocsDir, dir, 'sidebars'));
+  generatedApi[packageName] = [];
+  if (Object.keys(generatedSidebar.docs).length > 0) {
+    generatedApi[packageName] = Object.keys(generatedSidebar.docs).map(key => ({
+      type: 'category',
+      label: key,
+      items: generatedSidebar.docs[key],
+    }));
+  }
+  generatedApi[packageName].unshift(`api/${dir}/globals`);
+  generatedApi[packageName].unshift(`api/${dir}/index`);
+});
 
 module.exports = {
   docs: {
     Introduction: ['introduction', 'contributing'],
-    'Getting started': ['getting-started', 'email'],
+    'Getting started': ['getting-started', 'handling-errors', 'email', 'client'],
     Transports: [
       'transports/graphql',
       {
@@ -30,26 +48,5 @@ module.exports = {
     ],
     Cookbook: ['cookbook/react-native'],
   },
-  api: {
-    'Api Docs': [
-      'api/apollo-link-accounts/api-readme',
-      'api/boost/api-readme',
-      'api/client/api-readme',
-      'api/client-password/api-readme',
-      'api/database-manager/api-readme',
-      'api/database-mongo/api-readme',
-      'api/database-redis/api-readme',
-      'api/express-session/api-readme',
-      'api/graphql-api/api-readme',
-      'api/graphql-client/api-readme',
-      'api/oauth/api-readme',
-      'api/oauth-instagram/api-readme',
-      'api/oauth-twitter/api-readme',
-      'api/server/api-readme',
-      'api/password/api-readme',
-      'api/rest-client/api-readme',
-      'api/rest-express/api-readme',
-      'api/two-factor/api-readme',
-    ],
-  },
+  api: generatedApi,
 };

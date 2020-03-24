@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 export const getUserQuery = (userFieldsFragment: any) => gql`
   ${userFieldsFragment}
-  query {
+  query getUser {
     getUser {
       ...userFields
     }

@@ -1,6 +1,7 @@
 import { ModuleContext } from '@graphql-modules/core';
-import { AccountsPassword, PasswordCreateUserType } from '@accounts/password';
-import { AccountsServer } from '@accounts/server';
+import { CreateUserServicePassword } from '@accounts/types';
+import { AccountsPassword, CreateUserErrors } from '@accounts/password';
+import { AccountsServer, AccountsJsError } from '@accounts/server';
 import { AccountsModuleContext } from '../../accounts';
 import { MutationResolvers } from '../../../models';
 
@@ -23,9 +24,51 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
     await injector.get(AccountsPassword).changePassword(userId, oldPassword, newPassword);
     return null;
   },
-  createUser: async (_, { user }, { injector }) => {
-    const userId = await injector.get(AccountsPassword).createUser(user as PasswordCreateUserType);
-    return injector.get(AccountsServer).options.ambiguousErrorMessages ? null : userId;
+  createUser: async (_, { user }, ctx) => {
+    const { ip, userAgent, injector } = ctx;
+    const accountsServer = injector.get(AccountsServer);
+    const accountsPassword = injector.get(AccountsPassword);
+
+    let userId: string;
+
+    try {
+      userId = await accountsPassword.createUser(user as CreateUserServicePassword);
+    } catch (error) {
+      // If ambiguousErrorMessages is true we obfuscate the email or username already exist error
+      // to prevent user enumeration during user creation
+      if (
+        accountsServer.options.ambiguousErrorMessages &&
+        error instanceof AccountsJsError &&
+        (error.code === CreateUserErrors.EmailAlreadyExists ||
+          error.code === CreateUserErrors.UsernameAlreadyExists)
+      ) {
+        return {};
+      }
+      throw error;
+    }
+
+    if (!accountsServer.options.enableAutologin) {
+      return {
+        userId: accountsServer.options.ambiguousErrorMessages ? null : userId,
+      };
+    }
+
+    // When initializing AccountsServer we check that enableAutologin and ambiguousErrorMessages options
+    // are not enabled at the same time
+
+    const createdUser = await accountsServer.findUserById(userId);
+
+    // If we are here - user must be created successfully
+    // Explicitly saying this to Typescript compiler
+    const loginResult = await accountsServer.loginWithUser(createdUser!, {
+      ip,
+      userAgent,
+    });
+
+    return {
+      userId,
+      loginResult,
+    };
   },
   twoFactorSet: async (_, { code, secret }, { user, injector }) => {
     // Make sure user is logged in

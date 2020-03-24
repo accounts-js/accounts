@@ -69,8 +69,7 @@ describe('accounts resolvers mutation', () => {
       expect(accountsServerMock.impersonate).toHaveBeenCalledWith(
         accessToken,
         { username },
-        ip,
-        userAgent
+        { ip, userAgent }
       );
     });
   });
@@ -101,12 +100,10 @@ describe('accounts resolvers mutation', () => {
         {} as any
       );
       expect(injector.get).toHaveBeenCalledWith(AccountsServer);
-      expect(accountsServerMock.refreshTokens).toHaveBeenCalledWith(
-        accessToken,
-        refreshToken,
+      expect(accountsServerMock.refreshTokens).toHaveBeenCalledWith(accessToken, refreshToken, {
         ip,
-        userAgent
-      );
+        userAgent,
+      });
     });
   });
 });

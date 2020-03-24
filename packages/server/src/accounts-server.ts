@@ -22,6 +22,16 @@ import { AccountsServerOptions } from './types/accounts-server-options';
 import { JwtData } from './types/jwt-data';
 import { EmailTemplateType } from './types/email-template-type';
 import { JwtPayload } from './types/jwt-payload';
+import { AccountsJsError } from './utils/accounts-error';
+import {
+  AuthenticateWithServiceErrors,
+  LoginWithServiceErrors,
+  ImpersonateErrors,
+  FindSessionByAccessTokenErrors,
+  RefreshTokensErrors,
+  LogoutErrors,
+  ResumeSessionErrors,
+} from './errors';
 
 const defaultOptions = {
   ambiguousErrorMessages: true,
@@ -56,6 +66,12 @@ export class AccountsServer {
       console.log(`
 You are using the default secret "${this.options.tokenSecret}" which is not secure.
 Please change it with a strong random token.`);
+    }
+    if (this.options.ambiguousErrorMessages && this.options.enableAutologin) {
+      throw new Error(
+        `Can't enable autologin when ambiguous error messages are enabled (https://accounts-js.netlify.com/docs/api/server/globals#ambiguouserrormessages).
+Please set ambiguousErrorMessages to false to be able to use autologin.`
+      );
     }
 
     this.services = services || {};
@@ -98,6 +114,10 @@ Please change it with a strong random token.`);
     return () => this.hooks.off(eventName, callback);
   }
 
+  /**
+   * @description Try to authenticate the user for a given service
+   * @throws {@link AuthenticateWithServiceErrors}
+   */
   public async authenticateWithService(
     serviceName: string,
     params: any,
@@ -113,16 +133,25 @@ Please change it with a strong random token.`);
     };
     try {
       if (!this.services[serviceName]) {
-        throw new Error(`No service with the name ${serviceName} was registered.`);
+        throw new AccountsJsError(
+          `No service with the name ${serviceName} was registered.`,
+          AuthenticateWithServiceErrors.ServiceNotFound
+        );
       }
 
       const user: User | null = await this.services[serviceName].authenticate(params);
       hooksInfo.user = user;
       if (!user) {
-        throw new Error(`Service ${serviceName} was not able to authenticate user`);
+        throw new AccountsJsError(
+          `Service ${serviceName} was not able to authenticate user`,
+          AuthenticateWithServiceErrors.AuthenticationFailed
+        );
       }
       if (user.deactivated) {
-        throw new Error('Your account has been deactivated');
+        throw new AccountsJsError(
+          'Your account has been deactivated',
+          AuthenticateWithServiceErrors.UserDeactivated
+        );
       }
 
       this.hooks.emit(ServerHooks.AuthenticateSuccess, hooksInfo);
@@ -133,6 +162,9 @@ Please change it with a strong random token.`);
     }
   }
 
+  /**
+   * @throws {@link LoginWithServiceErrors}
+   */
   public async loginWithService(
     serviceName: string,
     params: any,
@@ -148,16 +180,25 @@ Please change it with a strong random token.`);
     };
     try {
       if (!this.services[serviceName]) {
-        throw new Error(`No service with the name ${serviceName} was registered.`);
+        throw new AccountsJsError(
+          `No service with the name ${serviceName} was registered.`,
+          LoginWithServiceErrors.ServiceNotFound
+        );
       }
 
       const user: User | null = await this.services[serviceName].authenticate(params);
       hooksInfo.user = user;
       if (!user) {
-        throw new Error(`Service ${serviceName} was not able to authenticate user`);
+        throw new AccountsJsError(
+          `Service ${serviceName} was not able to authenticate user`,
+          LoginWithServiceErrors.AuthenticationFailed
+        );
       }
       if (user.deactivated) {
-        throw new Error('Your account has been deactivated');
+        throw new AccountsJsError(
+          'Your account has been deactivated',
+          LoginWithServiceErrors.UserDeactivated
+        );
       }
 
       // Let the user validate the login attempt
@@ -180,12 +221,8 @@ Please change it with a strong random token.`);
    * @returns {Promise<LoginResult>} - Session tokens and user object.
    */
   public async loginWithUser(user: User, infos: ConnectionInformations): Promise<LoginResult> {
-    const { ip, userAgent } = infos;
     const token = await this.createSessionToken(user);
-    const sessionId = await this.db.createSession(user.id, token, {
-      ip,
-      userAgent,
-    });
+    const sessionId = await this.db.createSession(user.id, token, infos);
 
     const { accessToken, refreshToken } = await this.createTokens({
       token,
@@ -198,6 +235,7 @@ Please change it with a strong random token.`);
         refreshToken,
         accessToken,
       },
+      user,
     };
   }
 
@@ -205,9 +243,9 @@ Please change it with a strong random token.`);
    * @description Impersonate to another user.
    * @param {string} accessToken - User access token.
    * @param {object} impersonated - impersonated user.
-   * @param {string} ip - The user ip.
-   * @param {string} userAgent - User user agent.
+   * @param {ConnectionInformations} infos - User connection informations.
    * @returns {Promise<Object>} - ImpersonationResult
+   * @throws {@link LoginWithServiceErrors}
    */
   public async impersonate(
     accessToken: string,
@@ -216,30 +254,22 @@ Please change it with a strong random token.`);
       username?: string;
       email?: string;
     },
-    ip: string,
-    userAgent: string
+    infos: ConnectionInformations
   ): Promise<ImpersonationResult> {
     try {
-      if (!isString(accessToken)) {
-        throw new Error('An access token is required');
-      }
-
-      try {
-        jwt.verify(accessToken, this.getSecretOrPublicKey());
-      } catch (err) {
-        throw new Error('Access token is not valid');
-      }
-
       const session = await this.findSessionByAccessToken(accessToken);
 
       if (!session.valid) {
-        throw new Error('Session is not valid for user');
+        throw new AccountsJsError(
+          'Session is not valid for user',
+          ImpersonateErrors.InvalidSession
+        );
       }
 
       const user = await this.db.findUserById(session.userId);
 
       if (!user) {
-        throw new Error('User not found');
+        throw new AccountsJsError('User not found', ImpersonateErrors.UserNotFound);
       }
 
       let impersonatedUser;
@@ -255,7 +285,10 @@ Please change it with a strong random token.`);
         if (this.options.ambiguousErrorMessages) {
           return { authorized: false };
         }
-        throw new Error(`Impersonated user not found`);
+        throw new AccountsJsError(
+          `Impersonated user not found`,
+          ImpersonateErrors.ImpersonatedUserNotFound
+        );
       }
 
       if (!this.options.impersonationAuthorize) {
@@ -269,15 +302,9 @@ Please change it with a strong random token.`);
       }
 
       const token = generateRandomToken();
-      const newSessionId = await this.db.createSession(
-        impersonatedUser.id,
-        token,
-        {
-          ip,
-          userAgent,
-        },
-        { impersonatorUserId: user.id }
-      );
+      const newSessionId = await this.db.createSession(impersonatedUser.id, token, infos, {
+        impersonatorUserId: user.id,
+      });
 
       const impersonationTokens = await this.createTokens({
         token: newSessionId,
@@ -307,19 +334,21 @@ Please change it with a strong random token.`);
    * @description Refresh a user token.
    * @param {string} accessToken - User access token.
    * @param {string} refreshToken - User refresh token.
-   * @param {string} ip - User ip.
-   * @param {string} userAgent - User user agent.
+   * @param {ConnectionInformations} infos - User connection informations.
    * @returns {Promise<Object>} - LoginResult.
+   * @throws {@link RefreshTokensErrors}
    */
   public async refreshTokens(
     accessToken: string,
     refreshToken: string,
-    ip: string,
-    userAgent: string
+    infos: ConnectionInformations
   ): Promise<LoginResult> {
     try {
       if (!isString(accessToken) || !isString(refreshToken)) {
-        throw new Error('An accessToken and refreshToken are required');
+        throw new AccountsJsError(
+          'An accessToken and refreshToken are required',
+          RefreshTokensErrors.InvalidTokens
+        );
       }
 
       let sessionToken: string;
@@ -330,18 +359,21 @@ Please change it with a strong random token.`);
         }) as { data: JwtData };
         sessionToken = decodedAccessToken.data.token;
       } catch (err) {
-        throw new Error('Tokens are not valid');
+        throw new AccountsJsError(
+          'Tokens are not valid',
+          RefreshTokensErrors.TokenVerificationFailed
+        );
       }
 
       const session: Session | null = await this.db.findSessionByToken(sessionToken);
       if (!session) {
-        throw new Error('Session not found');
+        throw new AccountsJsError('Session not found', RefreshTokensErrors.SessionNotFound);
       }
 
       if (session.valid) {
         const user = await this.db.findUserById(session.userId);
         if (!user) {
-          throw new Error('User not found');
+          throw new AccountsJsError('User not found', RefreshTokensErrors.UserNotFound);
         }
 
         let newToken;
@@ -350,19 +382,19 @@ Please change it with a strong random token.`);
         }
 
         const tokens = await this.createTokens({ token: newToken || sessionToken, user });
-        await this.db.updateSession(session.id, { ip, userAgent }, newToken);
+        await this.db.updateSession(session.id, infos, newToken);
 
         const result = {
           sessionId: session.id,
-          user: this.sanitizeUser(user),
           tokens,
+          user,
         };
 
         this.hooks.emit(ServerHooks.RefreshTokensSuccess, result);
 
         return result;
       } else {
-        throw new Error('Session is no longer valid');
+        throw new AccountsJsError('Session is no longer valid', RefreshTokensErrors.InvalidSession);
       }
     } catch (err) {
       this.hooks.emit(ServerHooks.RefreshTokensError, err);
@@ -411,6 +443,7 @@ Please change it with a strong random token.`);
    * @description Logout a user and invalidate his session.
    * @param {string} accessToken - User access token.
    * @returns {Promise<void>} - Return a promise.
+   * @throws {@link LogoutErrors}
    */
   public async logout(accessToken: string): Promise<void> {
     try {
@@ -423,7 +456,7 @@ Please change it with a strong random token.`);
           accessToken,
         });
       } else {
-        throw new Error('Session is no longer valid');
+        throw new AccountsJsError('Session is no longer valid', LogoutErrors.InvalidSession);
       }
     } catch (error) {
       this.hooks.emit(ServerHooks.LogoutError, error);
@@ -432,6 +465,9 @@ Please change it with a strong random token.`);
     }
   }
 
+  /**
+   * @throws {@link ResumeSessionErrors}
+   */
   public async resumeSession(accessToken: string): Promise<User> {
     try {
       const session: Session = await this.findSessionByAccessToken(accessToken);
@@ -440,7 +476,7 @@ Please change it with a strong random token.`);
         const user = await this.db.findUserById(session.userId);
 
         if (!user) {
-          throw new Error('User not found');
+          throw new AccountsJsError('User not found', ResumeSessionErrors.UserNotFound);
         }
 
         if (this.options.resumeSessionValidator) {
@@ -456,9 +492,12 @@ Please change it with a strong random token.`);
         return this.sanitizeUser(user);
       }
 
-      this.hooks.emit(ServerHooks.ResumeSessionError, new Error('Invalid Session'));
+      this.hooks.emit(
+        ServerHooks.ResumeSessionError,
+        new AccountsJsError('Invalid Session', ResumeSessionErrors.InvalidSession)
+      );
 
-      throw new Error('Invalid Session');
+      throw new AccountsJsError('Invalid Session', ResumeSessionErrors.InvalidSession);
     } catch (e) {
       this.hooks.emit(ServerHooks.ResumeSessionError, e);
 
@@ -470,10 +509,14 @@ Please change it with a strong random token.`);
    * @description Find a session by his token.
    * @param {string} accessToken
    * @returns {Promise<Session>} - Return a session.
+   * @throws {@link FindSessionByAccessTokenErrors}
    */
   public async findSessionByAccessToken(accessToken: string): Promise<Session> {
     if (!isString(accessToken)) {
-      throw new Error('An accessToken is required');
+      throw new AccountsJsError(
+        'An accessToken is required',
+        FindSessionByAccessTokenErrors.InvalidToken
+      );
     }
 
     let sessionToken: string;
@@ -483,12 +526,18 @@ Please change it with a strong random token.`);
       };
       sessionToken = decodedAccessToken.data.token;
     } catch (err) {
-      throw new Error('Tokens are not valid');
+      throw new AccountsJsError(
+        'Tokens are not valid',
+        FindSessionByAccessTokenErrors.TokenVerificationFailed
+      );
     }
 
     const session: Session | null = await this.db.findSessionByToken(sessionToken);
     if (!session) {
-      throw new Error('Session not found');
+      throw new AccountsJsError(
+        'Session not found',
+        FindSessionByAccessTokenErrors.SessionNotFound
+      );
     }
 
     return session;
