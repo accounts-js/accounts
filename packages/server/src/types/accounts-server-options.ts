@@ -7,7 +7,6 @@ import { PrepareMailFunction } from './prepare-mail-function';
 import { SendMailType } from './send-mail-type';
 import { TokenCreator } from './token-creator';
 import { JwtData } from './jwt-data';
-import { JwtPayload } from './jwt-payload';
 
 export interface AccountsServerOptions {
   /**
