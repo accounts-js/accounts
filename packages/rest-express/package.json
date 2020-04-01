@@ -41,7 +41,7 @@
     "@types/jest": "25.1.4",
     "@types/lodash": "4.14.149",
     "@types/node": "13.9.8",
-    "@types/request-ip": "0.0.34",
+    "@types/request-ip": "0.0.35",
     "jest": "25.1.0"
   },
   "peerDependencies": {

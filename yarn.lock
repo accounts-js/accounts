@@ -3487,10 +3487,10 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
-"@types/request-ip@0.0.34":
-  version "0.0.34"
-  resolved "https://registry.yarnpkg.com/@types/request-ip/-/request-ip-0.0.34.tgz#9709f9b23ddbda925fba16c6c52ffb782f6c2b73"
-  integrity sha512-smiJc+Pzg5RJzVn6xEYEC4qrd9bnIeqTVLb4k2dTLIfi69HPamfDXRuUW8TvA+tKRbCkp1/heEGngPhwJZYX8Q==
+"@types/request-ip@0.0.35":
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/@types/request-ip/-/request-ip-0.0.35.tgz#c30e832533296151c221532c48c10591b7edd468"
+  integrity sha512-FtI7lv1EDaZnWmaCU7ZTwfOpW76EioocaWyiSeWdfW1cDPZYzzij781A5O/UeHQUN9yjtjEcD3StTzZjKG0XEA==
   dependencies:
     "@types/node" "*"
 
