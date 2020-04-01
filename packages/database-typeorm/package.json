@@ -28,7 +28,7 @@
   "devDependencies": {
     "@accounts/database-tests": "^0.24.0",
     "@types/jest": "25.1.4",
-    "@types/node": "13.7.7",
+    "@types/node": "13.9.8",
     "jest": "25.1.0",
     "pg": "7.15.1"
   },
