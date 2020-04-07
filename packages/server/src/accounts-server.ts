@@ -44,7 +44,6 @@ const defaultOptions = {
     },
   },
   emailTemplates,
-  userObjectSanitizer: (user: User) => user,
   sendMail,
   siteUrl: 'http://localhost:3000',
   createNewSessionTokenOnRefresh: false,
@@ -583,7 +582,11 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
   public sanitizeUser(user: User): User {
     const { userObjectSanitizer } = this.options;
 
-    return userObjectSanitizer(this.internalUserSanitizer(user), omit as any, pick as any);
+    if (userObjectSanitizer) {
+      return userObjectSanitizer(user, omit as any, pick as any);
+    }
+
+    return this.internalUserSanitizer(user);
   }
 
   private internalUserSanitizer(user: User): User {
