@@ -364,6 +364,18 @@ export class Mongo implements DatabaseInterface {
     );
   }
 
+  public async removeAllPasswordResetTokens(userId: string): Promise<void> {
+    await this.sessionCollection.update(
+      { userId },
+      {
+        $set: {
+          'services.email.verificationTokens': [],
+        },
+      },
+      { multi: true }
+    );
+  }
+
   public async findSessionByToken(token: string): Promise<Session | null> {
     const session = await this.sessionCollection.findOne({ token });
     if (session) {

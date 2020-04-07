@@ -88,6 +88,12 @@ export interface AccountsPasswordOptions {
    * Will automatically send a verification email after signup.
    * Default to false.
    */
+
+  removeAllPasswordResetTokensAfterPasswordChanged?: boolean;
+  /**
+   * Will remove all password reset tokens from the db after a password has been changed.
+   * Default to false.
+   */
   sendVerificationEmailAfterSignup?: boolean;
   /**
    * Function that will validate the user object during `createUser`.
@@ -136,6 +142,7 @@ const defaultOptions = {
   returnTokensAfterResetPassword: false,
   invalidateAllSessionsAfterPasswordReset: true,
   invalidateAllSessionsAfterPasswordChanged: false,
+  removeAllPasswordResetTokensAfterPasswordChanged: true,
   errors,
   sendVerificationEmailAfterSignup: false,
   validateEmail(email?: string): boolean {
@@ -419,6 +426,10 @@ export default class AccountsPassword implements AuthenticationService {
 
     if (this.options.invalidateAllSessionsAfterPasswordChanged) {
       await this.db.invalidateAllSessions(user.id);
+    }
+
+    if (this.options.removeAllPasswordResetTokensAfterPasswordChanged) {
+      await this.db.removeAllPasswordResetTokens(user.id);
     }
 
     if (this.options.notifyUserAfterPasswordChanged) {
