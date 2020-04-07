@@ -249,4 +249,8 @@ describe('DatabaseManager', () => {
   it('setUserDeactivated should be called on sessionStorage', () => {
     expect(databaseManager.setUserDeactivated('userId', true)).toBe('userStorage');
   });
+
+  it('removeAllPasswordResetTokens should be called on sessionStorage', () => {
+    expect(databaseManager.removeAllPasswordResetTokens('userId')).toBe('userStorage');
+  });
 });

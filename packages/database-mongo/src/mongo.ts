@@ -365,8 +365,9 @@ export class Mongo implements DatabaseInterface {
   }
 
   public async removeAllPasswordResetTokens(userId: string): Promise<void> {
-    await this.sessionCollection.update(
-      { userId },
+    const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
+    await this.collection.update(
+      { _id: id },
       {
         $set: {
           'services.email.verificationTokens': [],

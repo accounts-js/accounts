@@ -3,6 +3,7 @@ import { ObjectID, ObjectId } from 'mongodb';
 
 import { Mongo } from '../src';
 import { DatabaseTests } from './database-tests';
+import { isMainThread } from 'worker_threads';
 
 const databaseTests = new DatabaseTests();
 
@@ -725,84 +726,112 @@ describe('Mongo', () => {
     });
   });
 
-  describe('addEmailVerificationToken', () => {
+  describe('removeAllPasswordResetTokens', () => {
     // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
-        idProvider: () => new ObjectId().toString(),
       });
-      const userId = await mongoOptions.createUser(user);
-      await mongoOptions.addEmailVerificationToken(userId, 'john@doe.com', 'token');
+      await mongoOptions.setService('toto', 'twitter', { id: '1' });
     });
 
-    it('should add a token', async () => {
-      const userId = await databaseTests.database.createUser(user);
-      await databaseTests.database.addEmailVerificationToken(userId, 'john@doe.com', 'token');
-      const retUser = await databaseTests.database.findUserById(userId);
-      const services: any = retUser!.services;
-      expect(services.email.verificationTokens.length).toEqual(1);
-      expect(services.email.verificationTokens[0].address).toEqual('john@doe.com');
-      expect(services.email.verificationTokens[0].token).toEqual('token');
-      expect(services.email.verificationTokens[0].when).toBeTruthy();
-    });
+    // it('should remove the password reset tokens', async () => {
+    //   const userId = await databaseTests.database.createUser(user);
+    //   let ret = await databaseTests.database.addResetPasswordToken(userId,'test@test.test', 'testVerificationToken', 'testReason');
+
+    //   });
+    // expect(ret).not.toBeTruthy();
+    // await databaseTests.database.setService(userId, 'google', { id: '1' });
+    // ret = await databaseTests.database.findUserByServiceId('google', '1');
+    // expect(ret).toBeTruthy();
+    // expect((ret as any)._id).toBeTruthy();
+    // expect(ret!.id).toBeTruthy();
   });
 
-  describe('addResetPasswordToken', () => {
-    // eslint-disable-next-line jest/expect-expect
-    it('should not convert id', async () => {
-      const mongoOptions = new Mongo(databaseTests.db, {
-        convertUserIdToMongoObjectId: false,
-        idProvider: () => new ObjectId().toString(),
-      });
-      const userId = await mongoOptions.createUser(user);
-      await mongoOptions.addResetPasswordToken(userId, 'john@doe.com', 'token', 'reset');
-    });
+  // it('should throw if user is not found', async () => {
+  //   await expect(
+  //     databaseTests.database.addEmail('589871d1c9393d445745a57c', 'unknowemail', false)
+  //   ).rejects.toThrowError('User not found');
+  // });
+});
 
-    it('should add a token', async () => {
-      const userId = await databaseTests.database.createUser(user);
-      await databaseTests.database.addResetPasswordToken(userId, 'john@doe.com', 'token', 'reset');
-      const retUser = await databaseTests.database.findUserById(userId);
-      const services: any = retUser!.services;
-      expect(services.password.reset.length).toEqual(1);
-      expect(services.password.reset[0].address).toEqual('john@doe.com');
-      expect(services.password.reset[0].token).toEqual('token');
-      expect(services.password.reset[0].when).toBeTruthy();
-      expect(services.password.reset[0].reason).toEqual('reset');
+describe('addEmailVerificationToken', () => {
+  // eslint-disable-next-line jest/expect-expect
+  it('should not convert id', async () => {
+    const mongoOptions = new Mongo(databaseTests.db, {
+      convertUserIdToMongoObjectId: false,
+      idProvider: () => new ObjectId().toString(),
     });
+    const userId = await mongoOptions.createUser(user);
+    await mongoOptions.addEmailVerificationToken(userId, 'john@doe.com', 'token');
   });
 
-  describe('setResetPassword', () => {
-    it('should change password', async () => {
-      const newPassword = 'newpass';
-      const userId = await databaseTests.database.createUser(user);
-      await delay(10);
-      await databaseTests.database.setResetPassword(userId, 'toto', newPassword);
-      const retUser = await databaseTests.database.findUserById(userId);
-      const services: any = retUser!.services;
-      expect(services.password.bcrypt).toBeTruthy();
-      expect(services.password.bcrypt).toEqual(newPassword);
-      expect((retUser as any).createdAt).not.toEqual((retUser as any).updatedAt);
+  it('should add a token', async () => {
+    const userId = await databaseTests.database.createUser(user);
+    await databaseTests.database.addEmailVerificationToken(userId, 'john@doe.com', 'token');
+    const retUser = await databaseTests.database.findUserById(userId);
+    const services: any = retUser!.services;
+    expect(services.email.verificationTokens.length).toEqual(1);
+    expect(services.email.verificationTokens[0].address).toEqual('john@doe.com');
+    expect(services.email.verificationTokens[0].token).toEqual('token');
+    expect(services.email.verificationTokens[0].when).toBeTruthy();
+  });
+});
+
+describe('addResetPasswordToken', () => {
+  // eslint-disable-next-line jest/expect-expect
+  it('should not convert id', async () => {
+    const mongoOptions = new Mongo(databaseTests.db, {
+      convertUserIdToMongoObjectId: false,
+      idProvider: () => new ObjectId().toString(),
     });
+    const userId = await mongoOptions.createUser(user);
+    await mongoOptions.addResetPasswordToken(userId, 'john@doe.com', 'token', 'reset');
   });
 
-  describe('setUserDeactivated', () => {
-    // eslint-disable-next-line jest/expect-expect
-    it('should not convert id', async () => {
-      const mongoOptions = new Mongo(databaseTests.db, {
-        convertUserIdToMongoObjectId: false,
-        idProvider: () => new ObjectId().toString(),
-      });
-      const userId = await mongoOptions.createUser(user);
-      await mongoOptions.setUserDeactivated(userId, true);
-    });
+  it('should add a token', async () => {
+    const userId = await databaseTests.database.createUser(user);
+    await databaseTests.database.addResetPasswordToken(userId, 'john@doe.com', 'token', 'reset');
+    const retUser = await databaseTests.database.findUserById(userId);
+    const services: any = retUser!.services;
+    expect(services.password.reset.length).toEqual(1);
+    expect(services.password.reset[0].address).toEqual('john@doe.com');
+    expect(services.password.reset[0].token).toEqual('token');
+    expect(services.password.reset[0].when).toBeTruthy();
+    expect(services.password.reset[0].reason).toEqual('reset');
+  });
+});
 
-    it('should deactivate user', async () => {
-      const userId = await databaseTests.database.createUser(user);
-      await databaseTests.database.setUserDeactivated(userId, true);
-      const retUser = await databaseTests.database.findUserById(userId);
-      expect(retUser!.deactivated).toBeTruthy();
-      expect((retUser as any).createdAt).not.toEqual((retUser as any).updatedAt);
+describe('setResetPassword', () => {
+  it('should change password', async () => {
+    const newPassword = 'newpass';
+    const userId = await databaseTests.database.createUser(user);
+    await delay(10);
+    await databaseTests.database.setResetPassword(userId, 'toto', newPassword);
+    const retUser = await databaseTests.database.findUserById(userId);
+    const services: any = retUser!.services;
+    expect(services.password.bcrypt).toBeTruthy();
+    expect(services.password.bcrypt).toEqual(newPassword);
+    expect((retUser as any).createdAt).not.toEqual((retUser as any).updatedAt);
+  });
+});
+
+describe('setUserDeactivated', () => {
+  // eslint-disable-next-line jest/expect-expect
+  it('should not convert id', async () => {
+    const mongoOptions = new Mongo(databaseTests.db, {
+      convertUserIdToMongoObjectId: false,
+      idProvider: () => new ObjectId().toString(),
     });
+    const userId = await mongoOptions.createUser(user);
+    await mongoOptions.setUserDeactivated(userId, true);
+  });
+
+  it('should deactivate user', async () => {
+    const userId = await databaseTests.database.createUser(user);
+    await databaseTests.database.setUserDeactivated(userId, true);
+    const retUser = await databaseTests.database.findUserById(userId);
+    expect(retUser!.deactivated).toBeTruthy();
+    expect((retUser as any).createdAt).not.toEqual((retUser as any).updatedAt);
   });
 });
