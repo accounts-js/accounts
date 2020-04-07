@@ -84,6 +84,10 @@ export default class Database {
     return this.name;
   }
 
+  public removeAllPasswordResetTokens() {
+    return this.name;
+  }
+
   public findSessionByToken() {
     return this.name;
   }
