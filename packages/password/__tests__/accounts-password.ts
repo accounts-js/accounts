@@ -369,11 +369,13 @@ describe('AccountsPassword', () => {
       const findUserById = jest.fn(() => Promise.resolve(validUser));
       const invalidateAllSessions = jest.fn(() => Promise.resolve());
       const findPasswordHash = jest.fn(() => Promise.resolve());
+      const removeAllPasswordResetTokens = jest.fn(() => Promise.resolve());
       tmpAccountsPassword.setStore({
         setPassword,
         findUserById,
         findPasswordHash,
         invalidateAllSessions,
+        removeAllPasswordResetTokens,
       } as any);
       const prepareMail = jest.fn(() => Promise.resolve());
       const sanitizeUser = jest.fn(() => Promise.resolve());
@@ -397,10 +399,12 @@ describe('AccountsPassword', () => {
       const userId = 'id';
       const setPassword = jest.fn(() => Promise.resolve('user'));
       const findUserById = jest.fn(() => Promise.resolve(validUser));
-      password.setStore({ setPassword, findUserById } as any);
+      const removeAllPasswordResetTokens = jest.fn(() => Promise.resolve());
+      password.setStore({ setPassword, findUserById, removeAllPasswordResetTokens } as any);
       const prepareMail = jest.fn(() => Promise.resolve());
       const sanitizeUser = jest.fn(() => Promise.resolve());
       const sendMail = jest.fn(() => Promise.resolve());
+
       password.server = {
         ...server,
         prepareMail,
