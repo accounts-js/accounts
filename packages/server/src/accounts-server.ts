@@ -381,7 +381,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         }
 
         const tokens = this.createTokens({ token: newToken || sessionToken, userId: user.id });
-        await this.db.updateSession(session.id, infos, newToken);
+        this.db.updateSession(session.id, infos, newToken);
 
         const result = {
           sessionId: session.id,
