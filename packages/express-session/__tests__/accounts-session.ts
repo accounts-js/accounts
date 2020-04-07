@@ -8,6 +8,7 @@ const mockAccountsServer = () => ({
       accessToken: 'newAccess',
       refreshToken: 'newRefresh',
     },
+    user: 'user',
   }),
   logout: jest.fn(),
 });
@@ -18,7 +19,7 @@ describe('AccountsSession', () => {
 
     expect(accountsSession.options.name).toEqual(defaultName);
     expect(accountsSession.options.user.name).toEqual('user');
-    expect(typeof accountsSession.options.user.resolve).toBe('function');
+    expect(accountsSession.options.user.resolve).toBe(null);
   });
 
   test('should should set', () => {
@@ -152,11 +153,9 @@ describe('AccountsSession', () => {
 
   test('should renew tokens and resolve a user via middleware', async () => {
     const mockedServer = mockAccountsServer();
-    const resolveFn = jest.fn().mockReturnValue('user');
     const accountsSession = new AccountsSession(mockedServer as any, {
       user: {
         name: 'currentUser',
-        resolve: resolveFn,
       },
     });
     const tokens = {
@@ -175,43 +174,7 @@ describe('AccountsSession', () => {
     const next = jest.fn();
 
     await accountsSession.middleware()(req, res, next);
-    expect(resolveFn).toHaveBeenCalledWith({
-      accessToken: 'newAccess',
-      refreshToken: 'newRefresh',
-    });
     expect(req.currentUser).toEqual('user');
     expect(next).toHaveBeenCalled();
-  });
-
-  test('should have a default resolver', async () => {
-    const user = {
-      name: 'foo',
-    };
-    const resumeSession = jest.fn(() => user);
-    const accountsSession = new AccountsSession({
-      ...mockAccountsServer(),
-      resumeSession,
-    } as any);
-
-    const tokens = {
-      accessToken: 'access',
-      refreshToken: 'refresh',
-    };
-    const req: any = {
-      headers: {
-        'user-agent': null,
-      },
-      session: {
-        [defaultName]: tokens,
-      },
-    };
-    const res: any = {};
-    const next = () => {
-      //
-    };
-
-    await accountsSession.middleware()(req, res, next);
-    expect(resumeSession).toHaveBeenCalledWith('newAccess');
-    expect(req.user).toEqual(user);
   });
 });
