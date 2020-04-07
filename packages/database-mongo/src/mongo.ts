@@ -371,8 +371,7 @@ export class Mongo implements DatabaseInterface {
         $set: {
           'services.email.verificationTokens': [],
         },
-      },
-      { multi: true }
+      }
     );
   }
 
