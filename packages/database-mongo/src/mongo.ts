@@ -370,7 +370,7 @@ export class Mongo implements DatabaseInterface {
       { _id: id },
       {
         $set: {
-          'services.email.verificationTokens': [],
+          'services.password.reset': [],
         },
       }
     );

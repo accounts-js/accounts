@@ -127,7 +127,7 @@ export class DatabaseManager implements DatabaseInterface {
 
   // Return the removeAllPasswordResetTokens function from the sessionStorage
   public get removeAllPasswordResetTokens(): DatabaseInterface['removeAllPasswordResetTokens'] {
-    return this.userStorage.removeAllPasswordResetTokens.bind(this.sessionStorage);
+    return this.userStorage.removeAllPasswordResetTokens.bind(this.userStorage);
   }
 
   // Return the findSessionByToken function from the sessionStorage

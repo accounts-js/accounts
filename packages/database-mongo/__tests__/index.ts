@@ -747,12 +747,6 @@ describe('Mongo', () => {
       );
       expect(userWithDeletedTokens).not.toBeTruthy();
     });
-
-    it('should throw if user is not found', async () => {
-      await expect(
-        databaseTests.database.removeAllPasswordResetTokens('unknownUserId')
-      ).rejects.toThrowError('User not found');
-    });
   });
 
   describe('addEmailVerificationToken', () => {
