@@ -46,7 +46,9 @@ const defaultOptions = {
   emailTemplates,
   sendMail,
   siteUrl: 'http://localhost:3000',
+  userObjectSanitizer: (user: User) => user,
   createNewSessionTokenOnRefresh: false,
+  useInternalUserObjectSanitizer: true,
 };
 
 export class AccountsServer {
@@ -380,7 +382,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         }
 
         const tokens = this.createTokens({ token: newToken || sessionToken, userId: user.id });
-        this.db.updateSession(session.id, infos, newToken);
+        await this.db.updateSession(session.id, infos, newToken);
 
         const result = {
           sessionId: session.id,
@@ -581,12 +583,11 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
 
   public sanitizeUser(user: User): User {
     const { userObjectSanitizer } = this.options;
+    const baseUser = this.options.useInternalUserObjectSanitizer
+      ? this.internalUserSanitizer(user)
+      : user;
 
-    if (userObjectSanitizer) {
-      return userObjectSanitizer(user, omit as any, pick as any);
-    }
-
-    return this.internalUserSanitizer(user);
+    return userObjectSanitizer(baseUser, omit as any, pick as any);
   }
 
   private internalUserSanitizer(user: User): User {

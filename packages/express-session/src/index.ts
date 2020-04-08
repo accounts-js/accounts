@@ -9,7 +9,7 @@ import { getUserAgent } from './utils/get-user-agent';
 export interface AccountsSessionOptions {
   user?: {
     name: string;
-    resolve?: (tokens: Tokens, request: Request) => User | Promise<User>;
+    resolve?: (tokens: Tokens, request: Request, rawUser?: User) => User | Promise<User>;
   };
   name?: string;
 }
@@ -38,7 +38,7 @@ export class AccountsSession {
 
         if (tokens) {
           const user = this.options.user.resolve
-            ? await this.options.user.resolve(tokens, req)
+            ? await this.options.user.resolve(tokens, req, tokenResult?.user)
             : tokenResult?.user;
 
           // eslint-disable-next-line
