@@ -3,7 +3,6 @@ import { ObjectID, ObjectId } from 'mongodb';
 
 import { Mongo } from '../src';
 import { DatabaseTests } from './database-tests';
-import { isMainThread } from 'worker_threads';
 
 const databaseTests = new DatabaseTests();
 
@@ -737,15 +736,11 @@ describe('Mongo', () => {
 
     it('should remove the password reset tokens', async () => {
       const testToken = 'testVerificationToken';
+      const testReason = 'testReason';
       const userId = await databaseTests.database.createUser(user);
-      await databaseTests.database.addResetPasswordToken(
-        userId,
-        'test@test.test',
-        testToken,
-        'testReason'
-      );
-      const user = await databaseTests.database.findUserByResetPasswordToken(testToken);
-      expect(user).toBeTruthy();
+      await databaseTests.database.addResetPasswordToken(userId, user.email, testToken, testReason);
+      const userWithTokens = await databaseTests.database.findUserByResetPasswordToken(testToken);
+      expect(userWithTokens).toBeTruthy();
       await databaseTests.database.removeAllPasswordResetTokens(userId);
       const userWithDeletedTokens = await databaseTests.database.findUserByResetPasswordToken(
         testToken
