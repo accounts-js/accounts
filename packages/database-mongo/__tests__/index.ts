@@ -731,7 +731,8 @@ describe('Mongo', () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
       });
-      await mongoOptions.setService('toto', 'twitter', { id: '1' });
+      const userId = await mongoOptions.createUser(user);
+      await mongoOptions.removeAllPasswordResetTokens(userId);
     });
 
     it('should remove the password reset tokens', async () => {

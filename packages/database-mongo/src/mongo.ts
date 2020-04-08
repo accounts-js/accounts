@@ -369,8 +369,8 @@ export class Mongo implements DatabaseInterface {
     await this.collection.update(
       { _id: id },
       {
-        $set: {
-          'services.password.reset': [],
+        $unset: {
+          'services.password.reset': '',
         },
       }
     );

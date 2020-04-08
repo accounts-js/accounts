@@ -85,13 +85,12 @@ export interface AccountsPasswordOptions {
    */
   invalidateAllSessionsAfterPasswordChanged?: boolean;
   /**
-   * Will automatically send a verification email after signup.
+   * Will remove all password reset tokens from the db after a password has been changed.
    * Default to false.
    */
-
   removeAllPasswordResetTokensAfterPasswordChanged?: boolean;
   /**
-   * Will remove all password reset tokens from the db after a password has been changed.
+   * Will automatically send a verification email after signup.
    * Default to false.
    */
   sendVerificationEmailAfterSignup?: boolean;

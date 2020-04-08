@@ -423,7 +423,7 @@ describe('AccountsPassword', () => {
         .spyOn(tmpAccountsPassword, 'passwordAuthenticator' as any)
         .mockImplementation(() => Promise.resolve(validUser));
       await tmpAccountsPassword.changePassword(userId, 'old-password', 'new-password');
-      expect(invalidateAllSessions.mock.calls[0]).toMatchSnapshot();
+      expect(removeAllPasswordResetTokens.mock.calls[0]).toMatchSnapshot();
       (tmpAccountsPassword as any).passwordAuthenticator.mockRestore();
     });
 
