@@ -349,7 +349,7 @@ describe('AccountsPassword', () => {
     });
   });
 
-  describe('changePassword and invalidate all sessions', () => {
+  describe('changePassword, invalidate all sessions and remove all reset password tokens from user storage', () => {
     const tmpAccountsPassword = new AccountsPassword({
       invalidateAllSessionsAfterPasswordChanged: true,
     });
@@ -364,6 +364,38 @@ describe('AccountsPassword', () => {
     });
 
     it('call invalidateAllSessions', async () => {
+      const userId = 'id';
+      const setPassword = jest.fn(() => Promise.resolve('user'));
+      const findUserById = jest.fn(() => Promise.resolve(validUser));
+      const invalidateAllSessions = jest.fn(() => Promise.resolve());
+      const findPasswordHash = jest.fn(() => Promise.resolve());
+      const removeAllPasswordResetTokens = jest.fn(() => Promise.resolve());
+      tmpAccountsPassword.setStore({
+        setPassword,
+        findUserById,
+        findPasswordHash,
+        invalidateAllSessions,
+        removeAllPasswordResetTokens,
+      } as any);
+      const prepareMail = jest.fn(() => Promise.resolve());
+      const sanitizeUser = jest.fn(() => Promise.resolve());
+      const sendMail = jest.fn(() => Promise.resolve());
+      tmpAccountsPassword.server = {
+        ...server,
+        prepareMail,
+        options: { sendMail },
+        sanitizeUser,
+      } as any;
+      set(tmpAccountsPassword.server, 'options.emailTemplates', {});
+      jest
+        .spyOn(tmpAccountsPassword, 'passwordAuthenticator' as any)
+        .mockImplementation(() => Promise.resolve(validUser));
+      await tmpAccountsPassword.changePassword(userId, 'old-password', 'new-password');
+      expect(invalidateAllSessions.mock.calls[0]).toMatchSnapshot();
+      (tmpAccountsPassword as any).passwordAuthenticator.mockRestore();
+    });
+
+    it('call removeAllPasswordResetTokens', async () => {
       const userId = 'id';
       const setPassword = jest.fn(() => Promise.resolve('user'));
       const findUserById = jest.fn(() => Promise.resolve(validUser));
