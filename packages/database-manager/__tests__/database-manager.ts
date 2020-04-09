@@ -84,7 +84,7 @@ export default class Database {
     return this.name;
   }
 
-  public removeAllPasswordResetTokens() {
+  public removeAllResetPasswordTokens() {
     return this.name;
   }
 
@@ -250,7 +250,7 @@ describe('DatabaseManager', () => {
     expect(databaseManager.setUserDeactivated('userId', true)).toBe('userStorage');
   });
 
-  it('removeAllPasswordResetTokens should be called on userStorage', () => {
-    expect(databaseManager.removeAllPasswordResetTokens('userId')).toBe('userStorage');
+  it('removeAllResetPasswordTokens should be called on userStorage', () => {
+    expect(databaseManager.removeAllResetPasswordTokens('userId')).toBe('userStorage');
   });
 });

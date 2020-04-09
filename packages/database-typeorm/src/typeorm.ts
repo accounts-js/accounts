@@ -343,7 +343,7 @@ export class AccountsTypeorm implements DatabaseInterface {
     );
   }
 
-  public async removeAllPasswordResetTokens(userId: string): Promise<void> {
+  public async removeAllResetPasswordTokens(userId: string): Promise<void> {
     await this.unsetService(userId, 'password.reset');
   }
 

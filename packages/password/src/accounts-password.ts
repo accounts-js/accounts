@@ -88,7 +88,7 @@ export interface AccountsPasswordOptions {
    * Will remove all password reset tokens from the db after a password has been changed.
    * Default to false.
    */
-  removeAllPasswordResetTokensAfterPasswordChanged?: boolean;
+  removeAllResetPasswordTokensAfterPasswordChanged?: boolean;
   /**
    * Will automatically send a verification email after signup.
    * Default to false.
@@ -141,7 +141,7 @@ const defaultOptions = {
   returnTokensAfterResetPassword: false,
   invalidateAllSessionsAfterPasswordReset: true,
   invalidateAllSessionsAfterPasswordChanged: false,
-  removeAllPasswordResetTokensAfterPasswordChanged: true,
+  removeAllResetPasswordTokensAfterPasswordChanged: true,
   errors,
   sendVerificationEmailAfterSignup: false,
   validateEmail(email?: string): boolean {
@@ -427,8 +427,8 @@ export default class AccountsPassword implements AuthenticationService {
       await this.db.invalidateAllSessions(user.id);
     }
 
-    if (this.options.removeAllPasswordResetTokensAfterPasswordChanged) {
-      await this.db.removeAllPasswordResetTokens(user.id);
+    if (this.options.removeAllResetPasswordTokensAfterPasswordChanged) {
+      await this.db.removeAllResetPasswordTokens(user.id);
     }
 
     if (this.options.notifyUserAfterPasswordChanged) {

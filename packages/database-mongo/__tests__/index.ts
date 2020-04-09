@@ -725,14 +725,14 @@ describe('Mongo', () => {
     });
   });
 
-  describe('removeAllPasswordResetTokens', () => {
+  describe('removeAllResetPasswordTokens', () => {
     // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
       });
       const userId = await mongoOptions.createUser(user);
-      await mongoOptions.removeAllPasswordResetTokens(userId);
+      await mongoOptions.removeAllResetPasswordTokens(userId);
     });
 
     it('should remove the password reset tokens', async () => {
@@ -742,7 +742,7 @@ describe('Mongo', () => {
       await databaseTests.database.addResetPasswordToken(userId, user.email, testToken, testReason);
       const userWithTokens = await databaseTests.database.findUserByResetPasswordToken(testToken);
       expect(userWithTokens).toBeTruthy();
-      await databaseTests.database.removeAllPasswordResetTokens(userId);
+      await databaseTests.database.removeAllResetPasswordTokens(userId);
       const userWithDeletedTokens = await databaseTests.database.findUserByResetPasswordToken(
         testToken
       );
