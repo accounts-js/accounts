@@ -5,6 +5,7 @@ import {
   LoginResult,
   User,
   CreateUserResult,
+  Authenticator,
 } from '@accounts/types';
 import { print } from 'graphql';
 import gql from 'graphql-tag';
@@ -188,6 +189,20 @@ export default class GraphQLClient implements TransportInterface {
       accessToken: token,
       username: impersonated.username,
     });
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public async mfaAssociate(type: string, customHeaders?: object): Promise<void> {
+    throw new Error('Not implemented yet');
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public async authenticators(customHeaders?: object): Promise<Authenticator[]> {
+    throw new Error('Not implemented yet');
   }
 
   private async mutate(mutation: any, resultField: any, variables: any = {}) {

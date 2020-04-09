@@ -1,4 +1,12 @@
-import { ConnectionInformations, CreateUser, DatabaseInterface } from '@accounts/types';
+import {
+  ConnectionInformations,
+  CreateUser,
+  DatabaseInterface,
+  CreateAuthenticator,
+  Authenticator,
+  CreateMfaChallenge,
+  MfaChallenge,
+} from '@accounts/types';
 import { Repository, getRepository } from 'typeorm';
 import { User } from './entity/User';
 import { UserEmail } from './entity/UserEmail';
@@ -431,5 +439,41 @@ export class AccountsTypeorm implements DatabaseInterface {
         valid: false,
       }
     );
+  }
+
+  /**
+   * MFA authenticators related operations
+   */
+
+  public async createAuthenticator(newAuthenticator: CreateAuthenticator): Promise<string> {
+    throw new Error('Not implemented yet');
+  }
+
+  public async findAuthenticatorById(authenticatorId: string): Promise<Authenticator | null> {
+    throw new Error('Not implemented yet');
+  }
+
+  public async findUserAuthenticators(userId: string): Promise<Authenticator[]> {
+    throw new Error('Not implemented yet');
+  }
+
+  public async activateAuthenticator(authenticatorId: string): Promise<void> {
+    throw new Error('Not implemented yet');
+  }
+
+  /**
+   * MFA challenges related operations
+   */
+
+  public async createMfaChallenge(newMfaChallenge: CreateMfaChallenge): Promise<string> {
+    throw new Error('Not implemented yet');
+  }
+
+  public async findMfaChallengeByToken(token: string): Promise<MfaChallenge | null> {
+    throw new Error('Not implemented yet');
+  }
+
+  public async deactivateMfaChallenge(mfaChallengeId: string): Promise<void> {
+    throw new Error('Not implemented yet');
   }
 }
