@@ -151,14 +151,23 @@ export default class GraphQLClient implements TransportInterface {
     return this.mutate(changePasswordMutation, 'changePassword', { oldPassword, newPassword });
   }
 
+  /**
+   * @inheritDoc
+   */
   public async getTwoFactorSecret(): Promise<any> {
     return this.query(getTwoFactorSecretQuery, 'twoFactorSecret', {});
   }
 
+  /**
+   * @inheritDoc
+   */
   public async twoFactorSet(secret: any, code: string): Promise<void> {
     return this.mutate(twoFactorSetMutation, 'twoFactorSet', { secret, code });
   }
 
+  /**
+   * @inheritDoc
+   */
   public async twoFactorUnset(code: string): Promise<void> {
     return this.mutate(twoFactorUnsetMutation, 'twoFactorUnset', { code });
   }
