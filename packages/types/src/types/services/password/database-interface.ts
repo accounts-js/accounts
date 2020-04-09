@@ -37,5 +37,5 @@ export interface DatabaseInterfaceServicePassword {
 
   addEmailVerificationToken(userId: string, email: string, token: string): Promise<void>;
 
-  removeAllReserPasswordTokens(userId: string): Promise<void>;
+  removeAllResetPasswordTokens(userId: string): Promise<void>;
 }
