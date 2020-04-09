@@ -86,7 +86,7 @@ export interface AccountsPasswordOptions {
   invalidateAllSessionsAfterPasswordChanged?: boolean;
   /**
    * Will remove all password reset tokens from the db after a password has been changed.
-   * Default to false.
+   * Default to true.
    */
   removeAllResetPasswordTokensAfterPasswordChanged?: boolean;
   /**
