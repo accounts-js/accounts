@@ -13,10 +13,7 @@ export interface DatabaseInterface
   // Find user by identity fields
   findUserById(userId: string): Promise<User | null>;
 
-  /**
-   * Create and update users
-   */
-
+  // Create and update users
   createUser(user: CreateUser): Promise<string>;
 
   // Auth services related operations
