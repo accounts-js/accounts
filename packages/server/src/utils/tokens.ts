@@ -11,7 +11,7 @@ export const generateAccessToken = ({
   data,
   config,
 }: {
-  secret: string;
+  secret: jwt.Secret;
   data?: any;
   config: jwt.SignOptions;
 }) =>
@@ -28,7 +28,7 @@ export const generateRefreshToken = ({
   data,
   config,
 }: {
-  secret: string;
+  secret: jwt.Secret;
   data?: any;
   config: jwt.SignOptions;
 }) =>

@@ -17,6 +17,10 @@ module.exports = {
     repoUrl: 'https://github.com/accounts-js/accounts',
   },
   themeConfig: {
+    algolia: {
+      apiKey: 'c872074b5f5ecd186d94d7c19b27d757',
+      indexName: 'accounts',
+    },
     navbar: {
       logo: {
         alt: 'My Site Logo',
@@ -25,7 +29,7 @@ module.exports = {
       links: [
         { to: 'docs/introduction', label: 'Documentation', position: 'right' },
         {
-          to: 'docs/api/server/api-readme',
+          to: 'docs/api/server/index',
           label: 'Api reference',
           position: 'right',
         },

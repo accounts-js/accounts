@@ -1,9 +1,16 @@
-import { LoginResult, ImpersonationResult, CreateUser, User, Authenticator } from '@accounts/types';
+import {
+  LoginResult,
+  ImpersonationResult,
+  CreateUser,
+  User,
+  CreateUserResult,
+  Authenticator,
+} from '@accounts/types';
 import { AccountsClient } from './accounts-client';
 
 export interface TransportInterface extends TransportMfaInterface {
   client: AccountsClient;
-  createUser(user: CreateUser): Promise<string>;
+  createUser(user: CreateUser): Promise<CreateUserResult>;
   authenticateWithService(
     service: string,
     authenticateParams: {

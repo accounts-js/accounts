@@ -1,8 +1,9 @@
-import { readdirSync, readFileSync, writeFileSync } from 'fs';
+import { readdirSync, readFileSync, writeFileSync, renameSync } from 'fs';
 import { resolve } from 'path';
 import { Application } from 'typedoc';
 
 const packagesDir = resolve(__dirname, '..', '..', 'packages');
+const websiteDir = resolve(__dirname, '..', '..', 'website');
 const apiDocsDir = resolve(__dirname, '..', '..', 'website', 'docs', 'api');
 
 let dirs = readdirSync(packagesDir);
@@ -10,15 +11,17 @@ let dirs = readdirSync(packagesDir);
 // Do not build the docs for these packages
 const excludeDirs = ['database-tests', 'e2e', 'error', 'types'];
 
+const app = new Application();
+
 // Config for typedoc;
-const app = new Application({
-  theme: 'markdown',
-  module: 'commonjs',
+app.bootstrap({
+  theme: 'docusaurus2',
   mode: 'file',
   ignoreCompilerErrors: true,
   excludePrivate: true,
   excludeNotExported: true,
   tsconfig: 'tsconfig.json',
+  plugin: ['typedoc-plugin-markdown'],
 });
 
 // Do not build the docs for these packages
@@ -31,18 +34,14 @@ dirs.forEach(dir => {
     resolve(apiDocsDir, dir)
   );
 
-  // For each generated files we fix the links
-  const docFiles = readdirSync(resolve(apiDocsDir, dir));
-  docFiles.forEach(file => {
-    let fileContent = readFileSync(resolve(apiDocsDir, dir, file), { encoding: 'utf8' });
-    fileContent = fileContent
-      .replace(/\((api-\S+)\)/gm, '(/docs/api/' + dir + '/$1)')
-      .replace(new RegExp('.md', 'g'), '');
-    writeFileSync(resolve(apiDocsDir, dir, file), fileContent, { encoding: 'utf8' });
-  });
+  // We move the generated sidebar into the good API folder so they can be reused when the sidebar is generated
+  renameSync(
+    resolve(websiteDir, 'website', 'sidebars.js'),
+    resolve(apiDocsDir, dir, 'sidebars.js')
+  );
 });
 
 // console.log(`generated docs for packages:`);
 // dirs.forEach(dir => {
-//   console.log(`"api/${dir}/api-readme",`);
+//   console.log(`"api/${dir}/index",`);
 // });

@@ -95,3 +95,18 @@ export const accountsPassword = new AccountsPassword({
   },
 });
 ```
+
+## Custom password hashing
+
+By default we use bcrypt to hash the password. If you want to change the hashing algorithm, you can do so using the `hashPassword` and `verifyPassword` options.
+
+For example if you want to use argon2, you can use the following:
+
+```javascript
+import * as argon2 from 'argon2';
+
+const accountsPassword = new AccountsPassword({
+  hashPassword: password => argon2.hash('password'),
+  verifyPassword: (password, hash) => argon2.verify(hash, password),
+});
+```

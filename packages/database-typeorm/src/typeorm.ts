@@ -275,6 +275,7 @@ export class AccountsTypeorm implements DatabaseInterface {
     userId: string,
     email: string,
     newPassword: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     token?: string
   ): Promise<void> {
     await this.setPassword(userId, newPassword);
@@ -340,6 +341,10 @@ export class AccountsTypeorm implements DatabaseInterface {
       },
       token
     );
+  }
+
+  public async removeAllResetPasswordTokens(userId: string): Promise<void> {
+    await this.unsetService(userId, 'password.reset');
   }
 
   public async setUserDeactivated(userId: string, deactivated: boolean): Promise<void> {

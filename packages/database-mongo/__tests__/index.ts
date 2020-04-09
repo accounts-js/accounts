@@ -313,6 +313,7 @@ describe('Mongo', () => {
   });
 
   describe('addEmail', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
@@ -349,6 +350,7 @@ describe('Mongo', () => {
   });
 
   describe('removeEmail', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
@@ -470,6 +472,7 @@ describe('Mongo', () => {
   });
 
   describe('setService', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
@@ -612,6 +615,7 @@ describe('Mongo', () => {
   });
 
   describe('updateSession', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertSessionIdToMongoObjectId: false,
@@ -670,6 +674,7 @@ describe('Mongo', () => {
   });
 
   describe('invalidateSession', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertSessionIdToMongoObjectId: false,
@@ -720,7 +725,33 @@ describe('Mongo', () => {
     });
   });
 
+  describe('removeAllResetPasswordTokens', () => {
+    // eslint-disable-next-line jest/expect-expect
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertUserIdToMongoObjectId: false,
+      });
+      const userId = await mongoOptions.createUser(user);
+      await mongoOptions.removeAllResetPasswordTokens(userId);
+    });
+
+    it('should remove the password reset tokens', async () => {
+      const testToken = 'testVerificationToken';
+      const testReason = 'testReason';
+      const userId = await databaseTests.database.createUser(user);
+      await databaseTests.database.addResetPasswordToken(userId, user.email, testToken, testReason);
+      const userWithTokens = await databaseTests.database.findUserByResetPasswordToken(testToken);
+      expect(userWithTokens).toBeTruthy();
+      await databaseTests.database.removeAllResetPasswordTokens(userId);
+      const userWithDeletedTokens = await databaseTests.database.findUserByResetPasswordToken(
+        testToken
+      );
+      expect(userWithDeletedTokens).not.toBeTruthy();
+    });
+  });
+
   describe('addEmailVerificationToken', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
@@ -743,6 +774,7 @@ describe('Mongo', () => {
   });
 
   describe('addResetPasswordToken', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
@@ -780,6 +812,7 @@ describe('Mongo', () => {
   });
 
   describe('setUserDeactivated', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,

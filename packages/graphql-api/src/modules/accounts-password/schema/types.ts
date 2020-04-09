@@ -9,6 +9,14 @@ export default gql`
   type LoginResult {
     sessionId: String
     tokens: Tokens
+    user: User
+  }
+
+  type CreateUserResult {
+    # Will be returned only if ambiguousErrorMessages is set to false.
+    userId: ID
+    # Will be returned only if enableAutologin is set to true.
+    loginResult: LoginResult
   }
 
   type TwoFactorSecretKey {

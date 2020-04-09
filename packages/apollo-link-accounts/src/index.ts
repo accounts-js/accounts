@@ -5,14 +5,19 @@ import { AccountsClient } from '@accounts/client';
 type AccountsClientFactory = () => AccountsClient | Promise<AccountsClient>;
 
 export const accountsLink = (accountsClientFactory: AccountsClientFactory): ApolloLink => {
-  return setContext(async (_, { headers: headersWithoutTokens }) => {
+  return setContext(async (req, { headers: headersWithoutTokens }) => {
     const accountsClient = await accountsClientFactory();
-    const tokens = await accountsClient.refreshSession();
-
     const headers = { ...headersWithoutTokens };
 
-    if (tokens) {
-      headers.Authorization = 'Bearer ' + tokens.accessToken;
+    /**
+     * We have to check this condition to avoid an infinite loop
+     * during the refresh token operation
+     */
+    if (req.operationName !== 'refreshTokens') {
+      const tokens = await accountsClient.refreshSession();
+      if (tokens) {
+        headers.Authorization = 'Bearer ' + tokens.accessToken;
+      }
     }
 
     return {

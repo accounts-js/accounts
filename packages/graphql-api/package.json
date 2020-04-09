@@ -1,6 +1,6 @@
 {
   "name": "@accounts/graphql-api",
-  "version": "0.21.0",
+  "version": "0.25.0",
   "description": "Server side GraphQL transport for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -28,9 +28,9 @@
   },
   "homepage": "https://github.com/js-accounts/graphql-api",
   "devDependencies": {
-    "@accounts/password": "^0.21.0",
-    "@accounts/server": "^0.21.0",
-    "@accounts/types": "^0.21.0",
+    "@accounts/password": "^0.25.0",
+    "@accounts/server": "^0.25.0",
+    "@accounts/types": "^0.25.0",
     "@gql2ts/from-schema": "1.10.1",
     "@gql2ts/types": "1.9.0",
     "@graphql-codegen/add": "1.8.3",
@@ -39,21 +39,21 @@
     "@graphql-codegen/typescript-operations": "1.8.3",
     "@graphql-codegen/typescript-resolvers": "1.8.3",
     "@graphql-codegen/typescript-type-graphql": "1.8.3",
-    "@graphql-modules/core": "0.7.13",
-    "@types/jest": "24.0.25",
+    "@graphql-modules/core": "0.7.14",
+    "@types/jest": "25.1.4",
     "@types/request-ip": "0.0.34",
     "concurrently": "5.0.2",
     "graphql": "14.5.8",
     "graphql-tools": "4.0.6",
-    "jest": "24.9.0",
+    "jest": "25.1.0",
     "lodash": "4.17.15",
-    "ts-node": "8.5.4"
+    "ts-node": "8.6.2"
   },
   "peerDependencies": {
     "@accounts/password": "^0.19.0",
     "@accounts/server": "^0.19.0",
     "@accounts/types": "^0.19.0",
-    "@graphql-modules/core": "0.7.13",
+    "@graphql-modules/core": "0.7.14",
     "graphql-tag": "^2.10.0",
     "graphql-tools": "^4.0.6"
   },

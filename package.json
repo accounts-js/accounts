@@ -1,5 +1,6 @@
 {
   "private": true,
+  "version": "0.22.0",
   "scripts": {
     "setup": "lerna bootstrap; yarn run link",
     "start": "lerna exec -- yarn start",
@@ -18,6 +19,7 @@
     "test:examples": "lerna run test --scope=\"@examples/*\"",
     "coverage": "lerna run coverage",
     "codecov": "codecov",
+    "generate:changelog": "conventional-changelog -p conventionalcommits -n ./conventional-changelog.config.json -c ./conventional-changelog.context.json -i CHANGELOG.md -s",
     "reset": "yarn clean; yarn install; yarn setup; yarn compile"
   },
   "workspaces": {
@@ -43,7 +45,7 @@
     "printWidth": 100
   },
   "resolutions": {
-    "@types/node": "12.12.7"
+    "@types/node": "13.9.8"
   },
   "renovate": {
     "extends": [
@@ -63,6 +65,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "2.13.0",
     "@typescript-eslint/parser": "2.13.0",
+    "conventional-changelog-cli": "2.0.31",
     "eslint": "6.8.0",
     "eslint-config-prettier": "6.7.0",
     "eslint-plugin-jest": "23.1.1",
@@ -72,8 +75,8 @@
     "lint-staged": "9.5.0",
     "opencollective": "1.0.3",
     "prettier": "1.19.1",
-    "ts-jest": "24.2.0",
-    "typescript": "3.7.4"
+    "ts-jest": "25.2.0",
+    "typescript": "3.8.3"
   },
   "collective": {
     "type": "opencollective",

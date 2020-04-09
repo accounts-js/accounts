@@ -14,11 +14,12 @@ Object.keys(servers).forEach(key => {
 
     describe('create a new user', () => {
       it('should create a new user with email and password', async () => {
-        const userId = await server.accountsClientPassword.createUser({
+        const { userId } = await server.accountsClientPassword.createUser({
           email: user.email,
           password: user.password,
         });
-        expect(userId).toBeNull();
+        // User id will be null for graphql and undefined for rest
+        expect(userId === null || userId === undefined).toBeTruthy();
       });
     });
 

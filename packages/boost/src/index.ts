@@ -150,7 +150,11 @@ export class AccountsBoost {
         }
 
         try {
-          decoded = verify(accessToken, this.options.tokenSecret);
+          const secretOrPublicKey =
+            typeof this.options.tokenSecret === 'string'
+              ? this.options.tokenSecret
+              : this.options.tokenSecret.publicKey;
+          decoded = verify(accessToken, secretOrPublicKey);
         } catch (err) {
           throw new Error('Access token is not valid');
         }

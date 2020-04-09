@@ -32,7 +32,7 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
 
     const impersonateRes = await injector
       .get(AccountsServer)
-      .impersonate(accessToken, { username }, ip, userAgent);
+      .impersonate(accessToken, { username }, { ip, userAgent });
 
     // So ctx.user can be used in subsequent queries / mutations
     if (impersonateRes && impersonateRes.user && impersonateRes.tokens) {
@@ -57,7 +57,7 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
 
     const refreshedSession = await injector
       .get(AccountsServer)
-      .refreshTokens(accessToken, refreshToken, ip, userAgent);
+      .refreshTokens(accessToken, refreshToken, { ip, userAgent });
 
     return refreshedSession;
   },

@@ -32,7 +32,10 @@ describe('refreshAccessToken', () => {
 
     await middleware(req as any, res);
 
-    expect(accountsServer.refreshTokens).toHaveBeenCalledWith('token', 'refresh', null, '');
+    expect(accountsServer.refreshTokens).toHaveBeenCalledWith('token', 'refresh', {
+      ip: null,
+      userAgent: '',
+    });
     expect(req).toEqual(reqCopy);
     expect(res.json).toHaveBeenCalledWith(session);
     expect(res.status).not.toHaveBeenCalled();
@@ -58,7 +61,10 @@ describe('refreshAccessToken', () => {
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.refreshTokens).toHaveBeenCalledWith('token', 'refresh', null, '');
+    expect(accountsServer.refreshTokens).toHaveBeenCalledWith('token', 'refresh', {
+      ip: null,
+      userAgent: '',
+    });
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith(error);
   });

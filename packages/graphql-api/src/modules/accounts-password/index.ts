@@ -8,6 +8,7 @@ import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
 import { AccountsRequest } from '../accounts';
 import { context } from '../../utils';
+import { CoreAccountsModule } from '../core';
 
 export interface AccountsPasswordModuleConfig {
   accountsServer: AccountsServer;
@@ -32,6 +33,11 @@ export const AccountsPasswordModule = new GraphQLModule<
       [config.rootQueryName || 'Query']: Query,
       [config.rootMutationName || 'Mutation']: Mutation,
     } as any),
+  imports: ({ config }) => [
+    CoreAccountsModule.forRoot({
+      userAsInterface: config.userAsInterface,
+    }),
+  ],
   providers: ({ config }) => [
     {
       provide: AccountsServer,

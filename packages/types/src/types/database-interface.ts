@@ -1,21 +1,16 @@
 import { User } from './user';
 import { CreateUser } from './create-user';
 import { DatabaseInterfaceSessions } from './session/database-interface';
+import { DatabaseInterfaceServicePassword } from './services/password/database-interface';
 import { DatabaseInterfaceAuthenticators } from './authenticator/database-interface';
 import { DatabaseInterfaceMfaChallenges } from './mfa-challenge/database-interface';
 
 export interface DatabaseInterface
   extends DatabaseInterfaceSessions,
+    DatabaseInterfaceServicePassword,
     DatabaseInterfaceAuthenticators,
     DatabaseInterfaceMfaChallenges {
-  /**
-   * Find user by identity fields
-   */
-
-  findUserByEmail(email: string): Promise<User | null>;
-
-  findUserByUsername(username: string): Promise<User | null>;
-
+  // Find user by identity fields
   findUserById(userId: string): Promise<User | null>;
 
   /**
@@ -24,55 +19,12 @@ export interface DatabaseInterface
 
   createUser(user: CreateUser): Promise<string>;
 
-  setUsername(userId: string, newUsername: string): Promise<void>;
-
-  setUserDeactivated(userId: string, deactivated: boolean): Promise<void>;
-
-  /**
-   * Auth services related operations
-   */
-
+  // Auth services related operations
   findUserByServiceId(serviceName: string, serviceId: string): Promise<User | null>;
 
   setService(userId: string, serviceName: string, data: object): Promise<void>;
 
   unsetService(userId: string, serviceName: string): Promise<void>;
 
-  /**
-   * Password related operation
-   */
-
-  findPasswordHash(userId: string): Promise<string | null>;
-
-  findUserByResetPasswordToken(token: string): Promise<User | null>;
-
-  setPassword(userId: string, newPassword: string): Promise<void>;
-
-  addResetPasswordToken(
-    userId: string,
-    email: string,
-    token: string,
-    reason: string
-  ): Promise<void>;
-
-  setResetPassword(
-    userId: string,
-    email: string,
-    newPassword: string,
-    token: string
-  ): Promise<void>;
-
-  /**
-   * Email related operations
-   */
-
-  findUserByEmailVerificationToken(token: string): Promise<User | null>;
-
-  addEmail(userId: string, newEmail: string, verified: boolean): Promise<void>;
-
-  removeEmail(userId: string, email: string): Promise<void>;
-
-  verifyEmail(userId: string, email: string): Promise<void>;
-
-  addEmailVerificationToken(userId: string, email: string, token: string): Promise<void>;
+  setUserDeactivated(userId: string, deactivated: boolean): Promise<void>;
 }

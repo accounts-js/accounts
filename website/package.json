@@ -8,8 +8,7 @@
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
-    "generate-api-docs": "ts-node scripts/generate-api-docs.ts",
-    "postinstall": "patch-package"
+    "generate-api-docs": "ts-node scripts/generate-api-docs.ts"
   },
   "dependencies": {
     "@docusaurus/core": "2.0.0-alpha.40",
@@ -31,9 +30,8 @@
     ]
   },
   "devDependencies": {
-    "patch-package": "6.2.0",
     "ts-node": "8.5.4",
-    "typedoc": "0.13.0",
-    "typedoc-plugin-docusaurus": "1.0.14"
+    "typedoc": "0.16.9",
+    "typedoc-plugin-markdown": "2.2.16"
   }
 }
