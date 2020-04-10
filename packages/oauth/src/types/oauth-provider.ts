@@ -1,5 +1,8 @@
 import { OAuthUser } from './oauth-user';
 
+/**
+ * Interface to use for all custom implementations of OAuth providers
+ */
 export interface OAuthProvider {
   /**
    * Should return oauth user payload from passed authentication code or token
