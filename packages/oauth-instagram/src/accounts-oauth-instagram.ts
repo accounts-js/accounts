@@ -5,8 +5,8 @@ import { Configuration } from './types/configuration';
 export class AccountsOAuthInstagram implements OAuthProvider {
   public getRegistrationPayload?: (oauthUser: OAuthUser) => Promise<any>;
 
-  constructor(config: Configuration) {
-    this.getRegistrationPayload = config.getRegistrationPayload;
+  constructor(config?: Configuration) {
+    this.getRegistrationPayload = config?.getRegistrationPayload;
   }
 
   public async authenticate(params: any) {
