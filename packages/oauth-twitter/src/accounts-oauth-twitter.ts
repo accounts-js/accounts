@@ -25,7 +25,7 @@ export class AccountsOAuthTwitter implements OAuthProvider {
   }
 
   public authenticate(params: any): Promise<OAuthUser> {
-    return new Promise<OAuthUser>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.oauth.get(
         'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true',
         params.access_token,
@@ -42,7 +42,7 @@ export class AccountsOAuthTwitter implements OAuthProvider {
               email: data.email,
               accessToken: params.access_token,
               accessTokenSecret: params.access_token_secret,
-            } as OAuthUser;
+            };
             resolve(user);
           }
         }
