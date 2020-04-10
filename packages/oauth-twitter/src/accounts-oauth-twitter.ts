@@ -1,10 +1,13 @@
 import * as oauth from 'oauth';
 
 import { Configuration } from './types/configuration';
+import { OAuthProvider, OAuthUser } from '@accounts/oauth';
 
-export class AccountsOAuthTwitter {
+export class AccountsOAuthTwitter implements OAuthProvider {
   private config: Configuration;
   private oauth: any;
+
+  public getRegistrationPayload?: (oauthUser: OAuthUser) => Promise<any>;
 
   constructor(config: Configuration) {
     this.config = config;
@@ -17,10 +20,12 @@ export class AccountsOAuthTwitter {
       null,
       'HMAC-SHA1'
     );
+
+    this.getRegistrationPayload = config.getRegistrationPayload;
   }
 
-  public authenticate(params: any) {
-    return new Promise((resolve, reject) => {
+  public authenticate(params: any): Promise<OAuthUser> {
+    return new Promise<OAuthUser>((resolve, reject) => {
       this.oauth.get(
         'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true',
         params.access_token,
@@ -37,7 +42,7 @@ export class AccountsOAuthTwitter {
               email: data.email,
               accessToken: params.access_token,
               accessTokenSecret: params.access_token_secret,
-            };
+            } as OAuthUser;
             resolve(user);
           }
         }
