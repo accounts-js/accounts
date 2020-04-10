@@ -84,6 +84,10 @@ export default class Database {
     return this.name;
   }
 
+  public removeAllResetPasswordTokens() {
+    return this.name;
+  }
+
   public findSessionByToken() {
     return this.name;
   }
@@ -244,5 +248,9 @@ describe('DatabaseManager', () => {
 
   it('setUserDeactivated should be called on sessionStorage', () => {
     expect(databaseManager.setUserDeactivated('userId', true)).toBe('userStorage');
+  });
+
+  it('removeAllResetPasswordTokens should be called on userStorage', () => {
+    expect(databaseManager.removeAllResetPasswordTokens('userId')).toBe('userStorage');
   });
 });

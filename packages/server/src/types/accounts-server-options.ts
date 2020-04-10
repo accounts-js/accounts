@@ -40,4 +40,9 @@ export interface AccountsServerOptions {
    * LoginResult data will be included into registration response.
    */
   enableAutologin?: boolean;
+  /**
+   * Set this false to `false` if you wish to skip internal user sanitazing method, and expose
+   * the original User object as-is.
+   */
+  useInternalUserObjectSanitizer?: boolean;
 }

@@ -1,5 +1,5 @@
 import { AccountsServer } from '@accounts/server';
-import { Tokens, User } from '@accounts/types';
+import { Tokens, User, LoginResult } from '@accounts/types';
 import { Request, Response, NextFunction } from 'express';
 import * as requestIp from 'request-ip';
 import { merge } from 'lodash';
@@ -9,7 +9,7 @@ import { getUserAgent } from './utils/get-user-agent';
 export interface AccountsSessionOptions {
   user?: {
     name: string;
-    resolve: (tokens: Tokens) => User | Promise<User>;
+    resolve?: (tokens: Tokens, request: Request, rawUser?: User) => User | Promise<User>;
   };
   name?: string;
 }
@@ -23,10 +23,7 @@ export class AccountsSession {
         name: 'accounts-js-tokens',
         user: {
           name: 'user',
-          resolve: async (tokens: Tokens) => {
-            const user = await accountsServer.resumeSession(tokens.accessToken);
-            return user;
-          },
+          resolve: null,
         },
       },
       options
@@ -36,11 +33,13 @@ export class AccountsSession {
   public middleware() {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
-        await this.renew(req);
-
+        const tokenResult = await this.renew(req);
         const tokens = this.get(req);
+
         if (tokens) {
-          const user = await this.options.user.resolve(tokens);
+          const user = this.options.user.resolve
+            ? await this.options.user.resolve(tokens, req, tokenResult?.user)
+            : tokenResult?.user;
 
           // eslint-disable-next-line
           // @ts-ignore
@@ -83,7 +82,7 @@ export class AccountsSession {
     }
   }
 
-  public async renew(req: Request): Promise<Tokens | undefined> {
+  public async renew(req: Request): Promise<LoginResult | undefined> {
     const tokens = this.get(req);
 
     if (this.accountsServer && tokens && tokens.accessToken && tokens.refreshToken) {
@@ -95,7 +94,7 @@ export class AccountsSession {
 
       this.set(req, result.tokens);
 
-      return result.tokens;
+      return result;
     }
   }
 
