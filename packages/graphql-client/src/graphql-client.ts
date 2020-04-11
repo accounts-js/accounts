@@ -8,6 +8,7 @@ import {
 } from '@accounts/types';
 import { print } from 'graphql';
 import gql from 'graphql-tag';
+import { addEmailMutation } from './graphql/add-email.mutation';
 import { authenticateWithServiceMutation } from './graphql/authenticate-with-service.mutation';
 import { changePasswordMutation } from './graphql/change-password.mutation';
 import { createUserMutation } from './graphql/create-user.mutation';
@@ -141,7 +142,7 @@ export default class GraphQLClient implements TransportInterface {
    * @inheritDoc
    */
   public async addEmail(newEmail: string): Promise<void> {
-    return this.mutate(changePasswordMutation, 'addEmail', { newEmail });
+    return this.mutate(addEmailMutation, 'addEmail', { newEmail });
   }
 
   /**
