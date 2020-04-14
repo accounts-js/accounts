@@ -679,6 +679,8 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
 
   /**
    * @description Return the list of the active and inactive authenticators for this user.
+   * The authenticators objects are whitelisted to not expose any sensitive informations to the client.
+   * If you want to get all the fields from the database, use the database `findUserAuthenticators` method directly.
    * @param {string} userId - User id linked to the authenticators.
    */
   public async findUserAuthenticators(userId: string): Promise<Authenticator[]> {
