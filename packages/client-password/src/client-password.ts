@@ -24,7 +24,16 @@ export class AccountsClientPassword {
    */
   public async createUser(user: CreateUserServicePassword): Promise<CreateUserResult> {
     const hashedPassword = this.hashPassword(user.password);
-    return this.client.transport.createUser({ ...user, password: hashedPassword });
+    const createUserResult = await this.client.transport.createUser({
+      ...user,
+      password: hashedPassword,
+    });
+
+    // If autologin is enabled on server and LoginResult is returned in response - automatically log in user
+    if (createUserResult.loginResult) {
+      await this.client.setTokens(createUserResult.loginResult.tokens);
+    }
+    return createUserResult;
   }
 
   /**

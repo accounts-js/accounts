@@ -26,7 +26,7 @@ const start = async () => {
   const accountsPassword = new AccountsPassword({
     // This option is called when a new user create an account
     // Inside we can apply our logic to validate the user fields
-    validateNewUser: user => {
+    validateNewUser: (user) => {
       // For example we can allow only some kind of emails
       if (user.email.endsWith('.xyz')) {
         throw new Error('Invalid email');

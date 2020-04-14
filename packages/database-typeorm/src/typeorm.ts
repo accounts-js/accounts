@@ -190,7 +190,7 @@ export class AccountsTypeorm implements DatabaseInterface {
   public async getService(userId: string, serviceName: string): Promise<UserService | null> {
     const user = await this.findUserById(userId);
     if (user) {
-      const service = user.allServices.find(s => s.name === serviceName);
+      const service = user.allServices.find((s) => s.name === serviceName);
       if (service) {
         return service;
       }
@@ -236,7 +236,7 @@ export class AccountsTypeorm implements DatabaseInterface {
   public async unsetService(userId: string, serviceName: string): Promise<void> {
     const user = await this.findUserById(userId);
     if (user) {
-      const service = user.allServices.find(s => s.name === serviceName);
+      const service = user.allServices.find((s) => s.name === serviceName);
       if (service) {
         await this.serviceRepository.remove(service);
       }
@@ -307,7 +307,7 @@ export class AccountsTypeorm implements DatabaseInterface {
   public async removeEmail(userId: string, email: string): Promise<void> {
     const user = await this.findUserById(userId);
     if (user) {
-      const userEmail = user.emails.find(s => s.address === email.toLocaleLowerCase());
+      const userEmail = user.emails.find((s) => s.address === email.toLocaleLowerCase());
       if (!userEmail) {
         throw new Error('Email not found');
       }
@@ -321,7 +321,7 @@ export class AccountsTypeorm implements DatabaseInterface {
   public async verifyEmail(userId: string, email: string): Promise<void> {
     const user = await this.findUserById(userId);
     if (user) {
-      const userEmail = user.emails.find(s => s.address === email.toLocaleLowerCase());
+      const userEmail = user.emails.find((s) => s.address === email.toLocaleLowerCase());
 
       if (!userEmail) {
         throw new Error('Email not found');

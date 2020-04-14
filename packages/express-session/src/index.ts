@@ -62,7 +62,7 @@ export class AccountsSession {
     }
 
     return new Promise<void>((resolve, reject) => {
-      req.session!.destroy(err => {
+      req.session!.destroy((err) => {
         if (err) {
           reject(err);
         } else {

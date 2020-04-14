@@ -8,12 +8,12 @@ const dirs = readdirSync(apiDocsDir);
 
 const generatedApi = {};
 
-dirs.forEach(dir => {
+dirs.forEach((dir) => {
   const packageName = require(resolve(packagesDir, dir, 'package.json')).name;
   const generatedSidebar = require(resolve(apiDocsDir, dir, 'sidebars'));
   generatedApi[packageName] = [];
   if (Object.keys(generatedSidebar.docs).length > 0) {
-    generatedApi[packageName] = Object.keys(generatedSidebar.docs).map(key => ({
+    generatedApi[packageName] = Object.keys(generatedSidebar.docs).map((key) => ({
       type: 'category',
       label: key,
       items: generatedSidebar.docs[key],

@@ -6,11 +6,7 @@ export class UserEmail {
   @PrimaryGeneratedColumn('uuid')
   public id!: string;
 
-  @ManyToOne(
-    () => User,
-    user => user.emails,
-    { onDelete: 'CASCADE' }
-  )
+  @ManyToOne(() => User, (user) => user.emails, { onDelete: 'CASCADE' })
   public user!: User;
 
   @Unique(['address'])

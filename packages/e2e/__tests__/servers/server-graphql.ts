@@ -65,7 +65,7 @@ export class ServerGraphqlTest implements ServerTestInterface {
             html: () => `Your account password has been successfully changed.`,
           },
         },
-        sendMail: async mail => {
+        sendMail: async (mail) => {
           this.emails.push(mail);
         },
       },
@@ -93,7 +93,7 @@ export class ServerGraphqlTest implements ServerTestInterface {
   }
 
   public async start() {
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
     await this.apolloServer.listen({ port: this.port });
     await this.databaseTest.start();
   }

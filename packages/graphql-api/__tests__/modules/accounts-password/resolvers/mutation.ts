@@ -28,7 +28,7 @@ describe('accounts-password resolvers mutation', () => {
 
   beforeEach(() => {
     injector = {
-      get: jest.fn(arg => (arg === AccountsPassword ? accountsPasswordMock : accountsServerMock)),
+      get: jest.fn((arg) => (arg === AccountsPassword ? accountsPasswordMock : accountsServerMock)),
     };
     jest.clearAllMocks();
   });
@@ -87,7 +87,7 @@ describe('accounts-password resolvers mutation', () => {
       const createdUserMock = jest.fn(() => {
         throw new AccountsJsError('EmailAlreadyExists', 'EmailAlreadyExists');
       });
-      injector.get = jest.fn(arg =>
+      injector.get = jest.fn((arg) =>
         arg === AccountsPassword
           ? {
               createUser: createdUserMock,
@@ -107,7 +107,7 @@ describe('accounts-password resolvers mutation', () => {
       const createdUserMock = jest.fn(() => {
         throw new AccountsJsError('UsernameAlreadyExists', 'UsernameAlreadyExists');
       });
-      injector.get = jest.fn(arg =>
+      injector.get = jest.fn((arg) =>
         arg === AccountsPassword
           ? {
               createUser: createdUserMock,
@@ -127,7 +127,7 @@ describe('accounts-password resolvers mutation', () => {
       const createdUserMock = jest.fn(() => {
         throw new AccountsJsError('AnyError', 'AnyError');
       });
-      injector.get = jest.fn(arg =>
+      injector.get = jest.fn((arg) =>
         arg === AccountsPassword
           ? {
               createUser: createdUserMock,
@@ -175,7 +175,7 @@ describe('accounts-password resolvers mutation', () => {
       };
 
       const injector = {
-        get: jest.fn(arg =>
+        get: jest.fn((arg) =>
           arg === AccountsPassword ? accountsPasswordLocalMock : accountsServerLocalMock
         ),
       };

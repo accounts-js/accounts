@@ -2,10 +2,10 @@ import { randomBytes } from 'crypto';
 
 const generateRandomToken = (length = 43): string => randomBytes(length).toString('hex');
 const generatePseudoRandomUuid = () =>
-  [4, 2, 2, 2, 6].map(len => generateRandomToken(len)).join('-');
+  [4, 2, 2, 2, 6].map((len) => generateRandomToken(len)).join('-');
 
 function delay(time: number) {
-  return new Promise(resolve => setTimeout(() => resolve(), time));
+  return new Promise((resolve) => setTimeout(() => resolve(), time));
 }
 
 // eslint-disable-next-line jest/no-export
