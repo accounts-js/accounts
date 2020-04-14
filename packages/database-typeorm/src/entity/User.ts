@@ -20,25 +20,13 @@ export class User {
   @Column({ nullable: true })
   public username!: string;
 
-  @OneToMany(
-    () => UserService,
-    userService => userService.user,
-    { eager: true }
-  )
+  @OneToMany(() => UserService, (userService) => userService.user, { eager: true })
   public allServices!: UserService[];
 
-  @OneToMany(
-    () => UserEmail,
-    userEmail => userEmail.user,
-    { eager: true }
-  )
+  @OneToMany(() => UserEmail, (userEmail) => userEmail.user, { eager: true })
   public emails!: UserEmail[];
 
-  @OneToMany(
-    () => UserSession,
-    userSession => userSession.user,
-    { eager: true }
-  )
+  @OneToMany(() => UserSession, (userSession) => userSession.user, { eager: true })
   public sessions!: UserSession[];
 
   @Column({ default: false })

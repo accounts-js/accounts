@@ -101,7 +101,7 @@ The last step is to extend your `graphqlExpress` with a context middleware, that
 app.use(
   GRAPHQL_ROUTE,
   bodyParser.json(),
-  graphqlExpress(request => {
+  graphqlExpress((request) => {
     return {
       context: {
         ...accountsGraphQL(request),

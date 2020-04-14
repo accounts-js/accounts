@@ -3,7 +3,7 @@ import { AccountsServer } from '../src/accounts-server';
 import { JwtData } from '../src/types/jwt-data';
 import { ServerHooks } from '../src/utils/server-hooks';
 
-const delay = (timeout: number) => new Promise(resolve => setTimeout(resolve, timeout));
+const delay = (timeout: number) => new Promise((resolve) => setTimeout(resolve, timeout));
 
 describe('AccountsServer', () => {
   const db = {

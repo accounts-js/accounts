@@ -12,11 +12,11 @@ export class GraphQLErrorList extends Error {
     const summary = `${errors.length} error${errors.length > 1 ? 's' : ''}${
       message ? ' ' + message : ':'
     }`;
-    const errList = errors.map(err => `\t- ${err.message}`).join(br);
+    const errList = errors.map((err) => `\t- ${err.message}`).join(br);
     this.message = `GraphQLErrorList - ${summary}${br}${errList}`;
   }
 
   toString() {
-    return this.errors.map(err => err.toString()).join('\r\n');
+    return this.errors.map((err) => err.toString()).join('\r\n');
   }
 }

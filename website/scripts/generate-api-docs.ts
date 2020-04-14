@@ -25,9 +25,9 @@ app.bootstrap({
 });
 
 // Do not build the docs for these packages
-dirs = dirs.filter(dir => !excludeDirs.includes(dir));
+dirs = dirs.filter((dir) => !excludeDirs.includes(dir));
 
-dirs.forEach(dir => {
+dirs.forEach((dir) => {
   // Generate the api doc for each package
   app.generateDocs(
     app.expandInputFiles([resolve(packagesDir, dir, 'src')]),

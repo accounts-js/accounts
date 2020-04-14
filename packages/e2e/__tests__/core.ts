@@ -6,7 +6,7 @@ const user = {
   password: 'notSecure',
 };
 
-Object.keys(servers).forEach(key => {
+Object.keys(servers).forEach((key) => {
   const server = servers[key];
   describe(`${key} core`, () => {
     beforeAll(async () => {
