@@ -35,7 +35,7 @@ export class DatabaseTests {
   public dropDatabase = async () => {
     const keys = await this.redis.keys('*');
     const pipeline = this.redis.pipeline();
-    keys.forEach(key => {
+    keys.forEach((key) => {
       pipeline.del(key);
     });
     await pipeline.exec();

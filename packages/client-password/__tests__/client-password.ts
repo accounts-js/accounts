@@ -39,7 +39,7 @@ describe('AccountsClientPassword', () => {
   describe('#options', () => {
     describe('hashPassword', () => {
       it('should use hashPassword option', () => {
-        const hashPassword = jest.fn(pass => pass);
+        const hashPassword = jest.fn((pass) => pass);
         const accountsPasswordTest = new AccountsClientPassword(mockedClient as any, {
           hashPassword,
         });

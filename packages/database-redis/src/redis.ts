@@ -84,7 +84,7 @@ export class RedisSessions implements DatabaseInterfaceSessions {
       const sessionIds: string[] = await this.db.smembers(
         `${this.options.sessionCollectionName}:${this.options.userCollectionName}:${userId}`
       );
-      await sessionIds.map(sessionId => this.invalidateSession(sessionId));
+      await sessionIds.map((sessionId) => this.invalidateSession(sessionId));
     }
   }
 

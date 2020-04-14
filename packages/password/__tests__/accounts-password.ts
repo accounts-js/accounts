@@ -642,7 +642,7 @@ describe('AccountsPassword', () => {
 
     it('validateNewUser allow more fields', async () => {
       const tmpAccountsPassword = new AccountsPassword({
-        validateNewUser: user => {
+        validateNewUser: (user) => {
           user.additionalField = 'test';
           return user;
         },

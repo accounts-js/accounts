@@ -53,7 +53,7 @@ const accountsPassword = new AccountsPassword({
   // This option is called when a new user create an account
   // The user returned will be inserted into the database
   // For example here we allow a new `firstName` field on the user object
-  validateNewUser: async user => {
+  validateNewUser: async (user) => {
     // You can apply some custom validation
     if (!user.firstName) {
       throw new Error('First name is required');
@@ -106,7 +106,7 @@ For example if you want to use argon2, you can use the following:
 import * as argon2 from 'argon2';
 
 const accountsPassword = new AccountsPassword({
-  hashPassword: password => argon2.hash('password'),
+  hashPassword: (password) => argon2.hash('password'),
   verifyPassword: (password, hash) => argon2.verify(hash, password),
 });
 ```

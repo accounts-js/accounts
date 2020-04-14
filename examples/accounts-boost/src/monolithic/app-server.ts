@@ -55,7 +55,7 @@ import { ApolloServer } from 'apollo-server';
     context: ({ req }) => accounts.context({ req }),
   } as any)
     .listen()
-    .then(res => {
+    .then((res) => {
       console.log(`GraphQL server running at ${res.url}`);
     });
 })();

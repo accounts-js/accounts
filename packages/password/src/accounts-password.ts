@@ -315,7 +315,7 @@ export default class AccountsPassword implements AuthenticationService {
     }
 
     const resetTokens = getUserResetTokens(user);
-    const resetTokenRecord = find(resetTokens, t => t.token === token);
+    const resetTokenRecord = find(resetTokens, (t) => t.token === token);
 
     if (
       !resetTokenRecord ||

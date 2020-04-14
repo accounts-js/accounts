@@ -89,7 +89,7 @@ const options = {
           to,
           subject,
         },
-        err => {
+        (err) => {
           if (err) {
             reject(err);
             return;

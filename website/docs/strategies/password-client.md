@@ -108,7 +108,7 @@ import { AccountsClientPassword } from '@accounts/client-password';
 
 const accountsClient = new AccountsClient({});
 const accountsPassword = new AccountsClientPassword(accountsClient, {
-  hashPassword: password => {
+  hashPassword: (password) => {
     // Here we hash the password on the client before it's sent to the server
     const hashedPassword = SHA256(password);
     return hashedPassword.toString();
