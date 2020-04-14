@@ -687,7 +687,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     const authenticators = await this.db.findUserAuthenticators(userId);
     return authenticators.map((authenticator) => {
       const authenticatorService = this.authenticators[authenticator.type];
-      if (authenticatorService && authenticatorService.sanitize) {
+      if (authenticatorService?.sanitize) {
         return authenticatorService.sanitize(authenticator);
       }
       return authenticator;
