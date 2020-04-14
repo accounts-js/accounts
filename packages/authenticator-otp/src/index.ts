@@ -45,6 +45,7 @@ export class AuthenticatorOtp implements AuthenticatorService {
    */
   public async associate(
     userId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     params: any
   ): Promise<{ id: string; secret: string; otpauthUri: string }> {
     const secret = otplib.authenticator.generateSecret();
@@ -86,7 +87,11 @@ export class AuthenticatorOtp implements AuthenticatorService {
    */
   public sanitize(authenticator: DbAuthenticatorOtp): Authenticator {
     // The secret key should never be exposed to the user after the authenticator is linked
-    const { secret, ...safeAuthenticator } = authenticator;
+    const {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      secret,
+      ...safeAuthenticator
+    } = authenticator;
     return safeAuthenticator;
   }
 }
