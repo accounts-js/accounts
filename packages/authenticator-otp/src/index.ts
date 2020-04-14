@@ -41,7 +41,7 @@ export class AuthenticatorOtp implements AuthenticatorService {
   }
 
   /**
-   * Start the association of a new OTP device
+   * @description Start the association of a new OTP device
    */
   public async associate(
     userId: string,
@@ -67,7 +67,7 @@ export class AuthenticatorOtp implements AuthenticatorService {
   }
 
   /**
-   * Verify that the code provided by the user is valid
+   * @description Verify that the code provided by the user is valid
    */
   public async authenticate(
     authenticator: DbAuthenticatorOtp,
@@ -78,5 +78,15 @@ export class AuthenticatorOtp implements AuthenticatorService {
     }
 
     return otplib.authenticator.check(code, authenticator.secret);
+  }
+
+  /**
+   * @description Remove the sensitive fields from the database authenticator. The object
+   * returned by this function can be exposed to the user safely.
+   */
+  public sanitize(authenticator: DbAuthenticatorOtp): Authenticator {
+    // The secret key should never be exposed to the user after the authenticator is linked
+    const { secret, ...safeAuthenticator } = authenticator;
+    return safeAuthenticator;
   }
 }

@@ -32,4 +32,17 @@ describe('AuthenticatorOtp', () => {
       });
     });
   });
+
+  describe('sanitize', () => {
+    it('should remove the secret property', async () => {
+      const authenticator = {
+        id: '123',
+        secret: 'shouldBeRemoved',
+      };
+      const result = authenticatorOtp.sanitize(authenticator as any);
+      expect(result).toEqual({
+        id: authenticator.id,
+      });
+    });
+  });
 });

@@ -7,5 +7,6 @@ export interface AuthenticatorService {
   setStore(store: DatabaseInterface): void;
   associate(userId: string, params: any): Promise<any>;
   authenticate(authenticator: Authenticator, params: any): Promise<boolean>;
+  sanitize?(authenticator: Authenticator): Authenticator;
   // TODO ability to delete an authenticator
 }

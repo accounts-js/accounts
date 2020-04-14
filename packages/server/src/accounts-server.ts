@@ -685,8 +685,15 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
    */
   public async findUserAuthenticators(userId: string): Promise<Authenticator[]> {
     const authenticators = await this.db.findUserAuthenticators(userId);
-    // TODO need to whitelist the fields returned, eg OTP should not expose the secret property
-    return authenticators;
+    return authenticators.map(authenticator => {
+      if (
+        this.authenticators[authenticator.type] &&
+        this.authenticators[authenticator.type].sanitize
+      ) {
+        return this.authenticators[authenticator.type].sanitize(authenticator);
+      }
+      return authenticator;
+    });
   }
 
   /**
