@@ -1,6 +1,6 @@
 {
   "name": "@examples/react-rest-typescript",
-  "version": "0.25.0",
+  "version": "0.25.1",
   "private": true,
   "scripts": {
     "start": "SKIP_PREFLIGHT_CHECK=true react-scripts start",
@@ -24,9 +24,9 @@
     ]
   },
   "dependencies": {
-    "@accounts/client": "^0.25.0",
-    "@accounts/client-password": "^0.25.0",
-    "@accounts/rest-client": "^0.25.0",
+    "@accounts/client": "^0.25.1",
+    "@accounts/client-password": "^0.25.1",
+    "@accounts/rest-client": "^0.25.1",
     "@material-ui/core": "4.8.1",
     "@material-ui/icons": "4.5.1",
     "@material-ui/styles": "4.7.1",
