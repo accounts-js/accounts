@@ -46,7 +46,7 @@ module.exports = {
       'strategies/oauth',
       'strategies/twitter',
     ],
-    MFA: ['mfa/otp'],
+    MFA: ['mfa/introduction', 'mfa/otp', 'mfa/create-custom'],
     Cookbook: ['cookbook/react-native'],
   },
   api: generatedApi,
