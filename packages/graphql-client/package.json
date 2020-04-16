@@ -34,5 +34,8 @@
     "@accounts/types": "^0.25.0",
     "graphql-tag": "^2.10.0",
     "tslib": "1.10.0"
+  },
+  "peerDependencies": {
+    "graphql": "^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0"
   }
 }
