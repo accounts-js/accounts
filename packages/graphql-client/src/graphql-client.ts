@@ -6,7 +6,7 @@ import {
   User,
   CreateUserResult,
 } from '@accounts/types';
-import { print } from 'graphql';
+import { print } from 'graphql/language';
 import gql from 'graphql-tag';
 import { addEmailMutation } from './graphql/add-email.mutation';
 import { authenticateWithServiceMutation } from './graphql/authenticate-with-service.mutation';
