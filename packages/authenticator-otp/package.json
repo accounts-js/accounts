@@ -1,6 +1,6 @@
 {
   "name": "@accounts/authenticator-otp",
-  "version": "0.25.0",
+  "version": "0.25.1",
   "description": "@accounts/authenticator-otp",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
