@@ -23,4 +23,10 @@ export default ({ userAsInterface }: CoreAccountsModuleConfig) => gql`
     tokens: Tokens
     user: User
   }
+
+  type MultiFactorResult {
+    mfaToken: String!
+  }
+
+  union AuthenticationResult = LoginResult | MultiFactorResult
 `;

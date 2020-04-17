@@ -4,6 +4,7 @@ import { AccountsServer } from '@accounts/server';
 import { getUserAgent } from '../../utils/get-user-agent';
 import { sendError } from '../../utils/send-error';
 import { AccountsExpressOptions } from '../../types';
+import { LoginResult } from '@accounts/types';
 
 interface RequestWithSession extends express.Request {
   session: any;
@@ -16,7 +17,7 @@ export const providerCallback = (
   try {
     const userAgent = getUserAgent(req);
     const ip = requestIp.getClientIp(req);
-    const loggedInUser = await accountsServer.loginWithService(
+    const loggedInUser = (await accountsServer.loginWithService(
       'oauth',
       {
         ...(req.params || {}),
@@ -25,7 +26,8 @@ export const providerCallback = (
         ...((req as RequestWithSession).session || {}),
       },
       { ip, userAgent }
-    );
+      // TODO fix this, can require mfa when login with oauth
+    )) as LoginResult;
 
     if (options && options.onOAuthSuccess) {
       options.onOAuthSuccess(req, res, loggedInUser);

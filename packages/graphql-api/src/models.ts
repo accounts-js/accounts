@@ -22,6 +22,8 @@ export type AuthenticateParamsInput = {
   code?: Maybe<Scalars['String']>,
 };
 
+export type AuthenticationResult = LoginResult | MultiFactorResult;
+
 export type CreateUserInput = {
   username?: Maybe<Scalars['String']>,
   email?: Maybe<Scalars['String']>,
@@ -54,6 +56,11 @@ export type LoginResult = {
   user?: Maybe<User>,
 };
 
+export type MultiFactorResult = {
+   __typename?: 'MultiFactorResult',
+  mfaToken: Scalars['String'],
+};
+
 export type Mutation = {
    __typename?: 'Mutation',
   createUser?: Maybe<CreateUserResult>,
@@ -68,7 +75,7 @@ export type Mutation = {
   impersonate?: Maybe<ImpersonateReturn>,
   refreshTokens?: Maybe<LoginResult>,
   logout?: Maybe<Scalars['Boolean']>,
-  authenticate?: Maybe<LoginResult>,
+  authenticate?: Maybe<AuthenticationResult>,
   verifyAuthentication?: Maybe<Scalars['Boolean']>,
 };
 
@@ -271,6 +278,8 @@ export type ResolversTypes = {
   ImpersonateReturn: ResolverTypeWrapper<ImpersonateReturn>,
   AuthenticateParamsInput: AuthenticateParamsInput,
   UserInput: UserInput,
+  AuthenticationResult: ResolversTypes['LoginResult'] | ResolversTypes['MultiFactorResult'],
+  MultiFactorResult: ResolverTypeWrapper<MultiFactorResult>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -291,9 +300,15 @@ export type ResolversParentTypes = {
   ImpersonateReturn: ImpersonateReturn,
   AuthenticateParamsInput: AuthenticateParamsInput,
   UserInput: UserInput,
+  AuthenticationResult: ResolversParentTypes['LoginResult'] | ResolversParentTypes['MultiFactorResult'],
+  MultiFactorResult: MultiFactorResult,
 };
 
 export type AuthDirectiveResolver<Result, Parent, ContextType = any, Args = {  }> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type AuthenticationResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthenticationResult'] = ResolversParentTypes['AuthenticationResult']> = {
+  __resolveType: TypeResolveFn<'LoginResult' | 'MultiFactorResult', ParentType, ContextType>
+};
 
 export type CreateUserResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateUserResult'] = ResolversParentTypes['CreateUserResult']> = {
   userId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
@@ -317,6 +332,10 @@ export type LoginResultResolvers<ContextType = any, ParentType extends Resolvers
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
 };
 
+export type MultiFactorResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['MultiFactorResult'] = ResolversParentTypes['MultiFactorResult']> = {
+  mfaToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createUser?: Resolver<Maybe<ResolversTypes['CreateUserResult']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'user'>>,
   verifyEmail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationVerifyEmailArgs, 'token'>>,
@@ -330,7 +349,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   impersonate?: Resolver<Maybe<ResolversTypes['ImpersonateReturn']>, ParentType, ContextType, RequireFields<MutationImpersonateArgs, 'accessToken' | 'username'>>,
   refreshTokens?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationRefreshTokensArgs, 'accessToken' | 'refreshToken'>>,
   logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
-  authenticate?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationAuthenticateArgs, 'serviceName' | 'params'>>,
+  authenticate?: Resolver<Maybe<ResolversTypes['AuthenticationResult']>, ParentType, ContextType, RequireFields<MutationAuthenticateArgs, 'serviceName' | 'params'>>,
   verifyAuthentication?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationVerifyAuthenticationArgs, 'serviceName' | 'params'>>,
 };
 
@@ -362,10 +381,12 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type Resolvers<ContextType = any> = {
+  AuthenticationResult?: AuthenticationResultResolvers,
   CreateUserResult?: CreateUserResultResolvers<ContextType>,
   EmailRecord?: EmailRecordResolvers<ContextType>,
   ImpersonateReturn?: ImpersonateReturnResolvers<ContextType>,
   LoginResult?: LoginResultResolvers<ContextType>,
+  MultiFactorResult?: MultiFactorResultResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Tokens?: TokensResolvers<ContextType>,
