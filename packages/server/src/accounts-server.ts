@@ -53,6 +53,12 @@ const defaultOptions = {
   useInternalUserObjectSanitizer: true,
 };
 
+interface MultiFactorResult {
+  mfaToken: string;
+}
+
+type AuthenticationResult = LoginResult | MultiFactorResult;
+
 export class AccountsServer {
   public options: AccountsServerOptions & typeof defaultOptions;
   private services: { [key: string]: AuthenticationService };
@@ -183,7 +189,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     serviceName: string,
     params: any,
     infos: ConnectionInformations
-  ): Promise<LoginResult> {
+  ): Promise<AuthenticationResult> {
     const hooksInfo: any = {
       // The service name, such as “password” or “twitter”.
       service: serviceName,
@@ -253,6 +259,22 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
           'Your account has been deactivated',
           LoginWithServiceErrors.UserDeactivated
         );
+      }
+
+      // We check if the user have at least one active authenticator
+      // If yes we create a new mfaChallenge for the user to resolve
+      // If no we can login the user
+      const authenticators = await this.db.findUserAuthenticators(user.id);
+      const activeAuthenticator = authenticators.find((authenticator) => authenticator.active);
+      if (activeAuthenticator) {
+        // We create a new challenge for the authenticator so it can be verified later
+        const mfaChallengeToken = generateRandomToken();
+        // associate.id refer to the authenticator id
+        await this.db.createMfaChallenge({
+          userId: user.id,
+          token: mfaChallengeToken,
+        });
+        return { mfaToken: mfaChallengeToken };
       }
 
       // Let the user validate the login attempt
