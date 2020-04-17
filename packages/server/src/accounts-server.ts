@@ -13,6 +13,7 @@ import {
   AuthenticatorService,
   ConnectionInformations,
   Authenticator,
+  AuthenticationResult,
 } from '@accounts/types';
 
 import { generateAccessToken, generateRefreshToken, generateRandomToken } from './utils/tokens';
@@ -52,12 +53,6 @@ const defaultOptions = {
   createNewSessionTokenOnRefresh: false,
   useInternalUserObjectSanitizer: true,
 };
-
-interface MultiFactorResult {
-  mfaToken: string;
-}
-
-type AuthenticationResult = LoginResult | MultiFactorResult;
 
 export class AccountsServer {
   public options: AccountsServerOptions & typeof defaultOptions;
