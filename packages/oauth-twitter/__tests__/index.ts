@@ -9,7 +9,7 @@ describe('AccountsOAuthTwitter', () => {
     const twitterProvider = new AccountsOAuthTwitter({
       key: 'TWITTER_KEY',
       secret: 'TWITTER_SECRET',
-      getRegistrationPayload: async oauthUser => ({
+      getRegistrationPayload: async (oauthUser) => ({
         email: oauthUser.email,
         name: oauthUser.username,
       }),

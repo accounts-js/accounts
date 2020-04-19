@@ -42,7 +42,7 @@ describe('AccountsOAuthInstagram', () => {
 
   describe('configuration', () => {
     const instagramProvider = new AccountsOAuthInstagram({
-      getRegistrationPayload: async oauthUser => ({
+      getRegistrationPayload: async (oauthUser) => ({
         email: oauthUser.email,
         instagramUsername: oauthUser.username,
       }),
