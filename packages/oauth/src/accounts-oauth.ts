@@ -1,6 +1,13 @@
 import { User, DatabaseInterface, AuthenticationService } from '@accounts/types';
 import { AccountsServer, ServerHooks } from '@accounts/server';
 import { OAuthOptions } from './types/oauth-options';
+import { OAuthUser } from './types/oauth-user';
+
+const getRegistrationPayloadDefault = async (oauthUser: OAuthUser) => {
+  return {
+    email: oauthUser.email,
+  };
+};
 
 export class AccountsOauth implements AuthenticationService {
   public server!: AccountsServer;
@@ -36,9 +43,11 @@ export class AccountsOauth implements AuthenticationService {
 
     if (!user) {
       try {
-        const userId = await this.db.createUser({
-          email: oauthUser.email,
-        });
+        const userData = await (
+          userProvider.getRegistrationPayload || getRegistrationPayloadDefault
+        )(oauthUser);
+
+        const userId = await this.db.createUser(userData);
 
         user = (await this.db.findUserById(userId)) as User;
 

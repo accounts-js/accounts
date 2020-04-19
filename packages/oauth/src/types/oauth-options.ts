@@ -1,7 +1,5 @@
-import { OAuthUser } from './oauth-user';
+import { OAuthProvider } from './oauth-provider';
 
 export interface OAuthOptions {
-  [provider: string]: {
-    authenticate: (params: any) => Promise<OAuthUser>;
-  };
+  [provider: string]: OAuthProvider;
 }
