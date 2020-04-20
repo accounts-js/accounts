@@ -4,6 +4,7 @@ import { CssBaseline } from '@material-ui/core';
 import { AuthProvider, useAuth } from './components/AuthContext';
 import Signup from './Signup';
 import Login from './Login';
+import { LoginMfa } from './LoginMfa';
 import Home from './Home';
 import ResetPassword from './ResetPassword';
 import VerifyEmail from './VerifyEmail';
@@ -58,7 +59,7 @@ const Router = () => {
         {/* Unauthenticated routes */}
         <Route path="/signup" component={Signup} />
         <Route path="/login" exact={true} component={Login} />
-        <Route path="/login/mfa" component={Login} />
+        <Route path="/login/mfa" component={LoginMfa} />
         <Route exact path="/reset-password" component={ResetPassword} />
         <Route path="/reset-password/:token" component={ResetPassword} />
         <Route path="/verify-email/:token" component={VerifyEmail} />
