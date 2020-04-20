@@ -204,8 +204,8 @@ export class AccountsClient {
     return this.transport.mfaAssociate(type);
   }
 
-  public authenticators() {
-    return this.transport.authenticators();
+  public authenticators(mfaToken?: string) {
+    return this.transport.authenticators(mfaToken);
   }
 
   private getTokenKey(tokenName: TokenKey): string {

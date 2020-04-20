@@ -712,6 +712,30 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
   }
 
   /**
+   * @description Return the list of the active authenticators for this user.
+   * @param {string} mfaToken - A valid mfa token you obtained during the login process..
+   */
+  public async findUserAuthenticatorsByMfaToken(mfaToken: string): Promise<Authenticator[]> {
+    if (!mfaToken) {
+      throw new Error('Mfa token invalid');
+    }
+    const mfaChallenge = await this.db.findMfaChallengeByToken(mfaToken);
+    if (!mfaChallenge || mfaChallenge.deactivated) {
+      throw new Error('Mfa token invalid');
+    }
+    const authenticators = await this.db.findUserAuthenticators(mfaChallenge.userId);
+    return authenticators
+      .filter((authenticator) => authenticator.active)
+      .map((authenticator) => {
+        const authenticatorService = this.authenticators[authenticator.type];
+        if (authenticatorService?.sanitize) {
+          return authenticatorService.sanitize(authenticator);
+        }
+        return authenticator;
+      });
+  }
+
+  /**
    * Private methods
    */
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RouteComponentProps, useLocation } from 'react-router-dom';
 import {
   Button,
@@ -14,6 +14,7 @@ import { useFormik, FormikErrors } from 'formik';
 import { SnackBarContentError } from './components/SnackBarContentError';
 import { useAuth } from './components/AuthContext';
 import { UnauthenticatedContainer } from './components/UnauthenticatedContainer';
+import { accountsClient } from './accounts';
 
 const useStyles = makeStyles((theme) => ({
   cardContent: {
@@ -36,6 +37,7 @@ interface LoginMfaValues {
 export const LoginMfa = ({ history }: RouteComponentProps<{}>) => {
   const classes = useStyles();
   const location = useLocation();
+  const mfaToken: string = location.state.mfaToken;
   const { loginWithService } = useAuth();
   const [error, setError] = useState<string | undefined>();
   const formik = useFormik<LoginMfaValues>({
@@ -52,7 +54,7 @@ export const LoginMfa = ({ history }: RouteComponentProps<{}>) => {
     onSubmit: async (values, { setSubmitting }) => {
       try {
         await loginWithService('mfa', {
-          mfaToken: location.state.mfaToken,
+          mfaToken,
           code: values.code,
         });
         history.push('/');
@@ -62,6 +64,15 @@ export const LoginMfa = ({ history }: RouteComponentProps<{}>) => {
       }
     },
   });
+
+  useEffect(() => {
+    const fetchAuthenticators = async () => {
+      const data = await accountsClient.authenticators(mfaToken);
+      console.log(data);
+    };
+
+    fetchAuthenticators();
+  }, []);
 
   return (
     <UnauthenticatedContainer>
