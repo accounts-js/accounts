@@ -67,12 +67,13 @@ export const LoginMfa = ({ history }: RouteComponentProps<{}>) => {
 
   useEffect(() => {
     const fetchAuthenticators = async () => {
+      // TODO try catch
       const data = await accountsClient.authenticators(mfaToken);
       console.log(data);
     };
 
     fetchAuthenticators();
-  }, []);
+  }, [mfaToken]);
 
   return (
     <UnauthenticatedContainer>
