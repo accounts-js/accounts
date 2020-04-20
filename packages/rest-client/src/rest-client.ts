@@ -3,6 +3,7 @@ import { TransportInterface, AccountsClient } from '@accounts/client';
 import {
   User,
   LoginResult,
+  AuthenticationResult,
   CreateUser,
   ImpersonationResult,
   LoginUserIdentity,
@@ -79,7 +80,7 @@ export class RestClient implements TransportInterface {
     provider: string,
     data: any,
     customHeaders?: object
-  ): Promise<LoginResult> {
+  ): Promise<AuthenticationResult> {
     const args = {
       method: 'POST',
       body: JSON.stringify({

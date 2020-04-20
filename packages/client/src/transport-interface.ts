@@ -1,10 +1,11 @@
 import {
-  LoginResult,
+  AuthenticationResult,
   ImpersonationResult,
   CreateUser,
   User,
   CreateUserResult,
   Authenticator,
+  LoginResult,
 } from '@accounts/types';
 import { AccountsClient } from './accounts-client';
 
@@ -22,7 +23,7 @@ export interface TransportInterface extends TransportMfaInterface {
     authenticateParams: {
       [key: string]: string | object;
     }
-  ): Promise<LoginResult>;
+  ): Promise<AuthenticationResult>;
   logout(): Promise<void>;
   getUser(): Promise<User>;
   refreshTokens(accessToken: string, refreshToken: string): Promise<LoginResult>;

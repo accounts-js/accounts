@@ -1,4 +1,4 @@
-import { LoginResult, Tokens, ImpersonationResult, User } from '@accounts/types';
+import { Tokens, ImpersonationResult, User, AuthenticationResult } from '@accounts/types';
 import { TransportInterface } from './transport-interface';
 import { TokenStorage, AccountsClientOptions } from './types';
 import { tokenStorageLocal } from './token-storage-local';
@@ -102,9 +102,11 @@ export class AccountsClient {
   public async loginWithService(
     service: string,
     credentials: { [key: string]: any }
-  ): Promise<LoginResult> {
+  ): Promise<AuthenticationResult> {
     const response = await this.transport.loginWithService(service, credentials);
-    await this.setTokens(response.tokens);
+    if ('tokens' in response) {
+      await this.setTokens(response.tokens);
+    }
     return response;
   }
 
