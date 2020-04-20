@@ -57,7 +57,8 @@ const Router = () => {
 
         {/* Unauthenticated routes */}
         <Route path="/signup" component={Signup} />
-        <Route path="/login" component={Login} />
+        <Route path="/login" exact={true} component={Login} />
+        <Route path="/login/mfa" component={Login} />
         <Route exact path="/reset-password" component={ResetPassword} />
         <Route path="/reset-password/:token" component={ResetPassword} />
         <Route path="/verify-email/:token" component={VerifyEmail} />

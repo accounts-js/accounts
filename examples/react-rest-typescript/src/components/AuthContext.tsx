@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { User } from '@accounts/types';
+import { User, AuthenticationResult } from '@accounts/types';
 import { accountsClient } from '../accounts';
 
 const AuthContext = React.createContext<{
   user?: User;
   fetchUser: () => Promise<void>;
-  loginWithService: (service: string, credentials: any) => Promise<void>;
+  loginWithService: (service: string, credentials: any) => Promise<AuthenticationResult>;
   logout: () => Promise<void>;
 }>({
   fetchUser: async () => {},
   loginWithService: async () => {},
   logout: async () => {},
-});
+} as any);
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -26,8 +26,11 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const loginWithService = async (service: string, credentials: any) => {
-    await accountsClient.loginWithService(service, credentials);
-    await fetchUser();
+    const loginResponse = await accountsClient.loginWithService(service, credentials);
+    if ('tokens' in loginResponse) {
+      await fetchUser();
+    }
+    return loginResponse;
   };
 
   const logout = async () => {

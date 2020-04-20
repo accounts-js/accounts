@@ -17,7 +17,7 @@ import { SnackBarContentError } from './components/SnackBarContentError';
 import { useAuth } from './components/AuthContext';
 import { UnauthenticatedContainer } from './components/UnauthenticatedContainer';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   cardContent: {
     padding: theme.spacing(3),
   },
@@ -41,7 +41,6 @@ const ResetPasswordLink = React.forwardRef<RouterLink, any>((props, ref) => (
 interface LoginValues {
   email: string;
   password: string;
-  code: string;
 }
 
 const Login = ({ history }: RouteComponentProps<{}>) => {
@@ -52,9 +51,8 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
     initialValues: {
       email: '',
       password: '',
-      code: '',
     },
-    validate: values => {
+    validate: (values) => {
       const errors: FormikErrors<LoginValues> = {};
       if (!values.email) {
         errors.email = 'Required';
@@ -66,13 +64,16 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
     },
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        await loginWithService('password', {
+        const loginResponse = await loginWithService('password', {
           user: {
             email: values.email,
           },
           password: values.password,
-          code: values.code,
         });
+        if ('mfaToken' in loginResponse) {
+          history.push('/login/mfa', { mfaToken: loginResponse.mfaToken });
+          return;
+        }
         history.push('/');
       } catch (error) {
         setError(error.message);
@@ -128,18 +129,6 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
                   onChange={formik.handleChange}
                   error={Boolean(formik.errors.password && formik.touched.password)}
                   helperText={formik.touched.password && formik.errors.password}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="2fa code if enabled"
-                  variant="outlined"
-                  fullWidth={true}
-                  id="code"
-                  value={formik.values.code}
-                  onChange={formik.handleChange}
-                  error={Boolean(formik.errors.code && formik.touched.code)}
-                  helperText={formik.touched.code && formik.errors.code}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
