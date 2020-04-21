@@ -13,7 +13,7 @@ import { Authenticator } from '@accounts/types';
 import { accountsClient } from './accounts';
 import { useHistory } from 'react-router';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   card: {
     marginTop: theme.spacing(3),
   },
@@ -36,7 +36,54 @@ const useStyles = makeStyles(theme => ({
   authenticatorItemDot: {
     marginRight: theme.spacing(2),
   },
+  authenticatorItemDescription: {
+    marginTop: theme.spacing(1),
+  },
 }));
+
+interface AuthenticatorOtpProps {
+  authenticator?: Authenticator;
+}
+
+const AuthenticatorOtp = ({ authenticator }: AuthenticatorOtpProps) => {
+  const classes = useStyles();
+  const history = useHistory();
+
+  return (
+    <React.Fragment>
+      <div className={classes.authenticatorItem}>
+        <div className={classes.authenticatorItemTitle}>
+          <FiberManualRecordIcon
+            className={classes.authenticatorItemDot}
+            color={authenticator?.active ? 'secondary' : 'error'}
+          />
+          <Typography>Authenticator App (OTP)</Typography>
+        </div>
+        {authenticator?.active ? (
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={() => history.push(`/security/mfa/${authenticator.id}`)}
+          >
+            Configure
+          </Button>
+        ) : (
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={() => history.push('/security/mfa/otp')}
+          >
+            Add
+          </Button>
+        )}
+      </div>
+      <Typography className={classes.authenticatorItemDescription}>
+        An authenticator application that supports TOTP (like Google Authenticator or 1Password) can
+        be used to conveniently secure your account. A new token is generated every 30 seconds.
+      </Typography>
+    </React.Fragment>
+  );
+};
 
 export const TwoFactor = () => {
   const classes = useStyles();
@@ -53,41 +100,17 @@ export const TwoFactor = () => {
     fetchAuthenticators();
   }, []);
 
+  const haveOtpFactor = authenticators.find((authenticator) => authenticator.type === 'otp');
+
   return (
     <Card className={classes.card}>
       <CardHeader subheader="Two-factor authentication" className={classes.cardHeader} />
       <Divider />
       <CardContent className={classes.cardContent}>
-        {authenticators.map(authenticator => {
+        {!haveOtpFactor && <AuthenticatorOtp />}
+        {authenticators.map((authenticator) => {
           if (authenticator.type === 'otp') {
-            return (
-              <div key={authenticator.id} className={classes.authenticatorItem}>
-                <div className={classes.authenticatorItemTitle}>
-                  <FiberManualRecordIcon
-                    className={classes.authenticatorItemDot}
-                    color={authenticator.active ? 'secondary' : 'error'}
-                  />
-                  <Typography>Authenticator App</Typography>
-                </div>
-                {authenticator.active ? (
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() => history.push(`/security/mfa/${authenticator.id}`)}
-                  >
-                    Configure
-                  </Button>
-                ) : (
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() => history.push('/security/mfa/otp')}
-                  >
-                    Add
-                  </Button>
-                )}
-              </div>
-            );
+            return <AuthenticatorOtp key={authenticator.id} authenticator={authenticator} />;
           }
           return null;
         })}
