@@ -14,6 +14,7 @@ import { twoFactorSecret, twoFactorSet, twoFactorUnset } from './endpoints/passw
 import { changePassword } from './endpoints/password/change-password';
 import { associate } from './endpoints/mfa/associate';
 import { authenticators } from './endpoints/mfa/authenticators';
+import { challenge } from './endpoints/mfa/challenge';
 import { addEmail } from './endpoints/password/add-email';
 import { userLoader } from './user-loader';
 import { AccountsExpressOptions } from './types';
@@ -56,6 +57,8 @@ const accountsExpress = (
     userLoader(accountsServer),
     authenticators(accountsServer)
   );
+
+  router.post(`${path}/mfa/challenge`, challenge(accountsServer));
 
   const services = accountsServer.getServices();
 

@@ -49,4 +49,5 @@ export interface TransportInterface extends TransportMfaInterface {
 interface TransportMfaInterface {
   mfaAssociate(type: string): Promise<any>;
   authenticators(mfaToken?: string): Promise<Authenticator[]>;
+  mfaChallenge(mfaToken: string, authenticatorId: string): Promise<any>;
 }

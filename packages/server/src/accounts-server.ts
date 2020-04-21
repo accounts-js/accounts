@@ -666,6 +666,42 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
    */
 
   /**
+   * @description Request a challenge for the MFA authentication
+   * @param {string} mfaToken - A valid mfa token you obtained during the login process.
+   * @param {string} authenticatorId - The ID of the authenticator to challenge.
+   */
+  public async mfaChallenge(mfaToken: string, authenticatorId: string): Promise<void> {
+    if (!mfaToken) {
+      throw new Error('Mfa token invalid');
+    }
+    const mfaChallenge = await this.db.findMfaChallengeByToken(mfaToken);
+    // TODO need to check that the challenge is not expired
+    if (!mfaChallenge || mfaChallenge.deactivated) {
+      throw new Error('Mfa token invalid');
+    }
+    const authenticator = await this.db.findAuthenticatorById(authenticatorId);
+    if (!authenticator) {
+      throw new Error('Authenticator not found');
+    }
+    // A user should be able to challenge only is own authenticators
+    if (mfaChallenge.userId !== authenticator.userId) {
+      throw new Error('Mfa token invalid');
+    }
+    const authenticatorService = this.authenticators[authenticator.type];
+    if (!authenticatorService) {
+      throw new Error(`No authenticator with the name ${authenticator.type} was registered.`);
+    }
+    // We trigger the good authenticator challenge
+    if (authenticatorService.challenge) {
+      await authenticatorService.challenge(mfaChallenge, authenticator);
+    }
+    // Then we attach the authenticator id that will be used to resolve the challenge
+    await this.db.updateMfaChallenge(mfaChallenge.id, {
+      authenticatorId: authenticator.id,
+    });
+  }
+
+  /**
    * @description Start the association of a new authenticator
    * @param {string} userId - User id to link the new authenticator.
    * @param {string} serviceName - Service name of the authenticator service.
@@ -713,13 +749,14 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
 
   /**
    * @description Return the list of the active authenticators for this user.
-   * @param {string} mfaToken - A valid mfa token you obtained during the login process..
+   * @param {string} mfaToken - A valid mfa token you obtained during the login process.
    */
   public async findUserAuthenticatorsByMfaToken(mfaToken: string): Promise<Authenticator[]> {
     if (!mfaToken) {
       throw new Error('Mfa token invalid');
     }
     const mfaChallenge = await this.db.findMfaChallengeByToken(mfaToken);
+    // TODO need to check that the challenge is not expired
     if (!mfaChallenge || mfaChallenge.deactivated) {
       throw new Error('Mfa token invalid');
     }
