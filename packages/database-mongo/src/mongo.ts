@@ -499,6 +499,7 @@ export class Mongo implements DatabaseInterface {
         $set: {
           active: true,
           activatedAt: this.options.dateProvider(),
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
         },
       }
     );
@@ -542,6 +543,22 @@ export class Mongo implements DatabaseInterface {
         $set: {
           deactivated: true,
           deactivatedAt: this.options.dateProvider(),
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+        },
+      }
+    );
+  }
+
+  public async updateMfaChallenge(mfaChallengeId: string, data: any): Promise<void> {
+    const id = this.options.convertMfaChallengeIdToMongoObjectId
+      ? toMongoID(mfaChallengeId)
+      : mfaChallengeId;
+    await this.mfaChallengeCollection.updateOne(
+      { _id: id },
+      {
+        $set: {
+          ...data,
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
         },
       }
     );

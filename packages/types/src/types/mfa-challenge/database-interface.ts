@@ -6,5 +6,7 @@ export interface DatabaseInterfaceMfaChallenges {
 
   findMfaChallengeByToken(token: string): Promise<MfaChallenge | null>;
 
+  updateMfaChallenge(mfaChallengeId: string, data: any): Promise<void>;
+
   deactivateMfaChallenge(mfaChallengeId: string): Promise<void>;
 }
