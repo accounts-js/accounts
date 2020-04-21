@@ -18,7 +18,7 @@
     "preset": "ts-jest"
   },
   "dependencies": {
-    "@accounts/oauth": "^0.25.0",
+    "@accounts/oauth": "^0.26.0-alpha.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
     "tslib": "1.10.0"
