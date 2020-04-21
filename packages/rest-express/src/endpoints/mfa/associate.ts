@@ -14,7 +14,7 @@ export const associate = (accountsServer: AccountsServer) => async (
     }
 
     const { type } = req.body;
-    const mfaAssociateResult = await accountsServer.mfaAssociate(
+    const mfaAssociateResult = await accountsServer.mfa.associate(
       (req as any).userId,
       type,
       req.body

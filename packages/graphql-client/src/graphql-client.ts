@@ -202,7 +202,18 @@ export default class GraphQLClient implements TransportInterface {
   /**
    * @inheritDoc
    */
-  public async authenticators(customHeaders?: object): Promise<Authenticator[]> {
+  public async authenticators(mfaToken?: string, customHeaders?: object): Promise<Authenticator[]> {
+    throw new Error('Not implemented yet');
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public async mfaChallenge(
+    mfaToken: string,
+    authenticatorId: string,
+    customHeaders?: object
+  ): Promise<void> {
     throw new Error('Not implemented yet');
   }
 

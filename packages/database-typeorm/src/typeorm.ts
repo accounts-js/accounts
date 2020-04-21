@@ -476,4 +476,8 @@ export class AccountsTypeorm implements DatabaseInterface {
   public async deactivateMfaChallenge(mfaChallengeId: string): Promise<void> {
     throw new Error('Not implemented yet');
   }
+
+  public async updateMfaChallenge(mfaChallengeId: string): Promise<void> {
+    throw new Error('Not implemented yet');
+  }
 }

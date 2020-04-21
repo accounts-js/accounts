@@ -194,4 +194,9 @@ export class DatabaseManager implements DatabaseInterface {
   public get deactivateMfaChallenge(): DatabaseInterface['deactivateMfaChallenge'] {
     return this.userStorage.deactivateMfaChallenge.bind(this.userStorage);
   }
+
+  // Return the updateMfaChallenge function from the userStorage
+  public get updateMfaChallenge(): DatabaseInterface['updateMfaChallenge'] {
+    return this.userStorage.updateMfaChallenge.bind(this.userStorage);
+  }
 }

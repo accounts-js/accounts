@@ -21,8 +21,8 @@ export const authenticators = (accountsServer: AccountsServer) => async (
     }
 
     const userAuthenticators = mfaToken
-      ? await accountsServer.findUserAuthenticatorsByMfaToken(mfaToken)
-      : await accountsServer.findUserAuthenticators(userId);
+      ? await accountsServer.mfa.findUserAuthenticatorsByMfaToken(mfaToken)
+      : await accountsServer.mfa.findUserAuthenticators(userId);
     res.json(userAuthenticators);
   } catch (err) {
     sendError(res, err);
