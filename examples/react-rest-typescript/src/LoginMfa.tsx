@@ -70,6 +70,9 @@ export const LoginMfa = ({ history }: RouteComponentProps<{}>) => {
       // TODO try catch
       const data = await accountsClient.authenticators(mfaToken);
       console.log(data);
+      const authenticator = data[0];
+      const challengeResponse = await accountsClient.mfaChallenge(mfaToken, authenticator.id);
+      console.log(challengeResponse);
     };
 
     fetchAuthenticators();
