@@ -200,6 +200,10 @@ export class AccountsClient {
     await this.clearTokens();
   }
 
+  public mfaChallenge(mfaToken: string, authenticatorId: string) {
+    return this.transport.mfaChallenge(mfaToken, authenticatorId);
+  }
+
   public mfaAssociate(type: string) {
     return this.transport.mfaAssociate(type);
   }

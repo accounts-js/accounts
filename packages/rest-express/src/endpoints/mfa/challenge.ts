@@ -8,8 +8,8 @@ export const challenge = (accountsServer: AccountsServer) => async (
 ) => {
   try {
     const { mfaToken, authenticatorId } = req.body;
-    const mfaAssociateResult = await accountsServer.mfaChallenge(mfaToken, authenticatorId);
-    res.json(mfaAssociateResult);
+    await accountsServer.mfaChallenge(mfaToken, authenticatorId);
+    res.json(null);
   } catch (err) {
     sendError(res, err);
   }

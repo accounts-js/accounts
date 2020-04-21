@@ -251,7 +251,7 @@ export class RestClient implements TransportInterface {
       method: 'POST',
       body: JSON.stringify({ mfaToken, authenticatorId }),
     };
-    return this.authFetch(`mfa/challenge`, args, customHeaders);
+    return this.fetch(`mfa/challenge`, args, customHeaders);
   }
 
   public async mfaAssociate(type: string, customHeaders?: object) {
