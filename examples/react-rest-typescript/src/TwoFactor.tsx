@@ -87,7 +87,6 @@ const AuthenticatorOtp = ({ authenticator }: AuthenticatorOtpProps) => {
 
 export const TwoFactor = () => {
   const classes = useStyles();
-  const history = useHistory();
   const [authenticators, setAuthenticators] = useState<Authenticator[]>([]);
 
   useEffect(() => {
