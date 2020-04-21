@@ -1,6 +1,6 @@
 {
   "name": "@accounts/authenticator-otp",
-  "version": "0.26.0-alpha.0",
+  "version": "0.26.0-alpha.1",
   "description": "@accounts/authenticator-otp",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -29,14 +29,14 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
-    "@accounts/server": "^0.26.0-alpha.0",
+    "@accounts/server": "^0.26.0-alpha.1",
     "@types/jest": "24.0.23",
     "@types/node": "12.7.4",
     "jest": "24.9.0",
     "rimraf": "3.0.0"
   },
   "dependencies": {
-    "@accounts/types": "^0.26.0-alpha.0",
+    "@accounts/types": "^0.26.0-alpha.1",
     "otplib": "11.0.1",
     "tslib": "1.10.0"
   },
