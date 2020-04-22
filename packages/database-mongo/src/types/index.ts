@@ -33,11 +33,11 @@ export interface AccountsMongoOptions {
   /**
    * Should the authenticator collection use _id as string or ObjectId, default 'true'.
    */
-  convertAuthenticatorIdToMongoObjectId: boolean;
+  convertAuthenticatorIdToMongoObjectId?: boolean;
   /**
    * Should the mfa challenge collection use _id as string or ObjectId, default 'true'.
    */
-  convertMfaChallengeIdToMongoObjectId: boolean;
+  convertMfaChallengeIdToMongoObjectId?: boolean;
   /**
    * Perform case insensitive query for user name, default 'true'.
    */
