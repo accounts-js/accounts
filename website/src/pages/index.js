@@ -53,7 +53,7 @@ const features = [
 function Home() {
   const context = useDocusaurusContext();
   const { siteConfig = {} } = context;
-  console.log(siteConfig);
+
   return (
     <Layout
       title={`${siteConfig.title}`}
