@@ -25,7 +25,8 @@ import { sendVerificationEmailMutation } from './graphql/send-verification-email
 import { twoFactorSetMutation } from './graphql/two-factor-set.mutation';
 import { twoFactorUnsetMutation } from './graphql/two-factor-unset.mutation';
 import { verifyEmailMutation } from './graphql/verify-email.mutation';
-import { authenticatorsQuery } from './graphql/authenticators.query';
+import { authenticatorsQuery } from './graphql/accounts-mfa/authenticators.query';
+import { challengeMutation } from './graphql/accounts-mfa/challenge.mutation';
 import { GraphQLErrorList } from './GraphQLErrorList';
 
 export interface AuthenticateParams {
@@ -210,12 +211,8 @@ export default class GraphQLClient implements TransportInterface {
   /**
    * @inheritDoc
    */
-  public async mfaChallenge(
-    mfaToken: string,
-    authenticatorId: string,
-    customHeaders?: object
-  ): Promise<void> {
-    throw new Error('Not implemented yet');
+  public async mfaChallenge(mfaToken: string, authenticatorId: string): Promise<void> {
+    return this.mutate(challengeMutation, 'challenge', { mfaToken, authenticatorId });
   }
 
   private async mutate(mutation: any, resultField: any, variables: any = {}) {
