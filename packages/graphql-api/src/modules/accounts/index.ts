@@ -10,6 +10,7 @@ import { Mutation } from './resolvers/mutation';
 import { User as UserResolvers } from './resolvers/user';
 import { User } from '@accounts/types';
 import { AccountsPasswordModule } from '../accounts-password';
+import { AccountsMfaModule } from '../accounts-mfa';
 import { AuthenticatedDirective } from '../../utils/authenticated-directive';
 import { context } from '../../utils';
 import AccountsPassword from '@accounts/password';
@@ -69,6 +70,9 @@ export const AccountsModule: GraphQLModule<
   imports: ({ config }) => [
     CoreAccountsModule.forRoot({
       userAsInterface: config.userAsInterface,
+    }),
+    AccountsMfaModule.forRoot({
+      ...config,
     }),
     ...(config.accountsServer.getServices().password
       ? [

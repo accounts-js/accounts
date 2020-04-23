@@ -19,6 +19,9 @@ export class AccountsMFA {
     if (!mfaToken) {
       throw new Error('Mfa token invalid');
     }
+    if (!authenticatorId) {
+      throw new Error('Authenticator id invalid');
+    }
     const mfaChallenge = await this.db.findMfaChallengeByToken(mfaToken);
     // TODO need to check that the challenge is not expired
     if (!mfaChallenge || mfaChallenge.deactivated) {

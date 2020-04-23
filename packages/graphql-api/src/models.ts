@@ -24,6 +24,14 @@ export type AuthenticateParamsInput = {
 
 export type AuthenticationResult = LoginResult | MultiFactorResult;
 
+export type Authenticator = {
+   __typename?: 'Authenticator',
+  id?: Maybe<Scalars['ID']>,
+  type?: Maybe<Scalars['String']>,
+  active?: Maybe<Scalars['Boolean']>,
+  activatedAt?: Maybe<Scalars['String']>,
+};
+
 export type CreateUserInput = {
   username?: Maybe<Scalars['String']>,
   email?: Maybe<Scalars['String']>,
@@ -63,6 +71,7 @@ export type MultiFactorResult = {
 
 export type Mutation = {
    __typename?: 'Mutation',
+  challenge?: Maybe<Scalars['Boolean']>,
   createUser?: Maybe<CreateUserResult>,
   verifyEmail?: Maybe<Scalars['Boolean']>,
   resetPassword?: Maybe<LoginResult>,
@@ -77,6 +86,12 @@ export type Mutation = {
   logout?: Maybe<Scalars['Boolean']>,
   authenticate?: Maybe<AuthenticationResult>,
   verifyAuthentication?: Maybe<Scalars['Boolean']>,
+};
+
+
+export type MutationChallengeArgs = {
+  mfaToken: Scalars['String'],
+  authenticatorId: Scalars['String']
 };
 
 
@@ -153,8 +168,14 @@ export type MutationVerifyAuthenticationArgs = {
 
 export type Query = {
    __typename?: 'Query',
+  authenticators?: Maybe<Array<Maybe<Authenticator>>>,
   twoFactorSecret?: Maybe<TwoFactorSecretKey>,
   getUser?: Maybe<User>,
+};
+
+
+export type QueryAuthenticatorsArgs = {
+  mfaToken?: Maybe<Scalars['String']>
 };
 
 export type Tokens = {
@@ -263,12 +284,13 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
-  TwoFactorSecretKey: ResolverTypeWrapper<TwoFactorSecretKey>,
   String: ResolverTypeWrapper<Scalars['String']>,
-  User: ResolverTypeWrapper<User>,
+  Authenticator: ResolverTypeWrapper<Authenticator>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
-  EmailRecord: ResolverTypeWrapper<EmailRecord>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  TwoFactorSecretKey: ResolverTypeWrapper<TwoFactorSecretKey>,
+  User: ResolverTypeWrapper<User>,
+  EmailRecord: ResolverTypeWrapper<EmailRecord>,
   Mutation: ResolverTypeWrapper<{}>,
   CreateUserInput: CreateUserInput,
   CreateUserResult: ResolverTypeWrapper<CreateUserResult>,
@@ -285,12 +307,13 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Query: {},
-  TwoFactorSecretKey: TwoFactorSecretKey,
   String: Scalars['String'],
-  User: User,
+  Authenticator: Authenticator,
   ID: Scalars['ID'],
-  EmailRecord: EmailRecord,
   Boolean: Scalars['Boolean'],
+  TwoFactorSecretKey: TwoFactorSecretKey,
+  User: User,
+  EmailRecord: EmailRecord,
   Mutation: {},
   CreateUserInput: CreateUserInput,
   CreateUserResult: CreateUserResult,
@@ -308,6 +331,13 @@ export type AuthDirectiveResolver<Result, Parent, ContextType = any, Args = {  }
 
 export type AuthenticationResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthenticationResult'] = ResolversParentTypes['AuthenticationResult']> = {
   __resolveType: TypeResolveFn<'LoginResult' | 'MultiFactorResult', ParentType, ContextType>
+};
+
+export type AuthenticatorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Authenticator'] = ResolversParentTypes['Authenticator']> = {
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  activatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
 export type CreateUserResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateUserResult'] = ResolversParentTypes['CreateUserResult']> = {
@@ -337,6 +367,7 @@ export type MultiFactorResultResolvers<ContextType = any, ParentType extends Res
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  challenge?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationChallengeArgs, 'mfaToken' | 'authenticatorId'>>,
   createUser?: Resolver<Maybe<ResolversTypes['CreateUserResult']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'user'>>,
   verifyEmail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationVerifyEmailArgs, 'token'>>,
   resetPassword?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'token' | 'newPassword'>>,
@@ -354,6 +385,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  authenticators?: Resolver<Maybe<Array<Maybe<ResolversTypes['Authenticator']>>>, ParentType, ContextType, QueryAuthenticatorsArgs>,
   twoFactorSecret?: Resolver<Maybe<ResolversTypes['TwoFactorSecretKey']>, ParentType, ContextType>,
   getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
 };
@@ -382,6 +414,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type Resolvers<ContextType = any> = {
   AuthenticationResult?: AuthenticationResultResolvers,
+  Authenticator?: AuthenticatorResolvers<ContextType>,
   CreateUserResult?: CreateUserResultResolvers<ContextType>,
   EmailRecord?: EmailRecordResolvers<ContextType>,
   ImpersonateReturn?: ImpersonateReturnResolvers<ContextType>,
