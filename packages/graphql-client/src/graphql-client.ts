@@ -25,6 +25,7 @@ import { sendVerificationEmailMutation } from './graphql/send-verification-email
 import { twoFactorSetMutation } from './graphql/two-factor-set.mutation';
 import { twoFactorUnsetMutation } from './graphql/two-factor-unset.mutation';
 import { verifyEmailMutation } from './graphql/verify-email.mutation';
+import { authenticatorsQuery } from './graphql/authenticators.query';
 import { GraphQLErrorList } from './GraphQLErrorList';
 
 export interface AuthenticateParams {
@@ -195,15 +196,15 @@ export default class GraphQLClient implements TransportInterface {
   /**
    * @inheritDoc
    */
-  public async mfaAssociate(type: string, customHeaders?: object): Promise<void> {
+  public async mfaAssociate(type: string): Promise<void> {
     throw new Error('Not implemented yet');
   }
 
   /**
    * @inheritDoc
    */
-  public async authenticators(mfaToken?: string, customHeaders?: object): Promise<Authenticator[]> {
-    throw new Error('Not implemented yet');
+  public async authenticators(mfaToken?: string): Promise<Authenticator[]> {
+    return this.query(authenticatorsQuery, 'authenticators', { mfaToken });
   }
 
   /**
