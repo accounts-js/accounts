@@ -1,4 +1,9 @@
-import { DatabaseInterface, AuthenticatorService, Authenticator } from '@accounts/types';
+import {
+  DatabaseInterface,
+  AuthenticatorService,
+  Authenticator,
+  MfaChallenge,
+} from '@accounts/types';
 import { AccountsServer } from '@accounts/server';
 import * as otplib from 'otplib';
 
@@ -71,6 +76,7 @@ export class AuthenticatorOtp implements AuthenticatorService {
    * @description Verify that the code provided by the user is valid
    */
   public async authenticate(
+    mfaChallenge: MfaChallenge,
     authenticator: DbAuthenticatorOtp,
     { code }: { code?: string }
   ): Promise<boolean> {

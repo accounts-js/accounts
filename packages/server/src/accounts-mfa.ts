@@ -1,4 +1,9 @@
-import { DatabaseInterface, Authenticator, AuthenticatorService } from '@accounts/types';
+import {
+  DatabaseInterface,
+  Authenticator,
+  AuthenticatorService,
+  ConnectionInformations,
+} from '@accounts/types';
 import { generateRandomToken } from './utils/tokens';
 
 export class AccountsMFA {
@@ -14,8 +19,13 @@ export class AccountsMFA {
    * @description Request a challenge for the MFA authentication
    * @param {string} mfaToken - A valid mfa token you obtained during the login process.
    * @param {string} authenticatorId - The ID of the authenticator to challenge.
+   * @param {ConnectionInformations} infos - User connection informations.
    */
-  public async challenge(mfaToken: string, authenticatorId: string): Promise<void> {
+  public async challenge(
+    mfaToken: string,
+    authenticatorId: string,
+    infos: ConnectionInformations
+  ): Promise<void> {
     if (!mfaToken) {
       throw new Error('Mfa token invalid');
     }
@@ -41,7 +51,7 @@ export class AccountsMFA {
     }
     // We trigger the good authenticator challenge
     if (authenticatorService.challenge) {
-      await authenticatorService.challenge(mfaChallenge, authenticator);
+      await authenticatorService.challenge(mfaChallenge, authenticator, infos);
     }
     // Then we attach the authenticator id that will be used to resolve the challenge
     await this.db.updateMfaChallenge(mfaChallenge.id, {
@@ -54,13 +64,19 @@ export class AccountsMFA {
    * @param {string} userId - User id to link the new authenticator.
    * @param {string} serviceName - Service name of the authenticator service.
    * @param {any} params - Params for the the authenticator service.
+   * @param {ConnectionInformations} infos - User connection informations.
    */
-  public async associate(userId: string, serviceName: string, params: any): Promise<any> {
+  public async associate(
+    userId: string,
+    serviceName: string,
+    params: any,
+    infos: ConnectionInformations
+  ): Promise<any> {
     if (!this.authenticators[serviceName]) {
       throw new Error(`No authenticator with the name ${serviceName} was registered.`);
     }
 
-    const associate = await this.authenticators[serviceName].associate(userId, params);
+    const associate = await this.authenticators[serviceName].associate(userId, params, infos);
 
     // We create a new challenge for the authenticator so it can be verified later
     const mfaChallengeToken = generateRandomToken();

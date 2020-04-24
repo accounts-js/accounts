@@ -215,7 +215,14 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
           throw new Error(`No authenticator with the name ${serviceName} was registered.`);
         }
         // TODO we need to implement some time checking for the mfaToken (eg: expire after X minutes, probably based on the authenticator configuration)
-        if (!(await this.authenticators[authenticator.type].authenticate(authenticator, params))) {
+        if (
+          !(await this.authenticators[authenticator.type].authenticate(
+            mfaChallenge,
+            authenticator,
+            params,
+            infos
+          ))
+        ) {
           throw new Error(`Authenticator ${authenticator.type} was not able to authenticate user`);
         }
         // We activate the authenticator if user is using a challenge with scope 'associate'
