@@ -1,6 +1,6 @@
 {
   "name": "@accounts/oauth-twitter",
-  "version": "0.26.0-alpha.1",
+  "version": "0.26.0-alpha.2",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -18,7 +18,7 @@
     "preset": "ts-jest"
   },
   "dependencies": {
-    "@accounts/oauth": "^0.26.0-alpha.1",
+    "@accounts/oauth": "^0.26.0-alpha.2",
     "oauth": "^0.9.15",
     "tslib": "1.10.0"
   },

@@ -1,6 +1,6 @@
 {
   "name": "@examples/react-graphql-typescript",
-  "version": "0.26.0-alpha.1",
+  "version": "0.26.0-alpha.2",
   "private": true,
   "scripts": {
     "start": "SKIP_PREFLIGHT_CHECK=true react-scripts start",
@@ -24,10 +24,10 @@
     ]
   },
   "dependencies": {
-    "@accounts/apollo-link": "^0.26.0-alpha.1",
-    "@accounts/client": "^0.26.0-alpha.1",
-    "@accounts/client-password": "^0.26.0-alpha.1",
-    "@accounts/graphql-client": "^0.26.0-alpha.1",
+    "@accounts/apollo-link": "^0.26.0-alpha.2",
+    "@accounts/client": "^0.26.0-alpha.2",
+    "@accounts/client-password": "^0.26.0-alpha.2",
+    "@accounts/graphql-client": "^0.26.0-alpha.2",
     "@apollo/react-hooks": "3.1.2",
     "@material-ui/core": "4.8.1",
     "@material-ui/styles": "4.7.1",
