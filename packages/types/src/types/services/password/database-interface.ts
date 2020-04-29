@@ -1,13 +1,13 @@
 import { User } from '../../user';
 
-export interface DatabaseInterfaceServicePassword {
-  findUserByEmail(email: string): Promise<User | null>;
+export interface DatabaseInterfaceServicePassword<CustomUser extends User = User> {
+  findUserByEmail(email: string): Promise<CustomUser | null>;
 
-  findUserByUsername(username: string): Promise<User | null>;
+  findUserByUsername(username: string): Promise<CustomUser | null>;
 
-  findUserByResetPasswordToken(token: string): Promise<User | null>;
+  findUserByResetPasswordToken(token: string): Promise<CustomUser | null>;
 
-  findUserByEmailVerificationToken(token: string): Promise<User | null>;
+  findUserByEmailVerificationToken(token: string): Promise<CustomUser | null>;
 
   findPasswordHash(userId: string): Promise<string | null>;
 
