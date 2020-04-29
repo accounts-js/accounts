@@ -4,7 +4,7 @@ import { mergeTypeDefs, mergeResolvers } from 'graphql-toolkit';
 import { AccountsModule } from '@accounts/graphql-api';
 import { AccountsPassword } from '@accounts/password';
 import { AccountsServer } from '@accounts/server';
-import { AccountsTypeorm } from '@accounts/typeorm';
+import { AccountsTypeorm, User } from '@accounts/typeorm';
 import { connect } from './connect';
 
 export const createAccounts = async () => {
@@ -12,7 +12,7 @@ export const createAccounts = async () => {
   // Like, fix this man!
   const tokenSecret = 'process.env.ACCOUNTS_SECRET' || 'change this in .env';
   const db = new AccountsTypeorm({ connection, cache: 1000 });
-  const password = new AccountsPassword();
+  const password = new AccountsPassword<User>();
   const accountsServer = new AccountsServer(
     {
       db,
