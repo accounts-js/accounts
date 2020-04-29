@@ -14,7 +14,7 @@ export interface AccountsMongoOptions {
   /**
    * The mfa challenges collection name, default 'mfaChallenges'.
    */
-  mfaChallengeCollection?: string;
+  mfaChallengeCollectionName?: string;
   /**
    * The timestamps for the users and sessions collection, default 'createdAt' and 'updatedAt'.
    */
