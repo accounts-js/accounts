@@ -63,7 +63,7 @@ export default class GraphQLClient implements TransportInterface {
    * @memberof GraphQLClient
    */
   public async createUser(user: CreateUser): Promise<CreateUserResult> {
-    return this.mutate(createUserMutation, 'createUser', { user });
+    return this.mutate(createUserMutation(this.options.userFieldsFragment), 'createUser', { user });
   }
 
   /**
@@ -86,7 +86,7 @@ export default class GraphQLClient implements TransportInterface {
     service: string,
     authenticateParams: AuthenticateParams
   ): Promise<LoginResult> {
-    return this.mutate(loginWithServiceMutation, 'authenticate', {
+    return this.mutate(loginWithServiceMutation(this.options.userFieldsFragment), 'authenticate', {
       serviceName: service,
       params: authenticateParams,
     });
