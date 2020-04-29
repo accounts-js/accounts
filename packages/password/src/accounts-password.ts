@@ -159,24 +159,25 @@ const defaultOptions = {
   verifyPassword,
 };
 
-export default class AccountsPassword implements AuthenticationService {
+export default class AccountsPassword<CustomUser extends User = User>
+  implements AuthenticationService {
   public serviceName = 'password';
   public server!: AccountsServer;
   public twoFactor: TwoFactor;
   private options: AccountsPasswordOptions & typeof defaultOptions;
-  private db!: DatabaseInterface;
+  private db!: DatabaseInterface<CustomUser>;
 
   constructor(options: AccountsPasswordOptions = {}) {
     this.options = { ...defaultOptions, ...options };
     this.twoFactor = new TwoFactor(options.twoFactor);
   }
 
-  public setStore(store: DatabaseInterface) {
+  public setStore(store: DatabaseInterface<CustomUser>) {
     this.db = store;
     this.twoFactor.setStore(store);
   }
 
-  public async authenticate(params: LoginUserPasswordService): Promise<User> {
+  public async authenticate(params: LoginUserPasswordService): Promise<CustomUser> {
     const { user, password, code } = params;
     if (!user || !password) {
       throw new AccountsJsError(
@@ -203,7 +204,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {string} email - User email.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  public findUserByEmail(email: string): Promise<User | null> {
+  public findUserByEmail(email: string): Promise<CustomUser | null> {
     return this.db.findUserByEmail(email);
   }
 
@@ -212,7 +213,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {string} username - User username.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  public findUserByUsername(username: string): Promise<User | null> {
+  public findUserByUsername(username: string): Promise<CustomUser | null> {
     return this.db.findUserByUsername(username);
   }
 
@@ -666,12 +667,12 @@ export default class AccountsPassword implements AuthenticationService {
   private async passwordAuthenticator(
     user: string | LoginUserIdentity,
     password: string
-  ): Promise<User> {
+  ): Promise<CustomUser> {
     const { username, email, id } = isString(user)
       ? this.toUsernameAndEmail({ user })
       : this.toUsernameAndEmail({ ...user });
 
-    let foundUser: User | null = null;
+    let foundUser: CustomUser | null = null;
 
     if (id) {
       // this._validateLoginWithField('id', user);

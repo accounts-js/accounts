@@ -7,12 +7,12 @@ import { PrepareMailFunction } from './prepare-mail-function';
 import { SendMailType } from './send-mail-type';
 import { TokenCreator } from './token-creator';
 
-export interface AccountsServerOptions {
+export interface AccountsServerOptions<CustomUser extends User = User> {
   /**
    * Return ambiguous error messages from login failures to prevent user enumeration. Defaults to true.
    */
   ambiguousErrorMessages?: boolean;
-  db?: DatabaseInterface;
+  db?: DatabaseInterface<CustomUser>;
   tokenSecret:
     | string
     | {

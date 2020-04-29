@@ -5,19 +5,19 @@ import { DatabaseInterfaceServicePassword } from './services/password/database-i
 import { DatabaseInterfaceAuthenticators } from './authenticator/database-interface';
 import { DatabaseInterfaceMfaChallenges } from './mfa-challenge/database-interface';
 
-export interface DatabaseInterface
+export interface DatabaseInterface<CustomUser extends User = User>
   extends DatabaseInterfaceSessions,
-    DatabaseInterfaceServicePassword,
+    DatabaseInterfaceServicePassword<CustomUser>,
     DatabaseInterfaceAuthenticators,
     DatabaseInterfaceMfaChallenges {
   // Find user by identity fields
-  findUserById(userId: string): Promise<User | null>;
+  findUserById(userId: string): Promise<CustomUser | null>;
 
   // Create and update users
   createUser(user: CreateUser): Promise<string>;
 
   // Auth services related operations
-  findUserByServiceId(serviceName: string, serviceId: string): Promise<User | null>;
+  findUserByServiceId(serviceName: string, serviceId: string): Promise<CustomUser | null>;
 
   setService(userId: string, serviceName: string, data: object): Promise<void>;
 

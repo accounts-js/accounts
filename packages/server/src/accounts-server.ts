@@ -54,17 +54,16 @@ const defaultOptions = {
   useInternalUserObjectSanitizer: true,
 };
 
-export class AccountsServer {
-  public options: AccountsServerOptions & typeof defaultOptions;
-  public mfa: AccountsMFA;
-  private services: { [key: string]: AuthenticationService };
+export class AccountsServer<CustomUser extends User = User> {
+  public options: AccountsServerOptions<CustomUser> & typeof defaultOptions;
+  private services: { [key: string]: AuthenticationService<CustomUser> };
   private authenticators: { [key: string]: AuthenticatorService };
-  private db: DatabaseInterface;
+  private db: DatabaseInterface<CustomUser>;
   private hooks: Emittery;
 
   constructor(
-    options: AccountsServerOptions,
-    services: { [key: string]: AuthenticationService },
+    options: AccountsServerOptions<CustomUser>,
+    services: { [key: string]: AuthenticationService<CustomUser> },
     authenticators?: { [key: string]: AuthenticatorService }
   ) {
     this.options = merge({ ...defaultOptions }, options);
@@ -158,7 +157,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         );
       }
 
-      const user: User | null = await this.services[serviceName].authenticate(params);
+      const user: CustomUser | null = await this.services[serviceName].authenticate(params);
       hooksInfo.user = user;
       if (!user) {
         throw new AccountsJsError(
@@ -252,7 +251,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         );
       }
 
-      const user: User | null = await this.services[serviceName].authenticate(params);
+      const user: CustomUser | null = await this.services[serviceName].authenticate(params);
       hooksInfo.user = user;
       if (!user) {
         throw new AccountsJsError(
@@ -302,7 +301,10 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
    * @param {ConnectionInformations} infos - User connection informations.
    * @returns {Promise<LoginResult>} - Session id and tokens.
    */
-  public async loginWithUser(user: User, infos: ConnectionInformations): Promise<LoginResult> {
+  public async loginWithUser(
+    user: CustomUser,
+    infos: ConnectionInformations
+  ): Promise<LoginResult> {
     const token = await this.createSessionToken(user);
     const sessionId = await this.db.createSession(user.id, token, infos);
 
@@ -547,7 +549,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
   /**
    * @throws {@link ResumeSessionErrors}
    */
-  public async resumeSession(accessToken: string): Promise<User> {
+  public async resumeSession(accessToken: string): Promise<CustomUser> {
     try {
       const session: Session = await this.findSessionByAccessToken(accessToken);
 
@@ -627,7 +629,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
    * @param {string} userId - User id.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  public findUserById(userId: string): Promise<User | null> {
+  public findUserById(userId: string): Promise<CustomUser | null> {
     return this.db.findUserById(userId);
   }
 
@@ -652,7 +654,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
   public prepareMail(
     to: string,
     token: string,
-    user: User,
+    user: CustomUser,
     pathFragment: string,
     emailTemplate: EmailTemplateType,
     from: string
@@ -663,7 +665,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     return this.defaultPrepareEmail(to, token, user, pathFragment, emailTemplate, from);
   }
 
-  public sanitizeUser(user: User): User {
+  public sanitizeUser(user: CustomUser): CustomUser {
     const { userObjectSanitizer } = this.options;
     const baseUser = this.options.useInternalUserObjectSanitizer
       ? this.internalUserSanitizer(user)
@@ -676,14 +678,14 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
    * Private methods
    */
 
-  private internalUserSanitizer(user: User): User {
+  private internalUserSanitizer(user: CustomUser): CustomUser {
     return omit(user, ['services']) as any;
   }
 
   private defaultPrepareEmail(
     to: string,
     token: string,
-    user: User,
+    user: CustomUser,
     pathFragment: string,
     emailTemplate: EmailTemplateType,
     from: string
@@ -703,7 +705,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     return `${siteUrl}/${pathFragment}/${token}`;
   }
 
-  private async createSessionToken(user: User): Promise<string> {
+  private async createSessionToken(user: CustomUser): Promise<string> {
     return this.options.tokenCreator
       ? this.options.tokenCreator.createToken(user)
       : generateRandomToken();
