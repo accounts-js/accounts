@@ -56,6 +56,7 @@ const defaultOptions = {
 
 export class AccountsServer<CustomUser extends User = User> {
   public options: AccountsServerOptions<CustomUser> & typeof defaultOptions;
+  public mfa: AccountsMFA;
   private services: { [key: string]: AuthenticationService<CustomUser> };
   private authenticators: { [key: string]: AuthenticatorService };
   private db: DatabaseInterface<CustomUser>;
