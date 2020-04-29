@@ -13,8 +13,11 @@ export const challenge = (accountsServer: AccountsServer) => async (
     const ip = requestIp.getClientIp(req);
 
     const { mfaToken, authenticatorId } = req.body;
-    await accountsServer.mfa.challenge(mfaToken, authenticatorId, { userAgent, ip });
-    res.json(null);
+    const challengeResult = await accountsServer.mfa.challenge(mfaToken, authenticatorId, {
+      userAgent,
+      ip,
+    });
+    res.json(challengeResult);
   } catch (err) {
     sendError(res, err);
   }

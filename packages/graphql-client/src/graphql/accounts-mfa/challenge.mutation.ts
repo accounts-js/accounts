@@ -1,7 +1,9 @@
 import gql from 'graphql-tag';
 
-export const challengeMutation = gql`
+export const challengeMutation = (challengeFieldsFragment?: any) => gql`
   mutation challenge($mfaToken: String!, $authenticatorId: String!) {
-    challenge(mfaToken: $mfaToken, authenticatorId: $authenticatorId)
+    challenge(mfaToken: $mfaToken, authenticatorId: $authenticatorId) ${
+      challengeFieldsFragment || ''
+    }
   }
 `;

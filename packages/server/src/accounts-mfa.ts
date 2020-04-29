@@ -3,6 +3,7 @@ import {
   Authenticator,
   AuthenticatorService,
   ConnectionInformations,
+  MfaChallenge,
 } from '@accounts/types';
 import { generateRandomToken } from './utils/tokens';
 
@@ -25,7 +26,7 @@ export class AccountsMFA {
     mfaToken: string,
     authenticatorId: string,
     infos: ConnectionInformations
-  ): Promise<void> {
+  ): Promise<any> {
     if (!mfaToken) {
       throw new Error('Mfa token invalid');
     }
@@ -34,7 +35,7 @@ export class AccountsMFA {
     }
     const mfaChallenge = await this.db.findMfaChallengeByToken(mfaToken);
     // TODO need to check that the challenge is not expired
-    if (!mfaChallenge || mfaChallenge.deactivated) {
+    if (!mfaChallenge || !this.isMfaChallengeValid(mfaChallenge)) {
       throw new Error('Mfa token invalid');
     }
     const authenticator = await this.db.findAuthenticatorById(authenticatorId);
@@ -49,14 +50,14 @@ export class AccountsMFA {
     if (!authenticatorService) {
       throw new Error(`No authenticator with the name ${authenticator.type} was registered.`);
     }
-    // We trigger the good authenticator challenge
-    if (authenticatorService.challenge) {
-      await authenticatorService.challenge(mfaChallenge, authenticator, infos);
+    // If authenticator do not have a challenge method, we attach the authenticator id to the challenge
+    if (!authenticatorService.challenge) {
+      await this.db.updateMfaChallenge(mfaChallenge.id, {
+        authenticatorId: authenticator.id,
+      });
+      return null;
     }
-    // Then we attach the authenticator id that will be used to resolve the challenge
-    await this.db.updateMfaChallenge(mfaChallenge.id, {
-      authenticatorId: authenticator.id,
-    });
+    return authenticatorService.challenge(mfaChallenge, authenticator, infos);
   }
 
   /**
@@ -134,5 +135,12 @@ export class AccountsMFA {
         }
         return authenticator;
       });
+  }
+
+  public isMfaChallengeValid(mfaChallenge: MfaChallenge): boolean {
+    if (mfaChallenge.deactivated) {
+      return false;
+    }
+    return true;
   }
 }

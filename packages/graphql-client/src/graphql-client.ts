@@ -36,6 +36,7 @@ export interface AuthenticateParams {
 export interface OptionsType {
   graphQLClient: any;
   userFieldsFragment?: any;
+  challengeFieldsFragment?: string;
 }
 
 export default class GraphQLClient implements TransportInterface {
@@ -211,8 +212,11 @@ export default class GraphQLClient implements TransportInterface {
   /**
    * @inheritDoc
    */
-  public async mfaChallenge(mfaToken: string, authenticatorId: string): Promise<void> {
-    return this.mutate(challengeMutation, 'challenge', { mfaToken, authenticatorId });
+  public async mfaChallenge(mfaToken: string, authenticatorId: string): Promise<any> {
+    return this.mutate(challengeMutation(this.options.challengeFieldsFragment), 'challenge', {
+      mfaToken,
+      authenticatorId,
+    });
   }
 
   private async mutate(mutation: any, resultField: any, variables: any = {}) {

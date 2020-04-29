@@ -7,4 +7,6 @@ export default gql`
     active: Boolean
     activatedAt: String
   }
+
+  union ChallengeResult = Boolean
 `;

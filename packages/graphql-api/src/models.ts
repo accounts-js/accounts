@@ -32,6 +32,8 @@ export type Authenticator = {
   activatedAt?: Maybe<Scalars['String']>,
 };
 
+export type ChallengeResult = Scalars['Boolean'];
+
 export type CreateUserInput = {
   username?: Maybe<Scalars['String']>,
   email?: Maybe<Scalars['String']>,
@@ -71,7 +73,7 @@ export type MultiFactorResult = {
 
 export type Mutation = {
    __typename?: 'Mutation',
-  challenge?: Maybe<Scalars['Boolean']>,
+  challenge?: Maybe<ChallengeResult>,
   createUser?: Maybe<CreateUserResult>,
   verifyEmail?: Maybe<Scalars['Boolean']>,
   resetPassword?: Maybe<LoginResult>,
@@ -292,6 +294,7 @@ export type ResolversTypes = {
   User: ResolverTypeWrapper<User>,
   EmailRecord: ResolverTypeWrapper<EmailRecord>,
   Mutation: ResolverTypeWrapper<{}>,
+  ChallengeResult: ResolversTypes['Boolean'],
   CreateUserInput: CreateUserInput,
   CreateUserResult: ResolverTypeWrapper<CreateUserResult>,
   LoginResult: ResolverTypeWrapper<LoginResult>,
@@ -315,6 +318,7 @@ export type ResolversParentTypes = {
   User: User,
   EmailRecord: EmailRecord,
   Mutation: {},
+  ChallengeResult: ResolversParentTypes['Boolean'],
   CreateUserInput: CreateUserInput,
   CreateUserResult: CreateUserResult,
   LoginResult: LoginResult,
@@ -338,6 +342,10 @@ export type AuthenticatorResolvers<ContextType = any, ParentType extends Resolve
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   activatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+};
+
+export type ChallengeResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['ChallengeResult'] = ResolversParentTypes['ChallengeResult']> = {
+  __resolveType: TypeResolveFn<'Boolean', ParentType, ContextType>
 };
 
 export type CreateUserResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateUserResult'] = ResolversParentTypes['CreateUserResult']> = {
@@ -367,7 +375,7 @@ export type MultiFactorResultResolvers<ContextType = any, ParentType extends Res
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  challenge?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationChallengeArgs, 'mfaToken' | 'authenticatorId'>>,
+  challenge?: Resolver<Maybe<ResolversTypes['ChallengeResult']>, ParentType, ContextType, RequireFields<MutationChallengeArgs, 'mfaToken' | 'authenticatorId'>>,
   createUser?: Resolver<Maybe<ResolversTypes['CreateUserResult']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'user'>>,
   verifyEmail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationVerifyEmailArgs, 'token'>>,
   resetPassword?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'token' | 'newPassword'>>,
@@ -415,6 +423,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 export type Resolvers<ContextType = any> = {
   AuthenticationResult?: AuthenticationResultResolvers,
   Authenticator?: AuthenticatorResolvers<ContextType>,
+  ChallengeResult?: ChallengeResultResolvers,
   CreateUserResult?: CreateUserResultResolvers<ContextType>,
   EmailRecord?: EmailRecordResolvers<ContextType>,
   ImpersonateReturn?: ImpersonateReturnResolvers<ContextType>,
