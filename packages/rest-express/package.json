@@ -37,7 +37,7 @@
   "devDependencies": {
     "@accounts/password": "^0.25.1",
     "@accounts/server": "^0.25.1",
-    "@types/express": "4.17.4",
+    "@types/express": "4.17.6",
     "@types/jest": "25.1.4",
     "@types/lodash": "4.14.149",
     "@types/node": "13.9.8",
