@@ -1,6 +1,6 @@
 {
   "name": "@accounts/graphql-client",
-  "version": "0.26.0-alpha.2",
+  "version": "0.26.0-alpha.3",
   "description": "GraphQL client transport for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -30,8 +30,8 @@
     "lodash": "4.17.15"
   },
   "dependencies": {
-    "@accounts/client": "^0.26.0-alpha.2",
-    "@accounts/types": "^0.26.0-alpha.2",
+    "@accounts/client": "^0.26.0-alpha.3",
+    "@accounts/types": "^0.26.0-alpha.3",
     "graphql-tag": "^2.10.0",
     "tslib": "1.10.0"
   },
