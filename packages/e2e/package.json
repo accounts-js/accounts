@@ -45,7 +45,7 @@
     "@accounts/types": "^0.26.0-alpha.3",
     "@graphql-modules/core": "0.7.14",
     "apollo-boost": "0.4.7",
-    "apollo-server": "2.9.15",
+    "apollo-server": "2.12.0",
     "body-parser": "1.19.0",
     "core-js": "3.2.1",
     "express": "4.17.1",
