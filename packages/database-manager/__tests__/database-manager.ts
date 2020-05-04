@@ -111,6 +111,38 @@ export default class Database {
   public setUserDeactivated() {
     return this.name;
   }
+
+  public findAuthenticatorById() {
+    return this.name;
+  }
+
+  public findUserAuthenticators() {
+    return this.name;
+  }
+
+  public createAuthenticator() {
+    return this.name;
+  }
+
+  public activateAuthenticator() {
+    return this.name;
+  }
+
+  public createMfaChallenge() {
+    return this.name;
+  }
+
+  public findMfaChallengeByToken() {
+    return this.name;
+  }
+
+  public deactivateMfaChallenge() {
+    return this.name;
+  }
+
+  public updateMfaChallenge() {
+    return this.name;
+  }
 }
 
 const databaseManager = new DatabaseManager({
@@ -252,5 +284,41 @@ describe('DatabaseManager', () => {
 
   it('removeAllResetPasswordTokens should be called on userStorage', () => {
     expect(databaseManager.removeAllResetPasswordTokens('userId')).toBe('userStorage');
+  });
+
+  it('findAuthenticatorById should be called on userStorage', () => {
+    expect(databaseManager.findAuthenticatorById('authenticatorId')).toBe('userStorage');
+  });
+
+  it('findUserAuthenticators should be called on userStorage', () => {
+    expect(databaseManager.findUserAuthenticators('userId')).toBe('userStorage');
+  });
+
+  it('createAuthenticator should be called on userStorage', () => {
+    expect(
+      databaseManager.createAuthenticator({ userId: 'userId', type: 'type', active: true })
+    ).toBe('userStorage');
+  });
+
+  it('activateAuthenticator should be called on userStorage', () => {
+    expect(databaseManager.activateAuthenticator('userId')).toBe('userStorage');
+  });
+
+  it('createMfaChallenge should be called on userStorage', () => {
+    expect(databaseManager.createMfaChallenge({ userId: 'userId', token: 'token' })).toBe(
+      'userStorage'
+    );
+  });
+
+  it('findMfaChallengeByToken should be called on userStorage', () => {
+    expect(databaseManager.findMfaChallengeByToken('userId')).toBe('userStorage');
+  });
+
+  it('deactivateMfaChallenge should be called on userStorage', () => {
+    expect(databaseManager.deactivateMfaChallenge('userId')).toBe('userStorage');
+  });
+
+  it('updateMfaChallenge should be called on userStorage', () => {
+    expect(databaseManager.updateMfaChallenge('userId', {})).toBe('userStorage');
   });
 });
