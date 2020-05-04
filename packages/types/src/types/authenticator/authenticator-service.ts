@@ -7,7 +7,11 @@ export interface AuthenticatorService {
   server: any;
   serviceName: string;
   setStore(store: DatabaseInterface): void;
-  associate(userId: string, params: any, infos: ConnectionInformations): Promise<any>;
+  associate(
+    userIdOrMfaChallenge: string | MfaChallenge,
+    params: any,
+    infos: ConnectionInformations
+  ): Promise<any>;
   challenge?(
     mfaChallenge: MfaChallenge,
     authenticator: Authenticator,

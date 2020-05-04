@@ -52,6 +52,7 @@ const defaultOptions = {
   userObjectSanitizer: (user: User) => user,
   createNewSessionTokenOnRefresh: false,
   useInternalUserObjectSanitizer: true,
+  enforceMfaForLogin: false,
 };
 
 export class AccountsServer<CustomUser extends User = User> {
@@ -279,6 +280,18 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         await this.db.createMfaChallenge({
           userId: user.id,
           token: mfaChallengeToken,
+        });
+        return { mfaToken: mfaChallengeToken };
+      }
+
+      // We force the user to register a new device before first login
+      if (this.options.enforceMfaForLogin) {
+        // We create a new challenge for the authenticator so it can be verified later
+        const mfaChallengeToken = generateRandomToken();
+        await this.db.createMfaChallenge({
+          userId: user.id,
+          token: mfaChallengeToken,
+          scope: 'associate',
         });
         return { mfaToken: mfaChallengeToken };
       }

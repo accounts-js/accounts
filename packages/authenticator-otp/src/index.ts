@@ -4,7 +4,7 @@ import {
   Authenticator,
   MfaChallenge,
 } from '@accounts/types';
-import { AccountsServer } from '@accounts/server';
+import { AccountsServer, generateRandomToken } from '@accounts/server';
 import * as otplib from 'otplib';
 
 interface DbAuthenticatorOtp extends Authenticator {
@@ -49,14 +49,15 @@ export class AuthenticatorOtp implements AuthenticatorService {
    * @description Start the association of a new OTP device
    */
   public async associate(
-    userId: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    params: any
-  ): Promise<{ id: string; secret: string; otpauthUri: string }> {
+    userIdOrMfaChallenge: string | MfaChallenge
+  ): Promise<{ id: string; mfaToken: string; secret: string; otpauthUri: string }> {
+    const userId =
+      typeof userIdOrMfaChallenge === 'string' ? userIdOrMfaChallenge : userIdOrMfaChallenge.userId;
+    const mfaChallenge = typeof userIdOrMfaChallenge === 'string' ? null : userIdOrMfaChallenge;
+
     const secret = otplib.authenticator.generateSecret();
     const userName = this.options.userName ? await this.options.userName(userId) : userId;
     const otpauthUri = otplib.authenticator.keyuri(userName, this.options.appName, secret);
-    // TODO generate some recovery codes like slack is doing (as an option, or maybe should just be a separate authenticator so it can be used by anything)?
 
     const authenticatorId = await this.db.createAuthenticator({
       type: this.serviceName,
@@ -65,8 +66,27 @@ export class AuthenticatorOtp implements AuthenticatorService {
       active: false,
     });
 
+    let mfaToken: string;
+    if (mfaChallenge) {
+      mfaToken = mfaChallenge.token;
+      await this.db.updateMfaChallenge(mfaChallenge.id, {
+        authenticatorId,
+      });
+    } else {
+      // We create a new challenge for the authenticator so it can be verified later
+      mfaToken = generateRandomToken();
+      // associate.id refer to the authenticator id
+      await this.db.createMfaChallenge({
+        userId,
+        authenticatorId,
+        token: mfaToken,
+        scope: 'associate',
+      });
+    }
+
     return {
       id: authenticatorId,
+      mfaToken,
       secret,
       otpauthUri,
     };

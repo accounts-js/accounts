@@ -17,7 +17,7 @@ export class AccountsMFA {
   }
 
   /**
-   * @description Request a challenge for the MFA authentication
+   * @description Request a challenge for the MFA authentication.
    * @param {string} mfaToken - A valid mfa token you obtained during the login process.
    * @param {string} authenticatorId - The ID of the authenticator to challenge.
    * @param {ConnectionInformations} infos - User connection informations.
@@ -61,7 +61,7 @@ export class AccountsMFA {
   }
 
   /**
-   * @description Start the association of a new authenticator
+   * @description Start the association of a new authenticator.
    * @param {string} userId - User id to link the new authenticator.
    * @param {string} serviceName - Service name of the authenticator service.
    * @param {any} params - Params for the the authenticator service.
@@ -78,21 +78,40 @@ export class AccountsMFA {
     }
 
     const associate = await this.authenticators[serviceName].associate(userId, params, infos);
+    return associate;
+  }
 
-    // We create a new challenge for the authenticator so it can be verified later
-    const mfaChallengeToken = generateRandomToken();
-    // associate.id refer to the authenticator id
-    await this.db.createMfaChallenge({
-      userId,
-      authenticatorId: associate.id,
-      token: mfaChallengeToken,
-      scope: 'associate',
-    });
+  /**
+   * @description Associate a new authenticator, this method is called when the user is enforced to
+   * associate an authenticator before the first login.
+   * @param {string} userId - User id to link the new authenticator.
+   * @param {string} serviceName - Service name of the authenticator service.
+   * @param {any} params - Params for the the authenticator service.
+   * @param {ConnectionInformations} infos - User connection informations.
+   */
+  public async associateByMfaToken(
+    mfaToken: string,
+    serviceName: string,
+    params: any,
+    infos: ConnectionInformations
+  ): Promise<any> {
+    if (!this.authenticators[serviceName]) {
+      throw new Error(`No authenticator with the name ${serviceName} was registered.`);
+    }
+    if (!mfaToken) {
+      throw new Error('Mfa token invalid');
+    }
+    const mfaChallenge = await this.db.findMfaChallengeByToken(mfaToken);
+    if (
+      !mfaChallenge ||
+      !this.isMfaChallengeValid(mfaChallenge) ||
+      mfaChallenge.scope !== 'associate'
+    ) {
+      throw new Error('Mfa token invalid');
+    }
 
-    return {
-      ...associate,
-      mfaToken: mfaChallengeToken,
-    };
+    const associate = await this.authenticators[serviceName].associate(mfaChallenge, params, infos);
+    return associate;
   }
 
   /**
@@ -121,8 +140,7 @@ export class AccountsMFA {
       throw new Error('Mfa token invalid');
     }
     const mfaChallenge = await this.db.findMfaChallengeByToken(mfaToken);
-    // TODO need to check that the challenge is not expired
-    if (!mfaChallenge || mfaChallenge.deactivated) {
+    if (!mfaChallenge || !this.isMfaChallengeValid(mfaChallenge)) {
       throw new Error('Mfa token invalid');
     }
     const authenticators = await this.db.findUserAuthenticators(mfaChallenge.userId);
@@ -138,6 +156,7 @@ export class AccountsMFA {
   }
 
   public isMfaChallengeValid(mfaChallenge: MfaChallenge): boolean {
+    // TODO need to check that the challenge is not expired
     if (mfaChallenge.deactivated) {
       return false;
     }
