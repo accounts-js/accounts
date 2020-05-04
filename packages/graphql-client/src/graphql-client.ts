@@ -198,7 +198,9 @@ export default class GraphQLClient implements TransportInterface {
   /**
    * @inheritDoc
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async mfaAssociate(type: string): Promise<void> {
+    // TODO
     throw new Error('Not implemented yet');
   }
 

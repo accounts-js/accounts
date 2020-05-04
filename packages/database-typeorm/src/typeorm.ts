@@ -445,19 +445,27 @@ export class AccountsTypeorm implements DatabaseInterface {
    * MFA authenticators related operations
    */
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async createAuthenticator(newAuthenticator: CreateAuthenticator): Promise<string> {
+    // TODO
     throw new Error('Not implemented yet');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async findAuthenticatorById(authenticatorId: string): Promise<Authenticator | null> {
+    // TODO
     throw new Error('Not implemented yet');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async findUserAuthenticators(userId: string): Promise<Authenticator[]> {
+    // TODO
     throw new Error('Not implemented yet');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async activateAuthenticator(authenticatorId: string): Promise<void> {
+    // TODO
     throw new Error('Not implemented yet');
   }
 
@@ -465,19 +473,27 @@ export class AccountsTypeorm implements DatabaseInterface {
    * MFA challenges related operations
    */
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async createMfaChallenge(newMfaChallenge: CreateMfaChallenge): Promise<string> {
+    // TODO
     throw new Error('Not implemented yet');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async findMfaChallengeByToken(token: string): Promise<MfaChallenge | null> {
+    // TODO
     throw new Error('Not implemented yet');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async deactivateMfaChallenge(mfaChallengeId: string): Promise<void> {
+    // TODO
     throw new Error('Not implemented yet');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async updateMfaChallenge(mfaChallengeId: string): Promise<void> {
+    // TODO
     throw new Error('Not implemented yet');
   }
 }

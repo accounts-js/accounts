@@ -5,7 +5,6 @@ import {
   ConnectionInformations,
   MfaChallenge,
 } from '@accounts/types';
-import { generateRandomToken } from './utils/tokens';
 
 export class AccountsMFA {
   private db: DatabaseInterface;
