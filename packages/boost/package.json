@@ -1,6 +1,6 @@
 {
   "name": "@accounts/boost",
-  "version": "0.26.0-alpha.3",
+  "version": "0.26.0-alpha.4",
   "description": "Ready to use GraphQL accounts server",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -23,10 +23,10 @@
     "rimraf": "3.0.0"
   },
   "dependencies": {
-    "@accounts/database-manager": "^0.26.0-alpha.3",
-    "@accounts/graphql-api": "^0.26.0-alpha.3",
-    "@accounts/server": "^0.26.0-alpha.3",
-    "@accounts/types": "^0.26.0-alpha.3",
+    "@accounts/database-manager": "^0.26.0-alpha.4",
+    "@accounts/graphql-api": "^0.26.0-alpha.4",
+    "@accounts/server": "^0.26.0-alpha.4",
+    "@accounts/types": "^0.26.0-alpha.4",
     "@graphql-modules/core": "0.7.14",
     "apollo-server": "^2.9.13",
     "graphql": "^14.5.4",
