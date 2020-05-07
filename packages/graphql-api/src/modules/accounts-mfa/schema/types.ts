@@ -8,5 +8,10 @@ export default gql`
     activatedAt: String
   }
 
-  union ChallengeResult = Boolean
+  type DefaultChallengeResult {
+    mfaToken: String
+    authenticatorId: String
+  }
+
+  union ChallengeResult = DefaultChallengeResult
 `;

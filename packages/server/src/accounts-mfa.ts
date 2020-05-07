@@ -54,7 +54,10 @@ export class AccountsMFA {
       await this.db.updateMfaChallenge(mfaChallenge.id, {
         authenticatorId: authenticator.id,
       });
-      return null;
+      return {
+        mfaToken: mfaChallenge.token,
+        authenticatorId: authenticator.id,
+      };
     }
     return authenticatorService.challenge(mfaChallenge, authenticator, infos);
   }
