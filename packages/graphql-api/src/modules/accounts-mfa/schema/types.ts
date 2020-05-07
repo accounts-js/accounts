@@ -14,4 +14,11 @@ export default gql`
   }
 
   union ChallengeResult = DefaultChallengeResult
+
+  type OTPAssociationResult {
+    mfaToken: String
+    authenticatorId: String
+  }
+
+  union AssociationResult = OTPAssociationResult
 `;

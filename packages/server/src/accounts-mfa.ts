@@ -84,8 +84,8 @@ export class AccountsMFA {
   }
 
   /**
-   * @description Associate a new authenticator, this method is called when the user is enforced to
-   * associate an authenticator before the first login.
+   * @description Start the association of a new authenticator, this method is called when the user is
+   * enforced to associate an authenticator before the first login.
    * @param {string} userId - User id to link the new authenticator.
    * @param {string} serviceName - Service name of the authenticator service.
    * @param {any} params - Params for the the authenticator service.

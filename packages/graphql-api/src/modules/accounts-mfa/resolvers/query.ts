@@ -4,15 +4,15 @@ import { QueryResolvers } from '../../../models';
 import { AccountsModuleContext } from '../../accounts';
 
 export const Query: QueryResolvers<ModuleContext<AccountsModuleContext>> = {
-  authenticators: async (_, { mfaToken }, { user, injector }) => {
+  authenticators: async (_, __, { user, injector }) => {
     const userId = user?.id;
-    if (!mfaToken && !userId) {
+    if (!userId) {
       throw new Error('Unauthorized');
     }
 
-    const userAuthenticators = mfaToken
-      ? await injector.get(AccountsServer).mfa.findUserAuthenticatorsByMfaToken(mfaToken)
-      : await injector.get(AccountsServer).mfa.findUserAuthenticators(userId!);
-    return userAuthenticators;
+    return injector.get(AccountsServer).mfa.findUserAuthenticators(userId);
+  },
+  authenticatorsByMfaToken: async (_, { mfaToken }, { injector }) => {
+    return injector.get(AccountsServer).mfa.findUserAuthenticatorsByMfaToken(mfaToken);
   },
 };

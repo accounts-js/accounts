@@ -12,8 +12,8 @@ import { serviceVerifyAuthentication } from './endpoints/verify-authentication';
 import { registerPassword } from './endpoints/password/register';
 import { twoFactorSecret, twoFactorSet, twoFactorUnset } from './endpoints/password/two-factor';
 import { changePassword } from './endpoints/password/change-password';
-import { associate } from './endpoints/mfa/associate';
-import { authenticators } from './endpoints/mfa/authenticators';
+import { associate, associateByMfaToken } from './endpoints/mfa/associate';
+import { authenticators, authenticatorsByMfaToken } from './endpoints/mfa/authenticators';
 import { challenge } from './endpoints/mfa/challenge';
 import { addEmail } from './endpoints/password/add-email';
 import { userLoader } from './user-loader';
@@ -52,11 +52,15 @@ const accountsExpress = (
 
   router.post(`${path}/mfa/associate`, userLoader(accountsServer), associate(accountsServer));
 
+  router.post(`${path}/mfa/associateByMfaToken`, associateByMfaToken(accountsServer));
+
   router.get(
     `${path}/mfa/authenticators`,
     userLoader(accountsServer),
     authenticators(accountsServer)
   );
+
+  router.get(`${path}/mfa/authenticatorsByMfaToken`, authenticatorsByMfaToken(accountsServer));
 
   router.post(`${path}/mfa/challenge`, challenge(accountsServer));
 

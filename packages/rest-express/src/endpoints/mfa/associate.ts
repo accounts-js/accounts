@@ -30,3 +30,24 @@ export const associate = (accountsServer: AccountsServer) => async (
     sendError(res, err);
   }
 };
+
+export const associateByMfaToken = (accountsServer: AccountsServer) => async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const userAgent = getUserAgent(req);
+    const ip = requestIp.getClientIp(req);
+
+    const { mfaToken, type } = req.body;
+    const mfaAssociateResult = await accountsServer.mfa.associateByMfaToken(
+      mfaToken,
+      type,
+      req.body,
+      { userAgent, ip }
+    );
+    res.json(mfaAssociateResult);
+  } catch (err) {
+    sendError(res, err);
+  }
+};

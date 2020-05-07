@@ -26,7 +26,10 @@ import { twoFactorSetMutation } from './graphql/two-factor-set.mutation';
 import { twoFactorUnsetMutation } from './graphql/two-factor-unset.mutation';
 import { verifyEmailMutation } from './graphql/verify-email.mutation';
 import { authenticatorsQuery } from './graphql/accounts-mfa/authenticators.query';
+import { authenticatorsByMfaTokenQuery } from './graphql/accounts-mfa/authenticatorsByMfaToken.query';
 import { challengeMutation } from './graphql/accounts-mfa/challenge.mutation';
+import { associateMutation } from './graphql/accounts-mfa/associate.mutation';
+import { associateByMfaTokenMutation } from './graphql/accounts-mfa/associateByMfaToken.mutation';
 import { GraphQLErrorList } from './GraphQLErrorList';
 
 export interface AuthenticateParams {
@@ -37,6 +40,7 @@ export interface OptionsType {
   graphQLClient: any;
   userFieldsFragment?: any;
   challengeFieldsFragment?: string;
+  associateFieldsFragment?: string;
 }
 
 export default class GraphQLClient implements TransportInterface {
@@ -198,17 +202,38 @@ export default class GraphQLClient implements TransportInterface {
   /**
    * @inheritDoc
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async mfaAssociate(type: string): Promise<void> {
-    // TODO
-    throw new Error('Not implemented yet');
+    return this.mutate(associateMutation(this.options.associateFieldsFragment), 'associate', {
+      type,
+    });
   }
 
   /**
    * @inheritDoc
    */
-  public async authenticators(mfaToken?: string): Promise<Authenticator[]> {
-    return this.query(authenticatorsQuery, 'authenticators', { mfaToken });
+  public async mfaAssociateByMfaToken(mfaToken: string, type: string): Promise<any> {
+    return this.mutate(
+      associateByMfaTokenMutation(this.options.associateFieldsFragment),
+      'associateByMfaToken',
+      {
+        mfaToken,
+        type,
+      }
+    );
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public async authenticators(): Promise<Authenticator[]> {
+    return this.query(authenticatorsQuery, 'authenticators');
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public async authenticatorsByMfaToken(mfaToken?: string): Promise<Authenticator[]> {
+    return this.query(authenticatorsByMfaTokenQuery, 'authenticatorsByMfaToken', { mfaToken });
   }
 
   /**
