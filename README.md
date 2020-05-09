@@ -27,7 +27,9 @@
 
 <br>
 
-_Note: The packages within this repo are under active development — expect breaking changes with minor version updates._
+_Note: Although accounts-js is production ready, the packages within this repo are under active development — expect breaking changes with minor version updates._
+
+The `@accounts` suite of packages aims to provide all the tools you need to build a flexible authentication and accounts management solution for your application.
 
 **[Documentation](https://accounts-js.netlify.com/docs/getting-started)**
 
@@ -35,29 +37,28 @@ _Note: The packages within this repo are under active development — expect bre
 
 **[Examples](https://github.com/accounts-js/accounts/tree/master/examples)**
 
-**[Spectrum](https://spectrum.chat/accounts-js)**
-
-## About
-
-The `@accounts` suite of packages aims to provide the consumer an end to end authentication and accounts management solution, with a simple to start with interface while preserving options for configuration. These packages provide OAuth support for popular providers such as Instagram, Twitter, Github, two-factor authentication, password-based accounts along with recovery options and customizable account creation and validation.
-
-The `@accounts` packages are modular by nature and can be manually installed and configured, however, we provide `@accounts/boost` - a package containing useful abstractions to get a GraphQL accounts server started with minimal configuration.
+**[Join the Spectrum community](https://spectrum.chat/accounts-js)**
 
 ## Features
 
-- Multiple transports
+- Create and manage users
+- Create and manage sessions (JWT)
+- Pick your transport layer
   - GraphQL
   - Rest
-- Database agnostic
+- Compatible with all the modern js frameworks (react, react-native, vue, angular...)
+- Use the database you want
   - Mongo
   - Typeorm
-- Strategies
+  - Redis (sessions only)
+- Add all the strategies you need
   - password
   - Oauth (WIP)
 
 ## Features planned
 
 - Oauth Support
+- Magic link strategy
 - Customizable MFA process (OTP, SMS, device binding...)
 - Prisma2 database driver
 
