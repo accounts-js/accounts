@@ -121,6 +121,11 @@ function Home() {
 
         <div className={styles.supportSponsors}>
           <h3 className={styles.supportTitle}>Sponsors</h3>
+          <div className="supportImage">
+            <Link to="https://opencollective.com/accounts-js#sponsors" target="_blank">
+              <img src="https://opencollective.com/accounts-js/sponsors.svg?width=890&button=false" />
+            </Link>
+          </div>
           <div className={styles.supportButton}>
             <Link
               className={classnames(
