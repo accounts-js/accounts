@@ -116,43 +116,50 @@ function Home() {
       </main>
 
       <section className={classnames(styles.section, styles.support)}>
-        <h2 className={styles.homeTitle}>
-          <span>Open Collective</span>
-        </h2>
+        <div className="container">
+          <h2 className={styles.homeTitle}>
+            <span>Open Collective</span>
+          </h2>
 
-        <div className={styles.supportSponsors}>
-          <h3 className={styles.supportTitle}>Sponsors</h3>
+          <div className={styles.supportSponsors}>
+            <h3 className={styles.supportTitle}>Sponsors</h3>
+            <div className="supportImage">
+              <Link to="https://opencollective.com/accounts-js#sponsors" target="_blank">
+                <img src="https://opencollective.com/accounts-js/sponsors.svg?width=890&button=false" />
+              </Link>
+            </div>
+            <div className={styles.supportButton}>
+              <Link
+                className={classnames(
+                  'button button--outline button--secondary button--lg',
+                  styles.getStarted
+                )}
+                to="https://opencollective.com/accounts-js#sponsors"
+                target="_blank"
+              >
+                Become a Sponsor
+              </Link>
+            </div>
+          </div>
+
+          <h3 className={styles.supportTitle}>Backers</h3>
+          <div className="supportImage">
+            <Link to="https://opencollective.com/accounts-js#backers" target="_blank">
+              <img src="https://opencollective.com/accounts-js/backers.svg?width=890&button=false" />
+            </Link>
+          </div>
           <div className={styles.supportButton}>
             <Link
               className={classnames(
                 'button button--outline button--secondary button--lg',
                 styles.getStarted
               )}
-              to="https://opencollective.com/accounts-js#sponsors"
+              to="https://opencollective.com/accounts-js#backers"
               target="_blank"
             >
-              Become a Sponsor
+              Become a Backer
             </Link>
           </div>
-        </div>
-
-        <h3 className={styles.supportTitle}>Backers</h3>
-        <div className="supportImage">
-          <Link to="https://opencollective.com/accounts-js#backers" target="_blank">
-            <img src="https://opencollective.com/accounts-js/backers.svg?width=890&button=false" />
-          </Link>
-        </div>
-        <div className={styles.supportButton}>
-          <Link
-            className={classnames(
-              'button button--outline button--secondary button--lg',
-              styles.getStarted
-            )}
-            to="https://opencollective.com/accounts-js#backers"
-            target="_blank"
-          >
-            Become a Backer
-          </Link>
         </div>
       </section>
 
