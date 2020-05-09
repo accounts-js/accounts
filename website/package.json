@@ -8,7 +8,7 @@
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
-    "generate-api-docs": "ts-node scripts/generate-api-docs.ts"
+    "generate-api-docs": "rm -rf docs/api && ts-node scripts/generate-api-docs.ts"
   },
   "dependencies": {
     "@docusaurus/core": "2.0.0-alpha.54",
@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "ts-node": "8.10.1",
-    "typedoc": "0.16.9",
-    "typedoc-plugin-markdown": "2.2.16"
+    "typedoc": "0.17.6",
+    "typedoc-plugin-markdown": "2.2.17"
   }
 }
