@@ -46,7 +46,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  background-color: #f6f6f6;
+  background-color: #f7fafc;
   color: #1f2227;
 }
 
@@ -77,4 +77,40 @@
 
 .supportSponsors {
   margin-bottom: 4em;
+}
+
+.example {
+  text-align: center;
+  background-color: #f7fafc;
+}
+.exampleRow {
+  justify-content: center;
+  margin-top: -1rem;
+}
+.exampleCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #fff;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border-radius: 0.25rem;
+  transition-property: box-shadow;
+  transition-duration: 0.3s;
+  transition-timing-function: linear;
+}
+.exampleCard:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.exampleCardLogoGraphQL {
+  height: 55px;
+  margin-bottom: 15px;
+}
+.exampleCardLogoExpress {
+  height: 70px;
+}
+.exampleCardLink {
+  display: block;
 }
