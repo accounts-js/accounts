@@ -29,15 +29,13 @@
 
 _Note: Although accounts-js is production ready, the packages within this repo are under active development — expect breaking changes with minor version updates._
 
-The `@accounts` suite of packages aims to provide all the tools you need to build a flexible authentication and accounts management solution for your application.
+The `@accounts` suite of packages aims to provide all the tools you need to build a **flexible authentication and accounts management** solution for your application.
 
-**[Documentation](https://accounts-js.netlify.com/docs/getting-started)**
+We got you covered! The packages come with **strong opinionated security** defaults while preserving options for configuration.
 
-**[Api Documentation](https://accounts-js.netlify.com/docs/api/server/index)**
+Ready to get started? Take a look at our [documentation](https://accounts-js.netlify.com/docs/getting-started) to learn how to use the packages. For more advanced usage, head to our [Api Documentation](https://accounts-js.netlify.com/docs/api/server/index).
 
-**[Examples](https://github.com/accounts-js/accounts/tree/master/examples)**
-
-**[Join the Spectrum community](https://spectrum.chat/accounts-js)**
+A bit lost? Here are some [examples](https://github.com/accounts-js/accounts/tree/master/examples) where you can see working clients and severs with react, GraphQL or Rest.
 
 ## Features
 
@@ -66,7 +64,9 @@ The `@accounts` suite of packages aims to provide all the tools you need to buil
 
 TODO link
 
-## Contributing
+## Contributing and community
+
+[Join our Spectrum community](https://spectrum.chat/accounts-js) to get some help!
 
 Any contribution is very welcome, read our [contributing guide](CONTRIBUTING.md) to see how to locally setup the repository and see our development process.
 
