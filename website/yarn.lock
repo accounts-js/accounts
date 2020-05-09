@@ -3321,10 +3321,10 @@ docsearch.js@^2.6.3:
     to-factory "^1.0.0"
     zepto "^1.2.0"
 
-docusaurus-plugin-fathom@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/docusaurus-plugin-fathom/-/docusaurus-plugin-fathom-1.0.1.tgz#a2923971b20294c385f3f1894931ef5b10db9337"
-  integrity sha512-jTrH6vebpAWMBOzI432zSmjV4sBdHp7OWFzDpKr2BpFsUw8TciNp7AztzXDQvxrxFTIjLcDdZfedSlEgMxektw==
+docusaurus-plugin-fathom@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/docusaurus-plugin-fathom/-/docusaurus-plugin-fathom-1.1.0.tgz#d338d4f115c8f699c56d8f1e2413d75a2f244dc3"
+  integrity sha512-MVMYb2daXLho8Foaxl2ipTCH3RWEmV5plQytGa8tMk3LOiWcZ5S9TcOhcAB9W5b9ZeebyotWYXpTnsLyXgKFgA==
 
 dom-converter@^0.2:
   version "0.2.0"

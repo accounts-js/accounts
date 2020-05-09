@@ -14,7 +14,7 @@
     "@docusaurus/core": "2.0.0-alpha.50",
     "@docusaurus/preset-classic": "2.0.0-alpha.50",
     "classnames": "2.2.6",
-    "docusaurus-plugin-fathom": "1.0.1",
+    "docusaurus-plugin-fathom": "1.1.0",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   },
