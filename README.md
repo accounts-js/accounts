@@ -21,8 +21,6 @@
   </a>
 </p>
 
-<br>
-
 <h3 align="center">
   Fullstack authentication and accounts-management for GraphQL and REST.
 </h3>
