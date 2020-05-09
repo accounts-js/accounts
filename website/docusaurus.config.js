@@ -8,7 +8,7 @@
 module.exports = {
   title: 'accounts-js',
   tagline: 'Fullstack authentication and accounts-management for Javascript',
-  url: 'https://accounts-js.netlify.com',
+  url: 'https://www.accountsjs.com',
   baseUrl: '/',
   favicon: 'img/favicon.png',
   organizationName: 'accounts-js',
