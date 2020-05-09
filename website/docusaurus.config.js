@@ -23,6 +23,7 @@ module.exports = {
     },
     fathomAnalytics: {
       siteId: 'NZPJJZTJ',
+      customDomain: 'https://goose.accountsjs.com',
     },
     navbar: {
       logo: {
