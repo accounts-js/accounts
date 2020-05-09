@@ -31,11 +31,11 @@ _Note: Although accounts-js is production ready, the packages within this repo a
 
 The `@accounts` suite of packages aims to provide all the tools you need to build a **flexible authentication and accounts management** solution for your application.
 
-We got you covered! The packages come with **strong opinionated security** defaults while preserving options for configuration.
+🔐 We got you covered! The packages come with **strong opinionated security** defaults while preserving options for configuration.
 
-Ready to get started? Take a look at our [documentation](https://accounts-js.netlify.com/docs/getting-started) to learn how to use the packages. For more advanced usage, head to our [Api Documentation](https://accounts-js.netlify.com/docs/api/server/index).
+📚 Ready to get started? Take a look at our [documentation](https://accounts-js.netlify.com/docs/getting-started) to learn how to use the packages. For more advanced usage, head to our [API documentation](https://accounts-js.netlify.com/docs/api/server/index).
 
-A bit lost? Here are some [examples](https://github.com/accounts-js/accounts/tree/master/examples) where you can see working clients and severs with react, GraphQL or Rest.
+🙋‍♀️ A bit lost? Here are some [examples](https://github.com/accounts-js/accounts/tree/master/examples) where you can see working clients and severs with react, GraphQL or Rest.
 
 ## Features
 
@@ -52,17 +52,6 @@ A bit lost? Here are some [examples](https://github.com/accounts-js/accounts/tre
 - Add all the strategies you need
   - password
   - Oauth (WIP)
-
-## Features planned
-
-- Oauth Support
-- Magic link strategy
-- Customizable MFA process (OTP, SMS, device binding...)
-- Prisma2 database driver
-
-## Getting started
-
-TODO link
 
 ## Contributing and community
 
