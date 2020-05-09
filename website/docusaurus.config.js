@@ -21,6 +21,10 @@ module.exports = {
       apiKey: 'c872074b5f5ecd186d94d7c19b27d757',
       indexName: 'accounts',
     },
+    fathomAnalytics: {
+      siteId: 'NZPJJZTJ',
+      customDomain: 'https://goose.accountsjs.com',
+    },
     navbar: {
       logo: {
         alt: 'My Site Logo',
@@ -73,4 +77,5 @@ module.exports = {
       },
     ],
   ],
+  plugins: ['docusaurus-plugin-fathom'],
 };
