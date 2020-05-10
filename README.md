@@ -33,7 +33,7 @@ The `@accounts` suite of packages aims to provide all the tools you need to buil
 
 🔐 We got you covered! The packages come with **strong opinionated security** defaults while preserving options for configuration.
 
-📚 Ready to get started? Take a look at our [documentation](https://accounts-js.netlify.com/docs/introduction) to learn how to use the packages. For more advanced usage, head to our [API documentation](https://accounts-js.netlify.com/docs/api/server/index).
+📚 Ready to get started? Take a look at our [documentation](https://www.accountsjs.com/docs/introduction) to learn how to use the packages. For more advanced usage, head to our [API documentation](https://www.accountsjs.com/docs/api/server/index).
 
 🙋‍♀️ A bit lost? Here are some [examples](https://github.com/accounts-js/accounts/tree/master/examples) where you can see working clients and severs with react, GraphQL or Rest.
 
