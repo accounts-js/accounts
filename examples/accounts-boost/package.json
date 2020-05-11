@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@accounts/boost": "^0.25.1",
-    "apollo-link-context": "1.0.19",
-    "apollo-link-http": "1.5.16",
+    "apollo-link-context": "1.0.20",
+    "apollo-link-http": "1.5.17",
     "apollo-server": "2.13.0",
     "graphql": "14.5.8",
     "graphql-toolkit": "0.6.8",
@@ -25,7 +25,7 @@
     "tslib": "1.11.2"
   },
   "devDependencies": {
-    "nodemon": "2.0.2",
+    "nodemon": "2.0.3",
     "ts-node": "8.10.1",
     "typescript": "3.8.3"
   }
