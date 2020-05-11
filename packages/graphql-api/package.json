@@ -31,8 +31,6 @@
     "@accounts/password": "^0.25.1",
     "@accounts/server": "^0.25.1",
     "@accounts/types": "^0.25.1",
-    "@gql2ts/from-schema": "1.10.1",
-    "@gql2ts/types": "1.9.0",
     "@graphql-codegen/add": "1.13.5",
     "@graphql-codegen/cli": "1.13.5",
     "@graphql-codegen/typescript": "1.13.5",
