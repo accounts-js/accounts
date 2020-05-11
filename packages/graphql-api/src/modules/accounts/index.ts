@@ -33,8 +33,8 @@ export interface AccountsModuleConfig {
 
 export interface AccountsModuleContext<IUser = User> {
   authToken?: string;
-  userAgent: string;
-  ip: string;
+  userAgent: string | null;
+  ip: string | null;
   user?: IUser;
   userId?: string;
 }
