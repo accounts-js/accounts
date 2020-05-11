@@ -43,7 +43,7 @@
     "@types/jest": "25.2.1",
     "@types/request-ip": "0.0.35",
     "concurrently": "5.2.0",
-    "graphql": "14.5.8",
+    "graphql": "14.6.0",
     "graphql-tools": "4.0.8",
     "jest": "26.0.1",
     "lodash": "4.17.15",

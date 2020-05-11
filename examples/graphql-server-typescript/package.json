@@ -18,7 +18,7 @@
     "@accounts/server": "^0.25.1",
     "@graphql-modules/core": "0.7.16",
     "apollo-server": "2.13.0",
-    "graphql": "14.5.8",
+    "graphql": "14.6.0",
     "@graphql-toolkit/schema-merging": "0.10.6",
     "graphql-tools": "4.0.6",
     "lodash": "4.17.15",
