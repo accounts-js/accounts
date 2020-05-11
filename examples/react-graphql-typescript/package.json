@@ -41,10 +41,10 @@
     "react-apollo": "2.5.8",
     "react-dom": "16.13.1",
     "react-router-dom": "5.1.2",
-    "tslib": "1.10.0"
+    "tslib": "1.11.2"
   },
   "devDependencies": {
-    "@types/node": "13.7.7",
+    "@types/node": "13.13.5",
     "@types/qrcode.react": "1.0.0",
     "@types/react": "16.9.34",
     "@types/react-dom": "16.9.6",

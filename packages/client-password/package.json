@@ -29,14 +29,14 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "25.1.4",
-    "@types/node": "13.9.8",
-    "jest": "25.1.0",
-    "rimraf": "3.0.0"
+    "@types/jest": "25.2.1",
+    "@types/node": "13.13.5",
+    "jest": "26.0.1",
+    "rimraf": "3.0.2"
   },
   "dependencies": {
     "@accounts/client": "^0.25.1",
     "@accounts/types": "^0.25.1",
-    "tslib": "1.10.0"
+    "tslib": "1.11.2"
   }
 }

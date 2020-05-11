@@ -26,9 +26,9 @@
   },
   "devDependencies": {
     "@accounts/types": "^0.25.1",
-    "@types/node": "13.7.7",
-    "nodemon": "2.0.2",
-    "ts-node": "8.6.2",
+    "@types/node": "13.13.5",
+    "nodemon": "2.0.3",
+    "ts-node": "8.10.1",
     "typescript": "3.8.3"
   }
 }
