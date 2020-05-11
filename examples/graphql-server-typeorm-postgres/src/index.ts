@@ -1,5 +1,5 @@
 import { ApolloServer, makeExecutableSchema } from 'apollo-server';
-import { mergeTypeDefs, mergeResolvers } from 'graphql-toolkit';
+import { mergeTypeDefs, mergeResolvers } from '@graphql-toolkit/schema-merging';
 
 import { AccountsModule } from '@accounts/graphql-api';
 import { AccountsPassword } from '@accounts/password';

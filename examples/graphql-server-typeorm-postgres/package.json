@@ -17,18 +17,18 @@
     "@accounts/password": "^0.25.1",
     "@accounts/server": "^0.25.1",
     "@accounts/typeorm": "^0.25.1",
-    "@graphql-modules/core": "0.7.13",
-    "apollo-server": "2.9.7",
-    "graphql": "14.5.8",
-    "graphql-toolkit": "0.6.8",
-    "pg": "7.15.1",
-    "typeorm": "0.2.22"
+    "@graphql-modules/core": "0.7.16",
+    "apollo-server": "2.13.0",
+    "graphql": "14.6.0",
+    "@graphql-toolkit/schema-merging": "0.10.6",
+    "pg": "8.1.0",
+    "typeorm": "0.2.24"
   },
   "devDependencies": {
     "@accounts/types": "^0.25.1",
-    "@types/node": "13.7.7",
-    "nodemon": "2.0.2",
-    "ts-node": "8.6.2",
+    "@types/node": "13.13.5",
+    "nodemon": "2.0.3",
+    "ts-node": "8.10.1",
     "typescript": "3.8.3"
   }
 }

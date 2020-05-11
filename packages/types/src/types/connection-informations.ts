@@ -1,4 +1,4 @@
 export interface ConnectionInformations {
-  ip?: string;
-  userAgent?: string;
+  ip?: string | null;
+  userAgent?: string | null;
 }

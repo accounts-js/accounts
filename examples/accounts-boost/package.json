@@ -14,19 +14,19 @@
   },
   "dependencies": {
     "@accounts/boost": "^0.25.1",
-    "apollo-link-context": "1.0.19",
-    "apollo-link-http": "1.5.16",
-    "apollo-server": "2.9.7",
-    "graphql": "14.5.8",
-    "graphql-toolkit": "0.6.8",
-    "graphql-tools": "4.0.6",
+    "@graphql-toolkit/schema-merging": "0.10.6",
+    "apollo-link-context": "1.0.20",
+    "apollo-link-http": "1.5.17",
+    "apollo-server": "2.13.0",
+    "graphql": "14.6.0",
+    "graphql-tools": "5.0.0",
     "lodash": "4.17.15",
     "node-fetch": "2.6.0",
-    "tslib": "1.10.0"
+    "tslib": "1.11.2"
   },
   "devDependencies": {
-    "nodemon": "2.0.2",
-    "ts-node": "8.6.2",
+    "nodemon": "2.0.3",
+    "ts-node": "8.10.1",
     "typescript": "3.8.3"
   }
 }

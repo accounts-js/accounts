@@ -41,18 +41,18 @@
   "license": "MIT",
   "dependencies": {
     "@accounts/types": "^0.25.1",
-    "@types/jsonwebtoken": "8.3.5",
+    "@types/jsonwebtoken": "8.3.9",
     "emittery": "0.5.1",
     "jsonwebtoken": "8.5.1",
     "jwt-decode": "2.2.0",
     "lodash": "4.17.15",
-    "tslib": "1.10.0"
+    "tslib": "1.11.2"
   },
   "devDependencies": {
-    "@types/jest": "25.1.4",
+    "@types/jest": "25.2.1",
     "@types/jwt-decode": "2.2.1",
-    "@types/node": "13.9.8",
-    "jest": "25.1.0",
-    "rimraf": "3.0.0"
+    "@types/node": "13.13.5",
+    "jest": "26.0.1",
+    "rimraf": "3.0.2"
   }
 }

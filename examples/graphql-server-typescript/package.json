@@ -16,20 +16,20 @@
     "@accounts/password": "^0.25.1",
     "@accounts/rest-express": "^0.25.1",
     "@accounts/server": "^0.25.1",
-    "@graphql-modules/core": "0.7.13",
-    "apollo-server": "2.9.7",
-    "graphql": "14.5.8",
-    "graphql-toolkit": "0.6.8",
-    "graphql-tools": "4.0.6",
+    "@graphql-modules/core": "0.7.16",
+    "@graphql-toolkit/schema-merging": "0.10.6",
+    "apollo-server": "2.13.0",
+    "graphql": "14.6.0",
+    "graphql-tools": "5.0.0",
     "lodash": "4.17.15",
-    "mongoose": "5.8.3",
-    "tslib": "1.10.0"
+    "mongoose": "5.9.13",
+    "tslib": "1.11.2"
   },
   "devDependencies": {
-    "@types/mongoose": "5.5.35",
-    "@types/node": "13.7.7",
-    "nodemon": "2.0.2",
-    "ts-node": "8.6.2",
+    "@types/mongoose": "5.7.16",
+    "@types/node": "13.13.5",
+    "nodemon": "2.0.3",
+    "ts-node": "8.10.1",
     "typescript": "3.8.3"
   }
 }

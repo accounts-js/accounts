@@ -13,7 +13,7 @@ import { AccountsPasswordModule } from '../accounts-password';
 import { AuthenticatedDirective } from '../../utils/authenticated-directive';
 import { context } from '../../utils';
 import AccountsPassword from '@accounts/password';
-import { mergeTypeDefs } from 'graphql-toolkit';
+import { mergeTypeDefs } from '@graphql-toolkit/schema-merging';
 import { CoreAccountsModule } from '../core';
 
 export interface AccountsRequest {
@@ -33,8 +33,8 @@ export interface AccountsModuleConfig {
 
 export interface AccountsModuleContext<IUser = User> {
   authToken?: string;
-  userAgent: string;
-  ip: string;
+  userAgent: string | null;
+  ip: string | null;
   user?: IUser;
   userId?: string;
 }
