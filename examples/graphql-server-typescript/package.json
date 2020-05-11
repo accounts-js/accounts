@@ -16,13 +16,13 @@
     "@accounts/password": "^0.25.1",
     "@accounts/rest-express": "^0.25.1",
     "@accounts/server": "^0.25.1",
-    "@graphql-modules/core": "0.7.13",
-    "apollo-server": "2.9.7",
+    "@graphql-modules/core": "0.7.16",
+    "apollo-server": "2.13.0",
     "graphql": "14.5.8",
     "graphql-toolkit": "0.6.8",
     "graphql-tools": "4.0.6",
     "lodash": "4.17.15",
-    "mongoose": "5.8.3",
+    "mongoose": "5.9.13",
     "tslib": "1.11.2"
   },
   "devDependencies": {
