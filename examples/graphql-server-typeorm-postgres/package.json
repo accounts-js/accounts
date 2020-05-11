@@ -20,7 +20,7 @@
     "@graphql-modules/core": "0.7.16",
     "apollo-server": "2.13.0",
     "graphql": "14.5.8",
-    "graphql-toolkit": "0.6.8",
+    "@graphql-toolkit/schema-merging": "0.10.6",
     "pg": "8.1.0",
     "typeorm": "0.2.24"
   },

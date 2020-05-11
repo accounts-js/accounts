@@ -1,5 +1,5 @@
 import accountsBoost, { authenticated } from '@accounts/boost';
-import { mergeTypeDefs, mergeResolvers } from 'graphql-toolkit';
+import { mergeTypeDefs, mergeResolvers } from '@graphql-toolkit/schema-merging';
 import { ApolloServer } from 'apollo-server';
 
 (async () => {
