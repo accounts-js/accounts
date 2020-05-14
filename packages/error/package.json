@@ -1,6 +1,6 @@
 {
   "name": "@accounts/error",
-  "version": "0.25.3",
+  "version": "0.25.4",
   "description": "Accounts-js Error",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",

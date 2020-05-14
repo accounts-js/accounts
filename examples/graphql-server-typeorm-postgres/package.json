@@ -1,7 +1,7 @@
 {
   "name": "@examples/graphql-typeorm-typescript",
   "private": true,
-  "version": "0.25.3",
+  "version": "0.25.4",
   "main": "lib/index.js",
   "license": "Unlicensed",
   "scripts": {
@@ -13,10 +13,10 @@
     "test": "yarn build"
   },
   "dependencies": {
-    "@accounts/graphql-api": "^0.25.3",
-    "@accounts/password": "^0.25.3",
-    "@accounts/server": "^0.25.3",
-    "@accounts/typeorm": "^0.25.3",
+    "@accounts/graphql-api": "^0.25.4",
+    "@accounts/password": "^0.25.4",
+    "@accounts/server": "^0.25.4",
+    "@accounts/typeorm": "^0.25.4",
     "@graphql-modules/core": "0.7.16",
     "@graphql-toolkit/schema-merging": "0.10.6",
     "apollo-server": "2.13.0",
@@ -25,7 +25,7 @@
     "typeorm": "0.2.24"
   },
   "devDependencies": {
-    "@accounts/types": "^0.25.3",
+    "@accounts/types": "^0.25.4",
     "@types/node": "13.13.5",
     "nodemon": "2.0.3",
     "ts-node": "8.10.1",
