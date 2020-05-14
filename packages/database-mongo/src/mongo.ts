@@ -50,7 +50,11 @@ export class Mongo implements DatabaseInterface {
     this.sessionCollection = this.db.collection(this.options.sessionCollectionName);
   }
 
-  public async setupIndexes(options: IndexOptions = {}): Promise<void> {
+  /**
+   * Setup the mongo indexes needed.
+   * @param options Options passed to the mongo native `createIndex` method.
+   */
+  public async setupIndexes(options: Omit<IndexOptions, 'unique' | 'sparse'> = {}): Promise<void> {
     await this.sessionCollection.createIndex('token', {
       ...options,
       unique: true,
