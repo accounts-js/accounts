@@ -33,6 +33,9 @@ const db = await mongodb.MongoClient.connect(process.env.MONGO_URL);
 
 const accountsMongo = new Mongo(db, options);
 const accountsServer = new AccountsServer({ db: accountsMongo });
+
+// Will create the necessary mongo indexes
+await accountsMongo.setupIndexes();
 ```
 
 ## Usage with mongoose
@@ -49,6 +52,19 @@ const db = mongoose.connection;
 
 const accountsMongo = new Mongo(db, options);
 const accountsServer = new AccountsServer({ db: accountsMongo });
+
+// Will create the necessary mongo indexes
+await accountsMongo.setupIndexes();
+```
+
+## Setup mongodb indexes
+
+It's really important that your production database have the necessary mongodb indexes in order to perform fast queries.
+
+To do so, when your server is booting, run the following command:
+
+```javascript
+await accountsMongo.setupIndexes();
 ```
 
 ## Options
