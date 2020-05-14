@@ -6,7 +6,7 @@ import {
   User,
 } from '@accounts/types';
 import { get, merge } from 'lodash';
-import { Collection, Db, ObjectID } from 'mongodb';
+import { Collection, Db, ObjectID, IndexOptions } from 'mongodb';
 
 import { AccountsMongoOptions, MongoUser } from './types';
 
@@ -50,16 +50,19 @@ export class Mongo implements DatabaseInterface {
     this.sessionCollection = this.db.collection(this.options.sessionCollectionName);
   }
 
-  public async setupIndexes(): Promise<void> {
+  public async setupIndexes(options: IndexOptions = {}): Promise<void> {
     await this.sessionCollection.createIndex('token', {
+      ...options,
       unique: true,
       sparse: true,
     });
     await this.collection.createIndex('username', {
+      ...options,
       unique: true,
       sparse: true,
     });
     await this.collection.createIndex('emails.address', {
+      ...options,
       unique: true,
       sparse: true,
     });
