@@ -70,6 +70,15 @@ export class Mongo implements DatabaseInterface {
       unique: true,
       sparse: true,
     });
+    // Index related to the password service
+    await this.collection.createIndex('services.email.verificationTokens.token', {
+      ...options,
+      sparse: true,
+    });
+    await this.collection.createIndex('services.password.reset.token', {
+      ...options,
+      sparse: true,
+    });
   }
 
   public async createUser({
