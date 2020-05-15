@@ -4,12 +4,11 @@ title: Mongo
 sidebar_label: Mongo
 ---
 
-_MongoDB data store for accounts-js_
+A accounts-js database adapter for [MongoDB](https://www.mongodb.com/)
 
-[Github](https://github.com/accounts-js/accounts/tree/master/packages/database-mongo) |
-[npm](https://www.npmjs.com/package/@accounts/mongo)
+[View source code for @accounts/mongo.](https://github.com/accounts-js/accounts/tree/master/packages/database-mongo)
 
-## Install
+## Installation
 
 ```
 yarn add @accounts/mongo
@@ -31,8 +30,15 @@ const db = client.db('my-db-name');
 // If you are using mongodb 2.x
 const db = await mongodb.MongoClient.connect(process.env.MONGO_URL);
 
-const accountsMongo = new Mongo(db, options);
-const accountsServer = new AccountsServer({ db: accountsMongo });
+const accountsMongo = new Mongo(db, {
+  // options
+});
+const accountsServer = new AccountsServer(
+  { db: accountsMongo },
+  {
+    // services
+  }
+);
 
 // Will create the necessary mongo indexes
 await accountsMongo.setupIndexes();
@@ -50,8 +56,15 @@ import { Mongo } from '@accounts/mongo';
 mongoose.connect(process.env.MONGO_URL);
 const db = mongoose.connection;
 
-const accountsMongo = new Mongo(db, options);
-const accountsServer = new AccountsServer({ db: accountsMongo });
+const accountsMongo = new Mongo(db, {
+  // options
+});
+const accountsServer = new AccountsServer(
+  { db: accountsMongo },
+  {
+    // services
+  }
+);
 
 // Will create the necessary mongo indexes
 await accountsMongo.setupIndexes();
@@ -69,33 +82,41 @@ await accountsMongo.setupIndexes();
 
 ## Options
 
+You can use the following options to configure the `@accounts/mongo` behavior.
+
 ```typescript
 interface AccountsMongoOptions {
   /**
-   * The users collection name, default 'users'.
+   * The users collection name.
+   * Default 'users'.
    */
   collectionName?: string;
   /**
-   * The sessions collection name, default 'sessions'.
+   * The sessions collection name.
+   * Default 'sessions'.
    */
   sessionCollectionName?: string;
   /**
-   * The timestamps for the users and sessions collection, default 'createdAt' and 'updatedAt'.
+   * The timestamps for the users and sessions collection.
+   * Default 'createdAt' and 'updatedAt'.
    */
   timestamps?: {
     createdAt: string;
     updatedAt: string;
   };
   /**
-   * Should the user collection use _id as string or ObjectId, default 'true'.
+   * Should the user collection use _id as string or ObjectId.
+   * Default 'true'.
    */
   convertUserIdToMongoObjectId?: boolean;
   /**
-   * Should the session collection use _id as string or ObjectId, default 'true'.
+   * Should the session collection use _id as string or ObjectId.
+   * Default 'true'.
    */
   convertSessionIdToMongoObjectId?: boolean;
   /**
-   * Perform case intensitive query for user name, default 'true'.
+   * Perform case intensitive query for user name.
+   * Default 'true'.
    */
   caseSensitiveUserName?: boolean;
   /**
@@ -104,7 +125,16 @@ interface AccountsMongoOptions {
   idProvider?: () => string | object;
   /**
    * Function that generate the date for the timestamps.
+   * Default to `(date?: Date) => (date ? date.getTime() : Date.now())`.
    */
   dateProvider?: (date?: Date) => any;
 }
 ```
+
+## Example using GraphQL
+
+A working example is available [here](https://github.com/accounts-js/accounts/tree/master/examples/graphql-server-typescript).
+
+## Example using Rest
+
+A working example is available [here](https://github.com/accounts-js/accounts/tree/master/examples/react-rest-typescript).
