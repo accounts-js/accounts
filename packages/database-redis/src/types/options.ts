@@ -1,14 +1,17 @@
 export interface AccountsRedisOptions {
   /**
-   * The users collection name, default 'users'.
+   * The users collection name.
+   * Default 'users'.
    */
   userCollectionName?: string;
   /**
-   * The sessions collection name, default 'sessions'.
+   * The sessions collection name.
+   * Default 'sessions'.
    */
   sessionCollectionName?: string;
   /**
-   * The timestamps for the users and sessions collection, default 'createdAt' and 'updatedAt'.
+   * The timestamps for the users and sessions collection.
+   * Default 'createdAt' and 'updatedAt'.
    */
   timestamps?: {
     createdAt: string;
@@ -21,6 +24,7 @@ export interface AccountsRedisOptions {
   idProvider?: () => string;
   /**
    * Function that generate the date for the timestamps.
+   * Default to `(date?: Date) => (date ? date.getTime() : Date.now())`.
    */
   dateProvider?: (date?: Date) => any;
 }

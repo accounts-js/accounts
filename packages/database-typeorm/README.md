@@ -1,66 +1,23 @@
 # @accounts/typeorm
 
-_TypeORM adaptor for accounts_
+[![npm](https://img.shields.io/npm/v/@accounts/typeorm)](https://www.npmjs.com/package/@accounts/typeorm)
+[![npm downloads](https://img.shields.io/npm/dm/@accounts/typeorm)](https://www.npmjs.com/package/@accounts/typeorm)
+[![codecov](https://img.shields.io/codecov/c/github/accounts-js/accounts)](https://codecov.io/gh/accounts-js/accounts)
+[![License](https://img.shields.io/github/license/accounts-js/accounts)](https://github.com/accounts-js/accounts/blob/master/LICENSE)
 
-[![npm](https://img.shields.io/npm/v/@accounts/typeorm.svg?maxAge=2592000)](https://www.npmjs.com/package/@accounts/typeorm)
-![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
+A database adapter for [PostgreSQL](https://www.postgresql.org/) using [TypeORM](https://typeorm.io/)
 
-## Note
+## Documentation
 
-This package is under active development.
+- [Website documentation](https://www.accountsjs.com/docs/databases/typeorm)
+- [API documentation](https://www.accountsjs.com/docs/api/database-typeorm/globals)
 
-## Install
+## Installation
 
 ```
 yarn add @accounts/typeorm
 ```
 
-## Usage
+## Contributing
 
-```javascript
-import { createConnection } from 'typeorm';
-import { AccountsServer } from '@accounts/server';
-import { AccountsTypeorm, entities } from '@accounts/typeorm';
-
-createConnection({
-  type: 'postgres',
-  url: 'postgres://user@localhost:5432/dbname',
-  entities,
-}).then(() => {
-  const accountsTypeorm = new Typeorm();
-  const accountsServer = new AccountsServer({ db: accountsTypeorm });
-});
-```
-
-## Options
-
-```ts
-type Options = {
-  cache?: undefined | number; // Cache results from database (in ms)
-  connection?: Connection; // Pass a connection instance
-  connectionName?: string; // Use a connection name (if other than "default")
-  userEntity?: typeof User; // Overwrite entities with your own
-  userServiceEntity?: typeof UserService;
-  userEmailEntity?: typeof UserEmail;
-  userSessionEntity?: typeof UserSession;
-};
-```
-
-### Extending entities
-
-If you want to add fields, etc. to the User entity you can, by extending the base entities.
-
-```tsx
-import { User as AccountsUser } from '@accounts/typeorm';
-
-@Entity()
-export class User extends AccountsUser {
-  // Add fields
-  @Column()
-  custom_field: string;
-
-  // Overwrite fields
-  @Colum('text')
-  profile: string;
-}
-```
+Any contribution is very welcome, read our [contributing guide](https://github.com/accounts-js/accounts/blob/master/CONTRIBUTING.md) to see how to locally setup the repository and see our development process.

@@ -4,17 +4,16 @@ title: Redis
 sidebar_label: Redis
 ---
 
-[Github](https://github.com/accounts-js/accounts/tree/master/packages/database-redis) |
-[npm](https://www.npmjs.com/package/@accounts/redis)
-
-The `@accounts/redis` package provide a redis connector for accounts-js.
+A database adapter for [Redis](https://redis.io/)
 
 > For now `@accounts/redis` only provide a session storage, you will need to use another connector for the user storage.
 
-## Install
+[View source code for @accounts/redis.](https://github.com/accounts-js/accounts/tree/master/packages/database-redis)
+
+## Installation
 
 ```
-yarn add @accounts/redis
+yarn add @accounts/redis @accounts/database-manager ioredis
 ```
 
 ## Usage
@@ -29,29 +28,42 @@ import { RedisSessions } from '@accounts/redis';
 
 const ioRedis = new IORedis();
 
-const sessionDb = new RedisSessions(ioRedis, options);
-
-const accountsDb = new DatabaseManager({
-  sessionStorage: sessionDb,
+const accountsRedis = new RedisSessions(ioRedis, {
+  // options
 });
 
-const accountsServer = new AccountsServer({ db: accountsDb });
+const accountsDb = new DatabaseManager({
+  // You also need to provide the `userStorage` property linked to another database
+  sessionStorage: accountsRedis,
+});
+
+const accountsServer = new AccountsServer(
+  { db: accountsDb },
+  {
+    // services
+  }
+);
 ```
 
 ## Options
 
+You can use the following options to configure the `@accounts/redis` behavior.
+
 ```typescript
 interface AccountsRedisOptions {
   /**
-   * The users collection name, default 'users'.
+   * The users collection name.
+   * Default 'users'.
    */
   userCollectionName?: string;
   /**
-   * The sessions collection name, default 'sessions'.
+   * The sessions collection name.
+   * Default 'sessions'.
    */
   sessionCollectionName?: string;
   /**
-   * The timestamps for the users and sessions collection, default 'createdAt' and 'updatedAt'.
+   * The timestamps for the users and sessions collection.
+   * Default 'createdAt' and 'updatedAt'.
    */
   timestamps?: {
     createdAt: string;
@@ -64,6 +76,7 @@ interface AccountsRedisOptions {
   idProvider?: () => string;
   /**
    * Function that generate the date for the timestamps.
+   * Default to `(date?: Date) => (date ? date.getTime() : Date.now())`.
    */
   dateProvider?: (date?: Date) => any;
 }
