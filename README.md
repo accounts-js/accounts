@@ -10,7 +10,7 @@
   <a href="https://www.npmjs.com/package/@accounts/server">
    <img alt="npm" src="https://img.shields.io/npm/v/@accounts/server">
   </a>
-  <a href="https://github.com/accounts-js/accounts/blob/master/LICENSE">
+  <a href="https://www.npmjs.com/package/@accounts/server">
    <img alt="npm downloads" src="https://img.shields.io/npm/dm/@accounts/server">
   </a>
   <a href="https://codecov.io/gh/accounts-js/accounts">
