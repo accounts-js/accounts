@@ -35,7 +35,7 @@ module.exports = {
         items: ['transports/rest-express', 'transports/rest-client'],
       },
     ],
-    Databases: ['databases/mongo', 'databases/redis', 'databases/typeorm'],
+    Databases: ['databases/overview', 'databases/mongo', 'databases/redis', 'databases/typeorm'],
     Strategies: [
       {
         type: 'category',
