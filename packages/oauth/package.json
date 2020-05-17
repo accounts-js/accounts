@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "@accounts/types": "^0.25.4",
-    "request-promise": "^4.2.5",
     "tslib": "1.11.2"
   },
   "devDependencies": {
