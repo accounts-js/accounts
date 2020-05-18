@@ -27,6 +27,7 @@ module.exports = {
   docs: {
     Introduction: ['introduction', 'contributing'],
     'Getting started': ['getting-started', 'handling-errors', 'email', 'client'],
+    Rest: ['rest/getting-started'],
     Transports: [
       'transports/graphql',
       {
