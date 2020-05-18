@@ -382,7 +382,7 @@ export class Mongo implements DatabaseInterface {
 
   public async removeAllResetPasswordTokens(userId: string): Promise<void> {
     const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
-    await this.collection.update(
+    await this.collection.updateOne(
       { _id: id },
       {
         $unset: {
