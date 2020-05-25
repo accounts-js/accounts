@@ -6,33 +6,29 @@ import { AccountsServer } from '@accounts/server';
 export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> = {
   authenticate: async (_, args, ctx) => {
     const { serviceName, params } = args;
-    const { ip, userAgent, injector } = ctx;
+    const { injector, infos } = ctx;
 
-    const authenticated = await injector.get(AccountsServer).loginWithService(serviceName, params, {
-      ip,
-      userAgent,
-    });
+    const authenticated = await injector
+      .get(AccountsServer)
+      .loginWithService(serviceName, params, infos);
     return authenticated;
   },
   verifyAuthentication: async (_, args, ctx) => {
     const { serviceName, params } = args;
-    const { ip, userAgent, injector } = ctx;
+    const { injector, infos } = ctx;
 
     const authenticated = await injector
       .get(AccountsServer)
-      .authenticateWithService(serviceName, params, {
-        ip,
-        userAgent,
-      });
+      .authenticateWithService(serviceName, params, infos);
     return authenticated;
   },
   impersonate: async (_, args, ctx) => {
     const { accessToken, username } = args;
-    const { ip, userAgent, injector } = ctx;
+    const { injector, infos } = ctx;
 
     const impersonateRes = await injector
       .get(AccountsServer)
-      .impersonate(accessToken, { username }, { ip, userAgent });
+      .impersonate(accessToken, { username }, infos);
 
     // So ctx.user can be used in subsequent queries / mutations
     if (impersonateRes && impersonateRes.user && impersonateRes.tokens) {
@@ -53,11 +49,11 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
   },
   refreshTokens: async (_, args, ctx) => {
     const { accessToken, refreshToken } = args;
-    const { ip, userAgent, injector } = ctx;
+    const { injector, infos } = ctx;
 
     const refreshedSession = await injector
       .get(AccountsServer)
-      .refreshTokens(accessToken, refreshToken, { ip, userAgent });
+      .refreshTokens(accessToken, refreshToken, infos);
 
     return refreshedSession;
   },
