@@ -6,6 +6,7 @@ import { ResumeSessionValidator } from './resume-session-validator';
 import { PrepareMailFunction } from './prepare-mail-function';
 import { SendMailType } from './send-mail-type';
 import { TokenCreator } from './token-creator';
+import { JwtData } from './jwt-data';
 
 export interface AccountsServerOptions<CustomUser extends User = User> {
   /**
@@ -35,6 +36,10 @@ export interface AccountsServerOptions<CustomUser extends User = User> {
    * Creates a new session token each time a user refreshes his access token
    */
   createNewSessionTokenOnRefresh?: boolean;
+  /**
+   * Function to add addition information in jwt payload of accessToken
+   */
+  createJwtPayload?: (data: JwtData, user: CustomUser) => Promise<Record<string, any>>;
   /**
    * If this flag is set to true - user will be automatically logged in after registration.
    * LoginResult data will be included into registration response.

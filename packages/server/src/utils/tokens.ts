@@ -8,34 +8,20 @@ export const generateRandomToken = (length = 43): string => randomBytes(length).
 
 export const generateAccessToken = ({
   secret,
-  data,
+  payload = {},
   config,
 }: {
   secret: jwt.Secret;
-  data?: any;
+  payload?: any;
   config: jwt.SignOptions;
-}) =>
-  jwt.sign(
-    {
-      data,
-    },
-    secret,
-    config
-  );
+}) => jwt.sign(payload, secret, config);
 
 export const generateRefreshToken = ({
   secret,
-  data,
+  payload = {},
   config,
 }: {
   secret: jwt.Secret;
-  data?: any;
+  payload?: any;
   config: jwt.SignOptions;
-}) =>
-  jwt.sign(
-    {
-      data,
-    },
-    secret,
-    config
-  );
+}) => jwt.sign(payload, secret, config);
