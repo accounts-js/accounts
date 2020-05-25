@@ -1,6 +1,6 @@
-import { AccountsRequest, AccountsModuleConfig } from '../modules';
 import { ModuleConfig, ModuleSessionInfo } from '@graphql-modules/core';
 import { getClientIp } from 'request-ip';
+import { AccountsRequest, AccountsModuleConfig } from '../modules';
 
 export const context = (moduleName: string) => async (
   { req }: AccountsRequest,
@@ -11,6 +11,10 @@ export const context = (moduleName: string) => async (
     return {
       ip: '',
       userAgent: '',
+      infos: {
+        ip: '',
+        userAgent: '',
+      },
     };
   }
 
@@ -28,6 +32,7 @@ export const context = (moduleName: string) => async (
     }
   }
 
+  const ip = getClientIp(req);
   let userAgent: string = (req.headers['user-agent'] as string) || '';
   if (req.headers['x-ucbrowser-ua']) {
     // special case of UC Browser
@@ -36,9 +41,13 @@ export const context = (moduleName: string) => async (
 
   return {
     authToken,
-    userAgent,
-    ip: getClientIp(req),
     user,
     userId: user && user.id,
+    userAgent,
+    ip,
+    infos: {
+      userAgent,
+      ip,
+    },
   };
 };

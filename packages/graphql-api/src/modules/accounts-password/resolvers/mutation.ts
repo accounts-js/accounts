@@ -25,7 +25,7 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
     return null;
   },
   createUser: async (_, { user }, ctx) => {
-    const { ip, userAgent, injector } = ctx;
+    const { injector, infos } = ctx;
     const accountsServer = injector.get(AccountsServer);
     const accountsPassword = injector.get(AccountsPassword);
 
@@ -60,10 +60,7 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
 
     // If we are here - user must be created successfully
     // Explicitly saying this to Typescript compiler
-    const loginResult = await accountsServer.loginWithUser(createdUser!, {
-      ip,
-      userAgent,
-    });
+    const loginResult = await accountsServer.loginWithUser(createdUser!, infos);
 
     return {
       userId,
@@ -92,8 +89,8 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
     await injector.get(AccountsPassword).twoFactor.unset(userId, code);
     return null;
   },
-  resetPassword: async (_, { token, newPassword }, { injector, ip, userAgent }) => {
-    return injector.get(AccountsPassword).resetPassword(token, newPassword, { ip, userAgent });
+  resetPassword: async (_, { token, newPassword }, { injector, infos }) => {
+    return injector.get(AccountsPassword).resetPassword(token, newPassword, infos);
   },
   sendResetPasswordEmail: async (_, { email }, { injector }) => {
     await injector.get(AccountsPassword).sendResetPasswordEmail(email);
