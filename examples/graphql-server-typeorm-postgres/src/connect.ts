@@ -6,7 +6,7 @@ export const connect = (url = process.env.DATABASE_URL) => {
     url,
     entities: [...require('@accounts/typeorm').entities],
     synchronize: true,
-  }).then(connection => {
+  }).then((connection) => {
     return connection;
   });
 };

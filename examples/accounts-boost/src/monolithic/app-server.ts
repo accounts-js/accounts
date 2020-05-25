@@ -1,5 +1,5 @@
 import accountsBoost, { authenticated } from '@accounts/boost';
-import { mergeTypeDefs, mergeResolvers } from 'graphql-toolkit';
+import { mergeTypeDefs, mergeResolvers } from '@graphql-toolkit/schema-merging';
 import { ApolloServer } from 'apollo-server';
 
 (async () => {
@@ -55,7 +55,7 @@ import { ApolloServer } from 'apollo-server';
     context: ({ req }) => accounts.context({ req }),
   } as any)
     .listen()
-    .then(res => {
+    .then((res) => {
       console.log(`GraphQL server running at ${res.url}`);
     });
 })();

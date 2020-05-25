@@ -25,9 +25,9 @@ app.bootstrap({
 });
 
 // Do not build the docs for these packages
-dirs = dirs.filter(dir => !excludeDirs.includes(dir));
+dirs = dirs.filter((dir) => !excludeDirs.includes(dir));
 
-dirs.forEach(dir => {
+dirs.forEach((dir) => {
   // Generate the api doc for each package
   app.generateDocs(
     app.expandInputFiles([resolve(packagesDir, dir, 'src')]),
@@ -40,6 +40,17 @@ dirs.forEach(dir => {
     resolve(apiDocsDir, dir, 'sidebars.js')
   );
 });
+
+// This is a fix for a generics issue, see https://github.com/tom-grey/typedoc-plugin-markdown/issues/119
+const filePath = resolve(apiDocsDir, 'graphql-api', 'globals.md');
+let fileContent = readFileSync(filePath, {
+  encoding: 'utf8',
+});
+fileContent = fileContent.replace(
+  '= new GraphQLModule<CoreAccountsModuleConfig>',
+  '= new GraphQLModule'
+);
+writeFileSync(filePath, fileContent, { encoding: 'utf8' });
 
 // console.log(`generated docs for packages:`);
 // dirs.forEach(dir => {

@@ -6,7 +6,7 @@ import {
   User,
 } from '@accounts/types';
 import { get, merge } from 'lodash';
-import { Collection, Db, ObjectID } from 'mongodb';
+import { Collection, Db, ObjectID, IndexOptions } from 'mongodb';
 
 import { AccountsMongoOptions, MongoUser } from './types';
 
@@ -50,17 +50,33 @@ export class Mongo implements DatabaseInterface {
     this.sessionCollection = this.db.collection(this.options.sessionCollectionName);
   }
 
-  public async setupIndexes(): Promise<void> {
+  /**
+   * Setup the mongo indexes needed.
+   * @param options Options passed to the mongo native `createIndex` method.
+   */
+  public async setupIndexes(options: Omit<IndexOptions, 'unique' | 'sparse'> = {}): Promise<void> {
     await this.sessionCollection.createIndex('token', {
+      ...options,
       unique: true,
       sparse: true,
     });
     await this.collection.createIndex('username', {
+      ...options,
       unique: true,
       sparse: true,
     });
     await this.collection.createIndex('emails.address', {
+      ...options,
       unique: true,
+      sparse: true,
+    });
+    // Index related to the password service
+    await this.collection.createIndex('services.email.verificationTokens.token', {
+      ...options,
+      sparse: true,
+    });
+    await this.collection.createIndex('services.password.reset.token', {
+      ...options,
       sparse: true,
     });
   }
@@ -359,6 +375,18 @@ export class Mongo implements DatabaseInterface {
         $set: {
           valid: false,
           [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+        },
+      }
+    );
+  }
+
+  public async removeAllResetPasswordTokens(userId: string): Promise<void> {
+    const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
+    await this.collection.updateOne(
+      { _id: id },
+      {
+        $unset: {
+          'services.password.reset': '',
         },
       }
     );

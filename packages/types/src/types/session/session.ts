@@ -3,8 +3,8 @@ export interface Session {
   userId: string;
   token: string;
   valid: boolean;
-  userAgent?: string;
-  ip?: string;
+  userAgent?: string | null;
+  ip?: string | null;
   createdAt: string;
   updatedAt: string;
 }

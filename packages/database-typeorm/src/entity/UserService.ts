@@ -6,11 +6,7 @@ export class UserService {
   @PrimaryGeneratedColumn('uuid')
   public id!: string;
 
-  @ManyToOne(
-    () => User,
-    user => user.services,
-    { onDelete: 'CASCADE' }
-  )
+  @ManyToOne(() => User, (user) => user.services, { onDelete: 'CASCADE' })
   public user!: User;
 
   @Column()

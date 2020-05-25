@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   makeStyles,
   Card,
@@ -10,10 +10,11 @@ import {
   CardActions,
   Button,
 } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 import { useFormik, FormikErrors } from 'formik';
 import { accountsPassword } from './accounts';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   card: {
     marginTop: theme.spacing(3),
   },
@@ -27,6 +28,9 @@ const useStyles = makeStyles(theme => ({
   cardActions: {
     padding: theme.spacing(3),
   },
+  alert: {
+    marginTop: theme.spacing(3),
+  },
 }));
 
 interface ChangePasswordValues {
@@ -37,13 +41,14 @@ interface ChangePasswordValues {
 
 export const ChangePassword = () => {
   const classes = useStyles();
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; message: string }>();
   const formik = useFormik<ChangePasswordValues>({
     initialValues: {
       oldPassword: '',
       newPassword: '',
       confirmNewPassword: '',
     },
-    validate: values => {
+    validate: (values) => {
       const errors: FormikErrors<ChangePasswordValues> = {};
       if (!values.oldPassword) {
         errors.oldPassword = 'Required';
@@ -59,13 +64,13 @@ export const ChangePassword = () => {
       }
       return errors;
     },
-    onSubmit: async (values, { setSubmitting }) => {
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
         await accountsPassword.changePassword(values.oldPassword, values.newPassword);
-        // TODO success message
+        setMessage({ type: 'success', message: 'Password changed' });
+        resetForm();
       } catch (error) {
-        // TODO snackbar?
-        alert(error);
+        setMessage({ type: 'error', message: error.message });
       }
       setSubmitting(false);
     },
@@ -120,6 +125,15 @@ export const ChangePassword = () => {
               />
             </Grid>
           </Grid>
+          {message && (
+            <Alert
+              severity={message.type}
+              className={classes.alert}
+              onClose={() => setMessage(undefined)}
+            >
+              {message.message}
+            </Alert>
+          )}
         </CardContent>
         <Divider />
         <CardActions className={classes.cardActions}>

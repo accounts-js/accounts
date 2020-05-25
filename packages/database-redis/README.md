@@ -1,34 +1,25 @@
 # @accounts/redis
 
-_Redis adaptor for accounts_
+[![npm](https://img.shields.io/npm/v/@accounts/redis)](https://www.npmjs.com/package/@accounts/redis)
+[![npm downloads](https://img.shields.io/npm/dm/@accounts/redis)](https://www.npmjs.com/package/@accounts/redis)
+[![codecov](https://img.shields.io/codecov/c/github/accounts-js/accounts)](https://codecov.io/gh/accounts-js/accounts)
+[![License](https://img.shields.io/github/license/accounts-js/accounts)](https://github.com/accounts-js/accounts/blob/master/LICENSE)
 
-[![npm](https://img.shields.io/npm/v/@accounts/redis.svg?maxAge=2592000)](https://www.npmjs.com/package/@accounts/redis)
-![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
+A database adapter for [Redis](https://redis.io/)
 
-## Install
+> For now `@accounts/redis` only provide a session storage, you will need to use another connector for the user storage.
+
+## Documentation
+
+- [Website documentation](https://www.accountsjs.com/docs/databases/redis)
+- [API documentation](https://www.accountsjs.com/docs/api/database-redis/globals)
+
+## Installation
 
 ```
 yarn add @accounts/redis
 ```
 
-## Usage
+## Contributing
 
-```javascript
-import IORedis from 'ioredis';
-
-import { AccountsServer } from '@accounts/server';
-import { DatabaseManager } from '@accounts/database-manager';
-import { RedisSessions } from '@accounts/redis';
-
-const ioRedis = new IORedis();
-
-const sessionDb = new RedisSessions(ioRedis, {
-  ...options,
-});
-
-const accountsDb = new DatabaseManager({
-  sessionStorage: sessionDb,
-});
-
-const accountsServer = new AccountsServer({ db: accountsDb });
-```
+Any contribution is very welcome, read our [contributing guide](https://github.com/accounts-js/accounts/blob/master/CONTRIBUTING.

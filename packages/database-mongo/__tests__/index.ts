@@ -20,7 +20,7 @@ const session = {
 };
 
 function delay(time: number) {
-  return new Promise(resolve => setTimeout(() => resolve(), time));
+  return new Promise((resolve) => setTimeout(() => resolve(), time));
 }
 
 describe('Mongo', () => {
@@ -722,6 +722,31 @@ describe('Mongo', () => {
       expect(session1!.createdAt).not.toEqual(session1!.updatedAt);
       expect(session2!.valid).toEqual(false);
       expect(session2!.createdAt).not.toEqual(session2!.updatedAt);
+    });
+  });
+
+  describe('removeAllResetPasswordTokens', () => {
+    // eslint-disable-next-line jest/expect-expect
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertUserIdToMongoObjectId: false,
+      });
+      const userId = await mongoOptions.createUser(user);
+      await mongoOptions.removeAllResetPasswordTokens(userId);
+    });
+
+    it('should remove the password reset tokens', async () => {
+      const testToken = 'testVerificationToken';
+      const testReason = 'testReason';
+      const userId = await databaseTests.database.createUser(user);
+      await databaseTests.database.addResetPasswordToken(userId, user.email, testToken, testReason);
+      const userWithTokens = await databaseTests.database.findUserByResetPasswordToken(testToken);
+      expect(userWithTokens).toBeTruthy();
+      await databaseTests.database.removeAllResetPasswordTokens(userId);
+      const userWithDeletedTokens = await databaseTests.database.findUserByResetPasswordToken(
+        testToken
+      );
+      expect(userWithDeletedTokens).not.toBeTruthy();
     });
   });
 

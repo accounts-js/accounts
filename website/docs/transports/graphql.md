@@ -105,7 +105,7 @@ import { accountsContext } from '@accounts/graphql-api';
 app.use(
   GRAPHQL_ROUTE,
   bodyParser.json(),
-  graphqlExpress(request => {
+  graphqlExpress((request) => {
     return {
       context: {
         ...accountsGraphQL.context(request),
@@ -214,7 +214,7 @@ By default accounts-js only allow 'username', 'email' and 'password' for the use
 const accountsPassword = new AccountsPassword({
   // This option is called when a new user create an account
   // Inside we can apply our logic to validate the user fields
-  validateNewUser: user => {
+  validateNewUser: (user) => {
     if (user.profile.firstName.length < 2) {
       throw new Error('First name too short');
     }
@@ -346,7 +346,7 @@ async function registerUser() {
       */
 
       // Alternatively, the list of errors is accessible on the "errors" property
-      error.errors.forEach(graphQLError => console.log(graphQLError));
+      error.errors.forEach((graphQLError) => console.log(graphQLError));
     }
   }
 }

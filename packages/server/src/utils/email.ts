@@ -37,6 +37,6 @@ export type SendMailType = (mail: object) => Promise<void>;
 
 export const sendMail = async (mail: object): Promise<void> => {
   console.warn('No configuration for email, you must set an email configuration');
-  console.warn('Documentation: https://accounts-js.netlify.com/docs/email');
+  console.warn('Documentation: https://www.accountsjs.com/docs/email');
   console.log(mail);
 };

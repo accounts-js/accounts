@@ -1,8 +1,13 @@
 import { AccountsClientPassword } from '../src/client-password';
+import { LoginResult, CreateUserResult } from '@accounts/types';
+
+const mockCreateUserResult: CreateUserResult = {
+  userId: '123',
+};
 
 const mockedClient = {
   transport: {
-    createUser: jest.fn(),
+    createUser: jest.fn(() => Promise.resolve(mockCreateUserResult)),
     sendResetPasswordEmail: jest.fn(),
     resetPassword: jest.fn(),
     sendVerificationEmail: jest.fn(),
@@ -34,7 +39,7 @@ describe('AccountsClientPassword', () => {
   describe('#options', () => {
     describe('hashPassword', () => {
       it('should use hashPassword option', () => {
-        const hashPassword = jest.fn(pass => pass);
+        const hashPassword = jest.fn((pass) => pass);
         const accountsPasswordTest = new AccountsClientPassword(mockedClient as any, {
           hashPassword,
         });
@@ -55,6 +60,46 @@ describe('AccountsClientPassword', () => {
         email: user.email,
         password: user.password,
       });
+    });
+
+    it('should autologin user in case tokens are returned from transport', async () => {
+      const mockLoginResult: LoginResult = {
+        sessionId: 'session123',
+        tokens: {
+          accessToken: 'accessToken',
+          refreshToken: 'refreshToken',
+        },
+        user: {
+          id: '123',
+          deactivated: false,
+        },
+      };
+
+      const mockedClientWithAutologin = {
+        ...mockedClient,
+        transport: {
+          ...mockedClient.transport,
+          createUser: jest.fn(() =>
+            Promise.resolve({
+              ...mockCreateUserResult,
+              loginResult: mockLoginResult,
+            })
+          ),
+        },
+        setTokens: jest.fn(),
+      };
+      const accountsPassword = new AccountsClientPassword(mockedClientWithAutologin as any);
+
+      await accountsPassword.createUser(user);
+
+      expect(mockedClientWithAutologin.transport.createUser).toHaveBeenCalledTimes(1);
+      expect(mockedClientWithAutologin.transport.createUser).toHaveBeenCalledWith({
+        email: user.email,
+        password: user.password,
+      });
+
+      expect(mockedClientWithAutologin.setTokens).toHaveBeenCalledTimes(1);
+      expect(mockedClientWithAutologin.setTokens).toHaveBeenCalledWith(mockLoginResult.tokens);
     });
   });
 

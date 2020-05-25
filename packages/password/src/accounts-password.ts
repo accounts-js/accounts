@@ -85,6 +85,11 @@ export interface AccountsPasswordOptions {
    */
   invalidateAllSessionsAfterPasswordChanged?: boolean;
   /**
+   * Will remove all password reset tokens from the db after a password has been changed.
+   * Default to true.
+   */
+  removeAllResetPasswordTokensAfterPasswordChanged?: boolean;
+  /**
    * Will automatically send a verification email after signup.
    * Default to false.
    */
@@ -136,6 +141,7 @@ const defaultOptions = {
   returnTokensAfterResetPassword: false,
   invalidateAllSessionsAfterPasswordReset: true,
   invalidateAllSessionsAfterPasswordChanged: false,
+  removeAllResetPasswordTokensAfterPasswordChanged: true,
   errors,
   sendVerificationEmailAfterSignup: false,
   validateEmail(email?: string): boolean {
@@ -153,24 +159,25 @@ const defaultOptions = {
   verifyPassword,
 };
 
-export default class AccountsPassword implements AuthenticationService {
+export default class AccountsPassword<CustomUser extends User = User>
+  implements AuthenticationService {
   public serviceName = 'password';
   public server!: AccountsServer;
   public twoFactor: TwoFactor;
   private options: AccountsPasswordOptions & typeof defaultOptions;
-  private db!: DatabaseInterface;
+  private db!: DatabaseInterface<CustomUser>;
 
   constructor(options: AccountsPasswordOptions = {}) {
     this.options = { ...defaultOptions, ...options };
     this.twoFactor = new TwoFactor(options.twoFactor);
   }
 
-  public setStore(store: DatabaseInterface) {
+  public setStore(store: DatabaseInterface<CustomUser>) {
     this.db = store;
     this.twoFactor.setStore(store);
   }
 
-  public async authenticate(params: LoginUserPasswordService): Promise<User> {
+  public async authenticate(params: LoginUserPasswordService): Promise<CustomUser> {
     const { user, password, code } = params;
     if (!user || !password) {
       throw new AccountsJsError(
@@ -197,7 +204,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {string} email - User email.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  public findUserByEmail(email: string): Promise<User | null> {
+  public findUserByEmail(email: string): Promise<CustomUser | null> {
     return this.db.findUserByEmail(email);
   }
 
@@ -206,7 +213,7 @@ export default class AccountsPassword implements AuthenticationService {
    * @param {string} username - User username.
    * @returns {Promise<Object>} - Return a user or null if not found.
    */
-  public findUserByUsername(username: string): Promise<User | null> {
+  public findUserByUsername(username: string): Promise<CustomUser | null> {
     return this.db.findUserByUsername(username);
   }
 
@@ -309,7 +316,7 @@ export default class AccountsPassword implements AuthenticationService {
     }
 
     const resetTokens = getUserResetTokens(user);
-    const resetTokenRecord = find(resetTokens, t => t.token === token);
+    const resetTokenRecord = find(resetTokens, (t) => t.token === token);
 
     if (
       !resetTokenRecord ||
@@ -419,6 +426,10 @@ export default class AccountsPassword implements AuthenticationService {
 
     if (this.options.invalidateAllSessionsAfterPasswordChanged) {
       await this.db.invalidateAllSessions(user.id);
+    }
+
+    if (this.options.removeAllResetPasswordTokensAfterPasswordChanged) {
+      await this.db.removeAllResetPasswordTokens(user.id);
     }
 
     if (this.options.notifyUserAfterPasswordChanged) {
@@ -656,12 +667,12 @@ export default class AccountsPassword implements AuthenticationService {
   private async passwordAuthenticator(
     user: string | LoginUserIdentity,
     password: string
-  ): Promise<User> {
+  ): Promise<CustomUser> {
     const { username, email, id } = isString(user)
       ? this.toUsernameAndEmail({ user })
       : this.toUsernameAndEmail({ ...user });
 
-    let foundUser: User | null = null;
+    let foundUser: CustomUser | null = null;
 
     if (id) {
       // this._validateLoginWithField('id', user);

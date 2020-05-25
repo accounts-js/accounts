@@ -1,6 +1,8 @@
 import gql from 'graphql-tag';
 
-export const createUserMutation = gql`
+export const createUserMutation = (userFieldsFragment: any) => gql`
+  ${userFieldsFragment}
+
   mutation createUser($user: CreateUserInput!) {
     createUser(user: $user) {
       userId
@@ -9,6 +11,9 @@ export const createUserMutation = gql`
         tokens {
           refreshToken
           accessToken
+        }
+        user {
+          ...userFields
         }
       }
     }

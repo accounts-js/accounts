@@ -349,7 +349,7 @@ describe('AccountsPassword', () => {
     });
   });
 
-  describe('changePassword and invalidate all sessions', () => {
+  describe('changePassword, invalidate all sessions and remove all reset password tokens from user storage', () => {
     const tmpAccountsPassword = new AccountsPassword({
       invalidateAllSessionsAfterPasswordChanged: true,
     });
@@ -369,11 +369,13 @@ describe('AccountsPassword', () => {
       const findUserById = jest.fn(() => Promise.resolve(validUser));
       const invalidateAllSessions = jest.fn(() => Promise.resolve());
       const findPasswordHash = jest.fn(() => Promise.resolve());
+      const removeAllResetPasswordTokens = jest.fn(() => Promise.resolve());
       tmpAccountsPassword.setStore({
         setPassword,
         findUserById,
         findPasswordHash,
         invalidateAllSessions,
+        removeAllResetPasswordTokens,
       } as any);
       const prepareMail = jest.fn(() => Promise.resolve());
       const sanitizeUser = jest.fn(() => Promise.resolve());
@@ -393,14 +395,48 @@ describe('AccountsPassword', () => {
       (tmpAccountsPassword as any).passwordAuthenticator.mockRestore();
     });
 
+    it('call removeAllResetPasswordTokens', async () => {
+      const userId = 'id';
+      const setPassword = jest.fn(() => Promise.resolve('user'));
+      const findUserById = jest.fn(() => Promise.resolve(validUser));
+      const invalidateAllSessions = jest.fn(() => Promise.resolve());
+      const findPasswordHash = jest.fn(() => Promise.resolve());
+      const removeAllResetPasswordTokens = jest.fn(() => Promise.resolve());
+      tmpAccountsPassword.setStore({
+        setPassword,
+        findUserById,
+        findPasswordHash,
+        invalidateAllSessions,
+        removeAllResetPasswordTokens,
+      } as any);
+      const prepareMail = jest.fn(() => Promise.resolve());
+      const sanitizeUser = jest.fn(() => Promise.resolve());
+      const sendMail = jest.fn(() => Promise.resolve());
+      tmpAccountsPassword.server = {
+        ...server,
+        prepareMail,
+        options: { sendMail },
+        sanitizeUser,
+      } as any;
+      set(tmpAccountsPassword.server, 'options.emailTemplates', {});
+      jest
+        .spyOn(tmpAccountsPassword, 'passwordAuthenticator' as any)
+        .mockImplementation(() => Promise.resolve(validUser));
+      await tmpAccountsPassword.changePassword(userId, 'old-password', 'new-password');
+      expect(removeAllResetPasswordTokens.mock.calls[0]).toMatchSnapshot();
+      (tmpAccountsPassword as any).passwordAuthenticator.mockRestore();
+    });
+
     it('call passwordAuthenticator and this.db.setPassword', async () => {
       const userId = 'id';
       const setPassword = jest.fn(() => Promise.resolve('user'));
       const findUserById = jest.fn(() => Promise.resolve(validUser));
-      password.setStore({ setPassword, findUserById } as any);
+      const removeAllResetPasswordTokens = jest.fn(() => Promise.resolve());
+      password.setStore({ setPassword, findUserById, removeAllResetPasswordTokens } as any);
       const prepareMail = jest.fn(() => Promise.resolve());
       const sanitizeUser = jest.fn(() => Promise.resolve());
       const sendMail = jest.fn(() => Promise.resolve());
+
       password.server = {
         ...server,
         prepareMail,
@@ -606,7 +642,7 @@ describe('AccountsPassword', () => {
 
     it('validateNewUser allow more fields', async () => {
       const tmpAccountsPassword = new AccountsPassword({
-        validateNewUser: user => {
+        validateNewUser: (user) => {
           user.additionalField = 'test';
           return user;
         },

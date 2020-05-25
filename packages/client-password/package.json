@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client-password",
-  "version": "0.24.0",
+  "version": "0.25.4",
   "description": "@accounts/client-password",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -29,14 +29,14 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "25.1.3",
-    "@types/node": "13.7.7",
-    "jest": "25.1.0",
-    "rimraf": "3.0.0"
+    "@types/jest": "25.2.1",
+    "@types/node": "13.13.5",
+    "jest": "26.0.1",
+    "rimraf": "3.0.2"
   },
   "dependencies": {
-    "@accounts/client": "^0.24.0",
-    "@accounts/types": "^0.24.0",
-    "tslib": "1.10.0"
+    "@accounts/client": "^0.25.4",
+    "@accounts/types": "^0.25.4",
+    "tslib": "1.11.2"
   }
 }

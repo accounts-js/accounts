@@ -69,7 +69,7 @@ export class ServerRestTest implements ServerTestInterface {
             html: () => `Your account password has been successfully changed.`,
           },
         },
-        sendMail: async mail => {
+        sendMail: async (mail) => {
           this.emails.push(mail);
         },
       },
@@ -96,7 +96,7 @@ export class ServerRestTest implements ServerTestInterface {
   }
 
   public async start() {
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
     await new Promise((resolve, reject) => {
       this.server = this.app.listen(this.port, (err: Error) => {
         if (err) {
@@ -111,7 +111,7 @@ export class ServerRestTest implements ServerTestInterface {
 
   public async stop() {
     if (this.server) {
-      await new Promise(resolve => this.server!.close(resolve));
+      await new Promise((resolve) => this.server!.close(resolve));
     }
     await this.databaseTest.stop();
   }
