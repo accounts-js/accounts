@@ -155,7 +155,7 @@ describe('AccountsServer', () => {
             createSession: () => Promise.resolve('sessionId'),
           } as any,
           tokenSecret: 'secret1',
-          createPayload: async (data, user) => {
+          createJwtPayload: async (data, user) => {
             return { username: user.username };
           },
         },
