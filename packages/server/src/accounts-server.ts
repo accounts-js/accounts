@@ -634,9 +634,9 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
   }
 
   private async createJwtPayload(data: JwtData, user: CustomUser): Promise<JwtPayload> {
-    return this.options.createPayload
+    return this.options.createJwtPayload
       ? {
-          ...(await this.options.createPayload(data, user)),
+          ...(await this.options.createJwtPayload(data, user)),
           data,
         }
       : { data };
