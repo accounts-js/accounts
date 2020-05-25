@@ -636,6 +636,10 @@ describe('AccountsServer', () => {
         undefined,
       ]);
       expect(res).toEqual({
+        infos: {
+          ip: 'ip',
+          userAgent: 'userAgent',
+        },
         sessionId: '456',
         tokens: {
           accessToken: 'newAccessToken',
@@ -693,6 +697,10 @@ describe('AccountsServer', () => {
         '123',
       ]);
       expect(res).toEqual({
+        infos: {
+          ip: 'ip',
+          userAgent: 'userAgent',
+        },
         sessionId: '456',
         tokens: {
           accessToken: 'newAccessToken',

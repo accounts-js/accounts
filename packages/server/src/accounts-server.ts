@@ -395,6 +395,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
           sessionId: session.id,
           tokens,
           user,
+          infos,
         };
 
         this.hooks.emit(ServerHooks.RefreshTokensSuccess, result);
