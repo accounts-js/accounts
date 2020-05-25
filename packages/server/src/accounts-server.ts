@@ -424,7 +424,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
   }: {
     token: string;
     isImpersonated?: boolean;
-    user: User;
+    user: CustomUser;
   }): Promise<Tokens> {
     const { tokenConfigs } = this.options;
     const jwtData: JwtData = {
@@ -633,14 +633,13 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       : generateRandomToken();
   }
 
-  private async createJwtPayload(data: JwtData, user: User): Promise<JwtPayload> {
-    if (this.options.createPayload) {
-      return {
-        ...(await this.options.createPayload(data, user)),
-        data,
-      };
-    }
-    return { data };
+  private async createJwtPayload(data: JwtData, user: CustomUser): Promise<JwtPayload> {
+    return this.options.createPayload
+      ? {
+          ...(await this.options.createPayload(data, user)),
+          data,
+        }
+      : { data };
   }
 
   private getSecretOrPublicKey(): jwt.Secret {
