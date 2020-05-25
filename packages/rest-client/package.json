@@ -1,6 +1,6 @@
 {
   "name": "@accounts/rest-client",
-  "version": "0.25.4",
+  "version": "0.26.0",
   "description": "REST client for accounts",
   "main": "lib/index",
   "typings": "lib/index",
@@ -38,7 +38,7 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
-    "@accounts/client": "^0.25.4",
+    "@accounts/client": "^0.26.0",
     "@types/jest": "25.2.1",
     "@types/lodash": "4.14.150",
     "@types/node": "13.13.5",
@@ -49,7 +49,7 @@
     "@accounts/client": "^0.19.0"
   },
   "dependencies": {
-    "@accounts/types": "^0.25.4",
+    "@accounts/types": "^0.26.0",
     "lodash": "^4.17.15",
     "tslib": "1.11.2"
   }
