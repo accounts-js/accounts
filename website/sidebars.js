@@ -26,7 +26,7 @@ dirs.forEach((dir) => {
 module.exports = {
   docs: {
     Introduction: ['introduction', 'contributing'],
-    'Getting started': ['getting-started', 'handling-errors', 'email', 'client'],
+    'Getting started': ['getting-started', 'server', 'handling-errors', 'email', 'client'],
     Transports: [
       'transports/graphql',
       {
