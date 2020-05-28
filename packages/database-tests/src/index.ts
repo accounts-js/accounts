@@ -13,6 +13,8 @@ export const runDatabaseTests = (tests: any) => {
   describe('@accounts/database-tests', () => {
     const token1 = generateRandomToken();
     const token2 = generateRandomToken();
+    const token3 = generateRandomToken();
+    const token4 = generateRandomToken();
     const tokenSessionId1 = generatePseudoRandomUuid();
 
     const session = {
@@ -146,6 +148,48 @@ export const runDatabaseTests = (tests: any) => {
           expect(session1.createdAt).not.toEqual(session1.updatedAt);
           expect(session2.valid).toEqual(false);
           expect(session2.createdAt).not.toEqual(session2.updatedAt);
+        });
+
+        it('invalidates all sessions except given list', async () => {
+          const sessionId1 = await tests.database.createSession(
+            session.userId,
+            token1,
+            connectionInfo
+          );
+          const sessionId2 = await tests.database.createSession(
+            session.userId,
+            token2,
+            connectionInfo
+          );
+          const sessionId3 = await tests.database.createSession(
+            session.userId,
+            token3,
+            connectionInfo
+          );
+          const sessionId4 = await tests.database.createSession(
+            session.userId,
+            token4,
+            connectionInfo
+          );
+          await delay(10);
+          await tests.database.invalidateAllSessions(session.userId, [sessionId2, sessionId4]);
+
+          const session1 = await tests.database.findSessionById(sessionId1);
+          const session2 = await tests.database.findSessionById(sessionId2);
+          const session3 = await tests.database.findSessionById(sessionId3);
+          const session4 = await tests.database.findSessionById(sessionId4);
+
+          expect(session1.valid).toEqual(false);
+          expect(session1.createdAt).not.toEqual(session1.updatedAt);
+
+          expect(session2.valid).toEqual(true);
+          expect(session2.createdAt).toEqual(session2.updatedAt);
+
+          expect(session3.valid).toEqual(false);
+          expect(session3.createdAt).not.toEqual(session3.updatedAt);
+
+          expect(session4.valid).toEqual(true);
+          expect(session4.createdAt).toEqual(session4.updatedAt);
         });
       });
     });

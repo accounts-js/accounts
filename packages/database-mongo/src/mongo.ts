@@ -368,16 +368,34 @@ export class Mongo implements DatabaseInterface {
     );
   }
 
-  public async invalidateAllSessions(userId: string): Promise<void> {
-    await this.sessionCollection.updateMany(
-      { userId },
-      {
-        $set: {
-          valid: false,
-          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
-        },
+  public async invalidateAllSessions(userId: string, excludeList?: string[]): Promise<void> {
+    let selector;
+    selector = { userId };
+
+    if (excludeList && excludeList.length > 0) {
+      let excludedObjectIds;
+      excludedObjectIds = excludeList;
+
+      if (this.options.convertSessionIdToMongoObjectId) {
+        excludedObjectIds = excludeList.map((sessionId) => {
+          return toMongoID(sessionId);
+        });
       }
-    );
+
+      selector = {
+        userId,
+        _id: {
+          $nin: excludedObjectIds,
+        },
+      };
+    }
+
+    await this.sessionCollection.updateMany(selector, {
+      $set: {
+        valid: false,
+        [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+      },
+    });
   }
 
   public async removeAllResetPasswordTokens(userId: string): Promise<void> {
