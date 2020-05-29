@@ -61,12 +61,16 @@ describe('accounts resolvers mutation', () => {
     it('should call impersonate', async () => {
       await Mutation.impersonate!(
         {},
-        { accessToken, username } as any,
+        { accessToken, impersonated: { username } } as any,
         { injector, infos } as any,
         {} as any
       );
       expect(injector.get).toHaveBeenCalledWith(AccountsServer);
-      expect(accountsServerMock.impersonate).toHaveBeenCalledWith(accessToken, { username }, infos);
+      expect(accountsServerMock.impersonate).toHaveBeenCalledWith(
+        accessToken,
+        { userId: undefined, username, email: undefined },
+        infos
+      );
     });
   });
 
