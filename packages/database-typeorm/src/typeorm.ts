@@ -423,7 +423,7 @@ export class AccountsTypeorm implements DatabaseInterface {
   }
 
   public async invalidateAllSessions(userId: string, excludedSessionIds?: string[]): Promise<void> {
-    let selector: { userId: string; id?: FindOperator<any> } = { userId };
+    const selector: { userId: string; id?: FindOperator<any> } = { userId };
 
     if (excludedSessionIds && excludedSessionIds.length > 0) {
       selector.id = Not(In(excludedSessionIds));
