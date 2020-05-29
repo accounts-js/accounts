@@ -368,25 +368,20 @@ export class Mongo implements DatabaseInterface {
     );
   }
 
-  public async invalidateAllSessions(userId: string, excludeList?: string[]): Promise<void> {
-    let selector;
-    selector = { userId };
+  public async invalidateAllSessions(userId: string, excludedSessionIds?: string[]): Promise<void> {
+    const selector: { userId: string; _id?: object } = { userId };
 
-    if (excludeList && excludeList.length > 0) {
-      let excludedObjectIds;
-      excludedObjectIds = excludeList;
+    if (excludedSessionIds && excludedSessionIds.length > 0) {
+      let excludedObjectIds: string[] | ObjectID[] = excludedSessionIds;
 
       if (this.options.convertSessionIdToMongoObjectId) {
-        excludedObjectIds = excludeList.map((sessionId) => {
+        excludedObjectIds = excludedSessionIds.map((sessionId) => {
           return toMongoID(sessionId);
         });
       }
 
-      selector = {
-        userId,
-        _id: {
-          $nin: excludedObjectIds,
-        },
+      selector._id = {
+        $nin: excludedObjectIds,
       };
     }
 

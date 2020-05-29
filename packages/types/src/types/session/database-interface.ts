@@ -21,5 +21,5 @@ export interface DatabaseInterfaceSessions {
 
   invalidateSession(sessionId: string): Promise<void>;
 
-  invalidateAllSessions(userId: string, excludeList?: string[]): Promise<void>;
+  invalidateAllSessions(userId: string, excludedSessionIds?: string[]): Promise<void>;
 }

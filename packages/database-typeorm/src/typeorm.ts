@@ -1,5 +1,5 @@
 import { ConnectionInformations, CreateUser, DatabaseInterface } from '@accounts/types';
-import { Repository, getRepository, Not, In } from 'typeorm';
+import { Repository, getRepository, Not, In, FindOperator } from 'typeorm';
 import { User } from './entity/User';
 import { UserEmail } from './entity/UserEmail';
 import { UserService } from './entity/UserService';
@@ -422,15 +422,11 @@ export class AccountsTypeorm implements DatabaseInterface {
     }
   }
 
-  public async invalidateAllSessions(userId: string, excludeList?: string[]): Promise<void> {
-    let selector;
-    selector = { userId };
+  public async invalidateAllSessions(userId: string, excludedSessionIds?: string[]): Promise<void> {
+    let selector: { userId: string; id?: FindOperator<any> } = { userId };
 
-    if (excludeList && excludeList.length > 0) {
-      selector = {
-        userId,
-        id: Not(In(excludeList)),
-      };
+    if (excludedSessionIds && excludedSessionIds.length > 0) {
+      selector.id = Not(In(excludedSessionIds));
     }
 
     await this.sessionRepository.update(selector, {
