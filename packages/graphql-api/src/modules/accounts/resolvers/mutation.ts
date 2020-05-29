@@ -1,7 +1,7 @@
-import { MutationResolvers } from '../../../models';
 import { ModuleContext } from '@graphql-modules/core';
-import { AccountsModuleContext } from '..';
 import { AccountsServer } from '@accounts/server';
+import { MutationResolvers } from '../../../models';
+import { AccountsModuleContext } from '..';
 
 export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> = {
   authenticate: async (_, args, ctx) => {
@@ -23,12 +23,18 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
     return authenticated;
   },
   impersonate: async (_, args, ctx) => {
-    const { accessToken, username } = args;
+    const { accessToken, impersonated } = args;
     const { injector, infos } = ctx;
 
-    const impersonateRes = await injector
-      .get(AccountsServer)
-      .impersonate(accessToken, { username }, infos);
+    const impersonateRes = await injector.get(AccountsServer).impersonate(
+      accessToken,
+      {
+        userId: impersonated.userId!,
+        username: impersonated.username!,
+        email: impersonated.email!,
+      },
+      infos
+    );
 
     // So ctx.user can be used in subsequent queries / mutations
     if (impersonateRes && impersonateRes.user && impersonateRes.tokens) {

@@ -47,6 +47,12 @@ export type ImpersonateReturn = {
   user?: Maybe<User>;
 };
 
+export type ImpersonationUserIdentityInput = {
+  userId?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+};
+
 export type LoginResult = {
    __typename?: 'LoginResult';
   sessionId?: Maybe<Scalars['String']>;
@@ -123,7 +129,7 @@ export type MutationTwoFactorUnsetArgs = {
 
 export type MutationImpersonateArgs = {
   accessToken: Scalars['String'];
-  username: Scalars['String'];
+  impersonated: ImpersonationUserIdentityInput;
 };
 
 
@@ -270,6 +276,7 @@ export type ResolversTypes = {
   LoginResult: ResolverTypeWrapper<LoginResult>,
   Tokens: ResolverTypeWrapper<Tokens>,
   TwoFactorSecretKeyInput: TwoFactorSecretKeyInput,
+  ImpersonationUserIdentityInput: ImpersonationUserIdentityInput,
   ImpersonateReturn: ResolverTypeWrapper<ImpersonateReturn>,
   AuthenticateParamsInput: AuthenticateParamsInput,
   UserInput: UserInput,
@@ -290,6 +297,7 @@ export type ResolversParentTypes = {
   LoginResult: LoginResult,
   Tokens: Tokens,
   TwoFactorSecretKeyInput: TwoFactorSecretKeyInput,
+  ImpersonationUserIdentityInput: ImpersonationUserIdentityInput,
   ImpersonateReturn: ImpersonateReturn,
   AuthenticateParamsInput: AuthenticateParamsInput,
   UserInput: UserInput,
@@ -335,7 +343,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   changePassword?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationChangePasswordArgs, 'oldPassword' | 'newPassword'>>,
   twoFactorSet?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationTwoFactorSetArgs, 'secret' | 'code'>>,
   twoFactorUnset?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationTwoFactorUnsetArgs, 'code'>>,
-  impersonate?: Resolver<Maybe<ResolversTypes['ImpersonateReturn']>, ParentType, ContextType, RequireFields<MutationImpersonateArgs, 'accessToken' | 'username'>>,
+  impersonate?: Resolver<Maybe<ResolversTypes['ImpersonateReturn']>, ParentType, ContextType, RequireFields<MutationImpersonateArgs, 'accessToken' | 'impersonated'>>,
   refreshTokens?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationRefreshTokensArgs, 'accessToken' | 'refreshToken'>>,
   logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   authenticate?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationAuthenticateArgs, 'serviceName' | 'params'>>,

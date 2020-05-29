@@ -106,7 +106,7 @@ describe('RestClient', () => {
   describe('impersonate', () => {
     it('should call fetch with impersonate path', () =>
       restClient
-        .impersonate('token', { id: 'user' })
+        .impersonate('token', { userId: 'user' })
         .then(() =>
           expect((window.fetch as jest.Mock).mock.calls[0][0]).toBe(
             'http://localhost:3000/accounts/impersonate'
