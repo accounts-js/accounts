@@ -1,5 +1,6 @@
 import {
   LoginResult,
+  ImpersonationUserIdentity,
   ImpersonationResult,
   CreateUser,
   User,
@@ -31,12 +32,5 @@ export interface TransportInterface {
   resetPassword(token: string, newPassword: string): Promise<LoginResult | null>;
   addEmail(newEmail: string): Promise<void>;
   changePassword(oldPassword: string, newPassword: string): Promise<void>;
-  impersonate(
-    token: string,
-    impersonated: {
-      userId?: string;
-      username?: string;
-      email?: string;
-    }
-  ): Promise<ImpersonationResult>;
+  impersonate(token: string, impersonated: ImpersonationUserIdentity): Promise<ImpersonationResult>;
 }

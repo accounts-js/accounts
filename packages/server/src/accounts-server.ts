@@ -6,6 +6,7 @@ import {
   LoginResult,
   Tokens,
   Session,
+  ImpersonationUserIdentity,
   ImpersonationResult,
   HookListener,
   DatabaseInterface,
@@ -256,11 +257,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
    */
   public async impersonate(
     accessToken: string,
-    impersonated: {
-      userId?: string;
-      username?: string;
-      email?: string;
-    },
+    impersonated: ImpersonationUserIdentity,
     infos: ConnectionInformations
   ): Promise<ImpersonationResult> {
     try {

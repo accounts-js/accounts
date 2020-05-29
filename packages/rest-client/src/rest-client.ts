@@ -4,8 +4,8 @@ import {
   User,
   LoginResult,
   CreateUser,
+  ImpersonationUserIdentity,
   ImpersonationResult,
-  LoginUserIdentity,
   CreateUserResult,
 } from '@accounts/types';
 import { AccountsJsError } from './accounts-error';
@@ -91,7 +91,7 @@ export class RestClient implements TransportInterface {
 
   public impersonate(
     accessToken: string,
-    impersonated: LoginUserIdentity,
+    impersonated: ImpersonationUserIdentity,
     customHeaders?: object
   ): Promise<ImpersonationResult> {
     const args = {
