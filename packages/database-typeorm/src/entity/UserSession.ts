@@ -22,10 +22,10 @@ export class UserSession {
   @Column()
   public valid!: boolean;
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true })
   public userAgent?: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true })
   public ip?: string | null;
 
   @Column('jsonb', { nullable: true })
