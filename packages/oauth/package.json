@@ -1,6 +1,6 @@
 {
   "name": "@accounts/oauth",
-  "version": "0.26.0",
+  "version": "0.27.0",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -18,11 +18,11 @@
     "preset": "ts-jest"
   },
   "dependencies": {
-    "@accounts/types": "^0.26.0",
+    "@accounts/types": "^0.27.0",
     "tslib": "1.11.2"
   },
   "devDependencies": {
-    "@accounts/server": "^0.26.0",
+    "@accounts/server": "^0.27.0",
     "@types/jest": "25.2.1",
     "@types/node": "13.13.5",
     "jest": "26.0.1"
