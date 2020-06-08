@@ -47,7 +47,8 @@ import accountsBoost from `@accounts/boost`;
 
   const accounts = await accountsBoost({
     tokenSecret: 'your secret'
-  }).listen({
+  });
+  const accountsServer = await accounts.listen({
     port: 4003
   });
 
