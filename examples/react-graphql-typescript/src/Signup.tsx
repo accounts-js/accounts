@@ -62,7 +62,10 @@ const Signup = ({ history }: RouteComponentProps<{}>) => {
         <Input
           id="firstName"
           value={user.firstName}
-          onChange={e => setUser(prevState => ({ ...prevState, firstName: e.target.value }))}
+          onChange={(e) => {
+            const firstName = e.target.value;
+            return setUser((prevState) => ({ ...prevState, firstName }));
+          }}
         />
       </FormControl>
       <FormControl margin="normal">
@@ -70,7 +73,10 @@ const Signup = ({ history }: RouteComponentProps<{}>) => {
         <Input
           id="lastName"
           value={user.lastName}
-          onChange={e => setUser(prevState => ({ ...prevState, lastName: e.target.value }))}
+          onChange={(e) => {
+            const lastName = e.target.value;
+            return setUser((prevState) => ({ ...prevState, lastName }));
+          }}
         />
       </FormControl>
       <FormControl margin="normal">
@@ -78,7 +84,10 @@ const Signup = ({ history }: RouteComponentProps<{}>) => {
         <Input
           id="email"
           value={user.email}
-          onChange={e => setUser(prevState => ({ ...prevState, email: e.target.value }))}
+          onChange={(e) => {
+            const email = e.target.value;
+            return setUser((prevState) => ({ ...prevState, email }));
+          }}
         />
       </FormControl>
       <FormControl margin="normal">
@@ -87,7 +96,10 @@ const Signup = ({ history }: RouteComponentProps<{}>) => {
           id="password"
           type="password"
           value={user.password}
-          onChange={e => setUser(prevState => ({ ...prevState, password: e.target.value }))}
+          onChange={(e) => {
+            const password = e.target.value;
+            return setUser((prevState) => ({ ...prevState, password }));
+          }}
         />
       </FormControl>
       <Button variant="contained" color="primary" type="submit">
