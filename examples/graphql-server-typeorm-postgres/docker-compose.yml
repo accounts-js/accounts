@@ -11,3 +11,4 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: accounts
       SESSION_SECRET: 'very-secret'
+      POSTGRES_HOST_AUTH_METHOD: 'trust'
