@@ -8,7 +8,6 @@
     "start-only": "NODE_ENV=development nodemon -w src -x ts-node src/index.ts",
     "start": "yarn start-only",
     "start-services": "docker-compose up -d",
-    "prestart": "yarn start-services",
     "build": "tsc",
     "test": "yarn build"
   },
