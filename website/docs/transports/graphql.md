@@ -30,16 +30,16 @@ yarn add @accounts/server @accounts/graphql-api @graphql-modules/core
 Start by configuring your `AccountsServer` as you wish. For example, using MongoDB:
 
 ```js
-import mongoose from 'mongoose'
-import AccountsServer from '@accounts/server'
-import AccountsPassword from '@accounts/password'
-import MongoDBInterface from '@accounts/mongo'
+import mongoose from 'mongoose';
+import AccountsServer from '@accounts/server';
+import AccountsPassword from '@accounts/password';
+import MongoDBInterface from '@accounts/mongo';
 
-const db = mongoose.connection
+const db = mongoose.connection;
 
-const password = new AccountsPassword()
+const password = new AccountsPassword();
 
-const accountsServer = new AccountsServer({
+const accountsServer = new AccountsServer(
   {
     db: new MongoDBInterface(db),
     tokenSecret: 'SECRET',
@@ -47,7 +47,7 @@ const accountsServer = new AccountsServer({
   {
     password,
   }
-});
+);
 ```
 
 Next, import `AccountsModule` method from this package, and run it with your `AccountsServer`:
@@ -58,14 +58,13 @@ import { AccountsModule } from '@accounts/graphql-api';
 const accountsGraphQL = AccountsModule.forRoot({ accountsServer });
 ```
 
-Now, add `accountsGraphQL.typeDefs` to your schema definition (just before using it with `makeExecutableSchema`), and extend your resolvers object with `accountsGraphQL.resolvers`, for example:
+Now, add `accountsGraphQL.typeDefs` to your schema definition, and extend your resolvers object with `accountsGraphQL.resolvers`, for example:
 
 ```js
-import { makeExecutableSchema } from 'graphql-tools';
-import { mergeTypeDefs } from 'graphql-toolkit';
+import { ApolloServer } from 'apollo-server';
+import { mergeResolvers, mergeTypeDefs } from 'graphql-toolkit';
 
-const typeDefs = [
-  `
+const typeDefs = `
   type Query {
     myQuery: String
   }
@@ -73,14 +72,7 @@ const typeDefs = [
   type Mutation {
     myMutation: String
   }
-
-  schema {
-      query: Query,
-      mutation: Mutation
-  }
-  `,
-  accountsGraphQL.typeDefs,
-];
+`;
 
 let myResolvers = {
   Query: {
@@ -91,30 +83,28 @@ let myResolvers = {
   },
 };
 
-const schema = makeExecutableSchema({
-  resolvers: mergeTypeDefs(accountsGraphQL.resolvers, myResolvers),
-  typeDefs,
+const server = new ApolloServer({
+  typeDefs: mergeTypeDefs([typeDefs, accountsGraphQL.typeDefs]),
+  resolvers: mergeResolvers([accountsGraphQL.resolvers, myResolvers]),
 });
 ```
 
-The last step is to extend your `graphqlExpress` with a context middleware, that extracts the authentication token from the HTTP request, so AccountsServer will automatically validate it:
+The last step is to add to your `ApolloServer`the accounts context - it will extract the authentication token from the HTTP request, so AccountsServer will automatically validate it:
 
 ```js
-import { accountsContext } from '@accounts/graphql-api';
-
-app.use(
-  GRAPHQL_ROUTE,
-  bodyParser.json(),
-  graphqlExpress((request) => {
-    return {
-      context: {
-        ...accountsGraphQL.context(request),
-        // your context
-      },
-      schema,
-    };
+const server = new ApolloServer({
+  typeDefs,
+  resolvers: mergeResolvers([accountsGraphQL.resolvers, myResolvers]),
+  context: (req) => ({
+    ...accountsGraphQL.context(req),
+    // your context
   })
-);
+});
+
+// The `listen` method launches a web server.
+server.listen().then(({ url }) => {
+  console.log(`🚀  Server ready at ${url}`);
+});
 ```
 
 ## Authenticating Resolvers
