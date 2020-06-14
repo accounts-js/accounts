@@ -89,7 +89,7 @@ const server = new ApolloServer({
 });
 ```
 
-The last step is to add to your `ApolloServer`the accounts context - it will extract the authentication token from the HTTP request, so AccountsServer will automatically validate it:
+The last step is to add to your `ApolloServer`, the accounts context. It will extract the authentication token from the HTTP request, so that AccountsServer will automatically validate it:
 
 ```js
 const server = new ApolloServer({
