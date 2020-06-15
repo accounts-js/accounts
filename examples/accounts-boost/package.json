@@ -17,7 +17,7 @@
     "@graphql-toolkit/schema-merging": "0.10.6",
     "apollo-link-context": "1.0.20",
     "apollo-link-http": "1.5.17",
-    "apollo-server": "2.13.0",
+    "apollo-server": "2.14.4",
     "graphql": "14.6.0",
     "graphql-tools": "5.0.0",
     "lodash": "4.17.15",

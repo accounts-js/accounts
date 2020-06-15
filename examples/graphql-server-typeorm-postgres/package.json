@@ -19,7 +19,7 @@
     "@accounts/typeorm": "^0.27.0",
     "@graphql-modules/core": "0.7.16",
     "@graphql-toolkit/schema-merging": "0.10.6",
-    "apollo-server": "2.13.0",
+    "apollo-server": "2.14.4",
     "graphql": "14.6.0",
     "pg": "8.1.0",
     "typeorm": "0.2.25"
