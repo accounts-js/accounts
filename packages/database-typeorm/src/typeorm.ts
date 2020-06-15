@@ -194,7 +194,7 @@ export class AccountsTypeorm implements DatabaseInterface {
   public async setService(
     userId: string,
     serviceName: string,
-    data: object,
+    data: Record<string, unknown>,
     token?: string
   ): Promise<void> {
     let service = await this.getService(userId, serviceName);
@@ -388,7 +388,7 @@ export class AccountsTypeorm implements DatabaseInterface {
     userId: string,
     token: string,
     connection: ConnectionInformations = {},
-    extra?: object
+    extra?: Record<string, unknown>
   ) {
     const user = await this.findUserById(userId);
     const session = new this.options.userSessionEntity();

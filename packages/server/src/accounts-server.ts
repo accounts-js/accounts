@@ -609,7 +609,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     pathFragment: string,
     emailTemplate: EmailTemplateType,
     from: string
-  ): object {
+  ): Record<string, unknown> {
     const tokenizedUrl = this.defaultCreateTokenizedUrl(pathFragment, token);
     return {
       from: emailTemplate.from || from,

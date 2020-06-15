@@ -8,4 +8,4 @@ export type PrepareMailFunction = (
   pathFragment: string,
   emailTemplate: EmailTemplateType,
   from: string
-) => object;
+) => Record<string, unknown>;

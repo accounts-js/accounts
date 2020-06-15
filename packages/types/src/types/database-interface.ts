@@ -15,7 +15,7 @@ export interface DatabaseInterface<CustomUser extends User = User>
   // Auth services related operations
   findUserByServiceId(serviceName: string, serviceId: string): Promise<CustomUser | null>;
 
-  setService(userId: string, serviceName: string, data: object): Promise<void>;
+  setService(userId: string, serviceName: string, data: Record<string, unknown>): Promise<void>;
 
   unsetService(userId: string, serviceName: string): Promise<void>;
 

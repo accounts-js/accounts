@@ -10,7 +10,7 @@ export interface DatabaseInterfaceSessions {
     userId: string,
     token: string,
     connection: ConnectionInformations,
-    extraData?: object
+    extraData?: Record<string, unknown>
   ): Promise<string>;
 
   updateSession(

@@ -14,13 +14,13 @@ export interface TransportInterface {
   authenticateWithService(
     service: string,
     authenticateParams: {
-      [key: string]: string | object;
+      [key: string]: string | Record<string, unknown>;
     }
   ): Promise<boolean>;
   loginWithService(
     service: string,
     authenticateParams: {
-      [key: string]: string | object;
+      [key: string]: string | Record<string, unknown>;
     }
   ): Promise<LoginResult>;
   logout(): Promise<void>;

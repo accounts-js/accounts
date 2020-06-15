@@ -27,7 +27,11 @@ export class RestClient implements TransportInterface {
     this.options = options;
   }
 
-  public async fetch(route: string, args: object, customHeaders: object = {}): Promise<any> {
+  public async fetch(
+    route: string,
+    args: Record<string, unknown>,
+    customHeaders: Record<string, unknown> = {}
+  ): Promise<any> {
     const fetchOptions = {
       headers: this._loadHeadersObject(customHeaders),
       ...args,
@@ -53,7 +57,11 @@ export class RestClient implements TransportInterface {
     }
   }
 
-  public async authFetch(route: string, args: object, customHeaders: object = {}): Promise<any> {
+  public async authFetch(
+    route: string,
+    args: Record<string, unknown>,
+    customHeaders: Record<string, unknown> = {}
+  ): Promise<any> {
     const tokens = await this.client.refreshSession();
     return this.fetch(route, args, {
       ...customHeaders,
@@ -64,7 +72,7 @@ export class RestClient implements TransportInterface {
   public authenticateWithService(
     provider: string,
     data: any,
-    customHeaders?: object
+    customHeaders?: Record<string, unknown>
   ): Promise<boolean> {
     const args = {
       method: 'POST',
@@ -78,7 +86,7 @@ export class RestClient implements TransportInterface {
   public loginWithService(
     provider: string,
     data: any,
-    customHeaders?: object
+    customHeaders?: Record<string, unknown>
   ): Promise<LoginResult> {
     const args = {
       method: 'POST',
@@ -92,7 +100,7 @@ export class RestClient implements TransportInterface {
   public impersonate(
     accessToken: string,
     impersonated: ImpersonationUserIdentity,
-    customHeaders?: object
+    customHeaders?: Record<string, unknown>
   ): Promise<ImpersonationResult> {
     const args = {
       method: 'POST',
@@ -107,7 +115,7 @@ export class RestClient implements TransportInterface {
   public refreshTokens(
     accessToken: string,
     refreshToken: string,
-    customHeaders?: object
+    customHeaders?: Record<string, unknown>
   ): Promise<LoginResult> {
     const args = {
       method: 'POST',
@@ -119,7 +127,7 @@ export class RestClient implements TransportInterface {
     return this.fetch('refreshTokens', args, customHeaders);
   }
 
-  public logout(customHeaders?: object): Promise<void> {
+  public logout(customHeaders?: Record<string, unknown>): Promise<void> {
     const args = {
       method: 'POST',
       body: JSON.stringify({}),
@@ -127,7 +135,7 @@ export class RestClient implements TransportInterface {
     return this.authFetch('logout', args, customHeaders);
   }
 
-  public async getUser(customHeaders?: object): Promise<User> {
+  public async getUser(customHeaders?: Record<string, unknown>): Promise<User> {
     const args = {
       method: 'POST',
       body: JSON.stringify({}),
@@ -135,7 +143,10 @@ export class RestClient implements TransportInterface {
     return this.authFetch('user', args, customHeaders);
   }
 
-  public async createUser(user: CreateUser, customHeaders?: object): Promise<CreateUserResult> {
+  public async createUser(
+    user: CreateUser,
+    customHeaders?: Record<string, unknown>
+  ): Promise<CreateUserResult> {
     const args = {
       method: 'POST',
       body: JSON.stringify({ user }),
@@ -146,7 +157,7 @@ export class RestClient implements TransportInterface {
   public resetPassword(
     token: string,
     newPassword: string,
-    customHeaders?: object
+    customHeaders?: Record<string, unknown>
   ): Promise<LoginResult | null> {
     const args = {
       method: 'POST',
@@ -158,7 +169,7 @@ export class RestClient implements TransportInterface {
     return this.fetch('password/resetPassword', args, customHeaders);
   }
 
-  public verifyEmail(token: string, customHeaders?: object): Promise<void> {
+  public verifyEmail(token: string, customHeaders?: Record<string, unknown>): Promise<void> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
@@ -168,7 +179,10 @@ export class RestClient implements TransportInterface {
     return this.fetch('password/verifyEmail', args, customHeaders);
   }
 
-  public sendVerificationEmail(email: string, customHeaders?: object): Promise<void> {
+  public sendVerificationEmail(
+    email: string,
+    customHeaders?: Record<string, unknown>
+  ): Promise<void> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
@@ -178,7 +192,10 @@ export class RestClient implements TransportInterface {
     return this.fetch('password/sendVerificationEmail', args, customHeaders);
   }
 
-  public sendResetPasswordEmail(email: string, customHeaders?: object): Promise<void> {
+  public sendResetPasswordEmail(
+    email: string,
+    customHeaders?: Record<string, unknown>
+  ): Promise<void> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
@@ -188,7 +205,7 @@ export class RestClient implements TransportInterface {
     return this.fetch('password/sendResetPasswordEmail', args, customHeaders);
   }
 
-  public addEmail(newEmail: string, customHeaders?: object): Promise<void> {
+  public addEmail(newEmail: string, customHeaders?: Record<string, unknown>): Promise<void> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
@@ -201,7 +218,7 @@ export class RestClient implements TransportInterface {
   public changePassword(
     oldPassword: string,
     newPassword: string,
-    customHeaders?: object
+    customHeaders?: Record<string, unknown>
   ): Promise<void> {
     const args = {
       method: 'POST',
@@ -213,14 +230,18 @@ export class RestClient implements TransportInterface {
     return this.authFetch('password/changePassword', args, customHeaders);
   }
 
-  public getTwoFactorSecret(customHeaders?: object): Promise<any> {
+  public getTwoFactorSecret(customHeaders?: Record<string, unknown>): Promise<any> {
     const args = {
       method: 'POST',
     };
     return this.fetch('password/twoFactorSecret', args, customHeaders);
   }
 
-  public twoFactorSet(secret: any, code: string, customHeaders?: object): Promise<void> {
+  public twoFactorSet(
+    secret: any,
+    code: string,
+    customHeaders?: Record<string, unknown>
+  ): Promise<void> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
@@ -231,7 +252,7 @@ export class RestClient implements TransportInterface {
     return this.authFetch('password/twoFactorSet', args, customHeaders);
   }
 
-  public twoFactorUnset(code: string, customHeaders?: object): Promise<void> {
+  public twoFactorUnset(code: string, customHeaders?: Record<string, unknown>): Promise<void> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
@@ -241,7 +262,7 @@ export class RestClient implements TransportInterface {
     return this.authFetch('password/twoFactorUnset', args, customHeaders);
   }
 
-  private _loadHeadersObject(plainHeaders: object): { [key: string]: string } {
+  private _loadHeadersObject(plainHeaders: Record<string, unknown>): { [key: string]: string } {
     if (isPlainObject(plainHeaders)) {
       const customHeaders = headers;
       forIn(plainHeaders, (v: string, k: string) => {

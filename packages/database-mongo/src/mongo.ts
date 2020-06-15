@@ -268,7 +268,11 @@ export class Mongo implements DatabaseInterface {
     }
   }
 
-  public async setService(userId: string, serviceName: string, service: object): Promise<void> {
+  public async setService(
+    userId: string,
+    serviceName: string,
+    service: Record<string, unknown>
+  ): Promise<void> {
     const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
     await this.collection.updateOne(
       { _id: id },
@@ -313,7 +317,7 @@ export class Mongo implements DatabaseInterface {
     userId: string,
     token: string,
     connection: ConnectionInformations = {},
-    extraData?: object
+    extraData?: Record<string, unknown>
   ): Promise<string> {
     const session = {
       userId,
@@ -369,7 +373,7 @@ export class Mongo implements DatabaseInterface {
   }
 
   public async invalidateAllSessions(userId: string, excludedSessionIds?: string[]): Promise<void> {
-    const selector: { userId: string; _id?: object } = { userId };
+    const selector: { userId: string; _id?: Record<string, unknown> } = { userId };
 
     if (excludedSessionIds && excludedSessionIds.length > 0) {
       let excludedObjectIds: string[] | ObjectID[] = excludedSessionIds;

@@ -32,7 +32,7 @@ export class RedisSessions implements DatabaseInterfaceSessions {
     token: string,
     connection: ConnectionInformations = {},
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    extraData?: object
+    extraData?: Record<string, unknown>
   ): Promise<string> {
     const sessionId = this.options.idProvider();
     const pipeline = this.db.pipeline();

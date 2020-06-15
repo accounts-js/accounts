@@ -35,7 +35,7 @@ export interface AccountsMongoOptions {
   /**
    * Function that generate the id for new objects.
    */
-  idProvider?: () => string | object;
+  idProvider?: () => string | Record<string, unknown>;
   /**
    * Function that generate the date for the timestamps.
    * Default to `(date?: Date) => (date ? date.getTime() : Date.now())`.
@@ -44,7 +44,7 @@ export interface AccountsMongoOptions {
 }
 
 export interface MongoUser {
-  _id?: string | object;
+  _id?: string | Record<string, unknown>;
   username?: string;
   services: {
     password?: {

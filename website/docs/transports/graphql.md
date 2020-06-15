@@ -96,9 +96,9 @@ const server = new ApolloServer({
   typeDefs,
   resolvers: mergeResolvers([accountsGraphQL.resolvers, myResolvers]),
   context: (req) => ({
-    ...accountsGraphQL.context(req),
+    ...await accountsGraphQL.context({ req }),
     // your context
-  })
+  }),
 });
 
 // The `listen` method launches a web server.
