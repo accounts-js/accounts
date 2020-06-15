@@ -37,6 +37,6 @@
     "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
     "tslib": "1.11.2",
-    "typeorm": "^0.2.22"
+    "typeorm": "^0.2.25"
   }
 }

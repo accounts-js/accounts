@@ -22,7 +22,7 @@
     "apollo-server": "2.13.0",
     "graphql": "14.6.0",
     "pg": "8.1.0",
-    "typeorm": "0.2.24"
+    "typeorm": "0.2.25"
   },
   "devDependencies": {
     "@accounts/types": "^0.27.0",
