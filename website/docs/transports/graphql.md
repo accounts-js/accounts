@@ -96,7 +96,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers: mergeResolvers([accountsGraphQL.resolvers, myResolvers]),
   context: (req) => ({
-    ...await accountsGraphQL.context({ req }),
+    ...await accountsGraphQL.context(req),
     // your context
   }),
 });
