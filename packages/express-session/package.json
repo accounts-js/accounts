@@ -53,6 +53,6 @@
     "@accounts/types": "^0.27.0",
     "lodash": "^4.17.15",
     "request-ip": "^2.1.3",
-    "tslib": "1.11.2"
+    "tslib": "2.0.0"
   }
 }

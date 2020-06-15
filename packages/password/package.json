@@ -21,7 +21,7 @@
     "@accounts/two-factor": "^0.27.0",
     "bcryptjs": "^2.4.3",
     "lodash": "^4.17.15",
-    "tslib": "1.11.2"
+    "tslib": "2.0.0"
   },
   "devDependencies": {
     "@accounts/server": "^0.27.0",
