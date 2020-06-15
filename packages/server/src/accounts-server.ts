@@ -96,7 +96,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     return this.services;
   }
 
-  public getOptions(): AccountsServerOptions {
+  public getOptions(): AccountsServerOptions<CustomUser> {
     return this.options;
   }
 
@@ -609,7 +609,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     pathFragment: string,
     emailTemplate: EmailTemplateType,
     from: string
-  ): Record<string, unknown> {
+  ): object {
     const tokenizedUrl = this.defaultCreateTokenizedUrl(pathFragment, token);
     return {
       from: emailTemplate.from || from,

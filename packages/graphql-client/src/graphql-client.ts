@@ -27,7 +27,7 @@ import { verifyEmailMutation } from './graphql/verify-email.mutation';
 import { GraphQLErrorList } from './GraphQLErrorList';
 
 export interface AuthenticateParams {
-  [key: string]: string | Record<string, unknown>;
+  [key: string]: string | object;
 }
 
 export interface OptionsType {
@@ -71,7 +71,7 @@ export default class GraphQLClient implements TransportInterface {
    */
   public async authenticateWithService(
     service: string,
-    authenticateParams: { [key: string]: string | Record<string, unknown> }
+    authenticateParams: { [key: string]: string | object }
   ): Promise<boolean> {
     return this.mutate(authenticateWithServiceMutation, 'verifyAuthentication', {
       serviceName: service,

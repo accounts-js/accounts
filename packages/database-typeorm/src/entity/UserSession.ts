@@ -29,7 +29,7 @@ export class UserSession {
   public ip?: string | null;
 
   @Column('jsonb', { nullable: true })
-  public extra?: Record<string, unknown>;
+  public extra?: object;
 
   @CreateDateColumn()
   public createdAt!: string;

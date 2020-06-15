@@ -33,9 +33,9 @@ export const emailTemplates: EmailTemplatesType = {
   },
 };
 
-export type SendMailType = (mail: Record<string, unknown>) => Promise<void>;
+export type SendMailType = (mail: object) => Promise<void>;
 
-export const sendMail = async (mail: Record<string, unknown>): Promise<void> => {
+export const sendMail = async (mail: object): Promise<void> => {
   console.warn('No configuration for email, you must set an email configuration');
   console.warn('Documentation: https://www.accountsjs.com/docs/email');
   console.log(mail);
