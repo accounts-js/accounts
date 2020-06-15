@@ -96,7 +96,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     return this.services;
   }
 
-  public getOptions(): AccountsServerOptions {
+  public getOptions(): AccountsServerOptions<CustomUser> {
     return this.options;
   }
 
