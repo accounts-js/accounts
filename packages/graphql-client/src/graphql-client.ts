@@ -202,22 +202,24 @@ export default class GraphQLClient implements TransportInterface {
   /**
    * @inheritDoc
    */
-  public async mfaAssociate(type: string): Promise<void> {
+  public async mfaAssociate(type: string, params?: any): Promise<void> {
     return this.mutate(associateMutation(this.options.associateFieldsFragment), 'associate', {
       type,
+      params,
     });
   }
 
   /**
    * @inheritDoc
    */
-  public async mfaAssociateByMfaToken(mfaToken: string, type: string): Promise<any> {
+  public async mfaAssociateByMfaToken(mfaToken: string, type: string, params?: any): Promise<any> {
     return this.mutate(
       associateByMfaTokenMutation(this.options.associateFieldsFragment),
       'associateByMfaToken',
       {
         mfaToken,
         type,
+        params,
       }
     );
   }

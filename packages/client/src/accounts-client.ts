@@ -204,8 +204,12 @@ export class AccountsClient {
     return this.transport.mfaChallenge(mfaToken, authenticatorId);
   }
 
-  public mfaAssociate(type: string) {
-    return this.transport.mfaAssociate(type);
+  public mfaAssociate(type: string, params?: any) {
+    return this.transport.mfaAssociate(type, params);
+  }
+
+  public mfaAssociateByMfaToken(mfaToken: string, type: string, params?: any) {
+    return this.transport.mfaAssociateByMfaToken(mfaToken, type, params);
   }
 
   public authenticators() {
