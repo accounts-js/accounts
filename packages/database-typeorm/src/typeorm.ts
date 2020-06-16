@@ -1,4 +1,12 @@
-import { ConnectionInformations, CreateUser, DatabaseInterface } from '@accounts/types';
+import {
+  ConnectionInformations,
+  CreateUser,
+  DatabaseInterface,
+  CreateAuthenticator,
+  Authenticator,
+  CreateMfaChallenge,
+  MfaChallenge,
+} from '@accounts/types';
 import { Repository, getRepository, Not, In, FindOperator } from 'typeorm';
 import { User } from './entity/User';
 import { UserEmail } from './entity/UserEmail';

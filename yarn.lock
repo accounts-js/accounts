@@ -2,26 +2,6 @@
 # yarn lockfile v1
 
 
-"@accounts/server@^0.26.0-alpha.4":
-  version "0.26.0"
-  resolved "https://registry.yarnpkg.com/@accounts/server/-/server-0.26.0.tgz#ff344e0edf68fb5fedc9f58d079b024a68161966"
-  integrity sha512-p5cUh8vou1OFLuM4AGDFYn2z0/e4yHam9oR/gAdzJjFw+rezGmiJ3pYFwK5eAUkcK9aVU2b4KiUox99F7sdg0A==
-  dependencies:
-    "@accounts/types" "^0.26.0"
-    "@types/jsonwebtoken" "8.3.9"
-    emittery "0.5.1"
-    jsonwebtoken "8.5.1"
-    jwt-decode "2.2.0"
-    lodash "4.17.15"
-    tslib "1.11.2"
-
-"@accounts/types@^0.26.0", "@accounts/types@^0.26.0-alpha.4":
-  version "0.26.0"
-  resolved "https://registry.yarnpkg.com/@accounts/types/-/types-0.26.0.tgz#89defe77376a26b3df95360b1559bb63aece6875"
-  integrity sha512-zU11hUC79SDDUj4MGLPCf0XgEiow/gbpltJqC0nvQXx+K5COufulpfsuz0/b7aoBWclWfIAr4XYZ9lOR8ZLw6Q==
-  dependencies:
-    tslib "1.11.2"
-
 "@apollo/protobufjs@^1.0.3":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@apollo/protobufjs/-/protobufjs-1.0.4.tgz#cf01747a55359066341f31b5ce8db17df44244e0"

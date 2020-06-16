@@ -26,7 +26,7 @@ export const authenticatorsByMfaToken = (accountsServer: AccountsServer) => asyn
   res: express.Response
 ) => {
   try {
-    const { mfaToken } = req.query;
+    const { mfaToken } = req.query as { mfaToken: string };
 
     const userAuthenticators = await accountsServer.mfa.findUserAuthenticatorsByMfaToken(mfaToken);
     res.json(userAuthenticators);
