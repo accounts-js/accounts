@@ -470,6 +470,12 @@ export class AccountsTypeorm implements DatabaseInterface {
     throw new Error('Not implemented yet');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public async updateAuthenticator(authenticatorId: string): Promise<void> {
+    // TODO
+    throw new Error('Not implemented yet');
+  }
+
   /**
    * MFA challenges related operations
    */

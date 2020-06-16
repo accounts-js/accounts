@@ -534,6 +534,24 @@ export class Mongo implements DatabaseInterface {
     );
   }
 
+  public async updateAuthenticator(
+    authenticatorId: string,
+    data: Partial<Authenticator>
+  ): Promise<void> {
+    const id = this.options.convertAuthenticatorIdToMongoObjectId
+      ? toMongoID(authenticatorId)
+      : authenticatorId;
+    await this.authenticatorCollection.updateOne(
+      { _id: id },
+      {
+        $set: {
+          ...data,
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+        },
+      }
+    );
+  }
+
   /**
    * MFA challenges related operations
    */
@@ -578,7 +596,10 @@ export class Mongo implements DatabaseInterface {
     );
   }
 
-  public async updateMfaChallenge(mfaChallengeId: string, data: any): Promise<void> {
+  public async updateMfaChallenge(
+    mfaChallengeId: string,
+    data: Partial<MfaChallenge>
+  ): Promise<void> {
     const id = this.options.convertMfaChallengeIdToMongoObjectId
       ? toMongoID(mfaChallengeId)
       : mfaChallengeId;
