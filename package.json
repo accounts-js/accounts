@@ -44,6 +44,9 @@
     "trailingComma": "es5",
     "printWidth": 100
   },
+  "resolutions": {
+    "@types/react": "16.9.36"
+  },
   "renovate": {
     "extends": [
       "config:base",
