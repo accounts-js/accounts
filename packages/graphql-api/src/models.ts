@@ -13,6 +13,10 @@ export type Scalars = {
 };
 
 
+export type AssociateParamsInput = {
+  _?: Maybe<Scalars['String']>;
+};
+
 export type AssociationResult = OtpAssociationResult;
 
 export type AuthenticateParamsInput = {
@@ -115,12 +119,14 @@ export type MutationChallengeArgs = {
 
 export type MutationAssociateArgs = {
   type: Scalars['String'];
+  params?: Maybe<AssociateParamsInput>;
 };
 
 
 export type MutationAssociateByMfaTokenArgs = {
   mfaToken: Scalars['String'];
   type: Scalars['String'];
+  params?: Maybe<AssociateParamsInput>;
 };
 
 
@@ -332,6 +338,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>,
   ChallengeResult: ResolversTypes['DefaultChallengeResult'],
   DefaultChallengeResult: ResolverTypeWrapper<DefaultChallengeResult>,
+  AssociateParamsInput: AssociateParamsInput,
   AssociationResult: ResolversTypes['OTPAssociationResult'],
   OTPAssociationResult: ResolverTypeWrapper<OtpAssociationResult>,
   CreateUserInput: CreateUserInput,
@@ -360,6 +367,7 @@ export type ResolversParentTypes = {
   Mutation: {},
   ChallengeResult: ResolversParentTypes['DefaultChallengeResult'],
   DefaultChallengeResult: DefaultChallengeResult,
+  AssociateParamsInput: AssociateParamsInput,
   AssociationResult: ResolversParentTypes['OTPAssociationResult'],
   OTPAssociationResult: OtpAssociationResult,
   CreateUserInput: CreateUserInput,

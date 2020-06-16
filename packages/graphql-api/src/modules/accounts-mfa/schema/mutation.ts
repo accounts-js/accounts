@@ -7,9 +7,9 @@ export default (config: AccountsMfaModuleConfig) => gql`
     challenge(mfaToken: String!, authenticatorId: String!): ChallengeResult
 
     # Start the association of a new authenticator.
-    associate(type: String!): AssociationResult
+    associate(type: String!, params: AssociateParamsInput): AssociationResult
 
     # Start the association of a new authenticator, this method is called when the user is enforced to associate an authenticator before the first login.
-    associateByMfaToken(mfaToken: String!, type: String!): AssociationResult
+    associateByMfaToken(mfaToken: String!, type: String!, params: AssociateParamsInput): AssociationResult
   }
 `;

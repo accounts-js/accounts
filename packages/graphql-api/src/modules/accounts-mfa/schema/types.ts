@@ -21,4 +21,8 @@ export default gql`
   }
 
   union AssociationResult = OTPAssociationResult
+
+  input AssociateParamsInput {
+    _: String
+  }
 `;

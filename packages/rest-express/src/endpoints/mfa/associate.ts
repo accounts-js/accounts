@@ -18,11 +18,11 @@ export const associate = (accountsServer: AccountsServer) => async (
     const userAgent = getUserAgent(req);
     const ip = requestIp.getClientIp(req);
 
-    const { type } = req.body;
+    const { type, params } = req.body;
     const mfaAssociateResult = await accountsServer.mfa.associate(
       (req as any).userId,
       type,
-      req.body,
+      params,
       { userAgent, ip }
     );
     res.json(mfaAssociateResult);
@@ -39,11 +39,11 @@ export const associateByMfaToken = (accountsServer: AccountsServer) => async (
     const userAgent = getUserAgent(req);
     const ip = requestIp.getClientIp(req);
 
-    const { mfaToken, type } = req.body;
+    const { mfaToken, type, params } = req.body;
     const mfaAssociateResult = await accountsServer.mfa.associateByMfaToken(
       mfaToken,
       type,
-      req.body,
+      params,
       { userAgent, ip }
     );
     res.json(mfaAssociateResult);
