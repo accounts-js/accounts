@@ -1,6 +1,6 @@
 {
   "name": "@accounts/two-factor",
-  "version": "0.27.0",
+  "version": "0.28.0-alpha.0",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -22,7 +22,7 @@
     "preset": "ts-jest"
   },
   "dependencies": {
-    "@accounts/types": "^0.27.0",
+    "@accounts/types": "^0.28.0-alpha.0",
     "@types/lodash": "^4.14.138",
     "@types/speakeasy": "2.0.2",
     "lodash": "^4.17.15",
