@@ -1,11 +1,12 @@
 import {
-  AuthenticationResult,
+  LoginResult,
+  ImpersonationUserIdentity,
   ImpersonationResult,
   CreateUser,
   User,
   CreateUserResult,
   Authenticator,
-  LoginResult,
+  AuthenticationResult,
 } from '@accounts/types';
 import { AccountsClient } from './accounts-client';
 
@@ -33,14 +34,7 @@ export interface TransportInterface extends TransportMfaInterface {
   resetPassword(token: string, newPassword: string): Promise<LoginResult | null>;
   addEmail(newEmail: string): Promise<void>;
   changePassword(oldPassword: string, newPassword: string): Promise<void>;
-  impersonate(
-    token: string,
-    impersonated: {
-      userId?: string;
-      username?: string;
-      email?: string;
-    }
-  ): Promise<ImpersonationResult>;
+  impersonate(token: string, impersonated: ImpersonationUserIdentity): Promise<ImpersonationResult>;
 }
 
 /**

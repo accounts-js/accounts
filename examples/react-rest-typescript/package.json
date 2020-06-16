@@ -1,6 +1,6 @@
 {
   "name": "@examples/react-rest-typescript",
-  "version": "0.26.0-alpha.4",
+  "version": "0.27.0",
   "private": true,
   "scripts": {
     "start": "SKIP_PREFLIGHT_CHECK=true react-scripts start",
@@ -24,27 +24,27 @@
     ]
   },
   "dependencies": {
-    "@accounts/client": "^0.26.0-alpha.4",
-    "@accounts/client-password": "^0.26.0-alpha.4",
-    "@accounts/rest-client": "^0.26.0-alpha.4",
-    "@material-ui/core": "4.9.11",
+    "@accounts/client": "^0.27.0",
+    "@accounts/client-password": "^0.27.0",
+    "@accounts/rest-client": "^0.27.0",
+    "@material-ui/core": "4.9.13",
     "@material-ui/icons": "4.9.1",
     "@material-ui/lab": "4.0.0-alpha.50",
-    "@material-ui/styles": "4.9.10",
+    "@material-ui/styles": "4.9.13",
     "formik": "2.1.4",
     "qrcode.react": "1.0.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-router-dom": "5.1.2",
-    "tslib": "1.10.0"
+    "tslib": "2.0.0"
   },
   "devDependencies": {
-    "@types/node": "13.13.2",
+    "@types/node": "14.0.13",
     "@types/qrcode.react": "1.0.0",
-    "@types/react": "16.9.34",
-    "@types/react-dom": "16.9.6",
-    "@types/react-router": "5.1.5",
-    "@types/react-router-dom": "5.1.4",
+    "@types/react": "16.9.36",
+    "@types/react-dom": "16.9.8",
+    "@types/react-router": "5.1.7",
+    "@types/react-router-dom": "5.1.5",
     "react-scripts": "3.4.1",
     "typescript": "3.7.5"
   }

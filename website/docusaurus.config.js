@@ -8,7 +8,7 @@
 module.exports = {
   title: 'accounts-js',
   tagline: 'Fullstack authentication and accounts-management for Javascript',
-  url: 'https://accounts-js.netlify.com',
+  url: 'https://www.accountsjs.com',
   baseUrl: '/',
   favicon: 'img/favicon.png',
   organizationName: 'accounts-js',
@@ -20,6 +20,10 @@ module.exports = {
     algolia: {
       apiKey: 'c872074b5f5ecd186d94d7c19b27d757',
       indexName: 'accounts',
+    },
+    fathomAnalytics: {
+      siteId: 'NZPJJZTJ',
+      customDomain: 'https://goose.accountsjs.com',
     },
     navbar: {
       logo: {
@@ -66,6 +70,8 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
+          editUrl: 'https://github.com/accounts-js/accounts/edit/master/website/',
+          showLastUpdateTime: true,
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -73,4 +79,5 @@ module.exports = {
       },
     ],
   ],
+  plugins: ['docusaurus-plugin-fathom'],
 };

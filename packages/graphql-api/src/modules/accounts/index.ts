@@ -1,5 +1,8 @@
 import { GraphQLModule } from '@graphql-modules/core';
+import { mergeTypeDefs } from '@graphql-toolkit/schema-merging';
+import { User, ConnectionInformations } from '@accounts/types';
 import { AccountsServer } from '@accounts/server';
+import AccountsPassword from '@accounts/password';
 import { IncomingMessage } from 'http';
 import TypesTypeDefs from './schema/types';
 import getQueryTypeDefs from './schema/query';
@@ -8,13 +11,10 @@ import getSchemaDef from './schema/schema-def';
 import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
 import { User as UserResolvers } from './resolvers/user';
-import { User } from '@accounts/types';
 import { AccountsPasswordModule } from '../accounts-password';
 import { AccountsMfaModule } from '../accounts-mfa';
 import { AuthenticatedDirective } from '../../utils/authenticated-directive';
 import { context } from '../../utils';
-import AccountsPassword from '@accounts/password';
-import { mergeTypeDefs } from 'graphql-toolkit';
 import { CoreAccountsModule } from '../core';
 
 export interface AccountsRequest {
@@ -34,10 +34,11 @@ export interface AccountsModuleConfig {
 
 export interface AccountsModuleContext<IUser = User> {
   authToken?: string;
-  userAgent: string;
-  ip: string;
   user?: IUser;
   userId?: string;
+  userAgent: string | null;
+  ip: string | null;
+  infos: ConnectionInformations;
 }
 
 // You can see the below. It is really easy to create a reusable GraphQL-Module with different configurations

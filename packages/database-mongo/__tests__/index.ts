@@ -723,6 +723,53 @@ describe('Mongo', () => {
       expect(session2!.valid).toEqual(false);
       expect(session2!.createdAt).not.toEqual(session2!.updatedAt);
     });
+
+    it('invalidates all sessions except given list', async () => {
+      const sessionId1 = await databaseTests.database.createSession(
+        session.userId,
+        generateRandomToken(),
+        {
+          ip: session.ip,
+          userAgent: session.userAgent,
+        }
+      );
+      const sessionId2 = await databaseTests.database.createSession(
+        session.userId,
+        generateRandomToken(),
+        {
+          ip: session.ip,
+          userAgent: session.userAgent,
+        }
+      );
+      const sessionId3 = await databaseTests.database.createSession(
+        session.userId,
+        generateRandomToken(),
+        {
+          ip: session.ip,
+          userAgent: session.userAgent,
+        }
+      );
+      const sessionId4 = await databaseTests.database.createSession(
+        session.userId,
+        generateRandomToken(),
+        {
+          ip: session.ip,
+          userAgent: session.userAgent,
+        }
+      );
+      await delay(10);
+      await databaseTests.database.invalidateAllSessions(session.userId, [sessionId2, sessionId4]);
+
+      const session1 = await databaseTests.database.findSessionById(sessionId1);
+      const session2 = await databaseTests.database.findSessionById(sessionId2);
+      const session3 = await databaseTests.database.findSessionById(sessionId3);
+      const session4 = await databaseTests.database.findSessionById(sessionId4);
+
+      expect(session1!.valid).toEqual(false);
+      expect(session2!.valid).toEqual(true);
+      expect(session3!.valid).toEqual(false);
+      expect(session4!.valid).toEqual(true);
+    });
   });
 
   describe('removeAllResetPasswordTokens', () => {

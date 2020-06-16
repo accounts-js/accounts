@@ -3,7 +3,7 @@ import { AccountsModuleConfig } from '..';
 
 export default (config: AccountsModuleConfig) => gql`
   ${config.extendTypeDefs ? 'extend' : ''} type ${config.rootMutationName || 'Mutation'} {
-    impersonate(accessToken: String!, username: String!): ImpersonateReturn
+    impersonate(accessToken: String!, impersonated: ImpersonationUserIdentityInput!): ImpersonateReturn
     refreshTokens(accessToken: String!, refreshToken: String!): LoginResult
     logout: Boolean
 

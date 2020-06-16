@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as requestIp from 'request-ip';
 import { AccountsServer } from '@accounts/server';
-import { LoginUserIdentity } from '@accounts/types';
+import { ImpersonationUserIdentity } from '@accounts/types';
 import { getUserAgent } from '../utils/get-user-agent';
 import { sendError } from '../utils/send-error';
 
@@ -15,7 +15,7 @@ export const impersonate = (accountsServer: AccountsServer) => async (
       accessToken,
     }: {
       accessToken: string;
-      impersonated: LoginUserIdentity;
+      impersonated: ImpersonationUserIdentity;
     } = req.body;
     const userAgent = getUserAgent(req);
     const ip = requestIp.getClientIp(req);

@@ -1,6 +1,6 @@
 {
   "name": "@accounts/graphql-client",
-  "version": "0.26.0-alpha.4",
+  "version": "0.27.0",
   "description": "GraphQL client transport for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -25,15 +25,15 @@
   },
   "homepage": "https://github.com/js-accounts/graphql#readme",
   "devDependencies": {
-    "@types/jest": "25.1.4",
-    "jest": "25.1.0",
+    "@types/jest": "25.2.1",
+    "jest": "26.0.1",
     "lodash": "4.17.15"
   },
   "dependencies": {
-    "@accounts/client": "^0.26.0-alpha.4",
-    "@accounts/types": "^0.26.0-alpha.4",
+    "@accounts/client": "^0.27.0",
+    "@accounts/types": "^0.27.0",
     "graphql-tag": "^2.10.0",
-    "tslib": "1.10.0"
+    "tslib": "2.0.0"
   },
   "peerDependencies": {
     "graphql": "^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0"

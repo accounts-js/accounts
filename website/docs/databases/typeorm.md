@@ -4,78 +4,76 @@ title: TypeORM
 sidebar_label: TypeORM
 ---
 
-TypeORM data store for accounts-js
-
-[Github](https://github.com/accounts-js/accounts/tree/master/packages/database-mongo) |
-[npm](https://www.npmjs.com/package/@accounts/typeorm)
+A database adapter for [PostgreSQL](https://www.postgresql.org/) using [TypeORM](https://typeorm.io/)
 
 > It is our long-term goal for typeorm package to be database agnostic and support all database types it does by default.
 > For now it only works and has been tested with PostgreSQL, feel free to explore other typeorm-integrations.
 
-## Install
+## Installation
 
-```javascript
+```
 yarn add @accounts/typeorm typeorm pg
 ```
 
 ## Usage
 
 ```typescript
-import AccountsServer from '@accounts/server';
-import typeorm from '@accounts/typeorm';
 import { createConnection } from 'typeorm';
+import { AccountsServer } from '@accounts/server';
+import { AccountsTypeorm, entities } from '@accounts/typeorm';
 
-export const createAccounts = async () => {
-  const connection = await connect(process.env.DATABASE_URL);
-  // Like, fix this man!
-  const tokenSecret = 'BAD SECRET';
-  const db = new AccountsTypeorm({ connection, cache: 1000 });
-  const password = new AccountsPassword();
+createConnection({
+  type: 'postgres',
+  url: 'postgres://user@localhost:5432/dbname',
+  entities,
+}).then(() => {
+  const accountsTypeorm = new Typeorm({
+    // options
+  });
   const accountsServer = new AccountsServer(
+    { db: accountsTypeorm },
     {
-      db,
-      tokenSecret,
-      siteUrl: 'http://localhost:3000',
-    },
-    { password }
+      // services
+    }
   );
-  // Creates resolvers, type definitions, and schema directives used by accounts-js
-  const accountsGraphQL = AccountsModule.forRoot({
-    accountsServer,
-  });
-  };
-  const schema = makeExecutableSchema({
-    typeDefs: mergeTypeDefs[accountsGraphQL.typeDefs],
-    resolvers: [accountsGraphQL.resolvers],
-    schemaDirectives: {
-      ...accountsGraphQL.schemaDirectives,
-    },
-  });
+});
+```
 
-  // Create the Apollo Server that takes a schema and configures internal stuff
-  const server = new ApolloServer({
-    schema,
-    context: accountsGraphQL.context,
-  });
+## Options
 
-  server.listen(4000).then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`);
-  });
-};
-createAccounts();
-// Edit this line with your postgres url
-export const connect = (url = 'postgres://localhost:5432') => {
-  return createConnection({
-    type: 'postgres',
-    url,
-    entities: [...require('@accounts/typeorm').entities],
-    synchronize: true,
-  }).then(connection => {
-    return connection;
-  });
+You can use the following options to configure the `@accounts/typeorm` behavior.
+
+```typescript
+interface AccountsTypeormOptions {
+  cache?: undefined | number;
+  connection?: Connection;
+  connectionName?: string;
+  userEntity?: typeof User;
+  userServiceEntity?: typeof UserService;
+  userEmailEntity?: typeof UserEmail;
+  userSessionEntity?: typeof UserSession;
+}
+```
+
+### Extending entities
+
+If you want to add fields, etc. to the User entity you can, by extending the base entities.
+
+```tsx
+import { User as AccountsUser } from '@accounts/typeorm';
+
+@Entity()
+export class User extends AccountsUser {
+  // Add fields
+  @Column()
+  custom_field: string;
+
+  // Overwrite fields
+  @Colum('text')
+  profile: string;
+}
 ```
 
 ## Example
 
-You can find an example using the database-typeeorm package with a PostgreSQL database in the examples folder
-[graphql-server-typeorm-postgres](https://github.com/accounts-js/accounts/tree/master/examples/graphql-server-typeorm-postgres)
+A working example using the database-typeeorm package with a PostgreSQL database is available [here](https://github.com/accounts-js/accounts/tree/master/examples/graphql-server-typeorm-postgres).

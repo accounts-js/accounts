@@ -29,4 +29,10 @@ export default gql`
     # Two factor
     code: String
   }
+
+  input ImpersonationUserIdentityInput {
+    userId: String
+    username: String
+    email: String
+  }
 `;

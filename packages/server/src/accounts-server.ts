@@ -6,6 +6,7 @@ import {
   LoginResult,
   Tokens,
   Session,
+  ImpersonationUserIdentity,
   ImpersonationResult,
   HookListener,
   DatabaseInterface,
@@ -23,6 +24,7 @@ import { ServerHooks } from './utils/server-hooks';
 import { AccountsServerOptions } from './types/accounts-server-options';
 import { JwtData } from './types/jwt-data';
 import { EmailTemplateType } from './types/email-template-type';
+import { JwtPayload } from './types/jwt-payload';
 import { AccountsJsError } from './utils/accounts-error';
 import {
   AuthenticateWithServiceErrors,
@@ -79,7 +81,7 @@ Please change it with a strong random token.`);
     }
     if (this.options.ambiguousErrorMessages && this.options.enableAutologin) {
       throw new Error(
-        `Can't enable autologin when ambiguous error messages are enabled (https://accounts-js.netlify.com/docs/api/server/globals#ambiguouserrormessages).
+        `Can't enable autologin when ambiguous error messages are enabled (https://www.accountsjs.com/docs/api/server/globals#ambiguouserrormessages).
 Please set ambiguousErrorMessages to false to be able to use autologin.`
       );
     }
@@ -111,7 +113,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     return this.services;
   }
 
-  public getOptions(): AccountsServerOptions {
+  public getOptions(): AccountsServerOptions<CustomUser> {
     return this.options;
   }
 
@@ -311,9 +313,9 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
    * @description Server use only.
    * This method creates a session without authenticating any user identity.
    * Any authentication should happen before calling this function.
-   * @param {User} userId - The user object.
-   * @param {ConnectionInformations} infos - User connection informations.
-   * @returns {Promise<LoginResult>} - Session id and tokens.
+   * @param {User} user - The user object.
+   * @param {ConnectionInformations} infos - User's connection informations.
+   * @returns {Promise<LoginResult>} - Session tokens and user object.
    */
   public async loginWithUser(
     user: CustomUser,
@@ -322,9 +324,9 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     const token = await this.createSessionToken(user);
     const sessionId = await this.db.createSession(user.id, token, infos);
 
-    const { accessToken, refreshToken } = this.createTokens({
+    const { accessToken, refreshToken } = await this.createTokens({
       token,
-      userId: user.id,
+      user,
     });
 
     return {
@@ -347,11 +349,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
    */
   public async impersonate(
     accessToken: string,
-    impersonated: {
-      userId?: string;
-      username?: string;
-      email?: string;
-    },
+    impersonated: ImpersonationUserIdentity,
     infos: ConnectionInformations
   ): Promise<ImpersonationResult> {
     try {
@@ -404,10 +402,10 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         impersonatorUserId: user.id,
       });
 
-      const impersonationTokens = this.createTokens({
+      const impersonationTokens = await this.createTokens({
         token: newSessionId,
         isImpersonated: true,
-        userId: user.id,
+        user,
       });
       const impersonationResult = {
         authorized: true,
@@ -479,13 +477,14 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
           newToken = await this.createSessionToken(user);
         }
 
-        const tokens = this.createTokens({ token: newToken || sessionToken, userId: user.id });
+        const tokens = await this.createTokens({ token: newToken || sessionToken, user });
         await this.db.updateSession(session.id, infos, newToken);
 
         const result = {
           sessionId: session.id,
           tokens,
           user,
+          infos,
         };
 
         this.hooks.emit(ServerHooks.RefreshTokensSuccess, result);
@@ -505,25 +504,27 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
    * @description Refresh a user token.
    * @param {string} token - User session token.
    * @param {boolean} isImpersonated - Should be true if impersonating another user.
-   * @returns {<Tokens>} - Return a new accessToken and refreshToken.
+   * @param {User} user - The user object.
+   * @returns {Promise<Tokens>} - Return a new accessToken and refreshToken.
    */
-  public createTokens({
+  public async createTokens({
     token,
     isImpersonated = false,
-    userId,
+    user,
   }: {
     token: string;
     isImpersonated?: boolean;
-    userId: string;
-  }): Tokens {
+    user: CustomUser;
+  }): Promise<Tokens> {
     const { tokenConfigs } = this.options;
     const jwtData: JwtData = {
       token,
       isImpersonated,
-      userId,
+      userId: user.id,
     };
+
     const accessToken = generateAccessToken({
-      data: jwtData,
+      payload: await this.createJwtPayload(jwtData, user),
       secret: this.getSecretOrPrivateKey(),
       config: tokenConfigs.accessToken,
     });
@@ -531,6 +532,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       secret: this.getSecretOrPrivateKey(),
       config: tokenConfigs.refreshToken,
     });
+
     return { accessToken, refreshToken };
   }
 
@@ -723,6 +725,15 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     return this.options.tokenCreator
       ? this.options.tokenCreator.createToken(user)
       : generateRandomToken();
+  }
+
+  private async createJwtPayload(data: JwtData, user: CustomUser): Promise<JwtPayload> {
+    return this.options.createJwtPayload
+      ? {
+          ...(await this.options.createJwtPayload(data, user)),
+          data,
+        }
+      : { data };
   }
 
   private getSecretOrPublicKey(): jwt.Secret {

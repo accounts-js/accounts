@@ -75,15 +75,22 @@ export class RedisSessions implements DatabaseInterfaceSessions {
     }
   }
 
-  public async invalidateAllSessions(userId: string): Promise<void> {
+  public async invalidateAllSessions(userId: string, excludedSessionIds?: string[]): Promise<void> {
     if (
       await this.db.exists(
         `${this.options.sessionCollectionName}:${this.options.userCollectionName}:${userId}`
       )
     ) {
-      const sessionIds: string[] = await this.db.smembers(
+      let sessionIds: string[] = await this.db.smembers(
         `${this.options.sessionCollectionName}:${this.options.userCollectionName}:${userId}`
       );
+
+      if (excludedSessionIds && excludedSessionIds.length > 0) {
+        sessionIds = sessionIds.filter((sessionId) => {
+          return !excludedSessionIds.includes(sessionId);
+        });
+      }
+
       await sessionIds.map((sessionId) => this.invalidateSession(sessionId));
     }
   }

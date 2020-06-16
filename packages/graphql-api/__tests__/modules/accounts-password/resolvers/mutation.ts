@@ -23,8 +23,10 @@ describe('accounts-password resolvers mutation', () => {
   };
   let injector: { get: jest.Mock };
   const user = { id: 'idTest' };
-  const ip = 'ipTest';
-  const userAgent = 'userAgentTest';
+  const infos = {
+    ip: 'ipTest',
+    userAgent: 'userAgentTest',
+  };
 
   beforeEach(() => {
     injector = {
@@ -188,16 +190,13 @@ describe('accounts-password resolvers mutation', () => {
       const response = await Mutation.createUser!(
         {},
         { user: createUserInput },
-        { injector } as any,
+        { injector, infos } as any,
         {} as any
       );
       expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
       expect(injector.get).toHaveBeenCalledWith(AccountsServer);
       expect(accountsPasswordLocalMock.createUser).toHaveBeenCalledWith(createUserInput);
-      expect(accountsServerLocalMock.loginWithUser).toHaveBeenCalledWith(
-        createdUser,
-        expect.any(Object)
-      );
+      expect(accountsServerLocalMock.loginWithUser).toHaveBeenCalledWith(createdUser, infos);
       expect(response?.loginResult).not.toBeNull();
       expect(response?.loginResult!.user).toEqual(createdUser);
       expect(response?.loginResult!.tokens?.accessToken).toEqual('accessToken');
@@ -251,14 +250,11 @@ describe('accounts-password resolvers mutation', () => {
       await Mutation.resetPassword!(
         {},
         { token, newPassword } as any,
-        { injector, ip, userAgent } as any,
+        { injector, infos } as any,
         {} as any
       );
       expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
-      expect(accountsPasswordMock.resetPassword).toHaveBeenCalledWith(token, newPassword, {
-        ip,
-        userAgent,
-      });
+      expect(accountsPasswordMock.resetPassword).toHaveBeenCalledWith(token, newPassword, infos);
     });
   });
 

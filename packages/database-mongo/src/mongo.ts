@@ -10,7 +10,7 @@ import {
   CreateMfaChallenge,
 } from '@accounts/types';
 import { get, merge } from 'lodash';
-import { Collection, Db, ObjectID } from 'mongodb';
+import { Collection, Db, ObjectID, IndexOptions } from 'mongodb';
 
 import { AccountsMongoOptions, MongoUser, MongoAuthenticator, MongoMfaChallenge } from './types';
 
@@ -64,17 +64,33 @@ export class Mongo implements DatabaseInterface {
     this.mfaChallengeCollection = this.db.collection(this.options.mfaChallengeCollectionName);
   }
 
-  public async setupIndexes(): Promise<void> {
+  /**
+   * Setup the mongo indexes needed.
+   * @param options Options passed to the mongo native `createIndex` method.
+   */
+  public async setupIndexes(options: Omit<IndexOptions, 'unique' | 'sparse'> = {}): Promise<void> {
     await this.sessionCollection.createIndex('token', {
+      ...options,
       unique: true,
       sparse: true,
     });
     await this.collection.createIndex('username', {
+      ...options,
       unique: true,
       sparse: true,
     });
     await this.collection.createIndex('emails.address', {
+      ...options,
       unique: true,
+      sparse: true,
+    });
+    // Index related to the password service
+    await this.collection.createIndex('services.email.verificationTokens.token', {
+      ...options,
+      sparse: true,
+    });
+    await this.collection.createIndex('services.password.reset.token', {
+      ...options,
       sparse: true,
     });
   }
@@ -366,21 +382,34 @@ export class Mongo implements DatabaseInterface {
     );
   }
 
-  public async invalidateAllSessions(userId: string): Promise<void> {
-    await this.sessionCollection.updateMany(
-      { userId },
-      {
-        $set: {
-          valid: false,
-          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
-        },
+  public async invalidateAllSessions(userId: string, excludedSessionIds?: string[]): Promise<void> {
+    const selector: { userId: string; _id?: object } = { userId };
+
+    if (excludedSessionIds && excludedSessionIds.length > 0) {
+      let excludedObjectIds: string[] | ObjectID[] = excludedSessionIds;
+
+      if (this.options.convertSessionIdToMongoObjectId) {
+        excludedObjectIds = excludedSessionIds.map((sessionId) => {
+          return toMongoID(sessionId);
+        });
       }
-    );
+
+      selector._id = {
+        $nin: excludedObjectIds,
+      };
+    }
+
+    await this.sessionCollection.updateMany(selector, {
+      $set: {
+        valid: false,
+        [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+      },
+    });
   }
 
   public async removeAllResetPasswordTokens(userId: string): Promise<void> {
     const id = this.options.convertUserIdToMongoObjectId ? toMongoID(userId) : userId;
-    await this.collection.update(
+    await this.collection.updateOne(
       { _id: id },
       {
         $unset: {

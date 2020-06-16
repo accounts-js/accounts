@@ -1,13 +1,5 @@
-import {
-  ConnectionInformations,
-  CreateUser,
-  DatabaseInterface,
-  CreateAuthenticator,
-  Authenticator,
-  CreateMfaChallenge,
-  MfaChallenge,
-} from '@accounts/types';
-import { Repository, getRepository } from 'typeorm';
+import { ConnectionInformations, CreateUser, DatabaseInterface } from '@accounts/types';
+import { Repository, getRepository, Not, In, FindOperator } from 'typeorm';
 import { User } from './entity/User';
 import { UserEmail } from './entity/UserEmail';
 import { UserService } from './entity/UserService';
@@ -430,15 +422,16 @@ export class AccountsTypeorm implements DatabaseInterface {
     }
   }
 
-  public async invalidateAllSessions(userId: string): Promise<void> {
-    await this.sessionRepository.update(
-      {
-        userId,
-      },
-      {
-        valid: false,
-      }
-    );
+  public async invalidateAllSessions(userId: string, excludedSessionIds?: string[]): Promise<void> {
+    const selector: { userId: string; id?: FindOperator<any> } = { userId };
+
+    if (excludedSessionIds && excludedSessionIds.length > 0) {
+      selector.id = Not(In(excludedSessionIds));
+    }
+
+    await this.sessionRepository.update(selector, {
+      valid: false,
+    });
   }
 
   /**

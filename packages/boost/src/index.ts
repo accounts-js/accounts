@@ -135,7 +135,7 @@ export class AccountsBoost {
     return res;
   }
 
-  public graphql() {
+  public graphql(): typeof AccountsModule {
     // Cache `this.accountsGraphQL` to avoid regenerating the schema if the user calls `accountsBoost.graphql()` multple times.
     if (this.accountsGraphQL) {
       return this.accountsGraphQL;

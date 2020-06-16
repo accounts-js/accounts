@@ -14,8 +14,10 @@ describe('accounts resolvers mutation', () => {
     get: jest.fn(() => accountsServerMock),
   };
   const authToken = 'authTokenTest';
-  const ip = 'ipTest';
-  const userAgent = 'userAgentTest';
+  const infos = {
+    ip: 'ipTest',
+    userAgent: 'userAgentTest',
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -29,28 +31,26 @@ describe('accounts resolvers mutation', () => {
       await Mutation.authenticate!(
         {},
         { serviceName, params } as any,
-        { injector, ip, userAgent } as any,
+        { injector, infos } as any,
         {} as any
       );
       expect(injector.get).toHaveBeenCalledWith(AccountsServer);
-      expect(accountsServerMock.loginWithService).toHaveBeenCalledWith(serviceName, params, {
-        ip,
-        userAgent,
-      });
+      expect(accountsServerMock.loginWithService).toHaveBeenCalledWith(serviceName, params, infos);
     });
 
     it('should call authenticateWithService', async () => {
       await Mutation.verifyAuthentication!(
         {},
         { serviceName, params } as any,
-        { injector, ip, userAgent } as any,
+        { injector, infos } as any,
         {} as any
       );
       expect(injector.get).toHaveBeenCalledWith(AccountsServer);
-      expect(accountsServerMock.authenticateWithService).toHaveBeenCalledWith(serviceName, params, {
-        ip,
-        userAgent,
-      });
+      expect(accountsServerMock.authenticateWithService).toHaveBeenCalledWith(
+        serviceName,
+        params,
+        infos
+      );
     });
   });
 
@@ -61,15 +61,15 @@ describe('accounts resolvers mutation', () => {
     it('should call impersonate', async () => {
       await Mutation.impersonate!(
         {},
-        { accessToken, username } as any,
-        { injector, ip, userAgent } as any,
+        { accessToken, impersonated: { username } } as any,
+        { injector, infos } as any,
         {} as any
       );
       expect(injector.get).toHaveBeenCalledWith(AccountsServer);
       expect(accountsServerMock.impersonate).toHaveBeenCalledWith(
         accessToken,
-        { username },
-        { ip, userAgent }
+        { userId: undefined, username, email: undefined },
+        infos
       );
     });
   });
@@ -96,14 +96,15 @@ describe('accounts resolvers mutation', () => {
       await Mutation.refreshTokens!(
         {},
         { accessToken, refreshToken },
-        { injector, ip, userAgent } as any,
+        { injector, infos } as any,
         {} as any
       );
       expect(injector.get).toHaveBeenCalledWith(AccountsServer);
-      expect(accountsServerMock.refreshTokens).toHaveBeenCalledWith(accessToken, refreshToken, {
-        ip,
-        userAgent,
-      });
+      expect(accountsServerMock.refreshTokens).toHaveBeenCalledWith(
+        accessToken,
+        refreshToken,
+        infos
+      );
     });
   });
 });

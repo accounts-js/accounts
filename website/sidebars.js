@@ -26,7 +26,7 @@ dirs.forEach((dir) => {
 module.exports = {
   docs: {
     Introduction: ['introduction', 'contributing'],
-    'Getting started': ['getting-started', 'handling-errors', 'email', 'client'],
+    'Getting started': ['getting-started', 'server', 'handling-errors', 'email', 'client'],
     Transports: [
       'transports/graphql',
       {
@@ -35,7 +35,7 @@ module.exports = {
         items: ['transports/rest-express', 'transports/rest-client'],
       },
     ],
-    Databases: ['databases/mongo', 'databases/redis', 'databases/typeorm'],
+    Databases: ['databases/overview', 'databases/mongo', 'databases/redis', 'databases/typeorm'],
     Strategies: [
       {
         type: 'category',
