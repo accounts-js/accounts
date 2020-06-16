@@ -10,5 +10,7 @@ export interface DatabaseInterfaceAuthenticators {
 
   activateAuthenticator(authenticatorId: string): Promise<void>;
 
+  deactivateAuthenticator(authenticatorId: string): Promise<void>;
+
   updateAuthenticator(authenticatorId: string, data: Partial<Authenticator>): Promise<void>;
 }

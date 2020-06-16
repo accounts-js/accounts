@@ -534,6 +534,22 @@ export class Mongo implements DatabaseInterface {
     );
   }
 
+  public async deactivateAuthenticator(authenticatorId: string): Promise<void> {
+    const id = this.options.convertAuthenticatorIdToMongoObjectId
+      ? toMongoID(authenticatorId)
+      : authenticatorId;
+    await this.authenticatorCollection.updateOne(
+      { _id: id },
+      {
+        $set: {
+          active: false,
+          deactivatedAt: this.options.dateProvider(),
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+        },
+      }
+    );
+  }
+
   public async updateAuthenticator(
     authenticatorId: string,
     data: Partial<Authenticator>

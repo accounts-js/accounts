@@ -20,6 +20,10 @@ export interface Authenticator {
    */
   activatedAt?: string;
   /**
+   * If active is true, contain the date when the authenticator was activated
+   */
+  deactivatedAt?: string;
+  /**
    * Custom properties
    */
   [additionalKey: string]: any;
