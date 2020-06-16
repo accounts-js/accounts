@@ -1,8 +1,4 @@
-export interface Authenticator {
-  /**
-   * Db id
-   */
-  id: string;
+export interface CreateAuthenticator {
   /**
    * Authenticator type
    */
@@ -16,7 +12,7 @@ export interface Authenticator {
    */
   active: boolean;
   /**
-   * If active is true, contain the date when the authenticator was activated
+   * Custom properties
    */
-  activatedAt?: string;
+  [additionalKey: string]: any;
 }

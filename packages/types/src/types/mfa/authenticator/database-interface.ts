@@ -9,4 +9,6 @@ export interface DatabaseInterfaceAuthenticators {
   findUserAuthenticators(userId: string): Promise<Authenticator[]>;
 
   activateAuthenticator(authenticatorId: string): Promise<void>;
+
+  updateAuthenticator(authenticatorId: string, data: Partial<Authenticator>): Promise<void>;
 }

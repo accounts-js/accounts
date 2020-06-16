@@ -180,6 +180,11 @@ export class DatabaseManager implements DatabaseInterface {
     return this.userStorage.activateAuthenticator.bind(this.userStorage);
   }
 
+  // Return the updateAuthenticator function from the userStorage
+  public get updateAuthenticator(): DatabaseInterface['updateAuthenticator'] {
+    return this.userStorage.updateAuthenticator.bind(this.userStorage);
+  }
+
   // Return the createMfaChallenge function from the userStorage
   public get createMfaChallenge(): DatabaseInterface['createMfaChallenge'] {
     return this.userStorage.createMfaChallenge.bind(this.userStorage);

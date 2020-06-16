@@ -1,8 +1,4 @@
-export interface MfaChallenge {
-  /**
-   * Db id
-   */
-  id: string;
+export interface CreateMfaChallenge {
   /**
    * User id linked to this challenge
    */
@@ -20,11 +16,7 @@ export interface MfaChallenge {
    */
   scope?: 'associate';
   /**
-   * If deactivated is set to true, it means that challenge was already used and can't be used anymore
+   * Custom properties
    */
-  deactivated: boolean;
-  /**
-   * If deactivated is true, contain the date when the challenge was used
-   */
-  deactivatedAt?: string;
+  [additionalKey: string]: any;
 }

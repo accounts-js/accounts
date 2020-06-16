@@ -2,8 +2,8 @@ import { User } from './user';
 import { CreateUser } from './create-user';
 import { DatabaseInterfaceSessions } from './session/database-interface';
 import { DatabaseInterfaceServicePassword } from './services/password/database-interface';
-import { DatabaseInterfaceAuthenticators } from './authenticator/database-interface';
-import { DatabaseInterfaceMfaChallenges } from './mfa-challenge/database-interface';
+import { DatabaseInterfaceAuthenticators } from './mfa/authenticator/database-interface';
+import { DatabaseInterfaceMfaChallenges } from './mfa/challenge/database-interface';
 
 export interface DatabaseInterface<CustomUser extends User = User>
   extends DatabaseInterfaceSessions,
