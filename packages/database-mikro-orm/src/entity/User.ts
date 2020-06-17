@@ -4,7 +4,7 @@ import { UserService } from './UserService';
 import { UserEmail } from './UserEmail';
 import { UserSession } from './UserSession';
 
-interface UserContructor {
+export interface UserConstructor {
   userEmailEntity?: typeof UserEmail;
   userServiceEntity?: typeof UserService;
   email?: string;
@@ -46,7 +46,7 @@ export class User {
     password,
     username,
     ...otherFields
-  }: UserContructor) {
+  }: UserConstructor) {
     if (username) {
       this.username = username;
     }
