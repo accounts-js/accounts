@@ -5,7 +5,7 @@ import {
   MfaChallenge,
 } from '@accounts/types';
 import { AccountsServer, generateRandomToken } from '@accounts/server';
-import * as otplib from 'otplib';
+import { authenticator as optlibAuthenticator } from 'otplib';
 
 interface DbAuthenticatorOtp extends Authenticator {
   secret: string;
@@ -55,9 +55,9 @@ export class AuthenticatorOtp implements AuthenticatorService {
       typeof userIdOrMfaChallenge === 'string' ? userIdOrMfaChallenge : userIdOrMfaChallenge.userId;
     const mfaChallenge = typeof userIdOrMfaChallenge === 'string' ? null : userIdOrMfaChallenge;
 
-    const secret = otplib.authenticator.generateSecret();
+    const secret = optlibAuthenticator.generateSecret();
     const userName = this.options.userName ? await this.options.userName(userId) : userId;
-    const otpauthUri = otplib.authenticator.keyuri(userName, this.options.appName, secret);
+    const otpauthUri = optlibAuthenticator.keyuri(userName, this.options.appName, secret);
 
     const authenticatorId = await this.db.createAuthenticator({
       type: this.serviceName,
@@ -104,7 +104,7 @@ export class AuthenticatorOtp implements AuthenticatorService {
       throw new Error('Code required');
     }
 
-    return otplib.authenticator.check(code, authenticator.secret);
+    return optlibAuthenticator.check(code, authenticator.secret);
   }
 
   /**
