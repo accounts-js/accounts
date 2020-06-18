@@ -75,7 +75,6 @@ export class AuthenticatorOtp implements AuthenticatorService {
     } else {
       // We create a new challenge for the authenticator so it can be verified later
       mfaToken = generateRandomToken();
-      // associate.id refer to the authenticator id
       await this.db.createMfaChallenge({
         userId,
         authenticatorId,

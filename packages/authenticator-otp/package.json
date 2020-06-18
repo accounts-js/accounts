@@ -30,10 +30,10 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/server": "^0.28.0-alpha.0",
-    "@types/jest": "24.0.23",
+    "@types/jest": "26.0.0",
     "@types/node": "12.7.4",
-    "jest": "24.9.0",
-    "rimraf": "3.0.0"
+    "jest": "26.0.1",
+    "rimraf": "3.0.2"
   },
   "dependencies": {
     "@accounts/types": "^0.28.0-alpha.0",

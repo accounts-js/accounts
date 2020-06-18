@@ -3,8 +3,10 @@ import { AuthenticatorOtp } from '../src';
 const authenticatorOtp = new AuthenticatorOtp();
 
 const mockedDb = {
-  createAuthenticator: jest.fn(),
+  createAuthenticator: jest.fn(() => Promise.resolve('authenticatorIdTest')),
   findAuthenticatorById: jest.fn(),
+  createMfaChallenge: jest.fn(),
+  updateMfaChallenge: jest.fn(),
 };
 
 authenticatorOtp.setStore(mockedDb as any);
@@ -15,9 +17,8 @@ describe('AuthenticatorOtp', () => {
   });
 
   describe('associate', () => {
-    it('should create a new database entry and return the secret and url', async () => {
-      mockedDb.createAuthenticator.mockResolvedValueOnce('authenticatorIdtest');
-      const result = await authenticatorOtp.associate('userIdTest', {});
+    it('create a new mfa challenge when userId is passed', async () => {
+      const result = await authenticatorOtp.associate('userIdTest');
 
       expect(mockedDb.createAuthenticator).toHaveBeenCalledWith({
         type: 'otp',
@@ -25,8 +26,39 @@ describe('AuthenticatorOtp', () => {
         secret: expect.any(String),
         active: false,
       });
+      expect(mockedDb.createMfaChallenge).toHaveBeenCalledWith({
+        authenticatorId: 'authenticatorIdTest',
+        scope: 'associate',
+        token: expect.any(String),
+        userId: 'userIdTest',
+      });
       expect(result).toEqual({
-        id: 'authenticatorIdtest',
+        id: 'authenticatorIdTest',
+        mfaToken: expect.any(String),
+        secret: expect.any(String),
+        otpauthUri: expect.any(String),
+      });
+    });
+
+    it('update mfa challenge when challenge is passed', async () => {
+      const result = await authenticatorOtp.associate({
+        id: 'mfaChallengeIdTest',
+        token: 'mfaChallengeTokenTest',
+        userId: 'userIdTest',
+      } as any);
+
+      expect(mockedDb.createAuthenticator).toHaveBeenCalledWith({
+        type: 'otp',
+        userId: 'userIdTest',
+        secret: expect.any(String),
+        active: false,
+      });
+      expect(mockedDb.updateMfaChallenge).toHaveBeenCalledWith('mfaChallengeIdTest', {
+        authenticatorId: 'authenticatorIdTest',
+      });
+      expect(result).toEqual({
+        id: 'authenticatorIdTest',
+        mfaToken: expect.any(String),
         secret: expect.any(String),
         otpauthUri: expect.any(String),
       });
