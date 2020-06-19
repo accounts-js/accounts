@@ -1,24 +1,24 @@
 import { ConnectionInformations, CreateUser, DatabaseInterface } from '@accounts/types';
 import { User } from './entity/User';
-import { UserEmail } from './entity/UserEmail';
-import { UserService } from './entity/UserService';
-import { UserSession } from './entity/UserSession';
+import { Email } from './entity/Email';
+import { Service } from './entity/Service';
+import { Session } from './entity/Session';
 import { AccountsMikroOrmOptions } from './types';
-import { EntityRepository, EntityManager } from 'mikro-orm';
+import { EntityRepository, EntityManager, Constructor } from 'mikro-orm';
 import { User as IUser } from '@accounts/types/lib/types/user';
 import { Session as ISession } from '@accounts/types/lib/types/session/session';
 
 const hasPassword = (opt: object): opt is { bcrypt: string } =>
   !!(opt as { bcrypt: string }).bcrypt;
 
-const toUser = async (user: User | null): Promise<IUser | null> =>
+const toUser = async (user: User<any, any, any> | null): Promise<IUser | null> =>
   user && {
     ...user,
     id: String(user.id),
     emails: await user.emails.loadItems(),
   };
 
-const toSession = async (session: UserSession | null): Promise<ISession | null> =>
+const toSession = async (session: Session<any> | null): Promise<ISession | null> =>
   session && {
     ...session,
     id: String(session.id),
@@ -27,33 +27,38 @@ const toSession = async (session: UserSession | null): Promise<ISession | null> 
     updatedAt: session.updatedAt.toDateString(),
   };
 
-export class AccountsMikroOrm implements DatabaseInterface {
+export class AccountsMikroOrm<
+  CustomUser extends User<any, any, any>,
+  CustomEmail extends Email<any>,
+  CustomSession extends Session<any>,
+  CustomService extends Service<any>
+> implements DatabaseInterface {
   private em: EntityManager;
-  private userEntity: typeof User;
-  private userEmailEntity: typeof UserEmail;
-  private userServiceEntity: typeof UserService;
-  private userSessionEntity: typeof UserSession;
-  private userRepository: EntityRepository<User>;
-  private emailRepository: EntityRepository<UserEmail>;
-  private serviceRepository: EntityRepository<UserService>;
-  private sessionRepository: EntityRepository<UserSession>;
+  private UserEntity: Constructor<CustomUser | User<any, any, any>>;
+  private EmailEntity: Constructor<CustomEmail | Email<any>>;
+  private ServiceEntity: Constructor<CustomService | Service<any>>;
+  private SessionEntity: Constructor<CustomSession | Session<any>>;
+  private userRepository: EntityRepository<User<any, any, any>>;
+  private emailRepository: EntityRepository<Email<any>>;
+  private serviceRepository: EntityRepository<Service<any>>;
+  private sessionRepository: EntityRepository<Session<any>>;
 
   constructor({
     em,
-    userEntity = User,
-    userEmailEntity = UserEmail,
-    userServiceEntity = UserService,
-    userSessionEntity = UserSession,
-  }: AccountsMikroOrmOptions) {
+    UserEntity = User,
+    EmailEntity = Email,
+    ServiceEntity = Service,
+    SessionEntity = Session,
+  }: AccountsMikroOrmOptions<CustomUser, CustomEmail, CustomSession, CustomService>) {
     this.em = em;
-    this.userEntity = userEntity;
-    this.userEmailEntity = userEmailEntity;
-    this.userServiceEntity = userServiceEntity;
-    this.userSessionEntity = userSessionEntity;
-    this.userRepository = this.em.getRepository(this.userEntity);
-    this.emailRepository = this.em.getRepository(this.userEmailEntity);
-    this.serviceRepository = this.em.getRepository(this.userServiceEntity);
-    this.sessionRepository = this.em.getRepository(this.userSessionEntity);
+    this.UserEntity = UserEntity;
+    this.EmailEntity = EmailEntity;
+    this.ServiceEntity = ServiceEntity;
+    this.SessionEntity = SessionEntity;
+    this.userRepository = this.em.getRepository(this.UserEntity);
+    this.emailRepository = this.em.getRepository(this.EmailEntity);
+    this.serviceRepository = this.em.getRepository(this.ServiceEntity);
+    this.sessionRepository = this.em.getRepository(this.SessionEntity);
   }
 
   public async findUserByEmail(email: string): Promise<IUser | null> {
@@ -102,9 +107,9 @@ export class AccountsMikroOrm implements DatabaseInterface {
     password,
     ...otherFields
   }: CreateUser): Promise<string> {
-    const user = new this.userEntity({
-      userEmailEntity: this.userEmailEntity,
-      userServiceEntity: this.userServiceEntity,
+    const user = new this.UserEntity({
+      EmailEntity: this.EmailEntity,
+      ServiceEntity: this.ServiceEntity,
       email,
       password,
       username,
@@ -137,9 +142,9 @@ export class AccountsMikroOrm implements DatabaseInterface {
         name: serviceName,
         user: Number(userId),
       })) ??
-      new this.userServiceEntity({
+      new this.ServiceEntity({
         name: serviceName,
-        user: this.em.getReference(User, Number(userId), true),
+        user: this.em.getReference(this.UserEntity, Number(userId), true),
       });
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -205,8 +210,8 @@ export class AccountsMikroOrm implements DatabaseInterface {
 
   public async addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
     return this.em.persistAndFlush(
-      new this.userEmailEntity({
-        user: this.em.getReference(User, Number(userId), true),
+      new this.EmailEntity({
+        user: this.em.getReference(this.UserEntity, Number(userId), true),
         address: newEmail,
         verified,
       })
@@ -269,8 +274,8 @@ export class AccountsMikroOrm implements DatabaseInterface {
     connection: ConnectionInformations = {},
     extra?: object
   ): Promise<string> {
-    const session = new this.userSessionEntity({
-      user: this.em.getReference(User, Number(userId), true),
+    const session = new this.SessionEntity({
+      user: this.em.getReference(this.UserEntity, Number(userId), true),
       token,
       userAgent: connection.userAgent,
       ip: connection.ip,
@@ -296,7 +301,7 @@ export class AccountsMikroOrm implements DatabaseInterface {
 
   public async invalidateAllSessions(userId: string, excludedSessionIds?: string[]): Promise<void> {
     const sessions = await this.sessionRepository.find({
-      user: this.em.getReference(User, Number(userId), true),
+      user: this.em.getReference(this.UserEntity, Number(userId), true),
       ...(excludedSessionIds?.length && {
         id: { $nin: excludedSessionIds.map((id) => Number(id)) },
       }),

@@ -1,20 +1,29 @@
 import { AccountsMikroOrm } from './mikro-orm';
-import { User, UserConstructor } from './entity/User';
-import { UserEmail } from './entity/UserEmail';
-import { UserService } from './entity/UserService';
-import { UserSession } from './entity/UserSession';
+import { User, getUserSchema, UserCtorArgs } from './entity/User';
+import { Email, getEmailSchema, EmailCtorArgs } from './entity/Email';
+import { Service, getServiceSchema, ServiceCtorArgs } from './entity/Service';
+import { Session, getSessionSchema, SessionCtorArgs } from './entity/Session';
 import { User as IUser } from '@accounts/types/lib/types/user';
 
-const entities = [User, UserEmail, UserService, UserSession];
+const entities = [User, Email, Service, Session];
+const schemas = [getUserSchema, getEmailSchema, getServiceSchema, getSessionSchema];
 
 export {
   AccountsMikroOrm,
-  UserConstructor,
   IUser,
   User,
-  UserEmail,
-  UserService,
-  UserSession,
+  Email,
+  Service,
+  Session,
+  getUserSchema,
+  getEmailSchema,
+  getServiceSchema,
+  getSessionSchema,
+  UserCtorArgs,
+  EmailCtorArgs,
+  ServiceCtorArgs,
+  SessionCtorArgs,
   entities,
+  schemas,
 };
 export default AccountsMikroOrm;
