@@ -1,61 +1,92 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-import { Entity, Property, OneToMany, Collection, PrimaryKey } from 'mikro-orm';
-import { UserService } from './UserService';
-import { UserEmail } from './UserEmail';
-import { UserSession } from './UserSession';
+import { Collection, EntitySchema } from 'mikro-orm';
+import { Service, ServiceCtor } from './Service';
+import { Email, EmailCtor } from './Email';
+import { Session, SessionCtor } from './Session';
 
-export interface UserConstructor {
-  userEmailEntity?: typeof UserEmail;
-  userServiceEntity?: typeof UserService;
-  email?: string;
-  password?: string;
-  username?: string;
-  [additionalKey: string]: any;
-}
-
-@Entity()
-export class User {
-  @PrimaryKey()
+export class User<
+  CustomEmail extends Email<any>,
+  CustomSession extends Session<any>,
+  CustomService extends Service<any>
+> {
   id!: number;
 
-  @Property({ nullable: true })
   username?: string;
 
-  @OneToMany(() => UserService, (service) => service.user)
-  services: Collection<UserService> = new Collection<UserService>(this);
+  services = new Collection<CustomService | Service<any>>(this);
 
-  @OneToMany(() => UserEmail, (email) => email.user)
-  emails: Collection<UserEmail> = new Collection<UserEmail>(this);
+  emails = new Collection<CustomEmail | Email<any>>(this);
 
-  @OneToMany(() => UserSession, (session) => session.user)
-  sessions: Collection<UserSession> = new Collection<UserSession>(this);
+  sessions = new Collection<CustomSession | Session<any>>(this);
 
-  @Property()
-  deactivated: boolean = false;
+  deactivated = false;
 
-  @Property()
-  createdAt: Date = new Date();
+  createdAt = new Date();
 
-  @Property({ onUpdate: () => new Date() })
-  updatedAt: Date = new Date();
+  updatedAt = new Date();
 
-  constructor({
-    userEmailEntity = UserEmail,
-    userServiceEntity = UserService,
-    email,
-    password,
-    username,
-    ...otherFields
-  }: UserConstructor) {
+  constructor({ EmailEntity, ServiceEntity, email, password, username }: UserCtorArgs) {
     if (username) {
       this.username = username;
     }
     if (email) {
-      this.emails.add(new userEmailEntity({ address: email }));
+      this.emails.add(new EmailEntity({ address: email }));
     }
     if (password) {
-      this.services.add(new userServiceEntity({ name: 'password', password }));
+      this.services.add(new ServiceEntity({ name: 'password', password }));
     }
-    Object.assign(this, otherFields);
   }
 }
+
+export interface UserCtorArgs {
+  EmailEntity: EmailCtor<any>;
+  ServiceEntity: ServiceCtor<any>;
+  email?: string;
+  password?: string;
+  username?: string;
+}
+
+export type UserCtor = new (args: UserCtorArgs) => User<any, any, any>;
+
+export const getUserSchema = ({
+  EmailEntity = Email,
+  SessionEntity = Session,
+  ServiceEntity = Service,
+  abstract = false,
+}: {
+  EmailEntity?: EmailCtor<any>;
+  SessionEntity?: SessionCtor<any>;
+  ServiceEntity?: ServiceCtor<any>;
+  abstract?: boolean;
+} = {}) => {
+  return new EntitySchema<User<any, any, any>>({
+    class: User,
+    abstract,
+    properties: {
+      id: { type: 'number', primary: true },
+      createdAt: { type: 'Date', onCreate: () => new Date(), nullable: true },
+      updatedAt: {
+        type: 'Date',
+        onCreate: () => new Date(),
+        onUpdate: () => new Date(),
+        nullable: true,
+      },
+      username: { type: 'string', nullable: true },
+      deactivated: { type: 'boolean', default: false, onCreate: () => false },
+      services: {
+        reference: '1:m',
+        entity: () => ServiceEntity?.name ?? Service.name,
+        mappedBy: (service) => service.user,
+      },
+      emails: {
+        reference: '1:m',
+        entity: () => EmailEntity?.name ?? Email.name,
+        mappedBy: (email) => email.user,
+      },
+      sessions: {
+        reference: '1:m',
+        entity: () => SessionEntity?.name ?? Session.name,
+        mappedBy: (session) => session.user,
+      },
+    },
+  });
+};
