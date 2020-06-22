@@ -14,9 +14,6 @@ In order to be able to run this example on your machine you first need to do the
 
 ## Prerequisites
 
-If you're on a mac, you will probably already have postgres installed as a brew service.
-just edit the .env file and use your current postgres data
-
 You will need a PostgreSQL server to run this package. If you don't have a PostgreSQL server running already, and you have Docker & Docker Compose, you can do
 
 ```bash
@@ -24,6 +21,9 @@ docker-compose up -d
 ```
 
 to start a new one.
+
+If you have postgres already installed on your system, you can just edit the .env file and use your current postgres data instead of the supplied Docker image.
+Alternatively you can simply prepend the `DATABASE_URL` and `ACCOUNTS_SECRET` environmental variables to your `yarn start` command.
 
 ## Getting Started
 
