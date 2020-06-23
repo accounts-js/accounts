@@ -8,7 +8,6 @@
     "start-only": "NODE_ENV=development nodemon -w src -x ts-node src/index.ts",
     "start": "yarn start-only",
     "start-services": "docker-compose up -d",
-    "prestart": "yarn start-services",
     "build": "tsc",
     "test": "yarn build"
   },
@@ -20,6 +19,7 @@
     "@graphql-modules/core": "0.7.16",
     "@graphql-toolkit/schema-merging": "0.10.6",
     "apollo-server": "2.14.4",
+    "dotenv": "^8.2.0",
     "graphql": "14.6.0",
     "pg": "8.1.0",
     "typeorm": "0.2.25"

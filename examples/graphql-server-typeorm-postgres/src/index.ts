@@ -1,3 +1,4 @@
+require('dotenv').config();
 import { ApolloServer, makeExecutableSchema } from 'apollo-server';
 import { mergeTypeDefs, mergeResolvers } from '@graphql-toolkit/schema-merging';
 
@@ -9,8 +10,7 @@ import { connect } from './connect';
 
 export const createAccounts = async () => {
   const connection = await connect(process.env.DATABASE_URL);
-  // Like, fix this man!
-  const tokenSecret = 'process.env.ACCOUNTS_SECRET' || 'change this in .env';
+  const tokenSecret = process.env.ACCOUNTS_SECRET;
   const db = new AccountsTypeorm({ connection, cache: 1000 });
   const password = new AccountsPassword<User>();
   const accountsServer = new AccountsServer(
