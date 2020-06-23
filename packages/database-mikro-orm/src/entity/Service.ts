@@ -1,7 +1,7 @@
 import { IdentifiedReference, Reference, EntitySchema } from 'mikro-orm';
-import { User, UserCtor } from './User';
+import { IUser, UserCtor } from './User';
 
-export class Service<CustomUser extends User<any, any, any>> {
+export class Service<CustomUser extends IUser<any, any, any>> {
   id!: number;
 
   user!: IdentifiedReference<CustomUser>;
@@ -25,13 +25,13 @@ export class Service<CustomUser extends User<any, any, any>> {
   }
 }
 
-export type ServiceCtorArgs<CustomUser extends User<any, any, any>> = {
+export type ServiceCtorArgs<CustomUser extends IUser<any, any, any>> = {
   name: string;
   user?: CustomUser;
   password?: string;
 };
 
-export type ServiceCtor<CustomUser extends User<any, any, any>> = new (
+export type ServiceCtor<CustomUser extends IUser<any, any, any>> = new (
   args: ServiceCtorArgs<CustomUser>
 ) => Service<CustomUser>;
 

@@ -1,59 +1,66 @@
 import 'reflect-metadata';
 import {
-  User,
+  getUserCtor,
   UserCtorArgs,
   getUserSchema,
   Email,
   EmailCtorArgs,
   getEmailSchema,
-  Service,
-  Session,
   getServiceSchema,
   getSessionSchema,
 } from '@accounts/mikro-orm';
 import { ReflectMetadataProvider, Entity, Property } from 'mikro-orm';
-
-type ExtendedUserCtorArgs = UserCtorArgs & {
-  name?: string;
-  surname?: string;
-};
-
-@Entity()
-export class ExtendedUser extends User<
-  ExtendedEmail,
-  Session<ExtendedUser>,
-  Service<ExtendedUser>
-> {
-  @Property({ nullable: true })
-  name?: string;
-
-  @Property({ nullable: true })
-  surname?: string;
-
-  constructor({ name, surname, ...otherProps }: ExtendedUserCtorArgs) {
-    super(otherProps);
-    if (name) {
-      this.name = name;
-    }
-    if (surname) {
-      this.surname = surname;
-    }
-  }
-}
+import { UserCtor } from '@accounts/mikro-orm/lib/entity/User';
 
 type ExtendedEmailCtorArgs = EmailCtorArgs<ExtendedUser> & {
-  randomAttribute?: string;
+  fullName?: string;
 };
 
 @Entity()
 export class ExtendedEmail extends Email<ExtendedUser> {
   @Property({ nullable: true })
-  randomAttribute?: string;
+  fullName?: string;
 
-  constructor({ randomAttribute, ...otherProps }: ExtendedEmailCtorArgs) {
+  constructor({ fullName, ...otherProps }: ExtendedEmailCtorArgs) {
     super(otherProps);
-    if (randomAttribute) {
-      this.randomAttribute = randomAttribute;
+    if (fullName) {
+      this.fullName = fullName;
+    }
+  }
+}
+
+type ExtendedUserCtorArgs = UserCtorArgs & {
+  profile: {
+    firstName: string;
+    lastName: string;
+  };
+};
+
+const User: UserCtor<ExtendedEmail, any, any, ExtendedUserCtorArgs> = getUserCtor({
+  EmailEntity: ExtendedEmail,
+  getCustomEmailArgs: ({ profile: { firstName, lastName } }: ExtendedUserCtorArgs) => ({
+    fullName: `${firstName} ${lastName}`,
+  }),
+});
+
+@Entity()
+export class ExtendedUser extends User {
+  @Property({ nullable: true })
+  name?: string;
+
+  @Property({ nullable: true })
+  surname?: string;
+
+  constructor(args: ExtendedUserCtorArgs) {
+    super(args);
+    const {
+      profile: { firstName, lastName },
+    } = args;
+    if (firstName) {
+      this.name = firstName;
+    }
+    if (lastName) {
+      this.surname = lastName;
     }
   }
 }

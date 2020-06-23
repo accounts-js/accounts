@@ -1,7 +1,7 @@
 import { IdentifiedReference, Reference, EntitySchema } from 'mikro-orm';
-import { User, UserCtor } from './User';
+import { IUser, UserCtor } from './User';
 
-export class Session<CustomUser extends User<any, any, any>> {
+export class Session<CustomUser extends IUser<any, any, any>> {
   id!: number;
 
   createdAt: Date = new Date();
@@ -36,7 +36,7 @@ export class Session<CustomUser extends User<any, any, any>> {
   }
 }
 
-export type SessionCtorArgs<CustomUser extends User<any, any, any>> = {
+export type SessionCtorArgs<CustomUser extends IUser<any, any, any>> = {
   user: CustomUser;
   token: string;
   valid: boolean;
@@ -45,7 +45,7 @@ export type SessionCtorArgs<CustomUser extends User<any, any, any>> = {
   extra?: object;
 };
 
-export type SessionCtor<CustomUser extends User<any, any, any>> = new (
+export type SessionCtor<CustomUser extends IUser<any, any, any>> = new (
   args: SessionCtorArgs<CustomUser>
 ) => Session<CustomUser>;
 

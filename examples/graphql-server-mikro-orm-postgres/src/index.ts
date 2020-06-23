@@ -4,16 +4,17 @@ import { mergeTypeDefs, mergeResolvers } from '@graphql-toolkit/schema-merging';
 import { AccountsModule } from '@accounts/graphql-api';
 import { AccountsPassword } from '@accounts/password';
 import { AccountsServer } from '@accounts/server';
-import { AccountsMikroOrm, IUser } from '@accounts/mikro-orm';
+import { AccountsMikroOrm } from '@accounts/mikro-orm';
 import { MikroORM } from 'mikro-orm';
 import config, { ExtendedUser, ExtendedEmail } from './mikro-orm-config';
+import { User as AccountsUser } from '@accounts/types/lib/types/user';
 
 export const createAccounts = async () => {
   const tokenSecret = config.password;
   const orm = await MikroORM.init(config);
   const { em } = orm;
   const db = new AccountsMikroOrm({ em, UserEntity: ExtendedUser, EmailEntity: ExtendedEmail });
-  const password = new AccountsPassword<IUser>();
+  const password = new AccountsPassword<AccountsUser>();
   const accountsServer = new AccountsServer(
     {
       db,
@@ -28,30 +29,30 @@ export const createAccounts = async () => {
   });
 
   const typeDefs = `
-type PrivateType @auth {
-field: String
-}
+    type PrivateType @auth {
+      field: String
+    }
 
-# Our custom fields to add to the user
-extend input CreateUserInput {
-profile: CreateUserProfileInput!
-}
+    # Our custom fields to add to the user
+    extend input CreateUserInput {
+      profile: CreateUserProfileInput!
+    }
 
-input CreateUserProfileInput {
-firstName: String!
-lastName: String!
-}
+    input CreateUserProfileInput {
+      firstName: String!
+      lastName: String!
+    }
 
-type Query {
-publicField: String
-privateField: String @auth
-privateType: PrivateType
-}
+    type Query {
+      publicField: String
+      privateField: String @auth
+      privateType: PrivateType
+    }
 
-type Mutation {
-_: String
-}
-`;
+    type Mutation {
+      _: String
+    }
+  `;
 
   const resolvers = {
     Query: {
