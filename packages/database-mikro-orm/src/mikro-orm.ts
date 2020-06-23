@@ -1,17 +1,17 @@
 import { ConnectionInformations, CreateUser, DatabaseInterface } from '@accounts/types';
-import { User } from './entity/User';
+import { IUser, getUserCtor } from './entity/User';
 import { Email } from './entity/Email';
 import { Service } from './entity/Service';
 import { Session } from './entity/Session';
 import { AccountsMikroOrmOptions } from './types';
 import { EntityRepository, EntityManager, Constructor } from 'mikro-orm';
-import { User as IUser } from '@accounts/types/lib/types/user';
+import { User as AccountsUser } from '@accounts/types/lib/types/user';
 import { Session as ISession } from '@accounts/types/lib/types/session/session';
 
 const hasPassword = (opt: object): opt is { bcrypt: string } =>
   !!(opt as { bcrypt: string }).bcrypt;
 
-const toUser = async (user: User<any, any, any> | null): Promise<IUser | null> =>
+const toUser = async (user: IUser<any, any, any> | null): Promise<AccountsUser | null> =>
   user && {
     ...user,
     id: String(user.id),
@@ -28,27 +28,27 @@ const toSession = async (session: Session<any> | null): Promise<ISession | null>
   };
 
 export class AccountsMikroOrm<
-  CustomUser extends User<any, any, any>,
+  CustomUser extends IUser<any, any, any>,
   CustomEmail extends Email<any>,
   CustomSession extends Session<any>,
   CustomService extends Service<any>
 > implements DatabaseInterface {
   private em: EntityManager;
-  private UserEntity: Constructor<CustomUser | User<any, any, any>>;
+  private UserEntity: Constructor<CustomUser | IUser<any, any, any>>;
   private EmailEntity: Constructor<CustomEmail | Email<any>>;
   private ServiceEntity: Constructor<CustomService | Service<any>>;
   private SessionEntity: Constructor<CustomSession | Session<any>>;
-  private userRepository: EntityRepository<User<any, any, any>>;
+  private userRepository: EntityRepository<IUser<any, any, any>>;
   private emailRepository: EntityRepository<Email<any>>;
   private serviceRepository: EntityRepository<Service<any>>;
   private sessionRepository: EntityRepository<Session<any>>;
 
   constructor({
     em,
-    UserEntity = User,
     EmailEntity = Email,
     ServiceEntity = Service,
     SessionEntity = Session,
+    UserEntity = getUserCtor({ EmailEntity, ServiceEntity }),
   }: AccountsMikroOrmOptions<CustomUser, CustomEmail, CustomSession, CustomService>) {
     this.em = em;
     this.UserEntity = UserEntity;
@@ -61,7 +61,7 @@ export class AccountsMikroOrm<
     this.sessionRepository = this.em.getRepository(this.SessionEntity);
   }
 
-  public async findUserByEmail(email: string): Promise<IUser | null> {
+  public async findUserByEmail(email: string): Promise<AccountsUser | null> {
     return toUser(
       await this.userRepository.findOne({
         emails: {
@@ -71,15 +71,15 @@ export class AccountsMikroOrm<
     );
   }
 
-  public async findUserByUsername(username: string): Promise<IUser | null> {
+  public async findUserByUsername(username: string): Promise<AccountsUser | null> {
     return toUser(await this.userRepository.findOne({ username }));
   }
 
-  public async findUserById(userId: string): Promise<IUser | null> {
+  public async findUserById(userId: string): Promise<AccountsUser | null> {
     return toUser(await this.userRepository.findOne(Number(userId)));
   }
 
-  public async findUserByResetPasswordToken(token: string): Promise<IUser | null> {
+  public async findUserByResetPasswordToken(token: string): Promise<AccountsUser | null> {
     return toUser(
       await this.userRepository.findOne({
         services: {
@@ -90,7 +90,7 @@ export class AccountsMikroOrm<
     );
   }
 
-  public async findUserByEmailVerificationToken(token: string): Promise<IUser | null> {
+  public async findUserByEmailVerificationToken(token: string): Promise<AccountsUser | null> {
     return toUser(
       await this.userRepository.findOne({
         services: {
@@ -108,8 +108,6 @@ export class AccountsMikroOrm<
     ...otherFields
   }: CreateUser): Promise<string> {
     const user = new this.UserEntity({
-      EmailEntity: this.EmailEntity,
-      ServiceEntity: this.ServiceEntity,
       email,
       password,
       username,
@@ -126,7 +124,10 @@ export class AccountsMikroOrm<
     await this.em.flush();
   }
 
-  public async findUserByServiceId(serviceName: string, serviceId: string): Promise<IUser | null> {
+  public async findUserByServiceId(
+    serviceName: string,
+    serviceId: string
+  ): Promise<AccountsUser | null> {
     return toUser(await this.userRepository.findOne({ services: Number(serviceId) }));
   }
 
