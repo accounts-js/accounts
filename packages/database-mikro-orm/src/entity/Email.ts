@@ -1,7 +1,7 @@
 import { IdentifiedReference, Reference, EntitySchema } from 'mikro-orm';
-import { User, UserCtor } from './User';
+import { IUser, UserCtor } from './User';
 
-export class Email<CustomUser extends User<any, any, any>> {
+export class Email<CustomUser extends IUser<any, any, any>> {
   id!: number;
 
   user!: IdentifiedReference<CustomUser>;
@@ -21,13 +21,13 @@ export class Email<CustomUser extends User<any, any, any>> {
   }
 }
 
-export interface EmailCtorArgs<CustomUser extends User<any, any, any>> {
+export interface EmailCtorArgs<CustomUser extends IUser<any, any, any>> {
   address: string;
   user?: CustomUser;
   verified?: boolean;
 }
 
-export type EmailCtor<CustomUser extends User<any, any, any>> = new (
+export type EmailCtor<CustomUser extends IUser<any, any, any>> = new (
   args: EmailCtorArgs<CustomUser>
 ) => Email<CustomUser>;
 
