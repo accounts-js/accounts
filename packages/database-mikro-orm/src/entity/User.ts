@@ -25,18 +25,20 @@ export const getUserCtor = <
   CustomEmailCtorArgs extends EmailCtorArgs<any>,
   CustomServiceCtorArgs extends ServiceCtorArgs<any>
 >({
+  abstract = false,
   EmailEntity = Email,
   ServiceEntity = Service,
   getCustomEmailArgs = () => ({}),
   getCustomServiceArgs = () => ({}),
 }: {
+  abstract?: boolean;
   EmailEntity?: EmailCtor<any>;
   ServiceEntity?: ServiceCtor<any>;
   getCustomEmailArgs?: (args: UserCtorArgs & Partial<CustomEmailCtorArgs>) => Record<string, any>;
   getCustomServiceArgs?: (
     args: UserCtorArgs & Partial<CustomServiceCtorArgs>
   ) => Record<string, any>;
-} = {}) =>
+} = {}) => {
   class User implements IUser<CustomEmail, CustomSession, CustomService> {
     id!: number;
     username?: string;
@@ -71,7 +73,12 @@ export const getUserCtor = <
         );
       }
     }
-  };
+  }
+  if (abstract) {
+    Object.defineProperty(User, 'name', { value: 'AccountsUser' });
+  }
+  return User as UserCtor<CustomEmail, CustomSession, CustomService, UserCtorArgs>;
+};
 
 export interface UserCtorArgs {
   email?: string;
@@ -86,20 +93,29 @@ export type UserCtor<
   CustomUserCtorArgs extends UserCtorArgs = UserCtorArgs
 > = new (args: CustomUserCtorArgs) => IUser<CustomEmail, CustomSession, CustomService>;
 
-export const getUserSchema = ({
+export const getUserSchema = <
+  CustomEmail extends Email<any>,
+  CustomSession extends Session<any>,
+  CustomService extends Service<any>,
+  CustomUserCtorArgs extends UserCtorArgs
+>({
+  User,
   EmailEntity = Email,
   SessionEntity = Session,
   ServiceEntity = Service,
   abstract = false,
 }: {
+  User: UserCtor<CustomEmail, CustomSession, CustomService, CustomUserCtorArgs>;
   EmailEntity?: EmailCtor<any>;
   SessionEntity?: SessionCtor<any>;
   ServiceEntity?: ServiceCtor<any>;
   abstract?: boolean;
-} = {}) => {
-  const UserClass = getUserCtor({ EmailEntity, ServiceEntity });
-  const schema = new EntitySchema<IUser<any, any, any>>({
-    class: UserClass,
+}) => {
+  if (abstract) {
+    Object.defineProperty(User, 'name', { value: 'AccountsUser' });
+  }
+  return new EntitySchema<IUser<CustomEmail, CustomSession, CustomService>>({
+    class: User,
     abstract,
     properties: {
       id: { type: 'number', primary: true },
@@ -129,5 +145,4 @@ export const getUserSchema = ({
       },
     },
   });
-  return { ctor: UserClass, schema };
 };
