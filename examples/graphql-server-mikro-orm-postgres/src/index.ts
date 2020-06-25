@@ -6,15 +6,15 @@ import { AccountsPassword } from '@accounts/password';
 import { AccountsServer } from '@accounts/server';
 import { AccountsMikroOrm } from '@accounts/mikro-orm';
 import { MikroORM } from 'mikro-orm';
-import config, { ExtendedUser, ExtendedEmail } from './mikro-orm-config';
-import { User as AccountsUser } from '@accounts/types/lib/types/user';
+import config, { User, ExtendedEmail } from './mikro-orm-config';
+import { User as IAccountsUser } from '@accounts/types/lib/types/user';
 
 export const createAccounts = async () => {
   const tokenSecret = config.password;
   const orm = await MikroORM.init(config);
   const { em } = orm;
-  const db = new AccountsMikroOrm({ em, UserEntity: ExtendedUser, EmailEntity: ExtendedEmail });
-  const password = new AccountsPassword<AccountsUser>();
+  const db = new AccountsMikroOrm({ em, UserEntity: User, EmailEntity: ExtendedEmail });
+  const password = new AccountsPassword<IAccountsUser>();
   const accountsServer = new AccountsServer(
     {
       db,
