@@ -1,23 +1,23 @@
 import 'reflect-metadata';
 import {
-  getUserCtor,
-  UserCtorArgs,
-  getUserSchema,
+  UserCtorArgs as AccountsUserCtorArgs,
   Email,
   EmailCtorArgs,
   getEmailSchema,
   getServiceSchema,
   getSessionSchema,
+  Session,
+  Service,
 } from '@accounts/mikro-orm';
 import { ReflectMetadataProvider, Entity, Property } from 'mikro-orm';
-import { UserCtor } from '@accounts/mikro-orm/lib/entity/User';
+import { UserCtor, getUserCtor, getUserSchema } from '@accounts/mikro-orm/lib/entity/User';
 
-type ExtendedEmailCtorArgs = EmailCtorArgs<ExtendedUser> & {
+type ExtendedEmailCtorArgs = EmailCtorArgs<User> & {
   fullName?: string;
 };
 
 @Entity()
-export class ExtendedEmail extends Email<ExtendedUser> {
+export class ExtendedEmail extends Email<User> {
   @Property({ nullable: true })
   fullName?: string;
 
@@ -29,29 +29,32 @@ export class ExtendedEmail extends Email<ExtendedUser> {
   }
 }
 
-type ExtendedUserCtorArgs = UserCtorArgs & {
+type UserCtorArgs = AccountsUserCtorArgs & {
   profile: {
     firstName: string;
     lastName: string;
   };
 };
 
-const User: UserCtor<ExtendedEmail, any, any, ExtendedUserCtorArgs> = getUserCtor({
-  EmailEntity: ExtendedEmail,
-  getCustomEmailArgs: ({ profile: { firstName, lastName } }: ExtendedUserCtorArgs) => ({
-    fullName: `${firstName} ${lastName}`,
-  }),
-});
+const AccountsUser: UserCtor<ExtendedEmail, Session<any>, Service<any>, UserCtorArgs> = getUserCtor(
+  {
+    abstract: true,
+    EmailEntity: ExtendedEmail,
+    getCustomEmailArgs: ({ profile: { firstName, lastName } }: UserCtorArgs) => ({
+      fullName: `${firstName} ${lastName}`,
+    }),
+  }
+);
 
 @Entity()
-export class ExtendedUser extends User {
+export class User extends AccountsUser {
   @Property({ nullable: true })
   name?: string;
 
   @Property({ nullable: true })
   surname?: string;
 
-  constructor(args: ExtendedUserCtorArgs) {
+  constructor(args: UserCtorArgs) {
     super(args);
     const {
       profile: { firstName, lastName },
@@ -69,12 +72,12 @@ export default {
   metadataProvider: ReflectMetadataProvider,
   cache: { enabled: false },
   entities: [
-    ExtendedUser,
-    getUserSchema({ EmailEntity: ExtendedEmail, abstract: true }),
+    User,
+    getUserSchema({ User: AccountsUser, EmailEntity: ExtendedEmail, abstract: true }),
     ExtendedEmail,
-    getEmailSchema({ UserEntity: ExtendedUser, abstract: true }),
-    getServiceSchema({ UserEntity: ExtendedUser }),
-    getSessionSchema({ UserEntity: ExtendedUser }),
+    getEmailSchema({ UserEntity: User, abstract: true }),
+    getServiceSchema({ UserEntity: User }),
+    getSessionSchema({ UserEntity: User }),
   ],
   dbName: 'accounts',
   user: 'postgres',
