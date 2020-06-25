@@ -1,34 +1,53 @@
 import 'reflect-metadata';
-import { ApolloServer, makeExecutableSchema } from 'apollo-server';
+import { ApolloServer, makeExecutableSchema, gql } from 'apollo-server';
 import { mergeTypeDefs, mergeResolvers } from '@graphql-toolkit/schema-merging';
 import { AccountsModule } from '@accounts/graphql-api';
 import { AccountsPassword } from '@accounts/password';
-import { AccountsServer } from '@accounts/server';
+import { AccountsServer, ServerHooks } from '@accounts/server';
 import { AccountsMikroOrm } from '@accounts/mikro-orm';
 import { MikroORM } from 'mikro-orm';
 import config, { User, ExtendedEmail } from './mikro-orm-config';
-import { User as IAccountsUser } from '@accounts/types/lib/types/user';
 
 export const createAccounts = async () => {
-  const tokenSecret = config.password;
   const orm = await MikroORM.init(config);
   const { em } = orm;
-  const db = new AccountsMikroOrm({ em, UserEntity: User, EmailEntity: ExtendedEmail });
-  const password = new AccountsPassword<IAccountsUser>();
-  const accountsServer = new AccountsServer(
-    {
-      db,
-      tokenSecret,
-      siteUrl: 'http://localhost:3000',
+
+  const accountsDb = new AccountsMikroOrm({ em, UserEntity: User, EmailEntity: ExtendedEmail });
+
+  const accountsPassword = new AccountsPassword({
+    // This option is called when a new user create an account
+    // Inside we can apply our logic to validate the user fields
+    // By default accounts-js only allow 'username', 'email' and 'password' for the user
+    // In order to add custom fields you need to pass the validateNewUser function when you
+    // instantiate the 'accounts-password' package
+    validateNewUser: (user) => {
+      // For example we can allow only some kind of emails
+      if (user.email.endsWith('.xyz')) {
+        throw new Error('Invalid email');
+      }
+      return user;
     },
-    { password }
+  });
+
+  // Create accounts server that holds a lower level of all accounts operations
+  const accountsServer = new AccountsServer(
+    { db: accountsDb, tokenSecret: config.password },
+    { password: accountsPassword }
   );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  accountsServer.on(ServerHooks.ValidateLogin, ({ user }) => {
+    // This hook is called every time a user try to login.
+    // You can use it to only allow users with verified email to login.
+    // If you throw an error here it will be returned to the client.
+  });
+
   // Creates resolvers, type definitions, and schema directives used by accounts-js
   const accountsGraphQL = AccountsModule.forRoot({
     accountsServer,
   });
 
-  const typeDefs = `
+  const typeDefs = gql`
     type PrivateType @auth {
       field: String
     }
@@ -38,13 +57,21 @@ export const createAccounts = async () => {
       profile: CreateUserProfileInput!
     }
 
+    extend type User {
+      firstName: String!
+      lastName: String!
+    }
+
     input CreateUserProfileInput {
       firstName: String!
       lastName: String!
     }
 
     type Query {
+      # Example of how to get the userId from the context and return the current logged in user or null
+      me: User
       publicField: String
+      # You can only query this if you are logged in
       privateField: String @auth
       privateType: PrivateType
     }
@@ -56,6 +83,13 @@ export const createAccounts = async () => {
 
   const resolvers = {
     Query: {
+      me: async (_, __, ctx) => {
+        // ctx.userId will be set if user is logged in
+        if (ctx.userId) {
+          return accountsServer.findUserById(ctx.userId);
+        }
+        return null;
+      },
       publicField: () => 'public',
       privateField: () => 'private',
       privateType: () => ({
@@ -65,8 +99,8 @@ export const createAccounts = async () => {
   };
 
   const schema = makeExecutableSchema({
-    typeDefs: mergeTypeDefs([typeDefs, accountsGraphQL.typeDefs]) as any,
-    resolvers: mergeResolvers([accountsGraphQL.resolvers as any, resolvers]) as any,
+    typeDefs: mergeTypeDefs([typeDefs, accountsGraphQL.typeDefs]),
+    resolvers: mergeResolvers([accountsGraphQL.resolvers, resolvers]),
     schemaDirectives: {
       ...accountsGraphQL.schemaDirectives,
     },

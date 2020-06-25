@@ -49,10 +49,10 @@ const AccountsUser: UserCtor<ExtendedEmail, Session<any>, Service<any>, UserCtor
 @Entity()
 export class User extends AccountsUser {
   @Property({ nullable: true })
-  name?: string;
+  firstName?: string;
 
   @Property({ nullable: true })
-  surname?: string;
+  lastName?: string;
 
   constructor(args: UserCtorArgs) {
     super(args);
@@ -60,10 +60,10 @@ export class User extends AccountsUser {
       profile: { firstName, lastName },
     } = args;
     if (firstName) {
-      this.name = firstName;
+      this.firstName = firstName;
     }
     if (lastName) {
-      this.surname = lastName;
+      this.lastName = lastName;
     }
   }
 }
