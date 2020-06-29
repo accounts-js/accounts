@@ -6,13 +6,13 @@ import { AccountsPassword } from '@accounts/password';
 import { AccountsServer, ServerHooks } from '@accounts/server';
 import { AccountsMikroOrm } from '@accounts/mikro-orm';
 import { MikroORM } from 'mikro-orm';
-import config, { User, ExtendedEmail } from './mikro-orm-config';
+import config, { User, Email } from './mikro-orm-config';
 
 export const createAccounts = async () => {
   const orm = await MikroORM.init(config);
   const { em } = orm;
 
-  const accountsDb = new AccountsMikroOrm({ em, UserEntity: User, EmailEntity: ExtendedEmail });
+  const accountsDb = new AccountsMikroOrm({ em, UserEntity: User, EmailEntity: Email });
 
   const accountsPassword = new AccountsPassword({
     // This option is called when a new user create an account

@@ -1,7 +1,5 @@
 import { IdentifiedReference, Reference, EntitySchema } from 'mikro-orm';
-import { IUser, UserCtor, UserCtorArgs } from './User';
-import { Email } from './Email';
-import { Service } from './Service';
+import { IUser, UserCtor } from './User';
 
 export class Session<CustomUser extends IUser<any, any, any>> {
   id!: number;
@@ -51,18 +49,27 @@ export type SessionCtor<CustomUser extends IUser<any, any, any>> = new (
   args: SessionCtorArgs<CustomUser>
 ) => Session<CustomUser>;
 
-export const getSessionSchema = <
-  CustomEmail extends Email<any>,
-  CustomSession extends Session<any>,
-  CustomService extends Service<any>,
-  CustomUserCtorArgs extends UserCtorArgs
->({
+export const getSessionCtor = <CustomUser extends IUser<any, any, any>>({
+  abstract = false,
+}: {
+  abstract?: boolean;
+} = {}): SessionCtor<CustomUser> => {
+  if (abstract) {
+    Object.defineProperty(Session, 'name', { value: 'AccountsSession' });
+  }
+  return Session as SessionCtor<CustomUser>;
+};
+
+export const getSessionSchema = ({
   UserEntity,
   abstract = false,
 }: {
-  UserEntity?: UserCtor<CustomEmail, CustomSession, CustomService, CustomUserCtorArgs>;
+  UserEntity?: UserCtor<any, any, any, any>;
   abstract?: boolean;
 } = {}) => {
+  if (abstract) {
+    Object.defineProperty(Session, 'name', { value: 'AccountsSession' });
+  }
   return new EntitySchema<Session<any>>({
     class: Session,
     abstract,
