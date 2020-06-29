@@ -1,27 +1,30 @@
 import 'reflect-metadata';
 import {
   UserCtorArgs as AccountsUserCtorArgs,
-  Email,
-  EmailCtorArgs,
+  EmailCtorArgs as AccountsEmailCtorArgs,
   getEmailSchema,
   getServiceSchema,
   getSessionSchema,
+  getEmailCtor,
   Session,
   Service,
+  ServiceCtorArgs,
 } from '@accounts/mikro-orm';
 import { ReflectMetadataProvider, Entity, Property } from 'mikro-orm';
 import { UserCtor, getUserCtor, getUserSchema } from '@accounts/mikro-orm/lib/entity/User';
 
-type ExtendedEmailCtorArgs = EmailCtorArgs<User> & {
+const AccountsEmail = getEmailCtor<User>({ abstract: true });
+
+type EmailCtorArgs = AccountsEmailCtorArgs<User> & {
   fullName?: string;
 };
 
 @Entity()
-export class ExtendedEmail extends Email<User> {
+export class Email extends AccountsEmail {
   @Property({ nullable: true })
   fullName?: string;
 
-  constructor({ fullName, ...otherProps }: ExtendedEmailCtorArgs) {
+  constructor({ fullName, ...otherProps }: EmailCtorArgs) {
     super(otherProps);
     if (fullName) {
       this.fullName = fullName;
@@ -36,15 +39,20 @@ type UserCtorArgs = AccountsUserCtorArgs & {
   };
 };
 
-const AccountsUser: UserCtor<ExtendedEmail, Session<any>, Service<any>, UserCtorArgs> = getUserCtor(
-  {
-    abstract: true,
-    EmailEntity: ExtendedEmail,
-    getCustomEmailArgs: ({ profile: { firstName, lastName } }: UserCtorArgs) => ({
-      fullName: `${firstName} ${lastName}`,
-    }),
-  }
-);
+const AccountsUser: UserCtor<Email, Session<User>, Service<User>, UserCtorArgs> = getUserCtor<
+  Email,
+  Session<User>,
+  Service<User>,
+  UserCtorArgs,
+  EmailCtorArgs,
+  ServiceCtorArgs<User>
+>({
+  abstract: true,
+  EmailEntity: Email,
+  getCustomEmailArgs: ({ profile: { firstName, lastName } }) => ({
+    fullName: `${firstName} ${lastName}`,
+  }),
+});
 
 @Entity()
 export class User extends AccountsUser {
@@ -73,8 +81,8 @@ export default {
   cache: { enabled: false },
   entities: [
     User,
-    getUserSchema({ User: AccountsUser, EmailEntity: ExtendedEmail, abstract: true }),
-    ExtendedEmail,
+    Email,
+    getUserSchema({ AccountsUser, EmailEntity: Email, abstract: true }),
     getEmailSchema({ UserEntity: User, abstract: true }),
     getServiceSchema({ UserEntity: User }),
     getSessionSchema({ UserEntity: User }),

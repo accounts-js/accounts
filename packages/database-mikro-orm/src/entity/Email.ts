@@ -1,7 +1,5 @@
 import { IdentifiedReference, Reference, EntitySchema } from 'mikro-orm';
-import { IUser, UserCtor, UserCtorArgs } from './User';
-import { Session } from './Session';
-import { Service } from './Service';
+import { IUser, UserCtor } from './User';
 
 export class Email<CustomUser extends IUser<any, any, any>> {
   id!: number;
@@ -33,18 +31,27 @@ export type EmailCtor<CustomUser extends IUser<any, any, any>> = new (
   args: EmailCtorArgs<CustomUser>
 ) => Email<CustomUser>;
 
-export const getEmailSchema = <
-  CustomEmail extends Email<any>,
-  CustomSession extends Session<any>,
-  CustomService extends Service<any>,
-  CustomUserCtorArgs extends UserCtorArgs
->({
+export const getEmailCtor = <CustomUser extends IUser<any, any, any>>({
+  abstract = false,
+}: {
+  abstract?: boolean;
+} = {}): EmailCtor<CustomUser> => {
+  if (abstract) {
+    Object.defineProperty(Email, 'name', { value: 'AccountsEmail' });
+  }
+  return Email as EmailCtor<CustomUser>;
+};
+
+export const getEmailSchema = ({
   UserEntity,
   abstract = false,
 }: {
-  UserEntity?: UserCtor<CustomEmail, CustomSession, CustomService, CustomUserCtorArgs>;
+  UserEntity?: UserCtor<any, any, any, any>;
   abstract?: boolean;
 } = {}) => {
+  if (abstract) {
+    Object.defineProperty(Email, 'name', { value: 'AccountsEmail' });
+  }
   return new EntitySchema<Email<any>>({
     class: Email,
     abstract,
