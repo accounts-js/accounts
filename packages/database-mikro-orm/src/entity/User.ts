@@ -22,22 +22,21 @@ export const getUserCtor = <
   CustomEmail extends Email<any>,
   CustomSession extends Session<any>,
   CustomService extends Service<any>,
+  CustomUserCtorArgs extends UserCtorArgs,
   CustomEmailCtorArgs extends EmailCtorArgs<any>,
   CustomServiceCtorArgs extends ServiceCtorArgs<any>
 >({
   abstract = false,
-  EmailEntity = Email,
-  ServiceEntity = Service,
+  EmailEntity = Email as new (args: CustomEmailCtorArgs) => CustomEmail,
+  ServiceEntity = Service as new (args: CustomServiceCtorArgs) => CustomService,
   getCustomEmailArgs = () => ({}),
   getCustomServiceArgs = () => ({}),
 }: {
   abstract?: boolean;
-  EmailEntity?: EmailCtor<any>;
-  ServiceEntity?: ServiceCtor<any>;
-  getCustomEmailArgs?: (args: UserCtorArgs & Partial<CustomEmailCtorArgs>) => Record<string, any>;
-  getCustomServiceArgs?: (
-    args: UserCtorArgs & Partial<CustomServiceCtorArgs>
-  ) => Record<string, any>;
+  EmailEntity?: new (args: CustomEmailCtorArgs) => CustomEmail;
+  ServiceEntity?: new (args: CustomServiceCtorArgs) => CustomService;
+  getCustomEmailArgs?: (args: CustomUserCtorArgs) => Partial<CustomEmailCtorArgs>;
+  getCustomServiceArgs?: (args: CustomUserCtorArgs) => Partial<CustomServiceCtorArgs>;
 } = {}) => {
   class User implements IUser<CustomEmail, CustomSession, CustomService> {
     id!: number;
@@ -49,18 +48,14 @@ export const getUserCtor = <
     createdAt = new Date();
     updatedAt = new Date();
 
-    constructor(
-      args: UserCtorArgs &
-        ReturnType<typeof getCustomEmailArgs> &
-        ReturnType<typeof getCustomServiceArgs>
-    ) {
+    constructor(args: CustomUserCtorArgs) {
       const { email, password, username } = args;
       if (username) {
         this.username = username;
       }
       if (email) {
         this.emails.add(
-          new EmailEntity({ address: email, ...getCustomEmailArgs(args) }) as CustomEmail
+          new EmailEntity({ address: email, ...getCustomEmailArgs(args) } as CustomEmailCtorArgs)
         );
       }
       if (password) {
@@ -69,7 +64,7 @@ export const getUserCtor = <
             name: 'password',
             password,
             ...getCustomServiceArgs(args),
-          }) as CustomService
+          } as CustomServiceCtorArgs)
         );
       }
     }
@@ -77,7 +72,7 @@ export const getUserCtor = <
   if (abstract) {
     Object.defineProperty(User, 'name', { value: 'AccountsUser' });
   }
-  return User as UserCtor<CustomEmail, CustomSession, CustomService, UserCtorArgs>;
+  return User as UserCtor<CustomEmail, CustomSession, CustomService, CustomUserCtorArgs>;
 };
 
 export interface UserCtorArgs {
@@ -87,35 +82,30 @@ export interface UserCtorArgs {
 }
 
 export type UserCtor<
-  CustomEmail extends Email<any> = any,
-  CustomSession extends Session<any> = any,
-  CustomService extends Service<any> = any,
-  CustomUserCtorArgs extends UserCtorArgs = UserCtorArgs
-> = new (args: CustomUserCtorArgs) => IUser<CustomEmail, CustomSession, CustomService>;
-
-export const getUserSchema = <
   CustomEmail extends Email<any>,
   CustomSession extends Session<any>,
   CustomService extends Service<any>,
   CustomUserCtorArgs extends UserCtorArgs
->({
-  User,
+> = new (args: CustomUserCtorArgs) => IUser<CustomEmail, CustomSession, CustomService>;
+
+export const getUserSchema = ({
+  AccountsUser,
   EmailEntity = Email,
   SessionEntity = Session,
   ServiceEntity = Service,
   abstract = false,
 }: {
-  User: UserCtor<CustomEmail, CustomSession, CustomService, CustomUserCtorArgs>;
+  AccountsUser: UserCtor<any, any, any, any>;
   EmailEntity?: EmailCtor<any>;
   SessionEntity?: SessionCtor<any>;
   ServiceEntity?: ServiceCtor<any>;
   abstract?: boolean;
 }) => {
   if (abstract) {
-    Object.defineProperty(User, 'name', { value: 'AccountsUser' });
+    Object.defineProperty(AccountsUser, 'name', { value: 'AccountsUser' });
   }
-  return new EntitySchema<IUser<CustomEmail, CustomSession, CustomService>>({
-    class: User,
+  return new EntitySchema<InstanceType<typeof AccountsUser>>({
+    class: AccountsUser,
     abstract,
     properties: {
       id: { type: 'number', primary: true },
