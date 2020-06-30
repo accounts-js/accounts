@@ -1530,26 +1530,26 @@
     pascal-case "3.1.1"
     tslib "~2.0.0"
 
-"@graphql-modules/core@0.7.16":
-  version "0.7.16"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.7.16.tgz#c17758d85304b041760a501ac8aa5640c7915aa9"
-  integrity sha512-j4jqGVJFqLDx6jaUw1tuKLRaI+GSp3J1GxIQnvke8ho9zpB/hK//PrQiIPK+vO3yf501WouhfICRxdHHvrZGCQ==
+"@graphql-modules/core@0.7.17":
+  version "0.7.17"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/core/-/core-0.7.17.tgz#ae9bbf44894509664bc0b6fcdd9b6cf3d99bcd00"
+  integrity sha512-hGJa1VIsIHTKJ0Hc5gJfFrdhHAF1Vm+LWYeMNC5mPbVd/IZA1wVSpdLDjjliylLI6GnVRu1YreS2gXvFNXPJFA==
   dependencies:
-    "@graphql-modules/di" "0.7.16"
+    "@graphql-modules/di" "0.7.17"
     "@graphql-toolkit/common" "0.10.6"
     "@graphql-toolkit/schema-merging" "0.10.6"
     apollo-server-caching "0.5.1"
     deepmerge "4.2.2"
     graphql-tools "5.0.0"
-    tslib "1.11.2"
+    tslib "2.0.0"
 
-"@graphql-modules/di@0.7.16":
-  version "0.7.16"
-  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.7.16.tgz#1752c2b258f3015c830258da229f470ae66ace2a"
-  integrity sha512-BCWANYKdntr71NXs3KWiGGt/7meS64MS06KCkPKC8fa0IZvo+M5/jnHo61su9EWOmykpq+rEVXr8sRBmH9uOfQ==
+"@graphql-modules/di@0.7.17":
+  version "0.7.17"
+  resolved "https://registry.yarnpkg.com/@graphql-modules/di/-/di-0.7.17.tgz#049f93f204a6d90b7ee4e047a0654c6056f28065"
+  integrity sha512-Lq5sd/3RO+bNb8wVnAg43LWbwrqD57D0AVEqZlqiTwUj1f0mITtQdGMRN7g2sG79U7ngoaQx8VK/IiKh8E1OFQ==
   dependencies:
     events "3.1.0"
-    tslib "1.11.2"
+    tslib "2.0.0"
 
 "@graphql-toolkit/common@0.10.6":
   version "0.10.6"
@@ -17305,11 +17305,6 @@ tslib@1.11.1:
   version "1.11.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.11.1.tgz#eb15d128827fbee2841549e171f45ed338ac7e35"
   integrity sha512-aZW88SY8kQbU7gpV19lN24LtXh/yD4ZZg6qieAJDDg+YBsJcSmLGK9QpnUjAKVG/xefmvJGd1WUmfpT/g6AJGA==
-
-tslib@1.11.2:
-  version "1.11.2"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.11.2.tgz#9c79d83272c9a7aaf166f73915c9667ecdde3cc9"
-  integrity sha512-tTSkux6IGPnUGUd1XAZHcpu85MOkIl5zX49pO+jfsie3eP0B6pyhOlLXm3cAC6T7s+euSDDUUV+Acop5WmtkVg==
 
 tslib@2.0.0, tslib@^2.0.0, tslib@~2.0.0:
   version "2.0.0"
