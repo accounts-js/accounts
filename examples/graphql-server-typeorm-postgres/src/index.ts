@@ -1,6 +1,6 @@
 require('dotenv').config();
 import { ApolloServer, makeExecutableSchema } from 'apollo-server';
-import { mergeTypeDefs, mergeResolvers } from '@graphql-toolkit/schema-merging';
+import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
 
 import { AccountsModule } from '@accounts/graphql-api';
 import { AccountsPassword } from '@accounts/password';

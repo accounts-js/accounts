@@ -1,5 +1,5 @@
 import { GraphQLModule } from '@graphql-modules/core';
-import { mergeTypeDefs } from '@graphql-toolkit/schema-merging';
+import { mergeTypeDefs } from '@graphql-tools/merge';
 import { User, ConnectionInformations } from '@accounts/types';
 import { AccountsServer } from '@accounts/server';
 import AccountsPassword from '@accounts/password';
