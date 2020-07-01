@@ -3563,10 +3563,10 @@
     "@types/bson" "*"
     "@types/node" "*"
 
-"@types/mongodb@3.5.16":
-  version "3.5.16"
-  resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.5.16.tgz#b39b2e4873a5f399aa2a9027baeca542d0d76ebe"
-  integrity sha512-q12k9vFEGfQTUTC9KiN+Lf1nPpEawuPyTfIHBgGn+lSD/4ICZhePxQqEe/ukRgAjS63vdc+Td758VBr4bUGNjg==
+"@types/mongodb@3.5.25":
+  version "3.5.25"
+  resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.5.25.tgz#ab187db04d79f8e3f15af236327dc9139d9d4736"
+  integrity sha512-2H/Owt+pHCl9YmBOYnXc3VdnxejJEjVdH+QCWL5ZAfPehEn3evygKBX3/vKRv7aTwfNbUd0E5vjJdQklH/9a6w==
   dependencies:
     "@types/bson" "*"
     "@types/node" "*"
