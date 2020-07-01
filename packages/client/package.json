@@ -43,7 +43,7 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "25.2.1",
+    "@types/jest": "25.2.3",
     "@types/jwt-decode": "2.2.1",
     "@types/node": "14.0.13",
     "jest": "26.0.1",
