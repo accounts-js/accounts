@@ -38,7 +38,7 @@
     "@types/express": "4.17.6",
     "@types/express-session": "1.17.0",
     "@types/jest": "25.2.3",
-    "@types/lodash": "4.14.150",
+    "@types/lodash": "4.14.157",
     "@types/request-ip": "0.0.35",
     "express": "4.17.1",
     "express-session": "1.17.1",
