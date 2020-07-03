@@ -50,7 +50,8 @@ export class AccountsMikroOrm<
     SessionEntity = Session,
     UserEntity = getUserCtor({ EmailEntity, ServiceEntity }),
   }: AccountsMikroOrmOptions<CustomUser, CustomEmail, CustomSession, CustomService>) {
-    this.em = em;
+    console.log('AccountsMikroOrm ctor');
+    this.em = em.fork();
     this.UserEntity = UserEntity;
     this.EmailEntity = EmailEntity;
     this.ServiceEntity = ServiceEntity;

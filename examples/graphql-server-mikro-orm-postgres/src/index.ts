@@ -2,49 +2,46 @@ import 'reflect-metadata';
 import { ApolloServer, makeExecutableSchema, gql } from 'apollo-server';
 import { mergeTypeDefs, mergeResolvers } from '@graphql-toolkit/schema-merging';
 import { AccountsModule } from '@accounts/graphql-api';
-import { AccountsPassword } from '@accounts/password';
-import { AccountsServer, ServerHooks } from '@accounts/server';
-import { AccountsMikroOrm } from '@accounts/mikro-orm';
+import { AccountsServer } from '@accounts/server';
 import { MikroORM } from 'mikro-orm';
 import config, { User, Email } from './mikro-orm-config';
+import { ProviderScope } from '@graphql-modules/di';
 
 export const createAccounts = async () => {
   const orm = await MikroORM.init(config);
   const { em } = orm;
 
-  const accountsDb = new AccountsMikroOrm({ em, UserEntity: User, EmailEntity: Email });
-
-  const accountsPassword = new AccountsPassword({
-    // This option is called when a new user create an account
-    // Inside we can apply our logic to validate the user fields
-    // By default accounts-js only allow 'username', 'email' and 'password' for the user
-    // In order to add custom fields you need to pass the validateNewUser function when you
-    // instantiate the 'accounts-password' package
-    validateNewUser: (user) => {
-      // For example we can allow only some kind of emails
-      if (user.email.endsWith('.xyz')) {
-        throw new Error('Invalid email');
-      }
-      return user;
-    },
-  });
-
-  // Create accounts server that holds a lower level of all accounts operations
-  const accountsServer = new AccountsServer(
-    { db: accountsDb, tokenSecret: config.password },
-    { password: accountsPassword }
-  );
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  /* FIXME: hooks need to be implemented
   accountsServer.on(ServerHooks.ValidateLogin, ({ user }) => {
     // This hook is called every time a user try to login.
     // You can use it to only allow users with verified email to login.
     // If you throw an error here it will be returned to the client.
   });
+  */
 
   // Creates resolvers, type definitions, and schema directives used by accounts-js
   const accountsGraphQL = AccountsModule.forRoot({
-    accountsServer,
+    scope: ProviderScope.Session,
+    db: { mikroOrm: [{ em, UserEntity: User, EmailEntity: Email }] },
+    tokenSecret: config.password,
+    services: {
+      password: [
+        {
+          // This option is called when a new user create an account
+          // Inside we can apply our logic to validate the user fields
+          // By default accounts-js only allow 'username', 'email' and 'password' for the user
+          // In order to add custom fields you need to pass the validateNewUser function when you
+          // instantiate the 'accounts-password' package
+          validateNewUser: (user) => {
+            // For example we can allow only some kind of emails
+            if (user.email.endsWith('.xyz')) {
+              throw new Error('Invalid email');
+            }
+            return user;
+          },
+        },
+      ],
+    },
   });
 
   const typeDefs = gql`
@@ -83,10 +80,10 @@ export const createAccounts = async () => {
 
   const resolvers = {
     Query: {
-      me: async (_, __, ctx) => {
+      me: async (_, __, { userId, injector }) => {
         // ctx.userId will be set if user is logged in
-        if (ctx.userId) {
-          return accountsServer.findUserById(ctx.userId);
+        if (userId) {
+          return injector.get(AccountsServer).findUserById(userId);
         }
         return null;
       },

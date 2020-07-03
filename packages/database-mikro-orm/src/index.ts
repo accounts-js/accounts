@@ -15,9 +15,11 @@ import {
   SessionCtor,
   getSessionCtor,
 } from './entity/Session';
+import { AccountsMikroOrmOptions } from './types';
 
 export {
   AccountsMikroOrm,
+  AccountsMikroOrmOptions,
   IUser,
   Email,
   Service,
