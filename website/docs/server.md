@@ -43,7 +43,7 @@ The `@accounts/server` module exposes a set of methods that can be used directly
 
 ### Find a user
 
-Find a user by his id.
+Find a user by their id.
 
 ```javascript
 const user = await accountsServer.findUserById(userId);
@@ -101,7 +101,7 @@ const loginResult = await accountsServer.loginWithUser(user, {
 
 ### Deactivate a user
 
-Deactivate a user, the user will not be able to login until his account is reactivated.
+Deactivate a user, the user will not be able to login until their account is reactivated.
 
 ```javascript
 await accountsServer.deactivateUser(userId);
@@ -117,7 +117,7 @@ await accountsServer.activateUser(userId);
 
 ### Logout a user
 
-Logout a user and invalidate his session with the session access token.
+Logout a user and invalidate their session with the session access token.
 
 ```javascript
 await accountsServer.logout(accessToken);

@@ -66,7 +66,7 @@ await accountsPassword.resetPassword('token', 'newPassword');
 
 ### Verify email
 
-When a user is created, his email will be marked as unverified. To verify the user email, the first step is to send him an email containing a random secret. Then your application needs to send this token to the server to verify the email of the user.
+When a user is created, their email will be marked as unverified. To verify the user email, the first step is to send him an email containing a random secret. Then your application needs to send this token to the server to verify the email of the user.
 
 ```javascript
 // Send an email with a link the user can use verify their email address.
