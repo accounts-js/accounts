@@ -45,3 +45,11 @@ jobs:
         env:
           CI: true
           REACT_APP_API_URL: http://localhost:3000
+      - name: Test documentation
+        run: |
+          cd website
+          yarn install --frozen-lockfile
+          yarn generate-api-docs
+          yarn build
+        env:
+          CI: true

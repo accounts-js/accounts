@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
@@ -11,9 +10,9 @@
     "generate-api-docs": "rm -rf docs/api && ts-node scripts/generate-api-docs.ts"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-alpha.54",
-    "@docusaurus/preset-classic": "2.0.0-alpha.54",
-    "classnames": "2.2.6",
+    "@docusaurus/core": "2.0.0-alpha.58",
+    "@docusaurus/preset-classic": "2.0.0-alpha.58",
+    "clsx": "1.1.1",
     "docusaurus-plugin-fathom": "1.1.0",
     "react": "16.13.1",
     "react-dom": "16.13.1"
@@ -33,6 +32,6 @@
   "devDependencies": {
     "ts-node": "8.10.1",
     "typedoc": "0.17.6",
-    "typedoc-plugin-markdown": "2.2.17"
+    "typedoc-plugin-markdown": "2.3.1"
   }
 }
