@@ -1,10 +1,3 @@
-/**
- * Copyright (c) 2017-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
 module.exports = {
   title: 'accounts-js',
   tagline: 'Fullstack authentication and accounts-management for Javascript',
@@ -58,6 +51,10 @@ module.exports = {
               label: 'Slack',
               href: 'https://accounts-js.slack.com',
             },
+            {
+              label: 'Twitter',
+              href: 'https://twitter.com/accountsjs',
+            },
           ],
         },
       ],
@@ -79,5 +76,5 @@ module.exports = {
       },
     ],
   ],
-  plugins: ['docusaurus-plugin-fathom'],
+  plugins: [require.resolve('docusaurus-plugin-fathom')],
 };

@@ -1,10 +1,19 @@
-import { readdirSync, readFileSync, writeFileSync, renameSync } from 'fs';
+import { readdirSync, readFileSync, writeFileSync, renameSync, copyFileSync } from 'fs';
 import { resolve } from 'path';
 import { Application } from 'typedoc';
 
 const packagesDir = resolve(__dirname, '..', '..', 'packages');
 const websiteDir = resolve(__dirname, '..', '..', 'website');
 const apiDocsDir = resolve(__dirname, '..', '..', 'website', 'docs', 'api');
+const sidebarPath = resolve(websiteDir, 'sidebars.js');
+const sidebarTmpPath = resolve(websiteDir, 'sidebars.tmp.js');
+
+/**
+ * We need to save the sidebar content in a variable because typedoc-plugin-markdown overwrite
+ * the file to generate the package sidebar. At the end of the script we restore the file.
+ */
+copyFileSync(sidebarPath, sidebarTmpPath);
+writeFileSync(sidebarPath, `module.exports = {};`, { encoding: 'utf8' });
 
 let dirs = readdirSync(packagesDir);
 
@@ -35,10 +44,7 @@ dirs.forEach((dir) => {
   );
 
   // We move the generated sidebar into the good API folder so they can be reused when the sidebar is generated
-  renameSync(
-    resolve(websiteDir, 'website', 'sidebars.js'),
-    resolve(apiDocsDir, dir, 'sidebars.js')
-  );
+  renameSync(sidebarPath, resolve(apiDocsDir, dir, 'sidebars.js'));
 });
 
 // This is a fix for a generics issue, see https://github.com/tom-grey/typedoc-plugin-markdown/issues/119
@@ -52,7 +58,5 @@ fileContent = fileContent.replace(
 );
 writeFileSync(filePath, fileContent, { encoding: 'utf8' });
 
-// console.log(`generated docs for packages:`);
-// dirs.forEach(dir => {
-//   console.log(`"api/${dir}/index",`);
-// });
+// We restore the sidebar file.
+renameSync(sidebarTmpPath, sidebarPath);

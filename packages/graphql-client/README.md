@@ -1,27 +1,23 @@
 # @accounts/graphql-client
 
-_Client side graphql transport for accounts suite_
+[![npm](https://img.shields.io/npm/v/@accounts/graphql-client)](https://www.npmjs.com/package/@accounts/graphql-client)
+[![npm downloads](https://img.shields.io/npm/dm/@accounts/graphql-client)](https://www.npmjs.com/package/@accounts/graphql-client)
+[![codecov](https://img.shields.io/codecov/c/github/accounts-js/accounts)](https://codecov.io/gh/accounts-js/accounts)
+[![License](https://img.shields.io/github/license/accounts-js/accounts)](https://github.com/accounts-js/accounts/blob/master/LICENSE)
 
-[![npm](https://img.shields.io/npm/v/@accounts/graphql-client.svg?maxAge=2592000)](https://www.npmjs.com/package/@accounts/graphql-client) ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
+Client side graphql transport for accounts-js suite
 
-## Install
+## Documentation
+
+- [Website documentation](https://www.accountsjs.com/docs/transports/graphql#graphql-client)
+- [API documentation](https://www.accountsjs.com/docs/api/graphql-client/globals)
+
+## Installation
 
 ```
 yarn add @accounts/graphql-client
 ```
 
-## Usage
+## Contributing
 
-```js
-import { ApolloClient } from 'apollo-client';
-import { AccountsGraphQLClient } from '@accounts/graphql-client';
-
-const apolloClient = new ApolloClient({
-  // apollo options
-});
-
-const accountsGraphQL = new AccountsGraphQLClient({
-  graphQLClient: apolloClient,
-  // other options
-});
-```
+Any contribution is very welcome, read our [contributing guide](https://github.com/accounts-js/accounts/blob/master/CONTRIBUTING.md) to see how to locally setup the repository and see our development process.

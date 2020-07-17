@@ -24,8 +24,8 @@
     "tslib": "2.0.0"
   },
   "devDependencies": {
-    "@types/jest": "25.2.1",
-    "@types/node": "14.0.13",
+    "@types/jest": "25.2.3",
+    "@types/node": "14.0.14",
     "@types/request-promise": "4.1.46",
     "jest": "26.0.1"
   }

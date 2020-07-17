@@ -62,7 +62,7 @@ Now, add `accountsGraphQL.typeDefs` to your schema definition, and extend your r
 
 ```js
 import { ApolloServer } from 'apollo-server';
-import { mergeResolvers, mergeTypeDefs } from 'graphql-toolkit';
+import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
 
 const typeDefs = `
   type Query {

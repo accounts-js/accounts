@@ -1,23 +1,21 @@
 # @accounts/server
 
-[![npm](https://img.shields.io/npm/v/@accounts/server.svg?maxAge=2592000)](https://www.npmjs.com/package/@accounts/server)
-![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
+[![npm](https://img.shields.io/npm/v/@accounts/server)](https://www.npmjs.com/package/@accounts/server)
+[![npm downloads](https://img.shields.io/npm/dm/@accounts/server)](https://www.npmjs.com/package/@accounts/server)
+[![codecov](https://img.shields.io/codecov/c/github/accounts-js/accounts)](https://codecov.io/gh/accounts-js/accounts)
+[![License](https://img.shields.io/github/license/accounts-js/accounts)](https://github.com/accounts-js/accounts/blob/master/LICENSE)
 
-## Install
+## Documentation
+
+- [Website documentation](https://www.accountsjs.com/docs/server)
+- [API documentation](https://www.accountsjs.com/docs/api/server/globals)
+
+## Installation
 
 ```
 yarn add @accounts/server
 ```
 
-## Usage
+## Contributing
 
-```js
-import { AccountsServer } from '@accounts/server';
-
-const accountsServer = new AccountsServer({
-  db: accountsDatabase,
-  tokenSecret: ..., // a random string
-}, {
-  // accounts-js services
-});
-```
+Any contribution is very welcome, read our [contributing guide](https://github.com/accounts-js/accounts/blob/master/CONTRIBUTING.md) to see how to locally setup the repository and see our development process.

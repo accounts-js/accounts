@@ -1,5 +1,4 @@
 import * as express from 'express';
-import { get, isEmpty } from 'lodash';
 import { AccountsServer } from '@accounts/server';
 
 export const userLoader = (accountsServer: AccountsServer) => async (
@@ -8,11 +7,9 @@ export const userLoader = (accountsServer: AccountsServer) => async (
   next: any
 ) => {
   let accessToken =
-    get(req.headers, 'Authorization') ||
-    get(req.headers, 'authorization') ||
-    get(req.body, 'accessToken', undefined);
+    req.headers?.Authorization || req.headers?.authorization || req.body?.accessToken || undefined;
   accessToken = accessToken && accessToken.replace('Bearer ', '');
-  if (!isEmpty(accessToken)) {
+  if (accessToken) {
     try {
       (req as any).authToken = accessToken;
       const user = await accountsServer.resumeSession(accessToken);

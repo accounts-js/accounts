@@ -1,19 +1,18 @@
-# @accounts/password
+# @accounts/types
 
-[![npm](https://img.shields.io/npm/v/@accounts/password)](https://www.npmjs.com/package/@accounts/password)
-[![npm downloads](https://img.shields.io/npm/dm/@accounts/password)](https://www.npmjs.com/package/@accounts/password)
+[![npm](https://img.shields.io/npm/v/@accounts/types)](https://www.npmjs.com/package/@accounts/types)
+[![npm downloads](https://img.shields.io/npm/dm/@accounts/types)](https://www.npmjs.com/package/@accounts/types)
 [![codecov](https://img.shields.io/codecov/c/github/accounts-js/accounts)](https://codecov.io/gh/accounts-js/accounts)
 [![License](https://img.shields.io/github/license/accounts-js/accounts)](https://github.com/accounts-js/accounts/blob/master/LICENSE)
 
-## Documentation
+This package is a devDependency for most packages of the suite.
 
-- [Website documentation](https://www.accountsjs.com/docs/strategies/password)
-- [API documentation](https://www.accountsjs.com/docs/api/password/globals)
+It contains the types used across the accounts-js Suite.
 
 ## Installation
 
 ```
-yarn add @accounts/password
+yarn add @accounts/types
 ```
 
 ## Contributing

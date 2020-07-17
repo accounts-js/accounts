@@ -5,7 +5,7 @@ import { AccountsPassword } from '@accounts/password';
 import { AccountsServer, ServerHooks } from '@accounts/server';
 import { ApolloServer, makeExecutableSchema } from 'apollo-server';
 import gql from 'graphql-tag';
-import { mergeResolvers, mergeTypeDefs } from '@graphql-toolkit/schema-merging';
+import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
 import mongoose from 'mongoose';
 
 const start = async () => {
