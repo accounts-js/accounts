@@ -485,12 +485,13 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     }
 
     let sessionToken: string;
-    let userId: string = 'TODO';
+    let userId: string;
     try {
       const decodedAccessToken = jwt.verify(accessToken, this.getSecretOrPublicKey()) as {
         data: JwtData;
       };
       sessionToken = decodedAccessToken.data.token;
+      userId = decodedAccessToken.data.userId;
     } catch (err) {
       throw new AccountsJsError(
         'Tokens are not valid',
