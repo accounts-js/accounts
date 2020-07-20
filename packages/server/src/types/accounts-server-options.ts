@@ -55,7 +55,7 @@ export interface AccountsServerOptions<CustomUser extends User = User> {
   useInternalUserObjectSanitizer?: boolean;
   /**
    * Should the session mechanism be stateless. By default the token is checked against the database in every
-   * request. This allow you to be able to revoke any session at any time.
+   * request. This allow you to revoke a session at any time.
    * Since we are using JWT you can decide to have a stateless session. This means that the token won't be
    * checked against the database on every request. Using the stateless approach will make the server authorisation
    * check faster but this means that you won't be able to able to invalidate the access token until it's expired.

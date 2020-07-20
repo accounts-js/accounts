@@ -123,7 +123,40 @@ Logout a user and invalidate their session with the session access token.
 await accountsServer.logout(accessToken);
 ```
 
-## Customising the JWT payload
+## Session
+
+accounts-js use [JWT](https://jwt.io/introduction/) to implement authentication via tokens.
+
+A session is represented by a pair of access-token and refresh-token strings:
+
+- The access-token is a short-lived token that is sent along with every request to verify the identity of the user.
+- The refresh-token is a long-lived token that is used to get a new access-token after the previous one becomes expired.
+
+### Stateful session
+
+This is the default behavior of the accounts-js server. On every request, the validity will be checked against the database. This allows you to revoke a session at any time. We recommend using the Redis database adapter to store the sessions as the check will be done faster.
+
+### Stateless session
+
+Since we are using JWT you can decide to have a stateless session. This means that the token won't be checked against the database on every request. Using the stateless approach will make the server authorisation check faster but this means that you won't be able to able to invalidate the access token until it's expired.
+
+Set the `useStatelessSession` to `true` on the accounts-js server if you want to enable this behavior.
+
+```ts
+const accountsServer = new AccountsServer({
+  useStatelessSession: true,
+});
+```
+
+:::caution
+Only use this option if you understand the downsides of this approach.
+:::
+
+### Debugging a JWT token
+
+To debug a JWT token you can use the [JWT debugger](https://jwt.io/#debugger-io) and paste your token in the "Generated" input. On the right side, you will be able to see the payload that your token contains.
+
+### Customising the JWT payload
 
 When creating the JWT accessToken, accounts-js will add the following properties: `userId`, `isImpersonated`. If you want to add your own data to the payload (eg: roles or other), you can do it using the `createJwtPayload` option.
 
