@@ -7,7 +7,7 @@ export const associateByMfaTokenMutation = (associateFieldsFragment?: any) => gq
         mfaToken
         authenticatorId
       }
-      ${associateFieldsFragment}
+      ${associateFieldsFragment || ''}
     }
   }
 `;
