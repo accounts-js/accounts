@@ -880,6 +880,28 @@ describe('AccountsServer', () => {
       );
     });
 
+    it('should throw if session is not found', async () => {
+      const user = {
+        id: '123',
+        username: 'username',
+        deactivated: false,
+      };
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionByToken: () => Promise.resolve(null),
+          } as any,
+          tokenSecret: 'secret1',
+        },
+        {}
+      );
+
+      const { accessToken } = await accountsServer.createTokens({ token: '456', user });
+      await expect(accountsServer.resumeSession(accessToken)).rejects.toThrowError(
+        'Session not found'
+      );
+    });
+
     it('should throw if session is not valid', async () => {
       const user = {
         id: '123',
