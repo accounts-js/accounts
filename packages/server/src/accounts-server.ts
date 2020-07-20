@@ -474,6 +474,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
   /**
    * @description Resume the current session associated to the access token. Will throw if the token
    * or the session is invalid.
+   * If `useStatelessSession` is false the session validity will be checked against the database.
    * @param accessToken - User JWT access token.
    * @returns Return the user associated to the session.
    * @throws {@link ResumeSessionErrors}
@@ -498,7 +499,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     }
 
     // If the session is stateful we check the validity of the token against the db
-    let session: Session | null;
+    let session: Session | null = null;
     if (!this.options.useStatelessSession) {
       session = await this.db.findSessionByToken(sessionToken);
       if (!session) {
@@ -516,7 +517,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
 
     await this.options.resumeSessionValidator?.(user, session!);
 
-    this.hooks.emit(ServerHooks.ResumeSessionSuccess, { user, accessToken });
+    this.hooks.emit(ServerHooks.ResumeSessionSuccess, { user, accessToken, session });
 
     return this.sanitizeUser(user);
   }
