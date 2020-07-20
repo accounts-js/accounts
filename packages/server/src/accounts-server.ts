@@ -250,6 +250,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
 
   /**
    * @description Impersonate to another user.
+   * For security reasons, even if `useStatelessSession` is set to true the token will be checked against the database.
    * @param {string} accessToken - User access token.
    * @param {object} impersonated - impersonated user.
    * @param {ConnectionInformations} infos - User connection informations.
@@ -263,7 +264,6 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
   ): Promise<ImpersonationResult> {
     try {
       const session = await this.findSessionByAccessToken(accessToken);
-
       if (!session.valid) {
         throw new AccountsJsError(
           'Session is not valid for user',
@@ -272,7 +272,6 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       }
 
       const user = await this.db.findUserById(session.userId);
-
       if (!user) {
         throw new AccountsJsError('User not found', ImpersonateErrors.UserNotFound);
       }
@@ -301,7 +300,6 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       }
 
       const isAuthorized = await this.options.impersonationAuthorize(user, impersonatedUser);
-
       if (!isAuthorized) {
         return { authorized: false };
       }
@@ -395,7 +393,6 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
           user,
           infos,
         };
-
         this.hooks.emit(ServerHooks.RefreshTokensSuccess, result);
 
         return result;
