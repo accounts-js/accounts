@@ -173,3 +173,15 @@ const accountsServer = new AccountsServer({
   },
 });
 ```
+
+### Revoking all the sessions for a user
+
+After a session is invalidated, the access-token can't be used to authenticate the user (unless you are using the `useStatelessSession` option) and the refresh-token can't be used to get a new token.
+
+To invalidate all the open sessions for a user, call the following method against your accounts-js database adapter:
+
+```ts
+accountsDatabase.invalidateAllSessions('userId');
+```
+
+The user will need to reauthenticate to get a new access and refresh token.
