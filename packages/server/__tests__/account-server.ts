@@ -851,6 +851,20 @@ describe('AccountsServer', () => {
   });
 
   describe('resumeSession', () => {
+    it('throws error if access token is not provided', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {} as any,
+          tokenSecret: 'secret1',
+        },
+        {}
+      );
+
+      await expect(accountsServer.resumeSession(undefined as any)).rejects.toThrowError(
+        'An accessToken is required'
+      );
+    });
+
     it('throws error if user is not found', async () => {
       const accountsServer = new AccountsServer(
         {
