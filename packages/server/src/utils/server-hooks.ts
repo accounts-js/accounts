@@ -9,6 +9,7 @@ export const ServerHooks = {
   CreateUserSuccess: 'CreateUserSuccess',
   CreateUserError: 'CreateUserError',
   ResumeSessionSuccess: 'ResumeSessionSuccess',
+  ResumeSessionError: 'ResumeSessionError',
   RefreshTokensSuccess: 'RefreshTokensSuccess',
   RefreshTokensError: 'RefreshTokensError',
   ImpersonationSuccess: 'ImpersonationSuccess',

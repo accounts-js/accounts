@@ -477,47 +477,52 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
    * @throws {@link ResumeSessionErrors}
    */
   public async resumeSession(accessToken: string): Promise<CustomUser> {
-    if (!isString(accessToken)) {
-      throw new AccountsJsError('An accessToken is required', ResumeSessionErrors.InvalidToken);
-    }
-
-    let sessionToken: string;
-    let userId: string;
     try {
-      const decodedAccessToken = jwt.verify(accessToken, this.getSecretOrPublicKey()) as {
-        data: JwtData;
-      };
-      sessionToken = decodedAccessToken.data.token;
-      userId = decodedAccessToken.data.userId;
-    } catch (err) {
-      throw new AccountsJsError(
-        'Tokens are not valid',
-        ResumeSessionErrors.TokenVerificationFailed
-      );
-    }
-
-    // If the session is stateful we check the validity of the token against the db
-    let session: Session | null = null;
-    if (!this.options.useStatelessSession) {
-      session = await this.db.findSessionByToken(sessionToken);
-      if (!session) {
-        throw new AccountsJsError('Session not found', ResumeSessionErrors.SessionNotFound);
+      if (!isString(accessToken)) {
+        throw new AccountsJsError('An accessToken is required', ResumeSessionErrors.InvalidToken);
       }
-      if (!session.valid) {
-        throw new AccountsJsError('Invalid Session', ResumeSessionErrors.InvalidSession);
+
+      let sessionToken: string;
+      let userId: string;
+      try {
+        const decodedAccessToken = jwt.verify(accessToken, this.getSecretOrPublicKey()) as {
+          data: JwtData;
+        };
+        sessionToken = decodedAccessToken.data.token;
+        userId = decodedAccessToken.data.userId;
+      } catch (err) {
+        throw new AccountsJsError(
+          'Tokens are not valid',
+          ResumeSessionErrors.TokenVerificationFailed
+        );
       }
+
+      // If the session is stateful we check the validity of the token against the db
+      let session: Session | null = null;
+      if (!this.options.useStatelessSession) {
+        session = await this.db.findSessionByToken(sessionToken);
+        if (!session) {
+          throw new AccountsJsError('Session not found', ResumeSessionErrors.SessionNotFound);
+        }
+        if (!session.valid) {
+          throw new AccountsJsError('Invalid Session', ResumeSessionErrors.InvalidSession);
+        }
+      }
+
+      const user = await this.db.findUserById(userId);
+      if (!user) {
+        throw new AccountsJsError('User not found', ResumeSessionErrors.UserNotFound);
+      }
+
+      await this.options.resumeSessionValidator?.(user, session!);
+
+      this.hooks.emit(ServerHooks.ResumeSessionSuccess, { user, accessToken, session });
+
+      return this.sanitizeUser(user);
+    } catch (error) {
+      this.hooks.emit(ServerHooks.ResumeSessionError, error);
+      throw error;
     }
-
-    const user = await this.db.findUserById(userId);
-    if (!user) {
-      throw new AccountsJsError('User not found', ResumeSessionErrors.UserNotFound);
-    }
-
-    await this.options.resumeSessionValidator?.(user, session!);
-
-    this.hooks.emit(ServerHooks.ResumeSessionSuccess, { user, accessToken, session });
-
-    return this.sanitizeUser(user);
   }
 
   /**
