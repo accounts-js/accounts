@@ -7,6 +7,10 @@
   "scripts": {
     "coverage": "jest --forceExit --runInBand"
   },
+  "files": [
+    "src",
+    "lib"
+  ],
   "jest": {
     "testEnvironment": "node",
     "setupFiles": [

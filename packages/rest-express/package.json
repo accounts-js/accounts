@@ -18,6 +18,10 @@
     "testonly": "jest",
     "coverage": "npm run testonly -- --coverage"
   },
+  "files": [
+    "src",
+    "lib"
+  ],
   "jest": {
     "testEnvironment": "node",
     "preset": "ts-jest"

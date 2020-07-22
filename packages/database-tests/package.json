@@ -11,6 +11,10 @@
     "compile": "tsc",
     "prepublishOnly": "yarn compile"
   },
+  "files": [
+    "src",
+    "lib"
+  ],
   "jest": {
     "testEnvironment": "node",
     "preset": "ts-jest"

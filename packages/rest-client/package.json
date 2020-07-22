@@ -17,6 +17,10 @@
     "testonly": "jest",
     "coverage": "npm run testonly -- --coverage"
   },
+  "files": [
+    "src",
+    "lib"
+  ],
   "jest": {
     "testEnvironment": "jsdom",
     "preset": "ts-jest"

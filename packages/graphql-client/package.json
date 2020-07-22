@@ -11,6 +11,10 @@
     "compile": "tsc",
     "prepublishOnly": "yarn compile"
   },
+  "files": [
+    "src",
+    "lib"
+  ],
   "jest": {
     "preset": "ts-jest"
   },

@@ -13,6 +13,10 @@
     "coverage": "yarn testonly --coverage",
     "prepublishOnly": "yarn compile"
   },
+  "files": [
+    "src",
+    "lib"
+  ],
   "jest": {
     "testEnvironment": "node",
     "preset": "ts-jest"
