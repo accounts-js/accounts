@@ -27,7 +27,7 @@
   "devDependencies": {
     "@types/jest": "25.2.3",
     "jest": "26.0.1",
-    "lodash": "4.17.15"
+    "lodash": "4.17.19"
   },
   "dependencies": {
     "@accounts/client": "^0.28.0",
