@@ -397,7 +397,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
           } as any,
           tokenSecret: 'secret1',
-          resumeSessionValidator: () => Promise.resolve(user),
+          resumeSessionValidator: () => Promise.resolve(),
         },
         {}
       );
@@ -428,7 +428,7 @@ describe('AccountsServer', () => {
             findUserById: () => Promise.resolve(user),
           } as any,
           tokenSecret: 'secret1',
-          resumeSessionValidator: () => Promise.resolve(user),
+          resumeSessionValidator: () => Promise.resolve(),
         },
         {}
       );
@@ -918,6 +918,20 @@ describe('AccountsServer', () => {
   });
 
   describe('resumeSession', () => {
+    it('throws error if access token is not provided', async () => {
+      const accountsServer = new AccountsServer(
+        {
+          db: {} as any,
+          tokenSecret: 'secret1',
+        },
+        {}
+      );
+
+      await expect(accountsServer.resumeSession(undefined as any)).rejects.toThrowError(
+        'An accessToken is required'
+      );
+    });
+
     it('throws error if user is not found', async () => {
       const accountsServer = new AccountsServer(
         {
@@ -944,6 +958,28 @@ describe('AccountsServer', () => {
       });
       await expect(accountsServer.resumeSession(accessToken)).rejects.toThrowError(
         'User not found'
+      );
+    });
+
+    it('should throw if session is not found', async () => {
+      const user = {
+        id: '123',
+        username: 'username',
+        deactivated: false,
+      };
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionByToken: () => Promise.resolve(null),
+          } as any,
+          tokenSecret: 'secret1',
+        },
+        {}
+      );
+
+      const { accessToken } = await accountsServer.createTokens({ token: '456', user });
+      await expect(accountsServer.resumeSession(accessToken)).rejects.toThrowError(
+        'Session not found'
       );
     });
 
