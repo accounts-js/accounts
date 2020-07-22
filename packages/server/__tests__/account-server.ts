@@ -378,6 +378,73 @@ describe('AccountsServer', () => {
       expect(hookSpy).toHaveBeenCalled();
     });
 
+    it('ServerHooks.ResumeSessionError with invalid session', async () => {
+      const user = {
+        id: '123',
+        username: 'username',
+        deactivated: false,
+      };
+      const hookSpy = jest.fn(() => null);
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionByToken: () =>
+              Promise.resolve({
+                id: '456',
+                valid: false,
+                userId: '123',
+              }),
+            findUserById: () => Promise.resolve(user),
+          } as any,
+          tokenSecret: 'secret1',
+          resumeSessionValidator: () => Promise.resolve(),
+        },
+        {}
+      );
+      accountsServer.on(ServerHooks.ResumeSessionError, hookSpy);
+
+      const { accessToken } = await accountsServer.createTokens({ token: '456', user });
+
+      try {
+        await accountsServer.resumeSession(accessToken);
+      } catch (e) {
+        // nothing to do
+      }
+      await delay(10);
+      expect(hookSpy).toHaveBeenCalled();
+    });
+
+    it('ServerHooks.ResumeSessionError with invalid errored session', async () => {
+      const user = {
+        id: '123',
+        username: 'username',
+        deactivated: false,
+      };
+      const hookSpy = jest.fn(() => null);
+      const accountsServer = new AccountsServer(
+        {
+          db: {
+            findSessionByToken: () => Promise.reject(''),
+            findUserById: () => Promise.resolve(user),
+          } as any,
+          tokenSecret: 'secret1',
+          resumeSessionValidator: () => Promise.resolve(),
+        },
+        {}
+      );
+      accountsServer.on(ServerHooks.ResumeSessionError, hookSpy);
+
+      const { accessToken } = await accountsServer.createTokens({ token: '456', user });
+
+      try {
+        await accountsServer.resumeSession(accessToken);
+      } catch (e) {
+        // nothing to do
+      }
+      await delay(10);
+      expect(hookSpy).toHaveBeenCalled();
+    });
+
     it('ServerHooks.RefreshTokensError', async () => {
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
