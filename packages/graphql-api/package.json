@@ -1,6 +1,6 @@
 {
   "name": "@accounts/graphql-api",
-  "version": "0.27.0",
+  "version": "0.28.0",
   "description": "Server side GraphQL transport for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -28,9 +28,9 @@
   },
   "homepage": "https://github.com/js-accounts/graphql-api",
   "devDependencies": {
-    "@accounts/password": "^0.27.0",
-    "@accounts/server": "^0.27.0",
-    "@accounts/types": "^0.27.0",
+    "@accounts/password": "^0.28.0",
+    "@accounts/server": "^0.28.0",
+    "@accounts/types": "^0.28.0",
     "@graphql-codegen/add": "1.16.0",
     "@graphql-codegen/cli": "1.16.0",
     "@graphql-codegen/typescript": "1.16.0",
