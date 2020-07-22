@@ -13,6 +13,10 @@
     "testonly": "jest",
     "coverage": "jest --coverage"
   },
+  "files": [
+    "src",
+    "lib"
+  ],
   "jest": {
     "testEnvironment": "node",
     "preset": "ts-jest"
