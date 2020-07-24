@@ -8,22 +8,25 @@ import {
 } from '@accounts/types';
 import { print } from 'graphql/language';
 import gql from 'graphql-tag';
-import { addEmailMutation } from './graphql/add-email.mutation';
-import { authenticateWithServiceMutation } from './graphql/authenticate-with-service.mutation';
-import { changePasswordMutation } from './graphql/change-password.mutation';
+import { TypedDocumentNode } from '@graphql-typed-document-node/core';
+import {
+  AddEmailDocument,
+  AuthenticateWithServiceDocument,
+  GetTwoFactorSecretDocument,
+  ChangePasswordDocument,
+  LogoutDocument,
+  VerifyEmailDocument,
+  SendResetPasswordEmailDocument,
+  SendVerificationEmailDocument,
+  ResetPasswordDocument,
+  TwoFactorSetDocument,
+  TwoFactorUnsetDocument,
+  RefreshTokensDocument,
+} from './graphql-operations';
 import { createUserMutation } from './graphql/create-user.mutation';
-import { getTwoFactorSecretQuery } from './graphql/get-two-factor-secret.query';
 import { getUserQuery } from './graphql/get-user.query';
 import { impersonateMutation } from './graphql/impersonate.mutation';
 import { loginWithServiceMutation } from './graphql/login-with-service.mutation';
-import { logoutMutation } from './graphql/logout.mutation';
-import { refreshTokensMutation } from './graphql/refresh-tokens.mutation';
-import { resetPasswordMutation } from './graphql/reset-password.mutation';
-import { sendResetPasswordEmailMutation } from './graphql/send-reset-password-email.mutation';
-import { sendVerificationEmailMutation } from './graphql/send-verification-email.mutation';
-import { twoFactorSetMutation } from './graphql/two-factor-set.mutation';
-import { twoFactorUnsetMutation } from './graphql/two-factor-unset.mutation';
-import { verifyEmailMutation } from './graphql/verify-email.mutation';
 import { GraphQLErrorList } from './GraphQLErrorList';
 
 export interface AuthenticateParams {
@@ -73,7 +76,7 @@ export default class GraphQLClient implements TransportInterface {
     service: string,
     authenticateParams: { [key: string]: string | object }
   ): Promise<boolean> {
-    return this.mutate(authenticateWithServiceMutation, 'verifyAuthentication', {
+    return this.mutate(AuthenticateWithServiceDocument, 'verifyAuthentication', {
       serviceName: service,
       params: authenticateParams,
     });
@@ -100,68 +103,77 @@ export default class GraphQLClient implements TransportInterface {
    * @inheritDoc
    */
   public async logout(): Promise<void> {
-    return this.mutate(logoutMutation, 'logout');
+    return this.mutate(LogoutDocument, 'logout');
   }
 
   /**
    * @inheritDoc
    */
   public async refreshTokens(accessToken: string, refreshToken: string): Promise<LoginResult> {
-    return this.mutate(refreshTokensMutation, 'refreshTokens', { accessToken, refreshToken });
+    return this.mutate(RefreshTokensDocument, 'refreshTokens', { accessToken, refreshToken });
   }
 
   /**
    * @inheritDoc
    */
   public async verifyEmail(token: string): Promise<void> {
-    return this.mutate(verifyEmailMutation, 'verifyEmail', { token });
+    return this.mutate(VerifyEmailDocument, 'verifyEmail', { token });
   }
 
   /**
    * @inheritDoc
    */
   public async sendResetPasswordEmail(email: string): Promise<void> {
-    return this.mutate(sendResetPasswordEmailMutation, 'sendResetPasswordEmail', { email });
+    return this.mutate(SendResetPasswordEmailDocument, 'sendResetPasswordEmail', { email });
   }
 
   /**
    * @inheritDoc
    */
   public async sendVerificationEmail(email: string): Promise<void> {
-    return this.mutate(sendVerificationEmailMutation, 'sendVerificationEmail', { email });
+    return this.mutate(SendVerificationEmailDocument, 'sendVerificationEmail', { email });
   }
 
   /**
    * @inheritDoc
    */
   public async resetPassword(token: string, newPassword: string): Promise<LoginResult | null> {
-    return this.mutate(resetPasswordMutation, 'resetPassword', { token, newPassword });
+    return this.mutate(ResetPasswordDocument, 'resetPassword', { token, newPassword });
   }
 
   /**
    * @inheritDoc
    */
   public async addEmail(newEmail: string): Promise<void> {
-    return this.mutate(addEmailMutation, 'addEmail', { newEmail });
+    return this.mutate(AddEmailDocument, 'addEmail', { newEmail });
   }
 
   /**
    * @inheritDoc
    */
   public async changePassword(oldPassword: string, newPassword: string): Promise<void> {
-    return this.mutate(changePasswordMutation, 'changePassword', { oldPassword, newPassword });
+    return this.mutate(ChangePasswordDocument, 'changePassword', { oldPassword, newPassword });
   }
 
+  /**
+   * @inheritDoc
+   */
   public async getTwoFactorSecret(): Promise<any> {
-    return this.query(getTwoFactorSecretQuery, 'twoFactorSecret', {});
+    return this.query(GetTwoFactorSecretDocument, 'twoFactorSecret', {});
   }
 
+  /**
+   * @inheritDoc
+   */
   public async twoFactorSet(secret: any, code: string): Promise<void> {
-    return this.mutate(twoFactorSetMutation, 'twoFactorSet', { secret, code });
+    return this.mutate(TwoFactorSetDocument, 'twoFactorSet', { secret, code });
   }
 
+  /**
+   * @inheritDoc
+   */
   public async twoFactorUnset(code: string): Promise<void> {
-    return this.mutate(twoFactorUnsetMutation, 'twoFactorUnset', { code });
+    return this.mutate(TwoFactorUnsetDocument, 'twoFactorUnset', { code });
   }
 
   /**
@@ -182,11 +194,15 @@ export default class GraphQLClient implements TransportInterface {
     });
   }
 
-  private async mutate(mutation: any, resultField: any, variables: any = {}) {
+  private async mutate<TData = any, TVariables = Record<string, any>>(
+    mutation: TypedDocumentNode<TData, TVariables>,
+    resultField: any,
+    variables?: TVariables
+  ) {
     // If we are executing a refresh token mutation do not call refresh session again
     // otherwise it will end up in an infinite loop
     const tokens =
-      mutation === refreshTokensMutation
+      mutation === RefreshTokensDocument
         ? await this.client.getTokens()
         : await this.client.refreshSession();
 
@@ -210,7 +226,11 @@ export default class GraphQLClient implements TransportInterface {
     return data[resultField];
   }
 
-  private async query(query: any, resultField: any, variables: any = {}) {
+  private async query<TData = any, TVariables = Record<string, any>>(
+    query: TypedDocumentNode<TData, TVariables>,
+    resultField: any,
+    variables?: TVariables
+  ): Promise<TData> {
     const tokens = await this.client.refreshSession();
 
     const headers: { Authorization?: string } = {};

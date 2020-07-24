@@ -1,0 +1,8 @@
+schema: ../graphql-api/introspection.json
+documents: ./src/**/*.graphql
+generates:
+  ./src/graphql-operations.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typed-document-node

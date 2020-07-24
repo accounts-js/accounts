@@ -2,6 +2,11 @@ overwrite: true
 schema: ./src/schema.ts
 require: ts-node/register/transpile-only
 generates:
+  introspection.json:
+    plugins:
+      - introspection
+    config:
+      minify: true
   ./src/models.ts:
     config:
       noNamespaces: true
