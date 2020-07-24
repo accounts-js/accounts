@@ -6,11 +6,12 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf lib",
-    "start": "gql-gen && tsc --watch",
-    "precompile": "yarn clean && gql-gen",
-    "compile": "tsc",
+    "start": "yarn generate:graphql && tsc --watch",
+    "precompile": "yarn clean",
+    "compile": "yarn generate:graphql && tsc",
     "testonly": "jest",
     "coverage": "yarn testonly --coverage",
+    "generate:graphql": "gql-gen",
     "prepublishOnly": "yarn compile"
   },
   "files": [
