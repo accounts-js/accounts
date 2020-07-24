@@ -3,6 +3,7 @@ documents: ./src/**/*.graphql
 generates:
   ./src/graphql-operations.ts:
     plugins:
+      - add: /* eslint-disable */
       - typescript
       - typescript-operations
       - typed-document-node

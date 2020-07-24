@@ -1,7 +1,9 @@
+/* eslint-disable */
 import { DocumentNode } from 'graphql';
 import { TypedDocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
+
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
