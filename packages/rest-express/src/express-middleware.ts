@@ -2,6 +2,7 @@ import { providerCallback } from './endpoints/oauth/provider-callback';
 import { resetPassword, sendResetPasswordEmail } from './endpoints/password/reset';
 import { verifyEmail, sendVerificationEmail } from './endpoints/password/verify-email';
 import * as express from 'express';
+import * as requestIp from 'request-ip';
 import { AccountsServer } from '@accounts/server';
 import { refreshAccessToken } from './endpoints/refresh-access-token';
 import { getUser } from './endpoints/get-user';
@@ -15,6 +16,7 @@ import { changePassword } from './endpoints/password/change-password';
 import { addEmail } from './endpoints/password/add-email';
 import { userLoader } from './user-loader';
 import { AccountsExpressOptions } from './types';
+import { getUserAgent } from './utils/get-user-agent';
 
 const defaultOptions: AccountsExpressOptions = {
   path: '/accounts',
@@ -33,6 +35,16 @@ const accountsExpress = (
   }
 
   const router = express.Router();
+
+  /**
+   * Middleware to populate the user agent and ip.
+   */
+  router.use((req, _, next) => {
+    req.userAgent = getUserAgent(req);
+    req.ip = requestIp.getClientIp(req)!;
+
+    next();
+  });
 
   router.post(`${path}/impersonate`, impersonate(accountsServer));
 

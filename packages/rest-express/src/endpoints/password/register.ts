@@ -1,10 +1,8 @@
 import * as express from 'express';
-import * as requestIp from 'request-ip';
 import { AccountsServer, AccountsJsError } from '@accounts/server';
 import { AccountsPassword, CreateUserErrors } from '@accounts/password';
 import { CreateUserResult } from '@accounts/types';
 import { sendError } from '../../utils/send-error';
-import { getUserAgent } from '../../utils/get-user-agent';
 
 export const registerPassword = (accountsServer: AccountsServer) => async (
   req: express.Request,
@@ -44,16 +42,13 @@ export const registerPassword = (accountsServer: AccountsServer) => async (
     // When initializing AccountsServer we check that enableAutologin and ambiguousErrorMessages options
     // are not enabled at the same time
 
-    const userAgent = getUserAgent(req);
-    const ip = requestIp.getClientIp(req);
-
     const createdUser = await accountsServer.findUserById(userId);
 
     // If we are here - user must be created successfully
     // Explicitly saying this to Typescript compiler
     const loginResult = await accountsServer.loginWithUser(createdUser!, {
-      ip,
-      userAgent,
+      ip: req.ip,
+      userAgent: req.userAgent,
     });
 
     return res.json({

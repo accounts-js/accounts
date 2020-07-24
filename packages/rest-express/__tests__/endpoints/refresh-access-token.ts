@@ -27,14 +27,16 @@ describe('refreshAccessToken', () => {
         accessToken: 'token',
         refreshToken: 'refresh',
       },
+      ip: 'ipTest',
+      userAgent: 'userAgentTest',
     };
     const reqCopy = { ...req };
 
     await middleware(req as any, res);
 
     expect(accountsServer.refreshTokens).toHaveBeenCalledWith('token', 'refresh', {
-      ip: null,
-      userAgent: '',
+      ip: req.ip,
+      userAgent: req.userAgent,
     });
     expect(req).toEqual(reqCopy);
     expect(res.json).toHaveBeenCalledWith(session);
@@ -55,6 +57,8 @@ describe('refreshAccessToken', () => {
         accessToken: 'token',
         refreshToken: 'refresh',
       },
+      ip: 'ipTest',
+      userAgent: 'userAgentTest',
     };
     const reqCopy = { ...req };
 
@@ -62,8 +66,8 @@ describe('refreshAccessToken', () => {
 
     expect(req).toEqual(reqCopy);
     expect(accountsServer.refreshTokens).toHaveBeenCalledWith('token', 'refresh', {
-      ip: null,
-      userAgent: '',
+      ip: req.ip,
+      userAgent: req.userAgent,
     });
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith(error);

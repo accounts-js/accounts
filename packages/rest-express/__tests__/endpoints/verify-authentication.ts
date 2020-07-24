@@ -21,6 +21,8 @@ describe('serviceVerifyAuthentication', () => {
         service: 'sms',
       },
       headers: {},
+      ip: 'ipTest',
+      userAgent: 'userAgentTest',
     };
     const reqCopy = { ...req };
 
@@ -28,8 +30,8 @@ describe('serviceVerifyAuthentication', () => {
 
     expect(req).toEqual(reqCopy);
     expect(accountsServer.authenticateWithService).toHaveBeenCalledWith('sms', undefined, {
-      ip: null,
-      userAgent: '',
+      ip: req.ip,
+      userAgent: req.userAgent,
     });
     expect(res.json).toHaveBeenCalledWith(true);
     expect(res.status).not.toHaveBeenCalled();
@@ -48,6 +50,8 @@ describe('serviceVerifyAuthentication', () => {
         service: 'sms',
       },
       headers: {},
+      ip: 'ipTest',
+      userAgent: 'userAgentTest',
     };
     const reqCopy = { ...req };
 
@@ -55,8 +59,8 @@ describe('serviceVerifyAuthentication', () => {
 
     expect(req).toEqual(reqCopy);
     expect(accountsServer.authenticateWithService).toHaveBeenCalledWith('sms', undefined, {
-      ip: null,
-      userAgent: '',
+      ip: req.ip,
+      userAgent: req.userAgent,
     });
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith(error);

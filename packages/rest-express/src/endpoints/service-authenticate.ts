@@ -1,7 +1,5 @@
 import * as express from 'express';
-import * as requestIp from 'request-ip';
 import { AccountsServer } from '@accounts/server';
-import { getUserAgent } from '../utils/get-user-agent';
 import { sendError } from '../utils/send-error';
 
 export const serviceAuthenticate = (accountsServer: AccountsServer) => async (
@@ -10,11 +8,9 @@ export const serviceAuthenticate = (accountsServer: AccountsServer) => async (
 ) => {
   try {
     const serviceName = req.params.service;
-    const userAgent = getUserAgent(req);
-    const ip = requestIp.getClientIp(req);
     const loggedInUser = await accountsServer.loginWithService(serviceName, req.body, {
-      ip,
-      userAgent,
+      ip: req.ip,
+      userAgent: req.userAgent,
     });
     res.json(loggedInUser);
   } catch (err) {

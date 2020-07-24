@@ -25,6 +25,8 @@ describe('impersonate', () => {
         accessToken: 'token',
       },
       headers: {},
+      ip: 'ipTest',
+      userAgent: 'userAgentTest',
     };
     const reqCopy = { ...req };
 
@@ -32,8 +34,8 @@ describe('impersonate', () => {
 
     expect(req).toEqual(reqCopy);
     expect(accountsServer.impersonate).toHaveBeenCalledWith('token', 'toto', {
-      ip: null,
-      userAgent: '',
+      ip: req.ip,
+      userAgent: req.userAgent,
     });
     expect(res.json).toHaveBeenCalledWith(impersonateReturnType);
     expect(res.status).not.toHaveBeenCalled();
@@ -53,6 +55,8 @@ describe('impersonate', () => {
         accessToken: 'token',
       },
       headers: {},
+      ip: 'ipTest',
+      userAgent: 'userAgentTest',
     };
     const reqCopy = { ...req };
 
@@ -60,8 +64,8 @@ describe('impersonate', () => {
 
     expect(req).toEqual(reqCopy);
     expect(accountsServer.impersonate).toHaveBeenCalledWith('token', 'toto', {
-      ip: null,
-      userAgent: '',
+      ip: req.ip,
+      userAgent: req.userAgent,
     });
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith(error);
