@@ -2,7 +2,8 @@ coverage
 lib
 build
 package.json
-packages/graphql-api/schema.json
+packages/graphql-api/introspection.json
 packages/graphql-api/src/models.ts
+packages/graphql-client/src/graphql-operations.ts
 website/.docusaurus
 website/docs/api

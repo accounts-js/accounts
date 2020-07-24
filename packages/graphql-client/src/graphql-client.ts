@@ -10,6 +10,7 @@ import { print } from 'graphql/language';
 import gql from 'graphql-tag';
 import { TypedDocumentNode } from '@graphql-typed-document-node/core';
 import {
+  CreateUserDocument,
   AddEmailDocument,
   AuthenticateWithServiceDocument,
   GetTwoFactorSecretDocument,
@@ -22,11 +23,10 @@ import {
   TwoFactorSetDocument,
   TwoFactorUnsetDocument,
   RefreshTokensDocument,
+  GetUserDocument,
+  ImpersonateDocument,
+  AuthenticateDocument,
 } from './graphql-operations';
-import { createUserMutation } from './graphql/create-user.mutation';
-import { getUserQuery } from './graphql/get-user.query';
-import { impersonateMutation } from './graphql/impersonate.mutation';
-import { loginWithServiceMutation } from './graphql/login-with-service.mutation';
 import { GraphQLErrorList } from './GraphQLErrorList';
 
 export interface AuthenticateParams {
@@ -66,7 +66,8 @@ export default class GraphQLClient implements TransportInterface {
    * @memberof GraphQLClient
    */
   public async createUser(user: CreateUser): Promise<CreateUserResult> {
-    return this.mutate(createUserMutation(this.options.userFieldsFragment), 'createUser', { user });
+    // TODO allow this.options.userFieldsFragment customisation of the created user
+    return this.mutate(CreateUserDocument, 'createUser', { user });
   }
 
   /**
@@ -89,14 +90,16 @@ export default class GraphQLClient implements TransportInterface {
     service: string,
     authenticateParams: AuthenticateParams
   ): Promise<LoginResult> {
-    return this.mutate(loginWithServiceMutation(this.options.userFieldsFragment), 'authenticate', {
+    // TODO allow this.options.userFieldsFragment customisation
+    return this.mutate(AuthenticateDocument, 'authenticate', {
       serviceName: service,
       params: authenticateParams,
     });
   }
 
   public async getUser(): Promise<User> {
-    return this.query(getUserQuery(this.options.userFieldsFragment), 'getUser');
+    // TODO allow this.options.userFieldsFragment customisation of the created user
+    return this.query(GetUserDocument, 'getUser');
   }
 
   /**
@@ -183,14 +186,18 @@ export default class GraphQLClient implements TransportInterface {
     token: string,
     impersonated: {
       username?: string;
-      /* These aren't implemented in graphql-api, comment them out for now to avoid confusion */
-      // userId?: string;
-      // email?: string;
+      userId?: string;
+      email?: string;
     }
   ): Promise<ImpersonationResult> {
-    return this.mutate(impersonateMutation(this.options.userFieldsFragment), 'impersonate', {
+    // TODO allow this.options.userFieldsFragment customisation
+    return this.mutate(ImpersonateDocument, 'impersonate', {
       accessToken: token,
-      username: impersonated.username,
+      impersonated: {
+        userId: impersonated.userId,
+        username: impersonated.username,
+        email: impersonated.email,
+      },
     });
   }
 
@@ -198,7 +205,7 @@ export default class GraphQLClient implements TransportInterface {
     mutation: TypedDocumentNode<TData, TVariables>,
     resultField: any,
     variables?: TVariables
-  ) {
+  ): Promise<any> {
     // If we are executing a refresh token mutation do not call refresh session again
     // otherwise it will end up in an infinite loop
     const tokens =
@@ -230,7 +237,7 @@ export default class GraphQLClient implements TransportInterface {
     query: TypedDocumentNode<TData, TVariables>,
     resultField: any,
     variables?: TVariables
-  ): Promise<TData> {
+  ): Promise<any> {
     const tokens = await this.client.refreshSession();
 
     const headers: { Authorization?: string } = {};

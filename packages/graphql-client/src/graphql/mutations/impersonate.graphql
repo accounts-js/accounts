@@ -1,0 +1,12 @@
+mutation impersonate($accessToken: String!, $impersonated: ImpersonationUserIdentityInput!) {
+  impersonate(accessToken: $accessToken, impersonated: $impersonated) {
+    authorized
+    tokens {
+      refreshToken
+      accessToken
+    }
+    user {
+      ...userFields
+    }
+  }
+}
