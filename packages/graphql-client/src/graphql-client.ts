@@ -6,8 +6,7 @@ import {
   User,
   CreateUserResult,
 } from '@accounts/types';
-import { print } from 'graphql/language';
-import gql from 'graphql-tag';
+import { print, DocumentNode } from 'graphql/language';
 import { TypedDocumentNode } from '@graphql-typed-document-node/core';
 import {
   CreateUserDocument,
@@ -35,7 +34,7 @@ export interface AuthenticateParams {
 
 export interface OptionsType {
   graphQLClient: any;
-  userFieldsFragment?: any;
+  userFieldsFragment?: DocumentNode;
 }
 
 export default class GraphQLClient implements TransportInterface {
@@ -44,18 +43,6 @@ export default class GraphQLClient implements TransportInterface {
 
   constructor(options: OptionsType) {
     this.options = options;
-    this.options.userFieldsFragment =
-      this.options.userFieldsFragment ||
-      gql`
-        fragment userFields on User {
-          id
-          emails {
-            address
-            verified
-          }
-          username
-        }
-      `;
   }
 
   /**

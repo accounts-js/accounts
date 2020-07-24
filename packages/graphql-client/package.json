@@ -35,7 +35,6 @@
     "@accounts/client": "^0.28.0",
     "@accounts/types": "^0.28.0",
     "@graphql-typed-document-node/core": "0.0.1",
-    "graphql-tag": "^2.10.0",
     "tslib": "2.0.0"
   },
   "devDependencies": {
