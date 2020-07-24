@@ -15,6 +15,8 @@ const GET_USER_QUERY = gql`
         address
         verified
       }
+      firstName
+      lastName
     }
   }
 `;
@@ -44,7 +46,8 @@ const Home = ({ history }: RouteComponentProps<{}>) => {
       <Typography gutterBottom>Hello {data.getUser.username}</Typography>
       <Typography gutterBottom>You are logged in</Typography>
       <Typography gutterBottom>Email: {data.getUser.emails[0].address}</Typography>
-      <Typography gutterBottom>You username is {data.getUser.username}</Typography>
+      <Typography gutterBottom>First name: {data.getUser.firstName}</Typography>
+      <Typography gutterBottom>Last name: {data.getUser.lastName}</Typography>
       <Typography gutterBottom>
         You email is {data.getUser.emails[0].verified ? 'verified' : 'unverified'}
       </Typography>
