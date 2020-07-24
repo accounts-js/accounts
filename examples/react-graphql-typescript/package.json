@@ -36,6 +36,7 @@
     "apollo-link": "1.2.14",
     "apollo-link-http": "1.5.17",
     "graphql": "14.6.0",
+    "graphql-tag": "2.10.4",
     "qrcode.react": "1.0.0",
     "react": "16.13.1",
     "react-apollo": "2.5.8",

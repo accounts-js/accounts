@@ -27,6 +27,7 @@ import {
   AuthenticateDocument,
 } from './graphql-operations';
 import { GraphQLErrorList } from './GraphQLErrorList';
+import { replaceUserFieldsFragment } from './utils/replace-user-fragment';
 
 export interface AuthenticateParams {
   [key: string]: string | object;
@@ -53,8 +54,13 @@ export default class GraphQLClient implements TransportInterface {
    * @memberof GraphQLClient
    */
   public async createUser(user: CreateUser): Promise<CreateUserResult> {
-    // TODO allow this.options.userFieldsFragment customisation of the created user
-    return this.mutate(CreateUserDocument, 'createUser', { user });
+    return this.mutate(
+      this.options.userFieldsFragment
+        ? replaceUserFieldsFragment(CreateUserDocument, this.options.userFieldsFragment)
+        : CreateUserDocument,
+      'createUser',
+      { user }
+    );
   }
 
   /**
@@ -77,16 +83,28 @@ export default class GraphQLClient implements TransportInterface {
     service: string,
     authenticateParams: AuthenticateParams
   ): Promise<LoginResult> {
-    // TODO allow this.options.userFieldsFragment customisation
-    return this.mutate(AuthenticateDocument, 'authenticate', {
-      serviceName: service,
-      params: authenticateParams,
-    });
+    return this.mutate(
+      this.options.userFieldsFragment
+        ? replaceUserFieldsFragment(AuthenticateDocument, this.options.userFieldsFragment)
+        : AuthenticateDocument,
+      'authenticate',
+      {
+        serviceName: service,
+        params: authenticateParams,
+      }
+    );
   }
 
+  /**
+   * @inheritDoc
+   */
   public async getUser(): Promise<User> {
-    // TODO allow this.options.userFieldsFragment customisation of the created user
-    return this.query(GetUserDocument, 'getUser');
+    return this.query(
+      this.options.userFieldsFragment
+        ? replaceUserFieldsFragment(GetUserDocument, this.options.userFieldsFragment)
+        : GetUserDocument,
+      'getUser'
+    );
   }
 
   /**
@@ -177,15 +195,20 @@ export default class GraphQLClient implements TransportInterface {
       email?: string;
     }
   ): Promise<ImpersonationResult> {
-    // TODO allow this.options.userFieldsFragment customisation
-    return this.mutate(ImpersonateDocument, 'impersonate', {
-      accessToken: token,
-      impersonated: {
-        userId: impersonated.userId,
-        username: impersonated.username,
-        email: impersonated.email,
-      },
-    });
+    return this.mutate(
+      this.options.userFieldsFragment
+        ? replaceUserFieldsFragment(ImpersonateDocument, this.options.userFieldsFragment)
+        : ImpersonateDocument,
+      'impersonate',
+      {
+        accessToken: token,
+        impersonated: {
+          userId: impersonated.userId,
+          username: impersonated.username,
+          email: impersonated.email,
+        },
+      }
+    );
   }
 
   private async mutate<TData = any, TVariables = Record<string, any>>(
