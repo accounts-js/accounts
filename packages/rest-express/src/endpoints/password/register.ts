@@ -46,10 +46,7 @@ export const registerPassword = (accountsServer: AccountsServer) => async (
 
     // If we are here - user must be created successfully
     // Explicitly saying this to Typescript compiler
-    const loginResult = await accountsServer.loginWithUser(createdUser!, {
-      ip: req.ip,
-      userAgent: req.userAgent,
-    });
+    const loginResult = await accountsServer.loginWithUser(createdUser!, req.infos);
 
     return res.json({
       userId,

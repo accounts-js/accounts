@@ -8,10 +8,11 @@ export const serviceVerifyAuthentication = (accountsServer: AccountsServer) => a
 ) => {
   try {
     const serviceName = req.params.service;
-    const isAuthenticated = await accountsServer.authenticateWithService(serviceName, req.body, {
-      ip: req.ip,
-      userAgent: req.userAgent,
-    });
+    const isAuthenticated = await accountsServer.authenticateWithService(
+      serviceName,
+      req.body,
+      req.infos
+    );
     res.json(isAuthenticated);
   } catch (err) {
     sendError(res, err);

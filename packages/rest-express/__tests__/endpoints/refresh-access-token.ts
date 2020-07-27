@@ -27,17 +27,16 @@ describe('refreshAccessToken', () => {
         accessToken: 'token',
         refreshToken: 'refresh',
       },
-      ip: 'ipTest',
-      userAgent: 'userAgentTest',
+      infos: {
+        ip: 'ipTest',
+        userAgent: 'userAgentTest',
+      },
     };
     const reqCopy = { ...req };
 
     await middleware(req as any, res);
 
-    expect(accountsServer.refreshTokens).toHaveBeenCalledWith('token', 'refresh', {
-      ip: req.ip,
-      userAgent: req.userAgent,
-    });
+    expect(accountsServer.refreshTokens).toHaveBeenCalledWith('token', 'refresh', req.infos);
     expect(req).toEqual(reqCopy);
     expect(res.json).toHaveBeenCalledWith(session);
     expect(res.status).not.toHaveBeenCalled();
@@ -57,18 +56,17 @@ describe('refreshAccessToken', () => {
         accessToken: 'token',
         refreshToken: 'refresh',
       },
-      ip: 'ipTest',
-      userAgent: 'userAgentTest',
+      infos: {
+        ip: 'ipTest',
+        userAgent: 'userAgentTest',
+      },
     };
     const reqCopy = { ...req };
 
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.refreshTokens).toHaveBeenCalledWith('token', 'refresh', {
-      ip: req.ip,
-      userAgent: req.userAgent,
-    });
+    expect(accountsServer.refreshTokens).toHaveBeenCalledWith('token', 'refresh', req.infos);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith(error);
   });

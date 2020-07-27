@@ -20,7 +20,7 @@ export const providerCallback = (
         ...(req.body || {}),
         ...((req as RequestWithSession).session || {}),
       },
-      { ip: req.ip, userAgent: req.userAgent }
+      req.infos
     );
 
     if (options && options.onOAuthSuccess) {

@@ -10,10 +10,7 @@ export const resetPassword = (accountsServer: AccountsServer) => async (
   try {
     const { token, newPassword } = req.body;
     const accountsPassword = accountsServer.getServices().password as AccountsPassword;
-    const loginResult = await accountsPassword.resetPassword(token, newPassword, {
-      userAgent: req.userAgent,
-      ip: req.ip,
-    });
+    const loginResult = await accountsPassword.resetPassword(token, newPassword, req.infos);
     res.json(loginResult);
   } catch (err) {
     sendError(res, err);

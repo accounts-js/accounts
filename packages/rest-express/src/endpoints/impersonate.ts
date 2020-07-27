@@ -15,10 +15,7 @@ export const impersonate = (accountsServer: AccountsServer) => async (
       accessToken: string;
       impersonated: ImpersonationUserIdentity;
     } = req.body;
-    const impersonateRes = await accountsServer.impersonate(accessToken, impersonated, {
-      ip: req.ip,
-      userAgent: req.userAgent,
-    });
+    const impersonateRes = await accountsServer.impersonate(accessToken, impersonated, req.infos);
     res.json(impersonateRes);
   } catch (err) {
     sendError(res, err);

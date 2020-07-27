@@ -8,10 +8,11 @@ export const refreshAccessToken = (accountsServer: AccountsServer) => async (
 ) => {
   try {
     const { accessToken, refreshToken } = req.body;
-    const refreshedSession = await accountsServer.refreshTokens(accessToken, refreshToken, {
-      ip: req.ip,
-      userAgent: req.userAgent,
-    });
+    const refreshedSession = await accountsServer.refreshTokens(
+      accessToken,
+      refreshToken,
+      req.infos
+    );
     res.json(refreshedSession);
   } catch (err) {
     sendError(res, err);

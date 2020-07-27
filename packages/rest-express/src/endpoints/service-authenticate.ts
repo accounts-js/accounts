@@ -8,10 +8,7 @@ export const serviceAuthenticate = (accountsServer: AccountsServer) => async (
 ) => {
   try {
     const serviceName = req.params.service;
-    const loggedInUser = await accountsServer.loginWithService(serviceName, req.body, {
-      ip: req.ip,
-      userAgent: req.userAgent,
-    });
+    const loggedInUser = await accountsServer.loginWithService(serviceName, req.body, req.infos);
     res.json(loggedInUser);
   } catch (err) {
     sendError(res, err);

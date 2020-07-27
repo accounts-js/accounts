@@ -21,18 +21,21 @@ describe('serviceVerifyAuthentication', () => {
         service: 'sms',
       },
       headers: {},
-      ip: 'ipTest',
-      userAgent: 'userAgentTest',
+      infos: {
+        ip: 'ipTest',
+        userAgent: 'userAgentTest',
+      },
     };
     const reqCopy = { ...req };
 
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.authenticateWithService).toHaveBeenCalledWith('sms', undefined, {
-      ip: req.ip,
-      userAgent: req.userAgent,
-    });
+    expect(accountsServer.authenticateWithService).toHaveBeenCalledWith(
+      'sms',
+      undefined,
+      req.infos
+    );
     expect(res.json).toHaveBeenCalledWith(true);
     expect(res.status).not.toHaveBeenCalled();
   });
@@ -50,18 +53,21 @@ describe('serviceVerifyAuthentication', () => {
         service: 'sms',
       },
       headers: {},
-      ip: 'ipTest',
-      userAgent: 'userAgentTest',
+      infos: {
+        ip: 'ipTest',
+        userAgent: 'userAgentTest',
+      },
     };
     const reqCopy = { ...req };
 
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.authenticateWithService).toHaveBeenCalledWith('sms', undefined, {
-      ip: req.ip,
-      userAgent: req.userAgent,
-    });
+    expect(accountsServer.authenticateWithService).toHaveBeenCalledWith(
+      'sms',
+      undefined,
+      req.infos
+    );
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith(error);
   });

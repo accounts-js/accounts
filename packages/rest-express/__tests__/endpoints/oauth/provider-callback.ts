@@ -27,8 +27,10 @@ describe('providerCallback', () => {
         accessTokenSecret: 'secret',
       },
       headers: {},
-      ip: 'ipTest',
-      userAgent: 'userAgentTest',
+      infos: {
+        ip: 'ipTest',
+        userAgent: 'userAgentTest',
+      },
     };
     const reqCopy = { ...req };
 
@@ -38,7 +40,7 @@ describe('providerCallback', () => {
     expect(accountsServer.loginWithService).toHaveBeenCalledWith(
       'oauth',
       { accessToken: 'token', accessTokenSecret: 'secret' },
-      { ip: req.ip, userAgent: req.userAgent }
+      req.infos
     );
     expect(res.json).toHaveBeenCalledWith(user);
     expect(res.status).not.toHaveBeenCalled();
@@ -95,8 +97,10 @@ describe('providerCallback', () => {
         accessToken: 'token',
       },
       headers: {},
-      ip: 'ipTest',
-      userAgent: 'userAgentTest',
+      infos: {
+        ip: 'ipTest',
+        userAgent: 'userAgentTest',
+      },
     };
     const reqCopy = { ...req };
 
@@ -106,7 +110,7 @@ describe('providerCallback', () => {
     expect(accountsServer.loginWithService).toHaveBeenCalledWith(
       'oauth',
       { accessToken: 'token' },
-      { ip: req.ip, userAgent: req.userAgent }
+      req.infos
     );
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith(error);

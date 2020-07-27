@@ -40,8 +40,14 @@ const accountsExpress = (
    * Middleware to populate the user agent and ip.
    */
   router.use((req, _, next) => {
-    req.userAgent = getUserAgent(req);
-    req.ip = requestIp.getClientIp(req)!;
+    const userAgent = getUserAgent(req);
+    const ip = requestIp.getClientIp(req)!;
+    req.userAgent = userAgent;
+    req.ip = ip;
+    req.infos = {
+      userAgent,
+      ip,
+    };
 
     next();
   });
