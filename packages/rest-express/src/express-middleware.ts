@@ -42,8 +42,6 @@ const accountsExpress = (
   router.use((req, _, next) => {
     const userAgent = getUserAgent(req);
     const ip = requestIp.getClientIp(req)!;
-    req.userAgent = userAgent;
-    req.ip = ip;
     req.infos = {
       userAgent,
       ip,
