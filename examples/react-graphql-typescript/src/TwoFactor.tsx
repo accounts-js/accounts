@@ -5,7 +5,7 @@ import QRCode from 'qrcode.react';
 import { accountsGraphQL } from './utils/accounts';
 
 const TwoFactor = () => {
-  const [secret, setSecret] = useState();
+  const [secret, setSecret] = useState<any>();
   const [oneTimeCode, setOneTimeCode] = useState('');
 
   const fetchTwoFactorSecret = async () => {
@@ -44,7 +44,7 @@ const TwoFactor = () => {
         <Input
           id="one-time-code"
           value={oneTimeCode}
-          onChange={e => setOneTimeCode(e.target.value)}
+          onChange={(e) => setOneTimeCode(e.target.value)}
         />
       </FormControl>
       <Button onClick={onSetTwoFactor}>Submit</Button>

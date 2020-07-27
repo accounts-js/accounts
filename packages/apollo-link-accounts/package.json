@@ -23,13 +23,15 @@
     "url": "https://github.com/accounts-js/accounts/tree/master/packages/apollo-link"
   },
   "license": "MIT",
-  "devDependencies": {
-    "@accounts/client": "^0.28.0",
-    "apollo-link": "1.2.14",
-    "rimraf": "3.0.2"
+  "peerDependencies": {
+    "@apollo/client": "^3.0.0"
   },
   "dependencies": {
-    "apollo-link-context": "1.0.20",
     "tslib": "2.0.0"
+  },
+  "devDependencies": {
+    "@accounts/client": "^0.28.0",
+    "@apollo/client": "3.0.2",
+    "rimraf": "3.0.2"
   }
 }
