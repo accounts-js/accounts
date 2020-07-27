@@ -1,0 +1,3 @@
+mutation authenticateWithService($serviceName: String!, $params: AuthenticateParamsInput!) {
+  verifyAuthentication(serviceName: $serviceName, params: $params)
+}

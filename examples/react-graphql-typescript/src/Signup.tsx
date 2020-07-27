@@ -41,10 +41,8 @@ const Signup = ({ history }: RouteComponentProps<{}>) => {
       await accountsGraphQL.createUser({
         email: user.email,
         password: user.password,
-        profile: {
-          firstName: user.firstName,
-          lastName: user.lastName,
-        },
+        firstName: user.firstName,
+        lastName: user.lastName,
       });
       history.push('/login');
     } catch (err) {
