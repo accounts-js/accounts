@@ -5,7 +5,7 @@ import { AccountsGraphQLClient } from '@accounts/graphql-client';
 import { AccountsPassword } from '@accounts/password';
 import { AccountsServer } from '@accounts/server';
 import { DatabaseInterface, User } from '@accounts/types';
-import ApolloClient from 'apollo-boost';
+import { ApolloClient } from '@apollo/client';
 import { ApolloServer } from 'apollo-server';
 import fetch from 'node-fetch';
 
