@@ -273,7 +273,7 @@ yarn add @accounts/graphql-client
 ## Usage
 
 ```js
-import { ApolloClient } from 'apollo-client';
+import { ApolloClient } from '@apollo/client';
 import { AccountsClient } from '@accounts/client';
 import { AccountsClientPassword } from '@accounts/client-password';
 import { AccountsGraphQLClient } from '@accounts/graphql-client';
@@ -390,6 +390,7 @@ yarn add @accounts/apollo-link
 ### Hook it up to the apollo client
 
 ```js
+import { ApolloLink } from '@apollo/client';
 import { accountsLink } from '@accounts/apollo-link';
 
 const accountsClient = new AccountsClient( ... );
