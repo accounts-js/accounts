@@ -5,7 +5,7 @@ import { AccountsGraphQLClient } from '@accounts/graphql-client';
 import { AccountsPassword } from '@accounts/password';
 import { AccountsServer } from '@accounts/server';
 import { DatabaseInterface, User } from '@accounts/types';
-import { ApolloClient } from '@apollo/client';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { ApolloServer } from 'apollo-server';
 import fetch from 'node-fetch';
 
@@ -82,7 +82,10 @@ export class ServerGraphqlTest implements ServerTestInterface {
       context,
     });
 
-    const apolloClient = new ApolloClient({ uri: `http://localhost:${this.port}` });
+    const apolloClient = new ApolloClient({
+      uri: `http://localhost:${this.port}`,
+      cache: new InMemoryCache(),
+    });
 
     const accountsClientGraphQL = new AccountsGraphQLClient({
       graphQLClient: apolloClient,
