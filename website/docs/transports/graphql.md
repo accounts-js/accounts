@@ -342,6 +342,41 @@ async function registerUser() {
 }
 ```
 
+### Customising user fragment
+
+For the `getUser` query and some other mutations the client is requesting some user fields. By default the following fields are selected.
+
+```graphql
+fragment userFields on User {
+  id
+  emails {
+    address
+    verified
+  }
+  username
+}
+```
+
+Use the `userFieldsFragment` option to add your own user fragment:
+
+```js
+const accountsGraphQL = new GraphQLClient({
+  graphQLClient: apolloClient,
+  userFieldsFragment: gql`
+    fragment userFields on User {
+      id
+      emails {
+        address
+        verified
+      }
+      # I can add my custom fields here
+      firstName
+      lastName
+    }
+  `,
+});
+```
+
 ## Using with Apollo Link
 
 In order to send the accounts token on every request sent to your GraphQL server, apollo requires you to implment an apollo-link. This link is usually quite generic when using accounts-js so we've implemented the apollo-link you need and offer it as a utility package.
