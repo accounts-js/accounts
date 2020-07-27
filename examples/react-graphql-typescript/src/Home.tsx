@@ -2,7 +2,7 @@ import React from 'react';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom';
 import { Button, Typography } from '@material-ui/core';
 import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import { accountsClient, accountsGraphQL } from './utils/accounts';
 
