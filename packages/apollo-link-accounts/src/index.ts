@@ -1,5 +1,5 @@
-import { setContext } from 'apollo-link-context';
-import { ApolloLink } from 'apollo-link';
+import { ApolloLink } from '@apollo/client';
+import { setContext } from "@apollo/client/link/context";
 import { AccountsClient } from '@accounts/client';
 
 type AccountsClientFactory = () => AccountsClient | Promise<AccountsClient>;
