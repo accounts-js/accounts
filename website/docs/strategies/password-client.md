@@ -39,9 +39,20 @@ Create a new account for the user.
 
 ```javascript
 await accountsPassword.createUser({
-  email: user.email,
-  password: user.password,
+  email: 'userEmail',
+  password: 'userPassword',
   // You can also add some custom fields
+});
+```
+
+### Login user
+
+```javascript
+const user = await accountsClient.loginWithService('password', {
+  user: {
+    email: 'userEmail',
+  },
+  password: 'userPassword',
 });
 ```
 
@@ -60,6 +71,7 @@ In order to reset a user password, the first step is to send an email to the use
 ```javascript
 // Request a forgot password email
 await accountsPassword.requestPasswordReset('email');
+
 // Reset the password for a user using a token received in email
 await accountsPassword.resetPassword('token', 'newPassword');
 ```
@@ -71,6 +83,7 @@ When a user is created, their email will be marked as unverified. To verify the 
 ```javascript
 // Send an email with a link the user can use verify their email address.
 await accountsPassword.requestVerificationEmail('email');
+
 // Marks the user's email address as verified using a token received in email
 await accountsPassword.verifyEmail('token');
 ```
