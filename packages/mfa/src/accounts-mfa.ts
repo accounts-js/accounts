@@ -171,13 +171,10 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
    */
   public async findUserAuthenticators(userId: string): Promise<Authenticator[]> {
     const authenticators = await this.db.findUserAuthenticators(userId);
-    return authenticators.map((authenticator) => {
-      const authenticatorService = this.authenticators[authenticator.type];
-      if (authenticatorService?.sanitize) {
-        return authenticatorService.sanitize(authenticator);
-      }
-      return authenticator;
-    });
+    return authenticators.map(
+      (authenticator) =>
+        this.authenticators[authenticator.type]?.sanitize?.(authenticator) ?? authenticator
+    );
   }
 
   /**
@@ -197,13 +194,10 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
     const authenticators = await this.db.findUserAuthenticators(mfaChallenge.userId);
     return authenticators
       .filter((authenticator) => authenticator.active)
-      .map((authenticator) => {
-        const authenticatorService = this.authenticators[authenticator.type];
-        if (authenticatorService?.sanitize) {
-          return authenticatorService.sanitize(authenticator);
-        }
-        return authenticator;
-      });
+      .map(
+        (authenticator) =>
+          this.authenticators[authenticator.type]?.sanitize?.(authenticator) ?? authenticator
+      );
   }
 
   public isMfaChallengeValid(mfaChallenge: MfaChallenge): boolean {
