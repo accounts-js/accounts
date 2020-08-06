@@ -31,10 +31,10 @@
     "@accounts/server": "^0.29.0",
     "@accounts/types": "^0.29.0",
     "@types/bcryptjs": "2.4.2",
-    "@types/jest": "25.2.3",
+    "@types/jest": "26.0.9",
     "@types/lodash": "4.14.157",
     "@types/node": "14.0.14",
-    "jest": "26.0.1",
+    "jest": "26.2.2",
     "rimraf": "3.0.2"
   },
   "peerDependencies": {
