@@ -27,3 +27,17 @@ export enum ChallengeErrors {
    */
   AuthenticatorNotFound = 'authenticatorNotFound',
 }
+
+export enum AssociateByMfaTokenError {
+  /**
+   * Will throw if mfa token validation failed.
+   */
+  InvalidMfaToken = 'invalidMfaToken',
+}
+
+export enum FindUserAuthenticatorsByMfaTokenError {
+  /**
+   * Will throw if mfa token validation failed.
+   */
+  InvalidMfaToken = 'invalidMfaToken',
+}
