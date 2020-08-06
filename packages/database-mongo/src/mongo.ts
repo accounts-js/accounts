@@ -12,7 +12,7 @@ import {
 import { get, merge } from 'lodash';
 import { Collection, Db, ObjectID, IndexOptions } from 'mongodb';
 
-import { AccountsMongoOptions, MongoUser } from './types';
+import { AccountsMongoOptions, MongoUser, MongoAuthenticator, MongoMfaChallenge } from './types';
 
 const toMongoID = (objectId: string | ObjectID) => {
   if (typeof objectId === 'string') {
@@ -24,12 +24,16 @@ const toMongoID = (objectId: string | ObjectID) => {
 const defaultOptions = {
   collectionName: 'users',
   sessionCollectionName: 'sessions',
+  authenticatorCollectionName: 'authenticators',
+  mfaChallengeCollectionName: 'mfaChallenges',
   timestamps: {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
   },
   convertUserIdToMongoObjectId: true,
   convertSessionIdToMongoObjectId: true,
+  convertAuthenticatorIdToMongoObjectId: true,
+  convertMfaChallengeIdToMongoObjectId: true,
   caseSensitiveUserName: true,
   dateProvider: (date?: Date) => (date ? date.getTime() : Date.now()),
 };
@@ -43,6 +47,10 @@ export class Mongo implements DatabaseInterface {
   private collection: Collection;
   // Session collection
   private sessionCollection: Collection;
+  // Authenticator collection
+  private authenticatorCollection: Collection;
+  // Mfa challenge collection
+  private mfaChallengeCollection: Collection;
 
   constructor(db: any, options?: AccountsMongoOptions) {
     this.options = merge({ ...defaultOptions }, options);
@@ -52,6 +60,8 @@ export class Mongo implements DatabaseInterface {
     this.db = db;
     this.collection = this.db.collection(this.options.collectionName);
     this.sessionCollection = this.db.collection(this.options.sessionCollectionName);
+    this.authenticatorCollection = this.db.collection(this.options.authenticatorCollectionName);
+    this.mfaChallengeCollection = this.db.collection(this.options.mfaChallengeCollectionName);
   }
 
   /**
@@ -81,6 +91,16 @@ export class Mongo implements DatabaseInterface {
     });
     await this.collection.createIndex('services.password.reset.token', {
       ...options,
+      sparse: true,
+    });
+    // Index related to the mfa service
+    await this.authenticatorCollection.createIndex('userId', {
+      ...options,
+      sparse: true,
+    });
+    await this.mfaChallengeCollection.createIndex('token', {
+      ...options,
+      unique: true,
       sparse: true,
     });
   }
@@ -476,57 +496,146 @@ export class Mongo implements DatabaseInterface {
    * MFA authenticators related operations
    */
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async createAuthenticator(newAuthenticator: CreateAuthenticator): Promise<string> {
-    throw new Error('Mfa for mongo is not yet implemented');
+    const authenticator: MongoAuthenticator = {
+      ...newAuthenticator,
+      [this.options.timestamps.createdAt]: this.options.dateProvider(),
+      [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+    };
+    if (this.options.idProvider) {
+      authenticator._id = this.options.idProvider();
+    }
+    const ret = await this.authenticatorCollection.insertOne(authenticator);
+    return (ret.ops[0]._id as ObjectID).toString();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async findAuthenticatorById(authenticatorId: string): Promise<Authenticator | null> {
-    throw new Error('Mfa for mongo is not yet implemented');
+    const id = this.options.convertAuthenticatorIdToMongoObjectId
+      ? toMongoID(authenticatorId)
+      : authenticatorId;
+    const authenticator = await this.authenticatorCollection.findOne({ _id: id });
+    if (authenticator) {
+      authenticator.id = authenticator._id.toString();
+    }
+    return authenticator;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async findUserAuthenticators(userId: string): Promise<Authenticator[]> {
-    throw new Error('Mfa for mongo is not yet implemented');
+    const authenticators = await this.authenticatorCollection.find({ userId }).toArray();
+    authenticators.forEach((authenticator) => {
+      authenticator.id = authenticator._id.toString();
+    });
+    return authenticators;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async activateAuthenticator(authenticatorId: string): Promise<void> {
-    throw new Error('Mfa for mongo is not yet implemented');
+    const id = this.options.convertAuthenticatorIdToMongoObjectId
+      ? toMongoID(authenticatorId)
+      : authenticatorId;
+    await this.authenticatorCollection.updateOne(
+      { _id: id },
+      {
+        $set: {
+          active: true,
+          activatedAt: this.options.dateProvider(),
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+        },
+      }
+    );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async deactivateAuthenticator(authenticatorId: string): Promise<void> {
-    throw new Error('Mfa for mongo is not yet implemented');
+    const id = this.options.convertAuthenticatorIdToMongoObjectId
+      ? toMongoID(authenticatorId)
+      : authenticatorId;
+    await this.authenticatorCollection.updateOne(
+      { _id: id },
+      {
+        $set: {
+          active: false,
+          deactivatedAt: this.options.dateProvider(),
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+        },
+      }
+    );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async updateAuthenticator(authenticatorId: string): Promise<void> {
-    throw new Error('Mfa for mongo is not yet implemented');
+  public async updateAuthenticator(
+    authenticatorId: string,
+    data: Partial<Authenticator>
+  ): Promise<void> {
+    const id = this.options.convertAuthenticatorIdToMongoObjectId
+      ? toMongoID(authenticatorId)
+      : authenticatorId;
+    await this.authenticatorCollection.updateOne(
+      { _id: id },
+      {
+        $set: {
+          ...data,
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+        },
+      }
+    );
   }
 
   /**
    * MFA challenges related operations
    */
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async createMfaChallenge(newMfaChallenge: CreateMfaChallenge): Promise<string> {
-    throw new Error('Mfa for mongo is not yet implemented');
+    const mfaChallenge: MongoMfaChallenge = {
+      ...newMfaChallenge,
+      [this.options.timestamps.createdAt]: this.options.dateProvider(),
+      [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+    };
+    if (this.options.idProvider) {
+      mfaChallenge._id = this.options.idProvider();
+    }
+    const ret = await this.mfaChallengeCollection.insertOne(mfaChallenge);
+    return (ret.ops[0]._id as ObjectID).toString();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async findMfaChallengeByToken(token: string): Promise<MfaChallenge | null> {
-    throw new Error('Mfa for mongo is not yet implemented');
+    const mfaChallenge = await this.mfaChallengeCollection.findOne({
+      token,
+    });
+    if (mfaChallenge) {
+      mfaChallenge.id = mfaChallenge._id.toString();
+    }
+    return mfaChallenge;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async deactivateMfaChallenge(mfaChallengeId: string): Promise<void> {
-    throw new Error('Mfa for mongo is not yet implemented');
+    const id = this.options.convertMfaChallengeIdToMongoObjectId
+      ? toMongoID(mfaChallengeId)
+      : mfaChallengeId;
+    await this.mfaChallengeCollection.updateOne(
+      { _id: id },
+      {
+        $set: {
+          deactivated: true,
+          deactivatedAt: this.options.dateProvider(),
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+        },
+      }
+    );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async updateMfaChallenge(mfaChallengeId: string): Promise<void> {
-    throw new Error('Mfa for mongo is not yet implemented');
+  public async updateMfaChallenge(
+    mfaChallengeId: string,
+    data: Partial<MfaChallenge>
+  ): Promise<void> {
+    const id = this.options.convertMfaChallengeIdToMongoObjectId
+      ? toMongoID(mfaChallengeId)
+      : mfaChallengeId;
+    await this.mfaChallengeCollection.updateOne(
+      { _id: id },
+      {
+        $set: {
+          ...data,
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+        },
+      }
+    );
   }
 }

@@ -19,6 +19,15 @@ const session = {
   userAgent: 'user agent',
 };
 
+const authenticator = {
+  type: 'otp',
+  userId: '123',
+  active: false,
+};
+const mfaChallenge = {
+  userId: '123',
+};
+
 function delay(time: number) {
   return new Promise((resolve) => setTimeout(() => resolve(), time));
 }
@@ -879,62 +888,210 @@ describe('Mongo', () => {
   });
 
   describe('createAuthenticator', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.createAuthenticator({} as any)).rejects.toThrowError();
+    it('create an authenticator', async () => {
+      const authenticatorId = await databaseTests.database.createAuthenticator(authenticator);
+      const ret = await databaseTests.database.findAuthenticatorById(authenticatorId);
+      expect(authenticatorId).toBeTruthy();
+      expect(ret).toEqual({
+        _id: expect.any(ObjectID),
+        id: expect.any(String),
+        active: false,
+        type: 'otp',
+        userId: '123',
+        createdAt: expect.any(Number),
+        updatedAt: expect.any(Number),
+      });
+    });
+
+    it('call options.idProvider', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        idProvider: () => 'toto',
+        convertAuthenticatorIdToMongoObjectId: false,
+      });
+      const authenticatorId = await mongoOptions.createAuthenticator(authenticator);
+      const ret = await mongoOptions.findAuthenticatorById(authenticatorId);
+      expect(authenticatorId).toBe('toto');
+      expect(ret?.id).toBe('toto');
     });
   });
 
   describe('findAuthenticatorById', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.findAuthenticatorById('userId')).rejects.toThrowError();
+    it('should return null for not found authenticator', async () => {
+      const ret = await databaseTests.database.findAuthenticatorById('589871d1c9393d445745a57c');
+      expect(ret).not.toBeTruthy();
+    });
+
+    it('should find authenticator', async () => {
+      const authenticatorId = await databaseTests.database.createAuthenticator(authenticator);
+      const ret = await databaseTests.database.findAuthenticatorById(authenticatorId);
+      expect(ret).toBeTruthy();
     });
   });
 
   describe('findUserAuthenticators', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.findUserAuthenticators('userId')).rejects.toThrowError();
+    it('should find authenticators of the current user', async () => {
+      await Promise.all([
+        databaseTests.database.createAuthenticator(authenticator),
+        databaseTests.database.createAuthenticator(authenticator),
+        databaseTests.database.createAuthenticator(authenticator),
+        // create an authenticator for another user that should not be returned
+        databaseTests.database.createAuthenticator({ ...authenticator, userId: '456' }),
+      ]);
+      const ret = await databaseTests.database.findUserAuthenticators(authenticator.userId);
+      expect(ret.length).toBe(3);
     });
   });
 
   describe('activateAuthenticator', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.activateAuthenticator('userId')).rejects.toThrowError();
+    // eslint-disable-next-line jest/expect-expect
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertAuthenticatorIdToMongoObjectId: false,
+      });
+      await mongoOptions.activateAuthenticator('toto');
+    });
+
+    it('activate an authenticator', async () => {
+      const authenticatorId = await databaseTests.database.createAuthenticator(authenticator);
+      await databaseTests.database.activateAuthenticator(authenticatorId);
+      const ret = await databaseTests.database.findAuthenticatorById(authenticatorId);
+      expect(ret?.active).toEqual(true);
+      expect(ret?.activatedAt).not.toEqual(ret?.createdAt);
+      expect(ret?.updatedAt).not.toEqual(ret?.createdAt);
     });
   });
 
   describe('deactivateAuthenticator', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.deactivateAuthenticator('userId')).rejects.toThrowError();
+    // eslint-disable-next-line jest/expect-expect
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertAuthenticatorIdToMongoObjectId: false,
+      });
+      await mongoOptions.deactivateAuthenticator('toto');
+    });
+
+    it('deactivate an authenticator', async () => {
+      const authenticatorId = await databaseTests.database.createAuthenticator(authenticator);
+      await databaseTests.database.deactivateAuthenticator(authenticatorId);
+      const ret = await databaseTests.database.findAuthenticatorById(authenticatorId);
+      expect(ret?.active).toEqual(false);
+      expect(ret?.deactivatedAt).not.toEqual(ret?.createdAt);
+      expect(ret?.updatedAt).not.toEqual(ret?.createdAt);
     });
   });
 
   describe('updateAuthenticator', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.updateAuthenticator('userId')).rejects.toThrowError();
+    // eslint-disable-next-line jest/expect-expect
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertAuthenticatorIdToMongoObjectId: false,
+      });
+      await mongoOptions.updateAuthenticator('toto', { extra: true });
+    });
+
+    it('update an authenticator', async () => {
+      const authenticatorId = await databaseTests.database.createAuthenticator(authenticator);
+      await databaseTests.database.updateAuthenticator(authenticatorId, { extraData: true });
+      const ret = await databaseTests.database.findAuthenticatorById(authenticatorId);
+      expect(ret?.extraData).toEqual(true);
+      expect(ret?.updatedAt).not.toEqual(ret?.createdAt);
     });
   });
 
   describe('createMfaChallenge', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.createMfaChallenge({} as any)).rejects.toThrowError();
+    it('create a mfa challenge', async () => {
+      const token = generateRandomToken();
+      const mfaChallengeId = await databaseTests.database.createMfaChallenge({
+        ...mfaChallenge,
+        token,
+      });
+      const ret = await databaseTests.database.findMfaChallengeByToken(token);
+      expect(mfaChallengeId).toBeTruthy();
+      expect(ret).toEqual({
+        _id: expect.any(ObjectID),
+        id: expect.any(String),
+        token,
+        userId: '123',
+        createdAt: expect.any(Number),
+        updatedAt: expect.any(Number),
+      });
+    });
+
+    it('call options.idProvider', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        idProvider: () => 'toto',
+        convertMfaChallengeIdToMongoObjectId: false,
+      });
+      const token = generateRandomToken();
+      const mfaChallengeId = await mongoOptions.createMfaChallenge({
+        ...mfaChallenge,
+        token,
+      });
+      const ret = await mongoOptions.findMfaChallengeByToken(token);
+      expect(mfaChallengeId).toBe('toto');
+      expect(ret?.id).toBe('toto');
     });
   });
 
   describe('findMfaChallengeByToken', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.findMfaChallengeByToken('userId')).rejects.toThrowError();
+    it('should return null for not found authenticator', async () => {
+      const ret = await databaseTests.database.findMfaChallengeByToken('589871d1c9393d445745a57c');
+      expect(ret).not.toBeTruthy();
+    });
+
+    it('should find authenticator', async () => {
+      const token = generateRandomToken();
+      await databaseTests.database.createMfaChallenge({
+        ...mfaChallenge,
+        token,
+      });
+      const ret = await databaseTests.database.findMfaChallengeByToken(token);
+      expect(ret).toBeTruthy();
     });
   });
 
   describe('deactivateMfaChallenge', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.deactivateMfaChallenge('userId')).rejects.toThrowError();
+    // eslint-disable-next-line jest/expect-expect
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertMfaChallengeIdToMongoObjectId: false,
+      });
+      await mongoOptions.deactivateMfaChallenge('toto');
+    });
+
+    it('deactivate an mfa challenge', async () => {
+      const token = generateRandomToken();
+      const mfaChallengeId = await databaseTests.database.createMfaChallenge({
+        ...mfaChallenge,
+        token,
+      });
+      await databaseTests.database.deactivateMfaChallenge(mfaChallengeId);
+      const ret = await databaseTests.database.findMfaChallengeByToken(token);
+      expect(ret?.deactivated).toEqual(true);
+      expect(ret?.deactivatedAt).not.toEqual(ret?.createdAt);
+      expect(ret?.updatedAt).not.toEqual(ret?.createdAt);
     });
   });
 
   describe('updateMfaChallenge', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.updateMfaChallenge('userId')).rejects.toThrowError();
+    // eslint-disable-next-line jest/expect-expect
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertMfaChallengeIdToMongoObjectId: false,
+      });
+      await mongoOptions.updateMfaChallenge('toto', { extra: true });
+    });
+
+    it('update an mfa challenge', async () => {
+      const token = generateRandomToken();
+      const mfaChallengeId = await databaseTests.database.createMfaChallenge({
+        ...mfaChallenge,
+        token,
+      });
+      await databaseTests.database.updateMfaChallenge(mfaChallengeId, { extraData: true });
+      const ret = await databaseTests.database.findMfaChallengeByToken(token);
+      expect(ret?.extraData).toEqual(true);
+      expect(ret?.updatedAt).not.toEqual(ret?.createdAt);
     });
   });
 });
