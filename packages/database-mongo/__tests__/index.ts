@@ -24,6 +24,9 @@ const authenticator = {
   userId: '123',
   active: false,
 };
+const mfaChallenge = {
+  userId: '123',
+};
 
 function delay(time: number) {
   return new Promise((resolve) => setTimeout(() => resolve(), time));
@@ -885,7 +888,7 @@ describe('Mongo', () => {
   });
 
   describe('createAuthenticator', () => {
-    it('should throw an error', async () => {
+    it('create an authenticator', async () => {
       const authenticatorId = await databaseTests.database.createAuthenticator(authenticator);
       const ret = await databaseTests.database.findAuthenticatorById(authenticatorId);
       expect(authenticatorId).toBeTruthy();
@@ -996,14 +999,54 @@ describe('Mongo', () => {
   });
 
   describe('createMfaChallenge', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.createMfaChallenge({} as any)).rejects.toThrowError();
+    it('create a mfa challenge', async () => {
+      const token = generateRandomToken();
+      const mfaChallengeId = await databaseTests.database.createMfaChallenge({
+        ...mfaChallenge,
+        token,
+      });
+      const ret = await databaseTests.database.findMfaChallengeByToken(token);
+      expect(mfaChallengeId).toBeTruthy();
+      expect(ret).toEqual({
+        _id: expect.any(ObjectID),
+        id: expect.any(String),
+        token,
+        userId: '123',
+        createdAt: expect.any(Number),
+        updatedAt: expect.any(Number),
+      });
+    });
+
+    it('call options.idProvider', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        idProvider: () => 'toto',
+        convertMfaChallengeIdToMongoObjectId: false,
+      });
+      const token = generateRandomToken();
+      const mfaChallengeId = await mongoOptions.createMfaChallenge({
+        ...mfaChallenge,
+        token,
+      });
+      const ret = await mongoOptions.findMfaChallengeByToken(token);
+      expect(mfaChallengeId).toBe('toto');
+      expect(ret?.id).toBe('toto');
     });
   });
 
   describe('findMfaChallengeByToken', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.findMfaChallengeByToken('userId')).rejects.toThrowError();
+    it('should return null for not found authenticator', async () => {
+      const ret = await databaseTests.database.findMfaChallengeByToken('589871d1c9393d445745a57c');
+      expect(ret).not.toBeTruthy();
+    });
+
+    it('should find authenticator', async () => {
+      const token = generateRandomToken();
+      await databaseTests.database.createMfaChallenge({
+        ...mfaChallenge,
+        token,
+      });
+      const ret = await databaseTests.database.findMfaChallengeByToken(token);
+      expect(ret).toBeTruthy();
     });
   });
 

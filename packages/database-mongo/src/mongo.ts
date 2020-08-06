@@ -12,7 +12,7 @@ import {
 import { get, merge } from 'lodash';
 import { Collection, Db, ObjectID, IndexOptions } from 'mongodb';
 
-import { AccountsMongoOptions, MongoUser, MongoAuthenticator } from './types';
+import { AccountsMongoOptions, MongoUser, MongoAuthenticator, MongoMfaChallenge } from './types';
 
 const toMongoID = (objectId: string | ObjectID) => {
   if (typeof objectId === 'string') {
@@ -94,7 +94,15 @@ export class Mongo implements DatabaseInterface {
       sparse: true,
     });
     // Index related to the mfa service
-    // TODO
+    await this.authenticatorCollection.createIndex('userId', {
+      ...options,
+      sparse: true,
+    });
+    await this.mfaChallengeCollection.createIndex('token', {
+      ...options,
+      unique: true,
+      sparse: true,
+    });
   }
 
   public async createUser({
@@ -574,14 +582,29 @@ export class Mongo implements DatabaseInterface {
    * MFA challenges related operations
    */
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async createMfaChallenge(newMfaChallenge: CreateMfaChallenge): Promise<string> {
-    throw new Error('Mfa for mongo is not yet implemented');
+    const mfaChallenge: MongoMfaChallenge = {
+      ...newMfaChallenge,
+      [this.options.timestamps.createdAt]: this.options.dateProvider(),
+      [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+    };
+    if (this.options.idProvider) {
+      mfaChallenge._id = this.options.idProvider();
+    }
+    const ret = await this.mfaChallengeCollection.insertOne(mfaChallenge);
+    return (ret.ops[0]._id as ObjectID).toString();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async findMfaChallengeByToken(token: string): Promise<MfaChallenge | null> {
-    throw new Error('Mfa for mongo is not yet implemented');
+    const mfaChallenge = await this.mfaChallengeCollection.findOne({
+      token,
+      // TODO change exists
+      deactivated: { $exists: false },
+    });
+    if (mfaChallenge) {
+      mfaChallenge.id = mfaChallenge._id.toString();
+    }
+    return mfaChallenge;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
