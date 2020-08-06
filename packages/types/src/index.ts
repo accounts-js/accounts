@@ -16,3 +16,8 @@ export * from './types/session/session';
 export * from './types/services/password/create-user';
 export * from './types/services/password/database-interface';
 export * from './types/services/password/login-user';
+export * from './types/mfa/database-interface';
+export * from './types/mfa/authenticator';
+export * from './types/mfa/create-authenticator';
+export * from './types/mfa/mfa-challenge';
+export * from './types/mfa/create-mfa-challenge';
