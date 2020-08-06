@@ -621,8 +621,21 @@ export class Mongo implements DatabaseInterface {
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async updateMfaChallenge(mfaChallengeId: string): Promise<void> {
-    throw new Error('Mfa for mongo is not yet implemented');
+  public async updateMfaChallenge(
+    mfaChallengeId: string,
+    data: Partial<MfaChallenge>
+  ): Promise<void> {
+    const id = this.options.convertMfaChallengeIdToMongoObjectId
+      ? toMongoID(mfaChallengeId)
+      : mfaChallengeId;
+    await this.mfaChallengeCollection.updateOne(
+      { _id: id },
+      {
+        $set: {
+          ...data,
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+        },
+      }
+    );
   }
 }

@@ -1074,8 +1074,24 @@ describe('Mongo', () => {
   });
 
   describe('updateMfaChallenge', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.updateMfaChallenge('userId')).rejects.toThrowError();
+    // eslint-disable-next-line jest/expect-expect
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertMfaChallengeIdToMongoObjectId: false,
+      });
+      await mongoOptions.updateMfaChallenge('toto', { extra: true });
+    });
+
+    it('update an mfa challenge', async () => {
+      const token = generateRandomToken();
+      const mfaChallengeId = await databaseTests.database.createMfaChallenge({
+        ...mfaChallenge,
+        token,
+      });
+      await databaseTests.database.updateMfaChallenge(mfaChallengeId, { extraData: true });
+      const ret = await databaseTests.database.findMfaChallengeByToken(token);
+      expect(ret?.extraData).toEqual(true);
+      expect(ret?.updatedAt).not.toEqual(ret?.createdAt);
     });
   });
 });
