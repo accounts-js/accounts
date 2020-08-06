@@ -11,53 +11,53 @@ export enum AuthenticateErrors {
   /**
    * Will throw if mfa token validation failed.
    */
-  InvalidMfaToken = 'invalidMfaToken',
+  InvalidMfaToken = 'InvalidMfaToken',
   /**
    * Mfa factor is not registered on the server
    */
-  FactorNotFound = 'factorNotFound',
+  FactorNotFound = 'FactorNotFound',
 }
 
 export enum ChallengeErrors {
   /**
    * Will throw if mfa token validation failed.
    */
-  InvalidMfaToken = 'invalidMfaToken',
+  InvalidMfaToken = 'InvalidMfaToken',
   /**
    * Will throw if authenticator id validation failed.
    */
-  InvalidAuthenticatorId = 'invalidAuthenticatorId',
+  InvalidAuthenticatorId = 'InvalidAuthenticatorId',
   /**
    * Will throw if authenticator is not found.
    */
-  AuthenticatorNotFound = 'authenticatorNotFound',
+  AuthenticatorNotFound = 'AuthenticatorNotFound',
   /**
    * Mfa factor is not registered on the server
    */
-  FactorNotFound = 'factorNotFound',
+  FactorNotFound = 'FactorNotFound',
 }
 
 export enum AssociateError {
   /**
    * Mfa factor is not registered on the server
    */
-  FactorNotFound = 'factorNotFound',
+  FactorNotFound = 'FactorNotFound',
 }
 
 export enum AssociateByMfaTokenError {
   /**
    * Will throw if mfa token validation failed.
    */
-  InvalidMfaToken = 'invalidMfaToken',
+  InvalidMfaToken = 'InvalidMfaToken',
   /**
    * Mfa factor is not registered on the server
    */
-  FactorNotFound = 'factorNotFound',
+  FactorNotFound = 'FactorNotFound',
 }
 
 export enum FindUserAuthenticatorsByMfaTokenError {
   /**
    * Will throw if mfa token validation failed.
    */
-  InvalidMfaToken = 'invalidMfaToken',
+  InvalidMfaToken = 'InvalidMfaToken',
 }
