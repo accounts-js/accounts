@@ -175,8 +175,7 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
       throw new Error(`No authenticator with the name ${serviceName} was registered.`);
     }
 
-    const associate = await factor.associate(userId, params, infos);
-    return associate;
+    return factor.associate(userId, params, infos);
   }
 
   /**
@@ -210,8 +209,7 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
       throw new Error('Mfa token invalid');
     }
 
-    const associate = await factor.associate(mfaChallenge, params, infos);
-    return associate;
+    return factor.associate(mfaChallenge, params, infos);
   }
 
   /**
