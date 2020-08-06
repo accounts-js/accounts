@@ -127,6 +127,7 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
       );
     }
     // A user should be able to challenge only his own authenticators
+    // This should never happen but it's just an extra check to be safe
     if (mfaChallenge.userId !== authenticator.userId) {
       throw new AccountsJsError(
         this.options.errors.invalidMfaToken,
