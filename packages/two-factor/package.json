@@ -34,8 +34,8 @@
     "tslib": "2.0.0"
   },
   "devDependencies": {
-    "@types/jest": "25.2.3",
+    "@types/jest": "26.0.9",
     "@types/node": "14.0.14",
-    "jest": "26.0.1"
+    "jest": "26.2.2"
   }
 }
