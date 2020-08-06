@@ -1,7 +1,7 @@
-import { DatabaseInterface } from '../../database-interface';
+import { DatabaseInterface } from '../database-interface';
 import { Authenticator } from './authenticator';
-import { MfaChallenge } from '../challenge/mfa-challenge';
-import { ConnectionInformations } from '../../connection-informations';
+import { MfaChallenge } from './mfa-challenge';
+import { ConnectionInformations } from '../connection-informations';
 
 export interface AuthenticatorService {
   server: any;

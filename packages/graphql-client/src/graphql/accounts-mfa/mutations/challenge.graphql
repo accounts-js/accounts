@@ -1,0 +1,9 @@
+mutation challenge($mfaToken: String!, $authenticatorId: String!) {
+  challenge(mfaToken: $mfaToken, authenticatorId: $authenticatorId) {
+    # TODO allow to customise this
+    ... on DefaultChallengeResult {
+      mfaToken
+      authenticatorId
+    }
+  }
+}

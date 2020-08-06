@@ -1,0 +1,9 @@
+# TODO union for returned authenticators?
+query authenticators {
+  authenticators {
+    id
+    type
+    active
+    activatedAt
+  }
+}

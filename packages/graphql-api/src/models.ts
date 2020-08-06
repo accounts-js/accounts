@@ -504,10 +504,10 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type Resolvers<ContextType = any> = {
-  AssociationResult?: AssociationResultResolvers;
-  AuthenticationResult?: AuthenticationResultResolvers;
+  AssociationResult?: AssociationResultResolvers<ContextType>;
+  AuthenticationResult?: AuthenticationResultResolvers<ContextType>;
   Authenticator?: AuthenticatorResolvers<ContextType>;
-  ChallengeResult?: ChallengeResultResolvers;
+  ChallengeResult?: ChallengeResultResolvers<ContextType>;
   CreateUserResult?: CreateUserResultResolvers<ContextType>;
   DefaultChallengeResult?: DefaultChallengeResultResolvers<ContextType>;
   EmailRecord?: EmailRecordResolvers<ContextType>;
