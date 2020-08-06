@@ -1051,8 +1051,25 @@ describe('Mongo', () => {
   });
 
   describe('deactivateMfaChallenge', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.deactivateMfaChallenge('userId')).rejects.toThrowError();
+    // eslint-disable-next-line jest/expect-expect
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertMfaChallengeIdToMongoObjectId: false,
+      });
+      await mongoOptions.deactivateMfaChallenge('toto');
+    });
+
+    it('deactivate an mfa challenge', async () => {
+      const token = generateRandomToken();
+      const mfaChallengeId = await databaseTests.database.createMfaChallenge({
+        ...mfaChallenge,
+        token,
+      });
+      await databaseTests.database.deactivateMfaChallenge(mfaChallengeId);
+      const ret = await databaseTests.database.findMfaChallengeByToken(token);
+      expect(ret?.deactivated).toEqual(true);
+      expect(ret?.deactivatedAt).not.toEqual(ret?.createdAt);
+      expect(ret?.updatedAt).not.toEqual(ret?.createdAt);
     });
   });
 

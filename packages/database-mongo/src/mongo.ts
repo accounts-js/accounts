@@ -598,8 +598,6 @@ export class Mongo implements DatabaseInterface {
   public async findMfaChallengeByToken(token: string): Promise<MfaChallenge | null> {
     const mfaChallenge = await this.mfaChallengeCollection.findOne({
       token,
-      // TODO change exists
-      deactivated: { $exists: false },
     });
     if (mfaChallenge) {
       mfaChallenge.id = mfaChallenge._id.toString();
@@ -607,9 +605,20 @@ export class Mongo implements DatabaseInterface {
     return mfaChallenge;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async deactivateMfaChallenge(mfaChallengeId: string): Promise<void> {
-    throw new Error('Mfa for mongo is not yet implemented');
+    const id = this.options.convertMfaChallengeIdToMongoObjectId
+      ? toMongoID(mfaChallengeId)
+      : mfaChallengeId;
+    await this.mfaChallengeCollection.updateOne(
+      { _id: id },
+      {
+        $set: {
+          deactivated: true,
+          deactivatedAt: this.options.dateProvider(),
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+        },
+      }
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
