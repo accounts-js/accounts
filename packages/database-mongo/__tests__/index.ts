@@ -19,6 +19,12 @@ const session = {
   userAgent: 'user agent',
 };
 
+const authenticator = {
+  type: 'otp',
+  userId: '123',
+  active: false,
+};
+
 function delay(time: number) {
   return new Promise((resolve) => setTimeout(() => resolve(), time));
 }
@@ -880,13 +886,42 @@ describe('Mongo', () => {
 
   describe('createAuthenticator', () => {
     it('should throw an error', async () => {
-      await expect(databaseTests.database.createAuthenticator({} as any)).rejects.toThrowError();
+      const authenticatorId = await databaseTests.database.createAuthenticator(authenticator);
+      const ret = await databaseTests.database.findAuthenticatorById(authenticatorId);
+      expect(authenticatorId).toBeTruthy();
+      expect(ret).toEqual({
+        _id: expect.any(ObjectID),
+        id: expect.any(String),
+        active: false,
+        type: 'otp',
+        userId: '123',
+        createdAt: expect.any(Number),
+        updatedAt: expect.any(Number),
+      });
+    });
+
+    it('call options.idProvider', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        idProvider: () => 'toto',
+        convertAuthenticatorIdToMongoObjectId: false,
+      });
+      const authenticatorId = await mongoOptions.createAuthenticator(authenticator);
+      const ret = await mongoOptions.findAuthenticatorById(authenticatorId);
+      expect(authenticatorId).toBe('toto');
+      expect(ret?.id).toBe('toto');
     });
   });
 
   describe('findAuthenticatorById', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.findAuthenticatorById('userId')).rejects.toThrowError();
+    it('should return null for not found authenticator', async () => {
+      const ret = await databaseTests.database.findAuthenticatorById('589871d1c9393d445745a57c');
+      expect(ret).not.toBeTruthy();
+    });
+
+    it('should find authenticator', async () => {
+      const authenticatorId = await databaseTests.database.createAuthenticator(authenticator);
+      const ret = await databaseTests.database.findAuthenticatorById(authenticatorId);
+      expect(ret).toBeTruthy();
     });
   });
 
