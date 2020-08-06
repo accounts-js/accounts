@@ -4,6 +4,10 @@ import {
   DatabaseInterface,
   Session,
   User,
+  CreateAuthenticator,
+  Authenticator,
+  CreateMfaChallenge,
+  MfaChallenge,
 } from '@accounts/types';
 import { get, merge } from 'lodash';
 import { Collection, Db, ObjectID, IndexOptions } from 'mongodb';
@@ -466,5 +470,63 @@ export class Mongo implements DatabaseInterface {
 
   public async setResetPassword(userId: string, email: string, newPassword: string): Promise<void> {
     await this.setPassword(userId, newPassword);
+  }
+
+  /**
+   * MFA authenticators related operations
+   */
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public async createAuthenticator(newAuthenticator: CreateAuthenticator): Promise<string> {
+    throw new Error('Mfa for mongo is not yet implemented');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public async findAuthenticatorById(authenticatorId: string): Promise<Authenticator | null> {
+    throw new Error('Mfa for mongo is not yet implemented');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public async findUserAuthenticators(userId: string): Promise<Authenticator[]> {
+    throw new Error('Mfa for mongo is not yet implemented');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public async activateAuthenticator(authenticatorId: string): Promise<void> {
+    throw new Error('Mfa for mongo is not yet implemented');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public async deactivateAuthenticator(authenticatorId: string): Promise<void> {
+    throw new Error('Mfa for mongo is not yet implemented');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public async updateAuthenticator(authenticatorId: string): Promise<void> {
+    throw new Error('Mfa for mongo is not yet implemented');
+  }
+
+  /**
+   * MFA challenges related operations
+   */
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public async createMfaChallenge(newMfaChallenge: CreateMfaChallenge): Promise<string> {
+    throw new Error('Mfa for mongo is not yet implemented');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public async findMfaChallengeByToken(token: string): Promise<MfaChallenge | null> {
+    throw new Error('Mfa for mongo is not yet implemented');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public async deactivateMfaChallenge(mfaChallengeId: string): Promise<void> {
+    throw new Error('Mfa for mongo is not yet implemented');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public async updateMfaChallenge(mfaChallengeId: string): Promise<void> {
+    throw new Error('Mfa for mongo is not yet implemented');
   }
 }
