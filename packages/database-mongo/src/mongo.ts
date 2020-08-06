@@ -512,9 +512,12 @@ export class Mongo implements DatabaseInterface {
     return authenticator;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async findUserAuthenticators(userId: string): Promise<Authenticator[]> {
-    throw new Error('Mfa for mongo is not yet implemented');
+    const authenticators = await this.authenticatorCollection.find({ userId }).toArray();
+    authenticators.forEach((authenticator) => {
+      authenticator.id = authenticator._id.toString();
+    });
+    return authenticators;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

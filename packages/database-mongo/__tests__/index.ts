@@ -926,8 +926,16 @@ describe('Mongo', () => {
   });
 
   describe('findUserAuthenticators', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.findUserAuthenticators('userId')).rejects.toThrowError();
+    it('should find authenticators of the current user', async () => {
+      await Promise.all([
+        databaseTests.database.createAuthenticator(authenticator),
+        databaseTests.database.createAuthenticator(authenticator),
+        databaseTests.database.createAuthenticator(authenticator),
+        // create an authenticator for another user that should not be returned
+        databaseTests.database.createAuthenticator({ ...authenticator, userId: '456' }),
+      ]);
+      const ret = await databaseTests.database.findUserAuthenticators(authenticator.userId);
+      expect(ret.length).toBe(3);
     });
   });
 
