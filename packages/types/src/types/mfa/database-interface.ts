@@ -20,12 +20,12 @@ export interface DatabaseInterfaceMfa {
   findUserAuthenticators(userId: string): Promise<Authenticator[]>;
 
   /**
-   * TODO Do we really need this one as the update one could work for this?
+   * Activate the authenticator by his id.
    */
   activateAuthenticator(authenticatorId: string): Promise<void>;
 
   /**
-   * TODO Do we really need this one as the update one could work for this?
+   * Deactivate the authenticator by his id.
    */
   deactivateAuthenticator(authenticatorId: string): Promise<void>;
 
@@ -50,7 +50,7 @@ export interface DatabaseInterfaceMfa {
   updateMfaChallenge(mfaChallengeId: string, data: Partial<MfaChallenge>): Promise<void>;
 
   /**
-   * TODO Do we really need this one as the update one could work for this?
+   * Deactivate the mfa challenge by his id.
    */
   deactivateMfaChallenge(mfaChallengeId: string): Promise<void>;
 }
