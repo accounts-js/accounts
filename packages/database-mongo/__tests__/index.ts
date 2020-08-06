@@ -940,8 +940,21 @@ describe('Mongo', () => {
   });
 
   describe('activateAuthenticator', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.activateAuthenticator('userId')).rejects.toThrowError();
+    // eslint-disable-next-line jest/expect-expect
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertAuthenticatorIdToMongoObjectId: false,
+      });
+      await mongoOptions.activateAuthenticator('toto');
+    });
+
+    it('activate an authenticator', async () => {
+      const authenticatorId = await databaseTests.database.createAuthenticator(authenticator);
+      await databaseTests.database.activateAuthenticator(authenticatorId);
+      const ret = await databaseTests.database.findAuthenticatorById(authenticatorId);
+      expect(ret?.active).toEqual(true);
+      expect(ret?.activatedAt).not.toEqual(ret?.createdAt);
+      expect(ret?.updatedAt).not.toEqual(ret?.createdAt);
     });
   });
 
