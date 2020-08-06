@@ -6,6 +6,13 @@ export const errors: ErrorMessages = {
   authenticatorNotFound: 'Authenticator not found',
 };
 
+export enum AuthenticateErrors {
+  /**
+   * Will throw if mfa token validation failed.
+   */
+  InvalidMfaToken = 'invalidMfaToken',
+}
+
 export enum ChallengeErrors {
   /**
    * Will throw if mfa token validation failed.

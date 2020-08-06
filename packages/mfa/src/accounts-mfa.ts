@@ -9,13 +9,21 @@ import {
 } from '@accounts/types';
 import { AccountsServer, AccountsJsError } from '@accounts/server';
 import { ErrorMessages } from './types';
-import { errors, ChallengeErrors } from './errors';
+import { errors, AuthenticateErrors, ChallengeErrors } from './errors';
 
 export interface AccountsMfaOptions {
   /**
    * Accounts mfa module errors
    */
   errors?: ErrorMessages;
+  /**
+   * Factors used for mfa
+   */
+  factors: { [key: string]: AuthenticatorService | undefined };
+}
+
+interface AccountsMfaAuthenticateParams {
+  mfaToken: string;
 }
 
 const defaultOptions = {
@@ -27,23 +35,64 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
   public server!: AccountsServer;
   private options: AccountsMfaOptions & typeof defaultOptions;
   private db!: DatabaseInterface<CustomUser>;
-  private authenticators: { [key: string]: AuthenticatorService };
+  private factors: { [key: string]: AuthenticatorService | undefined };
 
-  constructor(
-    options: AccountsMfaOptions = {},
-    authenticators?: { [key: string]: AuthenticatorService }
-  ) {
+  constructor(options: AccountsMfaOptions) {
     this.options = { ...defaultOptions, ...options };
-    this.authenticators = authenticators || {};
+    this.factors = options.factors;
   }
 
   public setStore(store: DatabaseInterface<CustomUser>) {
     this.db = store;
   }
 
-  public async authenticate(): Promise<CustomUser> {
-    // TODO
-    throw new Error('Not implemented');
+  public async authenticate(
+    params: AccountsMfaAuthenticateParams,
+    infos: ConnectionInformations
+  ): Promise<CustomUser | null> {
+    const mfaToken = params.mfaToken;
+    if (!mfaToken) {
+      throw new AccountsJsError(
+        this.options.errors.invalidMfaToken,
+        AuthenticateErrors.InvalidMfaToken
+      );
+    }
+    const mfaChallenge = await this.db.findMfaChallengeByToken(mfaToken);
+    if (!mfaChallenge || !mfaChallenge.authenticatorId) {
+      throw new AccountsJsError(
+        this.options.errors.invalidMfaToken,
+        AuthenticateErrors.InvalidMfaToken
+      );
+    }
+    const authenticator = await this.db.findAuthenticatorById(mfaChallenge.authenticatorId);
+    if (!authenticator) {
+      throw new AccountsJsError(
+        this.options.errors.invalidMfaToken,
+        AuthenticateErrors.InvalidMfaToken
+      );
+    }
+    const factor = this.factors[authenticator.type];
+    if (!factor) {
+      // TODO custom error
+      throw new Error(`No authenticator with the name ${authenticator.type} was registered.`);
+    }
+    // TODO we need to implement some time checking for the mfaToken (eg: expire after X minutes, probably based on the authenticator configuration)
+    if (!(await factor.authenticate(mfaChallenge, authenticator, params, infos))) {
+      // TODO custom error
+      throw new Error(`Authenticator ${authenticator.type} was not able to authenticate user`);
+    }
+    // We activate the authenticator if user is using a challenge with scope 'associate'
+    if (!authenticator.active && mfaChallenge.scope === 'associate') {
+      await this.db.activateAuthenticator(authenticator.id);
+    } else if (!authenticator.active) {
+      // TODO custom error
+      throw new Error('Authenticator is not active');
+    }
+
+    // We invalidate the current mfa challenge so it can't be reused later
+    await this.db.deactivateMfaChallenge(mfaChallenge.id);
+
+    return this.db.findUserById(mfaChallenge.userId);
   }
   /**
    * @description Request a challenge for the MFA authentication.
@@ -89,13 +138,13 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
         ChallengeErrors.InvalidMfaToken
       );
     }
-    const authenticatorService = this.authenticators[authenticator.type];
-    if (!authenticatorService) {
+    const factor = this.factors[authenticator.type];
+    if (!factor) {
       // TODO custom error
       throw new Error(`No authenticator with the name ${authenticator.type} was registered.`);
     }
     // If authenticator do not have a challenge method, we attach the authenticator id to the challenge
-    if (!authenticatorService.challenge) {
+    if (!factor.challenge) {
       await this.db.updateMfaChallenge(mfaChallenge.id, {
         authenticatorId: authenticator.id,
       });
@@ -104,7 +153,7 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
         authenticatorId: authenticator.id,
       };
     }
-    return authenticatorService.challenge(mfaChallenge, authenticator, infos);
+    return factor.challenge(mfaChallenge, authenticator, infos);
   }
 
   /**
@@ -120,12 +169,13 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
     params: any,
     infos: ConnectionInformations
   ): Promise<any> {
-    if (!this.authenticators[serviceName]) {
+    const factor = this.factors[serviceName];
+    if (!factor) {
       // TODO custom error
       throw new Error(`No authenticator with the name ${serviceName} was registered.`);
     }
 
-    const associate = await this.authenticators[serviceName].associate(userId, params, infos);
+    const associate = await factor.associate(userId, params, infos);
     return associate;
   }
 
@@ -143,7 +193,8 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
     params: any,
     infos: ConnectionInformations
   ): Promise<any> {
-    if (!this.authenticators[serviceName]) {
+    const factor = this.factors[serviceName];
+    if (!factor) {
       // TODO custom error
       throw new Error(`No authenticator with the name ${serviceName} was registered.`);
     }
@@ -159,7 +210,7 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
       throw new Error('Mfa token invalid');
     }
 
-    const associate = await this.authenticators[serviceName].associate(mfaChallenge, params, infos);
+    const associate = await factor.associate(mfaChallenge, params, infos);
     return associate;
   }
 
@@ -173,7 +224,7 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
     const authenticators = await this.db.findUserAuthenticators(userId);
     return authenticators.map(
       (authenticator) =>
-        this.authenticators[authenticator.type]?.sanitize?.(authenticator) ?? authenticator
+        this.factors[authenticator.type]?.sanitize?.(authenticator) ?? authenticator
     );
   }
 
@@ -196,7 +247,7 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
       .filter((authenticator) => authenticator.active)
       .map(
         (authenticator) =>
-          this.authenticators[authenticator.type]?.sanitize?.(authenticator) ?? authenticator
+          this.factors[authenticator.type]?.sanitize?.(authenticator) ?? authenticator
       );
   }
 
