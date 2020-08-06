@@ -978,8 +978,20 @@ describe('Mongo', () => {
   });
 
   describe('updateAuthenticator', () => {
-    it('should throw an error', async () => {
-      await expect(databaseTests.database.updateAuthenticator('userId')).rejects.toThrowError();
+    // eslint-disable-next-line jest/expect-expect
+    it('should not convert id', async () => {
+      const mongoOptions = new Mongo(databaseTests.db, {
+        convertAuthenticatorIdToMongoObjectId: false,
+      });
+      await mongoOptions.updateAuthenticator('toto', { extra: true });
+    });
+
+    it('update an authenticator', async () => {
+      const authenticatorId = await databaseTests.database.createAuthenticator(authenticator);
+      await databaseTests.database.updateAuthenticator(authenticatorId, { extraData: true });
+      const ret = await databaseTests.database.findAuthenticatorById(authenticatorId);
+      expect(ret?.extraData).toEqual(true);
+      expect(ret?.updatedAt).not.toEqual(ret?.createdAt);
     });
   });
 
