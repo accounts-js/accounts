@@ -12,6 +12,10 @@ export interface ErrorMessages {
    */
   authenticatorNotFound: string;
   /**
+   *  Default to 'Authenticator is not active'.
+   */
+  authenticatorNotActive: string;
+  /**
    * Default to 'Authenticator not found'.
    */
   factorNotFound: (factorName: string) => string;

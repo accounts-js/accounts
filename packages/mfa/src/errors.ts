@@ -4,6 +4,7 @@ export const errors: ErrorMessages = {
   invalidMfaToken: 'Invalid mfa token',
   invalidAuthenticatorId: 'Invalid authenticator id',
   authenticatorNotFound: 'Authenticator not found',
+  authenticatorNotActive: 'Authenticator is not active',
   factorNotFound: (factorName: string) => `No service with the name ${factorName} was registered.`,
 };
 
@@ -16,6 +17,10 @@ export enum AuthenticateErrors {
    * Mfa factor is not registered on the server
    */
   FactorNotFound = 'FactorNotFound',
+  /**
+   * Will throw if authenticator is not active.
+   */
+  AuthenticatorNotActive = 'AuthenticatorNotActive',
 }
 
 export enum ChallengeErrors {

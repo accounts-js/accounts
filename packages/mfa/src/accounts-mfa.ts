@@ -91,8 +91,10 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
     if (!authenticator.active && mfaChallenge.scope === 'associate') {
       await this.db.activateAuthenticator(authenticator.id);
     } else if (!authenticator.active) {
-      // TODO custom error
-      throw new Error('Authenticator is not active');
+      throw new AccountsJsError(
+        this.options.errors.factorNotFound(authenticator.type),
+        AuthenticateErrors.AuthenticatorNotActive
+      );
     }
 
     // We invalidate the current mfa challenge so it can't be reused later
