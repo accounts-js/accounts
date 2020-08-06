@@ -4,10 +4,10 @@ import {
   DatabaseInterface,
   Session,
   User,
-  Authenticator,
   CreateAuthenticator,
-  MfaChallenge,
+  Authenticator,
   CreateMfaChallenge,
+  MfaChallenge,
 } from '@accounts/types';
 import { get, merge } from 'lodash';
 import { Collection, Db, ObjectID, IndexOptions } from 'mongodb';
@@ -91,6 +91,16 @@ export class Mongo implements DatabaseInterface {
     });
     await this.collection.createIndex('services.password.reset.token', {
       ...options,
+      sparse: true,
+    });
+    // Index related to the mfa service
+    await this.authenticatorCollection.createIndex('userId', {
+      ...options,
+      sparse: true,
+    });
+    await this.mfaChallengeCollection.createIndex('token', {
+      ...options,
+      unique: true,
       sparse: true,
     });
   }
@@ -496,7 +506,7 @@ export class Mongo implements DatabaseInterface {
       authenticator._id = this.options.idProvider();
     }
     const ret = await this.authenticatorCollection.insertOne(authenticator);
-    return (ret as any).ops[0]._id.toString();
+    return (ret.ops[0]._id as ObjectID).toString();
   }
 
   public async findAuthenticatorById(authenticatorId: string): Promise<Authenticator | null> {
@@ -582,13 +592,12 @@ export class Mongo implements DatabaseInterface {
       mfaChallenge._id = this.options.idProvider();
     }
     const ret = await this.mfaChallengeCollection.insertOne(mfaChallenge);
-    return (ret as any).ops[0]._id.toString();
+    return (ret.ops[0]._id as ObjectID).toString();
   }
 
   public async findMfaChallengeByToken(token: string): Promise<MfaChallenge | null> {
     const mfaChallenge = await this.mfaChallengeCollection.findOne({
       token,
-      deactivated: { $exists: false },
     });
     if (mfaChallenge) {
       mfaChallenge.id = mfaChallenge._id.toString();

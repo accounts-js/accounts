@@ -25,16 +25,17 @@ describe('impersonate', () => {
         accessToken: 'token',
       },
       headers: {},
+      infos: {
+        ip: 'ipTest',
+        userAgent: 'userAgentTest',
+      },
     };
     const reqCopy = { ...req };
 
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.impersonate).toHaveBeenCalledWith('token', 'toto', {
-      ip: null,
-      userAgent: '',
-    });
+    expect(accountsServer.impersonate).toHaveBeenCalledWith('token', 'toto', req.infos);
     expect(res.json).toHaveBeenCalledWith(impersonateReturnType);
     expect(res.status).not.toHaveBeenCalled();
   });
@@ -53,16 +54,17 @@ describe('impersonate', () => {
         accessToken: 'token',
       },
       headers: {},
+      infos: {
+        ip: 'ipTest',
+        userAgent: 'userAgentTest',
+      },
     };
     const reqCopy = { ...req };
 
     await middleware(req as any, res);
 
     expect(req).toEqual(reqCopy);
-    expect(accountsServer.impersonate).toHaveBeenCalledWith('token', 'toto', {
-      ip: null,
-      userAgent: '',
-    });
+    expect(accountsServer.impersonate).toHaveBeenCalledWith('token', 'toto', req.infos);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith(error);
   });

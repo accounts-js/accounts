@@ -128,6 +128,14 @@ export default class Database {
     return this.name;
   }
 
+  public deactivateAuthenticator() {
+    return this.name;
+  }
+
+  public updateAuthenticator() {
+    return this.name;
+  }
+
   public createMfaChallenge() {
     return this.name;
   }
@@ -302,6 +310,14 @@ describe('DatabaseManager', () => {
 
   it('activateAuthenticator should be called on userStorage', () => {
     expect(databaseManager.activateAuthenticator('userId')).toBe('userStorage');
+  });
+
+  it('deactivateAuthenticator should be called on userStorage', () => {
+    expect(databaseManager.deactivateAuthenticator('userId')).toBe('userStorage');
+  });
+
+  it('updateAuthenticator should be called on userStorage', () => {
+    expect(databaseManager.updateAuthenticator('userId', {})).toBe('userStorage');
   });
 
   it('createMfaChallenge should be called on userStorage', () => {

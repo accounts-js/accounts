@@ -54,6 +54,7 @@ const defaultOptions = {
   userObjectSanitizer: (user: User) => user,
   createNewSessionTokenOnRefresh: false,
   useInternalUserObjectSanitizer: true,
+  useStatelessSession: false,
   enforceMfaForLogin: false,
 };
 
@@ -341,6 +342,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
 
   /**
    * @description Impersonate to another user.
+   * For security reasons, even if `useStatelessSession` is set to true the token will be checked against the database.
    * @param {string} accessToken - User access token.
    * @param {object} impersonated - impersonated user.
    * @param {ConnectionInformations} infos - User connection informations.
@@ -354,7 +356,6 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
   ): Promise<ImpersonationResult> {
     try {
       const session = await this.findSessionByAccessToken(accessToken);
-
       if (!session.valid) {
         throw new AccountsJsError(
           'Session is not valid for user',
@@ -363,7 +364,6 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       }
 
       const user = await this.db.findUserById(session.userId);
-
       if (!user) {
         throw new AccountsJsError('User not found', ImpersonateErrors.UserNotFound);
       }
@@ -392,7 +392,6 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       }
 
       const isAuthorized = await this.options.impersonationAuthorize(user, impersonatedUser);
-
       if (!isAuthorized) {
         return { authorized: false };
       }
@@ -486,7 +485,6 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
           user,
           infos,
         };
-
         this.hooks.emit(ServerHooks.RefreshTokensSuccess, result);
 
         return result;
@@ -563,42 +561,59 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
   }
 
   /**
+   * @description Resume the current session associated to the access token. Will throw if the token
+   * or the session is invalid.
+   * If `useStatelessSession` is false the session validity will be checked against the database.
+   * @param accessToken - User JWT access token.
+   * @returns Return the user associated to the session.
    * @throws {@link ResumeSessionErrors}
    */
   public async resumeSession(accessToken: string): Promise<CustomUser> {
     try {
-      const session: Session = await this.findSessionByAccessToken(accessToken);
-
-      if (session.valid) {
-        const user = await this.db.findUserById(session.userId);
-
-        if (!user) {
-          throw new AccountsJsError('User not found', ResumeSessionErrors.UserNotFound);
-        }
-
-        if (this.options.resumeSessionValidator) {
-          try {
-            await this.options.resumeSessionValidator(user, session);
-          } catch (e) {
-            throw new Error(e);
-          }
-        }
-
-        this.hooks.emit(ServerHooks.ResumeSessionSuccess, { user, accessToken });
-
-        return this.sanitizeUser(user);
+      if (!isString(accessToken)) {
+        throw new AccountsJsError('An accessToken is required', ResumeSessionErrors.InvalidToken);
       }
 
-      this.hooks.emit(
-        ServerHooks.ResumeSessionError,
-        new AccountsJsError('Invalid Session', ResumeSessionErrors.InvalidSession)
-      );
+      let sessionToken: string;
+      let userId: string;
+      try {
+        const decodedAccessToken = jwt.verify(accessToken, this.getSecretOrPublicKey()) as {
+          data: JwtData;
+        };
+        sessionToken = decodedAccessToken.data.token;
+        userId = decodedAccessToken.data.userId;
+      } catch (err) {
+        throw new AccountsJsError(
+          'Tokens are not valid',
+          ResumeSessionErrors.TokenVerificationFailed
+        );
+      }
 
-      throw new AccountsJsError('Invalid Session', ResumeSessionErrors.InvalidSession);
-    } catch (e) {
-      this.hooks.emit(ServerHooks.ResumeSessionError, e);
+      // If the session is stateful we check the validity of the token against the db
+      let session: Session | null = null;
+      if (!this.options.useStatelessSession) {
+        session = await this.db.findSessionByToken(sessionToken);
+        if (!session) {
+          throw new AccountsJsError('Session not found', ResumeSessionErrors.SessionNotFound);
+        }
+        if (!session.valid) {
+          throw new AccountsJsError('Invalid Session', ResumeSessionErrors.InvalidSession);
+        }
+      }
 
-      throw e;
+      const user = await this.db.findUserById(userId);
+      if (!user) {
+        throw new AccountsJsError('User not found', ResumeSessionErrors.UserNotFound);
+      }
+
+      await this.options.resumeSessionValidator?.(user, session!);
+
+      this.hooks.emit(ServerHooks.ResumeSessionSuccess, { user, accessToken, session });
+
+      return this.sanitizeUser(user);
+    } catch (error) {
+      this.hooks.emit(ServerHooks.ResumeSessionError, error);
+      throw error;
     }
   }
 

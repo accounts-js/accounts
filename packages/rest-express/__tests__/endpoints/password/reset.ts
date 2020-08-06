@@ -28,6 +28,10 @@ describe('resetPassword', () => {
           newPassword: 'new-password',
         },
         headers: {},
+        infos: {
+          ip: 'ipTest',
+          userAgent: 'userAgentTest',
+        },
       };
       const reqCopy = { ...req };
 
@@ -37,7 +41,7 @@ describe('resetPassword', () => {
       expect(accountsServer.getServices().password.resetPassword).toHaveBeenCalledWith(
         'token',
         'new-password',
-        { ip: null, userAgent: '' }
+        req.infos
       );
       expect(res.json).toHaveBeenCalledWith(null);
       expect(res.status).not.toHaveBeenCalled();
@@ -62,6 +66,10 @@ describe('resetPassword', () => {
           newPassword: 'new-password',
         },
         headers: {},
+        infos: {
+          ip: 'ipTest',
+          userAgent: 'userAgentTest',
+        },
       };
       const reqCopy = { ...req };
 
@@ -71,7 +79,7 @@ describe('resetPassword', () => {
       expect(accountsServer.getServices().password.resetPassword).toHaveBeenCalledWith(
         'token',
         'new-password',
-        { ip: null, userAgent: '' }
+        req.infos
       );
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith(error);

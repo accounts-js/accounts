@@ -27,6 +27,13 @@ const start = async () => {
     // This option is called when a new user create an account
     // Inside we can apply our logic to validate the user fields
     validateNewUser: (user) => {
+      if (!user.firstName) {
+        throw new Error('First name required');
+      }
+      if (!user.lastName) {
+        throw new Error('Last name required');
+      }
+
       // For example we can allow only some kind of emails
       if (user.email.endsWith('.xyz')) {
         throw new Error('Invalid email');
@@ -61,10 +68,11 @@ const start = async () => {
 
     # Our custom fields to add to the user
     extend input CreateUserInput {
-      profile: CreateUserProfileInput!
+      firstName: String!
+      lastName: String!
     }
 
-    input CreateUserProfileInput {
+    extend type User {
       firstName: String!
       lastName: String!
     }

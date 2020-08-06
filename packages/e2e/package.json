@@ -1,12 +1,16 @@
 {
   "name": "@accounts/e2e",
   "private": true,
-  "version": "0.28.0-alpha.1",
+  "version": "0.29.0",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
     "coverage": "jest --forceExit --runInBand"
   },
+  "files": [
+    "src",
+    "lib"
+  ],
   "jest": {
     "testEnvironment": "node",
     "setupFiles": [
@@ -32,19 +36,19 @@
     "jest-localstorage-mock": "2.4.2"
   },
   "dependencies": {
-    "@accounts/client": "^0.28.0-alpha.1",
-    "@accounts/client-password": "^0.28.0-alpha.1",
-    "@accounts/graphql-api": "^0.28.0-alpha.1",
-    "@accounts/graphql-client": "^0.28.0-alpha.1",
-    "@accounts/mongo": "^0.28.0-alpha.1",
-    "@accounts/password": "^0.28.0-alpha.1",
-    "@accounts/rest-client": "^0.28.0-alpha.1",
-    "@accounts/rest-express": "^0.28.0-alpha.1",
-    "@accounts/server": "^0.28.0-alpha.1",
-    "@accounts/typeorm": "^0.28.0-alpha.1",
-    "@accounts/types": "^0.28.0-alpha.1",
+    "@accounts/client": "^0.29.0",
+    "@accounts/client-password": "^0.29.0",
+    "@accounts/graphql-api": "^0.29.0",
+    "@accounts/graphql-client": "^0.29.0",
+    "@accounts/mongo": "^0.29.0",
+    "@accounts/password": "^0.29.0",
+    "@accounts/rest-client": "^0.29.0",
+    "@accounts/rest-express": "^0.29.0",
+    "@accounts/server": "^0.29.0",
+    "@accounts/typeorm": "^0.29.0",
+    "@accounts/types": "^0.29.0",
+    "@apollo/client": "3.0.2",
     "@graphql-modules/core": "0.7.17",
-    "apollo-boost": "0.4.8",
     "apollo-server": "2.14.4",
     "body-parser": "1.19.0",
     "core-js": "3.6.5",

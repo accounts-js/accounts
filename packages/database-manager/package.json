@@ -1,6 +1,6 @@
 {
   "name": "@accounts/database-manager",
-  "version": "0.28.0-alpha.1",
+  "version": "0.29.0",
   "description": "Accounts Database Manager, allow the use of separate databases for session and user",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -17,6 +17,10 @@
     "testonly": "jest --coverage",
     "coverage": "jest --coverage"
   },
+  "files": [
+    "src",
+    "lib"
+  ],
   "jest": {
     "testEnvironment": "node",
     "preset": "ts-jest"
@@ -41,7 +45,7 @@
     "rimraf": "3.0.2"
   },
   "dependencies": {
-    "@accounts/types": "^0.28.0-alpha.1",
+    "@accounts/types": "^0.29.0",
     "tslib": "2.0.0"
   }
 }

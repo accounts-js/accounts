@@ -37,11 +37,7 @@ yarn start
 ```graphql
 mutation CreateUser {
   createUser(
-    user: {
-      email: "john.does@john.com"
-      password: "1234567"
-      profile: { firstName: "John", lastName: "Doe" }
-    }
+    user: { email: "john.does@john.com", password: "1234567", firstName: "John", lastName: "Doe" }
   )
 }
 

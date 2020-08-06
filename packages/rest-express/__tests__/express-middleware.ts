@@ -3,6 +3,7 @@ import * as express from 'express';
 
 jest.mock('express', () => {
   const mockRouter = {
+    use: jest.fn(),
     post: jest.fn(),
     get: jest.fn(),
   };

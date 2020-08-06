@@ -1,0 +1,3 @@
+mutation twoFactorSet($secret: TwoFactorSecretKeyInput!, $code: String!) {
+  twoFactorSet(secret: $secret, code: $code)
+}

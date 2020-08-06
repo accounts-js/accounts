@@ -1,8 +1,7 @@
 import * as jwt from 'jsonwebtoken';
-import { User, DatabaseInterface } from '@accounts/types';
+import { User, DatabaseInterface, Session } from '@accounts/types';
 import { EmailTemplatesType } from './email-templates-type';
 import { UserObjectSanitizerFunction } from './user-object-sanitizer-function';
-import { ResumeSessionValidator } from './resume-session-validator';
 import { PrepareMailFunction } from './prepare-mail-function';
 import { SendMailType } from './send-mail-type';
 import { TokenCreator } from './token-creator';
@@ -27,7 +26,11 @@ export interface AccountsServerOptions<CustomUser extends User = User> {
   emailTemplates?: EmailTemplatesType;
   userObjectSanitizer?: UserObjectSanitizerFunction;
   impersonationAuthorize?: (user: User, impersonateToUser: User) => Promise<any>;
-  resumeSessionValidator?: ResumeSessionValidator;
+  /**
+   * Use this function if you want to cancel the current session to be resumed.
+   * The session parameter will be null if the `useStatelessSession` option is set to true.
+   */
+  resumeSessionValidator?: (user: User, session: Session) => Promise<void>;
   siteUrl?: string;
   prepareMail?: PrepareMailFunction;
   sendMail?: SendMailType;
@@ -51,6 +54,16 @@ export interface AccountsServerOptions<CustomUser extends User = User> {
    */
   useInternalUserObjectSanitizer?: boolean;
   /**
+   * Should the session mechanism be stateless. By default the token is checked against the database in every
+   * request. This allow you to revoke a session at any time.
+   * Since we are using JWT you can decide to have a stateless session. This means that the token won't be
+   * checked against the database on every request. Using the stateless approach will make the server authorisation
+   * check faster but this means that you won't be able to able to invalidate the access token until it's expired.
+   * Only use this option if you understand the downsides of this approach.
+   * Default 'false'.
+   */
+  useStatelessSession?: boolean;
+   /**
    * If set to true, the user will be asked to register a new MFA authenticator the first time
    * he tries to login.
    */

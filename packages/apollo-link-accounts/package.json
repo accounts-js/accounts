@@ -1,6 +1,6 @@
 {
   "name": "@accounts/apollo-link",
-  "version": "0.28.0-alpha.1",
+  "version": "0.29.0",
   "description": "Apollo link for account-js",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -14,18 +14,24 @@
     "compile": "tsc",
     "prepublishOnly": "yarn compile"
   },
+  "files": [
+    "src",
+    "lib"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/accounts-js/accounts/tree/master/packages/apollo-link"
   },
   "license": "MIT",
-  "devDependencies": {
-    "@accounts/client": "^0.28.0-alpha.1",
-    "apollo-link": "1.2.14",
-    "rimraf": "3.0.2"
+  "peerDependencies": {
+    "@apollo/client": "^3.0.0"
   },
   "dependencies": {
-    "apollo-link-context": "1.0.20",
     "tslib": "2.0.0"
+  },
+  "devDependencies": {
+    "@accounts/client": "^0.29.0",
+    "@apollo/client": "3.0.2",
+    "rimraf": "3.0.2"
   }
 }

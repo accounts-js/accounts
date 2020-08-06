@@ -2,7 +2,7 @@ import React from 'react';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom';
 import { Button, Typography } from '@material-ui/core';
 import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import { accountsClient, accountsGraphQL } from './utils/accounts';
 
@@ -15,6 +15,8 @@ const GET_USER_QUERY = gql`
         address
         verified
       }
+      firstName
+      lastName
     }
   }
 `;
@@ -44,7 +46,8 @@ const Home = ({ history }: RouteComponentProps<{}>) => {
       <Typography gutterBottom>Hello {data.getUser.username}</Typography>
       <Typography gutterBottom>You are logged in</Typography>
       <Typography gutterBottom>Email: {data.getUser.emails[0].address}</Typography>
-      <Typography gutterBottom>You username is {data.getUser.username}</Typography>
+      <Typography gutterBottom>First name: {data.getUser.firstName}</Typography>
+      <Typography gutterBottom>Last name: {data.getUser.lastName}</Typography>
       <Typography gutterBottom>
         You email is {data.getUser.emails[0].verified ? 'verified' : 'unverified'}
       </Typography>

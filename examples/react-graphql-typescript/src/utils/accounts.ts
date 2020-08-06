@@ -2,10 +2,8 @@ import { AccountsClient } from '@accounts/client';
 import { AccountsClientPassword } from '@accounts/client-password';
 import GraphQLClient from '@accounts/graphql-client';
 import { accountsLink } from '@accounts/apollo-link';
-import { ApolloClient } from 'apollo-client';
-import { HttpLink } from 'apollo-link-http';
-import { from } from 'apollo-link';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloClient, InMemoryCache, HttpLink, from } from '@apollo/client';
+import gql from 'graphql-tag';
 
 // This auth link will inject the token in the headers on every request you make using apollo client
 const authLink = accountsLink(() => accountsClient);
@@ -19,7 +17,20 @@ const apolloClient = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const accountsGraphQL = new GraphQLClient({ graphQLClient: apolloClient });
+const accountsGraphQL = new GraphQLClient({
+  graphQLClient: apolloClient,
+  userFieldsFragment: gql`
+    fragment userFields on User {
+      id
+      emails {
+        address
+        verified
+      }
+      firstName
+      lastName
+    }
+  `,
+});
 const accountsClient = new AccountsClient({}, accountsGraphQL);
 const accountsPassword = new AccountsClientPassword(accountsClient);
 

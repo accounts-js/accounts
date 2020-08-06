@@ -1,6 +1,6 @@
 {
   "name": "@accounts/types",
-  "version": "0.28.0-alpha.1",
+  "version": "0.29.0",
   "description": "Accounts-js Types",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -19,6 +19,10 @@
     "test:watch": "yarn testonly --watch",
     "coverage": "yarn testonly --coverage"
   },
+  "files": [
+    "src",
+    "lib"
+  ],
   "jest": {
     "testEnvironment": "node",
     "preset": "ts-jest"

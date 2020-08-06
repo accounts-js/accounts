@@ -1,0 +1,15 @@
+mutation createUser($user: CreateUserInput!) {
+  createUser(user: $user) {
+    userId
+    loginResult {
+      sessionId
+      tokens {
+        refreshToken
+        accessToken
+      }
+      user {
+        ...userFields
+      }
+    }
+  }
+}
