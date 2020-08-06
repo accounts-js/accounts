@@ -877,4 +877,64 @@ describe('Mongo', () => {
       expect((retUser as any).createdAt).not.toEqual((retUser as any).updatedAt);
     });
   });
+
+  describe('createAuthenticator', () => {
+    it('should throw an error', async () => {
+      expect(databaseTests.database.createAuthenticator({} as any)).rejects.toThrowError();
+    });
+  });
+
+  describe('findAuthenticatorById', () => {
+    it('should throw an error', async () => {
+      expect(databaseTests.database.findAuthenticatorById('userId')).rejects.toThrowError();
+    });
+  });
+
+  describe('findUserAuthenticators', () => {
+    it('should throw an error', async () => {
+      expect(databaseTests.database.findUserAuthenticators('userId')).rejects.toThrowError();
+    });
+  });
+
+  describe('activateAuthenticator', () => {
+    it('should throw an error', async () => {
+      expect(databaseTests.database.activateAuthenticator('userId')).rejects.toThrowError();
+    });
+  });
+
+  describe('deactivateAuthenticator', () => {
+    it('should throw an error', async () => {
+      expect(databaseTests.database.deactivateAuthenticator('userId')).rejects.toThrowError();
+    });
+  });
+
+  describe('updateAuthenticator', () => {
+    it('should throw an error', async () => {
+      expect(databaseTests.database.updateAuthenticator('userId')).rejects.toThrowError();
+    });
+  });
+
+  describe('createMfaChallenge', () => {
+    it('should throw an error', async () => {
+      expect(databaseTests.database.createMfaChallenge({} as any)).rejects.toThrowError();
+    });
+  });
+
+  describe('findMfaChallengeByToken', () => {
+    it('should throw an error', async () => {
+      expect(databaseTests.database.findMfaChallengeByToken('userId')).rejects.toThrowError();
+    });
+  });
+
+  describe('deactivateMfaChallenge', () => {
+    it('should throw an error', async () => {
+      expect(databaseTests.database.deactivateMfaChallenge('userId')).rejects.toThrowError();
+    });
+  });
+
+  describe('updateMfaChallenge', () => {
+    it('should throw an error', async () => {
+      expect(databaseTests.database.updateMfaChallenge('userId')).rejects.toThrowError();
+    });
+  });
 });
