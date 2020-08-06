@@ -13,6 +13,7 @@ import {
   errors,
   AuthenticateErrors,
   ChallengeErrors,
+  AssociateError,
   AssociateByMfaTokenError,
   FindUserAuthenticatorsByMfaTokenError,
 } from './errors';
@@ -53,7 +54,6 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
   }
 
   /**
-   *
    * @throws {@link AuthenticateErrors}
    */
   public async authenticate(
@@ -77,8 +77,10 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
     }
     const factor = this.factors[authenticator.type];
     if (!factor) {
-      // TODO custom error
-      throw new Error(`No authenticator with the name ${authenticator.type} was registered.`);
+      throw new AccountsJsError(
+        this.options.errors.factorNotFound(authenticator.type),
+        AuthenticateErrors.FactorNotFound
+      );
     }
     // TODO we need to implement some time checking for the mfaToken (eg: expire after X minutes, probably based on the authenticator configuration)
     if (!(await factor.authenticate(mfaChallenge, authenticator, params, infos))) {
@@ -136,8 +138,10 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
     }
     const factor = this.factors[authenticator.type];
     if (!factor) {
-      // TODO custom error
-      throw new Error(`No authenticator with the name ${authenticator.type} was registered.`);
+      throw new AccountsJsError(
+        this.options.errors.factorNotFound(authenticator.type),
+        ChallengeErrors.FactorNotFound
+      );
     }
     // If authenticator do not have a challenge method, we attach the authenticator id to the challenge
     if (!factor.challenge) {
@@ -158,17 +162,20 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
    * @param {string} serviceName - Service name of the authenticator service.
    * @param {any} params - Params for the the authenticator service.
    * @param {ConnectionInformations} infos - User connection informations.
+   * @throws {@link AssociateError}
    */
   public async associate(
     userId: string,
-    serviceName: string,
+    factorName: string,
     params: any,
     infos: ConnectionInformations
   ): Promise<any> {
-    const factor = this.factors[serviceName];
+    const factor = this.factors[factorName];
     if (!factor) {
-      // TODO custom error
-      throw new Error(`No authenticator with the name ${serviceName} was registered.`);
+      throw new AccountsJsError(
+        this.options.errors.factorNotFound(factorName),
+        AssociateError.FactorNotFound
+      );
     }
 
     return factor.associate(userId, params, infos);
@@ -185,14 +192,16 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
    */
   public async associateByMfaToken(
     mfaToken: string,
-    serviceName: string,
+    factorName: string,
     params: any,
     infos: ConnectionInformations
   ): Promise<any> {
-    const factor = this.factors[serviceName];
+    const factor = this.factors[factorName];
     if (!factor) {
-      // TODO custom error
-      throw new Error(`No authenticator with the name ${serviceName} was registered.`);
+      throw new AccountsJsError(
+        this.options.errors.factorNotFound(factorName),
+        AssociateByMfaTokenError.FactorNotFound
+      );
     }
     const mfaChallenge = mfaToken ? await this.db.findMfaChallengeByToken(mfaToken) : null;
     if (
