@@ -536,9 +536,20 @@ export class Mongo implements DatabaseInterface {
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async deactivateAuthenticator(authenticatorId: string): Promise<void> {
-    throw new Error('Mfa for mongo is not yet implemented');
+    const id = this.options.convertAuthenticatorIdToMongoObjectId
+      ? toMongoID(authenticatorId)
+      : authenticatorId;
+    await this.authenticatorCollection.updateOne(
+      { _id: id },
+      {
+        $set: {
+          active: false,
+          deactivatedAt: this.options.dateProvider(),
+          [this.options.timestamps.updatedAt]: this.options.dateProvider(),
+        },
+      }
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
