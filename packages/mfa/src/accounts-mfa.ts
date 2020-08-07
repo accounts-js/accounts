@@ -84,8 +84,10 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
     }
     // TODO we need to implement some time checking for the mfaToken (eg: expire after X minutes, probably based on the authenticator configuration)
     if (!(await factor.authenticate(mfaChallenge, authenticator, params, infos))) {
-      // TODO custom error
-      throw new Error(`Authenticator ${authenticator.type} was not able to authenticate user`);
+      throw new AccountsJsError(
+        this.options.errors.authenticationFailed(authenticator.type),
+        AuthenticateErrors.AuthenticationFailed
+      );
     }
     // We activate the authenticator if user is using a challenge with scope 'associate'
     if (!authenticator.active && mfaChallenge.scope === 'associate') {

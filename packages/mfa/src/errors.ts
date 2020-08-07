@@ -6,6 +6,8 @@ export const errors: ErrorMessages = {
   authenticatorNotFound: 'Authenticator not found',
   authenticatorNotActive: 'Authenticator is not active',
   factorNotFound: (factorName: string) => `No service with the name ${factorName} was registered.`,
+  authenticationFailed: (factorName: string) =>
+    `Authenticator ${factorName} was not able to authenticate user`,
 };
 
 export enum AuthenticateErrors {
@@ -21,6 +23,10 @@ export enum AuthenticateErrors {
    * Will throw if authenticator is not active.
    */
   AuthenticatorNotActive = 'AuthenticatorNotActive',
+  /**
+   * Will throw if factor failed to verify the current login attempt.
+   */
+  AuthenticationFailed = 'AuthenticationFailed',
 }
 
 export enum ChallengeErrors {

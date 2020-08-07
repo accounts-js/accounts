@@ -16,7 +16,11 @@ export interface ErrorMessages {
    */
   authenticatorNotActive: string;
   /**
-   * Default to 'Authenticator not found'.
+   * Default to 'No service with the name ${factorName} was registered.'.
    */
   factorNotFound: (factorName: string) => string;
+  /**
+   * Default to 'Authenticator ${authenticator.type} was not able to authenticate user.'.
+   */
+  authenticationFailed: (factorName: string) => string;
 }
