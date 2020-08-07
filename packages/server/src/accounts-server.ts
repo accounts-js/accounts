@@ -145,7 +145,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         );
       }
 
-      const user: CustomUser | null = await this.services[serviceName].authenticate(params);
+      const user: CustomUser | null = await this.services[serviceName].authenticate(params, infos);
       hooksInfo.user = user;
       if (!user) {
         throw new AccountsJsError(
@@ -192,7 +192,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         );
       }
 
-      const user: CustomUser | null = await this.services[serviceName].authenticate(params);
+      const user: CustomUser | null = await this.services[serviceName].authenticate(params, infos);
       hooksInfo.user = user;
       if (!user) {
         throw new AccountsJsError(
