@@ -31,7 +31,7 @@ const defaultOptions = {
 };
 
 export class AuthenticatorOtp implements AuthenticatorService {
-  public serviceName = 'otp';
+  public authenticatorName = 'otp';
   public server!: AccountsServer;
 
   private options: AuthenticatorOtpOptions & typeof defaultOptions;
@@ -60,7 +60,7 @@ export class AuthenticatorOtp implements AuthenticatorService {
     const otpauthUri = optlibAuthenticator.keyuri(userName, this.options.appName, secret);
 
     const authenticatorId = await this.db.createAuthenticator({
-      type: this.serviceName,
+      type: this.authenticatorName,
       userId,
       secret,
       active: false,
