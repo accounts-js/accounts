@@ -2939,7 +2939,7 @@ __metadata:
     react-router-dom: 5.2.0
     react-scripts: 3.4.1
     tslib: 2.0.1
-    typescript: 3.7.5
+    typescript: 3.9.7
   languageName: unknown
   linkType: soft
 
@@ -25823,16 +25823,6 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-typescript@3.7.5:
-  version: 3.7.5
-  resolution: "typescript@npm:3.7.5"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 48a96fb7dc48746e6b76cf0946545181b0d5013368e510768402f1374e6c6a9f29b00e8ca4f40bc7523a655473f7bc7c55d1c8458970e96b7187bcee1b47e96b
-  languageName: node
-  linkType: hard
-
 typescript@3.9.7:
   version: 3.9.7
   resolution: "typescript@npm:3.9.7"
@@ -25840,16 +25830,6 @@ typescript@3.9.7:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10848a9c35fd8c70a8792b8bd9485317534bcd58768793d3b7d9c7486e9fd30cf345f83fa2a324e0bf6088bc8a4d8d061d58fda38b18c2ff187cf01fbbff6267
-  languageName: node
-  linkType: hard
-
-"typescript@patch:typescript@3.7.5#builtin<compat/typescript>":
-  version: 3.7.5
-  resolution: "typescript@patch:typescript@npm%3A3.7.5#builtin<compat/typescript>::version=3.7.5&hash=5b02a2"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: cf3413606dfe8a8c8e08392afe1f52975541b900ad407bc072279ad27b57ce4939eac389e74477bb0f8747122cf3442b944023ddfd87143d3b9ea3122fff40ad
   languageName: node
   linkType: hard
 

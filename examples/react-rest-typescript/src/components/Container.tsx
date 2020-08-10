@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface ContainerProps {
-  children: React.ReactNode;
+  children: any;
   maxWidth?: 'sm' | 'md';
 }
 
