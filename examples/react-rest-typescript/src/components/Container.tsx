@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles, Container as MuiContainer } from '@material-ui/core';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface ContainerProps {
-  children: React.ReactNode;
+  children: React.ReactElement;
   maxWidth?: 'sm' | 'md';
 }
 
