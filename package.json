@@ -2,7 +2,7 @@
   "private": true,
   "version": "0.27.0",
   "scripts": {
-    "setup": "lerna bootstrap; yarn run link",
+    "setup": "yarn run link",
     "start": "lerna exec -- yarn start",
     "link": "lerna exec -- yarn link",
     "unlink": "lerna exec -- yarn unlink",
@@ -25,7 +25,8 @@
   "workspaces": {
     "packages": [
       "packages/*",
-      "examples/*"
+      "examples/*",
+      "website"
     ]
   },
   "husky": {
@@ -72,7 +73,7 @@
     "lint-staged": "10.2.11",
     "opencollective": "1.0.3",
     "prettier": "2.0.5",
-    "ts-jest": "25.5.1",
+    "ts-jest": "26.1.4",
     "typescript": "3.9.5"
   },
   "collective": {

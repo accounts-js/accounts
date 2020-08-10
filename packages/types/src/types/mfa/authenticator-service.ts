@@ -5,7 +5,7 @@ import { ConnectionInformations } from '../connection-informations';
 
 export interface AuthenticatorService {
   server: any;
-  serviceName: string;
+  authenticatorName: string;
   setStore(store: DatabaseInterface): void;
   associate(
     userIdOrMfaChallenge: string | MfaChallenge,

@@ -43,10 +43,10 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/client": "^0.29.0",
-    "@types/jest": "25.2.3",
+    "@types/jest": "26.0.9",
     "@types/lodash": "4.14.157",
     "@types/node": "14.0.14",
-    "jest": "26.0.1",
+    "jest": "26.2.2",
     "node-fetch": "2.6.0"
   },
   "peerDependencies": {

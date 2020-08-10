@@ -33,9 +33,9 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "25.2.3",
+    "@types/jest": "26.0.9",
     "@types/node": "14.0.14",
-    "jest": "26.0.1",
+    "jest": "26.2.2",
     "rimraf": "3.0.2"
   },
   "dependencies": {
