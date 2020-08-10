@@ -229,6 +229,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@accounts/mfa@workspace:packages/mfa":
+  version: 0.0.0-use.local
+  resolution: "@accounts/mfa@workspace:packages/mfa"
+  dependencies:
+    "@accounts/server": ^0.29.0
+    "@accounts/types": ^0.29.0
+    "@types/jest": 26.0.9
+    "@types/node": 14.0.14
+    jest: 26.2.2
+    rimraf: 3.0.2
+    tslib: 2.0.0
+  peerDependencies:
+    "@accounts/server": ^0.29.0
+  languageName: unknown
+  linkType: soft
+
 "@accounts/mongo@^0.29.0, @accounts/mongo@workspace:packages/database-mongo":
   version: 0.0.0-use.local
   resolution: "@accounts/mongo@workspace:packages/database-mongo"
