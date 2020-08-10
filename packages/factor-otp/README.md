@@ -1,18 +1,18 @@
-# @accounts/authenticator-otp
+# @accounts/factor-otp
 
-[![npm](https://img.shields.io/npm/v/@accounts/authenticator-otp)](https://www.npmjs.com/package/@accounts/authenticator-otp)
-[![npm downloads](https://img.shields.io/npm/dm/@accounts/authenticator-otp)](https://www.npmjs.com/package/@accounts/authenticator-otp)
+[![npm](https://img.shields.io/npm/v/@accounts/factor-otp)](https://www.npmjs.com/package/@accounts/factor-otp)
+[![npm downloads](https://img.shields.io/npm/dm/@accounts/factor-otp)](https://www.npmjs.com/package/@accounts/factor-otp)
 [![codecov](https://img.shields.io/codecov/c/github/accounts-js/accounts)](https://codecov.io/gh/accounts-js/accounts)
 [![License](https://img.shields.io/github/license/accounts-js/accounts)](https://github.com/accounts-js/accounts/blob/master/LICENSE)
 
 ## Documentation
 
-- [API documentation](https://www.accountsjs.com/docs/api/authenticator-otp/globals)
+- [API documentation](https://www.accountsjs.com/docs/api/factor-otp/globals)
 
 ## Installation
 
 ```
-yarn add @accounts/authenticator-otp
+yarn add @accounts/factor-otp
 ```
 
 ## Contributing

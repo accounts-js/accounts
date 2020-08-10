@@ -20,23 +20,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/authenticator-otp@workspace:packages/authenticator-otp":
-  version: 0.0.0-use.local
-  resolution: "@accounts/authenticator-otp@workspace:packages/authenticator-otp"
-  dependencies:
-    "@accounts/server": ^0.29.0
-    "@accounts/types": ^0.29.0
-    "@types/jest": 26.0.0
-    "@types/node": 12.7.4
-    jest: 26.2.2
-    otplib: 12.0.1
-    rimraf: 3.0.2
-    tslib: 2.0.1
-  peerDependencies:
-    "@accounts/server": ^0.29.0
-  languageName: unknown
-  linkType: soft
-
 "@accounts/boost@^0.29.0, @accounts/boost@workspace:packages/boost":
   version: 0.0.0-use.local
   resolution: "@accounts/boost@workspace:packages/boost"
@@ -185,6 +168,23 @@ __metadata:
     "@accounts/server": ^0.19.0
     express: ^4.16.3
     express-session: ^1.15.6
+  languageName: unknown
+  linkType: soft
+
+"@accounts/factor-otp@workspace:packages/factor-otp":
+  version: 0.0.0-use.local
+  resolution: "@accounts/factor-otp@workspace:packages/factor-otp"
+  dependencies:
+    "@accounts/server": ^0.29.0
+    "@accounts/types": ^0.29.0
+    "@types/jest": 26.0.0
+    "@types/node": 12.7.4
+    jest: 26.2.2
+    otplib: 12.0.1
+    rimraf: 3.0.2
+    tslib: 2.0.1
+  peerDependencies:
+    "@accounts/server": ^0.29.0
   languageName: unknown
   linkType: soft
 

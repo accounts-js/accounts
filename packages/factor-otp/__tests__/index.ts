@@ -73,14 +73,14 @@ describe('AuthenticatorOtp', () => {
 
     it('should return false if code is invalid to resolve the challenge', async () => {
       const result = await authenticatorOtp.associate('userIdTest');
-      const resultAuthentiate = await authenticatorOtp.authenticate(
+      const resultAuthenticate = await authenticatorOtp.authenticate(
         {} as any,
         { secret: result.secret } as any,
         {
           code: '1233456',
         }
       );
-      expect(resultAuthentiate).toBe(false);
+      expect(resultAuthenticate).toBe(false);
     });
 
     it('should return true if code is valid', async () => {

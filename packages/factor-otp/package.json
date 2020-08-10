@@ -1,7 +1,7 @@
 {
-  "name": "@accounts/authenticator-otp",
+  "name": "@accounts/factor-otp",
   "version": "0.29.0",
-  "description": "@accounts/authenticator-otp",
+  "description": "@accounts/factor-otp",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "publishConfig": {
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/accounts-js/accounts/tree/master/packages/authenticator-otp"
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/factor-otp"
   },
   "author": "Leo Pradel",
   "license": "MIT",

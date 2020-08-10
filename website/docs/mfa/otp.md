@@ -4,10 +4,10 @@ title: One-Time Password
 sidebar_label: OTP
 ---
 
-[Github](https://github.com/accounts-js/accounts/tree/master/packages/authenticator-otp) |
-[npm](https://www.npmjs.com/package/@accounts/authenticator-otp)
+[Github](https://github.com/accounts-js/accounts/tree/master/packages/factor-otp) |
+[npm](https://www.npmjs.com/package/@accounts/factor-otp)
 
-The `@accounts/authenticator-otp` package provide a secure way to use OTP as a multi factor authentication step.
+The `@accounts/factor-otp` package provide a secure way to use OTP as a multi factor authentication step.
 This package will give the ability to your users to link an authenticator app (eg: Google Authenticator) to secure their account.
 
 > In order to generate and verify the validity of the OTP codes we are using the [otplib](https://github.com/yeojz/otplib) npm package
@@ -20,16 +20,16 @@ The first step is to setup the server configuration.
 
 ```
 # With yarn
-yarn add @accounts/authenticator-otp
+yarn add @accounts/factor-otp
 # Or if you use npm
-npm install @accounts/authenticator-otp --save
+npm install @accounts/factor-otp --save
 ```
 
 ## Usage
 
 ```javascript
 import AccountsServer from '@accounts/server';
-import { AuthenticatorOtp } from '@accounts/authenticator-otp';
+import { AuthenticatorOtp } from '@accounts/factor-otp';
 
 // We create a new password instance with some custom config
 const authenticatorOtp = new AuthenticatorOtp(...config);
