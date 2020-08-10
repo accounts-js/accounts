@@ -10,8 +10,8 @@
     "generate-api-docs": "rm -rf docs/api && ts-node scripts/generate-api-docs.ts"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-alpha.58",
-    "@docusaurus/preset-classic": "2.0.0-alpha.58",
+    "@docusaurus/core": "2.0.0-alpha.61",
+    "@docusaurus/preset-classic": "2.0.0-alpha.61",
     "clsx": "1.1.1",
     "docusaurus-plugin-fathom": "1.1.0",
     "react": "16.13.1",

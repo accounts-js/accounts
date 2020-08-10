@@ -2,7 +2,7 @@
   "private": true,
   "version": "0.22.0",
   "scripts": {
-    "setup": "lerna bootstrap; yarn run link",
+    "setup": "yarn run link",
     "start": "lerna exec -- yarn start",
     "link": "lerna exec -- yarn link",
     "unlink": "lerna exec -- yarn unlink",
@@ -25,7 +25,8 @@
   "workspaces": {
     "packages": [
       "packages/*",
-      "examples/*"
+      "examples/*",
+      "website"
     ]
   },
   "husky": {
