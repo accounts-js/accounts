@@ -15,12 +15,10 @@ import {
   ConnectionInformations,
   AuthenticationResult,
 } from '@accounts/types';
-
+import { AccountsMfa } from '@accounts/mfa';
 import { generateAccessToken, generateRefreshToken, generateRandomToken } from './utils/tokens';
-
 import { emailTemplates, sendMail } from './utils/email';
 import { ServerHooks } from './utils/server-hooks';
-
 import { AccountsServerOptions } from './types/accounts-server-options';
 import { JwtData } from './types/jwt-data';
 import { EmailTemplateType } from './types/email-template-type';
@@ -35,7 +33,6 @@ import {
   LogoutErrors,
   ResumeSessionErrors,
 } from './errors';
-import { AccountsMFA } from './accounts-mfa';
 
 const defaultOptions = {
   ambiguousErrorMessages: true,
@@ -60,7 +57,7 @@ const defaultOptions = {
 
 export class AccountsServer<CustomUser extends User = User> {
   public options: AccountsServerOptions<CustomUser> & typeof defaultOptions;
-  public mfa: AccountsMFA;
+  public mfa: AccountsMfa;
   private services: { [key: string]: AuthenticationService<CustomUser> };
   private authenticators: { [key: string]: AuthenticatorService };
   private db: DatabaseInterface<CustomUser>;
@@ -104,7 +101,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     }
 
     // Initialize the MFA module
-    this.mfa = new AccountsMFA(this.options.db, authenticators);
+    this.mfa = new AccountsMfa({ factors: authenticators! });
 
     // Initialize hooks
     this.hooks = new Emittery();
