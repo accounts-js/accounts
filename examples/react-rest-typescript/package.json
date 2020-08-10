@@ -46,6 +46,6 @@
     "@types/react-router": "5.1.8",
     "@types/react-router-dom": "5.1.5",
     "react-scripts": "3.4.1",
-    "typescript": "3.9.7"
+    "typescript": "3.7.5"
   }
 }
