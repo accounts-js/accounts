@@ -14,7 +14,7 @@
     "compile": "tsc",
     "prepublishOnly": "yarn compile",
     "test": "npm run test",
-    "testonly": "jest --coverage",
+    "testonly": "jest",
     "coverage": "jest --coverage"
   },
   "files": [
