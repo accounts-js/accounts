@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles, Container } from '@material-ui/core';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
   },
@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface UnauthenticatedContainerProps {
-  children: React.ReactNode;
+  children: any;
 }
 
 export const UnauthenticatedContainer = ({ children }: UnauthenticatedContainerProps) => {

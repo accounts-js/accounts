@@ -14,7 +14,7 @@ import QRCode from 'qrcode.react';
 import { useFormik, FormikErrors } from 'formik';
 import { accountsRest } from './accounts';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   card: {
     marginTop: theme.spacing(3),
   },
@@ -42,12 +42,12 @@ interface TwoFactorValues {
 
 export const TwoFactor = () => {
   const classes = useStyles();
-  const [secret, setSecret] = useState();
+  const [secret, setSecret] = useState<any>();
   const formik = useFormik<TwoFactorValues>({
     initialValues: {
       oneTimeCode: '',
     },
-    validate: values => {
+    validate: (values) => {
       const errors: FormikErrors<TwoFactorValues> = {};
       if (!values.oneTimeCode) {
         errors.oneTimeCode = 'Required';
