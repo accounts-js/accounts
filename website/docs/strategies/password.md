@@ -85,7 +85,7 @@ Due to some databases limitations, we have to do some internal logic to ensure t
 ## Two factor
 
 The password module come with two factor out of the box. You can customize it using the `twoFactor` option.
-Check all the options available [here](/docs/api/two-factor/api-interfaces-accountstwofactoroptions).
+Check all the options available [here](/docs/api/two-factor/interfaces/accountstwofactoroptions).
 
 ```javascript
 export const accountsPassword = new AccountsPassword({
