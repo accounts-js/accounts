@@ -1,9 +1,9 @@
 [build]
   base    = "."
   publish = "website/build"
-  command = "yarn setup && yarn compile && cd website && yarn && yarn generate-api-docs && yarn build"
+  command = "yarn setup && yarn compile && cd website && yarn generate-api-docs && yarn build"
 
 [build.environment]
   NODE_VERSION = "12"
   YARN_VERSION = "1.22.4"
-  YARN_FLAGS = "--pure-lockfile"
+  YARN_FLAGS = "--immutable"
