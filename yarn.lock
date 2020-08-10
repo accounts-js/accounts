@@ -171,6 +171,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@accounts/factor-otp@workspace:packages/factor-otp":
+  version: 0.0.0-use.local
+  resolution: "@accounts/factor-otp@workspace:packages/factor-otp"
+  dependencies:
+    "@accounts/server": ^0.29.0
+    "@accounts/types": ^0.29.0
+    "@types/jest": 26.0.0
+    "@types/node": 12.7.4
+    jest: 26.2.2
+    otplib: 12.0.1
+    rimraf: 3.0.2
+    tslib: 2.0.1
+  peerDependencies:
+    "@accounts/server": ^0.29.0
+  languageName: unknown
+  linkType: soft
+
 "@accounts/graphql-api@^0.29.0, @accounts/graphql-api@workspace:packages/graphql-api":
   version: 0.0.0-use.local
   resolution: "@accounts/graphql-api@workspace:packages/graphql-api"
@@ -5290,6 +5307,54 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@otplib/core@npm:^12.0.1":
+  version: 12.0.1
+  resolution: "@otplib/core@npm:12.0.1"
+  checksum: c4a6f3f0c5c5fe3765a92611b281f5ca0147480aabfed46c4f018219db91c67a1693724bec62f7bb08cbb237f0f74c70b28a783805ad6757c4681580e98f9fd4
+  languageName: node
+  linkType: hard
+
+"@otplib/plugin-crypto@npm:^12.0.1":
+  version: 12.0.1
+  resolution: "@otplib/plugin-crypto@npm:12.0.1"
+  dependencies:
+    "@otplib/core": ^12.0.1
+  checksum: e319991527167f800dafd3c7353c5b54cb85b229b5dd1e60d56a7004c0534eb3bd7ef2dda94d81a69d160ed45283ffc182260196cc7eec13c4ab35bc2a990348
+  languageName: node
+  linkType: hard
+
+"@otplib/plugin-thirty-two@npm:^12.0.1":
+  version: 12.0.1
+  resolution: "@otplib/plugin-thirty-two@npm:12.0.1"
+  dependencies:
+    "@otplib/core": ^12.0.1
+    thirty-two: ^1.0.2
+  checksum: 52f6d5208b0a90b347d419b931d51a63ae46440b89040e78710d4bdda37f1831da8e60a7dfb14c1411dd28fea05d817beea7d3451b803c1880ededb307c711fc
+  languageName: node
+  linkType: hard
+
+"@otplib/preset-default@npm:^12.0.1":
+  version: 12.0.1
+  resolution: "@otplib/preset-default@npm:12.0.1"
+  dependencies:
+    "@otplib/core": ^12.0.1
+    "@otplib/plugin-crypto": ^12.0.1
+    "@otplib/plugin-thirty-two": ^12.0.1
+  checksum: 8b702af09bf077c37c81883837b2ef199290e3308634eb6258f6d7976f55e263f06e3c39caa88caa2e2e91a08e71913635cf3b4adca925945fe2e2aece8c6793
+  languageName: node
+  linkType: hard
+
+"@otplib/preset-v11@npm:^12.0.1":
+  version: 12.0.1
+  resolution: "@otplib/preset-v11@npm:12.0.1"
+  dependencies:
+    "@otplib/core": ^12.0.1
+    "@otplib/plugin-crypto": ^12.0.1
+    "@otplib/plugin-thirty-two": ^12.0.1
+  checksum: 2dac0d8df213775a703ff845ab5dbf808d395e85988a9ff3d1615486fe8654fb2f0be7bde2f85c12857254ac3ab6e4bbfdafe54cdadf92f0c38a036c24f06698
+  languageName: node
+  linkType: hard
+
 "@protobufjs/aspromise@npm:^1.1.1, @protobufjs/aspromise@npm:^1.1.2":
   version: 1.1.2
   resolution: "@protobufjs/aspromise@npm:1.1.2"
@@ -5990,6 +6055,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/jest@npm:26.0.0":
+  version: 26.0.0
+  resolution: "@types/jest@npm:26.0.0"
+  dependencies:
+    jest-diff: ^25.2.1
+    pretty-format: ^25.2.1
+  checksum: 6c482e91e8ac3850a1db50d086900c810951eab7514d6b705a616934afd362f606b638a2967edad1ff716aa2ec7cc7631f68774fe9c19e3576ceb90c8df68f7b
+  languageName: node
+  linkType: hard
+
 "@types/jest@npm:26.0.9":
   version: 26.0.9
   resolution: "@types/jest@npm:26.0.9"
@@ -6181,6 +6256,13 @@ __metadata:
   version: 14.0.14
   resolution: "@types/node@npm:14.0.14"
   checksum: 0a2072aa7de32e6535ce6bc7383965fc0a4b7bbf6d76f69027db72e86381921c820a8a2173f75fa210d9fb3286c707079d3804ef33c76a065bcb890858e50ee9
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:12.7.4":
+  version: 12.7.4
+  resolution: "@types/node@npm:12.7.4"
+  checksum: ccafdc6e77ab785b6b7f3caae7ca58a72b7f8e281b780bb4d29827ac6a471337416138283df08d4f9932696b03bb2fb8072d10ff6a3c941eac3d59043a17060c
   languageName: node
   linkType: hard
 
@@ -20151,6 +20233,17 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"otplib@npm:12.0.1":
+  version: 12.0.1
+  resolution: "otplib@npm:12.0.1"
+  dependencies:
+    "@otplib/core": ^12.0.1
+    "@otplib/preset-default": ^12.0.1
+    "@otplib/preset-v11": ^12.0.1
+  checksum: afb790659af994513c320e2d4b673f2f36a7a9e5c6eeb69f8ecfbe68337964989cdb3c139aa8e8b276b364b3a4019f692a213ad26a75edb34b747a61d1fa273d
+  languageName: node
+  linkType: hard
+
 "p-cancelable@npm:^1.0.0":
   version: 1.1.0
   resolution: "p-cancelable@npm:1.1.0"
@@ -25532,6 +25625,13 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
+"thirty-two@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "thirty-two@npm:1.0.2"
+  checksum: 81c46a540b8f8984e3f39dbae6df0b1407cfa0b4d0ec17d5aa392d465f033bcc5dbe910260ccd4424711627890ad8b20ba67d9019fbd15f03f2658ce652b2847
+  languageName: node
+  linkType: hard
+
 "throat@npm:^4.0.0":
   version: 4.1.0
   resolution: "throat@npm:4.1.0"
@@ -25925,6 +26025,13 @@ resolve@1.1.7:
   version: 2.0.0
   resolution: "tslib@npm:2.0.0"
   checksum: a7369a224f12e223fb42f2a720389601a24a1e1c96c55bf0d8d4b60c131e574c175ae23578b8d1bd3f4ec790c7e0a82b43733f022f866d48a23aeadd3910755d
+  languageName: node
+  linkType: hard
+
+"tslib@npm:2.0.1":
+  version: 2.0.1
+  resolution: "tslib@npm:2.0.1"
+  checksum: 7b42337a07f536c9650c72471cdf51317f07eb981692e91b8979fee3f6e20136a8f047e6ecdc5f2f3201132a6cc4e0096fa3c58655eba3803bf7fe739ccd088e
   languageName: node
   linkType: hard
 
