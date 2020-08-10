@@ -8,7 +8,6 @@ In order to be able to run this example on your machine you first need to do the
 
 - Clone the repository `git clone git@github.com:accounts-js/accounts.git`
 - Install project dependencies: `yarn`
-- Link together all the packages: `yarn setup`
 - Compile the packages `yarn compile`
 - Go to the example folder `cd examples/graphql-server-typescript`
 

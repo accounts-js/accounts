@@ -35,7 +35,7 @@
   "dependencies": {
     "@accounts/client": "^0.29.0",
     "@accounts/types": "^0.29.0",
-    "@graphql-typed-document-node/core": "0.0.1",
+    "@graphql-typed-document-node/core": "3.0.0",
     "tslib": "2.0.1"
   },
   "devDependencies": {
@@ -45,7 +45,7 @@
     "@graphql-codegen/typescript": "1.17.7",
     "@graphql-codegen/typescript-operations": "1.17.7",
     "@types/jest": "26.0.9",
-    "graphql": "14.6.0",
+    "graphql": "14.7.0",
     "jest": "26.3.0",
     "lodash": "4.17.19"
   }

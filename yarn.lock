@@ -12,7 +12,7 @@ __metadata:
     "@accounts/client": ^0.29.0
     "@apollo/client": 3.1.3
     "@types/node": 14.0.27
-    graphql: 14.6.0
+    graphql: 14.7.0
     rimraf: 3.0.2
     tslib: 2.0.1
   peerDependencies:
@@ -30,7 +30,7 @@ __metadata:
     "@accounts/types": ^0.29.0
     "@graphql-modules/core": 0.7.17
     apollo-server: ^2.16.1
-    graphql: 14.6.0
+    graphql: 14.7.0
     graphql-tools: ^5.0.0
     jsonwebtoken: ^8.5.1
     lodash: ^4.17.19
@@ -124,7 +124,7 @@ __metadata:
     body-parser: 1.19.0
     core-js: 3.6.5
     express: 4.17.1
-    graphql: 14.6.0
+    graphql: 14.7.0
     jest: 26.3.0
     jest-localstorage-mock: 2.4.3
     lodash: 4.17.19
@@ -178,7 +178,7 @@ __metadata:
     "@accounts/server": ^0.29.0
     "@accounts/types": ^0.29.0
     "@types/jest": 26.0.9
-    "@types/node": 12.7.4
+    "@types/node": 14.0.27
     jest: 26.3.0
     otplib: 12.0.1
     rimraf: 3.0.2
@@ -207,7 +207,7 @@ __metadata:
     "@types/jest": 26.0.9
     "@types/request-ip": 0.0.35
     concurrently: 5.3.0
-    graphql: 14.6.0
+    graphql: 14.7.0
     graphql-tools: 5.0.0
     jest: 26.3.0
     lodash: 4.17.19
@@ -235,9 +235,9 @@ __metadata:
     "@graphql-codegen/typed-document-node": 1.17.8
     "@graphql-codegen/typescript": 1.17.7
     "@graphql-codegen/typescript-operations": 1.17.7
-    "@graphql-typed-document-node/core": 0.0.1
+    "@graphql-typed-document-node/core": 3.0.0
     "@types/jest": 26.0.9
-    graphql: 14.6.0
+    graphql: 14.7.0
     jest: 26.3.0
     lodash: 4.17.19
     tslib: 2.0.1
@@ -2827,7 +2827,7 @@ __metadata:
     apollo-link-context: 1.0.20
     apollo-link-http: 1.5.17
     apollo-server: 2.16.1
-    graphql: 14.6.0
+    graphql: 14.7.0
     graphql-tools: 5.0.0
     lodash: 4.17.19
     node-fetch: 2.6.0
@@ -2853,7 +2853,7 @@ __metadata:
     "@types/mongoose": 5.7.36
     "@types/node": 14.0.27
     apollo-server: 2.16.1
-    graphql: 14.6.0
+    graphql: 14.7.0
     lodash: 4.17.19
     mongoose: 5.9.28
     nodemon: 2.0.4
@@ -2877,7 +2877,7 @@ __metadata:
     "@types/node": 14.0.27
     apollo-server: 2.16.1
     dotenv: ^8.2.0
-    graphql: 14.6.0
+    graphql: 14.7.0
     nodemon: 2.0.4
     pg: 8.3.0
     ts-node: 8.10.2
@@ -2903,7 +2903,7 @@ __metadata:
     "@types/react-dom": 16.9.8
     "@types/react-router": 5.1.8
     "@types/react-router-dom": 5.1.5
-    graphql: 14.6.0
+    graphql: 14.7.0
     graphql-tag: 2.11.0
     qrcode.react: 1.0.0
     react: 16.13.1
@@ -3571,12 +3571,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-typed-document-node/core@npm:0.0.1":
-  version: 0.0.1
-  resolution: "@graphql-typed-document-node/core@npm:0.0.1"
+"@graphql-typed-document-node/core@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@graphql-typed-document-node/core@npm:3.0.0"
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
-  checksum: cc5241116bc75b7b867be066a02e1abd3f948aa8b7df44a135e813d66b4b8aaea8bb93ac10f6ea2609876aa6ec156b9e034f7dd0d787a7cab530b556a97c98ae
+  checksum: ca4ed2ff8919b752e74c490d445b5c33037f6eb580b2fb5e3a227ae13ca7d9b9c2eb7d76592095c4d00708a5c44c6775438ec800f210ea1d4995b273a118519e
   languageName: node
   linkType: hard
 
@@ -6168,13 +6168,6 @@ __metadata:
   version: 14.0.14
   resolution: "@types/node@npm:14.0.14"
   checksum: 0a2072aa7de32e6535ce6bc7383965fc0a4b7bbf6d76f69027db72e86381921c820a8a2173f75fa210d9fb3286c707079d3804ef33c76a065bcb890858e50ee9
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:12.7.4":
-  version: 12.7.4
-  resolution: "@types/node@npm:12.7.4"
-  checksum: ccafdc6e77ab785b6b7f3caae7ca58a72b7f8e281b780bb4d29827ac6a471337416138283df08d4f9932696b03bb2fb8072d10ff6a3c941eac3d59043a17060c
   languageName: node
   linkType: hard
 
@@ -14070,7 +14063,16 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"graphql@npm:14.6.0, graphql@npm:^14.5.3":
+"graphql@npm:14.7.0":
+  version: 14.7.0
+  resolution: "graphql@npm:14.7.0"
+  dependencies:
+    iterall: ^1.2.2
+  checksum: 3b7d50f98f5c66db36327d6dd331367c6da166d701b5bad669664e8602a180ee50dcb5ae3e1f9874e7fa59c1217f50a52a922fc77b5a1e04276426e67815b0ed
+  languageName: node
+  linkType: hard
+
+"graphql@npm:^14.5.3":
   version: 14.6.0
   resolution: "graphql@npm:14.6.0"
   dependencies:

@@ -2,7 +2,6 @@
   "private": true,
   "version": "0.22.0",
   "scripts": {
-    "setup": "yarn run link",
     "start": "lerna exec -- yarn start",
     "link": "lerna exec -- yarn link",
     "unlink": "lerna exec -- yarn unlink",
@@ -20,7 +19,7 @@
     "coverage": "lerna run coverage",
     "codecov": "codecov",
     "generate:changelog": "conventional-changelog -p conventionalcommits -n ./conventional-changelog.config.json -c ./conventional-changelog.context.json -i CHANGELOG.md -s",
-    "reset": "yarn clean; yarn install; yarn setup; yarn compile"
+    "reset": "yarn clean; yarn install; yarn compile"
   },
   "workspaces": {
     "packages": [

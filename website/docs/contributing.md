@@ -23,7 +23,6 @@ The Accounts project was intended - since its inception - to be a community main
 #### Useful Commands:
 
 - Install project dependencies: `yarn`
-- Link together all the packages: `yarn setup`
 - Watch the packages for changes and recompile: `yarn start`
 - If you want to use the accounts project in your own project, use `yarn link @accounts/<name of package>` within your project.
 
