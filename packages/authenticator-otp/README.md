@@ -1,3 +1,0 @@
-# @accounts/authenticator-otp
-
-TODO
