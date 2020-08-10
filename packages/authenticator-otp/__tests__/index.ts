@@ -1,3 +1,4 @@
+import { authenticator as optlibAuthenticator } from 'otplib';
 import { AuthenticatorOtp } from '../src';
 
 const authenticatorOtp = new AuthenticatorOtp();
@@ -60,6 +61,39 @@ describe('AuthenticatorOtp', () => {
         mfaToken: expect.any(String),
         secret: expect.any(String),
       });
+    });
+  });
+
+  describe('authenticate', () => {
+    it('should throw if code is not provided', async () => {
+      await expect(authenticatorOtp.authenticate({} as any, {} as any, {})).rejects.toThrowError(
+        'Code required'
+      );
+    });
+
+    it('should return false if code is invalid to resolve the challenge', async () => {
+      const result = await authenticatorOtp.associate('userIdTest');
+      const resultAuthentiate = await authenticatorOtp.authenticate(
+        {} as any,
+        { secret: result.secret } as any,
+        {
+          code: '1233456',
+        }
+      );
+      expect(resultAuthentiate).toBe(false);
+    });
+
+    it('should return true if code is valid', async () => {
+      const result = await authenticatorOtp.associate('userIdTest');
+      const code = optlibAuthenticator.generate(result.secret);
+      const resultAuthentiate = await authenticatorOtp.authenticate(
+        {} as any,
+        { secret: result.secret } as any,
+        {
+          code,
+        }
+      );
+      expect(resultAuthentiate).toBe(true);
     });
   });
 
