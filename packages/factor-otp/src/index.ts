@@ -11,7 +11,7 @@ interface DbAuthenticatorOtp extends Authenticator {
   secret: string;
 }
 
-export interface AuthenticatorOtpOptions {
+export interface FactorOtpOptions {
   /**
    * Tokens in the previous and future x-windows that should be considered valid.
    */
@@ -22,14 +22,14 @@ const defaultOptions = {
   window: 0,
 };
 
-export class AuthenticatorOtp implements AuthenticatorService {
+export class FactorOtp implements AuthenticatorService {
   public authenticatorName = 'otp';
   public server!: AccountsServer;
 
-  private options: AuthenticatorOtpOptions & typeof defaultOptions;
+  private options: FactorOtpOptions & typeof defaultOptions;
   private db!: DatabaseInterface;
 
-  constructor(options: AuthenticatorOtpOptions = {}) {
+  constructor(options: FactorOtpOptions = {}) {
     this.options = { ...defaultOptions, ...options };
     optlibAuthenticator.options = { window: this.options.window };
   }

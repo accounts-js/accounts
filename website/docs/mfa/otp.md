@@ -29,10 +29,10 @@ npm install @accounts/factor-otp --save
 
 ```javascript
 import AccountsServer from '@accounts/server';
-import { AuthenticatorOtp } from '@accounts/factor-otp';
+import { FactorOtp } from '@accounts/factor-otp';
 
 // We create a new password instance with some custom config
-const authenticatorOtp = new AuthenticatorOtp(...config);
+const factorOtp = new FactorOtp(...config);
 
 // We pass the password instance the AccountsServer service list
 const accountsServer = new AccountsServer(
@@ -41,8 +41,8 @@ const accountsServer = new AccountsServer(
     // Your services
   },
   {
-    // List of MFA authenticators
-    otp: authenticatorOtp,
+    // List of MFA factors
+    otp: factorOtp,
   }
 );
 ```
@@ -50,7 +50,7 @@ const accountsServer = new AccountsServer(
 ## Options
 
 ```typescript
-interface AuthenticatorOtpOptions {
+interface FactorOtpOptions {
   /**
    * Tokens in the previous and future x-windows that should be considered valid.
    */

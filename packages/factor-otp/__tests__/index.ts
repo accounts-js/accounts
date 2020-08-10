@@ -1,7 +1,7 @@
 import { authenticator as optlibAuthenticator } from 'otplib';
-import { AuthenticatorOtp } from '../src';
+import { FactorOtp } from '../src';
 
-const authenticatorOtp = new AuthenticatorOtp();
+const factorOtp = new FactorOtp();
 
 const mockedDb = {
   createAuthenticator: jest.fn(() => Promise.resolve('authenticatorIdTest')),
@@ -10,16 +10,16 @@ const mockedDb = {
   updateMfaChallenge: jest.fn(),
 };
 
-authenticatorOtp.setStore(mockedDb as any);
+factorOtp.setStore(mockedDb as any);
 
-describe('AuthenticatorOtp', () => {
+describe('FactorOtp', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   describe('associate', () => {
     it('create a new mfa challenge when userId is passed', async () => {
-      const result = await authenticatorOtp.associate('userIdTest');
+      const result = await factorOtp.associate('userIdTest');
 
       expect(mockedDb.createAuthenticator).toHaveBeenCalledWith({
         type: 'otp',
@@ -41,7 +41,7 @@ describe('AuthenticatorOtp', () => {
     });
 
     it('update mfa challenge when challenge is passed', async () => {
-      const result = await authenticatorOtp.associate({
+      const result = await factorOtp.associate({
         id: 'mfaChallengeIdTest',
         token: 'mfaChallengeTokenTest',
         userId: 'userIdTest',
@@ -66,14 +66,14 @@ describe('AuthenticatorOtp', () => {
 
   describe('authenticate', () => {
     it('should throw if code is not provided', async () => {
-      await expect(authenticatorOtp.authenticate({} as any, {} as any, {})).rejects.toThrowError(
+      await expect(factorOtp.authenticate({} as any, {} as any, {})).rejects.toThrowError(
         'Code required'
       );
     });
 
     it('should return false if code is invalid to resolve the challenge', async () => {
-      const result = await authenticatorOtp.associate('userIdTest');
-      const resultAuthenticate = await authenticatorOtp.authenticate(
+      const result = await factorOtp.associate('userIdTest');
+      const resultAuthenticate = await factorOtp.authenticate(
         {} as any,
         { secret: result.secret } as any,
         {
@@ -84,9 +84,9 @@ describe('AuthenticatorOtp', () => {
     });
 
     it('should return true if code is valid', async () => {
-      const result = await authenticatorOtp.associate('userIdTest');
+      const result = await factorOtp.associate('userIdTest');
       const code = optlibAuthenticator.generate(result.secret);
-      const resultAuthentiate = await authenticatorOtp.authenticate(
+      const resultAuthentiate = await factorOtp.authenticate(
         {} as any,
         { secret: result.secret } as any,
         {
@@ -103,7 +103,7 @@ describe('AuthenticatorOtp', () => {
         id: '123',
         secret: 'shouldBeRemoved',
       };
-      const result = authenticatorOtp.sanitize(authenticator as any);
+      const result = factorOtp.sanitize(authenticator as any);
       expect(result).toEqual({
         id: authenticator.id,
       });
