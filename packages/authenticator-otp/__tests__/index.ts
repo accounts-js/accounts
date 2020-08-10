@@ -36,7 +36,6 @@ describe('AuthenticatorOtp', () => {
         id: 'authenticatorIdTest',
         mfaToken: expect.any(String),
         secret: expect.any(String),
-        otpauthUri: expect.any(String),
       });
     });
 
@@ -60,7 +59,6 @@ describe('AuthenticatorOtp', () => {
         id: 'authenticatorIdTest',
         mfaToken: expect.any(String),
         secret: expect.any(String),
-        otpauthUri: expect.any(String),
       });
     });
   });

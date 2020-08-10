@@ -31,7 +31,7 @@ export class AuthenticatorOtp implements AuthenticatorService {
 
   constructor(options: AuthenticatorOtpOptions = {}) {
     this.options = { ...defaultOptions, ...options };
-    optlibAuthenticator.options = { window: options.window };
+    optlibAuthenticator.options = { window: this.options.window };
   }
 
   public setStore(store: DatabaseInterface) {
