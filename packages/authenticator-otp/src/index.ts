@@ -7,31 +7,19 @@ import {
 import { AccountsServer, generateRandomToken } from '@accounts/server';
 import { authenticator as optlibAuthenticator } from 'otplib';
 
-// TODO remove the url to be returned
-// - should be done client side
-// - update documentation to see how to use it
-
 interface DbAuthenticatorOtp extends Authenticator {
   secret: string;
 }
 
 export interface AuthenticatorOtpOptions {
   /**
-   * Two factor app name that will be displayed inside the user authenticator app.
+   * Tokens in the previous and future x-windows that should be considered valid.
    */
-  appName?: string;
-
-  /**
-   * Two factor user name that will be displayed inside the user authenticator app,
-   * usually a name, email etc..
-   * Will be called every time a user register a new device.
-   * That way you can display something like "Github (leo@accountsjs.com)" in the authenticator app.
-   */
-  userName?: (userId: string) => Promise<string> | string;
+  window?: number;
 }
 
 const defaultOptions = {
-  appName: 'accounts-js',
+  window: 0,
 };
 
 export class AuthenticatorOtp implements AuthenticatorService {
@@ -43,6 +31,7 @@ export class AuthenticatorOtp implements AuthenticatorService {
 
   constructor(options: AuthenticatorOtpOptions = {}) {
     this.options = { ...defaultOptions, ...options };
+    optlibAuthenticator.options = { window: options.window };
   }
 
   public setStore(store: DatabaseInterface) {
@@ -54,14 +43,14 @@ export class AuthenticatorOtp implements AuthenticatorService {
    */
   public async associate(
     userIdOrMfaChallenge: string | MfaChallenge
-  ): Promise<{ id: string; mfaToken: string; secret: string; otpauthUri: string }> {
+  ): Promise<{ id: string; mfaToken: string; secret: string }> {
     const userId =
       typeof userIdOrMfaChallenge === 'string' ? userIdOrMfaChallenge : userIdOrMfaChallenge.userId;
     const mfaChallenge = typeof userIdOrMfaChallenge === 'string' ? null : userIdOrMfaChallenge;
 
     const secret = optlibAuthenticator.generateSecret();
-    const userName = this.options.userName ? await this.options.userName(userId) : userId;
-    const otpauthUri = optlibAuthenticator.keyuri(userName, this.options.appName, secret);
+
+    // TODO update pending (not active) authenticator if there is one
 
     const authenticatorId = await this.db.createAuthenticator({
       type: this.authenticatorName,
@@ -91,7 +80,6 @@ export class AuthenticatorOtp implements AuthenticatorService {
       id: authenticatorId,
       mfaToken,
       secret,
-      otpauthUri,
     };
   }
 
