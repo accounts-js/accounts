@@ -4,10 +4,10 @@ title: One-Time Password
 sidebar_label: OTP
 ---
 
-[Github](https://github.com/accounts-js/accounts/tree/master/packages/authenticator-otp) |
-[npm](https://www.npmjs.com/package/@accounts/authenticator-otp)
+[Github](https://github.com/accounts-js/accounts/tree/master/packages/factor-otp) |
+[npm](https://www.npmjs.com/package/@accounts/factor-otp)
 
-The `@accounts/authenticator-otp` package provide a secure way to use OTP as a multi factor authentication step.
+The `@accounts/factor-otp` package provide a secure way to use OTP as a multi factor authentication step.
 This package will give the ability to your users to link an authenticator app (eg: Google Authenticator) to secure their account.
 
 > In order to generate and verify the validity of the OTP codes we are using the [otplib](https://github.com/yeojz/otplib) npm package
@@ -16,24 +16,23 @@ This package will give the ability to your users to link an authenticator app (e
 
 The first step is to setup the server configuration.
 
-## Install
+## Installation
 
 ```
 # With yarn
-yarn add @accounts/authenticator-otp
-
+yarn add @accounts/factor-otp
 # Or if you use npm
-npm install @accounts/authenticator-otp --save
+npm install @accounts/factor-otp --save
 ```
 
 ## Usage
 
 ```javascript
 import AccountsServer from '@accounts/server';
-import { AuthenticatorOtp } from '@accounts/authenticator-otp';
+import { FactorOtp } from '@accounts/factor-otp';
 
 // We create a new password instance with some custom config
-const authenticatorOtp = new AuthenticatorOtp(...config);
+const factorOtp = new FactorOtp(...config);
 
 // We pass the password instance the AccountsServer service list
 const accountsServer = new AccountsServer(
@@ -42,8 +41,8 @@ const accountsServer = new AccountsServer(
     // Your services
   },
   {
-    // List of MFA authenticators
-    otp: authenticatorOtp,
+    // List of MFA factors
+    otp: factorOtp,
   }
 );
 ```
@@ -51,19 +50,11 @@ const accountsServer = new AccountsServer(
 ## Options
 
 ```typescript
-interface AuthenticatorOtpOptions {
+interface FactorOtpOptions {
   /**
-   * Two factor app name that will be displayed inside the user authenticator app.
+   * Tokens in the previous and future x-windows that should be considered valid.
    */
-  appName?: string;
-
-  /**
-   * Two factor user name that will be displayed inside the user authenticator app,
-   * usually a name, email etc..
-   * Will be called every time a user register a new device.
-   * That way you can display something like "Github (leo@accountsjs.com)" in the authenticator app.
-   */
-  userName?: (userId: string) => Promise<string> | string;
+  window?: number;
 }
 ```
 
@@ -85,7 +76,6 @@ First step will be to request a new association for the device. To do so, we hav
 ```typescript
 // This will trigger a request on the server
 const data = await accountsClient.mfaAssociate('otp');
-
 // Data have the following structure
 {
   // Token that will be used later to activate the new authenticator
@@ -94,8 +84,6 @@ const data = await accountsClient.mfaAssociate('otp');
   id: string;
   // Secret to show to the user so they can save it in a safe place
   secret: string;
-  // Otpauth formatted uri so you can
-  otpauthUri: string;
 }
 ```
 
@@ -110,7 +98,11 @@ import qrcode from 'qrcode';
 
 const data = await accountsClient.mfaAssociate('otp');
 
-qrcode.toDataURL(data.otpauthUri, (err, imageUrl) => {
+// Format a valid uri string for the authenticator app.
+// You can customise it with the user email for example, you can also change the issue.
+const otpauthUri = `otpauth://totp/accounts-js:${user.email}?secret=${data.secret}&issuer=accounts-js`;
+
+qrcode.toDataURL(otpauthUri, (err, imageUrl) => {
   if (err) {
     console.log('Error with QR');
     return;
@@ -127,8 +119,12 @@ import QRCode from 'qrcode.react';
 
 const data = await accountsClient.mfaAssociate('otp');
 
+// Format a valid uri string for the authenticator app.
+// You can customise it with the user email for example, you can also change the issue.
+const otpauthUri = `otpauth://totp/accounts-js:${user.email}?secret=${data.secret}&issuer=accounts-js`;
+
 // In your render function
-<QRCode value={data.otpauthUri} />;
+<QRCode value={otpauthUri} />;
 ```
 
 ## Confirm the association

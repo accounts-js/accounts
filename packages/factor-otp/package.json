@@ -1,0 +1,46 @@
+{
+  "name": "@accounts/factor-otp",
+  "version": "0.29.0",
+  "description": "@accounts/factor-otp",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rimraf lib",
+    "start": "tsc --watch",
+    "precompile": "yarn clean",
+    "compile": "tsc",
+    "prepublishOnly": "yarn compile",
+    "test": "yarn testonly",
+    "test-ci": "yarn lint && yarn coverage",
+    "testonly": "jest",
+    "test:watch": "jest --watch",
+    "coverage": "yarn testonly --coverage"
+  },
+  "jest": {
+    "preset": "ts-jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/factor-otp"
+  },
+  "author": "Leo Pradel",
+  "license": "MIT",
+  "devDependencies": {
+    "@accounts/server": "^0.29.0",
+    "@types/jest": "26.0.0",
+    "@types/node": "12.7.4",
+    "jest": "26.2.2",
+    "rimraf": "3.0.2"
+  },
+  "dependencies": {
+    "@accounts/types": "^0.29.0",
+    "otplib": "12.0.1",
+    "tslib": "2.0.1"
+  },
+  "peerDependencies": {
+    "@accounts/server": "^0.29.0"
+  }
+}
