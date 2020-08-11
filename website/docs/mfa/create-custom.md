@@ -49,4 +49,4 @@ Add your custom logic and then link it to your accounts-js server.
 
 For best practices and inspiration you should check the source code of the official factors we provide:
 
-- [One-Time Password](https://github.com/accounts-js/accounts/tree/master/packages/authenticator-otp)
+- [One-Time Password](https://github.com/accounts-js/accounts/tree/master/packages/factor-otp)

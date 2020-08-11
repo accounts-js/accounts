@@ -199,53 +199,6 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       params,
     };
     try {
-      if (serviceName === 'mfa') {
-        const mfaToken = params.mfaToken;
-        if (!mfaToken) {
-          throw new Error('Mfa token is required');
-        }
-        const mfaChallenge = await this.db.findMfaChallengeByToken(mfaToken);
-        if (!mfaChallenge || !mfaChallenge.authenticatorId) {
-          throw new Error('Mfa token invalid');
-        }
-        const authenticator = await this.db.findAuthenticatorById(mfaChallenge.authenticatorId);
-        if (!authenticator) {
-          throw new Error('Mfa token invalid');
-        }
-        if (!this.authenticators[authenticator.type]) {
-          throw new Error(`No authenticator with the name ${serviceName} was registered.`);
-        }
-        // TODO we need to implement some time checking for the mfaToken (eg: expire after X minutes, probably based on the authenticator configuration)
-        if (
-          !(await this.authenticators[authenticator.type].authenticate(
-            mfaChallenge,
-            authenticator,
-            params,
-            infos
-          ))
-        ) {
-          throw new Error(`Authenticator ${authenticator.type} was not able to authenticate user`);
-        }
-        // We activate the authenticator if user is using a challenge with scope 'associate'
-        if (!authenticator.active && mfaChallenge.scope === 'associate') {
-          await this.db.activateAuthenticator(authenticator.id);
-        } else if (!authenticator.active) {
-          throw new Error('Authenticator is not active');
-        }
-
-        // We invalidate the current mfa challenge so it can't be reused later
-        await this.db.deactivateMfaChallenge(mfaChallenge.id);
-
-        const user = await this.db.findUserById(mfaChallenge.userId);
-        if (!user) {
-          throw new Error('user not found');
-        }
-        hooksInfo.user = user;
-        const loginResult = await this.loginWithUser(user, infos);
-        this.hooks.emit(ServerHooks.LoginSuccess, hooksInfo);
-        return loginResult;
-      }
-
       if (!this.services[serviceName]) {
         throw new AccountsJsError(
           `No service with the name ${serviceName} was registered.`,
