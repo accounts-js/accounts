@@ -1,11 +1,12 @@
 import * as jwt from 'jsonwebtoken';
-import { User, DatabaseInterface, Session } from '@accounts/types';
+import { User, DatabaseInterface, Session, AuthenticatorService } from '@accounts/types';
 import { EmailTemplatesType } from './email-templates-type';
 import { UserObjectSanitizerFunction } from './user-object-sanitizer-function';
 import { PrepareMailFunction } from './prepare-mail-function';
 import { SendMailType } from './send-mail-type';
 import { TokenCreator } from './token-creator';
 import { JwtData } from './jwt-data';
+import { AccountsMfaOptions } from '@accounts/mfa';
 
 export interface AccountsServerOptions<CustomUser extends User = User> {
   /**
@@ -63,4 +64,5 @@ export interface AccountsServerOptions<CustomUser extends User = User> {
    * Default 'false'.
    */
   useStatelessSession?: boolean;
+  mfa?: AccountsMfaOptions;
 }

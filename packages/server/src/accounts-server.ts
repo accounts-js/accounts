@@ -13,12 +13,10 @@ import {
   AuthenticationService,
   ConnectionInformations,
 } from '@accounts/types';
-
+import { AccountsMfa } from '@accounts/mfa';
 import { generateAccessToken, generateRefreshToken, generateRandomToken } from './utils/tokens';
-
 import { emailTemplates, sendMail } from './utils/email';
 import { ServerHooks } from './utils/server-hooks';
-
 import { AccountsServerOptions } from './types/accounts-server-options';
 import { JwtData } from './types/jwt-data';
 import { EmailTemplateType } from './types/email-template-type';
@@ -56,6 +54,7 @@ const defaultOptions = {
 
 export class AccountsServer<CustomUser extends User = User> {
   public options: AccountsServerOptions<CustomUser> & typeof defaultOptions;
+  public mfa?: AccountsMfa;
   private services: { [key: string]: AuthenticationService<CustomUser> };
   private db: DatabaseInterface<CustomUser>;
   private hooks: Emittery;
@@ -87,6 +86,17 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     for (const service in this.services) {
       this.services[service].setStore(this.db);
       this.services[service].server = this;
+    }
+
+    if (this.options.mfa) {
+      // Set the db to all factors
+      for (const service in this.options.mfa.factors) {
+        this.options.mfa.factors[service]!.setStore(this.db);
+        this.options.mfa.factors[service]!.server = this;
+      }
+
+      // Initialize the MFA module
+      this.mfa = new AccountsMfa(this.options.mfa);
     }
 
     // Initialize hooks
@@ -192,7 +202,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         );
       }
 
-      const user: CustomUser | null = await this.services[serviceName].authenticate(params, infos);
+      const user = await this.services[serviceName].authenticate(params, infos);
       hooksInfo.user = user;
       if (!user) {
         throw new AccountsJsError(

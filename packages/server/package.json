@@ -44,6 +44,7 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "dependencies": {
+    "@accounts/mfa": "^0.29.0",
     "@accounts/types": "^0.29.0",
     "@types/jsonwebtoken": "8.5.0",
     "emittery": "0.7.1",
