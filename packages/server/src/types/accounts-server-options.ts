@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken';
-import { User, DatabaseInterface, Session, AuthenticatorService } from '@accounts/types';
+import { User, DatabaseInterface, Session } from '@accounts/types';
 import { EmailTemplatesType } from './email-templates-type';
 import { UserObjectSanitizerFunction } from './user-object-sanitizer-function';
 import { PrepareMailFunction } from './prepare-mail-function';
