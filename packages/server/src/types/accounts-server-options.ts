@@ -6,7 +6,6 @@ import { PrepareMailFunction } from './prepare-mail-function';
 import { SendMailType } from './send-mail-type';
 import { TokenCreator } from './token-creator';
 import { JwtData } from './jwt-data';
-import { AccountsMfaOptions } from '@accounts/mfa';
 
 export interface AccountsServerOptions<CustomUser extends User = User> {
   /**
@@ -64,5 +63,9 @@ export interface AccountsServerOptions<CustomUser extends User = User> {
    * Default 'false'.
    */
   useStatelessSession?: boolean;
-  mfa?: AccountsMfaOptions;
+  /**
+   * If set to true, the user will be asked to register a new MFA authenticator the first time
+   * he tries to login.
+   */
+  enforceMfaForLogin?: boolean;
 }

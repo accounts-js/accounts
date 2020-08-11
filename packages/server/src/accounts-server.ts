@@ -12,6 +12,7 @@ import {
   DatabaseInterface,
   AuthenticationService,
   ConnectionInformations,
+  AuthenticationResult,
 } from '@accounts/types';
 import { AccountsMfa } from '@accounts/mfa';
 import { generateAccessToken, generateRefreshToken, generateRandomToken } from './utils/tokens';
@@ -88,23 +89,16 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       this.services[service].server = this;
     }
 
-    if (this.options.mfa) {
-      // Set the db to all factors
-      for (const service in this.options.mfa.factors) {
-        this.options.mfa.factors[service]!.setStore(this.db);
-        this.options.mfa.factors[service]!.server = this;
-      }
-
-      // Initialize the MFA module
-      this.mfa = new AccountsMfa(this.options.mfa);
-    }
-
     // Initialize hooks
     this.hooks = new Emittery();
   }
 
   public getServices(): { [key: string]: AuthenticationService } {
     return this.services;
+  }
+
+  public getService(serviceName: string): AuthenticationService | undefined {
+    return this.services[serviceName];
   }
 
   public getOptions(): AccountsServerOptions<CustomUser> {
@@ -185,7 +179,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     serviceName: string,
     params: any,
     infos: ConnectionInformations
-  ): Promise<LoginResult> {
+  ): Promise<AuthenticationResult> {
     const hooksInfo: any = {
       // The service name, such as “password” or “twitter”.
       service: serviceName,
@@ -215,6 +209,37 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
           'Your account has been deactivated',
           LoginWithServiceErrors.UserDeactivated
         );
+      }
+
+      // This must be called only if user is using the mfa service
+      if (this.getService('mfa')) {
+        // We check if the user have at least one active authenticator
+        // If yes we create a new mfaChallenge for the user to resolve
+        // If no we can login the user
+        const authenticators = await this.db.findUserAuthenticators(user.id);
+        const activeAuthenticator = authenticators.find((authenticator) => authenticator.active);
+        if (activeAuthenticator) {
+          // We create a new challenge for the authenticator so it can be verified later
+          const mfaChallengeToken = generateRandomToken();
+          // associate.id refer to the authenticator id
+          await this.db.createMfaChallenge({
+            userId: user.id,
+            token: mfaChallengeToken,
+          });
+          return { mfaToken: mfaChallengeToken };
+        }
+
+        // We force the user to register a new device before first login
+        if (this.options.enforceMfaForLogin) {
+          // We create a new challenge for the authenticator so it can be verified later
+          const mfaChallengeToken = generateRandomToken();
+          await this.db.createMfaChallenge({
+            userId: user.id,
+            token: mfaChallengeToken,
+            scope: 'associate',
+          });
+          return { mfaToken: mfaChallengeToken };
+        }
       }
 
       // Let the user validate the login attempt
