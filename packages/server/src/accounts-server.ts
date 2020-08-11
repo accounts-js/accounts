@@ -14,7 +14,6 @@ import {
   ConnectionInformations,
   AuthenticationResult,
 } from '@accounts/types';
-import { AccountsMfa } from '@accounts/mfa';
 import { generateAccessToken, generateRefreshToken, generateRandomToken } from './utils/tokens';
 import { emailTemplates, sendMail } from './utils/email';
 import { ServerHooks } from './utils/server-hooks';
@@ -55,7 +54,6 @@ const defaultOptions = {
 
 export class AccountsServer<CustomUser extends User = User> {
   public options: AccountsServerOptions<CustomUser> & typeof defaultOptions;
-  public mfa?: AccountsMfa;
   private services: { [key: string]: AuthenticationService<CustomUser> };
   private db: DatabaseInterface<CustomUser>;
   private hooks: Emittery;
