@@ -23,14 +23,14 @@
   },
   "dependencies": {
     "@accounts/oauth": "^0.29.0",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.5",
-    "tslib": "2.0.0"
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6",
+    "tslib": "2.0.1"
   },
   "devDependencies": {
     "@types/jest": "26.0.9",
-    "@types/node": "14.0.14",
+    "@types/node": "14.0.27",
     "@types/request-promise": "4.1.46",
-    "jest": "26.2.2"
+    "jest": "26.3.0"
   }
 }
