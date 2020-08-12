@@ -92,6 +92,81 @@ describe('AccountsServer', () => {
       const res = (await accountServer.loginWithService('facebook', {}, {})) as LoginResult;
       expect(res.tokens).toBeTruthy();
     });
+
+    describe('mfa', () => {
+      it('should do nothing if there is no active authenticators', async () => {
+        const authenticate = jest.fn(() => Promise.resolve({ id: 'userId' }));
+        const createSession = jest.fn(() => Promise.resolve('sessionId'));
+        const findUserAuthenticators = jest.fn(() => Promise.resolve([]));
+        const service: any = { authenticate, setStore: jest.fn() };
+        const accountServer = new AccountsServer(
+          {
+            db: { createSession, findUserAuthenticators } as any,
+            tokenSecret: 'secret1',
+          },
+          {
+            mfa: service,
+            facebook: service,
+          }
+        );
+        const res = (await accountServer.loginWithService('facebook', {}, {})) as LoginResult;
+        expect(findUserAuthenticators).toBeCalledWith('userId');
+        expect(res.tokens).toBeTruthy();
+      });
+
+      it('should create a challenge if there is an active authenticator', async () => {
+        const authenticate = jest.fn(() => Promise.resolve({ id: 'userId' }));
+        const createSession = jest.fn(() => Promise.resolve('sessionId'));
+        const findUserAuthenticators = jest.fn(() => Promise.resolve([{ active: true }]));
+        const createMfaChallenge = jest.fn(() => Promise.resolve());
+        const service: any = { authenticate, setStore: jest.fn() };
+        const accountServer = new AccountsServer(
+          {
+            db: { createSession, findUserAuthenticators, createMfaChallenge } as any,
+            tokenSecret: 'secret1',
+          },
+          {
+            mfa: service,
+            facebook: service,
+          }
+        );
+        const res = await accountServer.loginWithService('facebook', {}, {});
+        expect(findUserAuthenticators).toBeCalledWith('userId');
+        expect(createMfaChallenge).toBeCalledWith({ userId: 'userId', token: expect.any(String) });
+        expect(res).toEqual({
+          mfaToken: expect.any(String),
+        });
+      });
+
+      it('should create a challenge with associate scope if enforceMfaForLogin is true', async () => {
+        const authenticate = jest.fn(() => Promise.resolve({ id: 'userId' }));
+        const createSession = jest.fn(() => Promise.resolve('sessionId'));
+        const findUserAuthenticators = jest.fn(() => Promise.resolve([]));
+        const createMfaChallenge = jest.fn(() => Promise.resolve());
+        const service: any = { authenticate, setStore: jest.fn() };
+        const accountServer = new AccountsServer(
+          {
+            db: { createSession, findUserAuthenticators, createMfaChallenge } as any,
+            tokenSecret: 'secret1',
+            enforceMfaForLogin: true,
+          },
+          {
+            mfa: service,
+            facebook: service,
+          }
+        );
+        const res = await accountServer.loginWithService('facebook', {}, {});
+        expect(findUserAuthenticators).toBeCalledWith('userId');
+        expect(createMfaChallenge).toBeCalledWith({
+          userId: 'userId',
+          scope: 'associate',
+          token: expect.any(String),
+        });
+        expect(res).toEqual({
+          mfaToken: expect.any(String),
+        });
+      });
+    });
   });
 
   describe('authenticateWithService', () => {
