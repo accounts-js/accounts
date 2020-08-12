@@ -63,4 +63,9 @@ export interface AccountsServerOptions<CustomUser extends User = User> {
    * Default 'false'.
    */
   useStatelessSession?: boolean;
+  /**
+   * If set to true, the user will be asked to register a new MFA authenticator the first time
+   * he tries to login.
+   */
+  enforceMfaForLogin?: boolean;
 }
