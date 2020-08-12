@@ -1,5 +1,6 @@
 import * as express from 'express';
 import { AccountsServer } from '@accounts/server';
+import { AccountsMfa } from '@accounts/mfa';
 import { sendError } from '../../utils/send-error';
 
 export const authenticators = (accountsServer: AccountsServer) => async (
@@ -7,14 +8,15 @@ export const authenticators = (accountsServer: AccountsServer) => async (
   res: express.Response
 ) => {
   try {
-    const userId = (req as any).userId;
+    const userId: string | undefined = (req as any).userId;
     if (!userId) {
       res.status(401);
       res.json({ message: 'Unauthorized' });
       return;
     }
 
-    const userAuthenticators = await accountsServer.mfa.findUserAuthenticators(userId);
+    const accountsMfa = accountsServer.getService('mfa') as AccountsMfa;
+    const userAuthenticators = await accountsMfa.findUserAuthenticators(userId);
     res.json(userAuthenticators);
   } catch (err) {
     sendError(res, err);
@@ -28,7 +30,8 @@ export const authenticatorsByMfaToken = (accountsServer: AccountsServer) => asyn
   try {
     const { mfaToken } = req.query as { mfaToken: string };
 
-    const userAuthenticators = await accountsServer.mfa.findUserAuthenticatorsByMfaToken(mfaToken);
+    const accountsMfa = accountsServer.getService('mfa') as AccountsMfa;
+    const userAuthenticators = await accountsMfa.findUserAuthenticatorsByMfaToken(mfaToken);
     res.json(userAuthenticators);
   } catch (err) {
     sendError(res, err);
