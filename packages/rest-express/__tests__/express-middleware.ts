@@ -40,6 +40,31 @@ describe('express middleware', () => {
     accountsExpress(
       {
         getServices: () => ({
+          mfa: {},
+        }),
+      } as any,
+      { path: 'test' }
+    );
+    expect((router.post as jest.Mock).mock.calls[0][0]).toBe('test/impersonate');
+    expect((router.post as jest.Mock).mock.calls[1][0]).toBe('test/user');
+    expect((router.post as jest.Mock).mock.calls[2][0]).toBe('test/refreshTokens');
+    expect((router.post as jest.Mock).mock.calls[3][0]).toBe('test/logout');
+    expect((router.post as jest.Mock).mock.calls[4][0]).toBe('test/:service/verifyAuthentication');
+    expect((router.post as jest.Mock).mock.calls[5][0]).toBe('test/:service/authenticate');
+
+    expect((router.post as jest.Mock).mock.calls[6][0]).toBe('test/mfa/associate');
+    expect((router.post as jest.Mock).mock.calls[7][0]).toBe('test/mfa/associateByMfaToken');
+    expect((router.post as jest.Mock).mock.calls[8][0]).toBe('test/mfa/challenge');
+
+    expect((router.get as jest.Mock).mock.calls[0][0]).toBe('test/user');
+    expect((router.get as jest.Mock).mock.calls[1][0]).toBe('test/mfa/authenticators');
+    expect((router.get as jest.Mock).mock.calls[2][0]).toBe('test/mfa/authenticatorsByMfaToken');
+  });
+
+  it('Defines password endpoints when password service is present', () => {
+    accountsExpress(
+      {
+        getServices: () => ({
           password: {},
         }),
       } as any,
@@ -51,6 +76,7 @@ describe('express middleware', () => {
     expect((router.post as jest.Mock).mock.calls[3][0]).toBe('test/logout');
     expect((router.post as jest.Mock).mock.calls[4][0]).toBe('test/:service/verifyAuthentication');
     expect((router.post as jest.Mock).mock.calls[5][0]).toBe('test/:service/authenticate');
+
     expect((router.post as jest.Mock).mock.calls[6][0]).toBe('test/password/register');
     expect((router.post as jest.Mock).mock.calls[7][0]).toBe('test/password/verifyEmail');
     expect((router.post as jest.Mock).mock.calls[8][0]).toBe('test/password/resetPassword');
