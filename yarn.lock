@@ -246,7 +246,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/mfa@^0.29.0, @accounts/mfa@workspace:packages/mfa":
+"@accounts/mfa@workspace:packages/mfa":
   version: 0.0.0-use.local
   resolution: "@accounts/mfa@workspace:packages/mfa"
   dependencies:
@@ -403,7 +403,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@accounts/server@workspace:packages/server"
   dependencies:
-    "@accounts/mfa": ^0.29.0
     "@accounts/types": ^0.29.0
     "@types/jest": 26.0.9
     "@types/jsonwebtoken": 8.5.0
