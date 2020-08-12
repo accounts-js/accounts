@@ -2,7 +2,6 @@ import * as express from 'express';
 import { AccountsServer } from '@accounts/server';
 import { sendError } from '../../utils/send-error';
 import { AccountsExpressOptions } from '../../types';
-import { LoginResult } from '@accounts/types';
 
 interface RequestWithSession extends express.Request {
   session: any;
