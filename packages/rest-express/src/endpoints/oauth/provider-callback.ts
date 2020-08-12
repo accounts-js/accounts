@@ -13,7 +13,7 @@ export const providerCallback = (
   options?: AccountsExpressOptions
 ) => async (req: express.Request, res: express.Response) => {
   try {
-    const loggedInUser = (await accountsServer.loginWithService(
+    const authenticationResult = await accountsServer.loginWithService(
       'oauth',
       {
         ...(req.params || {}),
@@ -22,17 +22,16 @@ export const providerCallback = (
         ...((req as RequestWithSession).session || {}),
       },
       req.infos
-      // TODO fix this, can require mfa when login with oauth
-    )) as LoginResult;
+    );
 
-    if (options && options.onOAuthSuccess) {
-      options.onOAuthSuccess(req, res, loggedInUser);
+    if ('id' in authenticationResult && options && options.onOAuthSuccess) {
+      options.onOAuthSuccess(req, res, authenticationResult);
     }
 
-    if (options && options.transformOAuthResponse) {
-      res.json(options.transformOAuthResponse(loggedInUser));
+    if ('id' in authenticationResult && options && options.transformOAuthResponse) {
+      res.json(options.transformOAuthResponse(authenticationResult));
     } else {
-      res.json(loggedInUser);
+      res.json(authenticationResult);
     }
   } catch (err) {
     if (options && options.onOAuthError) {

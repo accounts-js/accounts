@@ -51,6 +51,10 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
 
   public setStore(store: DatabaseInterface<CustomUser>) {
     this.db = store;
+
+    for (const factorName in this.options.factors) {
+      this.options.factors[factorName]!.setStore(this.db);
+    }
   }
 
   /**
