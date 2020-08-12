@@ -36,7 +36,7 @@ describe('express middleware', () => {
     expect((router.get as jest.Mock).mock.calls[0][0]).toBe('test/user');
   });
 
-  it('Defines password endpoints when password service is present', () => {
+  it('Defines password endpoints when mfa service is present', () => {
     accountsExpress(
       {
         getServices: () => ({
