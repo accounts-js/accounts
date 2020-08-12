@@ -39,6 +39,7 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
+    "@accounts/mfa": "^0.29.0",
     "@accounts/password": "^0.29.0",
     "@accounts/server": "^0.29.0",
     "@types/express": "4.17.7",
