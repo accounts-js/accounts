@@ -2,9 +2,7 @@ import { print } from 'graphql';
 import { AccountsModule } from '../../../src/modules/accounts/index';
 
 const accountsServer = {
-  getServices: () => ({
-    password: {},
-  }),
+  getService: () => ({}),
 };
 
 describe('AccountsModule', () => {
