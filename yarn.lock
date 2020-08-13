@@ -171,7 +171,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/factor-otp@workspace:packages/factor-otp":
+"@accounts/factor-otp@^0.29.0, @accounts/factor-otp@workspace:packages/factor-otp":
   version: 0.0.0-use.local
   resolution: "@accounts/factor-otp@workspace:packages/factor-otp"
   dependencies:
@@ -2950,6 +2950,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/rest-express-typescript@workspace:examples/rest-express-typescript"
   dependencies:
+    "@accounts/factor-otp": ^0.29.0
+    "@accounts/mfa": ^0.29.0
     "@accounts/mongo": ^0.29.0
     "@accounts/password": ^0.29.0
     "@accounts/rest-express": ^0.29.0

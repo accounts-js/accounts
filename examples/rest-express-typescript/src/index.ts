@@ -4,6 +4,8 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import { AccountsServer, ServerHooks } from '@accounts/server';
 import { AccountsPassword } from '@accounts/password';
+import { AccountsMfa } from '@accounts/mfa';
+import { FactorOtp } from '@accounts/factor-otp';
 import accountsExpress, { userLoader } from '@accounts/rest-express';
 import { Mongo } from '@accounts/mongo';
 
@@ -49,6 +51,11 @@ const accountsServer = new AccountsServer(
   },
   {
     password: accountsPassword,
+    mfa: new AccountsMfa({
+      factors: {
+        otp: new FactorOtp(),
+      },
+    }),
   }
 );
 
