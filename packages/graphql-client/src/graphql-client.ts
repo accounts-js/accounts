@@ -33,7 +33,7 @@ import {
   AssociateByMfaTokenDocument,
 } from './graphql-operations';
 import { GraphQLErrorList } from './GraphQLErrorList';
-import { replaceUserFieldsFragment } from './utils/replace-user-fragment';
+import { replaceFragment } from './utils/replace-fragment';
 
 export interface AuthenticateParams {
   [key: string]: string | object;
@@ -44,7 +44,7 @@ export interface OptionsType {
   /**
    * Change the default user fragment.
    * Default to:
-   * ```ts
+   * ```graphql
    * fragment userFields on User {
    *   id
    *   emails {
@@ -58,8 +58,19 @@ export interface OptionsType {
   userFieldsFragment?: DocumentNode;
   // TODO
   challengeFieldsFragment?: DocumentNode;
-  // TODO
-  associateFieldsFragment?: DocumentNode;
+  /**
+   * Change the association result fragment.
+   * Default to:
+   * ```graphql
+   * fragment associationResult on AssociationResult {
+   *   ... on OTPAssociationResult {
+   *     mfaToken
+   *     authenticatorId
+   *   }
+   * }
+   * ```
+   */
+  associationResultFragment?: DocumentNode;
 }
 
 export default class GraphQLClient implements TransportInterface {
@@ -80,7 +91,7 @@ export default class GraphQLClient implements TransportInterface {
   public async createUser(user: CreateUser): Promise<CreateUserResult> {
     return this.mutate(
       this.options.userFieldsFragment
-        ? replaceUserFieldsFragment(CreateUserDocument, this.options.userFieldsFragment)
+        ? replaceFragment(CreateUserDocument, this.options.userFieldsFragment)
         : CreateUserDocument,
       'createUser',
       { user }
@@ -109,7 +120,7 @@ export default class GraphQLClient implements TransportInterface {
   ): Promise<LoginResult> {
     return this.mutate(
       this.options.userFieldsFragment
-        ? replaceUserFieldsFragment(AuthenticateDocument, this.options.userFieldsFragment)
+        ? replaceFragment(AuthenticateDocument, this.options.userFieldsFragment)
         : AuthenticateDocument,
       'authenticate',
       {
@@ -125,7 +136,7 @@ export default class GraphQLClient implements TransportInterface {
   public async getUser(): Promise<User> {
     return this.query(
       this.options.userFieldsFragment
-        ? replaceUserFieldsFragment(GetUserDocument, this.options.userFieldsFragment)
+        ? replaceFragment(GetUserDocument, this.options.userFieldsFragment)
         : GetUserDocument,
       'getUser'
     );
@@ -221,7 +232,7 @@ export default class GraphQLClient implements TransportInterface {
   ): Promise<ImpersonationResult> {
     return this.mutate(
       this.options.userFieldsFragment
-        ? replaceUserFieldsFragment(ImpersonateDocument, this.options.userFieldsFragment)
+        ? replaceFragment(ImpersonateDocument, this.options.userFieldsFragment)
         : ImpersonateDocument,
       'impersonate',
       {
@@ -239,23 +250,33 @@ export default class GraphQLClient implements TransportInterface {
    * @inheritDoc
    */
   public async mfaAssociate(type: string, params?: any): Promise<void> {
-    // TODO allow customisation via this.options.associateFieldsFragment
-    return this.mutate(AssociateDocument, 'associate', {
-      type,
-      params,
-    });
+    return this.mutate(
+      this.options.associationResultFragment
+        ? replaceFragment(AssociateDocument, this.options.associationResultFragment)
+        : AssociateDocument,
+      'associate',
+      {
+        type,
+        params,
+      }
+    );
   }
 
   /**
    * @inheritDoc
    */
   public async mfaAssociateByMfaToken(mfaToken: string, type: string, params?: any): Promise<any> {
-    // TODO allow customisation via this.options.associateFieldsFragment
-    return this.mutate(AssociateByMfaTokenDocument, 'associateByMfaToken', {
-      mfaToken,
-      type,
-      params,
-    });
+    return this.mutate(
+      this.options.associationResultFragment
+        ? replaceFragment(AssociateByMfaTokenDocument, this.options.associationResultFragment)
+        : AssociateByMfaTokenDocument,
+      'associateByMfaToken',
+      {
+        mfaToken,
+        type,
+        params,
+      }
+    );
   }
 
   /**

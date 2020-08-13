@@ -1,0 +1,6 @@
+fragment associationResult on AssociationResult {
+  ... on OTPAssociationResult {
+    mfaToken
+    authenticatorId
+  }
+}
