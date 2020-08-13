@@ -7,6 +7,7 @@ import {
   ImpersonationUserIdentity,
   ImpersonationResult,
   CreateUserResult,
+  AuthenticationResult,
 } from '@accounts/types';
 import { AccountsJsError } from './accounts-error';
 
@@ -79,7 +80,7 @@ export class RestClient implements TransportInterface {
     provider: string,
     data: any,
     customHeaders?: object
-  ): Promise<LoginResult> {
+  ): Promise<AuthenticationResult> {
     const args = {
       method: 'POST',
       body: JSON.stringify({
@@ -213,6 +214,9 @@ export class RestClient implements TransportInterface {
     return this.authFetch('password/changePassword', args, customHeaders);
   }
 
+  /**
+   * @deprecated
+   */
   public getTwoFactorSecret(customHeaders?: object): Promise<any> {
     const args = {
       method: 'POST',
@@ -220,6 +224,9 @@ export class RestClient implements TransportInterface {
     return this.fetch('password/twoFactorSecret', args, customHeaders);
   }
 
+  /**
+   * @deprecated
+   */
   public twoFactorSet(secret: any, code: string, customHeaders?: object): Promise<void> {
     const args = {
       method: 'POST',
@@ -231,6 +238,9 @@ export class RestClient implements TransportInterface {
     return this.authFetch('password/twoFactorSet', args, customHeaders);
   }
 
+  /**
+   * @deprecated
+   */
   public twoFactorUnset(code: string, customHeaders?: object): Promise<void> {
     const args = {
       method: 'POST',
@@ -239,6 +249,50 @@ export class RestClient implements TransportInterface {
       }),
     };
     return this.authFetch('password/twoFactorUnset', args, customHeaders);
+  }
+
+  public async mfaChallenge(mfaToken: string, authenticatorId: string, customHeaders?: object) {
+    const args = {
+      method: 'POST',
+      body: JSON.stringify({ mfaToken, authenticatorId }),
+    };
+    return this.fetch(`mfa/challenge`, args, customHeaders);
+  }
+
+  public async mfaAssociate(type: string, params?: any, customHeaders?: object) {
+    const args = {
+      method: 'POST',
+      body: JSON.stringify({ type, params }),
+    };
+    return this.authFetch(`mfa/associate`, args, customHeaders);
+  }
+
+  public async mfaAssociateByMfaToken(
+    mfaToken: string,
+    type: string,
+    params?: any,
+    customHeaders?: object
+  ) {
+    const args = {
+      method: 'POST',
+      body: JSON.stringify({ mfaToken, type, params }),
+    };
+    return this.fetch(`mfa/associateByMfaToken`, args, customHeaders);
+  }
+
+  public async authenticators(customHeaders?: object) {
+    const args = {
+      method: 'GET',
+    };
+    let route = `mfa/authenticators`;
+    return this.authFetch(route, args, customHeaders);
+  }
+
+  public async authenticatorsByMfaToken(mfaToken: string, customHeaders?: object) {
+    const args = {
+      method: 'GET',
+    };
+    return this.fetch(`mfa/authenticators?mfaToken=${mfaToken}`, args, customHeaders);
   }
 
   private _loadHeadersObject(plainHeaders: object): { [key: string]: string } {
