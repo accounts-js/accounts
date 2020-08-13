@@ -56,8 +56,19 @@ export interface OptionsType {
    * ```
    */
   userFieldsFragment?: DocumentNode;
-  // TODO
-  challengeFieldsFragment?: DocumentNode;
+  /**
+   * Change the challenge result fragment.
+   * Default to:
+   * ```graphql
+   * fragment challengeResult on ChallengeResult {
+   *   ... on DefaultChallengeResult {
+   *     mfaToken
+   *     authenticatorId
+   *   }
+   * }
+   * ```
+   */
+  challengeResultFragment?: DocumentNode;
   /**
    * Change the association result fragment.
    * Default to:
@@ -297,11 +308,16 @@ export default class GraphQLClient implements TransportInterface {
    * @inheritDoc
    */
   public async mfaChallenge(mfaToken: string, authenticatorId: string): Promise<any> {
-    // TODO allow customisation via this.options.challengeFieldsFragment
-    return this.mutate(ChallengeDocument, 'challenge', {
-      mfaToken,
-      authenticatorId,
-    });
+    return this.mutate(
+      this.options.challengeResultFragment
+        ? replaceFragment(ChallengeDocument, this.options.challengeResultFragment)
+        : ChallengeDocument,
+      'challenge',
+      {
+        mfaToken,
+        authenticatorId,
+      }
+    );
   }
 
   private async mutate<TData = any, TVariables = Record<string, any>>(
