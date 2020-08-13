@@ -1,0 +1,5 @@
+mutation associate($type: String!, $params: AssociateParamsInput) {
+  associate(type: $type, params: $params) {
+    ...associationResult
+  }
+}

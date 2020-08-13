@@ -256,4 +256,59 @@ describe('RestClient', () => {
           )
         ));
   });
+
+  describe('mfaChallenge', () => {
+    it('should call fetch with mfaChallenge path', () =>
+      restClient
+        .mfaChallenge('mfaToken', 'authenticatorId')
+        .then(() =>
+          expect((window.fetch as jest.Mock).mock.calls[0][0]).toBe(
+            'http://localhost:3000/accounts/mfa/challenge'
+          )
+        ));
+  });
+
+  describe('mfaAssociate', () => {
+    it('should call fetch with mfaAssociate path', () =>
+      restClient
+        .mfaAssociate('type')
+        .then(() =>
+          expect((window.fetch as jest.Mock).mock.calls[0][0]).toBe(
+            'http://localhost:3000/accounts/mfa/associate'
+          )
+        ));
+  });
+
+  describe('mfaAssociateByMfaToken', () => {
+    it('should call fetch with mfaAssociate path', () =>
+      restClient
+        .mfaAssociateByMfaToken('mfaToken', 'type')
+        .then(() =>
+          expect((window.fetch as jest.Mock).mock.calls[0][0]).toBe(
+            'http://localhost:3000/accounts/mfa/associateByMfaToken'
+          )
+        ));
+  });
+
+  describe('authenticators', () => {
+    it('should call fetch with authenticators path', () =>
+      restClient
+        .authenticators()
+        .then(() =>
+          expect((window.fetch as jest.Mock).mock.calls[0][0]).toBe(
+            'http://localhost:3000/accounts/mfa/authenticators'
+          )
+        ));
+  });
+
+  describe('authenticatorsByMfaToken', () => {
+    it('should call fetch with authenticatorsByMfaToken path', () =>
+      restClient
+        .authenticatorsByMfaToken('mfaToken')
+        .then(() =>
+          expect((window.fetch as jest.Mock).mock.calls[0][0]).toBe(
+            'http://localhost:3000/accounts/mfa/authenticatorsByMfaToken?mfaToken=mfaToken'
+          )
+        ));
+  });
 });

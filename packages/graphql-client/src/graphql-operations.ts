@@ -12,6 +12,12 @@ export type Scalars = {
   Float: number;
 };
 
+export type AssociateParamsInput = {
+  _?: Maybe<Scalars['String']>;
+};
+
+export type AssociationResult = OtpAssociationResult;
+
 export type AuthenticateParamsInput = {
   access_token?: Maybe<Scalars['String']>;
   access_token_secret?: Maybe<Scalars['String']>;
@@ -23,6 +29,16 @@ export type AuthenticateParamsInput = {
 
 export type AuthenticationResult = LoginResult | MultiFactorResult;
 
+export type Authenticator = {
+  __typename?: 'Authenticator';
+  id?: Maybe<Scalars['ID']>;
+  type?: Maybe<Scalars['String']>;
+  active?: Maybe<Scalars['Boolean']>;
+  activatedAt?: Maybe<Scalars['String']>;
+};
+
+export type ChallengeResult = DefaultChallengeResult;
+
 export type CreateUserInput = {
   username?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
@@ -33,6 +49,12 @@ export type CreateUserResult = {
   __typename?: 'CreateUserResult';
   userId?: Maybe<Scalars['ID']>;
   loginResult?: Maybe<LoginResult>;
+};
+
+export type DefaultChallengeResult = {
+  __typename?: 'DefaultChallengeResult';
+  mfaToken?: Maybe<Scalars['String']>;
+  authenticatorId?: Maybe<Scalars['String']>;
 };
 
 export type EmailRecord = {
@@ -77,6 +99,9 @@ export type Mutation = {
   changePassword?: Maybe<Scalars['Boolean']>;
   twoFactorSet?: Maybe<Scalars['Boolean']>;
   twoFactorUnset?: Maybe<Scalars['Boolean']>;
+  challenge?: Maybe<ChallengeResult>;
+  associate?: Maybe<AssociationResult>;
+  associateByMfaToken?: Maybe<AssociationResult>;
   impersonate?: Maybe<ImpersonateReturn>;
   refreshTokens?: Maybe<LoginResult>;
   logout?: Maybe<Scalars['Boolean']>;
@@ -133,6 +158,25 @@ export type MutationTwoFactorUnsetArgs = {
 };
 
 
+export type MutationChallengeArgs = {
+  mfaToken: Scalars['String'];
+  authenticatorId: Scalars['String'];
+};
+
+
+export type MutationAssociateArgs = {
+  type: Scalars['String'];
+  params?: Maybe<AssociateParamsInput>;
+};
+
+
+export type MutationAssociateByMfaTokenArgs = {
+  mfaToken: Scalars['String'];
+  type: Scalars['String'];
+  params?: Maybe<AssociateParamsInput>;
+};
+
+
 export type MutationImpersonateArgs = {
   accessToken: Scalars['String'];
   impersonated: ImpersonationUserIdentityInput;
@@ -156,10 +200,23 @@ export type MutationVerifyAuthenticationArgs = {
   params: AuthenticateParamsInput;
 };
 
+export type OtpAssociationResult = {
+  __typename?: 'OTPAssociationResult';
+  mfaToken?: Maybe<Scalars['String']>;
+  authenticatorId?: Maybe<Scalars['String']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   twoFactorSecret?: Maybe<TwoFactorSecretKey>;
+  authenticators?: Maybe<Array<Maybe<Authenticator>>>;
+  authenticatorsByMfaToken?: Maybe<Array<Maybe<Authenticator>>>;
   getUser?: Maybe<User>;
+};
+
+
+export type QueryAuthenticatorsByMfaTokenArgs = {
+  mfaToken: Scalars['String'];
 };
 
 export type Tokens = {
@@ -203,6 +260,83 @@ export type UserInput = {
   email?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
 };
+
+export type AssociationResultFragment = (
+  { __typename?: 'OTPAssociationResult' }
+  & Pick<OtpAssociationResult, 'mfaToken' | 'authenticatorId'>
+);
+
+export type ChallengeResultFragment = (
+  { __typename?: 'DefaultChallengeResult' }
+  & Pick<DefaultChallengeResult, 'mfaToken' | 'authenticatorId'>
+);
+
+export type AssociateMutationVariables = Exact<{
+  type: Scalars['String'];
+  params?: Maybe<AssociateParamsInput>;
+}>;
+
+
+export type AssociateMutation = (
+  { __typename?: 'Mutation' }
+  & { associate?: Maybe<(
+    { __typename?: 'OTPAssociationResult' }
+    & AssociationResultFragment
+  )> }
+);
+
+export type AssociateByMfaTokenMutationVariables = Exact<{
+  mfaToken: Scalars['String'];
+  type: Scalars['String'];
+  params?: Maybe<AssociateParamsInput>;
+}>;
+
+
+export type AssociateByMfaTokenMutation = (
+  { __typename?: 'Mutation' }
+  & { associateByMfaToken?: Maybe<(
+    { __typename?: 'OTPAssociationResult' }
+    & AssociationResultFragment
+  )> }
+);
+
+export type ChallengeMutationVariables = Exact<{
+  mfaToken: Scalars['String'];
+  authenticatorId: Scalars['String'];
+}>;
+
+
+export type ChallengeMutation = (
+  { __typename?: 'Mutation' }
+  & { challenge?: Maybe<(
+    { __typename?: 'DefaultChallengeResult' }
+    & ChallengeResultFragment
+  )> }
+);
+
+export type AuthenticatorsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AuthenticatorsQuery = (
+  { __typename?: 'Query' }
+  & { authenticators?: Maybe<Array<Maybe<(
+    { __typename?: 'Authenticator' }
+    & Pick<Authenticator, 'id' | 'type' | 'active' | 'activatedAt'>
+  )>>> }
+);
+
+export type AuthenticatorsByMfaTokenQueryVariables = Exact<{
+  mfaToken: Scalars['String'];
+}>;
+
+
+export type AuthenticatorsByMfaTokenQuery = (
+  { __typename?: 'Query' }
+  & { authenticatorsByMfaToken?: Maybe<Array<Maybe<(
+    { __typename?: 'Authenticator' }
+    & Pick<Authenticator, 'id' | 'type' | 'active' | 'activatedAt'>
+  )>>> }
+);
 
 export type UserFieldsFragment = (
   { __typename?: 'User' }
@@ -428,7 +562,14 @@ export type GetUserQuery = (
   )> }
 );
 
+export const AssociationResultFragmentDoc: DocumentNode<AssociationResultFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"associationResult"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AssociationResult"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"OTPAssociationResult"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mfaToken"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"authenticatorId"},"arguments":[],"directives":[]}]}}]}}]};
+export const ChallengeResultFragmentDoc: DocumentNode<ChallengeResultFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"challengeResult"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ChallengeResult"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"DefaultChallengeResult"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mfaToken"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"authenticatorId"},"arguments":[],"directives":[]}]}}]}}]};
 export const UserFieldsFragmentDoc: DocumentNode<UserFieldsFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"userFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"emails"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"verified"},"arguments":[],"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"username"},"arguments":[],"directives":[]}]}}]};
+export const AssociateDocument: DocumentNode<AssociateMutation, AssociateMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"associate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"type"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"params"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"AssociateParamsInput"}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"associate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"type"},"value":{"kind":"Variable","name":{"kind":"Name","value":"type"}}},{"kind":"Argument","name":{"kind":"Name","value":"params"},"value":{"kind":"Variable","name":{"kind":"Name","value":"params"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"associationResult"},"directives":[]}]}}]}},...AssociationResultFragmentDoc.definitions]};
+export const AssociateByMfaTokenDocument: DocumentNode<AssociateByMfaTokenMutation, AssociateByMfaTokenMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"associateByMfaToken"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"mfaToken"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"type"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"params"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"AssociateParamsInput"}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"associateByMfaToken"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"mfaToken"},"value":{"kind":"Variable","name":{"kind":"Name","value":"mfaToken"}}},{"kind":"Argument","name":{"kind":"Name","value":"type"},"value":{"kind":"Variable","name":{"kind":"Name","value":"type"}}},{"kind":"Argument","name":{"kind":"Name","value":"params"},"value":{"kind":"Variable","name":{"kind":"Name","value":"params"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"associationResult"},"directives":[]}]}}]}},...AssociationResultFragmentDoc.definitions]};
+export const ChallengeDocument: DocumentNode<ChallengeMutation, ChallengeMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"challenge"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"mfaToken"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"authenticatorId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"challenge"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"mfaToken"},"value":{"kind":"Variable","name":{"kind":"Name","value":"mfaToken"}}},{"kind":"Argument","name":{"kind":"Name","value":"authenticatorId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"authenticatorId"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"challengeResult"},"directives":[]}]}}]}},...ChallengeResultFragmentDoc.definitions]};
+export const AuthenticatorsDocument: DocumentNode<AuthenticatorsQuery, AuthenticatorsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"authenticators"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authenticators"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"type"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"active"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"activatedAt"},"arguments":[],"directives":[]}]}}]}}]};
+export const AuthenticatorsByMfaTokenDocument: DocumentNode<AuthenticatorsByMfaTokenQuery, AuthenticatorsByMfaTokenQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"authenticatorsByMfaToken"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"mfaToken"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authenticatorsByMfaToken"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"mfaToken"},"value":{"kind":"Variable","name":{"kind":"Name","value":"mfaToken"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"type"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"active"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"activatedAt"},"arguments":[],"directives":[]}]}}]}}]};
 export const AddEmailDocument: DocumentNode<AddEmailMutation, AddEmailMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"addEmail"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"newEmail"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addEmail"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"newEmail"},"value":{"kind":"Variable","name":{"kind":"Name","value":"newEmail"}}}],"directives":[]}]}}]};
 export const AuthenticateWithServiceDocument: DocumentNode<AuthenticateWithServiceMutation, AuthenticateWithServiceMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"authenticateWithService"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"serviceName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"params"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AuthenticateParamsInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verifyAuthentication"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"serviceName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"serviceName"}}},{"kind":"Argument","name":{"kind":"Name","value":"params"},"value":{"kind":"Variable","name":{"kind":"Name","value":"params"}}}],"directives":[]}]}}]};
 export const ChangePasswordDocument: DocumentNode<ChangePasswordMutation, ChangePasswordMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"changePassword"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"oldPassword"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"newPassword"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"changePassword"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"oldPassword"},"value":{"kind":"Variable","name":{"kind":"Name","value":"oldPassword"}}},{"kind":"Argument","name":{"kind":"Name","value":"newPassword"},"value":{"kind":"Variable","name":{"kind":"Name","value":"newPassword"}}}],"directives":[]}]}}]};

@@ -1,0 +1,6 @@
+fragment challengeResult on ChallengeResult {
+  ... on DefaultChallengeResult {
+    mfaToken
+    authenticatorId
+  }
+}
