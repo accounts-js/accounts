@@ -1,8 +1,5 @@
 mutation associate($type: String!, $params: AssociateParamsInput) {
   associate(type: $type, params: $params) {
-    ... on OTPAssociationResult {
-      mfaToken
-      authenticatorId
-    }
+    ...associationResult
   }
 }

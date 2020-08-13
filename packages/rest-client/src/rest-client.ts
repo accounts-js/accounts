@@ -8,6 +8,7 @@ import {
   ImpersonationUserIdentity,
   ImpersonationResult,
   CreateUserResult,
+  AuthenticationResult,
 } from '@accounts/types';
 import { AccountsJsError } from './accounts-error';
 
@@ -214,6 +215,9 @@ export class RestClient implements TransportInterface {
     return this.authFetch('password/changePassword', args, customHeaders);
   }
 
+  /**
+   * @deprecated
+   */
   public getTwoFactorSecret(customHeaders?: object): Promise<any> {
     const args = {
       method: 'POST',
@@ -221,6 +225,9 @@ export class RestClient implements TransportInterface {
     return this.fetch('password/twoFactorSecret', args, customHeaders);
   }
 
+  /**
+   * @deprecated
+   */
   public twoFactorSet(secret: any, code: string, customHeaders?: object): Promise<void> {
     const args = {
       method: 'POST',
@@ -232,6 +239,9 @@ export class RestClient implements TransportInterface {
     return this.authFetch('password/twoFactorSet', args, customHeaders);
   }
 
+  /**
+   * @deprecated
+   */
   public twoFactorUnset(code: string, customHeaders?: object): Promise<void> {
     const args = {
       method: 'POST',
@@ -241,10 +251,6 @@ export class RestClient implements TransportInterface {
     };
     return this.authFetch('password/twoFactorUnset', args, customHeaders);
   }
-
-  /**
-   * MFA related operations
-   */
 
   public async mfaChallenge(mfaToken: string, authenticatorId: string, customHeaders?: object) {
     const args = {
@@ -279,15 +285,14 @@ export class RestClient implements TransportInterface {
     const args = {
       method: 'GET',
     };
-    let route = `mfa/authenticators`;
-    return this.authFetch(route, args, customHeaders);
+    return this.authFetch('mfa/authenticators', args, customHeaders);
   }
 
   public async authenticatorsByMfaToken(mfaToken: string, customHeaders?: object) {
     const args = {
       method: 'GET',
     };
-    return this.fetch(`mfa/authenticators?mfaToken=${mfaToken}`, args, customHeaders);
+    return this.fetch(`mfa/authenticatorsByMfaToken?mfaToken=${mfaToken}`, args, customHeaders);
   }
 
   private _loadHeadersObject(plainHeaders: object): { [key: string]: string } {

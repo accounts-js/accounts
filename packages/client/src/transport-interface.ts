@@ -37,9 +37,6 @@ export interface TransportInterface extends TransportMfaInterface {
   impersonate(token: string, impersonated: ImpersonationUserIdentity): Promise<ImpersonationResult>;
 }
 
-/**
- * MFA related operations
- */
 interface TransportMfaInterface {
   authenticators(): Promise<Authenticator[]>;
   authenticatorsByMfaToken(mfaToken?: string): Promise<Authenticator[]>;
