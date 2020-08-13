@@ -41,6 +41,20 @@ export interface AuthenticateParams {
 
 export interface OptionsType {
   graphQLClient: any;
+  /**
+   * Change the default user fragment.
+   * Default to:
+   * ```ts
+   * fragment userFields on User {
+   *   id
+   *   emails {
+   *     address
+   *     verified
+   *   }
+   *   username
+   * }
+   * ```
+   */
   userFieldsFragment?: DocumentNode;
   // TODO
   challengeFieldsFragment?: DocumentNode;
