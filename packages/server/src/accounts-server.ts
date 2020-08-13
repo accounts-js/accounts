@@ -11,7 +11,6 @@ import {
   HookListener,
   DatabaseInterface,
   AuthenticationService,
-  AuthenticatorService,
   ConnectionInformations,
   AuthenticationResult,
 } from '@accounts/types';
@@ -56,16 +55,13 @@ const defaultOptions = {
 
 export class AccountsServer<CustomUser extends User = User> {
   public options: AccountsServerOptions<CustomUser> & typeof defaultOptions;
-  public mfa: AccountsMfa;
   private services: { [key: string]: AuthenticationService<CustomUser> };
-  private authenticators: { [key: string]: AuthenticatorService };
   private db: DatabaseInterface<CustomUser>;
   private hooks: Emittery;
 
   constructor(
     options: AccountsServerOptions<CustomUser>,
-    services: { [key: string]: AuthenticationService<CustomUser> },
-    authenticators?: { [key: string]: AuthenticatorService }
+    services: { [key: string]: AuthenticationService<CustomUser> }
   ) {
     this.options = merge({ ...defaultOptions }, options);
     if (!this.options.db) {
@@ -84,7 +80,6 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     }
 
     this.services = services || {};
-    this.authenticators = authenticators || {};
     this.db = this.options.db;
 
     // Set the db to all services
@@ -92,15 +87,6 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       this.services[service].setStore(this.db);
       this.services[service].server = this;
     }
-
-    // Set the db to all authenticators
-    for (const service in this.authenticators) {
-      this.authenticators[service].setStore(this.db);
-      this.authenticators[service].server = this;
-    }
-
-    // Initialize the MFA module
-    this.mfa = new AccountsMfa({ factors: authenticators! });
 
     // Initialize hooks
     this.hooks = new Emittery();
@@ -660,10 +646,6 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
 
     return userObjectSanitizer(baseUser, omit as any, pick as any);
   }
-
-  /**
-   * Private methods
-   */
 
   private internalUserSanitizer(user: CustomUser): CustomUser {
     return omit(user, ['services']) as any;
