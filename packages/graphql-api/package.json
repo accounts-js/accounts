@@ -33,9 +33,10 @@
   },
   "homepage": "https://github.com/js-accounts/graphql-api",
   "peerDependencies": {
-    "@accounts/password": "^0.28.0",
-    "@accounts/server": "^0.28.0",
-    "@accounts/types": "^0.28.0",
+    "@accounts/mfa": "^0.29.0",
+    "@accounts/password": "^0.29.0",
+    "@accounts/server": "^0.29.0",
+    "@accounts/types": "^0.29.0",
     "@graphql-modules/core": "0.7.17",
     "graphql-tag": "^2.10.0",
     "graphql-tools": "^5.0.0"
@@ -46,6 +47,7 @@
     "tslib": "2.0.1"
   },
   "devDependencies": {
+    "@accounts/mfa": "^0.29.0",
     "@accounts/password": "^0.29.0",
     "@accounts/server": "^0.29.0",
     "@accounts/types": "^0.29.0",

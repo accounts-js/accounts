@@ -2,7 +2,8 @@ import { GraphQLModule } from '@graphql-modules/core';
 import { mergeTypeDefs } from '@graphql-tools/merge';
 import { User, ConnectionInformations } from '@accounts/types';
 import { AccountsServer } from '@accounts/server';
-import AccountsPassword from '@accounts/password';
+import { AccountsPassword } from '@accounts/password';
+import { AccountsMfa } from '@accounts/mfa';
 import { IncomingMessage } from 'http';
 import TypesTypeDefs from './schema/types';
 import getQueryTypeDefs from './schema/query';
@@ -72,13 +73,18 @@ export const AccountsModule: GraphQLModule<
     CoreAccountsModule.forRoot({
       userAsInterface: config.userAsInterface,
     }),
-    AccountsMfaModule.forRoot({
-      ...config,
-    }),
-    ...(config.accountsServer.getServices().password
+    ...(config.accountsServer.getService('password')
       ? [
           AccountsPasswordModule.forRoot({
-            accountsPassword: config.accountsServer.getServices().password as AccountsPassword,
+            accountsPassword: config.accountsServer.getService('password') as AccountsPassword,
+            ...config,
+          }),
+        ]
+      : []),
+    ...(config.accountsServer.getService('mfa')
+      ? [
+          AccountsMfaModule.forRoot({
+            accountsMfa: config.accountsServer.getService('mfa') as AccountsMfa,
             ...config,
           }),
         ]

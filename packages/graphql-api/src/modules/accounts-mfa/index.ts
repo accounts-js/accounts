@@ -1,5 +1,7 @@
 import { GraphQLModule } from '@graphql-modules/core';
 import { AccountsServer } from '@accounts/server';
+import { AccountsMfa } from '@accounts/mfa';
+
 import TypesTypeDefs from './schema/types';
 import getQueryTypeDefs from './schema/query';
 import getMutationTypeDefs from './schema/mutation';
@@ -11,6 +13,7 @@ import { CoreAccountsModule } from '../core';
 
 export interface AccountsMfaModuleConfig {
   accountsServer: AccountsServer;
+  accountsMfa: AccountsMfa;
   rootQueryName?: string;
   rootMutationName?: string;
   extendTypeDefs?: boolean;
