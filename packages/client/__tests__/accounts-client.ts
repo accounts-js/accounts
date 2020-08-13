@@ -30,6 +30,12 @@ const mockTransport = {
   verifyEmail: jest.fn(() => Promise.resolve()),
   sendVerificationEmail: jest.fn(() => Promise.resolve()),
   impersonate: jest.fn(() => Promise.resolve(impersonateResult)),
+  getUser: jest.fn(() => Promise.resolve()),
+  mfaChallenge: jest.fn(() => Promise.resolve()),
+  mfaAssociate: jest.fn(() => Promise.resolve()),
+  mfaAssociateByMfaToken: jest.fn(() => Promise.resolve()),
+  authenticators: jest.fn(() => Promise.resolve()),
+  authenticatorsByMfaToken: jest.fn(() => Promise.resolve()),
 };
 
 describe('Accounts', () => {
@@ -268,6 +274,55 @@ describe('Accounts', () => {
       await accountsClient.stopImpersonation();
       const userTokens = await accountsClient.getTokens();
       expect(userTokens).toEqual(impersonateResult.tokens);
+    });
+  });
+
+  describe('getUser', () => {
+    it('calls transport', async () => {
+      await accountsClient.getUser();
+      expect(mockTransport.getUser).toHaveBeenCalledWith();
+    });
+  });
+
+  describe('mfaChallenge', () => {
+    it('calls transport', async () => {
+      await accountsClient.mfaChallenge('mfaTokenTest', 'authenticatorIdTest');
+      expect(mockTransport.mfaChallenge).toHaveBeenCalledWith(
+        'mfaTokenTest',
+        'authenticatorIdTest'
+      );
+    });
+  });
+
+  describe('mfaAssociate', () => {
+    it('calls transport', async () => {
+      await accountsClient.mfaAssociate('typeTest');
+      expect(mockTransport.mfaAssociate).toHaveBeenCalledWith('typeTest', undefined);
+    });
+  });
+
+  describe('mfaAssociateByMfaToken', () => {
+    it('calls transport', async () => {
+      await accountsClient.mfaAssociateByMfaToken('mfaTokenTest', 'typeTest');
+      expect(mockTransport.mfaAssociateByMfaToken).toHaveBeenCalledWith(
+        'mfaTokenTest',
+        'typeTest',
+        undefined
+      );
+    });
+  });
+
+  describe('authenticators', () => {
+    it('calls transport', async () => {
+      await accountsClient.authenticators();
+      expect(mockTransport.authenticators).toHaveBeenCalledWith();
+    });
+  });
+
+  describe('authenticatorsByMfaToken', () => {
+    it('calls transport', async () => {
+      await accountsClient.authenticatorsByMfaToken('mfaTokenTest');
+      expect(mockTransport.authenticatorsByMfaToken).toHaveBeenCalledWith('mfaTokenTest');
     });
   });
 });
