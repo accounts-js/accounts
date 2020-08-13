@@ -284,15 +284,14 @@ export class RestClient implements TransportInterface {
     const args = {
       method: 'GET',
     };
-    let route = `mfa/authenticators`;
-    return this.authFetch(route, args, customHeaders);
+    return this.authFetch('mfa/authenticators', args, customHeaders);
   }
 
   public async authenticatorsByMfaToken(mfaToken: string, customHeaders?: object) {
     const args = {
       method: 'GET',
     };
-    return this.fetch(`mfa/authenticators?mfaToken=${mfaToken}`, args, customHeaders);
+    return this.fetch(`mfa/authenticatorsByMfaToken?mfaToken=${mfaToken}`, args, customHeaders);
   }
 
   private _loadHeadersObject(plainHeaders: object): { [key: string]: string } {
