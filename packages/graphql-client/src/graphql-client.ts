@@ -5,6 +5,7 @@ import {
   LoginResult,
   User,
   CreateUserResult,
+  Authenticator,
 } from '@accounts/types';
 import { print, DocumentNode } from 'graphql/language';
 import { TypedDocumentNode } from '@graphql-typed-document-node/core';
@@ -25,6 +26,11 @@ import {
   GetUserDocument,
   ImpersonateDocument,
   AuthenticateDocument,
+  ChallengeDocument,
+  AuthenticatorsDocument,
+  AuthenticatorsByMfaTokenDocument,
+  AssociateDocument,
+  AssociateByMfaTokenDocument,
 } from './graphql-operations';
 import { GraphQLErrorList } from './GraphQLErrorList';
 import { replaceUserFieldsFragment } from './utils/replace-user-fragment';
@@ -36,6 +42,10 @@ export interface AuthenticateParams {
 export interface OptionsType {
   graphQLClient: any;
   userFieldsFragment?: DocumentNode;
+  // TODO
+  challengeFieldsFragment?: DocumentNode;
+  // TODO
+  associateFieldsFragment?: DocumentNode;
 }
 
 export default class GraphQLClient implements TransportInterface {
@@ -209,6 +219,54 @@ export default class GraphQLClient implements TransportInterface {
         },
       }
     );
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public async mfaAssociate(type: string, params?: any): Promise<void> {
+    // TODO allow customisation via this.options.associateFieldsFragment
+    return this.mutate(AssociateDocument, 'associate', {
+      type,
+      params,
+    });
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public async mfaAssociateByMfaToken(mfaToken: string, type: string, params?: any): Promise<any> {
+    // TODO allow customisation via this.options.associateFieldsFragment
+    return this.mutate(AssociateByMfaTokenDocument, 'associateByMfaToken', {
+      mfaToken,
+      type,
+      params,
+    });
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public async authenticators(): Promise<Authenticator[]> {
+    return this.query(AuthenticatorsDocument, 'authenticators');
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public async authenticatorsByMfaToken(mfaToken?: string): Promise<Authenticator[]> {
+    return this.query(AuthenticatorsByMfaTokenDocument, 'authenticatorsByMfaToken', { mfaToken });
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public async mfaChallenge(mfaToken: string, authenticatorId: string): Promise<any> {
+    // TODO allow customisation via this.options.challengeFieldsFragment
+    return this.mutate(ChallengeDocument, 'challenge', {
+      mfaToken,
+      authenticatorId,
+    });
   }
 
   private async mutate<TData = any, TVariables = Record<string, any>>(
