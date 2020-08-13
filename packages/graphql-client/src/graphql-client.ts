@@ -34,6 +34,7 @@ import {
 } from './graphql-operations';
 import { GraphQLErrorList } from './GraphQLErrorList';
 import { replaceFragment } from './utils/replace-fragment';
+import { Doc } from 'prettier';
 
 export interface AuthenticateParams {
   [key: string]: string | object;
@@ -87,9 +88,37 @@ export interface OptionsType {
 export default class GraphQLClient implements TransportInterface {
   public client!: AccountsClient;
   private options: OptionsType;
+  private operationsWithFragments: {
+    AuthenticateDocument: DocumentNode;
+    CreateUserDocument: DocumentNode;
+    ImpersonateDocument: DocumentNode;
+    AssociateDocument: DocumentNode;
+    AssociateByMfaTokenDocument: DocumentNode;
+    ChallengeDocument: DocumentNode;
+  };
 
   constructor(options: OptionsType) {
     this.options = options;
+    this.operationsWithFragments = {
+      AuthenticateDocument: this.options.userFieldsFragment
+        ? replaceFragment(AuthenticateDocument, this.options.userFieldsFragment)
+        : AuthenticateDocument,
+      CreateUserDocument: this.options.userFieldsFragment
+        ? replaceFragment(CreateUserDocument, this.options.userFieldsFragment)
+        : CreateUserDocument,
+      ImpersonateDocument: this.options.userFieldsFragment
+        ? replaceFragment(ImpersonateDocument, this.options.userFieldsFragment)
+        : ImpersonateDocument,
+      AssociateDocument: this.options.associationResultFragment
+        ? replaceFragment(AssociateDocument, this.options.associationResultFragment)
+        : AssociateDocument,
+      AssociateByMfaTokenDocument: this.options.associationResultFragment
+        ? replaceFragment(AssociateByMfaTokenDocument, this.options.associationResultFragment)
+        : AssociateByMfaTokenDocument,
+      ChallengeDocument: this.options.challengeResultFragment
+        ? replaceFragment(ChallengeDocument, this.options.challengeResultFragment)
+        : ChallengeDocument,
+    };
   }
 
   /**
@@ -100,13 +129,7 @@ export default class GraphQLClient implements TransportInterface {
    * @memberof GraphQLClient
    */
   public async createUser(user: CreateUser): Promise<CreateUserResult> {
-    return this.mutate(
-      this.options.userFieldsFragment
-        ? replaceFragment(CreateUserDocument, this.options.userFieldsFragment)
-        : CreateUserDocument,
-      'createUser',
-      { user }
-    );
+    return this.mutate(this.operationsWithFragments.CreateUserDocument, 'createUser', { user });
   }
 
   /**
@@ -129,16 +152,10 @@ export default class GraphQLClient implements TransportInterface {
     service: string,
     authenticateParams: AuthenticateParams
   ): Promise<LoginResult> {
-    return this.mutate(
-      this.options.userFieldsFragment
-        ? replaceFragment(AuthenticateDocument, this.options.userFieldsFragment)
-        : AuthenticateDocument,
-      'authenticate',
-      {
-        serviceName: service,
-        params: authenticateParams,
-      }
-    );
+    return this.mutate(this.operationsWithFragments.AuthenticateDocument, 'authenticate', {
+      serviceName: service,
+      params: authenticateParams,
+    });
   }
 
   /**
@@ -241,36 +258,24 @@ export default class GraphQLClient implements TransportInterface {
       email?: string;
     }
   ): Promise<ImpersonationResult> {
-    return this.mutate(
-      this.options.userFieldsFragment
-        ? replaceFragment(ImpersonateDocument, this.options.userFieldsFragment)
-        : ImpersonateDocument,
-      'impersonate',
-      {
-        accessToken: token,
-        impersonated: {
-          userId: impersonated.userId,
-          username: impersonated.username,
-          email: impersonated.email,
-        },
-      }
-    );
+    return this.mutate(this.operationsWithFragments.ImpersonateDocument, 'impersonate', {
+      accessToken: token,
+      impersonated: {
+        userId: impersonated.userId,
+        username: impersonated.username,
+        email: impersonated.email,
+      },
+    });
   }
 
   /**
    * @inheritDoc
    */
   public async mfaAssociate(type: string, params?: any): Promise<void> {
-    return this.mutate(
-      this.options.associationResultFragment
-        ? replaceFragment(AssociateDocument, this.options.associationResultFragment)
-        : AssociateDocument,
-      'associate',
-      {
-        type,
-        params,
-      }
-    );
+    return this.mutate(this.operationsWithFragments.AssociateDocument, 'associate', {
+      type,
+      params,
+    });
   }
 
   /**
@@ -278,9 +283,7 @@ export default class GraphQLClient implements TransportInterface {
    */
   public async mfaAssociateByMfaToken(mfaToken: string, type: string, params?: any): Promise<any> {
     return this.mutate(
-      this.options.associationResultFragment
-        ? replaceFragment(AssociateByMfaTokenDocument, this.options.associationResultFragment)
-        : AssociateByMfaTokenDocument,
+      this.operationsWithFragments.AssociateByMfaTokenDocument,
       'associateByMfaToken',
       {
         mfaToken,
@@ -308,16 +311,10 @@ export default class GraphQLClient implements TransportInterface {
    * @inheritDoc
    */
   public async mfaChallenge(mfaToken: string, authenticatorId: string): Promise<any> {
-    return this.mutate(
-      this.options.challengeResultFragment
-        ? replaceFragment(ChallengeDocument, this.options.challengeResultFragment)
-        : ChallengeDocument,
-      'challenge',
-      {
-        mfaToken,
-        authenticatorId,
-      }
-    );
+    return this.mutate(this.operationsWithFragments.ChallengeDocument, 'challenge', {
+      mfaToken,
+      authenticatorId,
+    });
   }
 
   private async mutate<TData = any, TVariables = Record<string, any>>(
