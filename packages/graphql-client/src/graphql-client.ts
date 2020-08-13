@@ -34,7 +34,6 @@ import {
 } from './graphql-operations';
 import { GraphQLErrorList } from './GraphQLErrorList';
 import { replaceFragment } from './utils/replace-fragment';
-import { Doc } from 'prettier';
 
 export interface AuthenticateParams {
   [key: string]: string | object;
