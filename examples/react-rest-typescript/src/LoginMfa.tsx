@@ -72,10 +72,8 @@ export const LoginMfa = ({ mfaToken }: LoginMfaProps) => {
     const fetchAuthenticators = async () => {
       // TODO try catch
       const data = await accountsClient.authenticatorsByMfaToken(mfaToken);
-      console.log(data);
       const authenticator = data[0];
-      const challengeResponse = await accountsClient.mfaChallenge(mfaToken, authenticator.id);
-      // console.log(challengeResponse);
+      await accountsClient.mfaChallenge(mfaToken, authenticator.id);
     };
 
     fetchAuthenticators();
