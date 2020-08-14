@@ -46,7 +46,7 @@ const Router = () => {
         <PrivateRoute path="/emails">
           <Email />
         </PrivateRoute>
-        <PrivateRoute path="/security">
+        <PrivateRoute path="/security" exact={true}>
           <Security />
         </PrivateRoute>
 
