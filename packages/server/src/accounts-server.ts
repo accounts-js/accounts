@@ -210,7 +210,8 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       }
 
       // This must be called only if user is using the mfa service
-      if (this.getService('mfa')) {
+      // Do not call when authenticating using the mfa service otherwise a new challenge is created
+      if (this.getService('mfa') && serviceName !== 'mfa') {
         // We check if the user have at least one active authenticator
         // If yes we create a new mfaChallenge for the user to resolve
         // If no we can login the user
