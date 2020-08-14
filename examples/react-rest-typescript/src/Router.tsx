@@ -9,6 +9,7 @@ import ResetPassword from './ResetPassword';
 import VerifyEmail from './VerifyEmail';
 import { Email } from './Email';
 import { Security } from './Security';
+import { TwoFactorOtp } from './TwoFactorOtp';
 
 // A wrapper for <Route> that redirects to the login
 // screen if you're not yet authenticated.
@@ -48,6 +49,9 @@ const Router = () => {
         </PrivateRoute>
         <PrivateRoute path="/security" exact={true}>
           <Security />
+        </PrivateRoute>
+        <PrivateRoute path="/security/mfa/otp">
+          <TwoFactorOtp />
         </PrivateRoute>
 
         {/* Unauthenticated routes */}
