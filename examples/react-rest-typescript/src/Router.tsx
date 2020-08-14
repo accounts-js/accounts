@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import { CssBaseline } from '@material-ui/core';
 import { AuthProvider, useAuth } from './components/AuthContext';
 import Signup from './Signup';
@@ -41,29 +41,31 @@ const Router = () => {
       <AuthProvider>
         <CssBaseline />
 
-        {/* Authenticated routes */}
-        <PrivateRoute exact path="/">
-          <Home />
-        </PrivateRoute>
-        <PrivateRoute path="/emails">
-          <Email />
-        </PrivateRoute>
-        <PrivateRoute path="/security" exact={true}>
-          <Security />
-        </PrivateRoute>
-        <PrivateRoute path="/security/mfa/otp">
-          <TwoFactorOtp />
-        </PrivateRoute>
-        <PrivateRoute path="/security/mfa/:authenticatorId">
-          <MfaAuthenticator />
-        </PrivateRoute>
+        <Switch>
+          {/* Authenticated routes */}
+          <PrivateRoute exact path="/">
+            <Home />
+          </PrivateRoute>
+          <PrivateRoute path="/emails">
+            <Email />
+          </PrivateRoute>
+          <PrivateRoute exact path="/security">
+            <Security />
+          </PrivateRoute>
+          <PrivateRoute exact path="/security/mfa/otp">
+            <TwoFactorOtp />
+          </PrivateRoute>
+          <PrivateRoute path="/security/mfa/:authenticatorId">
+            <MfaAuthenticator />
+          </PrivateRoute>
 
-        {/* Unauthenticated routes */}
-        <Route path="/signup" component={Signup} />
-        <Route path="/login" component={Login} />
-        <Route exact path="/reset-password" component={ResetPassword} />
-        <Route path="/reset-password/:token" component={ResetPassword} />
-        <Route path="/verify-email/:token" component={VerifyEmail} />
+          {/* Unauthenticated routes */}
+          <Route path="/signup" component={Signup} />
+          <Route path="/login" component={Login} />
+          <Route exact path="/reset-password" component={ResetPassword} />
+          <Route path="/reset-password/:token" component={ResetPassword} />
+          <Route path="/verify-email/:token" component={VerifyEmail} />
+        </Switch>
       </AuthProvider>
     </BrowserRouter>
   );
