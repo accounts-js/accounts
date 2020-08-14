@@ -54,7 +54,7 @@
     "core-js": "3.6.5",
     "express": "4.17.1",
     "graphql": "14.7.0",
-    "lodash": "4.17.19",
+    "lodash": "4.17.20",
     "mongoose": "5.9.28",
     "node-fetch": "2.6.0",
     "tslib": "2.0.1",

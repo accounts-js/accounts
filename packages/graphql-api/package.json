@@ -65,7 +65,7 @@
     "graphql": "14.7.0",
     "graphql-tools": "5.0.0",
     "jest": "26.3.0",
-    "lodash": "4.17.19",
+    "lodash": "4.17.20",
     "ts-node": "8.10.2"
   }
 }

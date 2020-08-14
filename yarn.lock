@@ -33,7 +33,7 @@ __metadata:
     graphql: 14.7.0
     graphql-tools: ^5.0.0
     jsonwebtoken: ^8.5.1
-    lodash: ^4.17.19
+    lodash: ^4.17.20
     rimraf: 3.0.2
     tslib: 2.0.1
   languageName: unknown
@@ -127,7 +127,7 @@ __metadata:
     graphql: 14.7.0
     jest: 26.3.0
     jest-localstorage-mock: 2.4.3
-    lodash: 4.17.19
+    lodash: 4.17.20
     mongoose: 5.9.28
     node-fetch: 2.6.0
     tslib: 2.0.1
@@ -161,7 +161,7 @@ __metadata:
     express: 4.17.1
     express-session: 1.17.1
     jest: 26.3.0
-    lodash: ^4.17.19
+    lodash: ^4.17.20
     request-ip: ^2.1.3
     tslib: 2.0.1
   peerDependencies:
@@ -211,7 +211,7 @@ __metadata:
     graphql: 14.7.0
     graphql-tools: 5.0.0
     jest: 26.3.0
-    lodash: 4.17.19
+    lodash: 4.17.20
     request-ip: 2.1.3
     ts-node: 8.10.2
     tslib: 2.0.1
@@ -241,7 +241,7 @@ __metadata:
     "@types/jest": 26.0.9
     graphql: 14.7.0
     jest: 26.3.0
-    lodash: 4.17.19
+    lodash: 4.17.20
     tslib: 2.0.1
   peerDependencies:
     graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -275,7 +275,7 @@ __metadata:
     "@types/mongodb": 3.5.25
     "@types/node": 14.0.27
     jest: 26.3.0
-    lodash: ^4.17.19
+    lodash: ^4.17.20
     mongodb: ^3.6.0
     tslib: 2.0.1
   languageName: unknown
@@ -336,7 +336,7 @@ __metadata:
     "@types/node": 14.0.27
     bcryptjs: ^2.4.3
     jest: 26.3.0
-    lodash: ^4.17.19
+    lodash: ^4.17.20
     rimraf: 3.0.2
     tslib: 2.0.1
   peerDependencies:
@@ -357,7 +357,7 @@ __metadata:
     "@types/shortid": 0.0.29
     ioredis: ^4.14.1
     jest: 26.3.0
-    lodash: ^4.17.19
+    lodash: ^4.17.20
     shortid: ^2.2.15
     tslib: 2.0.1
   languageName: unknown
@@ -373,7 +373,7 @@ __metadata:
     "@types/lodash": 4.14.159
     "@types/node": 14.0.27
     jest: 26.3.0
-    lodash: ^4.17.19
+    lodash: ^4.17.20
     node-fetch: 2.6.0
     tslib: 2.0.1
   peerDependencies:
@@ -416,7 +416,7 @@ __metadata:
     jest: 26.3.0
     jsonwebtoken: 8.5.1
     jwt-decode: 2.2.0
-    lodash: 4.17.19
+    lodash: 4.17.20
     rimraf: 3.0.2
     tslib: 2.0.1
   languageName: unknown
@@ -432,7 +432,7 @@ __metadata:
     "@types/node": 14.0.27
     "@types/speakeasy": 2.0.2
     jest: 26.3.0
-    lodash: ^4.17.19
+    lodash: ^4.17.20
     speakeasy: ^2.0.0
     tslib: 2.0.1
   languageName: unknown
@@ -448,7 +448,7 @@ __metadata:
     "@types/lodash": 4.14.159
     "@types/node": 14.0.27
     jest: 26.3.0
-    lodash: ^4.17.19
+    lodash: ^4.17.20
     pg: 8.3.0
     reflect-metadata: ^0.1.13
     tslib: 2.0.1
@@ -2832,7 +2832,7 @@ __metadata:
     apollo-server: 2.16.1
     graphql: 14.7.0
     graphql-tools: 5.0.0
-    lodash: 4.17.19
+    lodash: 4.17.20
     node-fetch: 2.6.0
     nodemon: 2.0.4
     ts-node: 8.10.2
@@ -2857,7 +2857,7 @@ __metadata:
     "@types/node": 14.0.27
     apollo-server: 2.16.1
     graphql: 14.7.0
-    lodash: 4.17.19
+    lodash: 4.17.20
     mongoose: 5.9.28
     nodemon: 2.0.4
     ts-node: 8.10.2
@@ -17989,7 +17989,14 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.17.19, lodash@npm:>=3.5 <5, lodash@npm:^4.17.11, lodash@npm:^4.17.12, lodash@npm:^4.17.13, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.5, lodash@npm:^4.2.1, lodash@npm:^4.3.0, lodash@npm:^4.5.2, lodash@npm:~4.17.15":
+"lodash@npm:4.17.20, lodash@npm:^4.17.20":
+  version: 4.17.20
+  resolution: "lodash@npm:4.17.20"
+  checksum: c62101d2500c383b5f174a7e9e6fe8098149ddd6e9ccfa85f36d4789446195f5c4afd3cfba433026bcaf3da271256566b04a2bf2618e5a39f6e67f8c12030cb6
+  languageName: node
+  linkType: hard
+
+"lodash@npm:>=3.5 <5, lodash@npm:^4.17.11, lodash@npm:^4.17.12, lodash@npm:^4.17.13, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.5, lodash@npm:^4.2.1, lodash@npm:^4.3.0, lodash@npm:^4.5.2, lodash@npm:~4.17.15":
   version: 4.17.19
   resolution: "lodash@npm:4.17.19"
   checksum: ff2b7a95f0129dba9101e346d44e0eda0f159d76bbbf23721eec1969b87a32bde3de0cfef0733218c64620e9be08040a973278d46a686540233b356115f3527c

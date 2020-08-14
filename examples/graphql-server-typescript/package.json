@@ -20,7 +20,7 @@
     "@graphql-tools/merge": "6.0.16",
     "apollo-server": "2.16.1",
     "graphql": "14.7.0",
-    "lodash": "4.17.19",
+    "lodash": "4.17.20",
     "mongoose": "5.9.28",
     "tslib": "2.0.1"
   },
