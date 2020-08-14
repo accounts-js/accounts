@@ -52,7 +52,7 @@ export class FactorOtp implements AuthenticatorService {
 
     const authenticators = await this.db.findUserAuthenticators(userId);
     const inactiveOtpAuthenticator = authenticators.find(
-      (authenticator) => authenticator.type === 'otp' && !authenticator.active
+      (authenticator) => authenticator.type === this.authenticatorName && !authenticator.active
     );
 
     let authenticatorId;
