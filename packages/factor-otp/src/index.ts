@@ -50,14 +50,27 @@ export class FactorOtp implements AuthenticatorService {
 
     const secret = optlibAuthenticator.generateSecret();
 
-    // TODO update pending (not active) authenticator if there is one
+    const authenticators = await this.db.findUserAuthenticators(userId);
+    const inactiveOtpAuthenticator = authenticators.find(
+      (authenticator) => authenticator.type === this.authenticatorName && !authenticator.active
+    );
 
-    const authenticatorId = await this.db.createAuthenticator({
-      type: this.authenticatorName,
-      userId,
-      secret,
-      active: false,
-    });
+    let authenticatorId;
+    // If there are no inactive otp authenticators we create one
+    if (!inactiveOtpAuthenticator) {
+      authenticatorId = await this.db.createAuthenticator({
+        type: this.authenticatorName,
+        userId,
+        secret,
+        active: false,
+      });
+    } else {
+      authenticatorId = inactiveOtpAuthenticator.id;
+      // If there is already one we generate a new secret and update the object
+      await this.db.updateAuthenticator(inactiveOtpAuthenticator.id, {
+        secret,
+      });
+    }
 
     let mfaToken: string;
     if (mfaChallenge) {

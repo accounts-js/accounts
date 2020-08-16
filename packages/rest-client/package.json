@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "@accounts/types": "^0.29.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.20",
     "tslib": "2.0.1"
   }
 }

@@ -7,11 +7,10 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  CardActions,
-  TextField,
 } from '@material-ui/core';
-import QRCode from 'qrcode.react';
-import { useFormik, FormikErrors } from 'formik';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import { useHistory } from 'react-router';
+import { Authenticator } from '@accounts/types';
 import { accountsRest } from './accounts';
 
 const useStyles = makeStyles((theme) => ({
@@ -25,90 +24,97 @@ const useStyles = makeStyles((theme) => ({
   cardContent: {
     padding: theme.spacing(3),
   },
-  cardActions: {
-    padding: theme.spacing(3),
+  authenticatorItem: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    minHeight: 48,
   },
-  qrCode: {
-    marginTop: theme.spacing(2),
+  authenticatorItemTitle: {
+    display: 'flex',
   },
-  textField: {
-    marginTop: theme.spacing(2),
+  authenticatorItemDot: {
+    marginRight: theme.spacing(2),
+  },
+  authenticatorItemDescription: {
+    marginTop: theme.spacing(1),
   },
 }));
 
-interface TwoFactorValues {
-  oneTimeCode: string;
+interface AuthenticatorOtpProps {
+  authenticator?: Authenticator;
 }
+
+const AuthenticatorOtp = ({ authenticator }: AuthenticatorOtpProps) => {
+  const classes = useStyles();
+  const history = useHistory();
+
+  return (
+    <React.Fragment>
+      <div className={classes.authenticatorItem}>
+        <div className={classes.authenticatorItemTitle}>
+          <FiberManualRecordIcon
+            className={classes.authenticatorItemDot}
+            color={authenticator?.active ? 'secondary' : 'error'}
+          />
+          <Typography>Authenticator App (OTP)</Typography>
+        </div>
+        {authenticator?.active ? (
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={() => history.push(`/security/mfa/${authenticator.id}`)}
+          >
+            Configure
+          </Button>
+        ) : (
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={() => history.push('/security/mfa/otp')}
+          >
+            Add
+          </Button>
+        )}
+      </div>
+      <Typography className={classes.authenticatorItemDescription}>
+        An authenticator application that supports TOTP (like Google Authenticator or 1Password) can
+        be used to conveniently secure your account. A new token is generated every 30 seconds.
+      </Typography>
+    </React.Fragment>
+  );
+};
 
 export const TwoFactor = () => {
   const classes = useStyles();
-  const [secret, setSecret] = useState<any>();
-  const formik = useFormik<TwoFactorValues>({
-    initialValues: {
-      oneTimeCode: '',
-    },
-    validate: (values) => {
-      const errors: FormikErrors<TwoFactorValues> = {};
-      if (!values.oneTimeCode) {
-        errors.oneTimeCode = 'Required';
-      }
-      return errors;
-    },
-    onSubmit: async (values, { setSubmitting }) => {
-      try {
-        await accountsRest.twoFactorSet(secret, values.oneTimeCode);
-        // TODO success message
-      } catch (error) {
-        // TODO snackbar?
-        alert(error);
-      }
-      setSubmitting(false);
-    },
-  });
+  const [authenticators, setAuthenticators] = useState<any>();
 
-  const fetchTwoFactorSecret = async () => {
-    const data = await accountsRest.getTwoFactorSecret();
-    setSecret(data.secret);
+  const fetchAuthenticators = async () => {
+    const data = await accountsRest.authenticators();
+    setAuthenticators(data);
   };
 
   useEffect(() => {
-    fetchTwoFactorSecret();
+    fetchAuthenticators();
   }, []);
 
-  if (!secret) {
-    return null;
-  }
+  const haveOtpFactor = authenticators?.find(
+    (authenticator: Authenticator) => authenticator.type === 'otp'
+  );
+
   return (
     <Card className={classes.card}>
-      <form onSubmit={formik.handleSubmit}>
-        <CardHeader subheader="Two-factor authentication" className={classes.cardHeader} />
-        <Divider />
-        <CardContent className={classes.cardContent}>
-          <Typography gutterBottom>Authenticator secret: {secret.base32}</Typography>
-          <QRCode className={classes.qrCode} value={secret.otpauth_url} />
-          <TextField
-            label="Authenticator code"
-            variant="outlined"
-            fullWidth={true}
-            className={classes.textField}
-            id="oneTimeCode"
-            value={formik.values.oneTimeCode}
-            onChange={formik.handleChange}
-            error={Boolean(formik.errors.oneTimeCode && formik.touched.oneTimeCode)}
-            helperText={
-              formik.touched.oneTimeCode && formik.errors.oneTimeCode
-                ? formik.errors.oneTimeCode
-                : 'Scan the code with your Two-Factor app and enter the one time password to confirm'
-            }
-          />
-        </CardContent>
-        <Divider />
-        <CardActions className={classes.cardActions}>
-          <Button variant="contained" type="submit" disabled={formik.isSubmitting}>
-            Submit
-          </Button>
-        </CardActions>
-      </form>
+      <CardHeader subheader="Two-factor authentication" className={classes.cardHeader} />
+      <Divider />
+      <CardContent className={classes.cardContent}>
+        {!haveOtpFactor && <AuthenticatorOtp />}
+        {authenticators?.map((authenticator: Authenticator) => {
+          if (authenticator.type === 'otp') {
+            return <AuthenticatorOtp key={authenticator.id} authenticator={authenticator} />;
+          }
+          return null;
+        })}
+      </CardContent>
     </Card>
   );
 };

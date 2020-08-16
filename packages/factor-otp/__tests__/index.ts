@@ -5,7 +5,9 @@ const factorOtp = new FactorOtp();
 
 const mockedDb = {
   createAuthenticator: jest.fn(() => Promise.resolve('authenticatorIdTest')),
+  updateAuthenticator: jest.fn(),
   findAuthenticatorById: jest.fn(),
+  findUserAuthenticators: jest.fn(() => [] as any[]),
   createMfaChallenge: jest.fn(),
   updateMfaChallenge: jest.fn(),
 };
@@ -52,6 +54,29 @@ describe('FactorOtp', () => {
         userId: 'userIdTest',
         secret: expect.any(String),
         active: false,
+      });
+      expect(mockedDb.updateMfaChallenge).toHaveBeenCalledWith('mfaChallengeIdTest', {
+        authenticatorId: 'authenticatorIdTest',
+      });
+      expect(result).toEqual({
+        id: 'authenticatorIdTest',
+        mfaToken: expect.any(String),
+        secret: expect.any(String),
+      });
+    });
+
+    it('update existing authenticator if there is one pending', async () => {
+      mockedDb.findUserAuthenticators.mockReturnValue([
+        { id: 'authenticatorIdTest', type: 'otp', active: false },
+      ]);
+      const result = await factorOtp.associate({
+        id: 'mfaChallengeIdTest',
+        token: 'mfaChallengeTokenTest',
+        userId: 'userIdTest',
+      } as any);
+
+      expect(mockedDb.updateAuthenticator).toHaveBeenCalledWith('authenticatorIdTest', {
+        secret: expect.any(String),
       });
       expect(mockedDb.updateMfaChallenge).toHaveBeenCalledWith('mfaChallengeIdTest', {
         authenticatorId: 'authenticatorIdTest',

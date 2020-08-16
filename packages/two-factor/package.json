@@ -29,7 +29,7 @@
     "@accounts/types": "^0.29.0",
     "@types/lodash": "^4.14.159",
     "@types/speakeasy": "2.0.2",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.20",
     "speakeasy": "^2.0.0",
     "tslib": "2.0.1"
   },
