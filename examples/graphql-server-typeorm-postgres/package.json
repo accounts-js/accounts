@@ -17,7 +17,7 @@
     "@accounts/server": "^0.29.0",
     "@accounts/typeorm": "^0.29.0",
     "@graphql-modules/core": "0.7.17",
-    "@graphql-tools/merge": "6.0.16",
+    "@graphql-tools/merge": "6.0.18",
     "apollo-server": "2.16.1",
     "dotenv": "^8.2.0",
     "graphql": "14.7.0",
