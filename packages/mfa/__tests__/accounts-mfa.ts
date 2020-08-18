@@ -27,4 +27,21 @@ describe('AccountsMfa', () => {
       ).rejects.toThrowError('Invalid mfa token');
     });
   });
+
+  describe('isMfaChallengeValid', () => {
+    it('should return false if challenge is deactivated', () => {
+      const accountsMfa = new AccountsMfa({ factors: {} });
+      expect(accountsMfa.isMfaChallengeValid({ deactivated: true } as any)).toBe(false);
+    });
+
+    it('should return false if challenge is expired', () => {
+      const accountsMfa = new AccountsMfa({ factors: {} });
+      expect(accountsMfa.isMfaChallengeValid({ createdAt: 100 } as any)).toBe(false);
+    });
+
+    it('should return true if challenge is valid', () => {
+      const accountsMfa = new AccountsMfa({ factors: {} });
+      expect(accountsMfa.isMfaChallengeValid({ createdAt: Date.now() } as any)).toBe(true);
+    });
+  });
 });

@@ -8,6 +8,7 @@ import {
   MfaChallenge,
 } from '@accounts/types';
 import { AccountsServer, AccountsJsError } from '@accounts/server';
+import ms from 'ms';
 import { ErrorMessages } from './types';
 import {
   errors,
@@ -27,6 +28,11 @@ export interface AccountsMfaOptions {
    * Factors used for mfa
    */
   factors: { [key: string]: AuthenticatorService | undefined };
+  /**
+   * Expressed in milliseconds or a string describing a time span zeit/ms.
+   * Default to '5m'.
+   */
+  expiresIn?: string | number;
 }
 
 interface AccountsMfaAuthenticateParams {
@@ -35,6 +41,7 @@ interface AccountsMfaAuthenticateParams {
 
 const defaultOptions = {
   errors,
+  expiresIn: '5m' as string | number,
 };
 
 export class AccountsMfa<CustomUser extends User = User> implements AuthenticationService {
@@ -46,7 +53,11 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
 
   constructor(options: AccountsMfaOptions) {
     this.options = { ...defaultOptions, ...options };
-    this.factors = options.factors;
+    if (typeof this.options.expiresIn === 'string') {
+      const milliseconds = ms(this.options.expiresIn);
+      this.options.expiresIn = milliseconds;
+    }
+    this.factors = this.options.factors;
   }
 
   public setStore(store: DatabaseInterface<CustomUser>) {
@@ -66,7 +77,7 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
   ): Promise<CustomUser | null> {
     const mfaToken = params.mfaToken;
     const mfaChallenge = mfaToken ? await this.db.findMfaChallengeByToken(mfaToken) : null;
-    if (!mfaChallenge || !mfaChallenge.authenticatorId) {
+    if (!mfaChallenge || !mfaChallenge.authenticatorId || !this.isMfaChallengeValid(mfaChallenge)) {
       throw new AccountsJsError(
         this.options.errors.invalidMfaToken,
         AuthenticateErrors.InvalidMfaToken
@@ -86,7 +97,6 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
         AuthenticateErrors.FactorNotFound
       );
     }
-    // TODO we need to implement some time checking for the mfaToken (eg: expire after X minutes, probably based on the authenticator configuration)
     if (!(await factor.authenticate(mfaChallenge, authenticator, params, infos))) {
       throw new AccountsJsError(
         this.options.errors.authenticationFailed(authenticator.type),
@@ -263,8 +273,13 @@ export class AccountsMfa<CustomUser extends User = User> implements Authenticati
   }
 
   public isMfaChallengeValid(mfaChallenge: MfaChallenge): boolean {
-    // TODO need to check that the challenge is not expired
     if (mfaChallenge.deactivated) {
+      return false;
+    }
+    const now = Date.now();
+    const expirationDate =
+      new Date(mfaChallenge.createdAt).getTime() + (this.options.expiresIn as number);
+    if (now > expirationDate) {
       return false;
     }
     return true;

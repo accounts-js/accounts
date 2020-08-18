@@ -28,6 +28,10 @@ export interface MfaChallenge {
    */
   deactivatedAt?: string;
   /**
+   * Contain the date when the challenge was created, is used to check that the challenge is not expired
+   */
+  createdAt: string;
+  /**
    * Custom properties
    */
   [additionalKey: string]: any;
