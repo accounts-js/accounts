@@ -1,7 +1,7 @@
 {
   "name": "@examples/rest-express-typescript",
   "private": true,
-  "version": "0.29.0",
+  "version": "0.30.0-alpha.0",
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
@@ -10,12 +10,12 @@
     "test": "yarn build"
   },
   "dependencies": {
-    "@accounts/factor-otp": "^0.29.0",
-    "@accounts/mfa": "^0.29.0",
-    "@accounts/mongo": "^0.29.0",
-    "@accounts/password": "^0.29.0",
-    "@accounts/rest-express": "^0.29.0",
-    "@accounts/server": "^0.29.0",
+    "@accounts/factor-otp": "^0.30.0-alpha.0",
+    "@accounts/mfa": "^0.30.0-alpha.0",
+    "@accounts/mongo": "^0.30.0-alpha.0",
+    "@accounts/password": "^0.30.0-alpha.0",
+    "@accounts/rest-express": "^0.30.0-alpha.0",
+    "@accounts/server": "^0.30.0-alpha.0",
     "body-parser": "1.19.0",
     "cors": "2.8.5",
     "express": "4.17.1",

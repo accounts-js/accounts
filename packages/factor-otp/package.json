@@ -1,6 +1,6 @@
 {
   "name": "@accounts/factor-otp",
-  "version": "0.29.0",
+  "version": "0.30.0-alpha.0",
   "description": "@accounts/factor-otp",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -29,14 +29,14 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "devDependencies": {
-    "@accounts/server": "^0.29.0",
+    "@accounts/server": "^0.30.0-alpha.0",
     "@types/jest": "26.0.9",
     "@types/node": "14.0.27",
     "jest": "26.3.0",
     "rimraf": "3.0.2"
   },
   "dependencies": {
-    "@accounts/types": "^0.29.0",
+    "@accounts/types": "^0.30.0-alpha.0",
     "otplib": "12.0.1",
     "tslib": "2.0.1"
   },
