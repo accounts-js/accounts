@@ -27,7 +27,7 @@ createConnection({
   url: 'postgres://user@localhost:5432/dbname',
   entities,
 }).then(() => {
-  const accountsTypeorm = new Typeorm({
+  const accountsTypeorm = new AccountsTypeorm({
     // options
   });
   const accountsServer = new AccountsServer(
