@@ -5,11 +5,11 @@ __metadata:
   version: 4
   cacheKey: 5
 
-"@accounts/apollo-link@^0.29.0, @accounts/apollo-link@workspace:packages/apollo-link-accounts":
+"@accounts/apollo-link@^0.30.0-alpha.1, @accounts/apollo-link@workspace:packages/apollo-link-accounts":
   version: 0.0.0-use.local
   resolution: "@accounts/apollo-link@workspace:packages/apollo-link-accounts"
   dependencies:
-    "@accounts/client": ^0.29.0
+    "@accounts/client": ^0.30.0-alpha.1
     "@apollo/client": 3.1.3
     "@types/node": 14.0.27
     graphql: 14.7.0
@@ -20,14 +20,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/boost@^0.29.0, @accounts/boost@workspace:packages/boost":
+"@accounts/boost@^0.30.0-alpha.1, @accounts/boost@workspace:packages/boost":
   version: 0.0.0-use.local
   resolution: "@accounts/boost@workspace:packages/boost"
   dependencies:
-    "@accounts/database-manager": ^0.29.0
-    "@accounts/graphql-api": ^0.29.0
-    "@accounts/server": ^0.29.0
-    "@accounts/types": ^0.29.0
+    "@accounts/database-manager": ^0.30.0-alpha.1
+    "@accounts/graphql-api": ^0.30.0-alpha.1
+    "@accounts/server": ^0.30.0-alpha.1
+    "@accounts/types": ^0.30.0-alpha.1
     "@graphql-modules/core": 0.7.17
     apollo-server: ^2.16.1
     graphql: 14.7.0
@@ -39,12 +39,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/client-password@^0.29.0, @accounts/client-password@workspace:packages/client-password":
+"@accounts/client-password@^0.30.0-alpha.1, @accounts/client-password@workspace:packages/client-password":
   version: 0.0.0-use.local
   resolution: "@accounts/client-password@workspace:packages/client-password"
   dependencies:
-    "@accounts/client": ^0.29.0
-    "@accounts/types": ^0.29.0
+    "@accounts/client": ^0.30.0-alpha.1
+    "@accounts/types": ^0.30.0-alpha.1
     "@types/jest": 26.0.9
     "@types/node": 14.0.27
     jest: 26.3.0
@@ -53,11 +53,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/client@^0.29.0, @accounts/client@workspace:packages/client":
+"@accounts/client@^0.30.0-alpha.1, @accounts/client@workspace:packages/client":
   version: 0.0.0-use.local
   resolution: "@accounts/client@workspace:packages/client"
   dependencies:
-    "@accounts/types": ^0.29.0
+    "@accounts/types": ^0.30.0-alpha.1
     "@types/jest": 26.0.9
     "@types/jwt-decode": 2.2.1
     "@types/node": 14.0.27
@@ -71,11 +71,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/database-manager@^0.29.0, @accounts/database-manager@workspace:packages/database-manager":
+"@accounts/database-manager@^0.30.0-alpha.1, @accounts/database-manager@workspace:packages/database-manager":
   version: 0.0.0-use.local
   resolution: "@accounts/database-manager@workspace:packages/database-manager"
   dependencies:
-    "@accounts/types": ^0.29.0
+    "@accounts/types": ^0.30.0-alpha.1
     "@types/jest": 26.0.9
     "@types/node": 14.0.27
     jest: 26.3.0
@@ -84,11 +84,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/database-tests@^0.29.0, @accounts/database-tests@workspace:packages/database-tests":
+"@accounts/database-tests@^0.30.0-alpha.1, @accounts/database-tests@workspace:packages/database-tests":
   version: 0.0.0-use.local
   resolution: "@accounts/database-tests@workspace:packages/database-tests"
   dependencies:
-    "@accounts/types": ^0.29.0
+    "@accounts/types": ^0.30.0-alpha.1
     "@types/jest": 26.0.9
     "@types/node": 14.0.27
     jest: 26.3.0
@@ -100,17 +100,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@accounts/e2e@workspace:packages/e2e"
   dependencies:
-    "@accounts/client": ^0.29.0
-    "@accounts/client-password": ^0.29.0
-    "@accounts/graphql-api": ^0.29.0
-    "@accounts/graphql-client": ^0.29.0
-    "@accounts/mongo": ^0.29.0
-    "@accounts/password": ^0.29.0
-    "@accounts/rest-client": ^0.29.0
-    "@accounts/rest-express": ^0.29.0
-    "@accounts/server": ^0.29.0
-    "@accounts/typeorm": ^0.29.0
-    "@accounts/types": ^0.29.0
+    "@accounts/client": ^0.30.0-alpha.1
+    "@accounts/client-password": ^0.30.0-alpha.1
+    "@accounts/graphql-api": ^0.30.0-alpha.1
+    "@accounts/graphql-client": ^0.30.0-alpha.1
+    "@accounts/mongo": ^0.30.0-alpha.1
+    "@accounts/password": ^0.30.0-alpha.1
+    "@accounts/rest-client": ^0.30.0-alpha.1
+    "@accounts/rest-express": ^0.30.0-alpha.1
+    "@accounts/server": ^0.30.0-alpha.1
+    "@accounts/typeorm": ^0.30.0-alpha.1
+    "@accounts/types": ^0.30.0-alpha.1
     "@apollo/client": 3.1.3
     "@graphql-modules/core": 0.7.17
     "@types/body-parser": 1.19.0
@@ -151,8 +151,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@accounts/express-session@workspace:packages/express-session"
   dependencies:
-    "@accounts/server": ^0.29.0
-    "@accounts/types": ^0.29.0
+    "@accounts/server": ^0.30.0-alpha.1
+    "@accounts/types": ^0.30.0-alpha.1
     "@types/express": 4.17.7
     "@types/express-session": 1.17.0
     "@types/jest": 26.0.9
@@ -171,12 +171,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/factor-otp@^0.29.0, @accounts/factor-otp@workspace:packages/factor-otp":
+"@accounts/factor-otp@^0.30.0-alpha.1, @accounts/factor-otp@workspace:packages/factor-otp":
   version: 0.0.0-use.local
   resolution: "@accounts/factor-otp@workspace:packages/factor-otp"
   dependencies:
-    "@accounts/server": ^0.29.0
-    "@accounts/types": ^0.29.0
+    "@accounts/server": ^0.30.0-alpha.1
+    "@accounts/types": ^0.30.0-alpha.1
     "@types/jest": 26.0.9
     "@types/node": 14.0.27
     jest: 26.3.0
@@ -188,14 +188,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/graphql-api@^0.29.0, @accounts/graphql-api@workspace:packages/graphql-api":
+"@accounts/graphql-api@^0.30.0-alpha.1, @accounts/graphql-api@workspace:packages/graphql-api":
   version: 0.0.0-use.local
   resolution: "@accounts/graphql-api@workspace:packages/graphql-api"
   dependencies:
-    "@accounts/mfa": ^0.29.0
-    "@accounts/password": ^0.29.0
-    "@accounts/server": ^0.29.0
-    "@accounts/types": ^0.29.0
+    "@accounts/mfa": ^0.30.0-alpha.1
+    "@accounts/password": ^0.30.0-alpha.1
+    "@accounts/server": ^0.30.0-alpha.1
+    "@accounts/types": ^0.30.0-alpha.1
     "@graphql-codegen/add": 1.17.7
     "@graphql-codegen/cli": 1.17.7
     "@graphql-codegen/introspection": 1.17.7
@@ -225,12 +225,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/graphql-client@^0.29.0, @accounts/graphql-client@workspace:packages/graphql-client":
+"@accounts/graphql-client@^0.30.0-alpha.1, @accounts/graphql-client@workspace:packages/graphql-client":
   version: 0.0.0-use.local
   resolution: "@accounts/graphql-client@workspace:packages/graphql-client"
   dependencies:
-    "@accounts/client": ^0.29.0
-    "@accounts/types": ^0.29.0
+    "@accounts/client": ^0.30.0-alpha.1
+    "@accounts/types": ^0.30.0-alpha.1
     "@graphql-codegen/add": 1.17.7
     "@graphql-codegen/cli": 1.17.7
     "@graphql-codegen/typed-document-node": 1.17.8
@@ -247,12 +247,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/mfa@^0.29.0, @accounts/mfa@workspace:packages/mfa":
+"@accounts/mfa@^0.30.0-alpha.1, @accounts/mfa@workspace:packages/mfa":
   version: 0.0.0-use.local
   resolution: "@accounts/mfa@workspace:packages/mfa"
   dependencies:
-    "@accounts/server": ^0.29.0
-    "@accounts/types": ^0.29.0
+    "@accounts/server": ^0.30.0-alpha.1
+    "@accounts/types": ^0.30.0-alpha.1
     "@types/jest": 26.0.9
     "@types/ms": 0.7.31
     "@types/node": 14.0.27
@@ -265,12 +265,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/mongo@^0.29.0, @accounts/mongo@workspace:packages/database-mongo":
+"@accounts/mongo@^0.30.0-alpha.1, @accounts/mongo@workspace:packages/database-mongo":
   version: 0.0.0-use.local
   resolution: "@accounts/mongo@workspace:packages/database-mongo"
   dependencies:
-    "@accounts/database-tests": ^0.29.0
-    "@accounts/types": ^0.29.0
+    "@accounts/database-tests": ^0.30.0-alpha.1
+    "@accounts/types": ^0.30.0-alpha.1
     "@types/jest": 26.0.9
     "@types/lodash": 4.14.159
     "@types/mongodb": 3.5.25
@@ -286,7 +286,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@accounts/oauth-instagram@workspace:packages/oauth-instagram"
   dependencies:
-    "@accounts/oauth": ^0.29.0
+    "@accounts/oauth": ^0.30.0-alpha.1
     "@types/jest": 26.0.9
     "@types/node": 14.0.27
     "@types/request-promise": 4.1.46
@@ -301,7 +301,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@accounts/oauth-twitter@workspace:packages/oauth-twitter"
   dependencies:
-    "@accounts/oauth": ^0.29.0
+    "@accounts/oauth": ^0.30.0-alpha.1
     "@types/jest": 26.0.9
     "@types/node": 14.0.27
     "@types/oauth": 0.9.1
@@ -311,12 +311,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/oauth@^0.29.0, @accounts/oauth@workspace:packages/oauth":
+"@accounts/oauth@^0.30.0-alpha.1, @accounts/oauth@workspace:packages/oauth":
   version: 0.0.0-use.local
   resolution: "@accounts/oauth@workspace:packages/oauth"
   dependencies:
-    "@accounts/server": ^0.29.0
-    "@accounts/types": ^0.29.0
+    "@accounts/server": ^0.30.0-alpha.1
+    "@accounts/types": ^0.30.0-alpha.1
     "@types/jest": 26.0.9
     "@types/node": 14.0.27
     jest: 26.3.0
@@ -324,13 +324,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/password@^0.29.0, @accounts/password@workspace:packages/password":
+"@accounts/password@^0.30.0-alpha.1, @accounts/password@workspace:packages/password":
   version: 0.0.0-use.local
   resolution: "@accounts/password@workspace:packages/password"
   dependencies:
-    "@accounts/server": ^0.29.0
-    "@accounts/two-factor": ^0.29.0
-    "@accounts/types": ^0.29.0
+    "@accounts/server": ^0.30.0-alpha.1
+    "@accounts/two-factor": ^0.30.0-alpha.1
+    "@accounts/types": ^0.30.0-alpha.1
     "@types/bcryptjs": 2.4.2
     "@types/jest": 26.0.9
     "@types/lodash": 4.14.159
@@ -349,8 +349,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@accounts/redis@workspace:packages/database-redis"
   dependencies:
-    "@accounts/database-tests": ^0.29.0
-    "@accounts/types": ^0.29.0
+    "@accounts/database-tests": ^0.30.0-alpha.1
+    "@accounts/types": ^0.30.0-alpha.1
     "@types/ioredis": 4.14.9
     "@types/jest": 26.0.9
     "@types/lodash": 4.14.159
@@ -364,12 +364,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/rest-client@^0.29.0, @accounts/rest-client@workspace:packages/rest-client":
+"@accounts/rest-client@^0.30.0-alpha.1, @accounts/rest-client@workspace:packages/rest-client":
   version: 0.0.0-use.local
   resolution: "@accounts/rest-client@workspace:packages/rest-client"
   dependencies:
-    "@accounts/client": ^0.29.0
-    "@accounts/types": ^0.29.0
+    "@accounts/client": ^0.30.0-alpha.1
+    "@accounts/types": ^0.30.0-alpha.1
     "@types/jest": 26.0.9
     "@types/lodash": 4.14.159
     "@types/node": 14.0.27
@@ -382,14 +382,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/rest-express@^0.29.0, @accounts/rest-express@workspace:packages/rest-express":
+"@accounts/rest-express@^0.30.0-alpha.1, @accounts/rest-express@workspace:packages/rest-express":
   version: 0.0.0-use.local
   resolution: "@accounts/rest-express@workspace:packages/rest-express"
   dependencies:
-    "@accounts/mfa": ^0.29.0
-    "@accounts/password": ^0.29.0
-    "@accounts/server": ^0.29.0
-    "@accounts/types": ^0.29.0
+    "@accounts/mfa": ^0.30.0-alpha.1
+    "@accounts/password": ^0.30.0-alpha.1
+    "@accounts/server": ^0.30.0-alpha.1
+    "@accounts/types": ^0.30.0-alpha.1
     "@types/express": 4.17.7
     "@types/jest": 26.0.9
     "@types/node": 14.0.27
@@ -403,11 +403,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/server@^0.29.0, @accounts/server@workspace:packages/server":
+"@accounts/server@^0.30.0-alpha.1, @accounts/server@workspace:packages/server":
   version: 0.0.0-use.local
   resolution: "@accounts/server@workspace:packages/server"
   dependencies:
-    "@accounts/types": ^0.29.0
+    "@accounts/types": ^0.30.0-alpha.1
     "@types/jest": 26.0.9
     "@types/jsonwebtoken": 8.5.0
     "@types/jwt-decode": 2.2.1
@@ -423,11 +423,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/two-factor@^0.29.0, @accounts/two-factor@workspace:packages/two-factor":
+"@accounts/two-factor@^0.30.0-alpha.1, @accounts/two-factor@workspace:packages/two-factor":
   version: 0.0.0-use.local
   resolution: "@accounts/two-factor@workspace:packages/two-factor"
   dependencies:
-    "@accounts/types": ^0.29.0
+    "@accounts/types": ^0.30.0-alpha.1
     "@types/jest": 26.0.9
     "@types/lodash": ^4.14.159
     "@types/node": 14.0.27
@@ -439,12 +439,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/typeorm@^0.29.0, @accounts/typeorm@workspace:packages/database-typeorm":
+"@accounts/typeorm@^0.30.0-alpha.1, @accounts/typeorm@workspace:packages/database-typeorm":
   version: 0.0.0-use.local
   resolution: "@accounts/typeorm@workspace:packages/database-typeorm"
   dependencies:
-    "@accounts/database-tests": ^0.29.0
-    "@accounts/types": ^0.29.0
+    "@accounts/database-tests": ^0.30.0-alpha.1
+    "@accounts/types": ^0.30.0-alpha.1
     "@types/jest": 26.0.9
     "@types/lodash": 4.14.159
     "@types/node": 14.0.27
@@ -457,7 +457,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/types@^0.29.0, @accounts/types@workspace:packages/types":
+"@accounts/types@^0.30.0-alpha.1, @accounts/types@workspace:packages/types":
   version: 0.0.0-use.local
   resolution: "@accounts/types@workspace:packages/types"
   dependencies:
@@ -2826,7 +2826,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/accounts-boost@workspace:examples/accounts-boost"
   dependencies:
-    "@accounts/boost": ^0.29.0
+    "@accounts/boost": ^0.30.0-alpha.1
     "@graphql-tools/merge": 6.0.18
     "@graphql-tools/schema": 6.0.18
     "@graphql-tools/wrap": 6.0.18
@@ -2847,12 +2847,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/graphql-server-typescript@workspace:examples/graphql-server-typescript"
   dependencies:
-    "@accounts/database-manager": ^0.29.0
-    "@accounts/graphql-api": ^0.29.0
-    "@accounts/mongo": ^0.29.0
-    "@accounts/password": ^0.29.0
-    "@accounts/rest-express": ^0.29.0
-    "@accounts/server": ^0.29.0
+    "@accounts/database-manager": ^0.30.0-alpha.1
+    "@accounts/graphql-api": ^0.30.0-alpha.1
+    "@accounts/mongo": ^0.30.0-alpha.1
+    "@accounts/password": ^0.30.0-alpha.1
+    "@accounts/rest-express": ^0.30.0-alpha.1
+    "@accounts/server": ^0.30.0-alpha.1
     "@graphql-modules/core": 0.7.17
     "@graphql-tools/merge": 6.0.18
     "@types/mongoose": 5.7.36
@@ -2872,11 +2872,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/graphql-typeorm-typescript@workspace:examples/graphql-server-typeorm-postgres"
   dependencies:
-    "@accounts/graphql-api": ^0.29.0
-    "@accounts/password": ^0.29.0
-    "@accounts/server": ^0.29.0
-    "@accounts/typeorm": ^0.29.0
-    "@accounts/types": ^0.29.0
+    "@accounts/graphql-api": ^0.30.0-alpha.1
+    "@accounts/password": ^0.30.0-alpha.1
+    "@accounts/server": ^0.30.0-alpha.1
+    "@accounts/typeorm": ^0.30.0-alpha.1
+    "@accounts/types": ^0.30.0-alpha.1
     "@graphql-modules/core": 0.7.17
     "@graphql-tools/merge": 6.0.18
     "@types/node": 14.0.27
@@ -2895,10 +2895,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/react-graphql-typescript@workspace:examples/react-graphql-typescript"
   dependencies:
-    "@accounts/apollo-link": ^0.29.0
-    "@accounts/client": ^0.29.0
-    "@accounts/client-password": ^0.29.0
-    "@accounts/graphql-client": ^0.29.0
+    "@accounts/apollo-link": ^0.30.0-alpha.1
+    "@accounts/client": ^0.30.0-alpha.1
+    "@accounts/client-password": ^0.30.0-alpha.1
+    "@accounts/graphql-client": ^0.30.0-alpha.1
     "@apollo/client": 3.1.3
     "@material-ui/core": 4.11.0
     "@material-ui/styles": 4.10.0
@@ -2924,9 +2924,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/react-rest-typescript@workspace:examples/react-rest-typescript"
   dependencies:
-    "@accounts/client": ^0.29.0
-    "@accounts/client-password": ^0.29.0
-    "@accounts/rest-client": ^0.29.0
+    "@accounts/client": ^0.30.0-alpha.1
+    "@accounts/client-password": ^0.30.0-alpha.1
+    "@accounts/rest-client": ^0.30.0-alpha.1
     "@material-ui/core": 4.11.0
     "@material-ui/icons": 4.9.1
     "@material-ui/lab": 4.0.0-alpha.56
@@ -2952,12 +2952,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/rest-express-typescript@workspace:examples/rest-express-typescript"
   dependencies:
-    "@accounts/factor-otp": ^0.29.0
-    "@accounts/mfa": ^0.29.0
-    "@accounts/mongo": ^0.29.0
-    "@accounts/password": ^0.29.0
-    "@accounts/rest-express": ^0.29.0
-    "@accounts/server": ^0.29.0
+    "@accounts/factor-otp": ^0.30.0-alpha.1
+    "@accounts/mfa": ^0.30.0-alpha.1
+    "@accounts/mongo": ^0.30.0-alpha.1
+    "@accounts/password": ^0.30.0-alpha.1
+    "@accounts/rest-express": ^0.30.0-alpha.1
+    "@accounts/server": ^0.30.0-alpha.1
     "@types/node": 14.0.27
     body-parser: 1.19.0
     cors: 2.8.5
