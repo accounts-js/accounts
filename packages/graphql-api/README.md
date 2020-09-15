@@ -127,7 +127,7 @@ import { authenticated } from '@accounts/graphql-api';
 
 export const resolver = {
   Mutation: {
-    updateUserProfile: authenticated(AccountsServer, (rootValue, args, context) => {
+    updateUserProfile: authenticated((rootValue, args, context) => {
       // Write your resolver here
       // context.user - the current authenticated user!
     }),
