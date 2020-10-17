@@ -11,4 +11,9 @@ export interface AccountsClientOptions {
    * Default: 'accounts'.
    */
   tokenStoragePrefix?: string;
+  /**
+   * String or character that will separate the storage key name from it's value.
+   * Default: ':'.
+   */
+  tokenStorageSeparator?: string;
 }

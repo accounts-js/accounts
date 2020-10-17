@@ -1,4 +1,4 @@
-import { Tokens, ImpersonationResult, User, AuthenticationResult } from '@accounts/types';
+import { LoginResult, Tokens, ImpersonationResult, User } from '@accounts/types';
 import { TransportInterface } from './transport-interface';
 import { TokenStorage, AccountsClientOptions } from './types';
 import { tokenStorageLocal } from './token-storage-local';
@@ -14,6 +14,7 @@ enum TokenKey {
 const defaultOptions = {
   tokenStorage: tokenStorageLocal,
   tokenStoragePrefix: 'accounts',
+  tokenStorageSeparator: ':',
 };
 
 export class AccountsClient {
@@ -87,26 +88,14 @@ export class AccountsClient {
   }
 
   /**
-   * Authenticate the user with a specific service (not creating a session)
-   */
-  public async authenticateWithService(
-    service: string,
-    credentials: { [key: string]: any }
-  ): Promise<boolean> {
-    return this.transport.authenticateWithService(service, credentials);
-  }
-
-  /**
    * Login the user with a specific service
    */
   public async loginWithService(
     service: string,
     credentials: { [key: string]: any }
-  ): Promise<AuthenticationResult> {
+  ): Promise<LoginResult> {
     const response = await this.transport.loginWithService(service, credentials);
-    if ('tokens' in response) {
-      await this.setTokens(response.tokens);
-    }
+    await this.setTokens(response.tokens);
     return response;
   }
 
@@ -114,7 +103,7 @@ export class AccountsClient {
    * Refresh the user session
    * If the tokens have expired try to refresh them
    */
-  public async refreshSession(force = false): Promise<Tokens | null> {
+  public async refreshSession(force: boolean = false): Promise<Tokens | null> {
     const tokens = await this.getTokens();
     if (tokens) {
       try {
@@ -200,27 +189,7 @@ export class AccountsClient {
     await this.clearTokens();
   }
 
-  public mfaChallenge(mfaToken: string, authenticatorId: string) {
-    return this.transport.mfaChallenge(mfaToken, authenticatorId);
-  }
-
-  public mfaAssociate(type: string, params?: any) {
-    return this.transport.mfaAssociate(type, params);
-  }
-
-  public mfaAssociateByMfaToken(mfaToken: string, type: string, params?: any) {
-    return this.transport.mfaAssociateByMfaToken(mfaToken, type, params);
-  }
-
-  public authenticators() {
-    return this.transport.authenticators();
-  }
-
-  public authenticatorsByMfaToken(mfaToken: string) {
-    return this.transport.authenticatorsByMfaToken(mfaToken);
-  }
-
   private getTokenKey(tokenName: TokenKey): string {
-    return `${this.options.tokenStoragePrefix}:${tokenName}`;
+    return `${this.options.tokenStoragePrefix}${tokenStorageSeparator}${tokenName}`;
   }
 }
