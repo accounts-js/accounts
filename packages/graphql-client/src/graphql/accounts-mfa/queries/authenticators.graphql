@@ -1,0 +1,8 @@
+query authenticators {
+  authenticators {
+    id
+    type
+    active
+    activatedAt
+  }
+}

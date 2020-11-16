@@ -17,6 +17,9 @@ import { addEmail } from './endpoints/password/add-email';
 import { userLoader } from './user-loader';
 import { AccountsExpressOptions } from './types';
 import { getUserAgent } from './utils/get-user-agent';
+import { challenge } from './endpoints/mfa/challenge';
+import { authenticators, authenticatorsByMfaToken } from './endpoints/mfa/authenticators';
+import { associate, associateByMfaToken } from './endpoints/mfa/associate';
 
 const defaultOptions: AccountsExpressOptions = {
   path: '/accounts',
@@ -64,6 +67,23 @@ const accountsExpress = (
   router.post(`${path}/:service/authenticate`, serviceAuthenticate(accountsServer));
 
   const services = accountsServer.getServices();
+
+  // @accounts/mfa
+  if (services.mfa) {
+    router.post(`${path}/mfa/associate`, userLoader(accountsServer), associate(accountsServer));
+
+    router.post(`${path}/mfa/associateByMfaToken`, associateByMfaToken(accountsServer));
+
+    router.get(
+      `${path}/mfa/authenticators`,
+      userLoader(accountsServer),
+      authenticators(accountsServer)
+    );
+
+    router.get(`${path}/mfa/authenticatorsByMfaToken`, authenticatorsByMfaToken(accountsServer));
+
+    router.post(`${path}/mfa/challenge`, challenge(accountsServer));
+  }
 
   // @accounts/password
   if (services.password) {

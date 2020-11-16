@@ -1,4 +1,4 @@
-import { LoginResult, Tokens, ImpersonationResult, User } from '@accounts/types';
+import { Tokens, ImpersonationResult, User, AuthenticationResult } from '@accounts/types';
 import { TransportInterface } from './transport-interface';
 import { TokenStorage, AccountsClientOptions } from './types';
 import { tokenStorageLocal } from './token-storage-local';
@@ -103,9 +103,11 @@ export class AccountsClient {
   public async loginWithService(
     service: string,
     credentials: { [key: string]: any }
-  ): Promise<LoginResult> {
+  ): Promise<AuthenticationResult> {
     const response = await this.transport.loginWithService(service, credentials);
-    await this.setTokens(response.tokens);
+    if ('tokens' in response) {
+      await this.setTokens(response.tokens);
+    }
     return response;
   }
 
@@ -197,6 +199,26 @@ export class AccountsClient {
       await this.transport.logout();
     }
     await this.clearTokens();
+  }
+
+  public mfaChallenge(mfaToken: string, authenticatorId: string) {
+    return this.transport.mfaChallenge(mfaToken, authenticatorId);
+  }
+
+  public mfaAssociate(type: string, params?: any) {
+    return this.transport.mfaAssociate(type, params);
+  }
+
+  public mfaAssociateByMfaToken(mfaToken: string, type: string, params?: any) {
+    return this.transport.mfaAssociateByMfaToken(mfaToken, type, params);
+  }
+
+  public authenticators() {
+    return this.transport.authenticators();
+  }
+
+  public authenticatorsByMfaToken(mfaToken: string) {
+    return this.transport.authenticatorsByMfaToken(mfaToken);
   }
 
   private getTokenKey(tokenName: TokenKey): string {

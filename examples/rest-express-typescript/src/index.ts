@@ -4,8 +4,10 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import { AccountsServer, ServerHooks } from '@accounts/server';
 import { AccountsPassword } from '@accounts/password';
+import { AccountsMfa } from '@accounts/mfa';
+import { FactorOtp } from '@accounts/factor-otp';
 import accountsExpress, { userLoader } from '@accounts/rest-express';
-import MongoDBInterface from '@accounts/mongo';
+import { Mongo } from '@accounts/mongo';
 
 mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/accounts-js-rest-example', {
   useNewUrlParser: true,
@@ -44,11 +46,16 @@ const accountsPassword = new AccountsPassword({
 
 const accountsServer = new AccountsServer(
   {
-    db: new MongoDBInterface(db),
+    db: new Mongo(db),
     tokenSecret: 'secret',
   },
   {
     password: accountsPassword,
+    mfa: new AccountsMfa({
+      factors: {
+        otp: new FactorOtp(),
+      },
+    }),
   }
 );
 

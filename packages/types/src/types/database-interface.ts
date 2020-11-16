@@ -2,10 +2,12 @@ import { User } from './user';
 import { CreateUser } from './create-user';
 import { DatabaseInterfaceSessions } from './session/database-interface';
 import { DatabaseInterfaceServicePassword } from './services/password/database-interface';
+import { DatabaseInterfaceMfa } from './mfa/database-interface';
 
 export interface DatabaseInterface<CustomUser extends User = User>
   extends DatabaseInterfaceSessions,
-    DatabaseInterfaceServicePassword<CustomUser> {
+    DatabaseInterfaceServicePassword<CustomUser>,
+    DatabaseInterfaceMfa {
   // Find user by identity fields
   findUserById(userId: string): Promise<CustomUser | null>;
 

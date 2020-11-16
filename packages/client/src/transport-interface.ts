@@ -5,10 +5,12 @@ import {
   CreateUser,
   User,
   CreateUserResult,
+  Authenticator,
+  AuthenticationResult,
 } from '@accounts/types';
 import { AccountsClient } from './accounts-client';
 
-export interface TransportInterface {
+export interface TransportInterface extends TransportMfaInterface {
   client: AccountsClient;
   createUser(user: CreateUser): Promise<CreateUserResult>;
   authenticateWithService(
@@ -22,7 +24,7 @@ export interface TransportInterface {
     authenticateParams: {
       [key: string]: string | object;
     }
-  ): Promise<LoginResult>;
+  ): Promise<AuthenticationResult>;
   logout(): Promise<void>;
   getUser(): Promise<User>;
   refreshTokens(accessToken: string, refreshToken: string): Promise<LoginResult>;
@@ -33,4 +35,12 @@ export interface TransportInterface {
   addEmail(newEmail: string): Promise<void>;
   changePassword(oldPassword: string, newPassword: string): Promise<void>;
   impersonate(token: string, impersonated: ImpersonationUserIdentity): Promise<ImpersonationResult>;
+}
+
+interface TransportMfaInterface {
+  authenticators(): Promise<Authenticator[]>;
+  authenticatorsByMfaToken(mfaToken?: string): Promise<Authenticator[]>;
+  mfaAssociate(type: string, params?: any): Promise<any>;
+  mfaAssociateByMfaToken(mfaToken: string, type: string, params?: any): Promise<any>;
+  mfaChallenge(mfaToken: string, authenticatorId: string): Promise<any>;
 }

@@ -20,7 +20,7 @@ jobs:
         run: docker-compose up -d
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
       - uses: actions/cache@v2
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
@@ -29,9 +29,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
-      - name: Lerna bootstrap
-        run: yarn run lerna bootstrap
+        run: yarn install --immutable
       - name: Check lint
         run: yarn test:lint
       - name: Compile packages
@@ -48,7 +46,6 @@ jobs:
       - name: Test documentation
         run: |
           cd website
-          yarn install --frozen-lockfile
           yarn generate-api-docs
           yarn build
         env:

@@ -2,7 +2,8 @@ import { GraphQLModule } from '@graphql-modules/core';
 import { mergeTypeDefs } from '@graphql-tools/merge';
 import { User, ConnectionInformations } from '@accounts/types';
 import { AccountsServer } from '@accounts/server';
-import AccountsPassword from '@accounts/password';
+import { AccountsPassword } from '@accounts/password';
+import { AccountsMfa } from '@accounts/mfa';
 import { IncomingMessage } from 'http';
 import TypesTypeDefs from './schema/types';
 import getQueryTypeDefs from './schema/query';
@@ -10,8 +11,9 @@ import getMutationTypeDefs from './schema/mutation';
 import getSchemaDef from './schema/schema-def';
 import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
-import { User as UserResolvers } from './resolvers/user';
+import { resolvers as CustomResolvers } from './resolvers';
 import { AccountsPasswordModule } from '../accounts-password';
+import { AccountsMfaModule } from '../accounts-mfa';
 import { AuthenticatedDirective } from '../../utils/authenticated-directive';
 import { context } from '../../utils';
 import { CoreAccountsModule } from '../core';
@@ -64,17 +66,25 @@ export const AccountsModule: GraphQLModule<
     ({
       [config.rootQueryName || 'Query']: Query,
       [config.rootMutationName || 'Mutation']: Mutation,
-      User: UserResolvers,
+      ...CustomResolvers,
     } as any),
   // If necessary, import AccountsPasswordModule together with this module
   imports: ({ config }) => [
     CoreAccountsModule.forRoot({
       userAsInterface: config.userAsInterface,
     }),
-    ...(config.accountsServer.getServices().password
+    ...(config.accountsServer.getService('password')
       ? [
           AccountsPasswordModule.forRoot({
-            accountsPassword: config.accountsServer.getServices().password as AccountsPassword,
+            accountsPassword: config.accountsServer.getService('password') as AccountsPassword,
+            ...config,
+          }),
+        ]
+      : []),
+    ...(config.accountsServer.getService('mfa')
+      ? [
+          AccountsMfaModule.forRoot({
+            accountsMfa: config.accountsServer.getService('mfa') as AccountsMfa,
             ...config,
           }),
         ]

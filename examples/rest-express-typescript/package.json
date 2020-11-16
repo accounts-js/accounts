@@ -1,7 +1,7 @@
 {
   "name": "@examples/rest-express-typescript",
   "private": true,
-  "version": "0.29.0",
+  "version": "0.30.0-alpha.1",
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
@@ -10,20 +10,22 @@
     "test": "yarn build"
   },
   "dependencies": {
-    "@accounts/mongo": "^0.29.0",
-    "@accounts/password": "^0.29.0",
-    "@accounts/rest-express": "^0.29.0",
-    "@accounts/server": "^0.29.0",
+    "@accounts/factor-otp": "^0.30.0-alpha.1",
+    "@accounts/mfa": "^0.30.0-alpha.1",
+    "@accounts/mongo": "^0.30.0-alpha.1",
+    "@accounts/password": "^0.30.0-alpha.1",
+    "@accounts/rest-express": "^0.30.0-alpha.1",
+    "@accounts/server": "^0.30.0-alpha.1",
     "body-parser": "1.19.0",
     "cors": "2.8.5",
     "express": "4.17.1",
-    "mongoose": "5.9.13",
-    "tslib": "2.0.0"
+    "mongoose": "5.9.28",
+    "tslib": "2.0.1"
   },
   "devDependencies": {
-    "@types/node": "14.0.13",
-    "nodemon": "2.0.3",
-    "ts-node": "8.10.1",
-    "typescript": "3.8.3"
+    "@types/node": "14.0.27",
+    "nodemon": "2.0.4",
+    "ts-node": "8.10.2",
+    "typescript": "3.9.7"
   }
 }
