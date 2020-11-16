@@ -59,7 +59,7 @@ const accountsGraphQL = AccountsModule.forRoot({
 Now, add `accountsGraphQL.typeDefs` to your schema definition (just before using it with `makeExecutableSchema`), and merge your resolvers object with `accountsGraphQL.resolvers` by using `@graphql-tools/epoxy`, for example:
 
 ```js
-import { makeExecutableSchema } from 'graphql-tools';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import { mergeGraphQLSchemas, mergeResolvers } from '@graphql-tools/epoxy';
 
 const typeDefs = [
@@ -127,7 +127,7 @@ import { authenticated } from '@accounts/graphql-api';
 
 export const resolver = {
   Mutation: {
-    updateUserProfile: authenticated(AccountsServer, (rootValue, args, context) => {
+    updateUserProfile: authenticated((rootValue, args, context) => {
       // Write your resolver here
       // context.user - the current authenticated user!
     }),

@@ -14,6 +14,7 @@ enum TokenKey {
 const defaultOptions = {
   tokenStorage: tokenStorageLocal,
   tokenStoragePrefix: 'accounts',
+  tokenStorageSeparator: ':',
 };
 
 export class AccountsClient {
@@ -199,6 +200,6 @@ export class AccountsClient {
   }
 
   private getTokenKey(tokenName: TokenKey): string {
-    return `${this.options.tokenStoragePrefix}:${tokenName}`;
+    return `${this.options.tokenStoragePrefix}${this.options.tokenStorageSeparator}${tokenName}`;
   }
 }
