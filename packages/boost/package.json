@@ -24,6 +24,9 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/jsonwebtoken": "8.5.0",
+    "@types/lodash": "4.14.165",
+    "@types/node": "14.14.7",
     "rimraf": "3.0.2"
   },
   "dependencies": {

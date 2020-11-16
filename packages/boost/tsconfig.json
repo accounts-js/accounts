@@ -3,7 +3,8 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./lib",
-    "importHelpers": true
+    "importHelpers": true,
+    "skipLibCheck": true
   },
   "exclude": ["node_modules", "__tests__", "lib"]
 }

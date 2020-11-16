@@ -30,6 +30,9 @@ __metadata:
     "@accounts/server": ^0.29.0
     "@accounts/types": ^0.29.0
     "@graphql-modules/core": 0.7.17
+    "@types/jsonwebtoken": 8.5.0
+    "@types/lodash": 4.14.165
+    "@types/node": 14.14.7
     apollo-server: ^2.9.3
     graphql: 14.6.0
     jsonwebtoken: ^8.5.1
@@ -6169,7 +6172,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:^8.5.0":
+"@types/jsonwebtoken@npm:8.5.0, @types/jsonwebtoken@npm:^8.5.0":
   version: 8.5.0
   resolution: "@types/jsonwebtoken@npm:8.5.0"
   dependencies:
@@ -6233,7 +6236,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.14.138":
+"@types/lodash@npm:4.14.165, @types/lodash@npm:^4.14.138":
   version: 4.14.165
   resolution: "@types/lodash@npm:4.14.165"
   checksum: 525bfc34b0b591cc957125a961c70e63e5ad8b23cbd89b7594a5ea74823285b6d96993a7eec506e26b379ee52dc9dcd3a894ff210be4c97bccb536e62361dbc8
@@ -6328,6 +6331,13 @@ __metadata:
   version: 14.0.13
   resolution: "@types/node@npm:14.0.13"
   checksum: 2f2be6f7f1a916b0f4d58949bd934a8e41c0dcb15c493c17c3eaf78da3065c09650030f0dfe2e8c11880d597ee001d7cd925129218037fdb4432e80f7d895673
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:14.14.7":
+  version: 14.14.7
+  resolution: "@types/node@npm:14.14.7"
+  checksum: 4fc8434bfe81c2a3102fa76777712ecee9e9177d43ec5929ba0dfd5a77a6c459cf10a37df64ea880a328f06973f6210eabf04b312428e309b2e8998147a6cd63
   languageName: node
   linkType: hard
 
