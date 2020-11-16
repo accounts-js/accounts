@@ -22,10 +22,10 @@ export interface AccountsPasswordModuleConfig {
   excludeAddUserInContext?: boolean;
 }
 
-export const AccountsPasswordModule = new GraphQLModule<
+export const AccountsPasswordModule: GraphQLModule<
   AccountsPasswordModuleConfig,
   AccountsRequest
->({
+> = new GraphQLModule<AccountsPasswordModuleConfig, AccountsRequest>({
   name: 'accounts-password',
   typeDefs: ({ config }) => [TypesTypeDefs, getQueryTypeDefs(config), getMutationTypeDefs(config)],
   resolvers: ({ config }) =>
