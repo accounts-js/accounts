@@ -17,7 +17,7 @@ import { accountsPassword } from './accounts';
 import { SnackBarContentError } from './components/SnackBarContentError';
 import { UnauthenticatedContainer } from './components/UnauthenticatedContainer';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   cardContent: {
     padding: theme.spacing(3),
   },
@@ -52,7 +52,7 @@ const Signup = ({ history }: RouteComponentProps<{}>) => {
       email: '',
       password: '',
     },
-    validate: values => {
+    validate: (values) => {
       const errors: FormikErrors<SignupValues> = {};
       if (!values.firstName) {
         errors.firstName = 'Required';

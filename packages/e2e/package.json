@@ -47,7 +47,7 @@
     "@accounts/server": "^0.29.0",
     "@accounts/typeorm": "^0.29.0",
     "@accounts/types": "^0.29.0",
-    "@apollo/client": "3.0.2",
+    "@apollo/client": "3.2.5",
     "@graphql-modules/core": "0.7.17",
     "apollo-server": "2.14.4",
     "body-parser": "1.19.0",

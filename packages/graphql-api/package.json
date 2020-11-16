@@ -49,13 +49,13 @@
     "@accounts/password": "^0.29.0",
     "@accounts/server": "^0.29.0",
     "@accounts/types": "^0.29.0",
-    "@graphql-codegen/add": "1.17.4",
-    "@graphql-codegen/cli": "1.17.4",
-    "@graphql-codegen/introspection": "1.17.4",
-    "@graphql-codegen/typescript": "1.17.4",
-    "@graphql-codegen/typescript-operations": "1.17.4",
-    "@graphql-codegen/typescript-resolvers": "1.17.4",
-    "@graphql-codegen/typescript-type-graphql": "1.17.4",
+    "@graphql-codegen/add": "2.0.1",
+    "@graphql-codegen/cli": "1.19.1",
+    "@graphql-codegen/introspection": "1.18.0",
+    "@graphql-codegen/typescript": "1.17.11",
+    "@graphql-codegen/typescript-operations": "1.17.9",
+    "@graphql-codegen/typescript-resolvers": "1.17.10",
+    "@graphql-codegen/typescript-type-graphql": "1.18.1",
     "@graphql-modules/core": "0.7.17",
     "@types/jest": "25.2.3",
     "@types/request-ip": "0.0.35",
@@ -64,6 +64,6 @@
     "graphql-tools": "5.0.0",
     "jest": "26.0.1",
     "lodash": "4.17.15",
-    "ts-node": "8.10.1"
+    "ts-node": "9.0.0"
   }
 }

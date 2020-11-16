@@ -1,6 +1,7 @@
 overwrite: true
 schema: ./src/schema.ts
-require: ts-node/register/transpile-only
+require:
+  - ts-node/register/transpile-only
 generates:
   introspection.json:
     plugins:
@@ -12,7 +13,8 @@ generates:
       noNamespaces: true
       noSchemaStitching: true
     plugins:
-      - add: /* eslint-disable */
+      - add:
+          content: '/* eslint-disable */'
       - typescript
       - typescript-resolvers
       - typescript-operations

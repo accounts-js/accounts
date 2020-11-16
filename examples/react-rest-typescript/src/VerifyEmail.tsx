@@ -5,7 +5,7 @@ import { accountsRest } from './accounts';
 import FormError from './components/FormError';
 import { UnauthenticatedContainer } from './components/UnauthenticatedContainer';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   link: {
     marginTop: theme.spacing(1),
     display: 'block',

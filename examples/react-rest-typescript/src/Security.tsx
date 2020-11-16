@@ -4,7 +4,7 @@ import { TwoFactor } from './TwoFactor';
 import { ChangePassword } from './ChangePassword';
 import { AuthenticatedContainer } from './components/AuthenticatedContainer';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   divider: {
     marginTop: theme.spacing(2),
   },

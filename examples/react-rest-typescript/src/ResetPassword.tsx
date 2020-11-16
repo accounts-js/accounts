@@ -18,7 +18,7 @@ import { SnackBarContentError } from './components/SnackBarContentError';
 import { SnackBarContentSuccess } from './components/SnackBarContentSuccess';
 import { UnauthenticatedContainer } from './components/UnauthenticatedContainer';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   cardContent: {
     padding: theme.spacing(3),
   },
@@ -52,7 +52,7 @@ const ResetPassword = ({ match }: RouteComponentProps<RouteMatchProps>) => {
       newPassword: '',
       confirmNewPassword: '',
     },
-    validate: values => {
+    validate: (values) => {
       const errors: FormikErrors<ResetPasswordValues> = {};
       if (!match.params.token) {
         if (!values.email) {

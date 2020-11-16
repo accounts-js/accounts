@@ -51,7 +51,7 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
       </Typography>
       <FormControl margin="normal">
         <InputLabel htmlFor="email">Email</InputLabel>
-        <Input id="email" value={email} onChange={e => setEmail(e.target.value)} />
+        <Input id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
       </FormControl>
       <FormControl margin="normal">
         <InputLabel htmlFor="password">Password</InputLabel>
@@ -59,12 +59,12 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
           id="password"
           type="password"
           value={password}
-          onChange={e => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
         />
       </FormControl>
       <FormControl margin="normal">
         <InputLabel htmlFor="password">2fa code if enabled</InputLabel>
-        <Input id="code" value={code} onChange={e => setCode(e.target.value)} />
+        <Input id="code" value={code} onChange={(e) => setCode(e.target.value)} />
       </FormControl>
       <Button variant="contained" color="primary" type="submit">
         Login
