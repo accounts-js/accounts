@@ -195,6 +195,7 @@ __metadata:
     graphql-tag: 2.11.0
     jest: 26.0.1
     lodash: 4.17.15
+    reflect-metadata: 0.1.13
     request-ip: 2.1.3
     ts-node: 9.0.0
     tslib: 2.0.0
@@ -23518,7 +23519,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"reflect-metadata@npm:^0.1.13":
+"reflect-metadata@npm:*, reflect-metadata@npm:0.1.13, reflect-metadata@npm:^0.1.13":
   version: 0.1.13
   resolution: "reflect-metadata@npm:0.1.13"
   checksum: 629101e6c8b7e0d3166fa51953f908f45b5c73dbaf1375c4f8c3ed62221b870c951343b9b031d0c49957e7262a88020f41be25731ee85b5d779f12c7cec66005
