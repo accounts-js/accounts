@@ -36,12 +36,12 @@ const accountsServerUri = 'http://localhost:4003/';
     };
   }).concat(http);
 
-  const remoteSchema = await introspectSchema(link);
+  const remoteSchema = await introspectSchema(link as any);
 
   const executableRemoteSchema = makeRemoteExecutableSchema({
     schema: remoteSchema,
     link,
-  });
+  } as any);
 
   // The @auth directive needs to be declared in your typeDefs
 
