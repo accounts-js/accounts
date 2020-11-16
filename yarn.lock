@@ -432,6 +432,7 @@ __metadata:
     "@types/node": 14.0.14
     jest: 26.0.1
     rimraf: 3.0.2
+    ts-jest: 26.1.4
     tslib: 2.0.0
   languageName: unknown
   linkType: soft
