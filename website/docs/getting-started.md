@@ -163,12 +163,9 @@ Next you need to configure your existing GraphQL server to authenticate incoming
 
 ```javascript
 import accountsBoost, { authenticated } from '@accounts/boost';
-import {
-  makeExecutableSchema,
-  mergeSchemas,
-  makeRemoteExecutableSchema,
-  introspectSchema,
-} from 'graphql-tools';
+import { mergeSchemas } from '@graphql-tools/merge';
+import { makeExecutableSchema } from '@graphql-tools/schema';
+import { introspectSchema, makeRemoteExecutableSchema } from '@graphql-tools/wrap';
 import { HttpLink } from 'apollo-link-http';
 import { ApolloServer } from 'apollo-server';
 import fetch from 'node-fetch';

@@ -59,7 +59,7 @@ const accountsGraphQL = AccountsModule.forRoot({
 Now, add `accountsGraphQL.typeDefs` to your schema definition (just before using it with `makeExecutableSchema`), and merge your resolvers object with `accountsGraphQL.resolvers` by using `@graphql-tools/epoxy`, for example:
 
 ```js
-import { makeExecutableSchema } from 'graphql-tools';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import { mergeGraphQLSchemas, mergeResolvers } from '@graphql-tools/epoxy';
 
 const typeDefs = [
