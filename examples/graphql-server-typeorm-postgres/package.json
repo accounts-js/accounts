@@ -22,6 +22,7 @@
     "dotenv": "^8.2.0",
     "graphql": "14.6.0",
     "pg": "8.1.0",
+    "tslib": "2.0.0",
     "typeorm": "0.2.25"
   },
   "devDependencies": {

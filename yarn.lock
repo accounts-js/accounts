@@ -3019,6 +3019,7 @@ __metadata:
     nodemon: 2.0.3
     pg: 8.1.0
     ts-node: 8.10.1
+    tslib: 2.0.0
     typeorm: 0.2.25
     typescript: 3.8.3
   languageName: unknown
