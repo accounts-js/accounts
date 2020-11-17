@@ -3,8 +3,7 @@ import { AccountsModule } from '@accounts/graphql-api';
 import MongoDBInterface from '@accounts/mongo';
 import { AccountsPassword } from '@accounts/password';
 import { AccountsServer, ServerHooks } from '@accounts/server';
-import { ApolloServer, makeExecutableSchema } from 'apollo-server';
-import gql from 'graphql-tag';
+import { ApolloServer, makeExecutableSchema, gql } from 'apollo-server';
 import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
 import mongoose from 'mongoose';
 
