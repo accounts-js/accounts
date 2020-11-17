@@ -140,7 +140,7 @@ __metadata:
     react: 17.0.1
     ts-jest: 26.1.4
     tslib: 2.0.0
-    typeorm: 0.2.25
+    typeorm: 0.2.29
   languageName: unknown
   linkType: soft
 
@@ -3020,7 +3020,7 @@ __metadata:
     pg: 8.1.0
     ts-node: 8.10.1
     tslib: 2.0.0
-    typeorm: 0.2.25
+    typeorm: 0.2.29
     typescript: 3.8.3
   languageName: unknown
   linkType: soft
@@ -9242,7 +9242,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"buffer@npm:^5.1.0, buffer@npm:^5.5.0, buffer@npm:^5.7.0":
+"buffer@npm:^5.5.0, buffer@npm:^5.7.0":
   version: 5.7.1
   resolution: "buffer@npm:5.7.1"
   dependencies:
@@ -9921,7 +9921,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cli-highlight@npm:^2.0.0, cli-highlight@npm:^2.1.4":
+"cli-highlight@npm:^2.1.4":
   version: 2.1.4
   resolution: "cli-highlight@npm:2.1.4"
   dependencies:
@@ -12130,13 +12130,6 @@ __metadata:
   version: 8.2.0
   resolution: "dotenv@npm:8.2.0"
   checksum: 16cb89cbd7b98b053899b8aba8c5044c8fb61a2db8a81fe70360b75035fce5fed53bd7a34d772be717d0880c0321122a4c09423f518025e1b52d96791521b1a7
-  languageName: node
-  linkType: hard
-
-"dotenv@npm:^6.2.0":
-  version: 6.2.0
-  resolution: "dotenv@npm:6.2.0"
-  checksum: 2589b4c8e3d9a54eaad276d0a6a3821eb73250b439edd7ba70147dfe4e12148461919817506c7dfae3f1ea72a88cb38bf01b0656fe0c28e8e51df9391ef76e73
   languageName: node
   linkType: hard
 
@@ -26844,32 +26837,7 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"typeorm@npm:0.2.25":
-  version: 0.2.25
-  resolution: "typeorm@npm:0.2.25"
-  dependencies:
-    app-root-path: ^3.0.0
-    buffer: ^5.1.0
-    chalk: ^2.4.2
-    cli-highlight: ^2.0.0
-    debug: ^4.1.1
-    dotenv: ^6.2.0
-    glob: ^7.1.2
-    js-yaml: ^3.13.1
-    mkdirp: ^1.0.3
-    reflect-metadata: ^0.1.13
-    sha.js: ^2.4.11
-    tslib: ^1.9.0
-    xml2js: ^0.4.17
-    yargonaut: ^1.1.2
-    yargs: ^13.2.1
-  bin:
-    typeorm: cli.js
-  checksum: 8004ad64c4aee55f44bada594fc86a70f50a2f5914d533cf8fbbf4d0623aed00a28e0682f5f260ebf0b012cd3a6f85f3cf2873317b9137070da53bc2d2220a8c
-  languageName: node
-  linkType: hard
-
-"typeorm@npm:^0.2.25":
+"typeorm@npm:0.2.29, typeorm@npm:^0.2.25":
   version: 0.2.29
   resolution: "typeorm@npm:0.2.29"
   dependencies:
@@ -28570,7 +28538,7 @@ typescript@3.9.7:
   languageName: node
   linkType: hard
 
-"xml2js@npm:^0.4.17, xml2js@npm:^0.4.23":
+"xml2js@npm:^0.4.23":
   version: 0.4.23
   resolution: "xml2js@npm:0.4.23"
   dependencies:
@@ -28756,7 +28724,7 @@ typescript@3.9.7:
   languageName: node
   linkType: hard
 
-"yargs@npm:^13.2.1, yargs@npm:^13.3.0, yargs@npm:^13.3.2":
+"yargs@npm:^13.3.0, yargs@npm:^13.3.2":
   version: 13.3.2
   resolution: "yargs@npm:13.3.2"
   dependencies:

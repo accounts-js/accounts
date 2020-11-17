@@ -60,6 +60,6 @@
     "node-fetch": "2.6.0",
     "react": "17.0.1",
     "tslib": "2.0.0",
-    "typeorm": "0.2.25"
+    "typeorm": "0.2.29"
   }
 }

@@ -23,7 +23,7 @@
     "graphql": "14.6.0",
     "pg": "8.1.0",
     "tslib": "2.0.0",
-    "typeorm": "0.2.25"
+    "typeorm": "0.2.29"
   },
   "devDependencies": {
     "@accounts/types": "^0.29.0",
