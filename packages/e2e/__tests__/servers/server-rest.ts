@@ -97,7 +97,7 @@ export class ServerRestTest implements ServerTestInterface {
 
   public async start() {
     await new Promise((resolve) => setTimeout(resolve, 3000));
-    await new Promise((resolve, reject) => {
+    await new Promise((resolve) => {
       this.server = this.app.listen(this.port, () => {
         resolve();
       });
