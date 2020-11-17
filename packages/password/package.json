@@ -35,7 +35,8 @@
     "@types/lodash": "4.14.157",
     "@types/node": "14.0.14",
     "jest": "26.0.1",
-    "rimraf": "3.0.2"
+    "rimraf": "3.0.2",
+    "ts-jest": "26.1.4"
   },
   "peerDependencies": {
     "@accounts/server": "^0.19.0"

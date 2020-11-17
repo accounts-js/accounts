@@ -34,7 +34,8 @@
     "@types/lodash": "4.14.157",
     "@types/mongodb": "3.5.25",
     "@types/node": "14.0.14",
-    "jest": "26.0.1"
+    "jest": "26.0.1",
+    "ts-jest": "26.1.4"
   },
   "dependencies": {
     "@accounts/types": "^0.29.0",

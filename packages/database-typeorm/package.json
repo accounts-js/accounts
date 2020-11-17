@@ -31,7 +31,8 @@
     "@types/lodash": "4.14.157",
     "@types/node": "14.0.14",
     "jest": "26.0.1",
-    "pg": "8.1.0"
+    "pg": "8.1.0",
+    "ts-jest": "26.1.4"
   },
   "dependencies": {
     "@accounts/types": "^0.29.0",
