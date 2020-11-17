@@ -28,25 +28,25 @@
     "@accounts/client": "^0.29.0",
     "@accounts/client-password": "^0.29.0",
     "@accounts/graphql-client": "^0.29.0",
-    "@apollo/client": "3.2.5",
+    "@apollo/client": "3.2.6",
     "@material-ui/core": "4.11.0",
     "@material-ui/styles": "4.10.0",
     "graphql": "14.6.0",
-    "graphql-tag": "2.10.4",
+    "graphql-tag": "2.11.0",
     "qrcode.react": "1.0.0",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
     "react-router-dom": "5.2.0",
-    "tslib": "2.0.0"
+    "tslib": "2.0.3"
   },
   "devDependencies": {
-    "@types/node": "14.0.13",
+    "@types/node": "14.14.7",
     "@types/qrcode.react": "1.0.1",
-    "@types/react": "16.9.43",
-    "@types/react-dom": "16.9.8",
+    "@types/react": "16.9.56",
+    "@types/react-dom": "16.9.9",
     "@types/react-router": "5.1.8",
-    "@types/react-router-dom": "5.1.5",
+    "@types/react-router-dom": "5.1.6",
     "react-scripts": "3.4.1",
-    "typescript": "3.9.7"
+    "typescript": "4.0.5"
   }
 }
