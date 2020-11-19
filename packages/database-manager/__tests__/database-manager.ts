@@ -145,7 +145,7 @@ describe('DatabaseManager configuration', () => {
 
 describe('DatabaseManager', () => {
   it('createUser should be called on userStorage', () => {
-    expect(databaseManager.createUser({})).toBe('userStorage');
+    expect(databaseManager.createUser({ email: 'test', password: 'test' })).toBe('userStorage');
   });
 
   it('findUserById should be called on userStorage', () => {
