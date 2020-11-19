@@ -1,5 +1,5 @@
 import { Collection, Db, ObjectID, IndexOptions } from 'mongodb';
-import { CreateUser, DatabaseInterfaceServicePassword, User } from '@accounts/types';
+import { CreateUserServicePassword, DatabaseInterfaceServicePassword, User } from '@accounts/types';
 import { toMongoID } from './utils';
 
 export interface MongoUser {
@@ -128,16 +128,17 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
     username,
     email,
     ...cleanUser
-  }: CreateUser): Promise<string> {
+  }: CreateUserServicePassword): Promise<string> {
     const user: MongoUser = {
       ...cleanUser,
-      services: {},
+      services: {
+        password: {
+          bcrypt: password,
+        },
+      },
       [this.options.timestamps.createdAt]: this.options.dateProvider(),
       [this.options.timestamps.updatedAt]: this.options.dateProvider(),
     };
-    if (password) {
-      user.services.password = { bcrypt: password };
-    }
     if (username) {
       user.username = username;
     }
