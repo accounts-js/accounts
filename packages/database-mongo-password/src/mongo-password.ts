@@ -30,7 +30,7 @@ export interface MongoServicePasswordOptions {
    */
   userCollectionName?: string;
   /**
-   * The timestamps for the users and sessions collection.
+   * The timestamps for the users collection.
    * Default 'createdAt' and 'updatedAt'.
    */
   timestamps?: {
