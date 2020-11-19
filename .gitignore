@@ -9,5 +9,6 @@ yarn-error.log
 packages/*/package-lock.json
 schema.json
 .DS_Store
-packages/database-mongo-password/globalConfig.json
 build/
+packages/database-mongo-password/globalConfig.json
+packages/database-mongo-sessions/globalConfig.json

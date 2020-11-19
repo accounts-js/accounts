@@ -1,9 +1,7 @@
 import { MongoClient, Db, ObjectID, ObjectId } from 'mongodb';
 import { MongoServicePassword } from '../src/mongo-password';
 
-function delay(time: number) {
-  return new Promise((resolve) => setTimeout(() => resolve(), time));
-}
+const delay = (time: number) => new Promise((resolve) => setTimeout(resolve, time));
 
 const user = {
   username: 'johndoe',
@@ -51,7 +49,6 @@ describe('MongoServicePassword', () => {
       const mongoServicePassword = new MongoServicePassword({ database });
       await mongoServicePassword.setupIndexes();
       const ret = await database.collection('users').indexInformation();
-      expect(ret).toBeTruthy();
       expect(ret).toEqual({
         _id_: [['_id', 1]],
         'emails.address_1': [['emails.address', 1]],
