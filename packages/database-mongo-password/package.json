@@ -27,15 +27,15 @@
     "url": "https://github.com/accounts-js/accounts/tree/master/packages/database-mongo-password"
   },
   "license": "MIT",
+  "dependencies": {
+    "@accounts/types": "^0.29.0",
+    "mongodb": "^3.4.1",
+    "tslib": "2.0.3"
+  },
   "devDependencies": {
     "@types/jest": "26.0.15",
     "@types/mongodb": "3.5.33",
     "@types/node": "14.14.8",
     "jest": "26.6.3"
-  },
-  "dependencies": {
-    "@accounts/types": "^0.29.0",
-    "mongodb": "^3.4.1",
-    "tslib": "2.0.3"
   }
 }
