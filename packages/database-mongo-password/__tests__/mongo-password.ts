@@ -1,4 +1,3 @@
-import { User } from '@accounts/types';
 import { MongoClient, Db, ObjectID } from 'mongodb';
 import { MongoServicePassword } from '../src/mongo-password';
 
@@ -163,6 +162,105 @@ describe('MongoServicePassword', () => {
       const mongoServicePassword = new MongoServicePassword({ db });
       const userId = await mongoServicePassword.createUser(user);
       const ret = await mongoServicePassword.findUserById(userId);
+      expect(ret).toBeTruthy();
+      expect((ret as any)._id).toBeTruthy();
+      expect(ret!.id).toBeTruthy();
+    });
+  });
+
+  describe('findUserByEmail', () => {
+    it('should return null for not found user', async () => {
+      const mongoServicePassword = new MongoServicePassword({ db });
+      const ret = await mongoServicePassword.findUserByEmail('unknow@user.com');
+      expect(ret).not.toBeTruthy();
+    });
+
+    it('should return user', async () => {
+      const mongoServicePassword = new MongoServicePassword({ db });
+      await mongoServicePassword.createUser(user);
+      const ret = await mongoServicePassword.findUserByEmail(user.email);
+      expect(ret).toBeTruthy();
+      expect((ret as any)._id).toBeTruthy();
+      expect(ret!.id).toBeTruthy();
+    });
+
+    it('should return user with uppercase email', async () => {
+      const mongoServicePassword = new MongoServicePassword({ db });
+      await mongoServicePassword.createUser({ email: 'JOHN@DOES.COM', password: user.password });
+      const ret = await mongoServicePassword.findUserByEmail('JOHN@DOES.COM');
+      expect((ret as any)._id).toBeTruthy();
+      expect(ret!.emails![0].address).toEqual('john@does.com');
+    });
+  });
+
+  describe('findUserByUsername', () => {
+    it('should return null for not found user', async () => {
+      const mongoServicePassword = new MongoServicePassword({ db });
+      const ret = await mongoServicePassword.findUserByUsername('unknowuser');
+      expect(ret).not.toBeTruthy();
+    });
+
+    it('should return username for case insensitive query', async () => {
+      const mongoServicePassword = new MongoServicePassword({ db, caseSensitiveUserName: false });
+      await mongoServicePassword.createUser(user);
+      const ret = await mongoServicePassword.findUserByUsername(user.username.toUpperCase());
+      expect(ret).toBeTruthy();
+      expect((ret as any)._id).toBeTruthy();
+      expect(ret!.id).toBeTruthy();
+    });
+
+    it('should return null for incomplete matching user when using insensitive', async () => {
+      const mongoServicePassword = new MongoServicePassword({ db, caseSensitiveUserName: false });
+      const ret = await mongoServicePassword.findUserByUsername('john');
+      expect(ret).not.toBeTruthy();
+    });
+
+    it('should return null when using regex wildcards when using insensitive', async () => {
+      const mongoServicePassword = new MongoServicePassword({ db, caseSensitiveUserName: false });
+      const ret = await mongoServicePassword.findUserByUsername('*');
+      expect(ret).not.toBeTruthy();
+    });
+
+    it('should return user', async () => {
+      const mongoServicePassword = new MongoServicePassword({ db });
+      await mongoServicePassword.createUser(user);
+      const ret = await mongoServicePassword.findUserByUsername(user.username);
+      expect(ret).toBeTruthy();
+      expect((ret as any)._id).toBeTruthy();
+      expect(ret!.id).toBeTruthy();
+    });
+  });
+
+  describe('findUserByEmailVerificationToken', () => {
+    it('should return null for not found user', async () => {
+      const mongoServicePassword = new MongoServicePassword({ db });
+      const ret = await mongoServicePassword.findUserByEmailVerificationToken('token');
+      expect(ret).not.toBeTruthy();
+    });
+
+    it('should return user', async () => {
+      const mongoServicePassword = new MongoServicePassword({ db });
+      const userId = await mongoServicePassword.createUser(user);
+      await mongoServicePassword.addEmailVerificationToken(userId, 'john@doe.com', 'token');
+      const ret = await mongoServicePassword.findUserByEmailVerificationToken('token');
+      expect(ret).toBeTruthy();
+      expect((ret as any)._id).toBeTruthy();
+      expect(ret!.id).toBeTruthy();
+    });
+  });
+
+  describe('findUserByResetPasswordToken', () => {
+    it('should return null for not found user', async () => {
+      const mongoServicePassword = new MongoServicePassword({ db });
+      const ret = await mongoServicePassword.findUserByResetPasswordToken('token');
+      expect(ret).not.toBeTruthy();
+    });
+
+    it('should return user', async () => {
+      const mongoServicePassword = new MongoServicePassword({ db });
+      const userId = await mongoServicePassword.createUser(user);
+      await mongoServicePassword.addResetPasswordToken(userId, 'john@doe.com', 'token', 'test');
+      const ret = await mongoServicePassword.findUserByResetPasswordToken('token');
       expect(ret).toBeTruthy();
       expect((ret as any)._id).toBeTruthy();
       expect(ret!.id).toBeTruthy();
