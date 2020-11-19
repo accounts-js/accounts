@@ -23,7 +23,7 @@ export interface MongoServicePasswordOptions {
   /**
    * Mongo database object.
    */
-  db: Db;
+  database: Db;
   /**
    * The users collection name.
    * Default 'users'.
@@ -73,7 +73,7 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
   // Merged options that can be used
   private options: MongoServicePasswordOptions & typeof defaultOptions;
   // Mongo database object
-  private db: Db;
+  private database: Db;
   // Mongo user collection
   private userCollection: Collection;
 
@@ -84,8 +84,8 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
       timestamps: { ...defaultOptions.timestamps, ...options.timestamps },
     };
 
-    this.db = this.options.db;
-    this.userCollection = this.db.collection(this.options.userCollectionName);
+    this.database = this.options.database;
+    this.userCollection = this.database.collection(this.options.userCollectionName);
   }
 
   /**
