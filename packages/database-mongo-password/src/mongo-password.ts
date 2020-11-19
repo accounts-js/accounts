@@ -205,7 +205,7 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
    */
   public async findPasswordHash(userId: string): Promise<string | null> {
     const user = await this.findUserById(userId);
-    return user?.services?.password?.bcrypt;
+    return user?.services?.password?.bcrypt ?? null;
   }
 
   /**

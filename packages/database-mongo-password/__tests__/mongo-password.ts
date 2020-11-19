@@ -1,5 +1,9 @@
-import { MongoClient, Db, ObjectID } from 'mongodb';
+import { MongoClient, Db, ObjectID, ObjectId } from 'mongodb';
 import { MongoServicePassword } from '../src/mongo-password';
+
+function delay(time: number) {
+  return new Promise((resolve) => setTimeout(() => resolve(), time));
+}
 
 const user = {
   username: 'johndoe',
@@ -264,6 +268,74 @@ describe('MongoServicePassword', () => {
       expect(ret).toBeTruthy();
       expect((ret as any)._id).toBeTruthy();
       expect(ret!.id).toBeTruthy();
+    });
+  });
+
+  describe('findPasswordHash', () => {
+    it('should not convert id', async () => {
+      const mongoServicePassword = new MongoServicePassword({
+        db,
+        convertUserIdToMongoObjectId: false,
+      });
+      await expect(mongoServicePassword.findPasswordHash('toto')).resolves.toBe(null);
+    });
+
+    it('should return null on not found user', async () => {
+      const mongoServicePassword = new MongoServicePassword({ db });
+      const ret = await mongoServicePassword.findPasswordHash('589871d1c9393d445745a57c');
+      expect(ret).toEqual(null);
+    });
+
+    it('should return hash', async () => {
+      const mongoServicePassword = new MongoServicePassword({ db });
+      const userId = await mongoServicePassword.createUser(user);
+      const retUser = await mongoServicePassword.findUserById(userId);
+      const ret = await mongoServicePassword.findPasswordHash(userId);
+      const services: any = retUser!.services;
+      expect(ret).toBeTruthy();
+      expect(ret).toEqual(services.password.bcrypt);
+    });
+  });
+
+  describe('addEmail', () => {
+    it('should not convert id', async () => {
+      const mongoServicePassword = new MongoServicePassword({
+        db,
+        convertUserIdToMongoObjectId: false,
+        idProvider: () => new ObjectId().toString(),
+      });
+      const userId = await mongoServicePassword.createUser(user);
+      await mongoServicePassword.addEmail(userId, 'hey', false);
+      const retUser = await mongoServicePassword.findUserById(userId);
+      expect(typeof (retUser as any)._id).toBe('string');
+    });
+
+    it('should throw if user is not found', async () => {
+      const mongoServicePassword = new MongoServicePassword({ db });
+      await expect(
+        mongoServicePassword.addEmail('589871d1c9393d445745a57c', 'unknowemail', false)
+      ).rejects.toThrowError('User not found');
+    });
+
+    it('should add email', async () => {
+      const mongoServicePassword = new MongoServicePassword({ db });
+      const email = 'johns@doe.com';
+      const userId = await mongoServicePassword.createUser(user);
+      await delay(10);
+      await mongoServicePassword.addEmail(userId, email, false);
+      const retUser = await mongoServicePassword.findUserByEmail(email);
+      expect(retUser!.emails!.length).toEqual(2);
+      expect((retUser as any).createdAt).not.toEqual((retUser as any).updatedAt);
+    });
+
+    it('should add lowercase email', async () => {
+      const mongoServicePassword = new MongoServicePassword({ db });
+      const email = 'johnS@doe.com';
+      const userId = await mongoServicePassword.createUser(user);
+      await mongoServicePassword.addEmail(userId, email, false);
+      const retUser = await mongoServicePassword.findUserByEmail(email);
+      expect(retUser!.emails!.length).toEqual(2);
+      expect(retUser!.emails![1].address).toEqual('johns@doe.com');
     });
   });
 });
