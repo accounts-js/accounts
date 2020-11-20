@@ -22,7 +22,6 @@
     - Register on server
     - Suggested API
 
-
     ```typescript
     // client code
     const accountsClient = new AccountsClient({

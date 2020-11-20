@@ -75,7 +75,7 @@ describe('twoFactor', () => {
   });
 
   describe('twoFactorSet', () => {
-    it('calls password.twoFactor and set ', async () => {
+    it('calls password.twoFactor and set', async () => {
       const passwordService = {
         twoFactor: {
           set: jest.fn(() => null),
@@ -155,7 +155,7 @@ describe('twoFactor', () => {
   });
 
   describe('twoFactorUnset', () => {
-    it('calls password.twoFactor and set ', async () => {
+    it('calls password.twoFactor and set', async () => {
       const passwordService = {
         twoFactor: {
           unset: jest.fn(() => null),
