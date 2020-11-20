@@ -1,4 +1,3 @@
-import { merge } from 'lodash';
 import { Collection, Db, ObjectID, IndexOptions } from 'mongodb';
 import {
   ConnectionInformations,
@@ -42,8 +41,12 @@ export class Mongo implements DatabaseInterface {
   // Password service
   private servicePassword: MongoServicePassword;
 
-  constructor(db: any, options?: AccountsMongoOptions) {
-    this.options = merge({ ...defaultOptions }, options);
+  constructor(db: any, options: AccountsMongoOptions = {}) {
+    this.options = {
+      ...defaultOptions,
+      ...options,
+      timestamps: { ...defaultOptions.timestamps, ...options.timestamps },
+    };
     if (!db) {
       throw new Error('A database connection is required');
     }
