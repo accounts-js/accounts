@@ -42,20 +42,3 @@ export interface AccountsMongoOptions {
    */
   dateProvider?: (date?: Date) => any;
 }
-
-export interface MongoUser {
-  _id?: string | object;
-  username?: string;
-  services: {
-    password?: {
-      bcrypt: string;
-    };
-  };
-  emails?: [
-    {
-      address: string;
-      verified: boolean;
-    }
-  ];
-  [key: string]: any;
-}
