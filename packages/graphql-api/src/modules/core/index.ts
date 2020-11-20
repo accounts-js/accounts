@@ -5,10 +5,10 @@ export interface CoreAccountsModuleConfig {
   userAsInterface?: boolean;
 }
 
-export const CoreAccountsModule: GraphQLModule<CoreAccountsModuleConfig> = new GraphQLModule<
-  CoreAccountsModuleConfig
->({
-  typeDefs: ({ config }) => makeSchema(config),
-  resolvers: {},
-  imports: [],
-});
+export const CoreAccountsModule: GraphQLModule<CoreAccountsModuleConfig> = new GraphQLModule<CoreAccountsModuleConfig>(
+  {
+    typeDefs: ({ config }) => makeSchema(config),
+    resolvers: {},
+    imports: [],
+  }
+);
