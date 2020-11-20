@@ -14,11 +14,12 @@ describe('MongoServicePassword', () => {
   let database: Db;
 
   beforeAll(async () => {
-    connection = await MongoClient.connect(process.env.MONGO_URL!, {
+    const url = 'mongodb://localhost:27017';
+    connection = await MongoClient.connect(url, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    database = await connection.db();
+    database = await connection.db('accounts-mongo-password-tests');
   });
 
   beforeEach(async () => {

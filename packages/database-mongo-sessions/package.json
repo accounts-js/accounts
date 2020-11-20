@@ -18,6 +18,10 @@
     "src",
     "lib"
   ],
+  "jest": {
+    "testEnvironment": "node",
+    "preset": "ts-jest"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/accounts-js/accounts/tree/master/packages/database-mongo-session"
@@ -28,7 +32,6 @@
     "tslib": "2.0.3"
   },
   "devDependencies": {
-    "@shelf/jest-mongodb": "1.2.3",
     "@types/jest": "26.0.15",
     "@types/mongodb": "3.5.33",
     "@types/node": "14.14.9",
