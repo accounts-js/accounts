@@ -29,6 +29,9 @@
       "website"
     ]
   },
+  "nohoist": [
+    "**/html-minifier-terser"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
