@@ -33,9 +33,6 @@
       "last 1 safari version"
     ]
   },
-  "nohoist": [
-    "**/html-minifier-terser"
-  ],
   "devDependencies": {
     "ts-node": "8.10.1",
     "typedoc": "0.17.6",
