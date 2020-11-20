@@ -28,20 +28,21 @@
   },
   "author": "Leo Pradel",
   "license": "MIT",
-  "devDependencies": {
-    "@accounts/database-tests": "^0.29.0",
-    "@types/jest": "25.2.3",
-    "@types/lodash": "4.14.157",
-    "@types/mongodb": "3.5.33",
-    "@types/node": "14.0.14",
-    "jest": "26.0.1"
-  },
   "dependencies": {
     "@accounts/types": "^0.29.0",
     "@accounts/mongo-password": "^0.29.0",
     "@accounts/mongo-sessions": "^0.29.0",
     "lodash": "^4.17.15",
     "mongodb": "^3.4.1",
-    "tslib": "2.0.0"
+    "tslib": "2.0.3"
+  },
+  "devDependencies": {
+    "@accounts/database-tests": "^0.29.0",
+    "@types/jest": "26.0.15",
+    "@types/lodash": "4.14.165",
+    "@types/mongodb": "3.5.33",
+    "@types/node": "14.14.9",
+    "jest": "26.6.3",
+    "ts-jest": "26.4.0"
   }
 }

@@ -31,7 +31,7 @@
     "@shelf/jest-mongodb": "1.2.3",
     "@types/jest": "26.0.15",
     "@types/mongodb": "3.5.33",
-    "@types/node": "14.14.8",
+    "@types/node": "14.14.9",
     "jest": "26.6.3",
     "ts-jest": "26.4.0"
   }
