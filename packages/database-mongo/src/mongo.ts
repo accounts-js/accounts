@@ -5,7 +5,6 @@ import {
   Session,
   User,
 } from '@accounts/types';
-import { get, merge } from 'lodash';
 import { Collection, Db, ObjectID, IndexOptions } from 'mongodb';
 
 import { AccountsMongoOptions, MongoUser } from './types';
@@ -40,8 +39,12 @@ export class Mongo implements DatabaseInterface {
   // Session collection
   private sessionCollection: Collection;
 
-  constructor(db: any, options?: AccountsMongoOptions) {
-    this.options = merge({ ...defaultOptions }, options);
+  constructor(db: any, options: AccountsMongoOptions = {}) {
+    this.options = {
+      ...defaultOptions,
+      ...options,
+      timestamps: { ...defaultOptions.timestamps, ...options.timestamps },
+    };
     if (!db) {
       throw new Error('A database connection is required');
     }
@@ -143,10 +146,7 @@ export class Mongo implements DatabaseInterface {
 
   public async findPasswordHash(userId: string): Promise<string | null> {
     const user = await this.findUserById(userId);
-    if (user) {
-      return get(user, 'services.password.bcrypt');
-    }
-    return null;
+    return user?.services?.password?.bcrypt ?? null;
   }
 
   public async findUserByEmailVerificationToken(token: string): Promise<User | null> {
