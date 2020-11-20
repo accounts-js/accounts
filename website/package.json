@@ -3,15 +3,19 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
+    "serve": "docusaurus serve",
+    "clear": "docusaurus clear",
     "generate-api-docs": "rm -rf docs/api && ts-node scripts/generate-api-docs.ts"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-alpha.58",
-    "@docusaurus/preset-classic": "2.0.0-alpha.58",
+    "@docusaurus/core": "2.0.0-alpha.68",
+    "@docusaurus/preset-classic": "2.0.0-alpha.68",
+    "@mdx-js/react": "^1.6.21",
     "clsx": "1.1.1",
     "docusaurus-plugin-fathom": "1.1.0",
     "react": "16.13.1",
@@ -19,7 +23,7 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
+      ">0.5%",
       "not dead",
       "not op_mini all"
     ],
