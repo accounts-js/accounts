@@ -55,7 +55,7 @@ const ResetPassword = ({ match }: RouteComponentProps<RouteMatchProps>) => {
       {!match.params.token && (
         <FormControl margin="normal">
           <InputLabel htmlFor="email">Email</InputLabel>
-          <Input id="email" value={email} onChange={e => setEmail(e.target.value)} />
+          <Input id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         </FormControl>
       )}
       {match.params.token && (
@@ -65,7 +65,7 @@ const ResetPassword = ({ match }: RouteComponentProps<RouteMatchProps>) => {
             id="new-password"
             type="password"
             value={newPassword}
-            onChange={e => setNewPassword(e.target.value)}
+            onChange={(e) => setNewPassword(e.target.value)}
           />
         </FormControl>
       )}

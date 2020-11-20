@@ -12,7 +12,7 @@ import { useHistory, useLocation } from 'react-router';
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   logo: {
     paddingLeft: theme.spacing(4),
     maxWidth: '100%',

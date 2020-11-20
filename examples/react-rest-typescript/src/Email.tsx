@@ -20,7 +20,7 @@ import { User } from '@accounts/types';
 import { accountsClient, accountsRest, accountsPassword } from './accounts';
 import { AuthenticatedContainer } from './components/AuthenticatedContainer';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   divider: {
     marginTop: theme.spacing(2),
   },
@@ -62,7 +62,7 @@ export const Email = () => {
     initialValues: {
       newEmail: '',
     },
-    validate: values => {
+    validate: (values) => {
       const errors: FormikErrors<AddEmailValues> = {};
       if (!values.newEmail) {
         errors.newEmail = 'Required';
@@ -108,7 +108,7 @@ export const Email = () => {
         <Divider />
         <CardContent className={classes.cardContent}>
           {user.emails &&
-            user.emails.map(email => (
+            user.emails.map((email) => (
               <div key={email.address} className={classes.emailItem}>
                 <div className={classes.emailItemPart}>
                   <Tooltip
