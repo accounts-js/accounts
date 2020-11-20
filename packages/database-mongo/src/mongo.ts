@@ -159,15 +159,15 @@ export class Mongo implements DatabaseInterface {
     connection: ConnectionInformations,
     newToken?: string
   ): Promise<void> {
-    this.sessions.updateSession(sessionId, connection, newToken);
+    return this.sessions.updateSession(sessionId, connection, newToken);
   }
 
   public async invalidateSession(sessionId: string): Promise<void> {
-    this.sessions.invalidateSession(sessionId);
+    return this.sessions.invalidateSession(sessionId);
   }
 
   public async invalidateAllSessions(userId: string, excludedSessionIds?: string[]): Promise<void> {
-    this.sessions.invalidateAllSessions(userId, excludedSessionIds);
+    return this.sessions.invalidateAllSessions(userId, excludedSessionIds);
   }
 
   public async findUserByServiceId(serviceName: string, serviceId: string): Promise<User | null> {

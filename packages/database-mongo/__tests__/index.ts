@@ -47,7 +47,7 @@ describe('Mongo', () => {
         convertUserIdToMongoObjectId: false,
       });
       const mockFindOne = jest.fn();
-      (mongoWithStringIds as any).collection.findOne = mockFindOne;
+      (mongoWithStringIds as any).servicePassword.userCollection.findOne = mockFindOne;
       await mongoWithStringIds.findUserById('589871d1c9393d445745a57c');
 
       expect(mockFindOne.mock.calls[0][0]).toHaveProperty('_id', '589871d1c9393d445745a57c');
