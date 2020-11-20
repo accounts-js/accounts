@@ -124,30 +124,31 @@ describe('Mongo', () => {
       });
     });
 
-    it('should not set password', async () => {
-      const userId = await databaseTests.database.createUser({ email: user.email });
-      const ret = await databaseTests.database.findUserById(userId);
-      const services: any = ret!.services!;
-      expect(ret!.id).toBeTruthy();
-      expect(services.password).not.toBeTruthy();
-    });
-
     it('should not set username', async () => {
-      const userId = await databaseTests.database.createUser({ email: user.email });
+      const userId = await databaseTests.database.createUser({
+        email: user.email,
+        password: user.password,
+      });
       const ret = await databaseTests.database.findUserById(userId);
       expect(ret!.id).toBeTruthy();
       expect(ret!.username).not.toBeTruthy();
     });
 
     it('should not set email', async () => {
-      const userId = await databaseTests.database.createUser({ username: user.username });
+      const userId = await databaseTests.database.createUser({
+        username: user.username,
+        password: user.password,
+      });
       const ret = await databaseTests.database.findUserById(userId);
       expect(ret!.id).toBeTruthy();
       expect(ret!.emails).not.toBeTruthy();
     });
 
     it('email should be lowercase', async () => {
-      const userId = await databaseTests.database.createUser({ email: 'JohN@doe.com' });
+      const userId = await databaseTests.database.createUser({
+        email: 'JohN@doe.com',
+        password: user.password,
+      });
       const ret = await databaseTests.database.findUserById(userId);
       expect(ret!.id).toBeTruthy();
       expect(ret!.emails![0].address).toEqual('john@doe.com');
@@ -158,7 +159,10 @@ describe('Mongo', () => {
         idProvider: () => 'toto',
         convertUserIdToMongoObjectId: false,
       });
-      const userId = await mongoOptions.createUser({ email: 'JohN@doe.com' });
+      const userId = await mongoOptions.createUser({
+        email: 'JohN@doe.com',
+        password: user.password,
+      });
       const ret = await mongoOptions.findUserById(userId);
       expect(userId).toBe('toto');
       expect(ret!.id).toBeTruthy();
@@ -196,7 +200,7 @@ describe('Mongo', () => {
     });
 
     it('should return user with uppercase email', async () => {
-      await databaseTests.database.createUser({ email: 'JOHN@DOES.COM' });
+      await databaseTests.database.createUser({ email: 'JOHN@DOES.COM', password: user.password });
       const ret = await databaseTests.database.findUserByEmail('JOHN@DOES.COM');
       expect((ret as any)._id).toBeTruthy();
       expect(ret!.emails![0].address).toEqual('john@does.com');
