@@ -25,7 +25,11 @@
   "workspaces": {
     "packages": [
       "packages/*",
-      "examples/*"
+      "examples/*",
+      "website"
+    ],
+    "nohoist": [
+      "**/html-minifier-terser"
     ]
   },
   "husky": {
