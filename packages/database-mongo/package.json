@@ -30,16 +30,14 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/database-tests": "^0.29.0",
-    "@types/jest": "25.2.3",
-    "@types/lodash": "4.14.157",
+    "@types/jest": "26.0.15",
     "@types/mongodb": "3.5.25",
     "@types/node": "14.0.14",
-    "jest": "26.0.1",
-    "ts-jest": "26.1.4"
+    "jest": "26.6.3",
+    "ts-jest": "26.4.0"
   },
   "dependencies": {
     "@accounts/types": "^0.29.0",
-    "lodash": "^4.17.15",
     "mongodb": "^3.4.1",
     "tslib": "2.0.0"
   }

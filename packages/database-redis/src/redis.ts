@@ -1,6 +1,5 @@
 import * as IORedis from 'ioredis';
 import * as shortid from 'shortid';
-import { merge } from 'lodash';
 import { Session, DatabaseInterfaceSessions, ConnectionInformations } from '@accounts/types';
 import { AccountsRedisOptions } from './types';
 
@@ -19,8 +18,12 @@ export class RedisSessions implements DatabaseInterfaceSessions {
   private options: AccountsRedisOptions & typeof defaultOptions;
   private db: IORedis.Redis;
 
-  constructor(db: IORedis.Redis, options?: AccountsRedisOptions) {
-    this.options = merge({ ...defaultOptions }, options);
+  constructor(db: IORedis.Redis, options: AccountsRedisOptions = {}) {
+    this.options = {
+      ...defaultOptions,
+      ...options,
+      timestamps: { ...defaultOptions.timestamps, ...options.timestamps },
+    };
     if (!db) {
       throw new Error('A database connection is required');
     }

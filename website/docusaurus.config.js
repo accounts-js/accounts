@@ -23,7 +23,7 @@ module.exports = {
         alt: 'My Site Logo',
         src: 'img/logo.png',
       },
-      links: [
+      items: [
         { to: 'docs/introduction', label: 'Documentation', position: 'right' },
         {
           to: 'docs/api/server/index',

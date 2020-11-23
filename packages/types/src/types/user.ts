@@ -4,6 +4,6 @@ export interface User {
   username?: string;
   emails?: EmailRecord[];
   id: string;
-  services?: object;
+  services?: Record<string, any>;
   deactivated: boolean;
 }
