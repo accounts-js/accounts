@@ -33,7 +33,6 @@ const VerifyEmail = () => {
 
   useEffect(() => {
     verifyEmail();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

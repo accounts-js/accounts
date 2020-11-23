@@ -42,7 +42,7 @@ interface TwoFactorValues {
 
 export const TwoFactor = () => {
   const classes = useStyles();
-  const [secret, setSecret] = useState();
+  const [secret, setSecret] = useState<any>();
   const formik = useFormik<TwoFactorValues>({
     initialValues: {
       oneTimeCode: '',
