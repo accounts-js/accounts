@@ -8,8 +8,11 @@ const AuthContext = React.createContext<{
   loginWithService: (service: string, credentials: any) => Promise<void>;
   logout: () => Promise<void>;
 }>({
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   fetchUser: async () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   loginWithService: async () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   logout: async () => {},
 });
 

@@ -9,5 +9,6 @@ yarn-error.log
 packages/*/package-lock.json
 schema.json
 .DS_Store
+.eslintcache
 
 build/
