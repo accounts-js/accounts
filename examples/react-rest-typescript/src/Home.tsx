@@ -15,7 +15,7 @@ import { useFormik, FormikErrors } from 'formik';
 import { accountsClient } from './accounts';
 import { AuthenticatedContainer } from './components/AuthenticatedContainer';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   divider: {
     marginTop: theme.spacing(2),
   },
@@ -57,7 +57,7 @@ const Home = () => {
       firstName: '',
       lastName: '',
     },
-    validate: values => {
+    validate: (values) => {
       const errors: FormikErrors<AccountDetailsValues> = {};
       if (!values.firstName) {
         errors.firstName = 'Required';
@@ -108,7 +108,6 @@ const Home = () => {
     };
 
     fetchUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

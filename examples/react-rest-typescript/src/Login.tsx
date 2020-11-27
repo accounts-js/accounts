@@ -17,7 +17,7 @@ import { SnackBarContentError } from './components/SnackBarContentError';
 import { useAuth } from './components/AuthContext';
 import { UnauthenticatedContainer } from './components/UnauthenticatedContainer';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   cardContent: {
     padding: theme.spacing(3),
   },
@@ -54,7 +54,7 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
       password: '',
       code: '',
     },
-    validate: values => {
+    validate: (values) => {
       const errors: FormikErrors<LoginValues> = {};
       if (!values.email) {
         errors.email = 'Required';

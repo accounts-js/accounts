@@ -27,9 +27,7 @@
   },
   "dependencies": {
     "@accounts/types": "^0.29.0",
-    "@types/lodash": "^4.14.138",
     "@types/speakeasy": "2.0.2",
-    "lodash": "^4.17.15",
     "speakeasy": "^2.0.0",
     "tslib": "2.0.0"
   },

@@ -1,7 +1,7 @@
 import React from 'react';
 import { SnackbarContent, makeStyles } from '@material-ui/core';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   message: {
     display: 'flex',
     alignItems: 'center',
