@@ -1,3 +1,5 @@
+import { SendVerificationEmailErrors } from '@accounts/password';
+import { AccountsJsError } from '@accounts/server';
 import { verifyEmail, sendVerificationEmail } from '../../../src/endpoints/password/verify-email';
 
 const res: any = {
@@ -106,6 +108,7 @@ describe('verifyEmail', () => {
         }),
       };
       const accountsServer = {
+        options: {},
         getServices: () => ({
           password: passwordService,
         }),
@@ -127,6 +130,40 @@ describe('verifyEmail', () => {
       );
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith(error);
+    });
+
+    it('hide UserNotFound error when ambiguousErrorMessages is true', async () => {
+      const error = new AccountsJsError('User not found', SendVerificationEmailErrors.UserNotFound);
+      const passwordService = {
+        sendVerificationEmail: jest.fn(() => {
+          throw error;
+        }),
+      };
+      const accountsServer = {
+        options: {
+          ambiguousErrorMessages: true,
+        },
+        getServices: () => ({
+          password: passwordService,
+        }),
+      };
+      const middleware = sendVerificationEmail(accountsServer as any);
+      const req = {
+        body: {
+          email: 'email',
+        },
+        headers: {},
+      };
+      const reqCopy = { ...req };
+
+      await middleware(req as any, res);
+
+      expect(req).toEqual(reqCopy);
+      expect(accountsServer.getServices().password.sendVerificationEmail).toHaveBeenCalledWith(
+        'email'
+      );
+      expect(res.json).toHaveBeenCalledWith(null);
+      expect(res.status).not.toHaveBeenCalled();
     });
   });
 });
