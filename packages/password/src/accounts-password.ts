@@ -350,7 +350,7 @@ export default class AccountsPassword<CustomUser extends User = User>
     // Change the user password and remove the old token
     await this.db.setResetPassword(user.id, resetTokenRecord.address, password, token);
 
-    this.server.getHooks().emit(ServerHooks.ResetPasswordSuccess, user);
+    await this.server.getHooks().emit(ServerHooks.ResetPasswordSuccess, user);
 
     // If user clicked on an enrollment link we can verify his email
     if (resetTokenRecord.reason === 'enroll') {
@@ -422,7 +422,7 @@ export default class AccountsPassword<CustomUser extends User = User>
     const password = await this.options.hashPassword(newPassword);
     await this.db.setPassword(userId, password);
 
-    this.server.getHooks().emit(ServerHooks.ChangePasswordSuccess, user);
+    await this.server.getHooks().emit(ServerHooks.ChangePasswordSuccess, user);
 
     if (this.options.invalidateAllSessionsAfterPasswordChanged) {
       await this.db.invalidateAllSessions(user.id);
@@ -469,10 +469,6 @@ export default class AccountsPassword<CustomUser extends User = User>
 
     const user = await this.db.findUserByEmail(address);
     if (!user) {
-      // To prevent user enumeration we fail silently
-      if (this.server.options.ambiguousErrorMessages) {
-        return;
-      }
       throw new AccountsJsError(
         this.options.errors.userNotFound,
         SendVerificationEmailErrors.UserNotFound
@@ -521,10 +517,6 @@ export default class AccountsPassword<CustomUser extends User = User>
 
     const user = await this.db.findUserByEmail(address);
     if (!user) {
-      // To prevent user enumeration we fail silently
-      if (this.server.options.ambiguousErrorMessages) {
-        return;
-      }
       throw new AccountsJsError(
         this.options.errors.userNotFound,
         SendResetPasswordEmailErrors.UserNotFound
@@ -645,12 +637,13 @@ export default class AccountsPassword<CustomUser extends User = User>
     try {
       const userId = await this.db.createUser(user);
 
-      defer(async () => {
-        if (this.options.sendVerificationEmailAfterSignup && user.email)
-          this.sendVerificationEmail(user.email);
+      const userRecord = (await this.db.findUserById(userId)) as User;
+      await this.server.getHooks().emit(ServerHooks.CreateUserSuccess, userRecord);
 
-        const userRecord = (await this.db.findUserById(userId)) as User;
-        this.server.getHooks().emit(ServerHooks.CreateUserSuccess, userRecord);
+      defer(async () => {
+        if (this.options.sendVerificationEmailAfterSignup && user.email) {
+          this.sendVerificationEmail(user.email);
+        }
       });
 
       return userId;

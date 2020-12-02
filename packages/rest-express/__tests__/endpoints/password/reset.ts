@@ -1,3 +1,5 @@
+import { SendResetPasswordEmailErrors } from '@accounts/password';
+import { AccountsJsError } from '@accounts/server';
 import { resetPassword, sendResetPasswordEmail } from '../../../src/endpoints/password/reset';
 
 const res: any = {
@@ -124,6 +126,7 @@ describe('resetPassword', () => {
         }),
       };
       const accountsServer = {
+        options: {},
         getServices: () => ({
           password: passwordService,
         }),
@@ -145,6 +148,43 @@ describe('resetPassword', () => {
       );
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith(error);
+    });
+
+    it('hide UserNotFound error when ambiguousErrorMessages is true', async () => {
+      const error = new AccountsJsError(
+        'User not found',
+        SendResetPasswordEmailErrors.UserNotFound
+      );
+      const passwordService = {
+        sendResetPasswordEmail: jest.fn(() => {
+          throw error;
+        }),
+      };
+      const accountsServer = {
+        options: {
+          ambiguousErrorMessages: true,
+        },
+        getServices: () => ({
+          password: passwordService,
+        }),
+      };
+      const middleware = sendResetPasswordEmail(accountsServer as any);
+      const req = {
+        body: {
+          email: 'email',
+        },
+        headers: {},
+      };
+      const reqCopy = { ...req };
+
+      await middleware(req as any, res);
+
+      expect(req).toEqual(reqCopy);
+      expect(accountsServer.getServices().password.sendResetPasswordEmail).toHaveBeenCalledWith(
+        'email'
+      );
+      expect(res.json).toHaveBeenCalledWith(null);
+      expect(res.status).not.toHaveBeenCalled();
     });
   });
 });
