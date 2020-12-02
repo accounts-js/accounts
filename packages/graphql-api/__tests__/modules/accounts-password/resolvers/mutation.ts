@@ -1,5 +1,9 @@
 import { AccountsServer, AccountsJsError } from '@accounts/server';
-import { AccountsPassword, SendVerificationEmailErrors } from '@accounts/password';
+import {
+  AccountsPassword,
+  SendResetPasswordEmailErrors,
+  SendVerificationEmailErrors,
+} from '@accounts/password';
 import { LoginResult } from '@accounts/types';
 import { Mutation } from '../../../../src/modules/accounts-password/resolvers/mutation';
 import { CreateUserInput } from '../../../../src';
@@ -265,6 +269,43 @@ describe('accounts-password resolvers mutation', () => {
       await Mutation.sendResetPasswordEmail!({}, { email } as any, { injector } as any, {} as any);
       expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
       expect(accountsPasswordMock.sendResetPasswordEmail).toHaveBeenCalledWith(email);
+    });
+
+    it('should rethrow all errors if server have ambiguousErrorMessages', async () => {
+      const sendResetPasswordEmailMock = jest.fn(() => {
+        throw new AccountsJsError('AnyError', 'AnyError');
+      });
+      injector.get = jest.fn((arg) =>
+        arg === AccountsPassword
+          ? {
+              sendResetPasswordEmail: sendResetPasswordEmailMock,
+            }
+          : {
+              options: { ambiguousErrorMessages: true },
+            }
+      );
+      await expect(
+        Mutation.sendResetPasswordEmail!({}, { email } as any, { injector } as any, {} as any)
+      ).rejects.toThrowError('AnyError');
+    });
+
+    it('should hide UserNotFound error when ambiguousErrorMessages is true', async () => {
+      const sendResetPasswordEmailMock = jest.fn(() => {
+        throw new AccountsJsError('User not found', SendResetPasswordEmailErrors.UserNotFound);
+      });
+      injector.get = jest.fn((arg) =>
+        arg === AccountsPassword
+          ? {
+              sendResetPasswordEmail: sendResetPasswordEmailMock,
+            }
+          : {
+              options: { ambiguousErrorMessages: true },
+            }
+      );
+
+      await Mutation.sendResetPasswordEmail!({}, { email } as any, { injector } as any, {} as any);
+      expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
+      expect(sendResetPasswordEmailMock).toHaveBeenCalledWith(email);
     });
   });
 
