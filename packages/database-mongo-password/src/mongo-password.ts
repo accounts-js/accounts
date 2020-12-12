@@ -24,7 +24,7 @@ export interface MongoResetPasswordToken {
   userId: string;
   token: string;
   address: string;
-  when: any;
+  when: Date;
   reason: string;
 }
 
@@ -43,6 +43,12 @@ export interface MongoServicePasswordOptions {
    * Default 'resetPasswordTokens'.
    */
   resetPasswordTokenCollectionName?: string;
+  /**
+   * Should be the same number of days as the `@accounts/password` longest options between `passwordResetTokenExpiration` and `passwordEnrollTokenExpiration`.
+   * Default to 30 days.
+   * Set to 0 to disable.
+   */
+  resetPasswordTokenExpireAfterSeconds?: number;
   /**
    * The timestamps for the users collection.
    * Default 'createdAt' and 'updatedAt'.
@@ -75,6 +81,8 @@ export interface MongoServicePasswordOptions {
 const defaultOptions = {
   userCollectionName: 'users',
   resetPasswordTokenCollectionName: 'resetPasswordTokens',
+  // 30 days - 30 * 24 * 60 * 60
+  resetPasswordTokenExpireAfterSeconds: 2592000,
   timestamps: {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -134,10 +142,16 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
     });
     // Token index used to verify a password reset request
     // TODO change index with ttl
-    await this.userCollection.createIndex('services.password.reset.token', {
+    await this.resetPasswordTokenCollection.createIndex('token', {
       ...options,
+      unique: true,
       sparse: true,
     });
+    if (this.options.resetPasswordTokenExpireAfterSeconds !== 0) {
+      await this.resetPasswordTokenCollection.createIndex('when', {
+        expireAfterSeconds: 10,
+      });
+    }
   }
 
   /**
@@ -259,7 +273,9 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
     const user = await this.userCollection.findOne({ _id: userId });
     if (user) {
       user.id = user._id.toString();
-      user.services.password.reset = [resetPasswordToken];
+      user.services.password.reset = [
+        { ...resetPasswordToken, when: resetPasswordToken.when.getTime() },
+      ];
     }
     return user;
   }
@@ -420,7 +436,7 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
       userId,
       address: email.toLowerCase(),
       token,
-      when: this.options.dateProvider(),
+      when: new Date(),
       reason,
     });
   }
