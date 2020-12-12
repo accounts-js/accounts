@@ -1,6 +1,9 @@
 import { User } from '../../user';
+import { CreateUserServicePassword } from './create-user';
 
 export interface DatabaseInterfaceServicePassword<CustomUser extends User = User> {
+  createUser(user: CreateUserServicePassword): Promise<string>;
+
   findUserByEmail(email: string): Promise<CustomUser | null>;
 
   findUserByUsername(username: string): Promise<CustomUser | null>;

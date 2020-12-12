@@ -1,7 +1,7 @@
 {
-  "name": "@accounts/mongo",
+  "name": "@accounts/mongo-sessions",
   "version": "0.30.0",
-  "description": "MongoDB adaptor for accounts",
+  "description": "MongoDB sessions adaptor for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
@@ -10,7 +10,7 @@
     "precompile": "yarn clean",
     "compile": "tsc",
     "prepublishOnly": "yarn compile",
-    "testonly": "jest --runInBand --forceExit",
+    "testonly": "jest --runInBand",
     "test:watch": "jest --watch",
     "coverage": "yarn testonly --coverage"
   },
@@ -24,19 +24,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/accounts-js/accounts/tree/master/packages/database-mongo"
+    "url": "https://github.com/accounts-js/accounts/tree/master/packages/database-mongo-session"
   },
-  "author": "Leo Pradel",
   "license": "MIT",
   "dependencies": {
     "@accounts/types": "^0.30.0",
-    "@accounts/mongo-password": "^0.30.0",
-    "@accounts/mongo-sessions": "^0.30.0",
-    "mongodb": "^3.4.1",
     "tslib": "2.0.3"
   },
   "devDependencies": {
-    "@accounts/database-tests": "^0.30.0",
     "@types/jest": "26.0.15",
     "@types/mongodb": "3.5.33",
     "@types/node": "14.14.9",
