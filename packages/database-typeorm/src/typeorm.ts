@@ -271,17 +271,6 @@ export class AccountsTypeorm implements DatabaseInterface {
     );
   }
 
-  public async setResetPassword(
-    userId: string,
-    email: string,
-    newPassword: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    token?: string
-  ): Promise<void> {
-    await this.setPassword(userId, newPassword);
-    await this.unsetService(userId, 'password.reset');
-  }
-
   public async addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
     const user = await this.findUserById(userId);
     if (user) {

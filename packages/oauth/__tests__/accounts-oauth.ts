@@ -19,7 +19,6 @@ const mockStore = {
   findUserByResetPasswordToken: jest.fn(),
   setPassword: jest.fn(),
   addResetPasswordToken: jest.fn(),
-  setResetPassword: jest.fn(),
   addEmail: jest.fn(),
   removeEmail: jest.fn(),
   verifyEmail: jest.fn(),

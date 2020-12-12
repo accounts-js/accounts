@@ -432,9 +432,4 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
   public async removeAllResetPasswordTokens(userId: string): Promise<void> {
     await this.resetPasswordTokenCollection.deleteMany({ userId });
   }
-
-  // TODO delete this function
-  public async setResetPassword(userId: string, email: string, newPassword: string): Promise<void> {
-    await this.setPassword(userId, newPassword);
-  }
 }

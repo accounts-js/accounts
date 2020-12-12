@@ -150,12 +150,7 @@ export class DatabaseManager implements DatabaseInterface {
     return this.userStorage.addResetPasswordToken.bind(this.userStorage);
   }
 
-  // Return the setResetPassword function from the userStorage
-  public get setResetPassword(): DatabaseInterface['setResetPassword'] {
-    return this.userStorage.setResetPassword.bind(this.userStorage);
-  }
-
-  // Return the setResetPassword function from the userStorage
+  // Return the setUserDeactivated function from the userStorage
   public get setUserDeactivated(): DatabaseInterface['setUserDeactivated'] {
     return this.userStorage.setUserDeactivated.bind(this.userStorage);
   }
