@@ -133,10 +133,6 @@ export class Mongo implements DatabaseInterface {
     return this.servicePassword.addResetPasswordToken(userId, email, token, reason);
   }
 
-  public async setResetPassword(userId: string, email: string, newPassword: string): Promise<void> {
-    return this.servicePassword.setResetPassword(userId, email, newPassword);
-  }
-
   public async createSession(
     userId: string,
     token: string,

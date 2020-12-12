@@ -848,20 +848,6 @@ describe('Mongo', () => {
     });
   });
 
-  describe('setResetPassword', () => {
-    it('should change password', async () => {
-      const newPassword = 'newpass';
-      const userId = await databaseTests.database.createUser(user);
-      await delay(10);
-      await databaseTests.database.setResetPassword(userId, 'toto', newPassword);
-      const retUser = await databaseTests.database.findUserById(userId);
-      const services: any = retUser!.services;
-      expect(services.password.bcrypt).toBeTruthy();
-      expect(services.password.bcrypt).toEqual(newPassword);
-      expect((retUser as any).createdAt).not.toEqual((retUser as any).updatedAt);
-    });
-  });
-
   describe('setUserDeactivated', () => {
     // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {

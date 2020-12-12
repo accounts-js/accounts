@@ -347,8 +347,9 @@ export default class AccountsPassword<CustomUser extends User = User>
     }
 
     const password = await this.options.hashPassword(newPassword);
-    // Change the user password and remove the old token
-    await this.db.setResetPassword(user.id, resetTokenRecord.address, password, token);
+    // Change the user password and remove the other reset tokens
+    await this.db.setPassword(user.id, password);
+    await this.db.removeAllResetPasswordTokens(user.id);
 
     await this.server.getHooks().emit(ServerHooks.ResetPasswordSuccess, user);
 
