@@ -104,10 +104,6 @@ export default class Database {
     return this.name;
   }
 
-  public setResetPassword() {
-    return this.name;
-  }
-
   public setUserDeactivated() {
     return this.name;
   }
@@ -236,12 +232,6 @@ describe('DatabaseManager', () => {
 
   it('addResetPasswordToken should be called on sessionStorage', () => {
     expect(databaseManager.addResetPasswordToken('userId', 'email', 'token', 'reason')).toBe(
-      'userStorage'
-    );
-  });
-
-  it('setResetPassword should be called on sessionStorage', () => {
-    expect(databaseManager.setResetPassword('userId', 'email', 'password', 'token')).toBe(
       'userStorage'
     );
   });

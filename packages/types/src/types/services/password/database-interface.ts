@@ -25,13 +25,6 @@ export interface DatabaseInterfaceServicePassword<CustomUser extends User = User
     reason: string
   ): Promise<void>;
 
-  setResetPassword(
-    userId: string,
-    email: string,
-    newPassword: string,
-    token: string
-  ): Promise<void>;
-
   addEmail(userId: string, newEmail: string, verified: boolean): Promise<void>;
 
   removeEmail(userId: string, email: string): Promise<void>;
