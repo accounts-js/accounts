@@ -370,9 +370,6 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
           'services.password.bcrypt': newPassword,
           [this.options.timestamps.updatedAt]: this.options.dateProvider(),
         },
-        $unset: {
-          'services.password.reset': '',
-        },
       }
     );
     if (ret.result.nModified === 0) {
@@ -436,7 +433,7 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
     await this.resetPasswordTokenCollection.deleteMany({ userId });
   }
 
-  // TODO delete this function?
+  // TODO delete this function
   public async setResetPassword(userId: string, email: string, newPassword: string): Promise<void> {
     await this.setPassword(userId, newPassword);
   }
