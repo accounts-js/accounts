@@ -469,10 +469,6 @@ export default class AccountsPassword<CustomUser extends User = User>
 
     const user = await this.db.findUserByEmail(address);
     if (!user) {
-      // To prevent user enumeration we fail silently
-      if (this.server.options.ambiguousErrorMessages) {
-        return;
-      }
       throw new AccountsJsError(
         this.options.errors.userNotFound,
         SendVerificationEmailErrors.UserNotFound
@@ -521,10 +517,6 @@ export default class AccountsPassword<CustomUser extends User = User>
 
     const user = await this.db.findUserByEmail(address);
     if (!user) {
-      // To prevent user enumeration we fail silently
-      if (this.server.options.ambiguousErrorMessages) {
-        return;
-      }
       throw new AccountsJsError(
         this.options.errors.userNotFound,
         SendResetPasswordEmailErrors.UserNotFound

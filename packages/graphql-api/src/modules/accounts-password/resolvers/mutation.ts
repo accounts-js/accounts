@@ -1,6 +1,11 @@
 import { ModuleContext } from '@graphql-modules/core';
 import { CreateUserServicePassword } from '@accounts/types';
-import { AccountsPassword, CreateUserErrors } from '@accounts/password';
+import {
+  AccountsPassword,
+  CreateUserErrors,
+  SendResetPasswordEmailErrors,
+  SendVerificationEmailErrors,
+} from '@accounts/password';
 import { AccountsServer, AccountsJsError } from '@accounts/server';
 import { AccountsModuleContext } from '../../accounts';
 import { MutationResolvers } from '../../../models';
@@ -93,7 +98,24 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
     return injector.get(AccountsPassword).resetPassword(token, newPassword, infos);
   },
   sendResetPasswordEmail: async (_, { email }, { injector }) => {
-    await injector.get(AccountsPassword).sendResetPasswordEmail(email);
+    const accountsServer = injector.get(AccountsServer);
+    const accountsPassword = injector.get(AccountsPassword);
+
+    try {
+      await accountsPassword.sendResetPasswordEmail(email);
+    } catch (error) {
+      // If ambiguousErrorMessages is true,
+      // to prevent user enumeration we fail silently in case there is no user attached to this email
+      if (
+        accountsServer.options.ambiguousErrorMessages &&
+        error instanceof AccountsJsError &&
+        error.code === SendResetPasswordEmailErrors.UserNotFound
+      ) {
+        return null;
+      }
+      throw error;
+    }
+
     return null;
   },
   verifyEmail: async (_, { token }, { injector }) => {
@@ -101,7 +123,23 @@ export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> =
     return null;
   },
   sendVerificationEmail: async (_, { email }, { injector }) => {
-    await injector.get(AccountsPassword).sendVerificationEmail(email);
+    const accountsServer = injector.get(AccountsServer);
+    const accountsPassword = injector.get(AccountsPassword);
+
+    try {
+      await accountsPassword.sendVerificationEmail(email);
+    } catch (error) {
+      // If ambiguousErrorMessages is true,
+      // to prevent user enumeration we fail silently in case there is no user attached to this email
+      if (
+        accountsServer.options.ambiguousErrorMessages &&
+        error instanceof AccountsJsError &&
+        error.code === SendVerificationEmailErrors.UserNotFound
+      ) {
+        return null;
+      }
+      throw error;
+    }
     return null;
   },
 };
