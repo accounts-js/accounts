@@ -26,6 +26,7 @@ export interface MongoResetPasswordToken {
   address: string;
   when: Date;
   reason: string;
+  expireAt: Date;
 }
 
 export interface MongoServicePasswordOptions {
@@ -44,11 +45,10 @@ export interface MongoServicePasswordOptions {
    */
   resetPasswordTokenCollectionName?: string;
   /**
-   * Should be the same number of days as the `@accounts/password` longest options between `passwordResetTokenExpiration` and `passwordEnrollTokenExpiration`.
-   * Default to 30 days.
-   * Set to 0 to disable.
+   * Should automatically delete the user reset password tokens when they expire via mongo TTL.
+   * Default to 'true'.
    */
-  resetPasswordTokenExpireAfterSeconds?: number;
+  resetPasswordTokenTTL?: boolean;
   /**
    * The timestamps for the users collection.
    * Default 'createdAt' and 'updatedAt'.
@@ -81,8 +81,7 @@ export interface MongoServicePasswordOptions {
 const defaultOptions = {
   userCollectionName: 'users',
   resetPasswordTokenCollectionName: 'resetPasswordTokens',
-  // 30 days - 30 * 24 * 60 * 60
-  resetPasswordTokenExpireAfterSeconds: 2592000,
+  resetPasswordTokenTTL: true,
   timestamps: {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -147,9 +146,9 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
       unique: true,
       sparse: true,
     });
-    if (this.options.resetPasswordTokenExpireAfterSeconds !== 0) {
-      await this.resetPasswordTokenCollection.createIndex('when', {
-        expireAfterSeconds: 10,
+    if (this.options.resetPasswordTokenTTL) {
+      await this.resetPasswordTokenCollection.createIndex('expireAt', {
+        expireAfterSeconds: 0,
       });
     }
   }
@@ -430,14 +429,18 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
     userId: string,
     email: string,
     token: string,
-    reason: string
+    reason: string,
+    expireAfterSeconds: number
   ): Promise<void> {
+    const now = new Date();
     await this.resetPasswordTokenCollection.insertOne({
       userId,
       address: email.toLowerCase(),
       token,
-      when: new Date(),
+      when: now,
       reason,
+      // Set when the object should be removed by mongo TTL
+      expireAt: new Date(now.getTime() + expireAfterSeconds * 1000),
     });
   }
 

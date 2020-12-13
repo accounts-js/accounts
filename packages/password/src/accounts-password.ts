@@ -524,7 +524,13 @@ export default class AccountsPassword<CustomUser extends User = User>
       );
     }
     const token = generateRandomToken();
-    await this.db.addResetPasswordToken(user.id, address, token, 'reset');
+    await this.db.addResetPasswordToken(
+      user.id,
+      address,
+      token,
+      'reset',
+      this.options.passwordResetTokenExpiration / 1000
+    );
 
     const resetPasswordMail = this.server.prepareMail(
       address,
@@ -563,7 +569,13 @@ export default class AccountsPassword<CustomUser extends User = User>
       );
     }
     const token = generateRandomToken();
-    await this.db.addResetPasswordToken(user.id, address, token, 'enroll');
+    await this.db.addResetPasswordToken(
+      user.id,
+      address,
+      token,
+      'enroll',
+      this.options.passwordEnrollTokenExpiration / 1000
+    );
 
     const enrollmentMail = this.server.prepareMail(
       address,
