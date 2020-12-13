@@ -140,7 +140,6 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
       sparse: true,
     });
     // Token index used to verify a password reset request
-    // TODO change index with ttl
     await this.resetPasswordTokenCollection.createIndex('token', {
       ...options,
       unique: true,
