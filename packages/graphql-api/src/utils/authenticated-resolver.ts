@@ -1,9 +1,6 @@
-export const authenticated = <R, A, C, I, T>(func: (root: R, args: A, context: C, info: I) => T | Promise<T>) => async (
-  root: R,
-  args: A,
-  context: C,
-  info: I
-) => {
+export const authenticated = <CustomRoot, CustomArgs, Context, Info, T>(
+  func: (root: CustomRoot, args: CustomArgs, context: Context, info: Info) => T | Promise<T>
+) => async (root: CustomRoot, args: CustomArgs, context: Context, info: Info) => {
   if (context && context.skipJSAccountsVerification === true) {
     return func(root, args, context, info);
   }
