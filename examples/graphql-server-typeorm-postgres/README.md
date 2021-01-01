@@ -1,6 +1,6 @@
 # typeorm-server-typescript
 
-This example demonstrate how to use [accounts-js](https://github.com/accounts-js/accounts) with PostgreSQL thanks to the amazing [@accounts/typeorm](https://www.npmjs.com/package/@accounts/typeorm) plugin built by (https://github.com/birkir/)[@birkir]for his awesome project: (https://github.com/birkir/prime)[PrimeCMS].
+This example demonstrate how to use [accounts-js](https://github.com/accounts-js/accounts) with PostgreSQL thanks to the amazing [@accounts/typeorm](https://www.npmjs.com/package/@accounts/typeorm) plugin built by [https://github.com/birkir/](@birkir)for his awesome project: (https://github.com/birkir/prime)[PrimeCMS].
 
 ## Setup example
 
