@@ -37,7 +37,7 @@
     "@accounts/server": "^0.28.0",
     "@accounts/types": "^0.28.0",
     "@graphql-modules/core": "0.7.17",
-    "graphql": "14.6.0",
+    "graphql": "^14.6.0 || ^15.0.0",
     "graphql-tag": "^2.10.0"
   },
   "dependencies": {
@@ -61,6 +61,7 @@
     "@types/jest": "25.2.3",
     "@types/request-ip": "0.0.35",
     "concurrently": "5.2.0",
+    "graphql": "14.6.0",
     "jest": "26.6.3",
     "ts-jest": "26.4.4",
     "ts-node": "8.10.1"
