@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@accounts/server": "^0.30.0",
+    "@accounts/types": "^0.30.0"
     "@types/bcryptjs": "2.4.2",
     "@types/jest": "26.0.19",
     "@types/lodash": "4.14.157",
@@ -38,7 +39,6 @@
     "rimraf": "3.0.2"
   },
   "peerDependencies": {
-    "@accounts/server": "^0.30.0",
-    "@accounts/types": "^0.30.0"
+    "@accounts/server": "^0.30.0"
   }
 }
