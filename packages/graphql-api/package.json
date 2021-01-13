@@ -37,6 +37,7 @@
     "@accounts/server": "^0.30.0",
     "@accounts/types": "^0.30.0",
     "@graphql-modules/core": "0.7.17",
+    "graphql": "^14.6.0 || ^15.0.0",
     "graphql-tag": "^2.10.0"
   },
   "dependencies": {
