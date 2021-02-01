@@ -22,7 +22,7 @@
     "apollo-server": "2.14.4",
     "graphql": "14.6.0",
     "lodash": "4.17.15",
-    "node-fetch": "2.6.0",
+    "node-fetch": "2.6.1",
     "tslib": "2.0.0"
   },
   "devDependencies": {
