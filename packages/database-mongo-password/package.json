@@ -4,6 +4,9 @@
   "description": "MongoDB password adaptor for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "clean": "rimraf lib",
     "start": "tsc --watch",
