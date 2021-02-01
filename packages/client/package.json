@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client",
-  "version": "0.30.0",
+  "version": "0.31.1",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -48,7 +48,6 @@
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "25.2.3",
-    "@types/jwt-decode": "2.2.1",
     "@types/node": "14.0.14",
     "jest": "26.0.1",
     "jest-localstorage-mock": "2.4.2",
@@ -57,8 +56,8 @@
     "rimraf": "3.0.2"
   },
   "dependencies": {
-    "@accounts/types": "^0.30.0",
-    "jwt-decode": "2.2.0",
+    "@accounts/types": "^0.31.1",
+    "jwt-decode": "3.1.2",
     "tslib": "2.0.0"
   }
 }
