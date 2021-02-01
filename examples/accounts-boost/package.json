@@ -21,7 +21,7 @@
     "apollo-link-http": "1.5.17",
     "apollo-server": "2.14.4",
     "graphql": "14.6.0",
-    "lodash": "4.17.15",
+    "lodash": "4.17.20",
     "node-fetch": "2.6.1",
     "tslib": "2.0.0"
   },
