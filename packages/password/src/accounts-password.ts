@@ -334,12 +334,7 @@ export default class AccountsPassword<CustomUser extends User = User>
     }
 
     const emails = user.emails || [];
-    if (
-      !includes(
-        emails.map((email: EmailRecord) => email.address),
-        resetTokenRecord.address
-      )
-    ) {
+    if (!emails.map((email: EmailRecord) => email.address).includes(resetTokenRecord.address)) {
       throw new AccountsJsError(
         this.options.errors.resetPasswordLinkUnknownAddress,
         ResetPasswordErrors.ResetPasswordLinkUnknownAddress
