@@ -1,4 +1,4 @@
-import { trim, isEmpty, pick, isString, isPlainObject, find, includes, defer } from 'lodash';
+import { trim, isEmpty, pick, isString, isPlainObject, includes, defer } from 'lodash';
 import {
   User,
   LoginUserIdentity,
@@ -266,7 +266,7 @@ export default class AccountsPassword<CustomUser extends User = User>
     }
 
     const verificationTokens = getUserVerificationTokens(user);
-    const tokenRecord = find(verificationTokens, (t: TokenRecord) => t.token === token);
+    const tokenRecord = verificationTokens.find((t: TokenRecord) => t.token === token);
     if (!tokenRecord || this.isTokenExpired(tokenRecord, this.options.verifyEmailTokenExpiration)) {
       throw new AccountsJsError(
         this.options.errors.verifyEmailLinkExpired,
@@ -274,7 +274,7 @@ export default class AccountsPassword<CustomUser extends User = User>
       );
     }
 
-    const emailRecord = find(user.emails, (e: EmailRecord) => e.address === tokenRecord.address);
+    const emailRecord = user.emails?.find((e: EmailRecord) => e.address === tokenRecord.address);
     if (!emailRecord) {
       throw new AccountsJsError(
         this.options.errors.verifyEmailLinkUnknownAddress,
@@ -316,7 +316,7 @@ export default class AccountsPassword<CustomUser extends User = User>
     }
 
     const resetTokens = getUserResetTokens(user);
-    const resetTokenRecord = find(resetTokens, (t) => t.token === token);
+    const resetTokenRecord = resetTokens.find((t) => t.token === token);
 
     if (
       !resetTokenRecord ||
@@ -477,8 +477,7 @@ export default class AccountsPassword<CustomUser extends User = User>
     }
 
     // Do not send an email if the address is already verified
-    const emailRecord = find(
-      user.emails,
+    const emailRecord = user.emails?.find(
       (email: EmailRecord) => email.address.toLowerCase() === address.toLocaleLowerCase()
     );
     if (!emailRecord || emailRecord.verified) {
