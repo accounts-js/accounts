@@ -1,4 +1,4 @@
-import { trim, isEmpty, pick, isPlainObject, includes, defer } from 'lodash';
+import { pick, isPlainObject, includes, defer } from 'lodash';
 import {
   User,
   LoginUserIdentity,
@@ -146,15 +146,14 @@ const defaultOptions = {
   errors,
   sendVerificationEmailAfterSignup: false,
   validateEmail(email?: string): boolean {
-    return !isEmpty(trim(email)) && isEmail(email);
+    return isString(email) && isEmail(email);
   },
   validatePassword(password?: string): boolean {
-    return !isEmpty(password);
+    return isString(password) && password !== '';
   },
   validateUsername(username?: string): boolean {
     const usernameRegex = /^[a-zA-Z][a-zA-Z0-9]*$/;
-    const isValid = username && !isEmpty(trim(username)) && usernameRegex.test(username);
-    return Boolean(isValid);
+    return isString(username) && usernameRegex.test(username);
   },
   hashPassword: bcryptPassword,
   verifyPassword,
