@@ -1,4 +1,4 @@
-import { pick, isPlainObject, includes, defer } from 'lodash';
+import { pick, defer } from 'lodash';
 import {
   User,
   LoginUserIdentity,
@@ -39,7 +39,7 @@ import {
   SendEnrollmentEmailErrors,
   VerifyEmailErrors,
 } from './errors';
-import { isString } from './utils/validation';
+import { isObject, isString } from './utils/validation';
 
 export interface AccountsPasswordOptions {
   /**
@@ -185,7 +185,7 @@ export default class AccountsPassword<CustomUser extends User = User>
         AuthenticateErrors.UnrecognizedOptionsForLogin
       );
     }
-    if ((!isString(user) && !isPlainObject(user)) || !isString(password)) {
+    if ((!isString(user) && !isObject(user)) || !isString(password)) {
       throw new AccountsJsError(this.options.errors.matchFailed, AuthenticateErrors.MatchFailed);
     }
 
