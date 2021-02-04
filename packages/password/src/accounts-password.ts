@@ -1,4 +1,4 @@
-import { trim, isEmpty, pick, isString, isPlainObject, includes, defer } from 'lodash';
+import { trim, isEmpty, pick, isPlainObject, includes, defer } from 'lodash';
 import {
   User,
   LoginUserIdentity,
@@ -39,6 +39,7 @@ import {
   SendEnrollmentEmailErrors,
   VerifyEmailErrors,
 } from './errors';
+import { isString } from './utils/validation';
 
 export interface AccountsPasswordOptions {
   /**
