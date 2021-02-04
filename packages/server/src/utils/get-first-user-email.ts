@@ -1,4 +1,3 @@
-import { includes, map } from 'lodash';
 import { User } from '@accounts/types';
 
 export function getFirstUserEmail(user: User, address: string): string {
@@ -11,8 +10,8 @@ export function getFirstUserEmail(user: User, address: string): string {
     }
   }
 
-  const validAddresses = map(user.emails, 'address');
-  const addressIsValid = includes(validAddresses, address);
+  const validAddresses = user.emails?.map((email) => email.address) ?? [];
+  const addressIsValid = validAddresses.includes(address);
   if (!addressIsValid) {
     throw new Error('No such email address for user');
   }

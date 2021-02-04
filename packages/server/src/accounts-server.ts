@@ -1,4 +1,4 @@
-import { pick, omit, isString, merge } from 'lodash';
+import { pick, omit, merge } from 'lodash';
 import * as jwt from 'jsonwebtoken';
 import Emittery from 'emittery';
 import {
@@ -33,6 +33,7 @@ import {
   LogoutErrors,
   ResumeSessionErrors,
 } from './errors';
+import { isString } from './utils/validation';
 
 const defaultOptions = {
   ambiguousErrorMessages: true,
