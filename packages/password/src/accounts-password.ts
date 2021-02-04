@@ -1,4 +1,3 @@
-import { pick } from 'lodash';
 import {
   User,
   LoginUserIdentity,
@@ -154,6 +153,19 @@ const defaultOptions = {
   validateUsername(username?: string): boolean {
     const usernameRegex = /^[a-zA-Z][a-zA-Z0-9]*$/;
     return isString(username) && usernameRegex.test(username);
+  },
+  // If user does not provide the validateNewUser function only allow some fields
+  validateNewUser(
+    user: CreateUserServicePassword
+  ): Promise<CreateUserServicePassword> | CreateUserServicePassword {
+    const safeUser: CreateUserServicePassword = { password: user.password };
+    if (user.username) {
+      safeUser.username = user.username;
+    }
+    if (user.email) {
+      safeUser.email = user.email;
+    }
+    return safeUser;
   },
   hashPassword: bcryptPassword,
   verifyPassword,
@@ -620,14 +632,7 @@ export default class AccountsPassword<CustomUser extends User = User>
       user.password = await this.options.hashPassword(user.password);
     }
 
-    // If user does not provide the validate function only allow some fields
-    user = this.options.validateNewUser
-      ? await this.options.validateNewUser(user)
-      : pick<CreateUserServicePassword, 'username' | 'email' | 'password'>(user, [
-          'username',
-          'email',
-          'password',
-        ]);
+    user = await this.options.validateNewUser(user);
 
     try {
       const userId = await this.db.createUser(user);
