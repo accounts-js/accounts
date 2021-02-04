@@ -1,4 +1,4 @@
-import { pick, defer } from 'lodash';
+import { pick } from 'lodash';
 import {
   User,
   LoginUserIdentity,
@@ -635,11 +635,9 @@ export default class AccountsPassword<CustomUser extends User = User>
       const userRecord = (await this.db.findUserById(userId)) as User;
       await this.server.getHooks().emit(ServerHooks.CreateUserSuccess, userRecord);
 
-      defer(async () => {
-        if (this.options.sendVerificationEmailAfterSignup && user.email) {
-          this.sendVerificationEmail(user.email);
-        }
-      });
+      if (this.options.sendVerificationEmailAfterSignup && user.email) {
+        await this.sendVerificationEmail(user.email);
+      }
 
       return userId;
     } catch (e) {
