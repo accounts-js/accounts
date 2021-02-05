@@ -193,14 +193,13 @@ describe('TypeormServicePassword', () => {
     it('should return user', async () => {
       const accountsTypeorm = new AccountsTypeorm({ connection, cache: 1 });
       const userId = await accountsTypeorm.createUser(user);
-      const ret = await accountsTypeorm.findUserById(userId);
-      const ret1 = await accountsTypeorm.findUserByServiceId(
-        'password',
-        ret!.services.password[0].id
-      );
 
-      expect(ret1).toBeTruthy();
-      expect(ret1!.id).toEqual(ret!.id);
+      let ret = await accountsTypeorm.findUserByServiceId('facebook', '1');
+      expect(ret).not.toBeTruthy();
+      await accountsTypeorm.setService(userId, 'facebook', { id: '1' });
+      ret = await accountsTypeorm.findUserByServiceId('facebook', '1');
+      expect(ret).toBeTruthy();
+      expect(ret!.id).toEqual(userId);
     });
   });
 
@@ -238,26 +237,24 @@ describe('TypeormServicePassword', () => {
     });
   });
 
-  // TODO: Uncomment this once #1108 is fixed
-  // describe('findUserByServiceId', () => {
-  //   it('should return null for not found user', async () => {
-  //     const accountsTypeorm = new AccountsTypeorm({ connection });
-  //     const ret = await accountsTypeorm.findUserByServiceId('facebook', 'invalid');
-  //     expect(ret).not.toBeTruthy();
-  //   });
-  //
-  //   it('should return user', async () => {
-  //     const accountsTypeorm = new AccountsTypeorm({ connection });
-  //     const userId = await accountsTypeorm.createUser(user);
-  //     let ret = await accountsTypeorm.findUserByServiceId('facebook', '1');
-  //     expect(ret).not.toBeTruthy();
-  //     await accountsTypeorm.setService(userId, 'facebook', { id: '1' });
-  //     ret = await accountsTypeorm.findUserByServiceId('facebook', '1');
-  //     expect(ret).toBeTruthy();
-  //     expect((ret as any)._id).toBeTruthy();
-  //     expect(ret!.id).toBeTruthy();
-  //   });
-  // });
+  describe('findUserByServiceId', () => {
+    it('should return null for not found user', async () => {
+      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const ret = await accountsTypeorm.findUserByServiceId('facebook', 'invalid');
+      expect(ret).not.toBeTruthy();
+    });
+
+    it('should return user', async () => {
+      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const userId = await accountsTypeorm.createUser(user);
+      let ret = await accountsTypeorm.findUserByServiceId('facebook', '1');
+      expect(ret).not.toBeTruthy();
+      await accountsTypeorm.setService(userId, 'facebook', { id: '1' });
+      ret = await accountsTypeorm.findUserByServiceId('facebook', '1');
+      expect(ret).toBeTruthy();
+      expect(ret!.id).toBeTruthy();
+    });
+  });
 
   describe('findPasswordHash', () => {
     it('should return null on not found user', async () => {
@@ -418,31 +415,29 @@ describe('TypeormServicePassword', () => {
     });
   });
 
-  // TODO: The query in findUserByServiceId is wrong and hence this will fail
-  // describe('setService', () => {
-  //   it('should set service', async () => {
-  //     const accountsTypeorm = new AccountsTypeorm({ connection });
-  //     const userId = await accountsTypeorm.createUser(user);
-  //     let ret = await accountsTypeorm.findUserByServiceId('google', '1');
-  //     expect(ret).not.toBeTruthy();
-  //     await accountsTypeorm.setService(userId, 'google', { id: 1 });
-  //     ret = await accountsTypeorm.findUserByServiceId('google', '1');
-  //     expect(ret).toBeTruthy();
-  //     expect(ret!.id).toBeTruthy();
-  //   });
-  // });
+  describe('setService', () => {
+    it('should set service', async () => {
+      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const userId = await accountsTypeorm.createUser(user);
+      let ret = await accountsTypeorm.findUserByServiceId('google', '1');
+      expect(ret).not.toBeTruthy();
+      await accountsTypeorm.setService(userId, 'google', { id: 1 });
+      ret = await accountsTypeorm.findUserByServiceId('google', '1');
+      expect(ret).toBeTruthy();
+      expect(ret!.id).toBeTruthy();
+    });
+  });
 
-  // TODO: The query in findUserByServiceId is wrong and hence this will fail
-  // describe('unsetService', () => {
-  //   it('should unset service', async () => {
-  //     const accountsTypeorm = new AccountsTypeorm({ connection });
-  //     const userId = await accountsTypeorm.createUser(user);
-  //     await accountsTypeorm.setService(userId, 'telegram', { id: '1' });
-  //     await accountsTypeorm.unsetService(userId, 'telegram');
-  //     const ret = await accountsTypeorm.findUserByServiceId('telegram', '1');
-  //     expect(ret).not.toBeTruthy();
-  //   });
-  // });
+  describe('unsetService', () => {
+    it('should unset service', async () => {
+      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const userId = await accountsTypeorm.createUser(user);
+      await accountsTypeorm.setService(userId, 'telegram', { id: '1' });
+      await accountsTypeorm.unsetService(userId, 'telegram');
+      const ret = await accountsTypeorm.findUserByServiceId('telegram', '1');
+      expect(ret).not.toBeTruthy();
+    });
+  });
 
   describe('setUserDeactivated', () => {
     // TODO: This should be added
