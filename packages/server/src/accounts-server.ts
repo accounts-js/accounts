@@ -616,7 +616,9 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
   }
 
   private internalUserSanitizer(user: CustomUser): CustomUser {
-    return omit(user, ['services']) as any;
+    // Remove services from the user object
+    const { services, ...sanitizedUser } = user;
+    return sanitizedUser as any;
   }
 
   private defaultPrepareEmail(
