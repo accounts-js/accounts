@@ -1,4 +1,4 @@
-import { merge } from 'lodash';
+import merge from 'lodash.merge';
 import * as jwt from 'jsonwebtoken';
 import Emittery from 'emittery';
 import {
