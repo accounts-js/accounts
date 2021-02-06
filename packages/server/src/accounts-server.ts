@@ -1,4 +1,4 @@
-import { pick, omit, merge } from 'lodash';
+import { merge } from 'lodash';
 import * as jwt from 'jsonwebtoken';
 import Emittery from 'emittery';
 import {
@@ -612,7 +612,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       ? this.internalUserSanitizer(user)
       : user;
 
-    return userObjectSanitizer(baseUser, omit as any, pick as any);
+    return userObjectSanitizer(baseUser) as CustomUser;
   }
 
   private internalUserSanitizer(user: CustomUser): CustomUser {
