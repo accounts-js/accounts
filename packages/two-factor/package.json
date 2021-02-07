@@ -29,7 +29,7 @@
     "@accounts/types": "^0.31.1",
     "@types/speakeasy": "2.0.2",
     "speakeasy": "^2.0.0",
-    "tslib": "2.0.0"
+    "tslib": "2.1.0"
   },
   "devDependencies": {
     "@types/jest": "25.2.3",

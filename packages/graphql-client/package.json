@@ -36,7 +36,7 @@
     "@accounts/client": "^0.31.1",
     "@accounts/types": "^0.31.1",
     "@graphql-typed-document-node/core": "0.0.1",
-    "tslib": "2.0.0"
+    "tslib": "2.1.0"
   },
   "devDependencies": {
     "@graphql-codegen/add": "1.17.4",
