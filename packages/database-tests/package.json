@@ -23,7 +23,7 @@
   "license": "MIT",
   "dependencies": {
     "@accounts/types": "^0.31.1",
-    "tslib": "2.0.0"
+    "tslib": "2.1.0"
   },
   "devDependencies": {
     "@types/jest": "25.2.3",

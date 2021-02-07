@@ -35,7 +35,7 @@
     "@accounts/types": "^0.31.1",
     "ioredis": "^4.14.1",
     "shortid": "^2.2.15",
-    "tslib": "2.0.0"
+    "tslib": "2.1.0"
   },
   "devDependencies": {
     "@accounts/database-tests": "^0.31.1",
