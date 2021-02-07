@@ -32,13 +32,13 @@
     "@accounts/mongo-password": "^0.31.1",
     "@accounts/mongo-sessions": "^0.31.1",
     "@accounts/types": "^0.31.1",
+    "@types/mongodb": "^3.5.33",
     "mongodb": "^3.4.1",
     "tslib": "2.0.3"
   },
   "devDependencies": {
     "@accounts/database-tests": "^0.31.1",
     "@types/jest": "26.0.15",
-    "@types/mongodb": "3.5.33",
     "@types/node": "14.14.9",
     "jest": "26.6.3",
     "ts-jest": "26.5.0"
