@@ -1,7 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import { User, DatabaseInterface, Session } from '@accounts/types';
 import { EmailTemplatesType } from './email-templates-type';
-import { UserObjectSanitizerFunction } from './user-object-sanitizer-function';
 import { PrepareMailFunction } from './prepare-mail-function';
 import { SendMailType } from './send-mail-type';
 import { TokenCreator } from './token-creator';
@@ -24,7 +23,7 @@ export interface AccountsServerOptions<CustomUser extends User = User> {
     refreshToken?: jwt.SignOptions;
   };
   emailTemplates?: EmailTemplatesType;
-  userObjectSanitizer?: UserObjectSanitizerFunction;
+  userObjectSanitizer?: (user: CustomUser) => CustomUser;
   impersonationAuthorize?: (user: User, impersonateToUser: User) => Promise<any>;
   /**
    * Use this function if you want to cancel the current session to be resumed.

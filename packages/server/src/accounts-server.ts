@@ -1,4 +1,4 @@
-import { pick, omit, isString, merge } from 'lodash';
+import merge from 'lodash.merge';
 import * as jwt from 'jsonwebtoken';
 import Emittery from 'emittery';
 import {
@@ -33,6 +33,7 @@ import {
   LogoutErrors,
   ResumeSessionErrors,
 } from './errors';
+import { isString } from './utils/validation';
 
 const defaultOptions = {
   ambiguousErrorMessages: true,
@@ -611,11 +612,17 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       ? this.internalUserSanitizer(user)
       : user;
 
-    return userObjectSanitizer(baseUser, omit as any, pick as any);
+    return userObjectSanitizer(baseUser) as CustomUser;
   }
 
   private internalUserSanitizer(user: CustomUser): CustomUser {
-    return omit(user, ['services']) as any;
+    // Remove services from the user object
+    const {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      services,
+      ...sanitizedUser
+    } = user;
+    return sanitizedUser as any;
   }
 
   private defaultPrepareEmail(
