@@ -30,6 +30,9 @@
     "url": "https://github.com/accounts-js/accounts/tree/master/packages/database-mongo-session"
   },
   "license": "MIT",
+  "peerDependencies": {
+    "mongodb": "^3.4.1"
+  },
   "dependencies": {
     "@accounts/types": "^0.31.1",
     "tslib": "2.0.3"
