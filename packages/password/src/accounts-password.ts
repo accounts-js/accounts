@@ -1,4 +1,3 @@
-import { trim, isEmpty, pick, isString, isPlainObject, find, includes, defer } from 'lodash';
 import {
   User,
   LoginUserIdentity,
@@ -39,6 +38,7 @@ import {
   SendEnrollmentEmailErrors,
   VerifyEmailErrors,
 } from './errors';
+import { isObject, isString } from './utils/validation';
 
 export interface AccountsPasswordOptions {
   /**
@@ -145,15 +145,27 @@ const defaultOptions = {
   errors,
   sendVerificationEmailAfterSignup: false,
   validateEmail(email?: string): boolean {
-    return !isEmpty(trim(email)) && isEmail(email);
+    return isString(email) && isEmail(email);
   },
   validatePassword(password?: string): boolean {
-    return !isEmpty(password);
+    return isString(password) && password !== '';
   },
   validateUsername(username?: string): boolean {
     const usernameRegex = /^[a-zA-Z][a-zA-Z0-9]*$/;
-    const isValid = username && !isEmpty(trim(username)) && usernameRegex.test(username);
-    return Boolean(isValid);
+    return isString(username) && usernameRegex.test(username);
+  },
+  // If user does not provide the validateNewUser function only allow some fields
+  validateNewUser(
+    user: CreateUserServicePassword
+  ): Promise<CreateUserServicePassword> | CreateUserServicePassword {
+    const safeUser: CreateUserServicePassword = { password: user.password };
+    if (user.username) {
+      safeUser.username = user.username;
+    }
+    if (user.email) {
+      safeUser.email = user.email;
+    }
+    return safeUser;
   },
   hashPassword: bcryptPassword,
   verifyPassword,
@@ -185,7 +197,7 @@ export default class AccountsPassword<CustomUser extends User = User>
         AuthenticateErrors.UnrecognizedOptionsForLogin
       );
     }
-    if ((!isString(user) && !isPlainObject(user)) || !isString(password)) {
+    if ((!isString(user) && !isObject(user)) || !isString(password)) {
       throw new AccountsJsError(this.options.errors.matchFailed, AuthenticateErrors.MatchFailed);
     }
 
@@ -266,7 +278,7 @@ export default class AccountsPassword<CustomUser extends User = User>
     }
 
     const verificationTokens = getUserVerificationTokens(user);
-    const tokenRecord = find(verificationTokens, (t: TokenRecord) => t.token === token);
+    const tokenRecord = verificationTokens.find((t: TokenRecord) => t.token === token);
     if (!tokenRecord || this.isTokenExpired(tokenRecord, this.options.verifyEmailTokenExpiration)) {
       throw new AccountsJsError(
         this.options.errors.verifyEmailLinkExpired,
@@ -274,7 +286,7 @@ export default class AccountsPassword<CustomUser extends User = User>
       );
     }
 
-    const emailRecord = find(user.emails, (e: EmailRecord) => e.address === tokenRecord.address);
+    const emailRecord = user.emails?.find((e: EmailRecord) => e.address === tokenRecord.address);
     if (!emailRecord) {
       throw new AccountsJsError(
         this.options.errors.verifyEmailLinkUnknownAddress,
@@ -316,7 +328,7 @@ export default class AccountsPassword<CustomUser extends User = User>
     }
 
     const resetTokens = getUserResetTokens(user);
-    const resetTokenRecord = find(resetTokens, (t) => t.token === token);
+    const resetTokenRecord = resetTokens.find((t) => t.token === token);
 
     if (
       !resetTokenRecord ||
@@ -334,12 +346,7 @@ export default class AccountsPassword<CustomUser extends User = User>
     }
 
     const emails = user.emails || [];
-    if (
-      !includes(
-        emails.map((email: EmailRecord) => email.address),
-        resetTokenRecord.address
-      )
-    ) {
+    if (!emails.map((email: EmailRecord) => email.address).includes(resetTokenRecord.address)) {
       throw new AccountsJsError(
         this.options.errors.resetPasswordLinkUnknownAddress,
         ResetPasswordErrors.ResetPasswordLinkUnknownAddress
@@ -477,8 +484,7 @@ export default class AccountsPassword<CustomUser extends User = User>
     }
 
     // Do not send an email if the address is already verified
-    const emailRecord = find(
-      user.emails,
+    const emailRecord = user.emails?.find(
       (email: EmailRecord) => email.address.toLowerCase() === address.toLocaleLowerCase()
     );
     if (!emailRecord || emailRecord.verified) {
@@ -626,14 +632,7 @@ export default class AccountsPassword<CustomUser extends User = User>
       user.password = await this.options.hashPassword(user.password);
     }
 
-    // If user does not provide the validate function only allow some fields
-    user = this.options.validateNewUser
-      ? await this.options.validateNewUser(user)
-      : pick<CreateUserServicePassword, 'username' | 'email' | 'password'>(user, [
-          'username',
-          'email',
-          'password',
-        ]);
+    user = await this.options.validateNewUser(user);
 
     try {
       const userId = await this.db.createUser(user);
@@ -641,11 +640,9 @@ export default class AccountsPassword<CustomUser extends User = User>
       const userRecord = (await this.db.findUserById(userId)) as User;
       await this.server.getHooks().emit(ServerHooks.CreateUserSuccess, userRecord);
 
-      defer(async () => {
-        if (this.options.sendVerificationEmailAfterSignup && user.email) {
-          this.sendVerificationEmail(user.email);
-        }
-      });
+      if (this.options.sendVerificationEmailAfterSignup && user.email) {
+        await this.sendVerificationEmail(user.email);
+      }
 
       return userId;
     } catch (e) {
