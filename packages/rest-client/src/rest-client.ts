@@ -1,4 +1,3 @@
-import { forIn, isPlainObject } from 'lodash';
 import { TransportInterface, AccountsClient } from '@accounts/client';
 import {
   User,
@@ -29,7 +28,10 @@ export class RestClient implements TransportInterface {
 
   public async fetch(route: string, args: object, customHeaders: object = {}): Promise<any> {
     const fetchOptions = {
-      headers: this._loadHeadersObject(customHeaders),
+      headers: {
+        ...headers,
+        ...customHeaders,
+      },
       ...args,
     };
     const res = await fetch(
@@ -239,19 +241,6 @@ export class RestClient implements TransportInterface {
       }),
     };
     return this.authFetch('password/twoFactorUnset', args, customHeaders);
-  }
-
-  private _loadHeadersObject(plainHeaders: object): { [key: string]: string } {
-    if (isPlainObject(plainHeaders)) {
-      const customHeaders = headers;
-      forIn(plainHeaders, (v: string, k: string) => {
-        customHeaders[k] = v;
-      });
-
-      return customHeaders;
-    }
-
-    return headers;
   }
 }
 

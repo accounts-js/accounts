@@ -41,21 +41,19 @@
   ],
   "author": "Tim Mikeladze",
   "license": "MIT",
-  "devDependencies": {
-    "@accounts/client": "^0.31.1",
-    "@types/jest": "25.2.3",
-    "@types/lodash": "4.14.157",
-    "@types/node": "14.0.14",
-    "jest": "26.6.3",
-    "node-fetch": "2.6.1",
-    "ts-jest": "26.5.0"
-  },
   "peerDependencies": {
     "@accounts/client": "^0.19.0"
   },
   "dependencies": {
     "@accounts/types": "^0.31.1",
-    "lodash": "^4.17.20",
     "tslib": "2.0.0"
+  },
+  "devDependencies": {
+    "@accounts/client": "^0.31.1",
+    "@types/jest": "25.2.3",
+    "@types/node": "14.0.14",
+    "jest": "26.6.3",
+    "node-fetch": "2.6.1",
+    "ts-jest": "26.5.0"
   }
 }

@@ -1,4 +1,3 @@
-import { forIn } from 'lodash';
 import { AccountsClient } from '@accounts/client';
 
 const headers: { [key: string]: string } = {
@@ -7,16 +6,17 @@ const headers: { [key: string]: string } = {
 
 export const authFetch = async (accounts: AccountsClient, path: string, request: any) => {
   const tokens = await accounts.refreshSession();
-  const headersCopy = { ...headers };
+  let headersCopy = { ...headers };
 
   if (tokens) {
     headersCopy.Authorization = 'Bearer ' + tokens.accessToken;
   }
 
   if (request['headers']) {
-    forIn(request['headers'], (v: string, k: string) => {
-      headersCopy[v] = k;
-    });
+    headersCopy = {
+      ...headersCopy,
+      ...request['headers'],
+    };
   }
 
   const fetchOptions = {
