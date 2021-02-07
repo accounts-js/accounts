@@ -1381,7 +1381,14 @@ describe('AccountsServer', () => {
         {
           db: db as any,
           tokenSecret: 'secret1',
-          userObjectSanitizer: (user, omit) => omit(user, ['username']),
+          userObjectSanitizer: (user) => {
+            const {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              username,
+              ...sanitizedUser
+            } = user;
+            return sanitizedUser;
+          },
         },
         {}
       );
