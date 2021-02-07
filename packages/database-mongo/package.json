@@ -29,9 +29,9 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "dependencies": {
-    "@accounts/types": "^0.31.1",
     "@accounts/mongo-password": "^0.31.1",
     "@accounts/mongo-sessions": "^0.31.1",
+    "@accounts/types": "^0.31.1",
     "@types/mongodb": "^3.5.33",
     "mongodb": "^3.4.1",
     "tslib": "2.0.3"
