@@ -617,7 +617,11 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
 
   private internalUserSanitizer(user: CustomUser): CustomUser {
     // Remove services from the user object
-    const { services, ...sanitizedUser } = user;
+    const {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      services,
+      ...sanitizedUser
+    } = user;
     return sanitizedUser as any;
   }
 
