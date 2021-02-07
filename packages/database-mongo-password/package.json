@@ -1,9 +1,12 @@
 {
   "name": "@accounts/mongo-password",
-  "version": "0.30.0",
+  "version": "0.31.1",
   "description": "MongoDB password adaptor for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "clean": "rimraf lib",
     "start": "tsc --watch",
@@ -28,7 +31,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@accounts/types": "^0.30.0",
+    "@accounts/types": "^0.31.1",
     "tslib": "2.0.3"
   },
   "devDependencies": {
@@ -37,6 +40,6 @@
 
     "@types/node": "14.14.9",
     "jest": "26.6.3",
-    "ts-jest": "26.4.0"
+    "ts-jest": "26.5.0"
   }
 }

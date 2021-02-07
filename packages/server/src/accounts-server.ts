@@ -304,13 +304,13 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         return { authorized: false };
       }
 
-      const token = generateRandomToken();
+      const token = await this.createSessionToken(impersonatedUser);
       const newSessionId = await this.db.createSession(impersonatedUser.id, token, infos, {
         impersonatorUserId: user.id,
       });
 
       const impersonationTokens = await this.createTokens({
-        token: newSessionId,
+        token,
         isImpersonated: true,
         user,
       });
@@ -323,6 +323,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       await this.hooks.emit(ServerHooks.ImpersonationSuccess, {
         user,
         impersonationResult,
+        sessionId: newSessionId,
       });
 
       return impersonationResult;

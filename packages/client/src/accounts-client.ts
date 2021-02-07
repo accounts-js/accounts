@@ -174,6 +174,7 @@ export class AccountsClient {
   public async stopImpersonation(): Promise<void> {
     const tokens = await this.getTokens(true);
     if (tokens) {
+      await this.logout();
       await this.setTokens(tokens);
       await this.clearTokens(true);
     }

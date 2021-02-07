@@ -1,6 +1,6 @@
 {
   "name": "@accounts/oauth-instagram",
-  "version": "0.30.0",
+  "version": "0.31.1",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -22,7 +22,7 @@
     "preset": "ts-jest"
   },
   "dependencies": {
-    "@accounts/oauth": "^0.30.0",
+    "@accounts/oauth": "^0.31.1",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
     "tslib": "2.0.0"
@@ -31,6 +31,7 @@
     "@types/jest": "25.2.3",
     "@types/node": "14.0.14",
     "@types/request-promise": "4.1.46",
-    "jest": "26.0.1"
+    "jest": "26.6.3",
+    "ts-jest": "26.5.0"
   }
 }

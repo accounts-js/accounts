@@ -1,6 +1,6 @@
 {
   "name": "@accounts/server",
-  "version": "0.30.0",
+  "version": "0.31.1",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -44,19 +44,19 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "dependencies": {
-    "@accounts/types": "^0.30.0",
+    "@accounts/types": "^0.31.1",
     "@types/jsonwebtoken": "8.3.9",
     "emittery": "0.5.1",
     "jsonwebtoken": "8.5.1",
-    "jwt-decode": "2.2.0",
-    "lodash": "4.17.15",
+    "jwt-decode": "3.1.2",
+    "lodash": "4.17.20",
     "tslib": "2.0.0"
   },
   "devDependencies": {
     "@types/jest": "25.2.3",
-    "@types/jwt-decode": "2.2.1",
     "@types/node": "14.0.14",
-    "jest": "26.0.1",
-    "rimraf": "3.0.2"
+    "jest": "26.6.3",
+    "rimraf": "3.0.2",
+    "ts-jest": "26.5.0"
   }
 }

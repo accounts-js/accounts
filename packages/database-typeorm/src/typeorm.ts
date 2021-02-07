@@ -167,10 +167,12 @@ export class AccountsTypeorm implements DatabaseInterface {
 
   public async findUserByServiceId(serviceName: string, serviceId: string): Promise<User | null> {
     const service = await this.serviceRepository.findOne({
-      name: serviceName,
-      serviceId,
+      where: {
+        name: serviceName,
+        serviceId,
+      },
       cache: this.options.cache,
-    } as any);
+    });
 
     if (service) {
       return this.findUserById(service.userId);

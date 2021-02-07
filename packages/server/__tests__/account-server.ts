@@ -1316,6 +1316,11 @@ describe('AccountsServer', () => {
           impersonationAuthorize: async (userObject, impersonateToUser) => {
             return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
+          tokenCreator: {
+            createToken: async () => {
+              return '123';
+            },
+          },
         },
         {}
       );
@@ -1342,7 +1347,7 @@ describe('AccountsServer', () => {
       );
       expect(res).toEqual({
         authorized: true,
-        tokens: { token: '001', isImpersonated: true },
+        tokens: { token: '123', isImpersonated: true },
         user: impersonatedUser,
       });
       expect(createSession).toHaveBeenCalledWith(

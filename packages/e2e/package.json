@@ -1,7 +1,7 @@
 {
   "name": "@accounts/e2e",
   "private": true,
-  "version": "0.30.0",
+  "version": "0.31.1",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
@@ -31,21 +31,22 @@
     "@types/mongoose": "5.7.16",
     "@types/node": "14.0.14",
     "@types/node-fetch": "2.5.7",
-    "jest": "26.0.1",
-    "jest-localstorage-mock": "2.4.2"
+    "jest": "26.6.3",
+    "jest-localstorage-mock": "2.4.2",
+    "ts-jest": "26.5.0"
   },
   "dependencies": {
-    "@accounts/client": "^0.30.0",
-    "@accounts/client-password": "^0.30.0",
-    "@accounts/graphql-api": "^0.30.0",
-    "@accounts/graphql-client": "^0.30.0",
-    "@accounts/mongo": "^0.30.0",
-    "@accounts/password": "^0.30.0",
-    "@accounts/rest-client": "^0.30.0",
-    "@accounts/rest-express": "^0.30.0",
-    "@accounts/server": "^0.30.0",
-    "@accounts/typeorm": "^0.30.0",
-    "@accounts/types": "^0.30.0",
+    "@accounts/client": "^0.31.1",
+    "@accounts/client-password": "^0.31.1",
+    "@accounts/graphql-api": "^0.31.1",
+    "@accounts/graphql-client": "^0.31.1",
+    "@accounts/mongo": "^0.31.1",
+    "@accounts/password": "^0.31.1",
+    "@accounts/rest-client": "^0.31.1",
+    "@accounts/rest-express": "^0.31.1",
+    "@accounts/server": "^0.31.1",
+    "@accounts/typeorm": "^0.31.1",
+    "@accounts/types": "^0.31.1",
     "@apollo/client": "3.0.2",
     "@graphql-modules/core": "0.7.17",
     "apollo-server": "2.14.4",
@@ -54,7 +55,7 @@
     "express": "4.17.1",
     "graphql": "14.6.0",
     "mongoose": "5.9.13",
-    "node-fetch": "2.6.0",
+    "node-fetch": "2.6.1",
     "tslib": "2.0.0",
     "typeorm": "0.2.25"
   }
