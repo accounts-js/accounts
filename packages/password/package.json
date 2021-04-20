@@ -39,6 +39,6 @@
     "ts-jest": "26.5.0"
   },
   "peerDependencies": {
-    "@accounts/server": "^0.31.1"
+    "@accounts/server": "^0.32.0"
   }
 }

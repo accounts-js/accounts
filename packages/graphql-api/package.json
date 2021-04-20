@@ -33,9 +33,9 @@
   },
   "homepage": "https://github.com/js-accounts/graphql-api",
   "peerDependencies": {
-    "@accounts/password": "^0.31.1",
-    "@accounts/server": "^0.31.1",
-    "@accounts/types": "^0.31.1",
+    "@accounts/password": "^0.32.0",
+    "@accounts/server": "^0.32.0",
+    "@accounts/types": "^0.32.0",
     "@graphql-modules/core": "0.7.17",
     "graphql": "^14.6.0 || ^15.0.0",
     "graphql-tag": "^2.10.0"
