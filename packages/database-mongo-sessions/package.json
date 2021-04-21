@@ -1,6 +1,6 @@
 {
   "name": "@accounts/mongo-sessions",
-  "version": "0.31.1",
+  "version": "0.32.0",
   "description": "MongoDB sessions adaptor for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -34,7 +34,7 @@
     "mongodb": "^3.4.1"
   },
   "dependencies": {
-    "@accounts/types": "^0.31.1",
+    "@accounts/types": "^0.32.0",
     "tslib": "2.1.0"
   },
   "devDependencies": {

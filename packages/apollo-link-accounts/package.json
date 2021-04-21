@@ -1,6 +1,6 @@
 {
   "name": "@accounts/apollo-link",
-  "version": "0.31.1",
+  "version": "0.32.0",
   "description": "Apollo link for account-js",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -30,7 +30,7 @@
     "tslib": "2.1.0"
   },
   "devDependencies": {
-    "@accounts/client": "^0.31.1",
+    "@accounts/client": "^0.32.0",
     "@apollo/client": "3.0.2",
     "rimraf": "3.0.2"
   }

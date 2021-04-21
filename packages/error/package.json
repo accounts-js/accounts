@@ -1,6 +1,6 @@
 {
   "name": "@accounts/error",
-  "version": "0.31.1",
+  "version": "0.32.0",
   "description": "Accounts-js Error",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -50,7 +50,7 @@
     "@types/jest": "25.2.3",
     "@types/node": "14.0.14",
     "jest": "26.6.3",
-    "ts-jest": "26.5.0",
-    "rimraf": "3.0.2"
+    "rimraf": "3.0.2",
+    "ts-jest": "26.5.0"
   }
 }
