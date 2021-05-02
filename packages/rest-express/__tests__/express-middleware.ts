@@ -62,6 +62,40 @@ describe('express middleware', () => {
     expect((router.get as jest.Mock).mock.calls[0][0]).toBe('test/user');
   });
 
+  it('Defines token endpoints when token service is present', () => {
+    accountsExpress(
+      {
+        getServices: () => ({
+          password: {},
+          token: {},
+        }),
+      } as any,
+      { path: 'test' }
+    );
+    expect((router.post as jest.Mock).mock.calls[0][0]).toBe('test/impersonate');
+    expect((router.post as jest.Mock).mock.calls[1][0]).toBe('test/user');
+    expect((router.post as jest.Mock).mock.calls[2][0]).toBe('test/refreshTokens');
+    expect((router.post as jest.Mock).mock.calls[3][0]).toBe('test/logout');
+    expect((router.post as jest.Mock).mock.calls[4][0]).toBe('test/:service/verifyAuthentication');
+    expect((router.post as jest.Mock).mock.calls[5][0]).toBe('test/:service/authenticate');
+    // Token depends on password service for user management
+    expect((router.post as jest.Mock).mock.calls[6][0]).toBe('test/password/register');
+    expect((router.post as jest.Mock).mock.calls[7][0]).toBe('test/password/verifyEmail');
+    expect((router.post as jest.Mock).mock.calls[8][0]).toBe('test/password/resetPassword');
+    expect((router.post as jest.Mock).mock.calls[9][0]).toBe('test/password/sendVerificationEmail');
+    expect((router.post as jest.Mock).mock.calls[10][0]).toBe(
+      'test/password/sendResetPasswordEmail'
+    );
+    expect((router.post as jest.Mock).mock.calls[11][0]).toBe('test/password/addEmail');
+    expect((router.post as jest.Mock).mock.calls[12][0]).toBe('test/password/changePassword');
+    expect((router.post as jest.Mock).mock.calls[13][0]).toBe('test/password/twoFactorSecret');
+    expect((router.post as jest.Mock).mock.calls[14][0]).toBe('test/password/twoFactorSet');
+    expect((router.post as jest.Mock).mock.calls[15][0]).toBe('test/password/twoFactorUnset');
+    expect((router.post as jest.Mock).mock.calls[16][0]).toBe('test/token/requestLoginToken');
+
+    expect((router.get as jest.Mock).mock.calls[0][0]).toBe('test/user');
+  });
+
   it('Defines oauth endpoints when oauth service is present', () => {
     accountsExpress(
       {

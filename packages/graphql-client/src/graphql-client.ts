@@ -22,6 +22,7 @@ import {
   TwoFactorSetDocument,
   TwoFactorUnsetDocument,
   RefreshTokensDocument,
+  RequestLoginTokenDocument,
   GetUserDocument,
   ImpersonateDocument,
   AuthenticateDocument,
@@ -269,5 +270,12 @@ export default class GraphQLClient implements TransportInterface {
     }
 
     return data[resultField];
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public async requestLoginToken(email: string): Promise<void> {
+    return this.mutate(RequestLoginTokenDocument, 'requestLoginToken', { email });
   }
 }

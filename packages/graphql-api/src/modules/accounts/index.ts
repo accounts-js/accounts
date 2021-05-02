@@ -3,6 +3,7 @@ import { mergeTypeDefs } from '@graphql-tools/merge';
 import { User, ConnectionInformations } from '@accounts/types';
 import { AccountsServer } from '@accounts/server';
 import AccountsPassword from '@accounts/password';
+import AccountsToken from '@accounts/token';
 import { IncomingMessage } from 'http';
 import TypesTypeDefs from './schema/types';
 import getQueryTypeDefs from './schema/query';
@@ -12,6 +13,7 @@ import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
 import { User as UserResolvers } from './resolvers/user';
 import { AccountsPasswordModule } from '../accounts-password';
+import { AccountsTokenModule } from '../accounts-token';
 import { AuthenticatedDirective } from '../../utils/authenticated-directive';
 import { context } from '../../utils';
 import { CoreAccountsModule } from '../core';
@@ -76,6 +78,15 @@ export const AccountsModule: GraphQLModule<
       ? [
           AccountsPasswordModule.forRoot({
             accountsPassword: config.accountsServer.getServices().password as AccountsPassword,
+            ...config,
+          }),
+        ]
+      : []),
+    ...(config.accountsServer.getServices().token
+      ? [
+          AccountsTokenModule.forRoot({
+            accountsPassword: config.accountsServer.getServices().password as AccountsPassword,
+            accountsToken: config.accountsServer.getServices().token as AccountsToken,
             ...config,
           }),
         ]

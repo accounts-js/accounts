@@ -33,4 +33,5 @@ export interface TransportInterface {
   addEmail(newEmail: string): Promise<void>;
   changePassword(oldPassword: string, newPassword: string): Promise<void>;
   impersonate(token: string, impersonated: ImpersonationUserIdentity): Promise<ImpersonationResult>;
+  requestLoginToken(email: string): Promise<void>;
 }

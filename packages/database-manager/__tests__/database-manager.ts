@@ -107,6 +107,18 @@ export default class Database {
   public setUserDeactivated() {
     return this.name;
   }
+
+  public findUserByLoginToken() {
+    return this.name;
+  }
+
+  public addLoginToken() {
+    return this.name;
+  }
+
+  public removeAllLoginTokens() {
+    return this.name;
+  }
 }
 
 const databaseManager = new DatabaseManager({

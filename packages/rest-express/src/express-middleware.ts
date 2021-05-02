@@ -17,6 +17,7 @@ import { addEmail } from './endpoints/password/add-email';
 import { userLoader } from './user-loader';
 import { AccountsExpressOptions } from './types';
 import { getUserAgent } from './utils/get-user-agent';
+import { requestLoginToken } from './endpoints/token/request-login-token';
 
 const defaultOptions: AccountsExpressOptions = {
   path: '/accounts',
@@ -102,6 +103,11 @@ const accountsExpress = (
       userLoader(accountsServer),
       twoFactorUnset(accountsServer)
     );
+  }
+
+  // @accounts/token
+  if (services.token) {
+    router.post(`${path}/token/requestLoginToken`, requestLoginToken(accountsServer));
   }
 
   // @accounts/oauth

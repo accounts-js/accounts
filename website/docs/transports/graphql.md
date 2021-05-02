@@ -201,7 +201,7 @@ By default accounts-js only allow 'username', 'email' and 'password' for the use
 ```javascript
 // server.js
 
-const accountsPassword = new AccountsPassword({
+const accountsPassword = new AccountsToken({
   // This option is called when a new user create an account
   // Inside we can apply our logic to validate the user fields
   validateNewUser: (user) => {

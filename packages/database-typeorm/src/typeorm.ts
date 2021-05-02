@@ -375,6 +375,23 @@ export class AccountsTypeorm implements DatabaseInterface {
     return session;
   }
 
+  public async findUserByLoginToken(token: string): Promise<User | null> {
+    // TODO : Implement
+    console.log(token);
+    return null;
+  }
+
+  public async addLoginToken(userId: string, email: string, token: string) {
+    // TODO : Implement
+    console.log(userId + email + token);
+    return;
+  }
+
+  public async removeAllLoginTokens(userId: string) {
+    // TODO : Implement
+    console.log(userId);
+  }
+
   public async createSession(
     userId: string,
     token: string,
