@@ -43,6 +43,8 @@ Alternatively, prepend your PR title with `[discuss]` to have a conversation aro
 
 4.  GitHub now allows auto-squashing of commits in a PR, so no need to rebase your commits before final submission.
 
+5.  Must contain a changeset file describing the changes and affected packages. Run `yarn changeset` to generate one.
+
 ### Submission
 
 1.  From [Getting Started](#getting-started), your work should ideally be in its own feature branch.

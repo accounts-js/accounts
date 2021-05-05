@@ -64,6 +64,8 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@changesets/changelog-github": "0.4.0",
+    "@changesets/cli": "2.16.0",
     "@typescript-eslint/eslint-plugin": "4.8.1",
     "@typescript-eslint/parser": "4.8.1",
     "conventional-changelog-cli": "2.0.34",
