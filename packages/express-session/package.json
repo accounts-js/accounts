@@ -1,6 +1,6 @@
 {
   "name": "@accounts/express-session",
-  "version": "0.32.0",
+  "version": "1.0.0",
   "description": "",
   "main": "lib/index",
   "typings": "lib/index",
@@ -38,7 +38,7 @@
   "author": "Kamil Kisiela",
   "license": "MIT",
   "devDependencies": {
-    "@accounts/server": "^0.32.0",
+    "@accounts/server": "^0.33.0",
     "@types/express": "4.17.6",
     "@types/express-session": "1.17.0",
     "@types/jest": "25.2.3",
@@ -50,7 +50,7 @@
     "ts-jest": "26.5.0"
   },
   "peerDependencies": {
-    "@accounts/server": "^0.32.0",
+    "@accounts/server": "^0.33.0",
     "express": "^4.16.3",
     "express-session": "^1.15.6"
   },
