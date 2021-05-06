@@ -24,13 +24,13 @@ npm install @accounts/oauth --save
 This example is written in Typescript - remove any type definitons if you are using plain JS.
 
 ```javascript
-import { AccountsServer } from '@accounts/server'
-import { AccountsOauth } from '@accounts/oauth'
+import { AccountsServer } from '@accounts/server';
+import { AccountsOauth } from '@accounts/oauth';
 
 // We create a new OAuth instance (with at least one provider)
 const accountsOauth = new AccountsOauth({
   // ... OAuth providers
-})
+});
 
 // We pass the OAuth instance the AccountsServer service list
 const accountsServer = new AccountsServer(...config, {
@@ -52,8 +52,7 @@ For Nextcloud, read [their docs](https://docs.nextcloud.com/server/19/admin_manu
 
 In the appropriate place of your app, place an "Authenticate via Nextcloud" button that will open a popup window for the user to authenticate via the OAuth provider.
 
-When receiving this code, the client will send it to the AccountsJS-based server, which will verify it with the provider (Nextcloud) itself (we will define the serverside part later). 
-
+When receiving this code, the client will send it to the AccountsJS-based server, which will verify it with the provider (Nextcloud) itself (we will define the serverside part later).
 
 ```typescript
 import qs from 'qs' // https://www.npmjs.com/package/qs
@@ -81,7 +80,7 @@ function startNextcloudLogin () {
     const code = e.data as string
     try {
       // Send this code to the AccountsJS-based server
-      await accountsClient.loginWithService('oauth', { provider: 'nextcloud', code }) 
+      await accountsClient.loginWithService('oauth', { provider: 'nextcloud', code })
       // the 'provider' is key you specify in AccountsOauth config
       console.log('User in LoginDialog success', user)
       user.value = await accountsClient.getUser()
@@ -114,6 +113,7 @@ The OAuth provider will redirect to the specified `redirectUri` with a query str
 The handler `oauthLoginChannel.onmessage` will use that code to authenticate against your app's accountsjs-based server.
 
 Register a route with your router. Example with vue-router:
+
 ```typescript
 { path: '/oauth-callback/:service', component: () => import('components/auth/OAuthCallback.vue') }
 ```
@@ -121,34 +121,35 @@ Register a route with your router. Example with vue-router:
 Define the handler (example based on vue-router):
 
 ```typescript
-import qs from 'qs'
+import qs from 'qs';
 
 export default defineComponent({
-  setup () {
-    const { route } = useRouter()
+  setup() {
+    const { route } = useRouter();
 
-    const service = route.value.params.service
-    console.log('service:', service)
+    const service = route.value.params.service;
+    console.log('service:', service);
 
     onMounted(() => {
-      const queryParams = qs.parse(window.location.search, { ignoreQueryPrefix: true })
+      const queryParams = qs.parse(window.location.search, { ignoreQueryPrefix: true });
 
-      const loginChannel = new BroadcastChannel('oauthLoginChannel')
-      loginChannel.postMessage(queryParams.code) // send the code 
-      loginChannel.close()
-      window.close()
-    })
+      const loginChannel = new BroadcastChannel('oauthLoginChannel');
+      loginChannel.postMessage(queryParams.code); // send the code
+      loginChannel.close();
+      window.close();
+    });
 
-    return { ...toRefs(data), service }
-  }
-})
+    return { ...toRefs(data), service };
+  },
+});
 ```
 
 ### Create the provider definition
 
 In the `oauthLoginChannel.onmessage` handler, we called:
+
 ```typescript
-accountsClient.loginWithService('oauth', { provider: 'nextcloud', code })
+accountsClient.loginWithService('oauth', { provider: 'nextcloud', code });
 ```
 
 AccountsJS client will send that code to the server, where define a provider:
@@ -156,19 +157,19 @@ AccountsJS client will send that code to the server, where define a provider:
 ```typescript
 const accountsOauth = new AccountsOauth({
   nextcloud: new AccountsNextcloudProvider(),
-})
+});
 ```
 
 The provider is defined like this:
+
 ```typescript
 export class AccountsNextcloudProvider implements OAuthProvider {
-
   /* This method is called when the user returns from the provider with an authorization code */
   async authenticate(params: any): Promise<OAuthUser> {
-    // params.code is the auth code that nextcloud OAuth provides to the client 
+    // params.code is the auth code that nextcloud OAuth provides to the client
     // then LoginDialog sends the code here via accountsClient.loginWithService
     // it is used here to authenticate against nextcloud and to get the user info
-     
+
     // Ask Nextcloud server if the code is valid, and which user it authenticates
     const response = await axios.post(
       config.get('accounts.oauth.nextcloud.token-endpoint'), // see: https://docs.nextcloud.com/server/19/admin_manual/configuration_server/oauth2.html
@@ -182,12 +183,12 @@ export class AccountsNextcloudProvider implements OAuthProvider {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-      },
-    )
+      }
+    );
 
-    const data = response.data
-    const token: string = data.access_token
-    const userID: string = data.user_id
+    const data = response.data;
+    const token: string = data.access_token;
+    const userID: string = data.user_id;
 
     // Optional - query Nextcloud for additional user info:
 
@@ -209,19 +210,19 @@ export class AccountsNextcloudProvider implements OAuthProvider {
     // This data will be passed to the getRegistrationPayload below, and to createJwtPayload (see optional step later)
     return {
       id: userID,
-      //data: userMeta, isAdmin, groups, 
-    }
+      //data: userMeta, isAdmin, groups,
+    };
   }
 
   /* If your server doesn't know the user yet, this method will be called to get initial user info to be stored in the DB */
   async getRegistrationPayload(oauthUser: OAuthUser): Promise<any> {
-    console.log('OAuth Registration payload for:', oauthUser)
+    console.log('OAuth Registration payload for:', oauthUser);
     return {
       // This is nextcloud-specific - TODO: Adapt to your provider
       // username: oauthUser.data.id,
       // email: oauthUser.data.email,
       // displayName: oauthUser.data.displayname,
-    }
+    };
   }
 }
 ```
@@ -229,7 +230,6 @@ export class AccountsNextcloudProvider implements OAuthProvider {
 ### Try it out :)
 
 This should be enough for a basic OAuth setup to work.
-
 
 ## Optional: Extend the JWT token
 
@@ -241,7 +241,7 @@ new AccountsServer<ExtendedUserType>(
       createJwtPayload: async (data, user) => {
         // data is the object returned from AccountsNextcloudProvider.authenticate
         // user is the user fetched from the db
-        
+
         const nextcloudData = _.get(user.services, 'nextcloud')
         if (!nextcloudData) {
           console.log('Extending JWT skipped - no Nextcloud data') // seems to be called sometimes without the data
@@ -259,4 +259,3 @@ new AccountsServer<ExtendedUserType>(
     //... services config
   )
 ```
-
