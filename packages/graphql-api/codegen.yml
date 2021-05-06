@@ -12,7 +12,8 @@ generates:
       noNamespaces: true
       noSchemaStitching: true
     plugins:
-      - add: /* eslint-disable */
+      - add:
+          content: '/* eslint-disable */'
       - typescript
       - typescript-resolvers
       - typescript-operations
