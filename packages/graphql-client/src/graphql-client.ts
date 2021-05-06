@@ -219,7 +219,7 @@ export default class GraphQLClient implements TransportInterface {
     // If we are executing a refresh token mutation do not call refresh session again
     // otherwise it will end up in an infinite loop
     const tokens =
-      mutation === RefreshTokensDocument
+      (mutation as any) === RefreshTokensDocument
         ? await this.client.getTokens()
         : await this.client.refreshSession();
 
