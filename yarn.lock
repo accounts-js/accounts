@@ -2725,10 +2725,10 @@
     tslib "~2.2.0"
     value-or-promise "1.0.6"
 
-"@graphql-typed-document-node/core@0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-0.0.1.tgz#f5cd1a0e75abe8a07a855c463a2ba947fe5913ec"
-  integrity sha512-NqQFW+ZN1wPZjrHGRzLlP2qEisXaDITp21FIuWmsMnP1ed76XI69LT4mv1QF+gWL3SWKgKS3gK8fsTeQUR3Swg==
+"@graphql-typed-document-node/core@3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.1.0.tgz#0eee6373e11418bfe0b5638f654df7a4ca6a3950"
+  integrity sha512-wYn6r8zVZyQJ6rQaALBEln5B1pzxb9shV5Ef97kTvn6yVGrqyXVnDqnU24MXnFubR+rZjBY9NWuxX3FB2sTsjg==
 
 "@hapi/address@2.x.x":
   version "2.1.4"
