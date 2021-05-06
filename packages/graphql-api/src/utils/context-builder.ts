@@ -3,10 +3,15 @@ import { getClientIp } from 'request-ip';
 import { AccountsRequest, AccountsModuleConfig } from '../modules';
 
 export const context = (moduleName: string) => async (
-  { req }: AccountsRequest,
+  { req, connection }: AccountsRequest,
   _: any,
   { injector }: ModuleSessionInfo
 ) => {
+  // If connection is set it means it's a websocket connection coming from apollo
+  if (connection) {
+    return connection.context;
+  }
+
   if (!req) {
     return {
       ip: '',

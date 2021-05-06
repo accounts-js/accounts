@@ -18,6 +18,7 @@ import { CoreAccountsModule } from '../core';
 
 export interface AccountsRequest {
   req: IncomingMessage;
+  connection?: any;
 }
 
 export interface AccountsModuleConfig {
