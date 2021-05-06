@@ -50,7 +50,7 @@
     "ts-jest": "26.5.0"
   },
   "peerDependencies": {
-    "@accounts/server": "^0.32.0",
+    "@accounts/server": "^0.32.0 || ^0.33.0",
     "express": "^4.16.3",
     "express-session": "^1.15.6"
   },
