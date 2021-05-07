@@ -55,8 +55,6 @@ The `@accounts` suite of packages aims to provide all the tools you need to buil
 
 ## Contributing and community
 
-[Join our Spectrum community](https://spectrum.chat/accounts-js) to get some help!
-
 Any contribution is very welcome, read our [contributing guide](CONTRIBUTING.md) to see how to locally setup the repository and see our development process.
 
 ## Sponsors

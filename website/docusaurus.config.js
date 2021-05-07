@@ -44,8 +44,8 @@ module.exports = {
           title: 'Community',
           items: [
             {
-              label: 'Spectrum',
-              href: 'https://spectrum.chat/accounts-js',
+              label: 'GitHub Discussions',
+              href: 'https://github.com/accounts-js/accounts/discussions',
             },
             {
               label: 'Slack',
