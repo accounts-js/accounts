@@ -1,4 +1,6 @@
 import { createModule, gql } from 'graphql-modules';
+import { Query } from './resolvers/query';
+import { Mutation } from './resolvers/mutation';
 
 export const passwordModule = createModule({
   id: 'accounts-password',
@@ -40,11 +42,11 @@ export const passwordModule = createModule({
         password: String
       }
 
-      type Query {
+      extend type Query {
         twoFactorSecret: TwoFactorSecretKey
       }
 
-      type Mutation {
+      extend type Mutation {
         # Creates a user with a password, returns the id corresponding db ids, such as number IDs, ObjectIDs or UUIDs
         createUser(user: CreateUserInput!): CreateUserResult
         verifyEmail(token: String!): Boolean
@@ -58,9 +60,5 @@ export const passwordModule = createModule({
       }
     `,
   ],
-  resolvers: {
-    Mutation: {
-      createUser: () => 'world',
-    },
-  },
+  resolvers: [{ Query }, { Mutation }],
 });

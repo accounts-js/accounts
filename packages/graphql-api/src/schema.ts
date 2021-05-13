@@ -4,7 +4,7 @@
  */
 import { createApplication } from 'graphql-modules';
 import { coreModule } from './modules/core';
-import { passwordModule } from './modules/accounts-password';
+import { passwordModule } from './modules/password';
 
 const application = createApplication({
   modules: [coreModule, passwordModule],
