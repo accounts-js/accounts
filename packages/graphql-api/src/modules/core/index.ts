@@ -1,14 +1,41 @@
-import { GraphQLModule } from '@graphql-modules/core';
-import makeSchema from './schema';
+import { createModule, gql } from 'graphql-modules';
 
-export interface CoreAccountsModuleConfig {
-  userAsInterface?: boolean;
-}
+export const coreModule = createModule({
+  id: 'accounts-core',
+  dirname: __dirname,
+  typeDefs: [
+    gql`
+      # TODO See how to inject userAsInterface option
+      type User {
+        id: ID!
+        emails: [EmailRecord!]
+        username: String
+      }
 
-export const CoreAccountsModule: GraphQLModule<CoreAccountsModuleConfig> = new GraphQLModule<CoreAccountsModuleConfig>(
-  {
-    typeDefs: ({ config }) => makeSchema(config),
-    resolvers: {},
-    imports: [],
-  }
-);
+      type EmailRecord {
+        address: String
+        verified: Boolean
+      }
+
+      type Tokens {
+        refreshToken: String
+        accessToken: String
+      }
+
+      type LoginResult {
+        sessionId: String
+        tokens: Tokens
+        user: User
+      }
+
+      type Query {
+        getUser: User
+      }
+    `,
+  ],
+  resolvers: {
+    Query: {
+      getUser: () => 'world',
+    },
+  },
+});

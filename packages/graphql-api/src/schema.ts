@@ -1,9 +1,12 @@
-import { AccountsModule } from './modules';
+/**
+ * This file is used to export the schema so graphql-codegen can generate the proper types.
+ * Do not import directly in your application.
+ */
+import { createApplication } from 'graphql-modules';
+import { coreModule } from './modules/core';
 
-export default AccountsModule.forRoot({
-  accountsServer: {
-    getServices: () => ({
-      password: {},
-    }),
-  } as any,
-}).typeDefs;
+const application = createApplication({
+  modules: [coreModule],
+});
+
+export default application.schema;
