@@ -4,9 +4,10 @@
  */
 import { createApplication } from 'graphql-modules';
 import { coreModule } from './modules/core';
+import { passwordModule } from './modules/accounts-password';
 
 const application = createApplication({
-  modules: [coreModule],
+  modules: [coreModule, passwordModule],
 });
 
 export default application.schema;
