@@ -4,6 +4,7 @@ export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -13,10 +14,33 @@ export type Scalars = {
   Float: number;
 };
 
+
+export type AuthenticateParamsInput = {
+  access_token?: Maybe<Scalars['String']>;
+  access_token_secret?: Maybe<Scalars['String']>;
+  provider?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  user?: Maybe<UserInput>;
+  code?: Maybe<Scalars['String']>;
+};
+
 export type EmailRecord = {
   __typename?: 'EmailRecord';
   address?: Maybe<Scalars['String']>;
   verified?: Maybe<Scalars['Boolean']>;
+};
+
+export type ImpersonateReturn = {
+  __typename?: 'ImpersonateReturn';
+  authorized?: Maybe<Scalars['Boolean']>;
+  tokens?: Maybe<Tokens>;
+  user?: Maybe<User>;
+};
+
+export type ImpersonationUserIdentityInput = {
+  userId?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
 };
 
 export type LoginResult = {
@@ -24,6 +48,39 @@ export type LoginResult = {
   sessionId?: Maybe<Scalars['String']>;
   tokens?: Maybe<Tokens>;
   user?: Maybe<User>;
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  impersonate?: Maybe<ImpersonateReturn>;
+  refreshTokens?: Maybe<LoginResult>;
+  logout?: Maybe<Scalars['Boolean']>;
+  authenticate?: Maybe<LoginResult>;
+  verifyAuthentication?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type MutationImpersonateArgs = {
+  accessToken: Scalars['String'];
+  impersonated: ImpersonationUserIdentityInput;
+};
+
+
+export type MutationRefreshTokensArgs = {
+  accessToken: Scalars['String'];
+  refreshToken: Scalars['String'];
+};
+
+
+export type MutationAuthenticateArgs = {
+  serviceName: Scalars['String'];
+  params: AuthenticateParamsInput;
+};
+
+
+export type MutationVerifyAuthenticationArgs = {
+  serviceName: Scalars['String'];
+  params: AuthenticateParamsInput;
 };
 
 export type Query = {
@@ -41,6 +98,12 @@ export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
   emails?: Maybe<Array<EmailRecord>>;
+  username?: Maybe<Scalars['String']>;
+};
+
+export type UserInput = {
+  id?: Maybe<Scalars['ID']>;
+  email?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
 };
 
@@ -115,8 +178,13 @@ export type ResolversTypes = {
   EmailRecord: ResolverTypeWrapper<EmailRecord>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  LoginResult: ResolverTypeWrapper<LoginResult>;
+  Mutation: ResolverTypeWrapper<{}>;
+  ImpersonationUserIdentityInput: ImpersonationUserIdentityInput;
+  ImpersonateReturn: ResolverTypeWrapper<ImpersonateReturn>;
   Tokens: ResolverTypeWrapper<Tokens>;
+  LoginResult: ResolverTypeWrapper<LoginResult>;
+  AuthenticateParamsInput: AuthenticateParamsInput;
+  UserInput: UserInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -127,13 +195,29 @@ export type ResolversParentTypes = {
   EmailRecord: EmailRecord;
   String: Scalars['String'];
   Boolean: Scalars['Boolean'];
-  LoginResult: LoginResult;
+  Mutation: {};
+  ImpersonationUserIdentityInput: ImpersonationUserIdentityInput;
+  ImpersonateReturn: ImpersonateReturn;
   Tokens: Tokens;
+  LoginResult: LoginResult;
+  AuthenticateParamsInput: AuthenticateParamsInput;
+  UserInput: UserInput;
 };
+
+export type AuthDirectiveArgs = {  };
+
+export type AuthDirectiveResolver<Result, Parent, ContextType = any, Args = AuthDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type EmailRecordResolvers<ContextType = any, ParentType extends ResolversParentTypes['EmailRecord'] = ResolversParentTypes['EmailRecord']> = {
   address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   verified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ImpersonateReturnResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpersonateReturn'] = ResolversParentTypes['ImpersonateReturn']> = {
+  authorized?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  tokens?: Resolver<Maybe<ResolversTypes['Tokens']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -142,6 +226,14 @@ export type LoginResultResolvers<ContextType = any, ParentType extends Resolvers
   tokens?: Resolver<Maybe<ResolversTypes['Tokens']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  impersonate?: Resolver<Maybe<ResolversTypes['ImpersonateReturn']>, ParentType, ContextType, RequireFields<MutationImpersonateArgs, 'accessToken' | 'impersonated'>>;
+  refreshTokens?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationRefreshTokensArgs, 'accessToken' | 'refreshToken'>>;
+  logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  authenticate?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationAuthenticateArgs, 'serviceName' | 'params'>>;
+  verifyAuthentication?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationVerifyAuthenticationArgs, 'serviceName' | 'params'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -163,7 +255,9 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type Resolvers<ContextType = any> = {
   EmailRecord?: EmailRecordResolvers<ContextType>;
+  ImpersonateReturn?: ImpersonateReturnResolvers<ContextType>;
   LoginResult?: LoginResultResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Tokens?: TokensResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
@@ -175,3 +269,13 @@ export type Resolvers<ContextType = any> = {
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
  */
 export type IResolvers<ContextType = any> = Resolvers<ContextType>;
+export type DirectiveResolvers<ContextType = any> = {
+  auth?: AuthDirectiveResolver<any, any, ContextType>;
+};
+
+
+/**
+ * @deprecated
+ * Use "DirectiveResolvers" root object instead. If you wish to get "IDirectiveResolvers", add "typesPrefix: I" to your config.
+ */
+export type IDirectiveResolvers<ContextType = any> = DirectiveResolvers<ContextType>;
