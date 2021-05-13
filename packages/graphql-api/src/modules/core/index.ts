@@ -1,5 +1,7 @@
 import { createModule, gql } from 'graphql-modules';
 import { User, ConnectionInformations } from '@accounts/types';
+import { Query } from '../accounts/resolvers/query';
+import { Mutation } from '../accounts/resolvers/mutation';
 
 declare global {
   namespace GraphQLModules {
@@ -96,9 +98,5 @@ export const coreModule = createModule({
       }
     `,
   ],
-  resolvers: {
-    Query: {
-      getUser: () => 'world',
-    },
-  },
+  resolvers: [{ Query }, { Mutation }],
 });
