@@ -6,8 +6,18 @@ import { createApplication } from 'graphql-modules';
 import { coreModule } from './modules/core';
 import { passwordModule } from './modules/password';
 
+const accountsServer = {
+  getServices: () => ({
+    password: {},
+  }),
+}
+
 const application = createApplication({
-  modules: [coreModule, passwordModule],
+  modules: [
+    coreModule({
+      accountsServer
+    }),
+    passwordModule],
 });
 
 export default application.schema;

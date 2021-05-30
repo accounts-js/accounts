@@ -1,5 +1,10 @@
 import { createModule, gql } from 'graphql-modules';
+import { AccountsServer } from '@accounts/server';
 import { User, ConnectionInformations } from '@accounts/types';
+import getTypesTypeDefs from './schema/types';
+import getQueryTypeDefs from './schema/query';
+import getMutationTypeDefs from './schema/mutation';
+import getSchemaDef from './schema/schema-def';
 import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
 
@@ -16,87 +21,37 @@ declare global {
   }
 }
 
-export const coreModule = createModule({
-  id: 'accounts-core',
-  dirname: __dirname,
-  typeDefs: [
-    gql`
-      directive @auth on FIELD_DEFINITION | OBJECT
+export interface AccountsModuleConfig {
+  accountsServer: AccountsServer;
+  rootQueryName?: string;
+  rootMutationName?: string;
+  extendTypeDefs?: boolean;
+  withSchemaDefinition?: boolean;
+  headerName?: string;
+  userAsInterface?: boolean;
+  excludeAddUserInContext?: boolean;
+}
 
-      # TODO See how to inject userAsInterface option
-      type User {
-        id: ID!
-        emails: [EmailRecord!]
-        username: String
+export const coreModule = (config: AccountsModuleConfig) =>
+  createModule({
+    id: 'accounts-core',
+    dirname: __dirname,
+    typeDefs: [
+      getTypesTypeDefs(config),
+      getQueryTypeDefs(config),
+      getMutationTypeDefs(config),
+      ...getSchemaDef(config),
+    ],
+    resolvers: [
+      {
+        [config.rootQueryName || 'Query']: Query,
+        [config.rootMutationName || 'Mutation']: Mutation,
+      },
+    ],
+    providers: [
+      {
+        provide: AccountsServer,
+        useValue: config.accountsServer,
       }
-
-      type EmailRecord {
-        address: String
-        verified: Boolean
-      }
-
-      type Tokens {
-        refreshToken: String
-        accessToken: String
-      }
-
-      type LoginResult {
-        sessionId: String
-        tokens: Tokens
-        user: User
-      }
-
-      type ImpersonateReturn {
-        authorized: Boolean
-        tokens: Tokens
-        user: User
-      }
-
-      input UserInput {
-        id: ID
-        email: String
-        username: String
-      }
-
-      input AuthenticateParamsInput {
-        # Twitter, Instagram
-        access_token: String
-        # Twitter
-        access_token_secret: String
-        # OAuth
-        provider: String
-        # Password
-        password: String
-        # Password
-        user: UserInput
-        # Two factor
-        code: String
-      }
-
-      input ImpersonationUserIdentityInput {
-        userId: String
-        username: String
-        email: String
-      }
-
-      type Query {
-        getUser: User
-      }
-
-      type Mutation {
-        impersonate(
-          accessToken: String!
-          impersonated: ImpersonationUserIdentityInput!
-        ): ImpersonateReturn
-        refreshTokens(accessToken: String!, refreshToken: String!): LoginResult
-        logout: Boolean
-
-        # Example: Login with password
-        # authenticate(serviceName: "password", params: {password: "<pw>", user: {email: "<email>"}})
-        authenticate(serviceName: String!, params: AuthenticateParamsInput!): LoginResult
-        verifyAuthentication(serviceName: String!, params: AuthenticateParamsInput!): Boolean
-      }
-    `,
-  ],
-  resolvers: [{ Query }, { Mutation }],
-});
+    ]
+  });
