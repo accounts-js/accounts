@@ -1,7 +1,7 @@
 import { gql } from 'graphql-modules';
-import { AccountsModuleConfig } from '..';
+import { CoreModuleConfig } from '..';
 
-export default (config: AccountsModuleConfig) =>
+export default (config: CoreModuleConfig) =>
   config.withSchemaDefinition
     ? [
         gql(`

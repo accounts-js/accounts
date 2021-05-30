@@ -1,6 +1,6 @@
 import { DocumentNode, print } from 'graphql';
 import { gql, testkit } from 'graphql-modules';
-import { coreModule } from '../../../src/modules';
+import { CoreModule } from '../../../src';
 
 const accountsServer = {
   getServices: () => ({
@@ -12,7 +12,7 @@ describe('CoreModule', () => {
   describe('withSchemaDefinition', () => {
     it('should export typeDefs with schema definition', () => {
       const app = testkit.testModule(
-          coreModule({
+          CoreModule({
             accountsServer: accountsServer as any,
             withSchemaDefinition: true,
           })
@@ -22,7 +22,7 @@ describe('CoreModule', () => {
 
     it('should export typeDefs without schema definition', () => {
       const app = testkit.testModule(
-          coreModule({
+          CoreModule({
             accountsServer: accountsServer as any,
             withSchemaDefinition: false,
           })
@@ -34,7 +34,7 @@ describe('CoreModule', () => {
   describe('extendTypeDefs', () => {
     it('should extends typeDefs', () => {
       const app = testkit.testModule(
-          coreModule({
+          CoreModule({
             accountsServer: accountsServer as any,
             extendTypeDefs: true,
           }), {
@@ -54,7 +54,7 @@ describe('CoreModule', () => {
 
     it('should not extends typeDefs', () => {
       const app = testkit.testModule(
-          coreModule({
+          CoreModule({
             accountsServer: accountsServer as any,
             extendTypeDefs: false,
           })

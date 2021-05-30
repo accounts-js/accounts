@@ -21,7 +21,7 @@ declare global {
   }
 }
 
-export interface AccountsModuleConfig {
+export interface CoreModuleConfig {
   accountsServer: AccountsServer;
   rootQueryName?: string;
   rootMutationName?: string;
@@ -32,7 +32,7 @@ export interface AccountsModuleConfig {
   excludeAddUserInContext?: boolean;
 }
 
-export const coreModule = (config: AccountsModuleConfig) =>
+export const CoreModule = (config: CoreModuleConfig) =>
   createModule({
     id: 'accounts-core',
     dirname: __dirname,
@@ -52,6 +52,7 @@ export const coreModule = (config: AccountsModuleConfig) =>
       {
         provide: AccountsServer,
         useValue: config.accountsServer,
+        global: true
       }
-    ]
+    ],
   });
