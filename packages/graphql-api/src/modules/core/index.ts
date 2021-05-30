@@ -1,4 +1,4 @@
-import { createModule, gql } from 'graphql-modules';
+import { createModule } from 'graphql-modules';
 import { AccountsServer } from '@accounts/server';
 import { User, ConnectionInformations } from '@accounts/types';
 import getTypesTypeDefs from './schema/types';
