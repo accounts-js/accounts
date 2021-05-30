@@ -12,20 +12,20 @@ describe('CoreModule', () => {
   describe('withSchemaDefinition', () => {
     it('should export typeDefs with schema definition', () => {
       const app = testkit.testModule(
-          CoreModule({
-            accountsServer: accountsServer as any,
-            withSchemaDefinition: true,
-          })
+        CoreModule({
+          accountsServer: accountsServer as any,
+          withSchemaDefinition: true,
+        })
       );
       expect(printTypeDefs(app.typeDefs)).toMatch(/schema/);
     });
 
     it('should export typeDefs without schema definition', () => {
       const app = testkit.testModule(
-          CoreModule({
-            accountsServer: accountsServer as any,
-            withSchemaDefinition: false,
-          })
+        CoreModule({
+          accountsServer: accountsServer as any,
+          withSchemaDefinition: false,
+        })
       );
       expect(printTypeDefs(app.typeDefs)).not.toMatch(/schema/);
     });
@@ -34,30 +34,31 @@ describe('CoreModule', () => {
   describe('extendTypeDefs', () => {
     it('should extends typeDefs', () => {
       const app = testkit.testModule(
-          CoreModule({
-            accountsServer: accountsServer as any,
-            extendTypeDefs: true,
-          }), {
-            typeDefs: gql`
-              type Query {
-                _empty: String
-              }
-              
-              type Mutation {
-                _empty: String
-              }
-            `
-          }
+        CoreModule({
+          accountsServer: accountsServer as any,
+          extendTypeDefs: true,
+        }),
+        {
+          typeDefs: gql`
+            type Query {
+              _empty: String
+            }
+
+            type Mutation {
+              _empty: String
+            }
+          `,
+        }
       );
       expect(printTypeDefs(app.typeDefs)).toMatch(/extend/);
     });
 
     it('should not extends typeDefs', () => {
       const app = testkit.testModule(
-          CoreModule({
-            accountsServer: accountsServer as any,
-            extendTypeDefs: false,
-          })
+        CoreModule({
+          accountsServer: accountsServer as any,
+          extendTypeDefs: false,
+        })
       );
       expect(printTypeDefs(app.typeDefs)).not.toMatch(/extend/);
     });
@@ -66,7 +67,6 @@ describe('CoreModule', () => {
 
 function printTypeDefs(typeDefs: DocumentNode[]): string {
   let typeDefsString = '';
-  typeDefs.forEach(typeDef => typeDefsString += print(typeDef));
+  typeDefs.forEach((typeDef) => (typeDefsString += print(typeDef)));
   return typeDefsString;
 }
-

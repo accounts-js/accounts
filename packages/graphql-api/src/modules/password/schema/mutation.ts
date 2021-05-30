@@ -1,7 +1,8 @@
-import { gql } from "graphql-modules";
-import {CoreModuleConfig} from "../../core";
+import { gql } from 'graphql-modules';
+import { CoreModuleConfig } from '../../core';
 
-export default (config: CoreModuleConfig) => gql(`
+export default (config: CoreModuleConfig) =>
+  gql(`
   extend type ${config.rootMutationName || 'Mutation'} {
     # Creates a user with a password, returns the id corresponding db ids, such as number IDs, ObjectIDs or UUIDs
     createUser(user: CreateUserInput!): CreateUserResult

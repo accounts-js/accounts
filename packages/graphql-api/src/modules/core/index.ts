@@ -52,7 +52,7 @@ export const CoreModule = (config: CoreModuleConfig) =>
       {
         provide: AccountsServer,
         useValue: config.accountsServer,
-        global: true
-      }
+        global: true,
+      },
     ],
   });

@@ -1,7 +1,8 @@
-import { gql } from "graphql-modules";
-import {CoreModuleConfig} from "../../core";
+import { gql } from 'graphql-modules';
+import { CoreModuleConfig } from '../../core';
 
-export default (config: CoreModuleConfig) => gql(`
+export default (config: CoreModuleConfig) =>
+  gql(`
   extend type ${config.rootQueryName || 'Query'} {
     twoFactorSecret: TwoFactorSecretKey
   }

@@ -1,4 +1,4 @@
-import { gql } from "graphql-modules";
+import { gql } from 'graphql-modules';
 
 export default gql`
   type CreateUserResult {
@@ -7,7 +7,7 @@ export default gql`
     # Will be returned only if enableAutologin is set to true.
     loginResult: LoginResult
   }
-  
+
   type TwoFactorSecretKey {
     ascii: String
     base32: String
@@ -18,7 +18,7 @@ export default gql`
     google_auth_qr: String
     otpauth_url: String
   }
-  
+
   input TwoFactorSecretKeyInput {
     ascii: String
     base32: String
@@ -29,7 +29,7 @@ export default gql`
     google_auth_qr: String
     otpauth_url: String
   }
-  
+
   input CreateUserInput {
     username: String
     email: String

@@ -1,7 +1,8 @@
 import { gql } from 'graphql-modules';
 import { CoreModuleConfig } from '..';
 
-export default ({ userAsInterface }: CoreModuleConfig) => gql(`
+export default ({ userAsInterface }: CoreModuleConfig) =>
+  gql(`
   directive @auth on FIELD_DEFINITION | OBJECT
 
   ${userAsInterface ? 'interface' : 'type'} User {
