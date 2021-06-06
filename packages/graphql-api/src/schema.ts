@@ -3,11 +3,20 @@
  * Do not import directly in your application.
  */
 import { createApplication } from 'graphql-modules';
-import { coreModule } from './modules/core';
-import { passwordModule } from './modules/password';
+import { CoreModule, CoreModuleConfig, PasswordModule } from './modules';
+
+const accountsServer = {
+  getServices: () => ({
+    password: {},
+  }),
+};
+
+const config = <CoreModuleConfig>{
+  accountsServer: accountsServer as any,
+};
 
 const application = createApplication({
-  modules: [coreModule, passwordModule],
+  modules: [CoreModule(config), PasswordModule(config)],
 });
 
 export default application.schema;
