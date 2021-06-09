@@ -1,16 +1,17 @@
-import { ModuleContext } from '@graphql-modules/core';
 import { AccountsServer } from '@accounts/server';
 import { MutationResolvers } from '../../../models';
-import { AccountsModuleContext } from '..';
 
-export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> = {
+export const Mutation: MutationResolvers = {
   authenticate: async (_, args, ctx) => {
+    //FIXME: remove console.logs
+    console.log('authenticateResolvers');
     const { serviceName, params } = args;
     const { injector, infos } = ctx;
 
     const authenticated = await injector
       .get(AccountsServer)
       .loginWithService(serviceName, params, infos);
+    console.log(authenticated.user);
     return authenticated;
   },
   verifyAuthentication: async (_, args, ctx) => {
