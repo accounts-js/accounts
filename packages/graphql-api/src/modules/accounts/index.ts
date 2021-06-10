@@ -9,7 +9,6 @@ import getMutationTypeDefs from './schema/mutation';
 import getSchemaDef from './schema/schema-def';
 import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
-import { User as UserResolvers, LoginResult as LoginResultResolvers } from './resolvers/user';
 import makeSchema from './schema/schema';
 //import { AuthenticatedDirective } from '../../utils/authenticated-directive';
 //import { context } from '../../utils';
@@ -60,10 +59,6 @@ export const createAccountsCoreModule = (config: AccountsCoreModuleConfig) =>
     resolvers: {
       [config.rootQueryName || 'Query']: Query,
       [config.rootMutationName || 'Mutation']: Mutation,
-      //FIXME: remove me
-      User: UserResolvers,
-      //FIXME: remove me
-      LoginResult: LoginResultResolvers,
     },
     providers: [
       {

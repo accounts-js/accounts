@@ -8,13 +8,10 @@ import {
 import MongoDBInterface from '@accounts/mongo';
 import { AccountsPassword } from '@accounts/password';
 import { AccountsServer, ServerHooks } from '@accounts/server';
-import { ApolloServer, makeExecutableSchema, SchemaDirectiveVisitor } from 'apollo-server';
+import { ApolloServer, SchemaDirectiveVisitor } from 'apollo-server';
 import gql from 'graphql-tag';
-import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
 import mongoose from 'mongoose';
 import { createApplication, createModule } from 'graphql-modules';
-import { parse } from 'graphql';
-import { printSchemaWithDirectives, getResolversFromSchema } from '@graphql-tools/utils';
 
 const start = async () => {
   // Create database connection
@@ -105,54 +102,31 @@ const start = async () => {
         field: () => 'private',
       }),
     },
-    User: {
-      firstName(user, args, ctx) {
-        console.log('UserResolvers');
-        console.log(user);
-        return user.firstName;
-      },
-    },
   };
 
-  /*
-  const myModule = createModule({
-    id: 'mine',
-    typeDefs,
-    resolvers,
-  });
-  */
-
   // Creates resolvers, type definitions, and schema directives used by accounts-js
-  const accountsSchema = createApplication({
+  const schema = createApplication({
     modules: [
       createAccountsCoreModule({ accountsServer }),
       createAccountsPasswordModule({ accountsPassword }),
-      //myModule,
+      createModule({
+        id: 'myApp',
+        typeDefs,
+        resolvers,
+      }),
     ],
   }).createSchemaForApollo();
 
-  const accountsTypeDefs = parse(printSchemaWithDirectives(accountsSchema));
-  const accountsResolvers = getResolversFromSchema(accountsSchema);
-
-  const schema = makeExecutableSchema({
-    typeDefs: mergeTypeDefs([typeDefs, accountsTypeDefs]),
-    resolvers: mergeResolvers([accountsResolvers as any, resolvers]),
-    schemaDirectives: {
-      // In order for the `@auth` directive to work
-      auth: AuthenticatedDirective,
-    } as any,
-  });
-
-  /*
-  SchemaDirectiveVisitor.visitSchemaDirectives(accountsSchema, {
+  SchemaDirectiveVisitor.visitSchemaDirectives(schema, {
     auth: AuthenticatedDirective,
   } as any);
-  */
 
   // Create the Apollo Server that takes a schema and configures internal stuff
   const server = new ApolloServer({
     schema,
-    //schema: accountsSchema,
+    /*schemaDirectives: {
+      auth: AuthenticatedDirective,
+    } as any,*/
     context: ({ req, connection }) => {
       return context({ req, connection }, { accountsServer });
     },
