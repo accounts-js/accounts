@@ -1,10 +1,11 @@
 import accountsBoost, { authenticated } from '@accounts/boost';
-import { setContext } from 'apollo-link-context';
-import { HttpLink } from 'apollo-link-http';
+import { setContext } from '@apollo/client/link/context';
+import { HttpLink } from '@apollo/client';
 import { ApolloServer } from 'apollo-server';
 import { mergeSchemas } from '@graphql-tools/merge';
 import { makeExecutableSchema } from '@graphql-tools/schema';
-import { introspectSchema, makeRemoteExecutableSchema } from '@graphql-tools/wrap';
+import { introspectSchema, wrapSchema } from '@graphql-tools/wrap';
+import { linkToExecutor } from '@graphql-tools/links';
 import fetch from 'node-fetch';
 
 const accountsServerUri = 'http://localhost:4003/';
@@ -36,12 +37,12 @@ const accountsServerUri = 'http://localhost:4003/';
     };
   }).concat(http);
 
-  const remoteSchema = await introspectSchema(link as any);
+  const executor = linkToExecutor(link);
 
-  const executableRemoteSchema = makeRemoteExecutableSchema({
-    schema: remoteSchema,
-    link,
-  } as any);
+  const executableRemoteSchema = wrapSchema({
+    schema: await introspectSchema(executor),
+    executor,
+  });
 
   // The @auth directive needs to be declared in your typeDefs
 

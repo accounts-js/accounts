@@ -14,11 +14,11 @@
   },
   "dependencies": {
     "@accounts/boost": "^0.32.0",
+    "@apollo/client": "3.3.20",
+    "@graphql-tools/links": "7.1.0",
     "@graphql-tools/merge": "6.2.5",
     "@graphql-tools/schema": "7.0.0",
     "@graphql-tools/wrap": "7.0.1",
-    "apollo-link-context": "1.0.20",
-    "apollo-link-http": "1.5.17",
     "apollo-server": "2.14.4",
     "graphql": "14.6.0",
     "lodash": "4.17.20",
