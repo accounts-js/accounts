@@ -1,3 +1,0 @@
-mutation requestLoginToken($email: String!) {
-  requestLoginToken(email: $email)
-}

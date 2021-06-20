@@ -4,7 +4,7 @@ export default AccountsModule.forRoot({
   accountsServer: {
     getServices: () => ({
       password: {},
-      token: {},
+      magicLink: {},
     }),
   } as any,
 }).typeDefs;

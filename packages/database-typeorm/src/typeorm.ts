@@ -376,20 +376,36 @@ export class AccountsTypeorm implements DatabaseInterface {
   }
 
   public async findUserByLoginToken(token: string): Promise<User | null> {
-    // TODO : Implement
-    console.log(token);
+    const service = await this.serviceRepository.findOne({
+      where: {
+        name: 'magicLink.loginTokens',
+        token,
+      },
+      cache: this.options.cache,
+    });
+
+    if (service) {
+      return this.findUserById(service.userId);
+    }
+
     return null;
   }
 
-  public async addLoginToken(userId: string, email: string, token: string) {
-    // TODO : Implement
-    console.log(userId + email + token);
-    return;
+  public async addLoginToken(userId: string, email: string, token: string, reason: string) {
+    await this.setService(
+      userId,
+      'magicLink.loginTokens',
+      {
+        address: email.toLocaleLowerCase(),
+        when: new Date().toJSON(),
+        reason,
+      },
+      token
+    );
   }
 
   public async removeAllLoginTokens(userId: string) {
-    // TODO : Implement
-    console.log(userId);
+    await this.unsetService(userId, 'magicLink.loginTokens');
   }
 
   public async createSession(

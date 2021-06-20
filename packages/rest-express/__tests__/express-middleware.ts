@@ -62,12 +62,12 @@ describe('express middleware', () => {
     expect((router.get as jest.Mock).mock.calls[0][0]).toBe('test/user');
   });
 
-  it('Defines token endpoints when token service is present', () => {
+  it('Defines magic link endpoints when magicLink service is present', () => {
     accountsExpress(
       {
         getServices: () => ({
           password: {},
-          token: {},
+          magicLink: {},
         }),
       } as any,
       { path: 'test' }
@@ -78,7 +78,7 @@ describe('express middleware', () => {
     expect((router.post as jest.Mock).mock.calls[3][0]).toBe('test/logout');
     expect((router.post as jest.Mock).mock.calls[4][0]).toBe('test/:service/verifyAuthentication');
     expect((router.post as jest.Mock).mock.calls[5][0]).toBe('test/:service/authenticate');
-    // Token depends on password service for user management
+    // Magic link depends on password service for user management
     expect((router.post as jest.Mock).mock.calls[6][0]).toBe('test/password/register');
     expect((router.post as jest.Mock).mock.calls[7][0]).toBe('test/password/verifyEmail');
     expect((router.post as jest.Mock).mock.calls[8][0]).toBe('test/password/resetPassword');
@@ -91,7 +91,9 @@ describe('express middleware', () => {
     expect((router.post as jest.Mock).mock.calls[13][0]).toBe('test/password/twoFactorSecret');
     expect((router.post as jest.Mock).mock.calls[14][0]).toBe('test/password/twoFactorSet');
     expect((router.post as jest.Mock).mock.calls[15][0]).toBe('test/password/twoFactorUnset');
-    expect((router.post as jest.Mock).mock.calls[16][0]).toBe('test/token/requestLoginToken');
+    expect((router.post as jest.Mock).mock.calls[16][0]).toBe(
+      'test/magiclink/requestMagicLinkEmail'
+    );
 
     expect((router.get as jest.Mock).mock.calls[0][0]).toBe('test/user');
   });

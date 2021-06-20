@@ -22,10 +22,10 @@ import {
   TwoFactorSetDocument,
   TwoFactorUnsetDocument,
   RefreshTokensDocument,
-  RequestLoginTokenDocument,
   GetUserDocument,
   ImpersonateDocument,
   AuthenticateDocument,
+  RequestMagicLinkEmailDocument,
 } from './graphql-operations';
 import { GraphQLErrorList } from './GraphQLErrorList';
 import { replaceUserFieldsFragment } from './utils/replace-user-fragment';
@@ -275,7 +275,7 @@ export default class GraphQLClient implements TransportInterface {
   /**
    * @inheritDoc
    */
-  public async requestLoginToken(email: string): Promise<void> {
-    return this.mutate(RequestLoginTokenDocument, 'requestLoginToken', { email });
+  public async requestMagicLinkEmail(email: string): Promise<void> {
+    return this.mutate(RequestMagicLinkEmailDocument, 'requestMagicLinkEmail', { email });
   }
 }

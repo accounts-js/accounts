@@ -88,7 +88,7 @@ The password module come with two factor out of the box. You can customize it us
 Check all the options available [here](/docs/api/two-factor/interfaces/accountstwofactoroptions).
 
 ```javascript
-export const accountsPassword = new AccountsToken({
+export const accountsPassword = new AccountsPassword({
   twoFactor: {
     // Will be the two factor name displayed to the user
     appName: 'My app',
@@ -105,7 +105,7 @@ For example if you want to use argon2, you can use the following:
 ```javascript
 import * as argon2 from 'argon2';
 
-const accountsPassword = new AccountsToken({
+const accountsPassword = new AccountsPassword({
   hashPassword: (password) => argon2.hash('password'),
   verifyPassword: (password, hash) => argon2.verify(hash, password),
 });

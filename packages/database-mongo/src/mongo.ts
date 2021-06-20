@@ -9,7 +9,7 @@ import {
 import { MongoSessions } from '@accounts/mongo-sessions';
 import { MongoServicePassword } from '@accounts/mongo-password';
 import { AccountsMongoOptions } from './types';
-import { MongoServiceToken } from '@accounts/mongo-token';
+import { MongoServiceMagicLink } from '@accounts/mongo-magic-link';
 
 const toMongoID = (objectId: string | ObjectID) => {
   if (typeof objectId === 'string') {
@@ -42,7 +42,7 @@ export class Mongo implements DatabaseInterface {
   // Password service
   private servicePassword: MongoServicePassword;
   // Password service
-  private serviceToken: MongoServiceToken;
+  private serviceMagicLink: MongoServiceMagicLink;
 
   constructor(db: any, options: AccountsMongoOptions = {}) {
     this.options = {
@@ -57,7 +57,7 @@ export class Mongo implements DatabaseInterface {
     this.collection = this.db.collection(this.options.collectionName);
     this.sessions = new MongoSessions({ ...this.options, database: this.db });
     this.servicePassword = new MongoServicePassword({ ...this.options, database: this.db });
-    this.serviceToken = new MongoServiceToken({
+    this.serviceMagicLink = new MongoServiceMagicLink({
       ...this.options,
       database: this.db,
       password: this.servicePassword,
@@ -142,15 +142,15 @@ export class Mongo implements DatabaseInterface {
   }
 
   public async addLoginToken(userId: string, email: string, token: string): Promise<void> {
-    return this.serviceToken.addLoginToken(userId, email, token);
+    return this.serviceMagicLink.addLoginToken(userId, email, token);
   }
 
   public async findUserByLoginToken(token: string): Promise<User | null> {
-    return this.serviceToken.findUserByLoginToken(token);
+    return this.serviceMagicLink.findUserByLoginToken(token);
   }
 
   public async removeAllLoginTokens(userId: string): Promise<void> {
-    return this.serviceToken.removeAllLoginTokens(userId);
+    return this.serviceMagicLink.removeAllLoginTokens(userId);
   }
 
   public async createSession(

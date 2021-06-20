@@ -6,5 +6,5 @@ export interface EmailTemplatesType {
   resetPassword: EmailTemplateType;
   enrollAccount: EmailTemplateType;
   passwordChanged: EmailTemplateType;
-  loginToken: EmailTemplateType;
+  magicLink: EmailTemplateType;
 }

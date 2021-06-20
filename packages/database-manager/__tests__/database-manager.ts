@@ -255,4 +255,16 @@ describe('DatabaseManager', () => {
   it('removeAllResetPasswordTokens should be called on userStorage', () => {
     expect(databaseManager.removeAllResetPasswordTokens('userId')).toBe('userStorage');
   });
+
+  it('addLoginToken should be called on sessionStorage', () => {
+    expect(databaseManager.addLoginToken('userId', 'email', 'token', 'reason')).toBe('userStorage');
+  });
+
+  it('removeAllLoginTokens should be called on userStorage', () => {
+    expect(databaseManager.removeAllLoginTokens('userId')).toBe('userStorage');
+  });
+
+  it('findUserByLoginToken should be called on userStorage', () => {
+    expect(databaseManager.findUserByLoginToken('token')).toBe('userStorage');
+  });
 });

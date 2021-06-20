@@ -32,8 +32,8 @@ export const emailTemplates: EmailTemplatesType = {
     html: () => `Your account password has been successfully changed.`,
   },
 
-  loginToken: {
-    subject: () => 'Your login token',
+  magicLink: {
+    subject: () => 'Your magic link',
     text: (user: User, url: string) => `To log in please click on this link: ${url}`,
     html: (user: User, url: string) => `To log in please <a href="${url}">click here</a>.`,
   },

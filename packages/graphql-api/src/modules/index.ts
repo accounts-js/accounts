@@ -1,3 +1,3 @@
 export * from './accounts';
 export * from './accounts-password';
-export * from './accounts-token';
+export * from './accounts-magic-link';

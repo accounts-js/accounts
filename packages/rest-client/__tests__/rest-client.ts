@@ -260,10 +260,10 @@ describe('RestClient', () => {
   describe('requestLoginToken', () => {
     it('should call fetch with requestLoginToken path', () =>
       restClient
-        .requestLoginToken('email')
+        .requestMagicLinkEmail('email')
         .then(() =>
           expect((window.fetch as jest.Mock).mock.calls[0][0]).toBe(
-            'http://localhost:3000/accounts/token/requestLoginToken'
+            'http://localhost:3000/accounts/magiclink/requestMagicLinkEmail'
           )
         ));
   });

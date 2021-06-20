@@ -74,7 +74,7 @@ export type Mutation = {
   changePassword?: Maybe<Scalars['Boolean']>;
   twoFactorSet?: Maybe<Scalars['Boolean']>;
   twoFactorUnset?: Maybe<Scalars['Boolean']>;
-  requestLoginToken?: Maybe<Scalars['Boolean']>;
+  requestMagicLinkEmail?: Maybe<Scalars['Boolean']>;
   impersonate?: Maybe<ImpersonateReturn>;
   refreshTokens?: Maybe<LoginResult>;
   logout?: Maybe<Scalars['Boolean']>;
@@ -131,7 +131,7 @@ export type MutationTwoFactorUnsetArgs = {
 };
 
 
-export type MutationRequestLoginTokenArgs = {
+export type MutationRequestMagicLinkEmailArgs = {
   email: Scalars['String'];
 };
 
@@ -352,7 +352,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   changePassword?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationChangePasswordArgs, 'oldPassword' | 'newPassword'>>;
   twoFactorSet?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationTwoFactorSetArgs, 'secret' | 'code'>>;
   twoFactorUnset?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationTwoFactorUnsetArgs, 'code'>>;
-  requestLoginToken?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRequestLoginTokenArgs, 'email'>>;
+  requestMagicLinkEmail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRequestMagicLinkEmailArgs, 'email'>>;
   impersonate?: Resolver<Maybe<ResolversTypes['ImpersonateReturn']>, ParentType, ContextType, RequireFields<MutationImpersonateArgs, 'accessToken' | 'impersonated'>>;
   refreshTokens?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationRefreshTokensArgs, 'accessToken' | 'refreshToken'>>;
   logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
