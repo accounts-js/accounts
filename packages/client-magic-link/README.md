@@ -1,19 +1,19 @@
-# @accounts/client-password
+# @accounts/client-magic-link
 
-[![npm](https://img.shields.io/npm/v/@accounts/client-password)](https://www.npmjs.com/package/@accounts/client-password)
-[![npm downloads](https://img.shields.io/npm/dm/@accounts/client-password)](https://www.npmjs.com/package/@accounts/client-password)
+[![npm](https://img.shields.io/npm/v/@accounts/client-magic-link)](https://www.npmjs.com/package/@accounts/client-magic-link)
+[![npm downloads](https://img.shields.io/npm/dm/@accounts/client-magic-link)](https://www.npmjs.com/package/@accounts/client-magic-link)
 [![codecov](https://img.shields.io/codecov/c/github/accounts-js/accounts)](https://codecov.io/gh/accounts-js/accounts)
 [![License](https://img.shields.io/github/license/accounts-js/accounts)](https://github.com/accounts-js/accounts/blob/master/LICENSE)
 
 ## Documentation
 
-- [Website documentation](https://www.accountsjs.com/docs/strategies/password-client)
-- [API documentation](https://www.accountsjs.com/docs/api/client-password/globals)
+- [Website documentation](https://www.accountsjs.com/docs/strategies/magic-link-client)
+- [API documentation](https://www.accountsjs.com/docs/api/client-magic-link/globals)
 
 ## Installation
 
 ```
-yarn add @accounts/client-password
+yarn add @accounts/client-magic-link
 ```
 
 ## Contributing
