@@ -13,7 +13,7 @@ const user = {
   token: 'deadbeef',
 };
 
-describe('AccountsClientPassword', () => {
+describe('AccountsClientMagicLink', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
