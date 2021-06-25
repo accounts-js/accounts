@@ -3,24 +3,6 @@ import { DatabaseInterfaceServiceMagicLink, User } from '@accounts/types';
 import { toMongoID } from './utils';
 import { MongoServicePassword, MongoServicePasswordOptions } from '@accounts/mongo-password';
 
-export interface MongoUser {
-  _id?: string | object;
-  username?: string;
-  services: {
-    token?: {
-      token: string;
-    };
-  };
-  emails?: [
-    {
-      address: string;
-      verified: boolean;
-    }
-  ];
-
-  [key: string]: any;
-}
-
 export interface MongoServiceMagicLinkOptions {
   /**
    * Mongo database object.
@@ -94,7 +76,7 @@ export class MongoServiceMagicLink implements DatabaseInterfaceServiceMagicLink 
    */
   public async setupIndexes(options: Omit<IndexOptions, 'unique' | 'sparse'> = {}): Promise<void> {
     // Token index used to verify the email address of a user
-    await this.userCollection.createIndex('services.token.loginTokens.token', {
+    await this.userCollection.createIndex('services.magicLink.loginTokens.token', {
       ...options,
       sparse: true,
     });
@@ -106,7 +88,7 @@ export class MongoServiceMagicLink implements DatabaseInterfaceServiceMagicLink 
    */
   public async findUserByLoginToken(token: string): Promise<User | null> {
     const user = await this.userCollection.findOne({
-      'services.token.loginTokens.token': token,
+      'services.magicLink.loginTokens.token': token,
     });
     if (user) {
       user.id = user._id.toString();
@@ -126,7 +108,7 @@ export class MongoServiceMagicLink implements DatabaseInterfaceServiceMagicLink 
       { _id },
       {
         $push: {
-          'services.token.loginTokens': {
+          'services.magicLink.loginTokens': {
             token,
             address: email.toLowerCase(),
             when: this.options.dateProvider(),
@@ -146,7 +128,7 @@ export class MongoServiceMagicLink implements DatabaseInterfaceServiceMagicLink 
       { _id: id },
       {
         $unset: {
-          'services.token.loginTokens': '',
+          'services.magicLink.loginTokens': '',
         },
       }
     );

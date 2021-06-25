@@ -56,7 +56,7 @@ describe('TypeormServiceMagicLink', () => {
     it('should return user', async () => {
       const accountsTypeorm = new AccountsTypeorm({ connection });
       const userId = await accountsTypeorm.createUser(user);
-      await accountsTypeorm.addLoginToken(userId, 'john@doe.com', 'token', 'test');
+      await accountsTypeorm.addLoginToken(userId, 'john@doe.com', 'token');
       const ret = await accountsTypeorm.findUserByLoginToken('token');
       expect(ret).toBeTruthy();
       expect(ret!.id).toBeTruthy();
@@ -67,9 +67,8 @@ describe('TypeormServiceMagicLink', () => {
     it('should remove the login tokens', async () => {
       const accountsTypeorm = new AccountsTypeorm({ connection });
       const testToken = 'testVerificationToken';
-      const testReason = 'testReason';
       const userId = await accountsTypeorm.createUser(user);
-      await accountsTypeorm.addLoginToken(userId, user.email, testToken, testReason);
+      await accountsTypeorm.addLoginToken(userId, user.email, testToken);
       const userWithTokens = await accountsTypeorm.findUserByLoginToken(testToken);
       expect(userWithTokens).toBeTruthy();
       await accountsTypeorm.removeAllLoginTokens(userId);
@@ -82,13 +81,12 @@ describe('TypeormServiceMagicLink', () => {
     it('should add a login token', async () => {
       const accountsTypeorm = new AccountsTypeorm({ connection });
       const userId = await accountsTypeorm.createUser(user);
-      await accountsTypeorm.addLoginToken(userId, 'john@doe.com', 'token', 'test-reason');
+      await accountsTypeorm.addLoginToken(userId, 'john@doe.com', 'token');
       const retUser = await accountsTypeorm.findUserById(userId);
       const services: any = retUser!.services;
       expect(services.magicLink.loginTokens.length).toEqual(1);
       expect(services.magicLink.loginTokens[0].address).toEqual('john@doe.com');
       expect(services.magicLink.loginTokens[0].token).toEqual('token');
-      expect(services.magicLink.loginTokens[0].reason).toEqual('test-reason');
       expect(services.magicLink.loginTokens[0].when).toBeTruthy();
     });
   });

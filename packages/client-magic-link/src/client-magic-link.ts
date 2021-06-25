@@ -19,8 +19,8 @@ export class AccountsClientMagicLink {
   }
 
   /**
-   * Request a new login token.
-   * @param {string} email - The email address to send a password reset link.
+   * Request a new login link.
+   * @param {string} email - The email address to send a login link.
    */
   public requestMagicLinkEmail(email: string): Promise<void> {
     return this.client.transport.requestMagicLinkEmail(email);

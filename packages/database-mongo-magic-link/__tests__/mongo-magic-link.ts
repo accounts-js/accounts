@@ -61,7 +61,7 @@ describe('MongoServiceMagicLink', () => {
       const ret = await database.collection('users').indexInformation();
       expect(ret).toEqual({
         _id_: [['_id', 1]],
-        'services.token.loginTokens.token_1': [['services.token.loginTokens.token', 1]],
+        'services.magicLink.loginTokens.token_1': [['services.magicLink.loginTokens.token', 1]],
       });
     });
   });
@@ -122,10 +122,10 @@ describe('MongoServiceMagicLink', () => {
         await mongoServiceMagicLink.addLoginToken(userId, 'john@doe.com', 'token');
         const retUser = await mongoServiceMagicLink.findUserByLoginToken('token');
         const services: any = retUser!.services;
-        expect(services.token.loginTokens.length).toEqual(1);
-        expect(services.token.loginTokens[0].address).toEqual('john@doe.com');
-        expect(services.token.loginTokens[0].token).toEqual('token');
-        expect(services.token.loginTokens[0].when).toBeTruthy();
+        expect(services.magicLink.loginTokens.length).toEqual(1);
+        expect(services.magicLink.loginTokens[0].address).toEqual('john@doe.com');
+        expect(services.magicLink.loginTokens[0].token).toEqual('token');
+        expect(services.magicLink.loginTokens[0].when).toBeTruthy();
       });
     });
 

@@ -391,14 +391,13 @@ export class AccountsTypeorm implements DatabaseInterface {
     return null;
   }
 
-  public async addLoginToken(userId: string, email: string, token: string, reason: string) {
+  public async addLoginToken(userId: string, email: string, token: string) {
     await this.setService(
       userId,
       'magicLink.loginTokens',
       {
         address: email.toLocaleLowerCase(),
         when: new Date().toJSON(),
-        reason,
       },
       token
     );

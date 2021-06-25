@@ -134,7 +134,7 @@ describe('AccountsMagicLink', () => {
       set(magicLink.server, 'options.emailTemplates', {});
       await magicLink.requestMagicLinkEmail(verifiedEmail);
       expect(removeAllLoginTokens.mock.calls[0].length).toBe(1);
-      expect(addLoginToken.mock.calls[0].length).toBe(4);
+      expect(addLoginToken.mock.calls[0].length).toBe(3);
       expect(prepareMail.mock.calls[0].length).toBe(6);
       expect(sendMail.mock.calls[0].length).toBe(1);
     });

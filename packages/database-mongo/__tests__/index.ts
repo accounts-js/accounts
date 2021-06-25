@@ -902,10 +902,10 @@ describe('Mongo', () => {
       await databaseTests.database.addLoginToken(userId, 'john@doe.com', 'token');
       const retUser = await databaseTests.database.findUserById(userId);
       const services: any = retUser!.services;
-      expect(services.token.loginTokens.length).toEqual(1);
-      expect(services.token.loginTokens[0].address).toEqual('john@doe.com');
-      expect(services.token.loginTokens[0].token).toEqual('token');
-      expect(services.token.loginTokens[0].when).toBeTruthy();
+      expect(services.magicLink.loginTokens.length).toEqual(1);
+      expect(services.magicLink.loginTokens[0].address).toEqual('john@doe.com');
+      expect(services.magicLink.loginTokens[0].token).toEqual('token');
+      expect(services.magicLink.loginTokens[0].when).toBeTruthy();
     });
   });
 

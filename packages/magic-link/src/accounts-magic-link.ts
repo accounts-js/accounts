@@ -71,7 +71,7 @@ export default class AccountsMagicLink<CustomUser extends User = User>
     await this.db.removeAllLoginTokens(user.id);
 
     const token = generateRandomToken();
-    await this.db.addLoginToken(user.id, email, token, 'magic-link-requested');
+    await this.db.addLoginToken(user.id, email, token);
 
     const requestMagicLinkMail = this.server.prepareMail(
       email,
