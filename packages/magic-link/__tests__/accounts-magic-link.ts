@@ -69,7 +69,7 @@ describe('AccountsMagicLink', () => {
           user: 'toto@toto.com',
           token: 'toto',
         } as any)
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrowError('Login token expired');
     });
 
     it('throws on incorrect token', async () => {
@@ -80,7 +80,7 @@ describe('AccountsMagicLink', () => {
           user: 'toto@toto.com',
           token: 'toto',
         } as any)
-      ).rejects.toThrowError('Incorrect token');
+      ).rejects.toThrowError('Login token expired');
     });
 
     it('throws when token is expired', async () => {

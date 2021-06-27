@@ -6,7 +6,6 @@ import {
   TokenRecord,
 } from '@accounts/types';
 import { AccountsServer, AccountsJsError, generateRandomToken } from '@accounts/server';
-import { verifyToken } from './utils';
 import { ErrorMessages } from './types';
 import { errors, AuthenticateErrors, MagicLinkAuthenticatorErrors } from './errors';
 import { isString } from './utils/validation';
@@ -19,10 +18,6 @@ export interface AccountsMagicLinkOptions {
    */
   errors?: ErrorMessages;
   /**
-   * Function called to verify the token.
-   */
-  verifyToken?: (token?: string, storedTokenEmail?: string) => boolean;
-  /**
    * The number of milliseconds from when a link with a login token is sent until token expires and user can't login with it.
    * Defaults to 15 minutes.
    */
@@ -31,7 +26,6 @@ export interface AccountsMagicLinkOptions {
 
 const defaultOptions = {
   errors,
-  verifyToken,
   // 15 minutes - 15 * 60 * 1000
   loginTokenExpiration: 900000,
 };
@@ -77,7 +71,7 @@ export default class AccountsMagicLink<CustomUser extends User = User>
       email,
       token,
       this.server.sanitizeUser(user),
-      'token-login',
+      'magiclink',
       this.server.options.emailTemplates.magicLink,
       this.server.options.emailTemplates.from
     );
@@ -113,29 +107,15 @@ export default class AccountsMagicLink<CustomUser extends User = User>
     const foundUser: CustomUser | null = await this.db.findUserByLoginToken(token);
 
     if (!foundUser) {
-      if (this.server.options.ambiguousErrorMessages) {
-        throw new AccountsJsError(
-          this.options.errors.invalidCredentials,
-          MagicLinkAuthenticatorErrors.InvalidCredentials
-        );
-      } else {
-        throw new AccountsJsError(
-          this.options.errors.userNotFound,
-          MagicLinkAuthenticatorErrors.UserNotFound
-        );
-      }
+      throw new AccountsJsError(
+        this.options.errors.loginTokenExpired,
+        MagicLinkAuthenticatorErrors.LoginTokenExpired
+      );
     }
 
     const loginTokens = getUserLoginTokens(foundUser);
     const tokenRecord = loginTokens.find((t: TokenRecord) => t.token === token);
-    if (!tokenRecord) {
-      throw new AccountsJsError(
-        this.options.errors.incorrectToken,
-        MagicLinkAuthenticatorErrors.IncorrectToken
-      );
-    }
-
-    if (this.isTokenExpired(tokenRecord, this.options.loginTokenExpiration)) {
+    if (!tokenRecord || this.isTokenExpired(tokenRecord, this.options.loginTokenExpiration)) {
       throw new AccountsJsError(
         this.options.errors.loginTokenExpired,
         MagicLinkAuthenticatorErrors.LoginTokenExpired
