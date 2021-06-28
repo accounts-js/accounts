@@ -41,7 +41,7 @@ export class Mongo implements DatabaseInterface {
   private sessions: MongoSessions;
   // Password service
   private servicePassword: MongoServicePassword;
-  // Password service
+  // Magic link service
   private serviceMagicLink: MongoServiceMagicLink;
 
   constructor(db: any, options: AccountsMongoOptions = {}) {
@@ -60,7 +60,6 @@ export class Mongo implements DatabaseInterface {
     this.serviceMagicLink = new MongoServiceMagicLink({
       ...this.options,
       database: this.db,
-      password: this.servicePassword,
     });
   }
 

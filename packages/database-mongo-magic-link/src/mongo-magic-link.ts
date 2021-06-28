@@ -1,7 +1,6 @@
 import { Collection, Db, IndexOptions } from 'mongodb';
 import { DatabaseInterfaceServiceMagicLink, User } from '@accounts/types';
 import { toMongoID } from './utils';
-import { MongoServicePassword, MongoServicePasswordOptions } from '@accounts/mongo-password';
 
 export interface MongoServiceMagicLinkOptions {
   /**
@@ -14,36 +13,20 @@ export interface MongoServiceMagicLinkOptions {
    */
   userCollectionName?: string;
   /**
-   * The timestamps for the users collection.
-   * Default 'createdAt' and 'updatedAt'.
-   */
-  timestamps?: {
-    createdAt: string;
-    updatedAt: string;
-  };
-  /**
    * Should the user collection use _id as string or ObjectId.
    * Default 'true'.
    */
   convertUserIdToMongoObjectId?: boolean;
   /**
-   * Function that generate the id for new objects.
-   */
-  idProvider?: () => string | object;
-  /**
    * Function that generate the date for the timestamps.
    * Default to `(date?: Date) => (date ? date.getTime() : Date.now())`.
    */
   dateProvider?: (date?: Date) => any;
-
-  /**
-   * Mongo password service
-   */
-  password: MongoServicePassword;
 }
 
 const defaultOptions = {
   userCollectionName: 'users',
+  convertUserIdToMongoObjectId: true,
   dateProvider: (date?: Date) => (date ? date.getTime() : Date.now()),
 };
 
@@ -54,20 +37,15 @@ export class MongoServiceMagicLink implements DatabaseInterfaceServiceMagicLink 
   private database: Db;
   // Mongo user collection
   private userCollection: Collection;
-  // Password service
-  private password: MongoServicePassword;
 
   constructor(options: MongoServiceMagicLinkOptions) {
-    const passwordOptions = (options.password as any).options as MongoServicePasswordOptions;
     this.options = {
       ...defaultOptions,
-      ...passwordOptions,
       ...options,
     };
 
     this.database = this.options.database;
     this.userCollection = this.database.collection(this.options.userCollectionName);
-    this.password = this.options.password;
   }
 
   /**

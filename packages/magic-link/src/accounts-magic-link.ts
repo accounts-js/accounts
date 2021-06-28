@@ -32,7 +32,7 @@ const defaultOptions = {
 
 export default class AccountsMagicLink<CustomUser extends User = User>
   implements AuthenticationService {
-  public serviceName = 'token';
+  public serviceName = 'magicLink';
   public server!: AccountsServer;
   private options: AccountsMagicLinkOptions & typeof defaultOptions;
   private db!: DatabaseInterface<CustomUser>;

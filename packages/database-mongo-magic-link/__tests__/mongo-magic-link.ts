@@ -31,19 +31,15 @@ describe('MongoServiceMagicLink', () => {
 
   describe('#constructor', () => {
     it('should have default options', () => {
-      const mongoServicePassword = new MongoServicePassword({ database });
       const mongoServiceMagicLink = new MongoServiceMagicLink({
         database,
-        password: mongoServicePassword,
       });
       expect((mongoServiceMagicLink as any).options).toBeTruthy();
     });
 
     it('should overwrite options', () => {
-      const mongoServicePassword = new MongoServicePassword({ database });
       const mongoServiceMagicLink = new MongoServiceMagicLink({
         database,
-        password: mongoServicePassword,
         userCollectionName: 'usersTest',
       });
       expect((mongoServiceMagicLink as any).options.userCollectionName).toEqual('usersTest');
@@ -52,10 +48,8 @@ describe('MongoServiceMagicLink', () => {
 
   describe('setupIndexes', () => {
     it('should create indexes', async () => {
-      const mongoServicePassword = new MongoServicePassword({ database });
       const mongoServiceMagicLink = new MongoServiceMagicLink({
         database,
-        password: mongoServicePassword,
       });
       await mongoServiceMagicLink.setupIndexes();
       const ret = await database.collection('users').indexInformation();
@@ -68,10 +62,8 @@ describe('MongoServiceMagicLink', () => {
 
   describe('findUserByLoginToken', () => {
     it('should return null for not found user', async () => {
-      const mongoServicePassword = new MongoServicePassword({ database });
       const mongoServiceMagicLink = new MongoServiceMagicLink({
         database,
-        password: mongoServicePassword,
       });
       const ret = await mongoServiceMagicLink.findUserByLoginToken('589871d1c9393d445745a57c');
       expect(ret).not.toBeTruthy();
@@ -81,7 +73,6 @@ describe('MongoServiceMagicLink', () => {
       const mongoServicePassword = new MongoServicePassword({ database });
       const mongoServiceMagicLink = new MongoServiceMagicLink({
         database,
-        password: mongoServicePassword,
       });
       const userId = await mongoServicePassword.createUser(user);
 
@@ -104,7 +95,7 @@ describe('MongoServiceMagicLink', () => {
         });
         const mongoServiceMagicLink = new MongoServiceMagicLink({
           database,
-          password: mongoServicePassword,
+          convertUserIdToMongoObjectId: false,
         });
         const userId = await mongoServicePassword.createUser(user);
         await expect(
@@ -116,7 +107,6 @@ describe('MongoServiceMagicLink', () => {
         const mongoServicePassword = new MongoServicePassword({ database });
         const mongoServiceMagicLink = new MongoServiceMagicLink({
           database,
-          password: mongoServicePassword,
         });
         const userId = await mongoServicePassword.createUser(user);
         await mongoServiceMagicLink.addLoginToken(userId, 'john@doe.com', 'token');
@@ -137,7 +127,7 @@ describe('MongoServiceMagicLink', () => {
         });
         const mongoServiceMagicLink = new MongoServiceMagicLink({
           database,
-          password: mongoServicePassword,
+          convertUserIdToMongoObjectId: false,
         });
         const userId = await mongoServicePassword.createUser(user);
         await expect(
@@ -149,7 +139,6 @@ describe('MongoServiceMagicLink', () => {
         const mongoServicePassword = new MongoServicePassword({ database });
         const mongoServiceMagicLink = new MongoServiceMagicLink({
           database,
-          password: mongoServicePassword,
         });
         const testToken = 'testLoginToken';
         const userId = await mongoServicePassword.createUser(user);
