@@ -69,7 +69,7 @@ export class User extends AccountsUser {
   custom_field: string;
 
   // Overwrite fields
-  @Colum('text')
+  @Column('text')
   profile: string;
 }
 ```
