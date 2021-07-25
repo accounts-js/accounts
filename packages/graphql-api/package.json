@@ -48,7 +48,7 @@
     "tslib": "2.1.0"
   },
   "devDependencies": {
-    "@accounts/magic-link": "^0.1.0",
+    "@accounts/magic-link": "^0.0.1",
     "@accounts/password": "^0.32.0",
     "@accounts/server": "^0.32.0",
     "@accounts/types": "^0.32.0",
