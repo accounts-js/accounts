@@ -172,7 +172,8 @@ const defaultOptions = {
 };
 
 export default class AccountsPassword<CustomUser extends User = User>
-  implements AuthenticationService {
+  implements AuthenticationService
+{
   public serviceName = 'password';
   public server!: AccountsServer;
   public twoFactor: TwoFactor;

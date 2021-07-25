@@ -22,32 +22,34 @@ export interface AccountsPasswordModuleConfig {
   excludeAddUserInContext?: boolean;
 }
 
-export const AccountsPasswordModule: GraphQLModule<
-  AccountsPasswordModuleConfig,
-  AccountsRequest
-> = new GraphQLModule<AccountsPasswordModuleConfig, AccountsRequest>({
-  name: 'accounts-password',
-  typeDefs: ({ config }) => [TypesTypeDefs, getQueryTypeDefs(config), getMutationTypeDefs(config)],
-  resolvers: ({ config }) =>
-    ({
-      [config.rootQueryName || 'Query']: Query,
-      [config.rootMutationName || 'Mutation']: Mutation,
-    } as any),
-  imports: ({ config }) => [
-    CoreAccountsModule.forRoot({
-      userAsInterface: config.userAsInterface,
-    }),
-  ],
-  providers: ({ config }) => [
-    {
-      provide: AccountsServer,
-      useValue: config.accountsServer,
-    },
-    {
-      provide: AccountsPassword,
-      useValue: config.accountsPassword,
-    },
-  ],
-  context: context('accounts-password'),
-  configRequired: true,
-});
+export const AccountsPasswordModule: GraphQLModule<AccountsPasswordModuleConfig, AccountsRequest> =
+  new GraphQLModule<AccountsPasswordModuleConfig, AccountsRequest>({
+    name: 'accounts-password',
+    typeDefs: ({ config }) => [
+      TypesTypeDefs,
+      getQueryTypeDefs(config),
+      getMutationTypeDefs(config),
+    ],
+    resolvers: ({ config }) =>
+      ({
+        [config.rootQueryName || 'Query']: Query,
+        [config.rootMutationName || 'Mutation']: Mutation,
+      } as any),
+    imports: ({ config }) => [
+      CoreAccountsModule.forRoot({
+        userAsInterface: config.userAsInterface,
+      }),
+    ],
+    providers: ({ config }) => [
+      {
+        provide: AccountsServer,
+        useValue: config.accountsServer,
+      },
+      {
+        provide: AccountsPassword,
+        useValue: config.accountsPassword,
+      },
+    ],
+    context: context('accounts-password'),
+    configRequired: true,
+  });

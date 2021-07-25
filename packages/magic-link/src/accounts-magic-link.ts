@@ -31,7 +31,8 @@ const defaultOptions = {
 };
 
 export default class AccountsMagicLink<CustomUser extends User = User>
-  implements AuthenticationService {
+  implements AuthenticationService
+{
   public serviceName = 'magicLink';
   public server!: AccountsServer;
   private options: AccountsMagicLinkOptions & typeof defaultOptions;
