@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client-magic-link",
-  "version": "0.32.0",
+  "version": "0.1.0",
   "description": "@accounts/client-magic-link",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
