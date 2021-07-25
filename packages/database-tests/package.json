@@ -1,7 +1,7 @@
 {
   "name": "@accounts/database-tests",
   "private": true,
-  "version": "0.32.0",
+  "version": "0.32.1",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
@@ -22,7 +22,7 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "dependencies": {
-    "@accounts/types": "^0.32.0",
+    "@accounts/types": "^0.33.0",
     "tslib": "2.1.0"
   },
   "devDependencies": {
