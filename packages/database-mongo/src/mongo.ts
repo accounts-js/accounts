@@ -8,8 +8,8 @@ import {
 } from '@accounts/types';
 import { MongoSessions } from '@accounts/mongo-sessions';
 import { MongoServicePassword } from '@accounts/mongo-password';
-import { AccountsMongoOptions } from './types';
 import { MongoServiceMagicLink } from '@accounts/mongo-magic-link';
+import { AccountsMongoOptions } from './types';
 
 const toMongoID = (objectId: string | ObjectID) => {
   if (typeof objectId === 'string') {
@@ -70,6 +70,7 @@ export class Mongo implements DatabaseInterface {
   public async setupIndexes(options: Omit<IndexOptions, 'unique' | 'sparse'> = {}): Promise<void> {
     await this.sessions.setupIndexes(options);
     await this.servicePassword.setupIndexes(options);
+    await this.serviceMagicLink.setupIndexes(options);
   }
 
   public async findUserById(userId: string): Promise<User | null> {
