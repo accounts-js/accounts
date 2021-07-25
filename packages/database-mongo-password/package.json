@@ -1,6 +1,6 @@
 {
   "name": "@accounts/mongo-password",
-  "version": "0.32.0",
+  "version": "0.32.1",
   "description": "MongoDB password adaptor for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -34,7 +34,7 @@
     "mongodb": "^3.4.1"
   },
   "dependencies": {
-    "@accounts/types": "^0.32.0",
+    "@accounts/types": "^0.33.0",
     "tslib": "2.1.0"
   },
   "devDependencies": {

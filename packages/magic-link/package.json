@@ -1,6 +1,6 @@
 {
   "name": "@accounts/magic-link",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -26,8 +26,8 @@
     "tslib": "2.1.0"
   },
   "devDependencies": {
-    "@accounts/server": "^0.32.0",
-    "@accounts/types": "^0.32.0",
+    "@accounts/server": "^0.33.0",
+    "@accounts/types": "^0.33.0",
     "@types/bcryptjs": "2.4.2",
     "@types/jest": "26.0.19",
     "@types/lodash.set": "4.3.6",

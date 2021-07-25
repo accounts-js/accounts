@@ -1,6 +1,6 @@
 {
   "name": "@accounts/graphql-api",
-  "version": "0.32.0",
+  "version": "0.33.0",
   "description": "Server side GraphQL transport for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -48,10 +48,10 @@
     "tslib": "2.1.0"
   },
   "devDependencies": {
-    "@accounts/magic-link": "^0.0.1",
+    "@accounts/magic-link": "^0.1.0",
     "@accounts/password": "^0.32.0",
-    "@accounts/server": "^0.32.0",
-    "@accounts/types": "^0.32.0",
+    "@accounts/server": "^0.33.0",
+    "@accounts/types": "^0.33.0",
     "@graphql-codegen/add": "2.0.2",
     "@graphql-codegen/cli": "1.21.4",
     "@graphql-codegen/introspection": "1.18.2",
