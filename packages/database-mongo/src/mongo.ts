@@ -56,9 +56,14 @@ export class Mongo implements DatabaseInterface {
     this.db = db;
     this.collection = this.db.collection(this.options.collectionName);
     this.sessions = new MongoSessions({ ...this.options, database: this.db });
-    this.servicePassword = new MongoServicePassword({ ...this.options, database: this.db });
+    this.servicePassword = new MongoServicePassword({ 
+      ...this.options,
+      userCollectionName: this.options.collectionName,
+      database: this.db,
+    });
     this.serviceMagicLink = new MongoServiceMagicLink({
       ...this.options,
+      userCollectionName: this.options.collectionName,
       database: this.db,
     });
   }
