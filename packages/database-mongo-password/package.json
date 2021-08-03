@@ -42,6 +42,7 @@
     "@types/mongodb": "3.6.18",
     "@types/node": "14.14.9",
     "jest": "26.6.3",
+    "rimraf": "3.0.2",
     "ts-jest": "26.5.0"
   }
 }
