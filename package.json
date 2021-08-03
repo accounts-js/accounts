@@ -78,7 +78,7 @@
     "lint-staged": "10.5.1",
     "opencollective": "1.0.3",
     "prettier": "2.3.2",
-    "typescript": "3.9.5"
+    "typescript": "4.3.5"
   },
   "collective": {
     "type": "opencollective",
