@@ -37,7 +37,12 @@ import { isString } from './utils/validation';
 
 const defaultOptions = {
   ambiguousErrorMessages: true,
-  tokenSecret: 'secret',
+  tokenSecret: 'secret' as
+    | string
+    | {
+        publicKey: jwt.Secret;
+        privateKey: jwt.Secret;
+      },
   tokenConfigs: {
     accessToken: {
       expiresIn: '90m',

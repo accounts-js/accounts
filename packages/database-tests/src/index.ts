@@ -5,7 +5,7 @@ const generatePseudoRandomUuid = () =>
   [4, 2, 2, 2, 6].map((len) => generateRandomToken(len)).join('-');
 
 function delay(time: number) {
-  return new Promise((resolve) => setTimeout(() => resolve(), time));
+  return new Promise<void>((resolve) => setTimeout(() => resolve(), time));
 }
 
 // eslint-disable-next-line jest/no-export
