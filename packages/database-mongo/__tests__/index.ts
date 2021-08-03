@@ -20,7 +20,7 @@ const session = {
 };
 
 function delay(time: number) {
-  return new Promise((resolve) => setTimeout(() => resolve(), time));
+  return new Promise<void>((resolve) => setTimeout(() => resolve(), time));
 }
 
 describe('Mongo', () => {
