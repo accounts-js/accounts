@@ -83,6 +83,7 @@ importers:
       nodemon: 2.0.3
       pg: 8.1.0
       ts-node: 8.10.1
+      tslib: 2.1.0
       typeorm: 0.2.36
       typescript: 3.8.3
     dependencies:
@@ -96,6 +97,7 @@ importers:
       dotenv: 8.6.0
       graphql: 14.6.0
       pg: 8.1.0
+      tslib: 2.1.0
       typeorm: 0.2.36_pg@8.1.0
     devDependencies:
       '@accounts/types': link:../../packages/types
