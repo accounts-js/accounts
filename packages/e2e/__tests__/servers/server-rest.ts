@@ -102,13 +102,13 @@ export class ServerRestTest implements ServerTestInterface {
   public async start() {
     await new Promise((resolve) => setTimeout(resolve, 3000));
     await new Promise<void>((resolve, reject) => {
-      this.server = this.app.listen(this.port, (err: Error) => {
-        if (err) {
+      this.server = this.app
+        .listen(this.port, () => {
+          resolve();
+        })
+        .on('error', (err) => {
           reject(err);
-          return;
-        }
-        resolve();
-      });
+        });
     });
     await this.databaseTest.start();
   }

@@ -620,7 +620,7 @@ importers:
       '@apollo/client': 3.0.2
       '@graphql-modules/core': 0.7.17
       '@types/body-parser': 1.19.0
-      '@types/express': 4.17.6
+      '@types/express': 4.17.13
       '@types/jest': 25.2.3
       '@types/mongoose': 5.7.16
       '@types/node': 14.0.14
@@ -662,7 +662,7 @@ importers:
       typeorm: 0.2.25
     devDependencies:
       '@types/body-parser': 1.19.0
-      '@types/express': 4.17.6
+      '@types/express': 4.17.13
       '@types/jest': 25.2.3
       '@types/mongoose': 5.7.16
       '@types/node': 14.0.14
@@ -692,7 +692,7 @@ importers:
     specifiers:
       '@accounts/server': ^0.33.0
       '@accounts/types': ^0.33.0
-      '@types/express': 4.17.6
+      '@types/express': 4.17.13
       '@types/express-session': 1.17.0
       '@types/jest': 25.2.3
       '@types/lodash': 4.14.157
@@ -712,7 +712,7 @@ importers:
       tslib: 2.1.0
     devDependencies:
       '@accounts/server': link:../server
-      '@types/express': 4.17.6
+      '@types/express': 4.17.13
       '@types/express-session': 1.17.0
       '@types/jest': 25.2.3
       '@types/lodash': 4.14.157
@@ -967,7 +967,7 @@ importers:
       '@accounts/password': ^0.32.0
       '@accounts/server': ^0.33.0
       '@accounts/types': ^0.33.0
-      '@types/express': 4.17.6
+      '@types/express': 4.17.13
       '@types/jest': 25.2.3
       '@types/node': 14.0.14
       '@types/request-ip': 0.0.35
@@ -986,7 +986,7 @@ importers:
       '@accounts/magic-link': link:../magic-link
       '@accounts/password': link:../password
       '@accounts/server': link:../server
-      '@types/express': 4.17.6
+      '@types/express': 4.17.13
       '@types/jest': 25.2.3
       '@types/node': 14.0.14
       '@types/request-ip': 0.0.35
@@ -7445,7 +7445,6 @@ packages:
     dependencies:
       '@types/connect': 3.4.35
       '@types/node': 16.4.10
-    dev: true
 
   /@types/bson/4.0.5:
     resolution: {integrity: sha512-vVLwMUqhYJSQ/WKcE60eFqcyuWse5fGH+NMAXHuKrUAPoryq3ATxk5o4bgYNtg5aOM4APVg7Hnb3ASqUYG0PKg==}
@@ -7459,7 +7458,7 @@ packages:
   /@types/connect/3.4.35:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
-      '@types/node': 14.0.14
+      '@types/node': 16.4.10
 
   /@types/content-disposition/0.5.4:
     resolution: {integrity: sha512-0mPF08jn9zYI0n0Q/Pnz7C4kThdSt+6LD4amsrYDDpgBfrVWa3TcCOxKX1zkGgYniGagRv8heN2cbh+CAn+uuQ==}
@@ -7510,11 +7509,10 @@ packages:
   /@types/express/4.17.13:
     resolution: {integrity: sha512-6bSZTPaTIACxn48l50SR+axgrqm6qXFIxrdAKaG6PaJk3+zuUr35hBlgT7vOmJcum+OEaIBLtHV/qloEAFITeA==}
     dependencies:
-      '@types/body-parser': 1.19.0
+      '@types/body-parser': 1.19.1
       '@types/express-serve-static-core': 4.17.24
       '@types/qs': 6.9.7
       '@types/serve-static': 1.13.10
-    dev: false
 
   /@types/express/4.17.6:
     resolution: {integrity: sha512-n/mr9tZI83kd4azlPG5y997C/M4DNABK9yErhFM6hKdym4kkmd9j0vtsJyjFIwfRBxtrxZtAfGZCNRIBMFLK5w==}
