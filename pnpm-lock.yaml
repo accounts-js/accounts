@@ -439,7 +439,7 @@ importers:
       '@accounts/mongo-sessions': ^0.32.1
       '@accounts/types': ^0.33.0
       '@types/jest': 26.0.15
-      '@types/mongodb': ^3.6.18
+      '@types/mongodb': ^3.6.20
       '@types/node': 14.14.9
       jest: 26.6.3
       mongodb: ^3.4.1
@@ -466,7 +466,7 @@ importers:
     specifiers:
       '@accounts/types': ^0.33.0
       '@types/jest': 26.0.15
-      '@types/mongodb': 3.6.18
+      '@types/mongodb': 3.6.20
       '@types/node': 14.14.9
       jest: 26.6.3
       rimraf: 3.0.2
@@ -477,7 +477,7 @@ importers:
       tslib: 2.1.0
     devDependencies:
       '@types/jest': 26.0.15
-      '@types/mongodb': 3.6.18
+      '@types/mongodb': 3.6.20
       '@types/node': 14.14.9
       jest: 26.6.3
       rimraf: 3.0.2
@@ -487,7 +487,7 @@ importers:
     specifiers:
       '@accounts/types': ^0.33.0
       '@types/jest': 26.0.15
-      '@types/mongodb': 3.6.18
+      '@types/mongodb': 3.6.20
       '@types/node': 14.14.9
       jest: 26.6.3
       rimraf: 3.0.2
@@ -498,7 +498,7 @@ importers:
       tslib: 2.1.0
     devDependencies:
       '@types/jest': 26.0.15
-      '@types/mongodb': 3.6.18
+      '@types/mongodb': 3.6.20
       '@types/node': 14.14.9
       jest: 26.6.3
       rimraf: 3.0.2
@@ -508,7 +508,7 @@ importers:
     specifiers:
       '@accounts/types': ^0.33.0
       '@types/jest': 26.0.15
-      '@types/mongodb': 3.6.18
+      '@types/mongodb': 3.6.20
       '@types/node': 14.14.9
       jest: 26.6.3
       rimraf: 3.0.2
@@ -519,7 +519,7 @@ importers:
       tslib: 2.1.0
     devDependencies:
       '@types/jest': 26.0.15
-      '@types/mongodb': 3.6.18
+      '@types/mongodb': 3.6.20
       '@types/node': 14.14.9
       jest: 26.6.3
       rimraf: 3.0.2
@@ -7444,7 +7444,7 @@ packages:
   /@types/bson/4.0.5:
     resolution: {integrity: sha512-vVLwMUqhYJSQ/WKcE60eFqcyuWse5fGH+NMAXHuKrUAPoryq3ATxk5o4bgYNtg5aOM4APVg7Hnb3ASqUYG0PKg==}
     dependencies:
-      '@types/node': 14.14.9
+      '@types/node': 16.4.10
 
   /@types/caseless/0.12.2:
     resolution: {integrity: sha512-6ckxMjBBD8URvjB6J3NcnuAn5Pkl7t3TizAg+xdlzzQGSPSmBcXf8KoIH0ua/i+tio+ZRUHEXp0HEmvaR4kt0w==}
@@ -7714,19 +7714,11 @@ packages:
     resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
     dev: true
 
-  /@types/mongodb/3.6.18:
-    resolution: {integrity: sha512-JSVFt9p0rTfZ4EgzXmVHUB3ue00xe3CRbQho8nXfImzEDDM4O7I3po1bwbWl/EIbLENxUreZxqLOc8lvcnLVPA==}
-    dependencies:
-      '@types/bson': 4.0.5
-      '@types/node': 14.14.9
-    dev: true
-
   /@types/mongodb/3.6.20:
     resolution: {integrity: sha512-WcdpPJCakFzcWWD9juKoZbRtQxKIMYF/JIAM4JrNHrMcnJL6/a2NWjXxW7fo9hxboxxkg+icff8d7+WIEvKgYQ==}
     dependencies:
       '@types/bson': 4.0.5
-      '@types/node': 14.14.9
-    dev: false
+      '@types/node': 16.4.10
 
   /@types/mongodb/4.0.7:
     resolution: {integrity: sha512-lPUYPpzA43baXqnd36cZ9xxorprybxXDzteVKCPAdp14ppHtFJHnXYvNpmBvtMUTb5fKXVv6sVbzo1LHkWhJlw==}
@@ -7772,6 +7764,7 @@ packages:
 
   /@types/node/14.14.9:
     resolution: {integrity: sha512-JsoLXFppG62tWTklIoO4knA+oDTYsmqWxHRvd4lpmfQRNhX6osheUOWETP2jMoV/2bEHuMra8Pp3Dmo/stBFcw==}
+    dev: true
 
   /@types/node/16.4.10:
     resolution: {integrity: sha512-TmVHsm43br64js9BqHWqiDZA+xMtbUpI1MBIA0EyiBmoV9pcEYFOSdj5fr6enZNfh4fChh+AGOLIzGwJnkshyQ==}
