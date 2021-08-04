@@ -57,6 +57,6 @@
     "mongoose": "5.9.13",
     "node-fetch": "2.6.1",
     "tslib": "2.1.0",
-    "typeorm": "0.2.25"
+    "typeorm": "0.2.36"
   }
 }

@@ -22,7 +22,7 @@
     "dotenv": "^8.2.0",
     "graphql": "14.6.0",
     "pg": "8.1.0",
-    "typeorm": "0.2.25"
+    "typeorm": "0.2.36"
   },
   "devDependencies": {
     "@accounts/types": "^0.33.0",
