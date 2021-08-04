@@ -234,6 +234,7 @@ importers:
       '@accounts/client': ^0.33.0
       '@accounts/client-password': ^0.32.1
       '@accounts/rest-client': ^0.33.0
+      '@accounts/types': ^0.33.0
       '@material-ui/core': 4.12.3
       '@material-ui/icons': 4.11.2
       '@material-ui/lab': 4.0.0-alpha.60
@@ -271,6 +272,7 @@ importers:
       react-router-dom: 5.2.0_react@17.0.2
       tslib: 2.3.0
     devDependencies:
+      '@accounts/types': link:../../packages/types
       '@types/node': 16.4.10
       '@types/qrcode.react': 1.0.0
       '@types/react': 17.0.15
