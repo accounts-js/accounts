@@ -195,6 +195,7 @@ importers:
       qrcode.react: 1.0.0
       react: 17.0.2
       react-dom: 17.0.2
+      react-router: 5.2.0
       react-router-dom: 5.2.0
       react-scripts: 4.0.3
       tslib: 2.3.0
@@ -213,6 +214,7 @@ importers:
       qrcode.react: 1.0.0_react@17.0.2
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
+      react-router: 5.2.0_react@17.0.2
       react-router-dom: 5.2.0_react@17.0.2
       tslib: 2.3.0
     devDependencies:
@@ -247,6 +249,7 @@ importers:
       qrcode.react: 1.0.0
       react: 17.0.2
       react-dom: 17.0.2
+      react-router: 5.2.0
       react-router-dom: 5.2.0
       react-scripts: 4.0.3
       tslib: 2.3.0
@@ -264,6 +267,7 @@ importers:
       qrcode.react: 1.0.0_react@17.0.2
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
+      react-router: 5.2.0_react@17.0.2
       react-router-dom: 5.2.0_react@17.0.2
       tslib: 2.3.0
     devDependencies:
