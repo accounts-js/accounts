@@ -464,6 +464,7 @@ importers:
 
   packages/database-mongo-magic-link:
     specifiers:
+      '@accounts/mongo-password': ^0.32.1
       '@accounts/types': ^0.33.0
       '@types/jest': 26.0.15
       '@types/mongodb': 3.6.20
@@ -476,6 +477,7 @@ importers:
       '@accounts/types': link:../types
       tslib: 2.1.0
     devDependencies:
+      '@accounts/mongo-password': link:../database-mongo-password
       '@types/jest': 26.0.15
       '@types/mongodb': 3.6.20
       '@types/node': 14.14.9

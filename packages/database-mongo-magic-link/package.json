@@ -38,6 +38,7 @@
     "tslib": "2.1.0"
   },
   "devDependencies": {
+    "@accounts/mongo-password": "^0.32.1",
     "@types/jest": "26.0.15",
     "@types/mongodb": "3.6.20",
     "@types/node": "14.14.9",
