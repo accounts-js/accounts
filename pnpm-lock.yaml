@@ -190,7 +190,7 @@ importers:
       '@types/react-router': 5.1.16
       '@types/react-router-dom': 5.1.8
       eslint-config-react-app: 6.0.0
-      graphql: 14.6.0
+      graphql: 15.5.1
       graphql-tag: 2.11.0
       qrcode.react: 1.0.0
       react: 17.0.2
@@ -206,11 +206,11 @@ importers:
       '@accounts/client': link:../../packages/client
       '@accounts/client-password': link:../../packages/client-password
       '@accounts/graphql-client': link:../../packages/graphql-client
-      '@apollo/client': 3.0.2_graphql@14.6.0+react@17.0.2
+      '@apollo/client': 3.0.2_graphql@15.5.1+react@17.0.2
       '@material-ui/core': 4.12.3_6ed7afba42f0472a9770b39da668445f
       '@material-ui/styles': 4.11.4_6ed7afba42f0472a9770b39da668445f
-      graphql: 14.6.0
-      graphql-tag: 2.11.0_graphql@14.6.0
+      graphql: 15.5.1
+      graphql-tag: 2.11.0_graphql@15.5.1
       qrcode.react: 1.0.0_react@17.0.2
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -1241,7 +1241,7 @@ packages:
       zen-observable: 0.8.15
     dev: false
 
-  /@apollo/client/3.0.2_graphql@14.6.0+react@17.0.2:
+  /@apollo/client/3.0.2_graphql@15.5.1+react@17.0.2:
     resolution: {integrity: sha512-4ighan5Anlj4tK/tdUHs4Mi1njqXZ7AxRCVolz/H702DjPphAJfm+FRkIadPTmwz+OLO+d+tX+6V1VBshf02rg==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0
@@ -1255,8 +1255,8 @@ packages:
       '@wry/context': 0.5.4
       '@wry/equality': 0.1.11
       fast-json-stable-stringify: 2.1.0
-      graphql: 14.6.0
-      graphql-tag: 2.12.5_graphql@14.6.0
+      graphql: 15.5.1
+      graphql-tag: 2.12.5_graphql@15.5.1
       hoist-non-react-statics: 3.3.2
       optimism: 0.12.2
       prop-types: 15.7.2
@@ -13705,6 +13705,14 @@ packages:
     dependencies:
       graphql: 14.6.0
 
+  /graphql-tag/2.11.0_graphql@15.5.1:
+    resolution: {integrity: sha512-VmsD5pJqWJnQZMUeRwrDhfgoyqcfwEkvtpANqcoUG8/tOLkwNgU9mzub/Mc78OJMhHjx7gfAMTxzdG43VGg3bA==}
+    peerDependencies:
+      graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
+    dependencies:
+      graphql: 15.5.1
+    dev: false
+
   /graphql-tag/2.12.5:
     resolution: {integrity: sha512-5xNhP4063d16Pz3HBtKprutsPrmHZi5IdUGOWRxA2B6VF7BIRGOHZ5WQvDmJXZuPcBg7rYwaFxvQYjqkSdR3TQ==}
     engines: {node: '>=10'}
@@ -13731,7 +13739,6 @@ packages:
     dependencies:
       graphql: 15.5.1
       tslib: 2.1.0
-    dev: true
 
   /graphql-tools/4.0.8_graphql@14.6.0:
     resolution: {integrity: sha512-MW+ioleBrwhRjalKjYaLQbr+920pHBgy9vM/n47sswtns8+96sRn5M/G+J1eu7IMeKWiN/9p6tmwCHU7552VJg==}
@@ -13790,7 +13797,6 @@ packages:
   /graphql/15.5.1:
     resolution: {integrity: sha512-FeTRX67T3LoE3LWAxxOlW2K3Bz+rMYAC18rRguK4wgXaTZMiJwSUwDmPFo3UadAKbzirKIg5Qy+sNJXbpPRnQw==}
     engines: {node: '>= 10.x'}
-    dev: true
 
   /gray-matter/4.0.3:
     resolution: {integrity: sha512-5v6yZd4JK3eMI3FqqCouswVqwugaA9r4dNZB1wwcmrD02QkV5H0y7XBQW8QwQqEaZY1pM9aqORSORhJRdNK44Q==}
