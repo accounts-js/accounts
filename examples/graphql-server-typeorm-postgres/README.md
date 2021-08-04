@@ -7,9 +7,8 @@ This example demonstrate how to use [accounts-js](https://github.com/accounts-js
 In order to be able to run this example on your machine you first need to do the following steps:
 
 - Clone the repository `git clone git@github.com:accounts-js/accounts.git`
-- Install project dependencies: `yarn`
-- Link together all the packages: `yarn setup`
-- Compile the packages `yarn compile`
+- Install project dependencies: `pnpm install`
+- Compile the packages `pnpm run compile`
 - Go to the example folder `cd examples/graphql-server-typeorm-postgres`
 
 ## Prerequisites
@@ -23,7 +22,7 @@ docker-compose up -d
 to start a new one.
 
 If you have postgres already installed on your system, you can just edit the .env file and use your current postgres data instead of the supplied Docker image.
-Alternatively you can simply prepend the `DATABASE_URL` and `ACCOUNTS_SECRET` environmental variables to your `yarn start` command.
+Alternatively you can simply prepend the `DATABASE_URL` and `ACCOUNTS_SECRET` environmental variables to your `pnpm run start` command.
 
 ## Getting Started
 
@@ -32,7 +31,7 @@ Start the app.
 Visit <http://localhost:4000/>
 
 ```bash
-yarn start
+pnpm run start
 ```
 
 -> [Start the client side](../react-graphql-typescript).

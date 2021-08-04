@@ -7,10 +7,10 @@
   "scripts": {
     "clean": "rimraf lib",
     "start": "tsc --watch",
-    "precompile": "yarn clean",
-    "compile": "yarn generate:graphql && tsc",
+    "precompile": "pnpm run clean",
+    "compile": "pnpm run generate:graphql && tsc",
     "generate:graphql": "gql-gen",
-    "prepublishOnly": "yarn compile"
+    "prepublishOnly": "pnpm run compile"
   },
   "files": [
     "src",

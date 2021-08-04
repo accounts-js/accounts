@@ -1,9 +1,7 @@
 [build]
   base    = "."
   publish = "website/build"
-  command = "yarn setup && yarn compile && cd website && yarn generate-api-docs && yarn build"
+  command = "pnpm run compile && cd website && pnpm run generate-api-docs && pnpm run build"
 
 [build.environment]
-  NODE_VERSION = "12"
-  YARN_VERSION = "1.22.4"
-  YARN_FLAGS = "--pure-lockfile"
+  NODE_VERSION = "14"
