@@ -120,6 +120,7 @@ importers:
       '@types/node': 14.0.13
       apollo-server: 2.16.0
       graphql: 14.6.0
+      graphql-tag: 2.11.0
       mongoose: 5.9.25
       nodemon: 2.0.4
       ts-node: 8.10.2
@@ -136,6 +137,7 @@ importers:
       '@graphql-tools/merge': 6.2.5_graphql@14.6.0
       apollo-server: 2.16.0_graphql@14.6.0
       graphql: 14.6.0
+      graphql-tag: 2.11.0_graphql@14.6.0
       mongoose: 5.9.25
       tslib: 2.1.0
     devDependencies:
