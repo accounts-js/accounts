@@ -14,7 +14,6 @@
     "test:examples": "lerna run test --scope=\"@examples/*\"",
     "coverage": "lerna run coverage",
     "codecov": "codecov",
-    "generate:changelog": "conventional-changelog -p conventionalcommits -n ./conventional-changelog.config.json -c ./conventional-changelog.context.json -i CHANGELOG.md -s",
     "release": "pnpm publish -r && pnpx changeset version",
     "reset": "pnpm run clean; pnpm run install; pnpm run compile",
     "prepare": "husky install"
@@ -60,7 +59,6 @@
     "@changesets/cli": "2.16.0",
     "@typescript-eslint/eslint-plugin": "4.29.0",
     "@typescript-eslint/parser": "4.29.0",
-    "conventional-changelog-cli": "2.0.34",
     "eslint": "7.32.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-jest": "24.4.0",
