@@ -15,6 +15,7 @@
     "coverage": "lerna run coverage",
     "codecov": "codecov",
     "generate:changelog": "conventional-changelog -p conventionalcommits -n ./conventional-changelog.config.json -c ./conventional-changelog.context.json -i CHANGELOG.md -s",
+    "release": "pnpm publish -r && pnpx changeset version",
     "reset": "pnpm run clean; pnpm run install; pnpm run compile",
     "prepare": "husky install"
   },
