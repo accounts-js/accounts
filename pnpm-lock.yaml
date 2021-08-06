@@ -44,7 +44,7 @@ importers:
       graphql: 14.6.0
       lodash: 4.17.20
       node-fetch: 2.6.1
-      nodemon: 2.0.3
+      nodemon: 2.0.4
       ts-node: 8.10.1
       tslib: 2.1.0
       typescript: 3.8.3
@@ -61,7 +61,7 @@ importers:
       node-fetch: 2.6.1
       tslib: 2.1.0
     devDependencies:
-      nodemon: 2.0.3
+      nodemon: 2.0.4
       ts-node: 8.10.1_typescript@3.8.3
       typescript: 3.8.3
 
@@ -78,7 +78,7 @@ importers:
       apollo-server: 2.14.4
       dotenv: ^8.2.0
       graphql: 14.6.0
-      nodemon: 2.0.3
+      nodemon: 2.0.4
       pg: 8.1.0
       ts-node: 8.10.1
       tslib: 2.1.0
@@ -100,7 +100,7 @@ importers:
     devDependencies:
       '@accounts/types': link:../../packages/types
       '@types/node': 14.0.13
-      nodemon: 2.0.3
+      nodemon: 2.0.4
       ts-node: 8.10.1_typescript@3.8.3
       typescript: 3.8.3
 
@@ -293,7 +293,7 @@ importers:
       cors: 2.8.5
       express: 4.17.1
       mongoose: 5.9.13
-      nodemon: 2.0.3
+      nodemon: 2.0.4
       ts-node: 8.10.1
       tslib: 2.1.0
       typescript: 3.8.3
@@ -309,7 +309,7 @@ importers:
       tslib: 2.1.0
     devDependencies:
       '@types/node': 14.0.13
-      nodemon: 2.0.3
+      nodemon: 2.0.4
       ts-node: 8.10.1_typescript@3.8.3
       typescript: 3.8.3
 
@@ -17415,24 +17415,6 @@ packages:
 
   /node-releases/1.1.73:
     resolution: {integrity: sha512-uW7fodD6pyW2FZNZnp/Z3hvWKeEW1Y8R1+1CnErE8cXFXzl5blBOoVB41CvMer6P6Q0S5FXDwcHgFd1Wj0U9zg==}
-
-  /nodemon/2.0.3:
-    resolution: {integrity: sha512-lLQLPS90Lqwc99IHe0U94rDgvjo+G9I4uEIxRG3evSLROcqQ9hwc0AxlSHKS4T1JW/IMj/7N5mthiN58NL/5kw==}
-    engines: {node: '>=8.10.0'}
-    hasBin: true
-    requiresBuild: true
-    dependencies:
-      chokidar: 3.5.2
-      debug: 3.2.7
-      ignore-by-default: 1.0.1
-      minimatch: 3.0.4
-      pstree.remy: 1.1.8
-      semver: 5.7.1
-      supports-color: 5.5.0
-      touch: 3.1.0
-      undefsafe: 2.0.3
-      update-notifier: 4.1.3
-    dev: true
 
   /nodemon/2.0.4:
     resolution: {integrity: sha512-Ltced+hIfTmaS28Zjv1BM552oQ3dbwPqI4+zI0SLgq+wpJhSyqgYude/aZa/3i31VCQWMfXJVxvu86abcam3uQ==}
