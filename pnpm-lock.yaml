@@ -47,7 +47,7 @@ importers:
       nodemon: 2.0.12
       ts-node: 10.1.0
       tslib: 2.1.0
-      typescript: 3.8.3
+      typescript: 4.3.5
     dependencies:
       '@accounts/boost': link:../../packages/boost
       '@apollo/client': 3.3.20_graphql@14.6.0
@@ -62,8 +62,8 @@ importers:
       tslib: 2.1.0
     devDependencies:
       nodemon: 2.0.12
-      ts-node: 10.1.0_typescript@3.8.3
-      typescript: 3.8.3
+      ts-node: 10.1.0_typescript@4.3.5
+      typescript: 4.3.5
 
   examples/graphql-server-typeorm-postgres:
     specifiers:
@@ -83,7 +83,7 @@ importers:
       ts-node: 10.1.0
       tslib: 2.1.0
       typeorm: 0.2.36
-      typescript: 3.8.3
+      typescript: 4.3.5
     dependencies:
       '@accounts/graphql-api': link:../../packages/graphql-api
       '@accounts/password': link:../../packages/password
@@ -101,8 +101,8 @@ importers:
       '@accounts/types': link:../../packages/types
       '@types/node': 16.4.13
       nodemon: 2.0.12
-      ts-node: 10.1.0_5aa28daf0e61c976a8e5783468626efd
-      typescript: 3.8.3
+      ts-node: 10.1.0_dea0625f6d31b223e93dc3dc354b8b43
+      typescript: 4.3.5
 
   examples/graphql-server-typescript:
     specifiers:
@@ -123,7 +123,7 @@ importers:
       nodemon: 2.0.12
       ts-node: 10.1.0
       tslib: 2.1.0
-      typescript: 3.9.7
+      typescript: 4.3.5
     dependencies:
       '@accounts/database-manager': link:../../packages/database-manager
       '@accounts/graphql-api': link:../../packages/graphql-api
@@ -142,8 +142,8 @@ importers:
       '@types/mongoose': 5.7.32
       '@types/node': 16.4.13
       nodemon: 2.0.12
-      ts-node: 10.1.0_6f92b7965c9216a575f086fb8815c22d
-      typescript: 3.9.7
+      ts-node: 10.1.0_dea0625f6d31b223e93dc3dc354b8b43
+      typescript: 4.3.5
 
   examples/magic-link-server-typescript:
     specifiers:
@@ -157,7 +157,7 @@ importers:
       nodemon: 2.0.12
       ts-node: 10.1.0
       tslib: 2.1.0
-      typescript: 3.9.7
+      typescript: 4.3.5
     dependencies:
       '@accounts/database-manager': link:../../packages/database-manager
       '@accounts/magic-link': link:../../packages/magic-link
@@ -169,8 +169,8 @@ importers:
       '@types/mongoose': 5.7.32
       '@types/node': 16.4.13
       nodemon: 2.0.12
-      ts-node: 10.1.0_6f92b7965c9216a575f086fb8815c22d
-      typescript: 3.9.7
+      ts-node: 10.1.0_dea0625f6d31b223e93dc3dc354b8b43
+      typescript: 4.3.5
 
   examples/react-graphql-typescript:
     specifiers:
@@ -296,7 +296,7 @@ importers:
       nodemon: 2.0.12
       ts-node: 10.1.0
       tslib: 2.1.0
-      typescript: 3.8.3
+      typescript: 4.3.5
     dependencies:
       '@accounts/mongo': link:../../packages/database-mongo
       '@accounts/password': link:../../packages/password
@@ -310,8 +310,8 @@ importers:
     devDependencies:
       '@types/node': 16.4.13
       nodemon: 2.0.12
-      ts-node: 10.1.0_5aa28daf0e61c976a8e5783468626efd
-      typescript: 3.8.3
+      ts-node: 10.1.0_dea0625f6d31b223e93dc3dc354b8b43
+      typescript: 4.3.5
 
   packages/apollo-link-accounts:
     specifiers:
@@ -22922,7 +22922,7 @@ packages:
     resolution: {integrity: sha512-XvB+OdKSJ708Dmf9ore4Uf/q62AYDTzFcAdxc8KNML1mmAWywRFVt/dn1KYJH8Agt5UJNujfM3znU5PxgAzA2w==}
     dev: true
 
-  /ts-node/10.1.0_5aa28daf0e61c976a8e5783468626efd:
+  /ts-node/10.1.0_dea0625f6d31b223e93dc3dc354b8b43:
     resolution: {integrity: sha512-6szn3+J9WyG2hE+5W8e0ruZrzyk1uFLYye6IGMBadnOzDh8aP7t8CbFpsfCiEx2+wMixAhjFt7lOZC4+l+WbEA==}
     engines: {node: '>=12.0.0'}
     hasBin: true
@@ -22947,64 +22947,7 @@ packages:
       diff: 4.0.2
       make-error: 1.3.6
       source-map-support: 0.5.19
-      typescript: 3.8.3
-      yn: 3.1.1
-    dev: true
-
-  /ts-node/10.1.0_6f92b7965c9216a575f086fb8815c22d:
-    resolution: {integrity: sha512-6szn3+J9WyG2hE+5W8e0ruZrzyk1uFLYye6IGMBadnOzDh8aP7t8CbFpsfCiEx2+wMixAhjFt7lOZC4+l+WbEA==}
-    engines: {node: '>=12.0.0'}
-    hasBin: true
-    peerDependencies:
-      '@swc/core': '>=1.2.50'
-      '@swc/wasm': '>=1.2.50'
-      '@types/node': '*'
-      typescript: '>=2.7'
-    peerDependenciesMeta:
-      '@swc/core':
-        optional: true
-      '@swc/wasm':
-        optional: true
-    dependencies:
-      '@tsconfig/node10': 1.0.8
-      '@tsconfig/node12': 1.0.9
-      '@tsconfig/node14': 1.0.1
-      '@tsconfig/node16': 1.0.2
-      '@types/node': 16.4.13
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.2
-      make-error: 1.3.6
-      source-map-support: 0.5.19
-      typescript: 3.9.7
-      yn: 3.1.1
-    dev: true
-
-  /ts-node/10.1.0_typescript@3.8.3:
-    resolution: {integrity: sha512-6szn3+J9WyG2hE+5W8e0ruZrzyk1uFLYye6IGMBadnOzDh8aP7t8CbFpsfCiEx2+wMixAhjFt7lOZC4+l+WbEA==}
-    engines: {node: '>=12.0.0'}
-    hasBin: true
-    peerDependencies:
-      '@swc/core': '>=1.2.50'
-      '@swc/wasm': '>=1.2.50'
-      '@types/node': '*'
-      typescript: '>=2.7'
-    peerDependenciesMeta:
-      '@swc/core':
-        optional: true
-      '@swc/wasm':
-        optional: true
-    dependencies:
-      '@tsconfig/node10': 1.0.8
-      '@tsconfig/node12': 1.0.9
-      '@tsconfig/node14': 1.0.1
-      '@tsconfig/node16': 1.0.2
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.2
-      make-error: 1.3.6
-      source-map-support: 0.5.19
-      typescript: 3.8.3
+      typescript: 4.3.5
       yn: 3.1.1
     dev: true
 
@@ -23383,18 +23326,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
-
-  /typescript/3.8.3:
-    resolution: {integrity: sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==}
-    engines: {node: '>=4.2.0'}
-    hasBin: true
-    dev: true
-
-  /typescript/3.9.7:
-    resolution: {integrity: sha512-BLbiRkiBzAwsjut4x/dsibSTB6yWpwT5qWmC2OfuCg3GgVQCSgMs4vEctYPhsaGtd0AeuuHMkjZ2h2WG8MSzRw==}
-    engines: {node: '>=4.2.0'}
-    hasBin: true
-    dev: true
 
   /typescript/4.3.5:
     resolution: {integrity: sha512-DqQgihaQ9cUrskJo9kIyW/+g0Vxsk8cDtZ52a3NGh0YNTfpUSArXSohyUGnvbPazEPLu398C0UxmKSOrPumUzA==}
