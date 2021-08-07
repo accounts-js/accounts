@@ -50,7 +50,7 @@
     "jsonwebtoken": "8.5.1",
     "jwt-decode": "3.1.2",
     "lodash.merge": "4.6.2",
-    "tslib": "2.1.0"
+    "tslib": "2.3.0"
   },
   "devDependencies": {
     "@types/jest": "26.0.24",

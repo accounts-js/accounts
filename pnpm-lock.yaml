@@ -46,7 +46,7 @@ importers:
       node-fetch: 2.6.1
       nodemon: 2.0.12
       ts-node: 10.1.0
-      tslib: 2.1.0
+      tslib: 2.3.0
       typescript: 4.3.5
     dependencies:
       '@accounts/boost': link:../../packages/boost
@@ -59,7 +59,7 @@ importers:
       graphql: 14.6.0
       lodash: 4.17.20
       node-fetch: 2.6.1
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       nodemon: 2.0.12
       ts-node: 10.1.0_typescript@4.3.5
@@ -81,7 +81,7 @@ importers:
       nodemon: 2.0.12
       pg: 8.1.0
       ts-node: 10.1.0
-      tslib: 2.1.0
+      tslib: 2.3.0
       typeorm: 0.2.36
       typescript: 4.3.5
     dependencies:
@@ -95,7 +95,7 @@ importers:
       dotenv: 8.6.0
       graphql: 14.6.0
       pg: 8.1.0
-      tslib: 2.1.0
+      tslib: 2.3.0
       typeorm: 0.2.36_pg@8.1.0
     devDependencies:
       '@accounts/types': link:../../packages/types
@@ -122,7 +122,7 @@ importers:
       mongoose: 5.9.25
       nodemon: 2.0.12
       ts-node: 10.1.0
-      tslib: 2.1.0
+      tslib: 2.3.0
       typescript: 4.3.5
     dependencies:
       '@accounts/database-manager': link:../../packages/database-manager
@@ -137,7 +137,7 @@ importers:
       graphql: 14.6.0
       graphql-tag: 2.11.0_graphql@14.6.0
       mongoose: 5.9.25
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@types/mongoose': 5.7.32
       '@types/node': 16.4.13
@@ -156,7 +156,7 @@ importers:
       mongoose: 5.9.25
       nodemon: 2.0.12
       ts-node: 10.1.0
-      tslib: 2.1.0
+      tslib: 2.3.0
       typescript: 4.3.5
     dependencies:
       '@accounts/database-manager': link:../../packages/database-manager
@@ -164,7 +164,7 @@ importers:
       '@accounts/mongo': link:../../packages/database-mongo
       '@accounts/server': link:../../packages/server
       mongoose: 5.9.25
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@types/mongoose': 5.7.32
       '@types/node': 16.4.13
@@ -222,7 +222,7 @@ importers:
       '@types/react-dom': 17.0.9
       '@types/react-router': 5.1.16
       '@types/react-router-dom': 5.1.8
-      eslint-config-react-app: 6.0.0_8b549cba4563f45b9f3b76639e8f6f9c
+      eslint-config-react-app: 6.0.0
       react-scripts: 4.0.3_react@17.0.2+typescript@4.3.5
       typescript: 4.3.5
       web-vitals: 1.0.1
@@ -277,7 +277,7 @@ importers:
       '@types/react-dom': 17.0.9
       '@types/react-router': 5.1.16
       '@types/react-router-dom': 5.1.8
-      eslint-config-react-app: 6.0.0_8b549cba4563f45b9f3b76639e8f6f9c
+      eslint-config-react-app: 6.0.0
       react-scripts: 4.0.3_react@17.0.2+typescript@4.3.5
       typescript: 4.3.5
       web-vitals: 1.0.1
@@ -295,7 +295,7 @@ importers:
       mongoose: 5.9.13
       nodemon: 2.0.12
       ts-node: 10.1.0
-      tslib: 2.1.0
+      tslib: 2.3.0
       typescript: 4.3.5
     dependencies:
       '@accounts/mongo': link:../../packages/database-mongo
@@ -306,7 +306,7 @@ importers:
       cors: 2.8.5
       express: 4.17.1
       mongoose: 5.9.13
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@types/node': 16.4.13
       nodemon: 2.0.12
@@ -318,9 +318,9 @@ importers:
       '@accounts/client': ^0.33.0
       '@apollo/client': 3.0.2
       rimraf: 3.0.2
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@accounts/client': link:../client
       '@apollo/client': 3.0.2
@@ -338,7 +338,7 @@ importers:
       jsonwebtoken: ^8.5.1
       lodash: ^4.17.20
       rimraf: 3.0.2
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/database-manager': link:../database-manager
       '@accounts/graphql-api': link:../graphql-api
@@ -349,7 +349,7 @@ importers:
       graphql: 14.6.0
       jsonwebtoken: 8.5.1
       lodash: 4.17.21
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       rimraf: 3.0.2
 
@@ -364,11 +364,11 @@ importers:
       jwt-decode: 3.1.2
       localstorage-polyfill: 1.0.1
       rimraf: 3.0.2
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/types': link:../types
       jwt-decode: 3.1.2
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@types/jest': 26.0.24
       '@types/node': 16.4.13
@@ -387,17 +387,17 @@ importers:
       jest: 27.0.6
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/client': link:../client
       '@accounts/types': link:../types
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@types/jest': 26.0.24
       '@types/node': 16.4.13
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/client-password:
     specifiers:
@@ -408,17 +408,17 @@ importers:
       jest: 27.0.6
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/client': link:../client
       '@accounts/types': link:../types
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@types/jest': 26.0.24
       '@types/node': 16.4.13
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/database-manager:
     specifiers:
@@ -428,16 +428,16 @@ importers:
       jest: 27.0.6
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/types': link:../types
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@types/jest': 26.0.24
       '@types/node': 16.4.13
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/database-mongo:
     specifiers:
@@ -453,7 +453,7 @@ importers:
       mongodb: ^3.4.1
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/mongo-magic-link': link:../database-mongo-magic-link
       '@accounts/mongo-password': link:../database-mongo-password
@@ -461,14 +461,14 @@ importers:
       '@accounts/types': link:../types
       '@types/mongodb': 3.6.20
       mongodb: 3.6.10
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@accounts/database-tests': link:../database-tests
       '@types/jest': 26.0.24
       '@types/node': 16.4.13
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/database-mongo-magic-link:
     specifiers:
@@ -480,10 +480,10 @@ importers:
       jest: 27.0.6
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/types': link:../types
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@accounts/mongo-password': link:../database-mongo-password
       '@types/jest': 26.0.24
@@ -491,7 +491,7 @@ importers:
       '@types/node': 16.4.13
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/database-mongo-password:
     specifiers:
@@ -502,17 +502,17 @@ importers:
       jest: 27.0.6
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/types': link:../types
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@types/jest': 26.0.24
       '@types/mongodb': 3.6.20
       '@types/node': 16.4.13
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/database-mongo-sessions:
     specifiers:
@@ -523,17 +523,17 @@ importers:
       jest: 27.0.6
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/types': link:../types
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@types/jest': 26.0.24
       '@types/mongodb': 3.6.20
       '@types/node': 16.4.13
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/database-redis:
     specifiers:
@@ -548,12 +548,12 @@ importers:
       rimraf: 3.0.2
       shortid: ^2.2.15
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/types': link:../types
       ioredis: 4.27.7
       shortid: 2.2.16
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@accounts/database-tests': link:../database-tests
       '@types/ioredis': 4.14.9
@@ -562,7 +562,7 @@ importers:
       '@types/shortid': 0.0.29
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/database-tests:
     specifiers:
@@ -572,16 +572,16 @@ importers:
       jest: 27.0.6
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/types': link:../types
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@types/jest': 26.0.24
       '@types/node': 16.4.13
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/database-typeorm:
     specifiers:
@@ -595,13 +595,13 @@ importers:
       reflect-metadata: ^0.1.13
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
       typeorm: ^0.2.36
     dependencies:
       '@accounts/types': link:../types
       lodash: 4.17.21
       reflect-metadata: 0.1.13
-      tslib: 2.1.0
+      tslib: 2.3.0
       typeorm: 0.2.36_pg@8.1.0
     devDependencies:
       '@accounts/database-tests': link:../database-tests
@@ -610,7 +610,7 @@ importers:
       jest: 27.0.6
       pg: 8.1.0
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/e2e:
     specifiers:
@@ -643,7 +643,7 @@ importers:
       mongoose: 5.9.13
       node-fetch: 2.6.1
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
       typeorm: 0.2.36
     dependencies:
       '@accounts/client': link:../client
@@ -666,7 +666,7 @@ importers:
       graphql: 14.6.0
       mongoose: 5.9.13
       node-fetch: 2.6.1
-      tslib: 2.1.0
+      tslib: 2.3.0
       typeorm: 0.2.36
     devDependencies:
       '@types/body-parser': 1.19.0
@@ -677,7 +677,7 @@ importers:
       '@types/node-fetch': 2.5.12
       jest: 27.0.6
       jest-localstorage-mock: 2.4.14
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/error:
     specifiers:
@@ -686,15 +686,15 @@ importers:
       jest: 27.0.6
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@types/jest': 26.0.24
       '@types/node': 16.4.13
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/express-session:
     specifiers:
@@ -712,12 +712,12 @@ importers:
       request-ip: ^2.1.3
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/types': link:../types
       lodash: 4.17.21
       request-ip: 2.1.3
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@accounts/server': link:../server
       '@types/express': 4.17.13
@@ -729,7 +729,7 @@ importers:
       express-session: 1.17.1
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/graphql-api:
     specifiers:
@@ -756,19 +756,19 @@ importers:
       rimraf: 3.0.2
       ts-jest: 27.0.4
       ts-node: 10.1.0
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@graphql-tools/merge': 6.2.13_graphql@14.6.0
       '@graphql-tools/utils': 7.9.0_graphql@14.6.0
       request-ip: 2.1.3
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@accounts/magic-link': link:../magic-link
       '@accounts/password': link:../password
       '@accounts/server': link:../server
       '@accounts/types': link:../types
       '@graphql-codegen/add': 2.0.2_graphql@14.6.0
-      '@graphql-codegen/cli': 1.21.4_graphql@14.6.0+typescript@4.3.5
+      '@graphql-codegen/cli': 1.21.4_graphql@14.6.0
       '@graphql-codegen/introspection': 1.18.2_graphql@14.6.0
       '@graphql-codegen/typescript': 1.22.0_graphql@14.6.0
       '@graphql-codegen/typescript-operations': 1.17.16_graphql@14.6.0
@@ -781,8 +781,8 @@ importers:
       graphql-tag: 2.11.0_graphql@14.6.0
       jest: 27.0.6_ts-node@10.1.0
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
-      ts-node: 10.1.0_typescript@4.3.5
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
+      ts-node: 10.1.0
 
   packages/graphql-client:
     specifiers:
@@ -799,15 +799,15 @@ importers:
       jest: 27.0.6
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/client': link:../client
       '@accounts/types': link:../types
       '@graphql-typed-document-node/core': 3.1.0_graphql@15.5.1
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@graphql-codegen/add': 3.0.0_graphql@15.5.1
-      '@graphql-codegen/cli': 2.0.1_graphql@15.5.1+typescript@4.3.5
+      '@graphql-codegen/cli': 2.0.1_graphql@15.5.1
       '@graphql-codegen/typed-document-node': 2.0.0_graphql@15.5.1
       '@graphql-codegen/typescript': 2.0.0_graphql@15.5.1
       '@graphql-codegen/typescript-operations': 2.0.1_graphql@15.5.1
@@ -815,7 +815,7 @@ importers:
       graphql: 15.5.1
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/magic-link:
     specifiers:
@@ -830,10 +830,10 @@ importers:
       lodash.set: 4.3.2
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       bcryptjs: 2.4.3
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@accounts/server': link:../server
       '@accounts/types': link:../types
@@ -844,7 +844,7 @@ importers:
       jest: 27.0.6
       lodash.set: 4.3.2
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/oauth:
     specifiers:
@@ -855,17 +855,17 @@ importers:
       jest: 27.0.6
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/types': link:../types
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@accounts/server': link:../server
       '@types/jest': 26.0.24
       '@types/node': 16.4.13
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/oauth-instagram:
     specifiers:
@@ -878,19 +878,19 @@ importers:
       request-promise: ^4.2.6
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/oauth': link:../oauth
       request: 2.88.2
       request-promise: 4.2.6_request@2.88.2
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@types/jest': 26.0.24
       '@types/node': 16.4.13
       '@types/request-promise': 4.1.46
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/oauth-twitter:
     specifiers:
@@ -902,18 +902,18 @@ importers:
       oauth: ^0.9.15
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/oauth': link:../oauth
       oauth: 0.9.15
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@types/jest': 26.0.24
       '@types/node': 16.4.13
       '@types/oauth': 0.9.1
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/password:
     specifiers:
@@ -929,11 +929,11 @@ importers:
       lodash.set: 4.3.2
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/two-factor': link:../two-factor
       bcryptjs: 2.4.3
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@accounts/server': link:../server
       '@accounts/types': link:../types
@@ -944,7 +944,7 @@ importers:
       jest: 27.0.6
       lodash.set: 4.3.2
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/rest-client:
     specifiers:
@@ -956,10 +956,10 @@ importers:
       node-fetch: 2.6.1
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/types': link:../types
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@accounts/client': link:../client
       '@types/jest': 26.0.24
@@ -967,7 +967,7 @@ importers:
       jest: 27.0.6
       node-fetch: 2.6.1
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/rest-express:
     specifiers:
@@ -984,12 +984,12 @@ importers:
       request-ip: ^2.1.3
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/types': link:../types
       express: 4.17.1
       request-ip: 2.1.3
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@accounts/magic-link': link:../magic-link
       '@accounts/password': link:../password
@@ -1000,7 +1000,7 @@ importers:
       '@types/request-ip': 0.0.35
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/server:
     specifiers:
@@ -1016,7 +1016,7 @@ importers:
       lodash.merge: 4.6.2
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/types': link:../types
       '@types/jsonwebtoken': 8.3.9
@@ -1024,14 +1024,14 @@ importers:
       jsonwebtoken: 8.5.1
       jwt-decode: 3.1.2
       lodash.merge: 4.6.2
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@types/jest': 26.0.24
       '@types/lodash.merge': 4.6.6
       '@types/node': 16.4.13
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/two-factor:
     specifiers:
@@ -1043,18 +1043,18 @@ importers:
       rimraf: 3.0.2
       speakeasy: ^2.0.0
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
       '@accounts/types': link:../types
       '@types/speakeasy': 2.0.2
       speakeasy: 2.0.0
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@types/jest': 26.0.24
       '@types/node': 16.4.13
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   packages/types:
     specifiers:
@@ -1063,15 +1063,15 @@ importers:
       jest: 27.0.6
       rimraf: 3.0.2
       ts-jest: 27.0.4
-      tslib: 2.1.0
+      tslib: 2.3.0
     dependencies:
-      tslib: 2.1.0
+      tslib: 2.3.0
     devDependencies:
       '@types/jest': 26.0.24
       '@types/node': 16.4.13
       jest: 27.0.6
       rimraf: 3.0.2
-      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
 
   website:
     specifiers:
@@ -4785,7 +4785,7 @@ packages:
     resolution: {integrity: sha512-kBJtf7PH6aWwZ6fka3zQ0p6SBYzx4fl1LoZXE2RrnYST9Xljm7WfKJrU4g/Xr3Beg72MLrp1AWNUmuYJTL7Cow==}
     dev: false
 
-  /@endemolshinegroup/cosmiconfig-typescript-loader/3.0.2_d7e37a937920a5f79299d305717794f0:
+  /@endemolshinegroup/cosmiconfig-typescript-loader/3.0.2_cosmiconfig@7.0.0:
     resolution: {integrity: sha512-QRVtqJuS1mcT56oHpVegkKBlgtWjXw/gHNWO3eL9oyB5Sc7HBoc2OLG/nYpVfT/Jejvo3NUrD0Udk7XgoyDKkA==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
@@ -4794,7 +4794,7 @@ packages:
       cosmiconfig: 7.0.0
       lodash.get: 4.4.2
       make-error: 1.3.6
-      ts-node: 9.1.1_typescript@4.3.5
+      ts-node: 9.1.1
       tslib: 2.3.0
     transitivePeerDependencies:
       - typescript
@@ -4925,7 +4925,7 @@ packages:
       tslib: 2.3.0
     dev: true
 
-  /@graphql-codegen/cli/1.21.4_graphql@14.6.0+typescript@4.3.5:
+  /@graphql-codegen/cli/1.21.4_graphql@14.6.0:
     resolution: {integrity: sha512-fCrPn7DeGnCU6d9xjo04VSzIGioVLj1BAjuZpgRJNNjyzTmv+qZJJVTWfD55J17XxlhFsfKJBprtdmRxZ3V2hw==}
     hasBin: true
     peerDependencies:
@@ -4954,7 +4954,7 @@ packages:
       detect-indent: 6.1.0
       glob: 7.1.7
       graphql: 14.6.0
-      graphql-config: 3.4.1_graphql@14.6.0+typescript@4.3.5
+      graphql-config: 3.4.1_graphql@14.6.0
       indent-string: 4.0.0
       inquirer: 7.3.3
       is-glob: 4.0.1
@@ -4981,7 +4981,7 @@ packages:
       - zen-observable
     dev: true
 
-  /@graphql-codegen/cli/2.0.1_graphql@15.5.1+typescript@4.3.5:
+  /@graphql-codegen/cli/2.0.1_graphql@15.5.1:
     resolution: {integrity: sha512-ExCS7w0INpeKvIuPq2y1xfb0L6X2p4bP8Ai+CAsMpW7Yp7F2U/oe/2YBJkCi82oXyOkohW9Z04s/TI1f8xzNLQ==}
     hasBin: true
     peerDependencies:
@@ -5011,7 +5011,7 @@ packages:
       glob: 7.1.7
       globby: 11.0.4
       graphql: 15.5.1
-      graphql-config: 4.0.1_graphql@15.5.1+typescript@4.3.5
+      graphql-config: 4.0.1_graphql@15.5.1
       inquirer: 7.3.3
       is-glob: 4.0.1
       json-to-pretty-yaml: 1.2.2
@@ -12468,6 +12468,30 @@ packages:
       eslint: 7.32.0
     dev: true
 
+  /eslint-config-react-app/6.0.0:
+    resolution: {integrity: sha512-bpoAAC+YRfzq0dsTk+6v9aHm/uqnDwayNAXleMypGl6CpxI9oXXscVHo4fk3eJPIn+rsbtNetB4r/ZIidFIE8A==}
+    engines: {node: ^10.12.0 || >=12.0.0}
+    peerDependencies:
+      '@typescript-eslint/eslint-plugin': ^4.0.0
+      '@typescript-eslint/parser': ^4.0.0
+      babel-eslint: ^10.0.0
+      eslint: ^7.5.0
+      eslint-plugin-flowtype: ^5.2.0
+      eslint-plugin-import: ^2.22.0
+      eslint-plugin-jest: ^24.0.0
+      eslint-plugin-jsx-a11y: ^6.3.1
+      eslint-plugin-react: ^7.20.3
+      eslint-plugin-react-hooks: ^4.0.8
+      eslint-plugin-testing-library: ^3.9.0
+    peerDependenciesMeta:
+      eslint-plugin-jest:
+        optional: true
+      eslint-plugin-testing-library:
+        optional: true
+    dependencies:
+      confusing-browser-globals: 1.0.10
+    dev: true
+
   /eslint-config-react-app/6.0.0_7b148e1953e57331ad4a5929c92d49bd:
     resolution: {integrity: sha512-bpoAAC+YRfzq0dsTk+6v9aHm/uqnDwayNAXleMypGl6CpxI9oXXscVHo4fk3eJPIn+rsbtNetB4r/ZIidFIE8A==}
     engines: {node: ^10.12.0 || >=12.0.0}
@@ -12501,34 +12525,6 @@ packages:
       eslint-plugin-react: 7.24.0_eslint@7.32.0
       eslint-plugin-react-hooks: 4.2.0_eslint@7.32.0
       eslint-plugin-testing-library: 3.10.2_eslint@7.32.0+typescript@4.3.5
-    dev: true
-
-  /eslint-config-react-app/6.0.0_8b549cba4563f45b9f3b76639e8f6f9c:
-    resolution: {integrity: sha512-bpoAAC+YRfzq0dsTk+6v9aHm/uqnDwayNAXleMypGl6CpxI9oXXscVHo4fk3eJPIn+rsbtNetB4r/ZIidFIE8A==}
-    engines: {node: ^10.12.0 || >=12.0.0}
-    peerDependencies:
-      '@typescript-eslint/eslint-plugin': ^4.0.0
-      '@typescript-eslint/parser': ^4.0.0
-      babel-eslint: ^10.0.0
-      eslint: ^7.5.0
-      eslint-plugin-flowtype: ^5.2.0
-      eslint-plugin-import: ^2.22.0
-      eslint-plugin-jest: ^24.0.0
-      eslint-plugin-jsx-a11y: ^6.3.1
-      eslint-plugin-react: ^7.20.3
-      eslint-plugin-react-hooks: ^4.0.8
-      eslint-plugin-testing-library: ^3.9.0
-    peerDependenciesMeta:
-      eslint-plugin-jest:
-        optional: true
-      eslint-plugin-testing-library:
-        optional: true
-    dependencies:
-      '@typescript-eslint/eslint-plugin': 4.29.0_48ea228fa0647506aa803d17f48b59f7
-      '@typescript-eslint/parser': 4.29.0_eslint@7.32.0+typescript@4.3.5
-      confusing-browser-globals: 1.0.10
-      eslint: 7.32.0
-      eslint-plugin-jest: 24.4.0_8acbcf4842302c074111ae8720519eaa
     dev: true
 
   /eslint-import-resolver-node/0.3.4:
@@ -13912,13 +13908,13 @@ packages:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
     dev: true
 
-  /graphql-config/3.4.1_graphql@14.6.0+typescript@4.3.5:
+  /graphql-config/3.4.1_graphql@14.6.0:
     resolution: {integrity: sha512-g9WyK4JZl1Ko++FSyE5Ir2g66njfxGzrDDhBOwnkoWf/t3TnnZG6BBkWP+pkqVJ5pqMJGPKHNrbew8jRxStjhw==}
     engines: {node: '>= 10.0.0'}
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
     dependencies:
-      '@endemolshinegroup/cosmiconfig-typescript-loader': 3.0.2_d7e37a937920a5f79299d305717794f0
+      '@endemolshinegroup/cosmiconfig-typescript-loader': 3.0.2_cosmiconfig@7.0.0
       '@graphql-tools/graphql-file-loader': 6.2.7_graphql@14.6.0
       '@graphql-tools/json-file-loader': 6.2.6_graphql@14.6.0
       '@graphql-tools/load': 6.2.8_graphql@14.6.0
@@ -13937,13 +13933,13 @@ packages:
       - utf-8-validate
     dev: true
 
-  /graphql-config/4.0.1_graphql@15.5.1+typescript@4.3.5:
+  /graphql-config/4.0.1_graphql@15.5.1:
     resolution: {integrity: sha512-JdXxFzBwjujJMGLHUZom9SrmP/M4gF57iTDa3fJVm3Q85+Xw2kj9jZIygaaSLpDKhaPnMQZqfJ5Hmc6afKxS9w==}
     engines: {node: '>= 10.0.0'}
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
     dependencies:
-      '@endemolshinegroup/cosmiconfig-typescript-loader': 3.0.2_d7e37a937920a5f79299d305717794f0
+      '@endemolshinegroup/cosmiconfig-typescript-loader': 3.0.2_cosmiconfig@7.0.0
       '@graphql-tools/graphql-file-loader': 7.0.1_graphql@15.5.1
       '@graphql-tools/json-file-loader': 7.0.1_graphql@15.5.1
       '@graphql-tools/load': 7.1.0_graphql@15.5.1
@@ -15737,7 +15733,7 @@ packages:
       jest-validate: 27.0.6
       micromatch: 4.0.4
       pretty-format: 27.0.6
-      ts-node: 10.1.0_typescript@4.3.5
+      ts-node: 10.1.0
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -22885,7 +22881,7 @@ packages:
       tslib: 2.1.0
     dev: false
 
-  /ts-jest/27.0.4_52cc4273aa16028085013af47e479e10:
+  /ts-jest/27.0.4_@types+jest@26.0.24+jest@27.0.6:
     resolution: {integrity: sha512-c4E1ECy9Xz2WGfTMyHbSaArlIva7Wi2p43QOMmCqjSSjHP06KXv+aT+eSY+yZMuqsMi3k7pyGsGj2q5oSl5WfQ==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     hasBin: true
@@ -22914,12 +22910,38 @@ packages:
       make-error: 1.3.6
       mkdirp: 1.0.4
       semver: 7.3.5
-      typescript: 4.3.5
       yargs-parser: 20.2.9
     dev: true
 
   /ts-log/2.2.3:
     resolution: {integrity: sha512-XvB+OdKSJ708Dmf9ore4Uf/q62AYDTzFcAdxc8KNML1mmAWywRFVt/dn1KYJH8Agt5UJNujfM3znU5PxgAzA2w==}
+    dev: true
+
+  /ts-node/10.1.0:
+    resolution: {integrity: sha512-6szn3+J9WyG2hE+5W8e0ruZrzyk1uFLYye6IGMBadnOzDh8aP7t8CbFpsfCiEx2+wMixAhjFt7lOZC4+l+WbEA==}
+    engines: {node: '>=12.0.0'}
+    hasBin: true
+    peerDependencies:
+      '@swc/core': '>=1.2.50'
+      '@swc/wasm': '>=1.2.50'
+      '@types/node': '*'
+      typescript: '>=2.7'
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      '@swc/wasm':
+        optional: true
+    dependencies:
+      '@tsconfig/node10': 1.0.8
+      '@tsconfig/node12': 1.0.9
+      '@tsconfig/node14': 1.0.1
+      '@tsconfig/node16': 1.0.2
+      arg: 4.1.3
+      create-require: 1.1.1
+      diff: 4.0.2
+      make-error: 1.3.6
+      source-map-support: 0.5.19
+      yn: 3.1.1
     dev: true
 
   /ts-node/10.1.0_dea0625f6d31b223e93dc3dc354b8b43:
@@ -22979,7 +23001,7 @@ packages:
       yn: 3.1.1
     dev: true
 
-  /ts-node/9.1.1_typescript@4.3.5:
+  /ts-node/9.1.1:
     resolution: {integrity: sha512-hPlt7ZACERQGf03M253ytLY3dHbGNGrAq9qIHWUY9XHYl1z7wYngSr3OQ5xmui8o2AaxsONxIzjafLUiWBo1Fg==}
     engines: {node: '>=10.0.0'}
     hasBin: true
@@ -22991,7 +23013,6 @@ packages:
       diff: 4.0.2
       make-error: 1.3.6
       source-map-support: 0.5.19
-      typescript: 4.3.5
       yn: 3.1.1
     dev: true
 

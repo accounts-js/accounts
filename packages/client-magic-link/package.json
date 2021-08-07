@@ -42,6 +42,6 @@
   "dependencies": {
     "@accounts/client": "^0.33.0",
     "@accounts/types": "^0.33.0",
-    "tslib": "2.1.0"
+    "tslib": "2.3.0"
   }
 }
