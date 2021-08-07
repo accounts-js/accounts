@@ -1,5 +1,11 @@
 # @accounts/mongo
 
+## 0.33.2
+
+### Patch Changes
+
+- [`8f540588`](https://github.com/accounts-js/accounts/commit/8f540588cdd35b9c55fb4135b416f834f5073ef3) Thanks [@pradel](https://github.com/pradel)! - Fix 0.33.1 not properly published.
+
 ## 0.33.1
 
 ### Patch Changes
