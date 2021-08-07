@@ -7,7 +7,7 @@
   "scripts": {
     "start": "NODE_ENV=development nodemon -w src -x ts-node src/index.ts",
     "build": "tsc",
-    "test": "yarn build"
+    "test": "pnpm run build"
   },
   "dependencies": {
     "@accounts/database-manager": "^0.33.0",
@@ -20,6 +20,7 @@
     "@graphql-tools/merge": "6.2.5",
     "apollo-server": "2.16.0",
     "graphql": "14.6.0",
+    "graphql-tag": "2.11.0",
     "mongoose": "5.9.25",
     "tslib": "2.1.0"
   },

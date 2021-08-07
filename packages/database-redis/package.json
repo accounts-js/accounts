@@ -7,12 +7,12 @@
   "scripts": {
     "clean": "rimraf lib",
     "start": "tsc --watch",
-    "precompile": "yarn clean",
+    "precompile": "pnpm run clean",
     "compile": "tsc",
-    "prepublishOnly": "yarn compile",
+    "prepublishOnly": "pnpm run compile",
     "testonly": "jest",
     "test:watch": "jest --watch",
-    "coverage": "yarn testonly --coverage"
+    "coverage": "pnpm run testonly -- --coverage"
   },
   "files": [
     "src",
@@ -44,6 +44,7 @@
     "@types/node": "14.0.14",
     "@types/shortid": "0.0.29",
     "jest": "26.6.3",
+    "rimraf": "3.0.2",
     "ts-jest": "26.5.0"
   }
 }

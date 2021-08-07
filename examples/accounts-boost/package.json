@@ -8,9 +8,9 @@
     "start:micro": "NODE_ENV=development nodemon -w src -x ts-node src/microservice/accounts-microservice.ts & sleep 2 && nodemon -w src -x ts-node src/microservice/app-server.ts",
     "start:mono": "NODE_ENV=development nodemon -w src -x ts-node src/monolithic/app-server.ts",
     "start-services": "docker-compose up -d",
-    "prestart": "yarn start-services",
+    "prestart": "pnpm run start-services",
     "build": "tsc",
-    "test": "yarn build"
+    "test": "pnpm run build"
   },
   "dependencies": {
     "@accounts/boost": "^0.32.1",
@@ -26,7 +26,7 @@
     "tslib": "2.1.0"
   },
   "devDependencies": {
-    "nodemon": "2.0.3",
+    "nodemon": "2.0.4",
     "ts-node": "8.10.1",
     "typescript": "3.8.3"
   }

@@ -5,8 +5,8 @@
   "scripts": {
     "start": "SKIP_PREFLIGHT_CHECK=true react-scripts start",
     "build": "SKIP_PREFLIGHT_CHECK=true react-scripts build",
-    "test": "yarn build",
-    "testonly": "yarn build"
+    "test": "pnpm run build",
+    "testonly": "pnpm run build"
   },
   "eslintConfig": {
     "extends": [
@@ -38,10 +38,12 @@
     "qrcode.react": "1.0.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
     "tslib": "2.3.0"
   },
   "devDependencies": {
+    "@accounts/types": "^0.33.0",
     "@types/node": "16.4.10",
     "@types/qrcode.react": "1.0.0",
     "@types/react": "17.0.15",

@@ -10,9 +10,9 @@
   "scripts": {
     "clean": "rimraf lib",
     "start": "tsc --watch",
-    "precompile": "yarn clean",
+    "precompile": "pnpm run clean",
     "compile": "tsc",
-    "prepublishOnly": "yarn compile"
+    "prepublishOnly": "pnpm run compile"
   },
   "files": [
     "src",

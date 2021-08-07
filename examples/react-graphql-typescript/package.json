@@ -5,8 +5,8 @@
   "scripts": {
     "start": "SKIP_PREFLIGHT_CHECK=true react-scripts start",
     "build": "SKIP_PREFLIGHT_CHECK=true react-scripts build",
-    "test": "yarn build",
-    "testonly": "yarn build"
+    "test": "pnpm run build",
+    "testonly": "pnpm run build"
   },
   "eslintConfig": {
     "extends": [
@@ -34,11 +34,12 @@
     "@apollo/client": "3.0.2",
     "@material-ui/core": "4.12.3",
     "@material-ui/styles": "4.11.4",
-    "graphql": "14.6.0",
+    "graphql": "15.5.1",
     "graphql-tag": "2.11.0",
     "qrcode.react": "1.0.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
     "tslib": "2.3.0"
   },

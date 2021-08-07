@@ -10,9 +10,9 @@
   "scripts": {
     "clean": "rimraf lib",
     "start": "tsc --watch",
-    "precompile": "yarn clean",
+    "precompile": "pnpm run clean",
     "compile": "tsc",
-    "prepublishOnly": "yarn compile",
+    "prepublishOnly": "pnpm run compile",
     "test": "npm run testonly",
     "test:watch": "npm run testonly -- --watch --coverage",
     "testonly": "jest",
@@ -48,13 +48,15 @@
     "tslib": "2.1.0"
   },
   "devDependencies": {
+    "@accounts/magic-link": "^0.1.0",
     "@accounts/password": "^0.32.0",
     "@accounts/server": "^0.33.0",
-    "@types/express": "4.17.6",
+    "@types/express": "4.17.13",
     "@types/jest": "25.2.3",
     "@types/node": "14.0.14",
     "@types/request-ip": "0.0.35",
     "jest": "26.6.3",
+    "rimraf": "3.0.2",
     "ts-jest": "26.5.0"
   }
 }

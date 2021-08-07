@@ -9,9 +9,8 @@ You must have a mongodb server running before starting the server.
 In order to be able to run this example on your machine you first need to do the following steps:
 
 - Clone the repository `git clone git@github.com:accounts-js/accounts.git`
-- Install project dependencies: `yarn`
-- Link together all the packages: `yarn setup`
-- Compile the packages `yarn compile`
+- Install project dependencies: `pnpm install`
+- Compile the packages `pnpm run compile`
 - Go to the example folder `cd examples/rest-express-typescript`
 
 ## Getting Started
@@ -19,7 +18,7 @@ In order to be able to run this example on your machine you first need to do the
 Start the app.
 
 ```
-yarn start
+pnpm run start
 ```
 
 Open a browser and navigate to [http://localhost:4000](http://localhost:4000).

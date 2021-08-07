@@ -7,10 +7,10 @@
   "scripts": {
     "clean": "rimraf lib",
     "start": "tsc --watch",
-    "precompile": "yarn clean",
-    "compile": "yarn generate:graphql && tsc",
+    "precompile": "pnpm run clean",
+    "compile": "pnpm run generate:graphql && tsc",
     "generate:graphql": "gql-gen",
-    "prepublishOnly": "yarn compile"
+    "prepublishOnly": "pnpm run compile"
   },
   "files": [
     "src",
@@ -39,13 +39,14 @@
     "tslib": "2.1.0"
   },
   "devDependencies": {
-    "@graphql-codegen/add": "2.0.2",
-    "@graphql-codegen/cli": "1.21.4",
-    "@graphql-codegen/typed-document-node": "1.18.5",
-    "@graphql-codegen/typescript": "1.22.0",
-    "@graphql-codegen/typescript-operations": "1.17.16",
+    "@graphql-codegen/add": "3.0.0",
+    "@graphql-codegen/cli": "2.0.1",
+    "@graphql-codegen/typed-document-node": "2.0.0",
+    "@graphql-codegen/typescript": "2.0.0",
+    "@graphql-codegen/typescript-operations": "2.0.1",
     "@types/jest": "26.0.23",
-    "graphql": "14.6.0",
+    "graphql": "15.5.1",
+    "rimraf": "3.0.2",
     "jest": "26.6.3",
     "ts-jest": "26.5.6"
   }
