@@ -35,7 +35,7 @@
     "@accounts/types": "^0.33.0",
     "@types/mongodb": "^3.6.20",
     "mongodb": "^3.4.1",
-    "tslib": "2.1.0"
+    "tslib": "2.3.0"
   },
   "devDependencies": {
     "@accounts/database-tests": "^0.32.1",
