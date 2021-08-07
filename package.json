@@ -14,7 +14,7 @@
     "test:examples": "lerna run test --scope=\"@examples/*\"",
     "coverage": "lerna run coverage",
     "codecov": "codecov",
-    "release": "pnpm publish -r && pnpx changeset version",
+    "release": "pnpm publish -r && pnpx changeset publish",
     "reset": "pnpm run clean; pnpm run install; pnpm run compile",
     "prepare": "husky install"
   },
