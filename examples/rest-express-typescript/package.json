@@ -10,7 +10,7 @@
     "test": "pnpm run build"
   },
   "dependencies": {
-    "@accounts/mongo": "^0.33.3",
+    "@accounts/mongo": "^0.33.4",
     "@accounts/password": "^0.32.0",
     "@accounts/rest-express": "^0.33.0",
     "@accounts/server": "^0.33.0",
