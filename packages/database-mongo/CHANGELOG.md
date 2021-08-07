@@ -1,25 +1,30 @@
 # @accounts/mongo
 
+## 0.33.1
+
+### Patch Changes
+
+- [#1157](https://github.com/accounts-js/accounts/pull/1157) [`19031830`](https://github.com/accounts-js/accounts/commit/19031830e2e9630ff5264cfd22f5a2f8722112bf) Thanks [@Adel-ak](https://github.com/Adel-ak)! - Fix `collectionName` option not used properly.
+
 ## 0.33.0
+
 ### Minor Changes
 
-
-
 - [#1150](https://github.com/accounts-js/accounts/pull/1150) [`22056642`](https://github.com/accounts-js/accounts/commit/220566425755a7015569d8e518095701ff7122e2) Thanks [@larsivi](https://github.com/larsivi)! - Add support for magic-link strategy 🎉.
-  
+
   Installation:
-  
+
   ```sh
   yarn add @accounts/magic-link
   ```
-  
+
   Usage:
-  
+
   ```js
   import AccountsMagicLink from '@accounts/magic-link';
-  
+
   const accountsMagicLink = new AccountsMagicLink({});
-  
+
   const accountsServer = new AccountsServer(
     { db: accountsDb, tokenSecret: 'secret' },
     {

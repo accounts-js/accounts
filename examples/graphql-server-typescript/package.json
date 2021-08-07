@@ -12,7 +12,7 @@
   "dependencies": {
     "@accounts/database-manager": "^0.33.0",
     "@accounts/graphql-api": "^0.33.0",
-    "@accounts/mongo": "^0.33.0",
+    "@accounts/mongo": "^0.33.1",
     "@accounts/password": "^0.32.0",
     "@accounts/rest-express": "^0.33.0",
     "@accounts/server": "^0.33.0",
