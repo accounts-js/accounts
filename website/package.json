@@ -34,7 +34,7 @@
     ]
   },
   "devDependencies": {
-    "ts-node": "8.10.1",
+    "ts-node": "10.1.0",
     "typedoc": "0.17.6",
     "typedoc-plugin-markdown": "2.3.1"
   }
