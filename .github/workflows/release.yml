@@ -36,6 +36,7 @@ jobs:
       - name: Create Release Pull Request
         uses: changesets/action@master
         with:
+          version: pnpm run version
           publish: pnpm run release
           commit: 'chore: update versions'
           title: 'chore: version packages'
