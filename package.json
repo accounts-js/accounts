@@ -15,7 +15,7 @@
     "coverage": "lerna run coverage",
     "codecov": "codecov",
     "version": "pnpx changeset version && pnpm install --lockfile-only",
-    "release": "pnpm run compile && pnpm publish -r && pnpx changeset publish",
+    "release": "pnpm run compile && pnpx changeset publish",
     "reset": "pnpm run clean; pnpm run install; pnpm run compile",
     "prepare": "husky install"
   },
