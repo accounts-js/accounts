@@ -12,7 +12,6 @@
 '@accounts/redis': patch
 '@accounts/database-tests': patch
 '@accounts/typeorm': patch
-'@accounts/e2e': patch
 '@accounts/error': patch
 '@accounts/express-session': patch
 '@accounts/graphql-api': patch
