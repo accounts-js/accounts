@@ -12,7 +12,7 @@
     "prepublishOnly": "pnpm run compile",
     "testonly": "jest --runInBand --forceExit",
     "test:watch": "jest --watch",
-    "coverage": "pnpm run testonly --coverage"
+    "coverage": "pnpm run testonly -- --coverage"
   },
   "files": [
     "src",

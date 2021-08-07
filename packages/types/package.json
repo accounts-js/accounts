@@ -16,8 +16,8 @@
     "test": "pnpm run testonly",
     "test-ci": "pnpm run lint && pnpm run coverage",
     "testonly": "jest",
-    "test:watch": "pnpm run testonly --watch",
-    "coverage": "pnpm run testonly --coverage"
+    "test:watch": "pnpm run testonly -- --watch",
+    "coverage": "pnpm run testonly -- --coverage"
   },
   "files": [
     "src",

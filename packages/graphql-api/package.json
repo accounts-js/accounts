@@ -10,7 +10,7 @@
     "precompile": "pnpm run clean",
     "compile": "pnpm run generate:graphql && tsc",
     "testonly": "jest",
-    "coverage": "pnpm run testonly --coverage",
+    "coverage": "pnpm run testonly -- --coverage",
     "generate:graphql": "gql-gen",
     "prepublishOnly": "pnpm run compile"
   },
