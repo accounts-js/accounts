@@ -22,7 +22,7 @@ export interface AccountsServerOptions<CustomUser extends User = User> {
     accessToken?: jwt.SignOptions;
     refreshToken?: jwt.SignOptions;
   };
-  emailTemplates?: EmailTemplatesType;
+  emailTemplates?: Partial<EmailTemplatesType>;
   userObjectSanitizer?: (user: CustomUser) => CustomUser;
   impersonationAuthorize?: (user: User, impersonateToUser: User) => Promise<any>;
   /**
