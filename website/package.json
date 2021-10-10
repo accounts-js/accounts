@@ -18,8 +18,8 @@
     "@mdx-js/react": "^1.6.21",
     "clsx": "1.1.1",
     "docusaurus-plugin-fathom": "1.1.0",
-    "react": "17.0.1",
-    "react-dom": "17.0.1"
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
   },
   "browserslist": {
     "production": [
@@ -34,7 +34,7 @@
     ]
   },
   "devDependencies": {
-    "ts-node": "8.10.1",
+    "ts-node": "10.1.0",
     "typedoc": "0.17.6",
     "typedoc-plugin-markdown": "2.3.1"
   }

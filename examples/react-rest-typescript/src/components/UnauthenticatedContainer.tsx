@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface UnauthenticatedContainerProps {
-  children: React.ReactNode;
+  children: any;
 }
 
 export const UnauthenticatedContainer = ({ children }: UnauthenticatedContainerProps) => {

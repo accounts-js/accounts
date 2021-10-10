@@ -2,25 +2,22 @@
   "private": true,
   "version": "0.22.0",
   "scripts": {
-    "setup": "lerna bootstrap; yarn run link",
-    "start": "lerna exec -- yarn start",
-    "link": "lerna exec -- yarn link",
-    "unlink": "lerna exec -- yarn unlink",
-    "clean": "lerna run clean; rm -rf node_modules; rm -rf packages/**/node_modules; rm -rf yarn.lock",
-    "clean:examples": "rm -rf examples/**/node_modules; rm -rf examples/**/yarn.lock",
+    "start": "lerna exec -- pnpm run start",
+    "clean": "lerna run clean; rm -rf node_modules; rm -rf packages/**/node_modules;",
     "compile": "lerna run compile",
-    "postinstall": "opencollective postinstall",
     "publish": "lerna publish",
-    "publish:canary": "yarn run publish -- --canary",
-    "test": "yarn test:lint && yarn compile && yarn coverage",
+    "publish:canary": "pnpm run publish -- --canary",
+    "test": "pnpm run test:lint && pnpm run compile && pnpm run coverage",
     "testonly": "lerna run testonly",
     "prettier": "prettier --write '**/*.{json,md,js,ts,jsx,tsx,yml}'",
     "test:lint": "eslint 'packages/*/{src,__tests__}/**/*.ts'",
     "test:examples": "lerna run test --scope=\"@examples/*\"",
     "coverage": "lerna run coverage",
     "codecov": "codecov",
-    "generate:changelog": "conventional-changelog -p conventionalcommits -n ./conventional-changelog.config.json -c ./conventional-changelog.context.json -i CHANGELOG.md -s",
-    "reset": "yarn clean; yarn install; yarn setup; yarn compile"
+    "version": "pnpx changeset version && pnpm install --lockfile-only",
+    "release": "pnpm run compile && pnpx changeset publish",
+    "reset": "pnpm run clean; pnpm run install; pnpm run compile",
+    "prepare": "husky install"
   },
   "workspaces": {
     "packages": [
@@ -31,11 +28,6 @@
     "nohoist": [
       "**/html-minifier-terser"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "*.{json,md,js,ts,jsx,tsx,yml}": [
@@ -68,15 +60,13 @@
     "@changesets/cli": "2.16.0",
     "@typescript-eslint/eslint-plugin": "4.29.0",
     "@typescript-eslint/parser": "4.29.0",
-    "conventional-changelog-cli": "2.0.34",
     "eslint": "7.32.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-jest": "24.4.0",
     "eslint-plugin-prettier": "3.4.0",
-    "husky": "4.3.0",
+    "husky": "7.0.1",
     "lerna": "3.22.1",
-    "lint-staged": "10.5.1",
-    "opencollective": "1.0.3",
+    "lint-staged": "11.1.2",
     "prettier": "2.3.2",
     "typescript": "4.3.5"
   },

@@ -7,9 +7,9 @@
   "scripts": {
     "clean": "rimraf lib",
     "start": "tsc --watch",
-    "precompile": "yarn clean",
+    "precompile": "pnpm run clean",
     "compile": "tsc",
-    "prepublishOnly": "yarn compile",
+    "prepublishOnly": "pnpm run compile",
     "test:watch": "jest --watch",
     "coverage": "jest --coverage"
   },
@@ -23,13 +23,14 @@
   },
   "dependencies": {
     "@accounts/types": "^0.33.0",
-    "tslib": "2.1.0"
+    "tslib": "2.3.0"
   },
   "devDependencies": {
     "@accounts/server": "^0.33.0",
-    "@types/jest": "25.2.3",
-    "@types/node": "14.0.14",
-    "jest": "26.6.3",
-    "ts-jest": "26.5.0"
+    "@types/jest": "26.0.24",
+    "@types/node": "16.4.13",
+    "jest": "27.0.6",
+    "rimraf": "3.0.2",
+    "ts-jest": "27.0.4"
   }
 }

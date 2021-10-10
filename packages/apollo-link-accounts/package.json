@@ -10,9 +10,9 @@
   "scripts": {
     "clean": "rimraf lib",
     "start": "tsc --watch",
-    "precompile": "yarn clean",
+    "precompile": "pnpm run clean",
     "compile": "tsc",
-    "prepublishOnly": "yarn compile"
+    "prepublishOnly": "pnpm run compile"
   },
   "files": [
     "src",
@@ -27,7 +27,7 @@
     "@apollo/client": "^3.0.0"
   },
   "dependencies": {
-    "tslib": "2.1.0"
+    "tslib": "2.3.0"
   },
   "devDependencies": {
     "@accounts/client": "^0.33.0",

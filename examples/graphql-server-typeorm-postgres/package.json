@@ -6,10 +6,10 @@
   "license": "Unlicensed",
   "scripts": {
     "start-only": "NODE_ENV=development nodemon -w src -x ts-node src/index.ts",
-    "start": "yarn start-only",
+    "start": "pnpm run start-only",
     "start-services": "docker-compose up -d",
     "build": "tsc",
-    "test": "yarn build"
+    "test": "pnpm run build"
   },
   "dependencies": {
     "@accounts/graphql-api": "^0.33.0",
@@ -22,13 +22,14 @@
     "dotenv": "^8.2.0",
     "graphql": "14.6.0",
     "pg": "8.1.0",
-    "typeorm": "0.2.25"
+    "tslib": "2.3.0",
+    "typeorm": "0.2.36"
   },
   "devDependencies": {
     "@accounts/types": "^0.33.0",
-    "@types/node": "14.0.13",
-    "nodemon": "2.0.3",
-    "ts-node": "8.10.1",
-    "typescript": "3.8.3"
+    "@types/node": "16.4.13",
+    "nodemon": "2.0.12",
+    "ts-node": "10.1.0",
+    "typescript": "4.3.5"
   }
 }

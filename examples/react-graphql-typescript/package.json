@@ -5,8 +5,8 @@
   "scripts": {
     "start": "SKIP_PREFLIGHT_CHECK=true react-scripts start",
     "build": "SKIP_PREFLIGHT_CHECK=true react-scripts build",
-    "test": "yarn build",
-    "testonly": "yarn build"
+    "test": "pnpm run build",
+    "testonly": "pnpm run build"
   },
   "eslintConfig": {
     "extends": [
@@ -32,24 +32,27 @@
     "@accounts/client-password": "^0.32.1",
     "@accounts/graphql-client": "^0.33.0",
     "@apollo/client": "3.0.2",
-    "@material-ui/core": "4.11.0",
-    "@material-ui/styles": "4.10.0",
-    "graphql": "14.6.0",
+    "@material-ui/core": "4.12.3",
+    "@material-ui/styles": "4.11.4",
+    "graphql": "15.5.1",
     "graphql-tag": "2.11.0",
     "qrcode.react": "1.0.0",
-    "react": "17.0.1",
-    "react-dom": "17.0.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
-    "tslib": "2.1.0"
+    "tslib": "2.3.0"
   },
   "devDependencies": {
-    "@types/node": "14.14.9",
-    "@types/qrcode.react": "1.0.1",
-    "@types/react": "17.0.0",
-    "@types/react-dom": "17.0.0",
-    "@types/react-router": "5.1.8",
-    "@types/react-router-dom": "5.1.6",
-    "react-scripts": "4.0.1",
-    "typescript": "4.1.2"
+    "@types/node": "16.4.13",
+    "@types/qrcode.react": "1.0.0",
+    "@types/react": "17.0.15",
+    "@types/react-dom": "17.0.9",
+    "@types/react-router": "5.1.16",
+    "@types/react-router-dom": "5.1.8",
+    "eslint-config-react-app": "6.0.0",
+    "react-scripts": "4.0.3",
+    "typescript": "4.3.5",
+    "web-vitals": "1.0.1"
   }
 }

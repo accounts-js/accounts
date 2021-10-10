@@ -7,12 +7,12 @@
   "scripts": {
     "start": "NODE_ENV=development nodemon -w src -x ts-node src/index.ts",
     "build": "tsc",
-    "test": "yarn build"
+    "test": "pnpm run build"
   },
   "dependencies": {
     "@accounts/database-manager": "^0.33.0",
     "@accounts/graphql-api": "^0.33.0",
-    "@accounts/mongo": "^0.33.0",
+    "@accounts/mongo": "^0.33.4",
     "@accounts/password": "^0.32.0",
     "@accounts/rest-express": "^0.33.0",
     "@accounts/server": "^0.33.0",
@@ -20,14 +20,15 @@
     "@graphql-tools/merge": "6.2.5",
     "apollo-server": "2.16.0",
     "graphql": "14.6.0",
+    "graphql-tag": "2.11.0",
     "mongoose": "5.9.25",
-    "tslib": "2.1.0"
+    "tslib": "2.3.0"
   },
   "devDependencies": {
     "@types/mongoose": "5.7.32",
-    "@types/node": "14.0.13",
-    "nodemon": "2.0.4",
-    "ts-node": "8.10.2",
-    "typescript": "3.9.7"
+    "@types/node": "16.4.13",
+    "nodemon": "2.0.12",
+    "ts-node": "10.1.0",
+    "typescript": "4.3.5"
   }
 }

@@ -7,9 +7,9 @@
   "scripts": {
     "clean": "rimraf lib",
     "start": "tsc --watch",
-    "precompile": "yarn clean",
+    "precompile": "pnpm run clean",
     "compile": "tsc",
-    "prepublishOnly": "yarn compile",
+    "prepublishOnly": "pnpm run compile",
     "testonly": "jest --coverage",
     "coverage": "jest --coverage"
   },
@@ -24,19 +24,19 @@
   "dependencies": {
     "@accounts/two-factor": "^0.32.1",
     "bcryptjs": "^2.4.3",
-    "tslib": "2.1.0"
+    "tslib": "2.3.0"
   },
   "devDependencies": {
     "@accounts/server": "^0.33.0",
     "@accounts/types": "^0.33.0",
     "@types/bcryptjs": "2.4.2",
-    "@types/jest": "26.0.19",
+    "@types/jest": "26.0.24",
     "@types/lodash.set": "4.3.6",
-    "@types/node": "14.0.14",
-    "jest": "26.6.3",
+    "@types/node": "16.4.13",
+    "jest": "27.0.6",
     "lodash.set": "4.3.2",
     "rimraf": "3.0.2",
-    "ts-jest": "26.5.0"
+    "ts-jest": "27.0.4"
   },
   "peerDependencies": {
     "@accounts/server": "^0.32.0 || ^0.33.0"
