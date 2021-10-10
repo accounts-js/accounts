@@ -11,6 +11,7 @@ generates:
     config:
       noNamespaces: true
       noSchemaStitching: true
+      makeResolverTypeCallable: true
     plugins:
       - add:
           content: '/* eslint-disable */'
