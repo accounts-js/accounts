@@ -39,15 +39,14 @@
     "tslib": "2.3.0"
   },
   "devDependencies": {
-    "@graphql-codegen/add": "3.0.0",
-    "@graphql-codegen/cli": "2.0.1",
-    "@graphql-codegen/typed-document-node": "2.0.0",
-    "@graphql-codegen/typescript": "2.0.0",
-    "@graphql-codegen/typescript-operations": "2.0.1",
+    "@graphql-codegen/add": "3.1.0",
+    "@graphql-codegen/cli": "2.2.0",
+    "@graphql-codegen/typed-document-node": "2.1.4",
+    "@graphql-codegen/typescript": "2.2.2",
+    "@graphql-codegen/typescript-operations": "2.1.6",
     "@types/jest": "26.0.24",
     "graphql": "15.5.1",
     "jest": "27.0.6",
-    "rimraf": "3.0.2",
     "ts-jest": "27.0.4"
   }
 }
