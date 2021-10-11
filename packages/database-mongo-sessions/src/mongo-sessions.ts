@@ -107,7 +107,7 @@ export class MongoSessions implements DatabaseInterfaceSessions {
     }
 
     const ret = await this.sessionCollection.insertOne(session);
-    return (ret.ops[0]._id as ObjectID).toString();
+    return (ret.insertedId as ObjectID).toString();
   }
 
   /**

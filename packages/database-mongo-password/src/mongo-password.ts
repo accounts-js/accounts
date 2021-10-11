@@ -149,7 +149,7 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
       user._id = this.options.idProvider();
     }
     const ret = await this.userCollection.insertOne(user);
-    return (ret.ops[0]._id as ObjectID).toString();
+    return (ret.insertedId as ObjectID).toString();
   }
 
   /**
