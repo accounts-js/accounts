@@ -1,6 +1,6 @@
 {
   "name": "@accounts/rest-client",
-  "version": "0.33.0",
+  "version": "0.33.1",
   "description": "REST client for accounts",
   "main": "lib/index",
   "typings": "lib/index",
@@ -45,11 +45,11 @@
     "@accounts/client": "^0.32.0 || ^0.33.0"
   },
   "dependencies": {
-    "@accounts/types": "^0.33.0",
+    "@accounts/types": "^0.33.1",
     "tslib": "2.3.0"
   },
   "devDependencies": {
-    "@accounts/client": "^0.33.0",
+    "@accounts/client": "^0.33.1",
     "@types/jest": "26.0.24",
     "@types/node": "16.4.13",
     "jest": "27.0.6",

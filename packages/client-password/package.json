@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client-password",
-  "version": "0.32.1",
+  "version": "0.32.2",
   "description": "@accounts/client-password",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -40,8 +40,8 @@
     "ts-jest": "27.0.4"
   },
   "dependencies": {
-    "@accounts/client": "^0.33.0",
-    "@accounts/types": "^0.33.0",
+    "@accounts/client": "^0.33.1",
+    "@accounts/types": "^0.33.1",
     "tslib": "2.3.0"
   }
 }

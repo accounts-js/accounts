@@ -1,6 +1,6 @@
 {
   "name": "@accounts/typeorm",
-  "version": "0.33.0",
+  "version": "0.33.1",
   "description": "TypeORM adaptor for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -29,7 +29,7 @@
   "author": "Birkir Gudjonsson <birkir.gudjonsson@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@accounts/database-tests": "^0.32.1",
+    "@accounts/database-tests": "^0.32.2",
     "@types/jest": "26.0.24",
     "@types/node": "16.4.13",
     "jest": "27.0.6",
@@ -38,7 +38,7 @@
     "ts-jest": "27.0.4"
   },
   "dependencies": {
-    "@accounts/types": "^0.33.0",
+    "@accounts/types": "^0.33.1",
     "lodash": "^4.17.20",
     "reflect-metadata": "^0.1.13",
     "tslib": "2.3.0",

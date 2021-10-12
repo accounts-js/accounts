@@ -10,12 +10,12 @@
     "test": "pnpm run build"
   },
   "dependencies": {
-    "@accounts/database-manager": "^0.33.0",
-    "@accounts/graphql-api": "^0.33.0",
-    "@accounts/mongo": "^0.33.4",
-    "@accounts/password": "^0.32.0",
-    "@accounts/rest-express": "^0.33.0",
-    "@accounts/server": "^0.33.0",
+    "@accounts/database-manager": "^0.33.1",
+    "@accounts/graphql-api": "^0.33.1",
+    "@accounts/mongo": "^0.33.5",
+    "@accounts/password": "^0.32.1",
+    "@accounts/rest-express": "^0.33.1",
+    "@accounts/server": "^0.33.1",
     "@graphql-modules/core": "0.7.17",
     "@graphql-tools/merge": "6.2.5",
     "apollo-server": "2.16.0",
