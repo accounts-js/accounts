@@ -3,4 +3,4 @@
 '@accounts/mongo-sessions': patch
 ---
 
-use new node mongodb driver InsertOneResult.insertedId
+Fix compatibility issue with MongoDB 4.X
