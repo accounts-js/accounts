@@ -1,6 +1,6 @@
 {
   "name": "@accounts/password",
-  "version": "0.32.0",
+  "version": "0.32.1",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -22,13 +22,13 @@
     "preset": "ts-jest"
   },
   "dependencies": {
-    "@accounts/two-factor": "^0.32.1",
+    "@accounts/two-factor": "^0.32.2",
     "bcryptjs": "^2.4.3",
     "tslib": "2.3.0"
   },
   "devDependencies": {
-    "@accounts/server": "^0.33.0",
-    "@accounts/types": "^0.33.0",
+    "@accounts/server": "^0.33.1",
+    "@accounts/types": "^0.33.1",
     "@types/bcryptjs": "2.4.2",
     "@types/jest": "26.0.24",
     "@types/lodash.set": "4.3.6",

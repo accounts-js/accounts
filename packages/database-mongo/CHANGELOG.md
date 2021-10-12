@@ -1,5 +1,17 @@
 # @accounts/mongo
 
+## 0.33.5
+
+### Patch Changes
+
+- [#1170](https://github.com/accounts-js/accounts/pull/1170) [`e81eb578`](https://github.com/accounts-js/accounts/commit/e81eb578b35906346b6fadd6c5768b82879f6cda) Thanks [@pradel](https://github.com/pradel)! - Upgrade tslib to 2.3.0
+
+- Updated dependencies [[`e81eb578`](https://github.com/accounts-js/accounts/commit/e81eb578b35906346b6fadd6c5768b82879f6cda), [`975ced7d`](https://github.com/accounts-js/accounts/commit/975ced7d796a75add425120c83152cf262a7bdf0)]:
+  - @accounts/mongo-magic-link@0.1.1
+  - @accounts/mongo-password@0.32.2
+  - @accounts/mongo-sessions@0.32.2
+  - @accounts/types@0.33.1
+
 ## 0.33.4
 
 ### Patch Changes
