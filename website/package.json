@@ -38,8 +38,10 @@
     ]
   },
   "devDependencies": {
+    "@types/node": "16.11.7",
+    "@types/react": "17.0.38",
     "ts-node": "10.4.0",
-    "typedoc": "0.17.6",
-    "typedoc-plugin-markdown": "2.3.1"
+    "typedoc": "0.17.8",
+    "typedoc-plugin-markdown": "2.4.2"
   }
 }

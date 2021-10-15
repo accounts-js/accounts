@@ -31,11 +31,14 @@
     "@accounts/graphql-api": "^0.33.1",
     "@accounts/server": "^0.33.1",
     "@accounts/types": "^0.33.1",
-    "@graphql-modules/core": "0.7.17",
-    "apollo-server": "^2.9.3",
-    "graphql": "14.6.0",
-    "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.21",
+    "@graphql-tools/merge": "8.2.0",
+    "@graphql-tools/schema": "8.3.0",
+    "apollo-server": "3.4.0",
+    "apollo-server-core": "3.4.0",
+    "graphql": "15.6.1",
+    "graphql-modules": "2.0.0",
+    "jsonwebtoken": "8.5.1",
+    "lodash": "4.17.21",
     "tslib": "2.3.1"
   }
 }
