@@ -1,8 +1,6 @@
 import gql from 'graphql-tag';
 
 export default gql`
-  directive @auth on FIELD_DEFINITION | OBJECT
-
   type ImpersonateReturn {
     authorized: Boolean
     tokens: Tokens

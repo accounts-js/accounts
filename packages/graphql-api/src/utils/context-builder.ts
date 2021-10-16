@@ -1,56 +1,61 @@
-import { ModuleConfig, ModuleSessionInfo } from '@graphql-modules/core';
+import AccountsServer from '@accounts/server';
+import { IncomingMessage } from 'http';
 import { getClientIp } from 'request-ip';
-import { AccountsRequest, AccountsModuleConfig } from '../modules';
 
-export const context =
-  (moduleName: string) =>
-  async ({ req, connection }: AccountsRequest, _: any, { injector }: ModuleSessionInfo) => {
-    // If connection is set it means it's a websocket connection coming from apollo
-    if (connection) {
-      return connection.context;
-    }
+interface AccountsContextOptions {
+  accountsServer: AccountsServer;
+  headerName?: string;
+  excludeAddUserInContext?: boolean;
+}
 
-    if (!req) {
-      return {
+export const context = async (
+  {
+    req,
+  }: {
+    req: IncomingMessage;
+  },
+  options: AccountsContextOptions
+) => {
+  if (!req) {
+    return {
+      ip: '',
+      userAgent: '',
+      infos: {
         ip: '',
         userAgent: '',
-        infos: {
-          ip: '',
-          userAgent: '',
-        },
-      };
-    }
-
-    const config: AccountsModuleConfig = injector.get(ModuleConfig(moduleName));
-    const headerName = config.headerName || 'Authorization';
-    let authToken = (req.headers[headerName] || req.headers[headerName.toLowerCase()]) as string;
-    authToken = authToken && authToken.replace('Bearer ', '');
-    let user;
-
-    if (authToken && !config.excludeAddUserInContext) {
-      try {
-        user = await config.accountsServer.resumeSession(authToken);
-      } catch (error) {
-        // Empty catch
-      }
-    }
-
-    const ip = getClientIp(req);
-    let userAgent: string = (req.headers['user-agent'] as string) || '';
-    if (req.headers['x-ucbrowser-ua']) {
-      // special case of UC Browser
-      userAgent = req.headers['x-ucbrowser-ua'] as string;
-    }
-
-    return {
-      authToken,
-      user,
-      userId: user && user.id,
-      userAgent,
-      ip,
-      infos: {
-        userAgent,
-        ip,
       },
     };
+  }
+
+  const headerName = options.headerName || 'Authorization';
+  let authToken = (req.headers[headerName] || req.headers[headerName.toLowerCase()]) as string;
+  authToken = authToken && authToken.replace('Bearer ', '');
+  let user;
+
+  if (authToken && !options.excludeAddUserInContext) {
+    try {
+      user = await options.accountsServer.resumeSession(authToken);
+    } catch (error) {
+      // Empty catch
+    }
+  }
+
+  const ip = getClientIp(req);
+  let userAgent: string = (req.headers['user-agent'] as string) || '';
+  if (req.headers['x-ucbrowser-ua']) {
+    // special case of UC Browser
+    userAgent = req.headers['x-ucbrowser-ua'] as string;
+  }
+
+  return {
+    authToken,
+    user,
+    userId: user && user.id,
+    userAgent,
+    ip,
+    infos: {
+      userAgent,
+      ip,
+    },
   };
+};
