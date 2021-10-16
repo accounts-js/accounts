@@ -1,10 +1,19 @@
-import { AccountsModule } from './modules';
+import { createApplication } from 'graphql-modules';
+import {
+  AccountsCoreModuleConfig,
+  AccountsMagicLinkModuleConfig,
+  AccountsPasswordModuleConfig,
+  createAccountsCoreModule,
+  createAccountsMagicLinkModule,
+  createAccountsPasswordModule,
+} from './modules';
 
-export default AccountsModule.forRoot({
-  accountsServer: {
-    getServices: () => ({
-      password: {},
-      magicLink: {},
-    }),
-  } as any,
-}).typeDefs;
+const { schema } = createApplication({
+  modules: [
+    createAccountsCoreModule({} as AccountsCoreModuleConfig),
+    createAccountsPasswordModule({} as AccountsPasswordModuleConfig),
+    createAccountsMagicLinkModule({} as AccountsMagicLinkModuleConfig),
+  ],
+});
+
+export default schema;

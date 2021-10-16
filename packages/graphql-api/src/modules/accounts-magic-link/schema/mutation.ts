@@ -1,8 +1,13 @@
 import gql from 'graphql-tag';
-import { AccountsMagicLinkModuleConfig } from '..';
 
-export default (config: AccountsMagicLinkModuleConfig) => gql`
-    ${config.extendTypeDefs ? 'extend' : ''} type ${config.rootMutationName || 'Mutation'} {
+export default ({
+  rootMutationName,
+  extendTypeDefs = true,
+}: {
+  rootMutationName?: string;
+  extendTypeDefs?: boolean;
+}) => gql`
+    ${extendTypeDefs ? 'extend' : ''} type ${rootMutationName || 'Mutation'} {
         requestMagicLinkEmail(email: String!): Boolean
     }
 `;

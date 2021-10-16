@@ -1,10 +1,8 @@
-import { ModuleContext } from '@graphql-modules/core';
 import { AccountsMagicLink, RequestMagicLinkEmailErrors } from '@accounts/magic-link';
 import { AccountsServer, AccountsJsError } from '@accounts/server';
-import { AccountsModuleContext } from '../../accounts';
 import { MutationResolvers } from '../../../models';
 
-export const Mutation: MutationResolvers<ModuleContext<AccountsModuleContext>> = {
+export const Mutation: MutationResolvers = {
   requestMagicLinkEmail: async (_, { email }, { injector }) => {
     const accountsServer = injector.get(AccountsServer);
     const accountsMagicLink = injector.get(AccountsMagicLink);
