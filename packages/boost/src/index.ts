@@ -1,12 +1,25 @@
 import { DatabaseManager } from '@accounts/database-manager';
-import { AccountsModule, authenticated } from '@accounts/graphql-api';
+import {
+  createAccountsCoreModule,
+  createAccountsPasswordModule,
+  authenticated,
+  context,
+  authDirective,
+} from '@accounts/graphql-api';
 import { AccountsServer, AccountsServerOptions } from '@accounts/server';
 import { AuthenticationService } from '@accounts/types';
-import { ApolloServer } from 'apollo-server';
+import { ApolloServer, ServerInfo } from 'apollo-server';
 import { verify } from 'jsonwebtoken';
 import { get, isString, merge } from 'lodash';
+import { Application, createApplication, ApplicationConfig } from 'graphql-modules';
+import { makeExecutableSchema } from '@graphql-tools/schema';
+import { mergeTypeDefs } from '@graphql-tools/merge';
+import {
+  ApolloServerPluginLandingPageGraphQLPlayground,
+  ApolloServerPluginLandingPageDisabled,
+} from 'apollo-server-core';
 
-export { AccountsModule };
+export { createAccountsCoreModule, createAccountsPasswordModule };
 
 export { AccountsServerOptions };
 
@@ -17,7 +30,9 @@ export interface AccountsBoostOptions extends AccountsServerOptions {
     uri?: string;
     name?: string;
   };
+  services?: { [key: string]: object };
   micro?: boolean;
+  schemaBuilder?: ApplicationConfig['schemaBuilder'];
 }
 
 const defaultAccountsBoostOptions = {
@@ -107,39 +122,12 @@ const defaultAccountsBoostListenOptions: AccountsBoostListenOptions = {
 export class AccountsBoost {
   public accountsServer: AccountsServer;
   public apolloServer: ApolloServer;
-  public accountsGraphQL: typeof AccountsModule;
+  public application: Application;
   private options: AccountsBoostOptions;
 
   constructor(options: AccountsBoostOptions, services: { [key: string]: AuthenticationService }) {
     this.accountsServer = new AccountsServer(options, services);
     this.options = options;
-    this.accountsGraphQL = AccountsModule.forRoot({
-      accountsServer: this.accountsServer,
-    });
-
-    const { schema, context } = this.accountsGraphQL;
-
-    this.apolloServer = new ApolloServer({
-      schema,
-      context,
-    });
-  }
-
-  public async listen(options?: AccountsBoostListenOptions): Promise<any> {
-    const res = await this.apolloServer.listen(
-      merge({}, defaultAccountsBoostListenOptions, options)
-    );
-
-    console.log(`Accounts GraphQL server running at ${res.url}`);
-
-    return res;
-  }
-
-  public graphql(): typeof AccountsModule {
-    // Cache `this.accountsGraphQL` to avoid regenerating the schema if the user calls `accountsBoost.graphql()` multple times.
-    if (this.accountsGraphQL) {
-      return this.accountsGraphQL;
-    }
 
     if (this.options.micro) {
       this.accountsServer.resumeSession = async (accessToken: string) => {
@@ -165,7 +153,50 @@ export class AccountsBoost {
       };
     }
 
-    return this.accountsGraphQL;
+    const { authDirectiveTypeDefs, authDirectiveTransformer } = authDirective('auth');
+
+    this.application = createApplication({
+      modules: [
+        createAccountsCoreModule({ accountsServer: this.accountsServer }),
+        createAccountsPasswordModule({ accountsPassword: services.password as any }),
+      ],
+      schemaBuilder:
+        options.schemaBuilder ??
+        (({ typeDefs: accountsTypeDefs, resolvers }) =>
+          authDirectiveTransformer(
+            makeExecutableSchema({
+              typeDefs: mergeTypeDefs([authDirectiveTypeDefs, ...accountsTypeDefs]),
+              resolvers,
+            })
+          )),
+    });
+
+    this.apolloServer = new ApolloServer({
+      plugins: [
+        process.env.NODE_ENV === 'production'
+          ? ApolloServerPluginLandingPageDisabled()
+          : ApolloServerPluginLandingPageGraphQLPlayground(),
+      ],
+      schema: this.application.createSchemaForApollo(),
+      context: ({ req }) => {
+        return context(
+          { req },
+          {
+            accountsServer: this.accountsServer,
+          }
+        );
+      },
+    });
+  }
+
+  public async listen(options?: AccountsBoostListenOptions): Promise<ServerInfo> {
+    const res = await this.apolloServer.listen(
+      merge({}, defaultAccountsBoostListenOptions, options)
+    );
+
+    console.log(`Accounts GraphQL server running at ${res.url}`);
+
+    return res;
   }
 }
 
