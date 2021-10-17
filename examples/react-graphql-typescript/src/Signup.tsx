@@ -46,7 +46,7 @@ const Signup = ({ history }: RouteComponentProps<{}>) => {
       });
       history.push('/login');
     } catch (err) {
-      setError(err.message);
+      setError(err instanceof Error ? err.message : 'Unknown error');
     }
   };
 

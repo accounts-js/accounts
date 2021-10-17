@@ -24,7 +24,7 @@ const TwoFactor = () => {
     try {
       await accountsGraphQL.twoFactorSet(secret, oneTimeCode);
     } catch (err) {
-      alert(err.message);
+      alert(err instanceof Error ? err.message : 'Unknown error');
     }
   };
 

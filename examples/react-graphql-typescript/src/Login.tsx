@@ -40,7 +40,7 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
       });
       history.push('/');
     } catch (err) {
-      setError(err.message);
+      setError(err instanceof Error ? err.message : 'Unknown error');
     }
   };
 
