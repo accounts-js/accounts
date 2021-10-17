@@ -42,7 +42,7 @@ const ResetPassword = ({ match }: RouteComponentProps<RouteMatchProps>) => {
         setSnackbarMessage('Your password has been reset successfully');
       }
     } catch (err) {
-      setError(err.message);
+      setError(err instanceof Error ? err.message : 'Unknown error');
       setSnackbarMessage(null);
     }
   };

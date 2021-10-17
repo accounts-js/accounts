@@ -20,7 +20,7 @@ const VerifyEmail = ({ match }: RouteComponentProps<RouteMatchProps>) => {
       await accountsGraphQL.verifyEmail(match.params.token);
       setSuccess(true);
     } catch (err) {
-      setError(err.message);
+      setError(err instanceof Error ? err.message : 'Unknown error');
     }
   };
 

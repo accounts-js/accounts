@@ -1,12 +1,20 @@
 import { DatabaseManager } from '@accounts/database-manager';
-import { AccountsModule } from '@accounts/graphql-api';
+import {
+  authDirective,
+  authenticated,
+  context,
+  createAccountsCoreModule,
+  createAccountsPasswordModule,
+} from '@accounts/graphql-api';
 import MongoDBInterface from '@accounts/mongo';
 import { AccountsPassword } from '@accounts/password';
 import { AccountsServer, ServerHooks } from '@accounts/server';
-import { ApolloServer, makeExecutableSchema } from 'apollo-server';
+import { ApolloServer } from 'apollo-server';
 import gql from 'graphql-tag';
 import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
 import mongoose from 'mongoose';
+import { createApplication } from 'graphql-modules';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 
 const start = async () => {
   // Create database connection
@@ -50,15 +58,11 @@ const start = async () => {
     }
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   accountsServer.on(ServerHooks.ValidateLogin, ({ user }) => {
     // This hook is called every time a user try to login.
     // You can use it to only allow users with verified email to login.
     // If you throw an error here it will be returned to the client.
-  });
-
-  // Creates resolvers, type definitions, and schema directives used by accounts-js
-  const accountsGraphQL = AccountsModule.forRoot({
-    accountsServer,
   });
 
   const typeDefs = gql`
@@ -77,17 +81,19 @@ const start = async () => {
       lastName: String!
     }
 
-    type Query {
+    extend type Query {
       # Example of how to get the userId from the context and return the current logged in user or null
       me: User
       publicField: String
       # You can only query this if you are logged in
       privateField: String @auth
       privateType: PrivateType
+      privateFieldWithAuthResolver: String
     }
 
-    type Mutation {
-      _: String
+    extend type Mutation {
+      privateMutation: String @auth
+      publicMutation: String
     }
   `;
 
@@ -102,24 +108,41 @@ const start = async () => {
       },
       publicField: () => 'public',
       privateField: () => 'private',
+      privateFieldWithAuthResolver: authenticated(() => {
+        return 'private';
+      }),
       privateType: () => ({
         field: () => 'private',
       }),
     },
+    Mutation: {
+      privateMutation: () => 'private',
+      publicMutation: () => 'public',
+    },
   };
 
-  const schema = makeExecutableSchema({
-    typeDefs: mergeTypeDefs([typeDefs, accountsGraphQL.typeDefs]),
-    resolvers: mergeResolvers([accountsGraphQL.resolvers, resolvers]),
-    schemaDirectives: {
-      ...accountsGraphQL.schemaDirectives,
-    },
-  });
+  const { authDirectiveTypeDefs, authDirectiveTransformer } = authDirective('auth');
+
+  const schema = createApplication({
+    modules: [
+      createAccountsCoreModule({ accountsServer }),
+      createAccountsPasswordModule({ accountsPassword }),
+    ],
+    schemaBuilder: ({ typeDefs: accountsTypeDefs, resolvers: accountsResolvers }) =>
+      authDirectiveTransformer(
+        makeExecutableSchema({
+          typeDefs: mergeTypeDefs([typeDefs, authDirectiveTypeDefs, ...accountsTypeDefs]),
+          resolvers: mergeResolvers([resolvers, ...accountsResolvers]),
+        })
+      ),
+  }).createSchemaForApollo();
 
   // Create the Apollo Server that takes a schema and configures internal stuff
   const server = new ApolloServer({
     schema,
-    context: accountsGraphQL.context,
+    context: ({ req }) => {
+      return context({ req }, { accountsServer });
+    },
   });
 
   server.listen(4000).then(({ url }) => {

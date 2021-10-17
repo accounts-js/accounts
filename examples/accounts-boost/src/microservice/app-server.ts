@@ -1,81 +1,59 @@
 import accountsBoost, { authenticated } from '@accounts/boost';
-import { setContext } from '@apollo/client/link/context';
-import { HttpLink } from '@apollo/client';
-import { ApolloServer } from 'apollo-server';
-import { mergeSchemas } from '@graphql-tools/merge';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { introspectSchema, wrapSchema } from '@graphql-tools/wrap';
-import { linkToExecutor } from '@graphql-tools/links';
 import fetch from 'node-fetch';
+import { mergeTypeDefs } from '@graphql-tools/merge';
+import { introspectSchema } from '@graphql-tools/wrap';
+import { stitchSchemas } from '@graphql-tools/stitch';
+import { AsyncExecutor } from '@graphql-tools/utils';
+import { print } from 'graphql';
+import { authDirective } from '@accounts/graphql-api';
+import { gql } from 'apollo-server';
+import { delegateToSchema } from '@graphql-tools/delegate';
 
 const accountsServerUri = 'http://localhost:4003/';
 
 (async () => {
-  const accounts = (
-    await accountsBoost({
-      tokenSecret: 'terrible secret',
-      micro: true, // setting micro to true will instruct `@accounts/boost` to only verify access tokens without any additional session logic
-    })
-  ).graphql();
-
-  // // Note: the following steps are optional and only required if you want to stitch the remote accounts schema with your apps schema.
-
-  // // Creates a link to fetch the remote schema from the accounts microservice.
-
-  const http = new HttpLink({ uri: accountsServerUri, fetch: fetch as any });
-
-  const link = setContext((request, previousContext) => {
-    if (!previousContext.graphqlContext) {
-      return {};
-    }
-    // Attach the Authorization to requests which are proxied to the remote schema.
-    // This step is optional and only required if you want the `getUser` query to return data.
-    return {
-      headers: {
-        Authorization: 'Bearer ' + previousContext.graphqlContext.authToken,
-      },
-    };
-  }).concat(http);
-
-  const executor = linkToExecutor(link);
-
-  const executableRemoteSchema = wrapSchema({
-    schema: await introspectSchema(executor),
-    executor,
-  });
-
-  // The @auth directive needs to be declared in your typeDefs
-
-  const typeDefs = `
-    directive @auth on FIELD_DEFINITION | OBJECT
-
+  const typeDefs = gql`
     type PrivateType @auth {
-      privateField: String
+      field: String
     }
 
-    type Query {
+    extend type Query {
+      # Example of how to get the userId from the context and return the current logged in user or null
+      me: User
       publicField: String
+      # You can only query this if you are logged in
       privateField: String @auth
       privateType: PrivateType
       privateFieldWithAuthResolver: String
     }
 
-    type Mutation {
+    extend type Mutation {
       privateMutation: String @auth
       publicMutation: String
-    }    
-    `;
+    }
+  `;
 
   const resolvers = {
-    PrivateType: {
-      privateField: () => 'private',
-    },
     Query: {
+      me: {
+        resolve: (parent, args, context, info) => {
+          return delegateToSchema({
+            schema: remoteSubschema,
+            operation: 'query',
+            fieldName: 'getUser',
+            args,
+            context,
+            info,
+          });
+        },
+      },
       publicField: () => 'public',
       privateField: () => 'private',
-      privateType: () => '',
-      privateFieldWithAuthResolver: authenticated((root, args, context) => {
+      privateFieldWithAuthResolver: authenticated(() => {
         return 'private';
+      }),
+      privateType: () => ({
+        field: () => 'private',
       }),
     },
     Mutation: {
@@ -84,18 +62,43 @@ const accountsServerUri = 'http://localhost:4003/';
     },
   };
 
-  const executableLocalSchema = makeExecutableSchema({
-    typeDefs,
-    resolvers,
+  // // Note: the following steps are optional and only required if you want to stitch the remote accounts schema with your apps schema.
+
+  const remoteExecutor: AsyncExecutor = async ({ document, variables, context }) => {
+    console.log('context: ', context);
+    const query = print(document);
+    const fetchResult = await fetch(accountsServerUri, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Attach the Authorization to requests which are proxied to the remote schema.
+        // This step is optional and only required if you want the `getUser` query to return data.
+        ...(context?.authToken && { Authorization: `Bearer ${context.authToken}` }),
+      },
+      body: JSON.stringify({ query, variables }),
+    });
+    return fetchResult.json();
+  };
+
+  const remoteSubschema = {
+    schema: await introspectSchema(remoteExecutor),
+    executor: remoteExecutor,
+  };
+
+  const { authDirectiveTypeDefs, authDirectiveTransformer } = authDirective('auth');
+
+  const accounts = await accountsBoost({
+    tokenSecret: 'terrible secret',
+    micro: true, // setting micro to true will instruct `@accounts/boost` to only verify access tokens without any additional session logic
+    schemaBuilder: () =>
+      authDirectiveTransformer(
+        stitchSchemas({
+          subschemas: [remoteSubschema],
+          typeDefs: mergeTypeDefs([typeDefs, authDirectiveTypeDefs]),
+          resolvers,
+        })
+      ),
   });
 
-  const apolloServer = await new ApolloServer({
-    schema: mergeSchemas({
-      schemas: [executableLocalSchema, executableRemoteSchema],
-      schemaDirectives: accounts.schemaDirectives as any,
-    }),
-    context: ({ req }) => accounts.context({ req }),
-  }).listen();
-
-  console.log(`GraphQL server running at ${apolloServer.url}`);
+  accounts.listen({ port: 4000 });
 })();
