@@ -8,18 +8,25 @@
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
-    "serve": "docusaurus serve",
     "clear": "docusaurus clear",
+    "serve": "docusaurus serve",
+    "write-translations": "docusaurus write-translations",
+    "write-heading-ids": "docusaurus write-heading-ids",
     "generate-api-docs": "rm -rf docs/api && ts-node scripts/generate-api-docs.ts"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-alpha.68",
-    "@docusaurus/preset-classic": "2.0.0-alpha.68",
-    "@mdx-js/react": "^1.6.21",
+    "@docusaurus/core": "2.0.0-beta.7",
+    "@docusaurus/plugin-content-docs": "2.0.0-beta.7",
+    "@docusaurus/preset-classic": "2.0.0-beta.7",
+    "@mdx-js/react": "1.6.22",
+    "@svgr/webpack": "5.5.0",
     "clsx": "1.1.1",
     "docusaurus-plugin-fathom": "1.1.0",
+    "file-loader": "6.2.0",
+    "prism-react-renderer": "1.2.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "url-loader": "4.1.1"
   },
   "browserslist": {
     "production": [
@@ -34,7 +41,7 @@
     ]
   },
   "devDependencies": {
-    "ts-node": "10.1.0",
+    "ts-node": "10.3.0",
     "typedoc": "0.17.6",
     "typedoc-plugin-markdown": "2.3.1"
   }

@@ -1,3 +1,4 @@
+// @ts-check
 const { readdirSync } = require('fs');
 const { resolve } = require('path');
 
@@ -6,6 +7,7 @@ const apiDocsDir = resolve(__dirname, '..', 'website', 'docs', 'api');
 
 const dirs = readdirSync(apiDocsDir);
 
+/** @type any */
 const generatedApi = {};
 
 dirs.forEach((dir) => {
@@ -23,7 +25,8 @@ dirs.forEach((dir) => {
   generatedApi[packageName].unshift(`api/${dir}/index`);
 });
 
-module.exports = {
+/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
+const sidebars = {
   docs: {
     Introduction: ['introduction', 'contributing'],
     'Getting started': ['getting-started', 'server', 'handling-errors', 'email', 'client'],
@@ -48,5 +51,8 @@ module.exports = {
     ],
     Cookbook: ['cookbook/react-native'],
   },
+
   api: generatedApi,
 };
+
+module.exports = sidebars;
