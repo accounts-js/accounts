@@ -123,7 +123,7 @@ export class TwoFactor {
         window: this.options.window,
       })
     ) {
-      this.db.unsetService(userId, this.serviceName);
+      await this.db.unsetService(userId, this.serviceName);
     } else {
       throw new Error(this.options.errors.codeDidNotMatch);
     }
