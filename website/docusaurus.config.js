@@ -1,7 +1,17 @@
 // @ts-check
-
+const { readdirSync } = require('fs');
+const { resolve } = require('path');
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+
+// Select entry points for typedoc
+const packagesDir = resolve(__dirname, '..', 'packages');
+let dirs = readdirSync(packagesDir);
+// Do not build the docs for these packages
+const excludeDirs = ['database-tests', 'e2e', 'error', 'types'];
+// Do not build the docs for these packages
+dirs = dirs.filter((dir) => !excludeDirs.includes(dir));
+dirs = dirs.map((dir) => resolve(packagesDir, dir));
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -41,7 +51,8 @@ const config = {
         items: [
           { to: 'docs/introduction', label: 'Documentation', position: 'right' },
           {
-            to: 'docs/api/server/index',
+            to: 'docs/api/',
+            activeBasePath: 'docs',
             label: 'Api reference',
             position: 'right',
           },
@@ -101,7 +112,20 @@ const config = {
       }),
     ],
   ],
-  plugins: [require.resolve('docusaurus-plugin-fathom')],
+  plugins: [
+    require.resolve('docusaurus-plugin-fathom'),
+    [
+      'docusaurus-plugin-typedoc',
+      {
+        entryPoints: dirs,
+        entryPointStrategy: 'Packages',
+        excludePrivate: true,
+        sidebar: {
+          fullNames: true,
+        },
+      },
+    ],
+  ],
 };
 
 module.exports = config;

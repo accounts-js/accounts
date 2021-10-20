@@ -1,23 +1,23 @@
 <p align="center">
   <a href="https://www.accountsjs.com">
-    <img alt="accounts-js logo" src="https://github.com/accounts-js/accounts/blob/master/website/static/img/logo.png?raw=true" width="500">
+    <img alt="accounts-js logo" src="https://github.com/accounts-js/accounts/blob/master/website/static/img/logo.png?raw=true" width="500" />
   </a>
 </p>
 
-<br>
+<br />
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@accounts/server">
-   <img alt="npm" src="https://img.shields.io/npm/v/@accounts/server">
+   <img alt="npm" src="https://img.shields.io/npm/v/@accounts/server" />
   </a>
   <a href="https://www.npmjs.com/package/@accounts/server">
-   <img alt="npm downloads" src="https://img.shields.io/npm/dm/@accounts/server">
+   <img alt="npm downloads" src="https://img.shields.io/npm/dm/@accounts/server" />
   </a>
   <a href="https://codecov.io/gh/accounts-js/accounts">
-   <img alt="codecov" src="https://img.shields.io/codecov/c/github/accounts-js/accounts">
+   <img alt="codecov" src="https://img.shields.io/codecov/c/github/accounts-js/accounts" />
   </a>
   <a href="https://github.com/accounts-js/accounts/blob/master/LICENSE">
-   <img alt="License" src="https://img.shields.io/github/license/accounts-js/accounts">
+   <img alt="License" src="https://img.shields.io/github/license/accounts-js/accounts" />
   </a>
 </p>
 
@@ -25,7 +25,7 @@
   Fullstack authentication and accounts-management for GraphQL and REST.
 </h3>
 
-<br>
+<br />
 
 _Note: Although accounts-js is production ready, the packages within this repo are under active development — expect breaking changes with minor version updates._
 

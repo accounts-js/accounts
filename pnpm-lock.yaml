@@ -1080,13 +1080,14 @@ importers:
       '@svgr/webpack': 5.5.0
       clsx: 1.1.1
       docusaurus-plugin-fathom: 1.1.0
+      docusaurus-plugin-typedoc: 0.16.3
       file-loader: 6.2.0
       prism-react-renderer: 1.2.1
       react: 17.0.2
       react-dom: 17.0.2
       ts-node: 10.3.0
-      typedoc: 0.17.6
-      typedoc-plugin-markdown: 2.3.1
+      typedoc: 0.22.6
+      typedoc-plugin-markdown: 3.11.3
       url-loader: 4.1.1
     dependencies:
       '@docusaurus/core': 2.0.0-beta.7_react-dom@17.0.2+react@17.0.2
@@ -1102,9 +1103,10 @@ importers:
       react-dom: 17.0.2_react@17.0.2
       url-loader: 4.1.1_file-loader@6.2.0
     devDependencies:
+      docusaurus-plugin-typedoc: 0.16.3_3aa79e74c97b00505a96532e784b4e82
       ts-node: 10.3.0_typescript@4.3.5
-      typedoc: 0.17.6_typescript@4.3.5
-      typedoc-plugin-markdown: 2.3.1_typedoc@0.17.6
+      typedoc: 0.22.6_typescript@4.3.5
+      typedoc-plugin-markdown: 3.11.3_typedoc@0.22.6
 
 packages:
 
@@ -13301,6 +13303,16 @@ packages:
       '@docusaurus/core': 2.0.0-beta.7_react-dom@17.0.2+react@17.0.2
     dev: false
 
+  /docusaurus-plugin-typedoc/0.16.3_3aa79e74c97b00505a96532e784b4e82:
+    resolution: {integrity: sha512-feVKPyAcH98KuZ3wtrVkEnutEUo3zbKvVB/9crbo4W9CjZ0QczSdBtKWuasHWuPxWbThZ6gbBZp/5oeFnSVWbg==}
+    peerDependencies:
+      typedoc: '>=0.21.0'
+      typedoc-plugin-markdown: '>=3.10.0'
+    dependencies:
+      typedoc: 0.22.6_typescript@4.3.5
+      typedoc-plugin-markdown: 3.11.3_typedoc@0.22.6
+    dev: true
+
   /dom-converter/0.2.0:
     resolution: {integrity: sha512-gd3ypIPfOMr9h5jIKq8E3sHOTCjeirnl0WK5ZdS1AW0Odt0b1PaWaHdJ4Qk4klv+YB9aJBS7mESXjFoDQPu6DA==}
     dependencies:
@@ -15571,6 +15583,7 @@ packages:
 
   /highlight.js/10.7.3:
     resolution: {integrity: sha512-tzcUFauisWKNHaRkN4Wjl/ZA07gENAjFl3J/c480dprkGTg5EQstgaNFqBfUqCq54kZRIEcreTsAgF/m2quD7A==}
+    dev: false
 
   /history/4.10.1:
     resolution: {integrity: sha512-36nwAD620w12kuzPAsyINPWJqlNbij+hpK1k9XRloDtym8mxzGYl2c17LnV6IAGB2Dmg4tEa7G7DlawS0+qjew==}
@@ -16141,6 +16154,7 @@ packages:
   /interpret/1.4.0:
     resolution: {integrity: sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==}
     engines: {node: '>= 0.10'}
+    dev: false
 
   /invariant/2.2.4:
     resolution: {integrity: sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==}
@@ -17938,6 +17952,10 @@ packages:
     dependencies:
       minimist: 1.2.5
 
+  /jsonc-parser/3.0.0:
+    resolution: {integrity: sha512-fQzRfAbIBnR0IQvftw9FJveWiHp72Fg20giDrHz6TdfB12UH/uue0D3hm57UB5KgAVuniLMCaS8P1IMj9NR7cA==}
+    dev: true
+
   /jsonfile/4.0.0:
     resolution: {integrity: sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=}
     optionalDependencies:
@@ -18719,9 +18737,9 @@ packages:
     resolution: {integrity: sha512-8z4efJYk43E0upd0NbVXwgSTQs6cT3T06etieCMEg7dRbzCbxUCK/GHlX8mhHRDcp+OLlHkPKsvqQTCvsRl2cg==}
     dev: false
 
-  /marked/1.0.0:
-    resolution: {integrity: sha512-Wo+L1pWTVibfrSr+TTtMuiMfNzmZWiOPeO7rZsQUY5bgsxpHesBEcIWJloWVTFnrMXnf/TL30eTFSGJddmQAng==}
-    engines: {node: '>= 8.16.2'}
+  /marked/3.0.7:
+    resolution: {integrity: sha512-ctKqbnLuNbsHbI26cfMyOlKgXGfl1orOv1AvWWDX7AkgfMOwCWvmuYc+mVLeWhQ9W6hdWVBynOs96VkcscKo0Q==}
+    engines: {node: '>= 12'}
     hasBin: true
     dev: true
 
@@ -19845,6 +19863,12 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       mimic-fn: 2.1.0
+
+  /onigasm/2.2.5:
+    resolution: {integrity: sha512-F+th54mPc0l1lp1ZcFMyL/jTs2Tlq4SqIHKIXGZOR/VkHkF9A7Fr5rRr5+ZG/lWeRsyrClLYRq7s/yFQ/XhWCA==}
+    dependencies:
+      lru-cache: 5.1.1
+    dev: true
 
   /open/7.4.2:
     resolution: {integrity: sha512-MVHddDVweXZF3awtlAS+6pgKLlm/JgxZ90+/NBurBoQctVOOB/zDdVjcyPzQ+0laDGbsWgrRkflI65sQeOgT9Q==}
@@ -22399,6 +22423,7 @@ packages:
     engines: {node: '>= 0.10'}
     dependencies:
       resolve: 1.20.0
+    dev: false
 
   /recursive-readdir/2.2.2:
     resolution: {integrity: sha512-nRCcW9Sj7NuZwa2XvH9co8NPeXUBhZP7CRKJtU+cS6PW9FpCIFoI5ib0NT1ZrbNuPoRy0ylyCaUL8Gih4LSyFg==}
@@ -23371,11 +23396,20 @@ packages:
       glob: 7.2.0
       interpret: 1.4.0
       rechoir: 0.6.2
+    dev: false
 
   /shellwords/0.1.1:
     resolution: {integrity: sha512-vFwSUfQvqybiICwZY5+DAWIPLKsWO31Q91JSKl3UYv+K5c2QRPzn0qzec6QPu1Qc9eHYItiP3NdJqNVqetYAww==}
     dev: true
     optional: true
+
+  /shiki/0.9.12:
+    resolution: {integrity: sha512-VXcROdldv0/Qu0w2XvzU4IrvTeBNs/Kj/FCmtcEXGz7Tic/veQzliJj6tEiAgoKianhQstpYmbPDStHU5Opqcw==}
+    dependencies:
+      jsonc-parser: 3.0.0
+      onigasm: 2.2.5
+      vscode-textmate: 5.2.0
+    dev: true
 
   /shortid/2.2.16:
     resolution: {integrity: sha512-Ugt+GIZqvGXCIItnsL+lvFJOiN7RYqlGy7QE41O3YC1xbNSeDGIRO7xg2JJXIAj1cAGnOeC1r7/T9pgrtQbv4g==}
@@ -24971,41 +25005,27 @@ packages:
     resolution: {integrity: sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=}
     dev: true
 
-  /typedoc-default-themes/0.10.2:
-    resolution: {integrity: sha512-zo09yRj+xwLFE3hyhJeVHWRSPuKEIAsFK5r2u47KL/HBKqpwdUSanoaz5L34IKiSATFrjG5ywmIu98hPVMfxZg==}
-    engines: {node: '>= 8'}
-    dependencies:
-      lunr: 2.3.9
-    dev: true
-
-  /typedoc-plugin-markdown/2.3.1_typedoc@0.17.6:
-    resolution: {integrity: sha512-7rlmg1tLjddYy11uznHCAlyoOpxdWnFXqGEZ7j2mJ4KJg2avwWgEpw6SFZVofgPCGn36zklpFS51lHxYSRTLVQ==}
-    engines: {node: '>= 8.0.0'}
+  /typedoc-plugin-markdown/3.11.3_typedoc@0.22.6:
+    resolution: {integrity: sha512-rWiHbEIe0oZetDIsBR24XJVxGOJ91kDcHoj2KhFKxCLoJGX659EKBQkHne9QJ4W2stGhu1fRgFyQaouSBnxukA==}
     peerDependencies:
-      typedoc: '>=0.17.0'
+      typedoc: '>=0.22.0'
     dependencies:
-      fs-extra: 9.1.0
       handlebars: 4.7.7
-      typedoc: 0.17.6_typescript@4.3.5
+      typedoc: 0.22.6_typescript@4.3.5
     dev: true
 
-  /typedoc/0.17.6_typescript@4.3.5:
-    resolution: {integrity: sha512-pQiYnhG3yJk7939cv2n8uFoTsSgy5Hfiw0dgOQYa9nT9Ya1013dMctQdAXMj8JbNu7KhcauQyq9Zql9D/TziLw==}
-    engines: {node: '>= 8.0.0'}
+  /typedoc/0.22.6_typescript@4.3.5:
+    resolution: {integrity: sha512-ePbJqOaz0GNkU2ehRwFwBpLD4Gp6m7jbJfHysXmDdjVKc1g8DFJ83r/LOZ9TZrkC661vgpoIY3FjSPEtUilHNA==}
+    engines: {node: '>= 12.10.0'}
     hasBin: true
     peerDependencies:
-      typescript: '>=3.8.3'
+      typescript: 4.0.x || 4.1.x || 4.2.x || 4.3.x || 4.4.x
     dependencies:
-      fs-extra: 8.1.0
-      handlebars: 4.7.7
-      highlight.js: 10.7.3
-      lodash: 4.17.21
+      glob: 7.2.0
       lunr: 2.3.9
-      marked: 1.0.0
+      marked: 3.0.7
       minimatch: 3.0.4
-      progress: 2.0.3
-      shelljs: 0.8.4
-      typedoc-default-themes: 0.10.2
+      shiki: 0.9.12
       typescript: 4.3.5
     dev: true
 
@@ -25718,6 +25738,10 @@ packages:
 
   /vm-browserify/1.1.2:
     resolution: {integrity: sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==}
+    dev: true
+
+  /vscode-textmate/5.2.0:
+    resolution: {integrity: sha512-Uw5ooOQxRASHgu6C7GVvUxisKXfSgW4oFlO+aa+PAkgmH89O3CXxEEzNRNtHSqtXFTl0nAC1uYj0GMSH27uwtQ==}
     dev: true
 
   /w3c-hr-time/1.0.2:
