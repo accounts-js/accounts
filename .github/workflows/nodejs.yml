@@ -53,5 +53,4 @@ jobs:
       - name: Test documentation
         run: |
           cd website
-          pnpm run generate-api-docs
           pnpm run build
