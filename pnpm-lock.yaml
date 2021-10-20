@@ -1077,30 +1077,24 @@ importers:
       '@docusaurus/plugin-content-docs': 2.0.0-beta.7
       '@docusaurus/preset-classic': 2.0.0-beta.7
       '@mdx-js/react': 1.6.22
-      '@svgr/webpack': 5.5.0
       clsx: 1.1.1
       docusaurus-plugin-fathom: 1.1.0
-      file-loader: 6.2.0
       prism-react-renderer: 1.2.1
       react: 17.0.2
       react-dom: 17.0.2
       ts-node: 10.3.0
       typedoc: 0.17.6
       typedoc-plugin-markdown: 2.3.1
-      url-loader: 4.1.1
     dependencies:
       '@docusaurus/core': 2.0.0-beta.7_react-dom@17.0.2+react@17.0.2
       '@docusaurus/plugin-content-docs': 2.0.0-beta.7_react-dom@17.0.2+react@17.0.2
       '@docusaurus/preset-classic': 2.0.0-beta.7_cf03b7458ee8070c9e09362c20b6f0a1
       '@mdx-js/react': 1.6.22_react@17.0.2
-      '@svgr/webpack': 5.5.0
       clsx: 1.1.1
       docusaurus-plugin-fathom: 1.1.0_@docusaurus+core@2.0.0-beta.7
-      file-loader: 6.2.0
       prism-react-renderer: 1.2.1_react@17.0.2
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
-      url-loader: 4.1.1_file-loader@6.2.0
     devDependencies:
       ts-node: 10.3.0_typescript@4.3.5
       typedoc: 0.17.6_typescript@4.3.5
@@ -14458,16 +14452,6 @@ packages:
       webpack: 4.44.2
     dev: true
 
-  /file-loader/6.2.0:
-    resolution: {integrity: sha512-qo3glqyTa61Ytg4u73GultjHGjdRyig3tG6lPtyX/jOEJvHif9uB0/OCI2Kif6ctF3caQTW2G5gym21oAsI4pw==}
-    engines: {node: '>= 10.13.0'}
-    peerDependencies:
-      webpack: ^4.0.0 || ^5.0.0
-    dependencies:
-      loader-utils: 2.0.0
-      schema-utils: 3.1.1
-    dev: false
-
   /file-loader/6.2.0_webpack@5.59.0:
     resolution: {integrity: sha512-qo3glqyTa61Ytg4u73GultjHGjdRyig3tG6lPtyX/jOEJvHif9uB0/OCI2Kif6ctF3caQTW2G5gym21oAsI4pw==}
     engines: {node: '>= 10.13.0'}
@@ -25473,22 +25457,6 @@ packages:
       schema-utils: 3.1.1
       webpack: 4.44.2
     dev: true
-
-  /url-loader/4.1.1_file-loader@6.2.0:
-    resolution: {integrity: sha512-3BTV812+AVHHOJQO8O5MkWgZ5aosP7GnROJwvzLS9hWDj00lZ6Z0wNak423Lp9PBZN05N+Jk/N5Si8jRAlGyWA==}
-    engines: {node: '>= 10.13.0'}
-    peerDependencies:
-      file-loader: '*'
-      webpack: ^4.0.0 || ^5.0.0
-    peerDependenciesMeta:
-      file-loader:
-        optional: true
-    dependencies:
-      file-loader: 6.2.0
-      loader-utils: 2.0.0
-      mime-types: 2.1.33
-      schema-utils: 3.1.1
-    dev: false
 
   /url-loader/4.1.1_file-loader@6.2.0+webpack@5.59.0:
     resolution: {integrity: sha512-3BTV812+AVHHOJQO8O5MkWgZ5aosP7GnROJwvzLS9hWDj00lZ6Z0wNak423Lp9PBZN05N+Jk/N5Si8jRAlGyWA==}
