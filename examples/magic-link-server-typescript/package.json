@@ -15,13 +15,13 @@
     "@accounts/mongo": "^0.33.5",
     "@accounts/server": "^0.33.1",
     "mongoose": "5.9.25",
-    "tslib": "2.3.0"
+    "tslib": "2.3.1"
   },
   "devDependencies": {
-    "@types/mongoose": "5.7.32",
-    "@types/node": "16.4.13",
-    "nodemon": "2.0.12",
-    "ts-node": "10.1.0",
+    "@types/mongoose": "5.11.97",
+    "@types/node": "16.11.4",
+    "nodemon": "2.0.14",
+    "ts-node": "10.4.0",
     "typescript": "4.4.4"
   }
 }

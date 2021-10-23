@@ -24,19 +24,19 @@
   "dependencies": {
     "@accounts/two-factor": "^0.32.2",
     "bcryptjs": "^2.4.3",
-    "tslib": "2.3.0"
+    "tslib": "2.3.1"
   },
   "devDependencies": {
     "@accounts/server": "^0.33.1",
     "@accounts/types": "^0.33.1",
     "@types/bcryptjs": "2.4.2",
-    "@types/jest": "26.0.24",
+    "@types/jest": "27.0.2",
     "@types/lodash.set": "4.3.6",
-    "@types/node": "16.4.13",
-    "jest": "27.0.6",
+    "@types/node": "16.11.4",
+    "jest": "27.3.1",
     "lodash.set": "4.3.2",
     "rimraf": "3.0.2",
-    "ts-jest": "27.0.4"
+    "ts-jest": "27.0.7"
   },
   "peerDependencies": {
     "@accounts/server": "^0.32.0 || ^0.33.0"

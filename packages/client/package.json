@@ -47,10 +47,10 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "26.0.24",
-    "@types/node": "16.4.13",
-    "jest": "27.0.6",
-    "jest-localstorage-mock": "2.4.14",
+    "@types/jest": "27.0.2",
+    "@types/node": "16.11.4",
+    "jest": "27.3.1",
+    "jest-localstorage-mock": "2.4.18",
     "jsonwebtoken": "8.5.1",
     "localstorage-polyfill": "1.0.1",
     "rimraf": "3.0.2"
@@ -58,6 +58,6 @@
   "dependencies": {
     "@accounts/types": "^0.33.1",
     "jwt-decode": "3.1.2",
-    "tslib": "2.3.0"
+    "tslib": "2.3.1"
   }
 }

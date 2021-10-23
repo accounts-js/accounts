@@ -39,14 +39,14 @@
   "author": "Elies Lou (Aetherall)",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "26.0.24",
-    "@types/node": "16.4.13",
-    "jest": "27.0.6",
+    "@types/jest": "27.0.2",
+    "@types/node": "16.11.4",
+    "jest": "27.3.1",
     "rimraf": "3.0.2",
-    "ts-jest": "27.0.4"
+    "ts-jest": "27.0.7"
   },
   "dependencies": {
     "@accounts/types": "^0.33.1",
-    "tslib": "2.3.0"
+    "tslib": "2.3.1"
   }
 }
