@@ -54,7 +54,7 @@
     "@types/express": "4.17.13",
     "@types/jest": "27.0.2",
     "@types/node": "16.11.4",
-    "@types/request-ip": "0.0.35",
+    "@types/request-ip": "0.0.37",
     "jest": "27.3.1",
     "rimraf": "3.0.2",
     "ts-jest": "27.0.7"

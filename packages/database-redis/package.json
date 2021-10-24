@@ -33,7 +33,7 @@
   "license": "MIT",
   "dependencies": {
     "@accounts/types": "^0.33.1",
-    "ioredis": "^4.14.1",
+    "ioredis": "^4.28.0",
     "shortid": "^2.2.15",
     "tslib": "2.3.1"
   },

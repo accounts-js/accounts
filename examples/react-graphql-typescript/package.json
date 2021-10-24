@@ -45,8 +45,8 @@
   },
   "devDependencies": {
     "@types/node": "16.11.4",
-    "@types/qrcode.react": "1.0.0",
-    "@types/react": "17.0.31",
+    "@types/qrcode.react": "1.0.2",
+    "@types/react": "17.0.32",
     "@types/react-dom": "17.0.10",
     "@types/react-router": "5.1.17",
     "@types/react-router-dom": "5.3.1",
