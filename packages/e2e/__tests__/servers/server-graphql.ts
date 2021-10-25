@@ -1,6 +1,11 @@
 import { AccountsClient } from '@accounts/client';
 import { AccountsClientPassword } from '@accounts/client-password';
-import { AccountsModule } from '@accounts/graphql-api';
+import {
+  context,
+  createAccountsCoreModule,
+  createAccountsPasswordModule,
+} from '@accounts/graphql-api';
+import { createApplication } from 'graphql-modules';
 import { AccountsGraphQLClient } from '@accounts/graphql-client';
 import { AccountsPassword } from '@accounts/password';
 import { AccountsServer } from '@accounts/server';
@@ -77,13 +82,17 @@ export class ServerGraphqlTest implements ServerTestInterface {
         password: this.accountsPassword,
       }
     );
-    const { schema, context } = AccountsModule.forRoot({
-      accountsServer: this.accountsServer,
-    });
 
     this.apolloServer = new ApolloServer({
-      schema,
-      context,
+      schema: createApplication({
+        modules: [
+          createAccountsCoreModule({ accountsServer: this.accountsServer }),
+          createAccountsPasswordModule({ accountsPassword: this.accountsPassword }),
+        ],
+      }).createSchemaForApollo(),
+      context: ({ req }) => {
+        return context({ req }, { accountsServer: this.accountsServer });
+      },
     });
 
     const apolloClient = new ApolloClient({
