@@ -222,7 +222,7 @@ importers:
       '@types/react-dom': 17.0.10
       '@types/react-router': 5.1.17
       '@types/react-router-dom': 5.3.1
-      eslint-config-react-app: 6.0.0
+      eslint-config-react-app: 6.0.0_c6168ebf7643e6bd4c161e0a623cc1aa
       react-scripts: 4.0.3_react@17.0.2+typescript@4.4.4
       typescript: 4.4.4
       web-vitals: 1.0.1
@@ -610,7 +610,7 @@ importers:
       jest: 27.3.1
       pg: 8.1.0
       rimraf: 3.0.2
-      ts-jest: 27.0.7_@types+jest@27.0.2+jest@27.3.1
+      ts-jest: 27.0.7_2c4ca6574207836d1023f54689cc81ac
 
   packages/e2e:
     specifiers:
@@ -677,7 +677,7 @@ importers:
       '@types/node-fetch': 2.5.12
       jest: 27.3.1
       jest-localstorage-mock: 2.4.18
-      ts-jest: 27.0.7_@types+jest@27.0.2+jest@27.3.1
+      ts-jest: 27.0.7_2c4ca6574207836d1023f54689cc81ac
 
   packages/error:
     specifiers:
@@ -729,7 +729,7 @@ importers:
       express-session: 1.17.2
       jest: 27.3.1
       rimraf: 3.0.2
-      ts-jest: 27.0.7_@types+jest@27.0.2+jest@27.3.1
+      ts-jest: 27.0.7_2c4ca6574207836d1023f54689cc81ac
 
   packages/graphql-api:
     specifiers:
@@ -1052,7 +1052,7 @@ importers:
       '@types/node': 16.11.4
       jest: 27.3.1
       rimraf: 3.0.2
-      ts-jest: 27.0.7_@types+jest@27.0.2+jest@27.3.1
+      ts-jest: 27.0.7_2c4ca6574207836d1023f54689cc81ac
 
   packages/types:
     specifiers:
@@ -1096,8 +1096,8 @@ importers:
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
     devDependencies:
-      ts-node: 10.4.0
-      typedoc: 0.17.6
+      ts-node: 10.4.0_typescript@4.4.4
+      typedoc: 0.17.6_typescript@4.4.4
       typedoc-plugin-markdown: 2.3.1_typedoc@0.17.6
 
 packages:
@@ -13547,30 +13547,6 @@ packages:
       eslint: 8.1.0
     dev: true
 
-  /eslint-config-react-app/6.0.0:
-    resolution: {integrity: sha512-bpoAAC+YRfzq0dsTk+6v9aHm/uqnDwayNAXleMypGl6CpxI9oXXscVHo4fk3eJPIn+rsbtNetB4r/ZIidFIE8A==}
-    engines: {node: ^10.12.0 || >=12.0.0}
-    peerDependencies:
-      '@typescript-eslint/eslint-plugin': ^4.0.0
-      '@typescript-eslint/parser': ^4.0.0
-      babel-eslint: ^10.0.0
-      eslint: ^7.5.0
-      eslint-plugin-flowtype: ^5.2.0
-      eslint-plugin-import: ^2.22.0
-      eslint-plugin-jest: ^24.0.0
-      eslint-plugin-jsx-a11y: ^6.3.1
-      eslint-plugin-react: ^7.20.3
-      eslint-plugin-react-hooks: ^4.0.8
-      eslint-plugin-testing-library: ^3.9.0
-    peerDependenciesMeta:
-      eslint-plugin-jest:
-        optional: true
-      eslint-plugin-testing-library:
-        optional: true
-    dependencies:
-      confusing-browser-globals: 1.0.10
-    dev: true
-
   /eslint-config-react-app/6.0.0_7b148e1953e57331ad4a5929c92d49bd:
     resolution: {integrity: sha512-bpoAAC+YRfzq0dsTk+6v9aHm/uqnDwayNAXleMypGl6CpxI9oXXscVHo4fk3eJPIn+rsbtNetB4r/ZIidFIE8A==}
     engines: {node: ^10.12.0 || >=12.0.0}
@@ -24775,66 +24751,8 @@ packages:
       yargs-parser: 20.2.9
     dev: true
 
-  /ts-jest/27.0.7_@types+jest@27.0.2+jest@27.3.1:
-    resolution: {integrity: sha512-O41shibMqzdafpuP+CkrOL7ykbmLh+FqQrXEmV9CydQ5JBk0Sj0uAEF5TNNe94fZWKm3yYvWa/IbyV4Yg1zK2Q==}
-    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
-    hasBin: true
-    peerDependencies:
-      '@babel/core': '>=7.0.0-beta.0 <8'
-      '@types/jest': ^27.0.0
-      babel-jest: '>=27.0.0 <28'
-      jest: ^27.0.0
-      typescript: '>=3.8 <5.0'
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-      '@types/jest':
-        optional: true
-      babel-jest:
-        optional: true
-    dependencies:
-      '@types/jest': 27.0.2
-      bs-logger: 0.2.6
-      fast-json-stable-stringify: 2.1.0
-      jest: 27.3.1
-      jest-util: 27.3.1
-      json5: 2.2.0
-      lodash.memoize: 4.1.2
-      make-error: 1.3.6
-      semver: 7.3.5
-      yargs-parser: 20.2.9
-    dev: true
-
   /ts-log/2.2.3:
     resolution: {integrity: sha512-XvB+OdKSJ708Dmf9ore4Uf/q62AYDTzFcAdxc8KNML1mmAWywRFVt/dn1KYJH8Agt5UJNujfM3znU5PxgAzA2w==}
-    dev: true
-
-  /ts-node/10.4.0:
-    resolution: {integrity: sha512-g0FlPvvCXSIO1JDF6S232P5jPYqBkRL9qly81ZgAOSU7rwI0stphCgd2kLiCrU9DjQCrJMWEqcNSjQL02s6d8A==}
-    hasBin: true
-    peerDependencies:
-      '@swc/core': '>=1.2.50'
-      '@swc/wasm': '>=1.2.50'
-      '@types/node': '*'
-      typescript: '>=2.7'
-    peerDependenciesMeta:
-      '@swc/core':
-        optional: true
-      '@swc/wasm':
-        optional: true
-    dependencies:
-      '@cspotcode/source-map-support': 0.7.0
-      '@tsconfig/node10': 1.0.8
-      '@tsconfig/node12': 1.0.9
-      '@tsconfig/node14': 1.0.1
-      '@tsconfig/node16': 1.0.2
-      acorn: 8.5.0
-      acorn-walk: 8.2.0
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.2
-      make-error: 1.3.6
-      yn: 3.1.1
     dev: true
 
   /ts-node/10.4.0_bada05a3e1cd24c0fc5f82f6eaa2ca15:
@@ -25082,10 +25000,10 @@ packages:
     dependencies:
       fs-extra: 9.1.0
       handlebars: 4.7.7
-      typedoc: 0.17.6
+      typedoc: 0.17.6_typescript@4.4.4
     dev: true
 
-  /typedoc/0.17.6:
+  /typedoc/0.17.6_typescript@4.4.4:
     resolution: {integrity: sha512-pQiYnhG3yJk7939cv2n8uFoTsSgy5Hfiw0dgOQYa9nT9Ya1013dMctQdAXMj8JbNu7KhcauQyq9Zql9D/TziLw==}
     engines: {node: '>= 8.0.0'}
     hasBin: true
@@ -25102,6 +25020,7 @@ packages:
       progress: 2.0.3
       shelljs: 0.8.4
       typedoc-default-themes: 0.10.2
+      typescript: 4.4.4
     dev: true
 
   /typeorm/0.2.38:
