@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@accounts/client": "^0.33.1",
-    "@apollo/client": "3.0.2",
+    "@apollo/client": "3.4.16",
     "rimraf": "3.0.2"
   }
 }
