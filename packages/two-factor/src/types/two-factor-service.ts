@@ -1,5 +1,5 @@
-import * as speakeasy from 'speakeasy';
+import { GeneratedSecret } from 'speakeasy';
 
 export interface TwoFactorService {
-  secret: speakeasy.Key;
+  secret: GeneratedSecret;
 }
