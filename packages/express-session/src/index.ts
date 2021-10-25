@@ -77,8 +77,8 @@ export class AccountsSession {
       return;
     }
 
-    if (req.session && req.session[this.options.name]) {
-      return req.session[this.options.name];
+    if (req.session && (req.session as any)[this.options.name]) {
+      return (req.session as any)[this.options.name];
     }
   }
 
@@ -105,13 +105,13 @@ export class AccountsSession {
     }
 
     if (req.session) {
-      req.session[this.options.name] = tokens;
+      (req.session as any)[this.options.name] = tokens;
     }
   }
 
   public clear(req: Request): void {
     if (this.get(req)) {
-      req.session![this.options.name] = null;
+      (req.session as any)![this.options.name] = null;
     }
   }
 }
