@@ -1,6 +1,6 @@
 {
   "name": "@accounts/mikro-orm",
-  "version": "0.27.0",
+  "version": "0.34.0",
   "description": "MikroORM adaptor for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -26,19 +26,29 @@
   "author": "Niccolò Belli <niccolo.belli@linuxsystems.it>",
   "license": "MIT",
   "devDependencies": {
-    "@accounts/database-tests": "^0.27.0",
-    "@types/jest": "25.2.1",
-    "@types/node": "13.13.5",
-    "mikro-orm": "^3.6.15",
-    "pg": "^8.1.0",
-    "jest": "26.0.1"
+    "@accounts/database-tests": "^0.32.2",
+    "@types/jest": "27.0.2",
+    "@types/node": "16.11.7",
+    "@mikro-orm/cli": "5.0.0-rc.0",
+    "@mikro-orm/core": "5.0.0-rc.0",
+    "@mikro-orm/entity-generator": "5.0.0-rc.0",
+    "@mikro-orm/knex": "5.0.0-rc.0",
+    "@mikro-orm/migrations": "5.0.0-rc.0",
+    "@mikro-orm/postgresql": "5.0.0-rc.0",
+    "@mikro-orm/reflection": "5.0.0-rc.0",
+    "jest": "27.3.1"
   },
   "dependencies": {
-    "@accounts/types": "^0.27.0",
-    "tslib": "1.11.2"
+    "@accounts/types": "^0.33.2",
+    "tslib": "2.3.1"
   },
   "peerDependencies": {
-    "mikro-orm": "^3.6.15",
-    "pg": "^8.1.0"
+    "@mikro-orm/cli": "^5.0.0-rc.0",
+    "@mikro-orm/core": "^5.0.0-rc.0",
+    "@mikro-orm/entity-generator": "^5.0.0-rc.0",
+    "@mikro-orm/knex": "^5.0.0-rc.0",
+    "@mikro-orm/migrations": "^5.0.0-rc.0",
+    "@mikro-orm/postgresql": "^5.0.0-rc.0",
+    "@mikro-orm/reflection": "^5.0.0-rc.0"
   }
 }
