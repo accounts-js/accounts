@@ -1,7 +1,7 @@
 {
   "name": "@examples/graphql-mikro-orm-typescript",
   "private": true,
-  "version": "0.27.0",
+  "version": "0.34.0",
   "main": "lib/index.js",
   "license": "Unlicensed",
   "mikro-orm": {
@@ -19,22 +19,30 @@
     "test": "yarn build"
   },
   "dependencies": {
-    "@accounts/graphql-api": "^0.27.0",
-    "@accounts/mikro-orm": "^0.27.0",
-    "@accounts/password": "^0.27.0",
-    "@accounts/server": "^0.27.0",
-    "@graphql-modules/core": "0.7.16",
-    "@graphql-toolkit/schema-merging": "0.10.6",
-    "apollo-server": "2.13.0",
-    "graphql": "14.6.0",
-    "mikro-orm": "^3.6.15",
-    "pg": "^8.1.0"
+    "@accounts/graphql-api": "^0.33.2",
+    "@accounts/mikro-orm": "^0.34.0",
+    "@accounts/password": "^0.32.1",
+    "@accounts/server": "^0.33.1",
+    "graphql-modules": "^2.0.0",
+    "@graphql-tools/merge": "8.2.0",
+    "@graphql-tools/schema": "8.3.0",
+    "apollo-server": "^3.4.0",
+    "apollo-server-core": "^3.4.0",
+    "graphql": "^15.6.1",
+    "@mikro-orm/cli": "5.0.0-rc.0",
+    "@mikro-orm/core": "5.0.0-rc.0",
+    "@mikro-orm/entity-generator": "5.0.0-rc.0",
+    "@mikro-orm/knex": "5.0.0-rc.0",
+    "@mikro-orm/migrations": "5.0.0-rc.0",
+    "@mikro-orm/postgresql": "5.0.0-rc.0",
+    "@mikro-orm/reflection": "5.0.0-rc.0",
+    "tslib": "2.3.1"
   },
   "devDependencies": {
-    "@accounts/types": "^0.27.0",
-    "@types/node": "13.13.5",
-    "nodemon": "2.0.3",
-    "ts-node": "8.10.1",
-    "typescript": "3.8.3"
+    "@accounts/types": "^0.33.2",
+    "@types/node": "16.11.7",
+    "nodemon": "2.0.14",
+    "ts-node": "10.4.0",
+    "typescript": "4.5.2"
   }
 }

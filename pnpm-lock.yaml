@@ -76,6 +76,57 @@ importers:
       ts-node: 10.4.0_typescript@4.5.2
       typescript: 4.5.2
 
+  examples/graphql-server-mikro-orm-postgres:
+    specifiers:
+      '@accounts/graphql-api': ^0.33.2
+      '@accounts/mikro-orm': ^0.34.0
+      '@accounts/password': ^0.32.1
+      '@accounts/server': ^0.33.1
+      '@accounts/types': ^0.33.2
+      '@graphql-tools/merge': 8.2.0
+      '@graphql-tools/schema': 8.3.0
+      '@mikro-orm/cli': 5.0.0-rc.0
+      '@mikro-orm/core': 5.0.0-rc.0
+      '@mikro-orm/entity-generator': 5.0.0-rc.0
+      '@mikro-orm/knex': 5.0.0-rc.0
+      '@mikro-orm/migrations': 5.0.0-rc.0
+      '@mikro-orm/postgresql': 5.0.0-rc.0
+      '@mikro-orm/reflection': 5.0.0-rc.0
+      '@types/node': 16.11.7
+      apollo-server: ^3.4.0
+      apollo-server-core: ^3.4.0
+      graphql: ^15.6.1
+      graphql-modules: ^2.0.0
+      nodemon: 2.0.14
+      ts-node: 10.4.0
+      tslib: 2.3.1
+      typescript: 4.5.2
+    dependencies:
+      '@accounts/graphql-api': link:../../packages/graphql-api
+      '@accounts/mikro-orm': link:../../packages/database-mikro-orm
+      '@accounts/password': link:../../packages/password
+      '@accounts/server': link:../../packages/server
+      '@graphql-tools/merge': 8.2.0_graphql@15.6.1
+      '@graphql-tools/schema': 8.3.0_graphql@15.6.1
+      '@mikro-orm/cli': 5.0.0-rc.0_95b141186260c6b5ca2690e851a29b53
+      '@mikro-orm/core': 5.0.0-rc.0_95b141186260c6b5ca2690e851a29b53
+      '@mikro-orm/entity-generator': 5.0.0-rc.0_7af7fe0a688765badc2bc842c547f373
+      '@mikro-orm/knex': 5.0.0-rc.0_7f1d59a545b41c153d221c011a5de0f5
+      '@mikro-orm/migrations': 5.0.0-rc.0_ac17597040deb8dc864dce39e04cc12d
+      '@mikro-orm/postgresql': 5.0.0-rc.0_7f1d59a545b41c153d221c011a5de0f5
+      '@mikro-orm/reflection': 5.0.0-rc.0_@mikro-orm+core@5.0.0-rc.0
+      apollo-server: 3.4.0_graphql@15.6.1
+      apollo-server-core: 3.6.2_graphql@15.6.1
+      graphql: 15.6.1
+      graphql-modules: 2.0.0_graphql@15.6.1
+      tslib: 2.3.1
+    devDependencies:
+      '@accounts/types': link:../../packages/types
+      '@types/node': 16.11.7
+      nodemon: 2.0.14
+      ts-node: 10.4.0_822df8cc64711c2db8d43ce90a8558a3
+      typescript: 4.5.2
+
   examples/graphql-server-typeorm-postgres:
     specifiers:
       '@accounts/graphql-api': ^0.33.2
@@ -455,6 +506,37 @@ importers:
       jest: 27.3.1
       rimraf: 3.0.2
       ts-jest: 27.0.7_013ef332172517e974c4b270e59f55f5
+
+  packages/database-mikro-orm:
+    specifiers:
+      '@accounts/database-tests': ^0.32.2
+      '@accounts/types': ^0.33.2
+      '@mikro-orm/cli': 5.0.0-rc.0
+      '@mikro-orm/core': 5.0.0-rc.0
+      '@mikro-orm/entity-generator': 5.0.0-rc.0
+      '@mikro-orm/knex': 5.0.0-rc.0
+      '@mikro-orm/migrations': 5.0.0-rc.0
+      '@mikro-orm/postgresql': 5.0.0-rc.0
+      '@mikro-orm/reflection': 5.0.0-rc.0
+      '@types/jest': 27.0.2
+      '@types/node': 16.11.7
+      jest: 27.3.1
+      tslib: 2.3.1
+    dependencies:
+      '@accounts/types': link:../types
+      tslib: 2.3.1
+    devDependencies:
+      '@accounts/database-tests': link:../database-tests
+      '@mikro-orm/cli': 5.0.0-rc.0_95b141186260c6b5ca2690e851a29b53
+      '@mikro-orm/core': 5.0.0-rc.0_95b141186260c6b5ca2690e851a29b53
+      '@mikro-orm/entity-generator': 5.0.0-rc.0_7af7fe0a688765badc2bc842c547f373
+      '@mikro-orm/knex': 5.0.0-rc.0_7f1d59a545b41c153d221c011a5de0f5
+      '@mikro-orm/migrations': 5.0.0-rc.0_ac17597040deb8dc864dce39e04cc12d
+      '@mikro-orm/postgresql': 5.0.0-rc.0_7f1d59a545b41c153d221c011a5de0f5
+      '@mikro-orm/reflection': 5.0.0-rc.0_@mikro-orm+core@5.0.0-rc.0
+      '@types/jest': 27.0.2
+      '@types/node': 16.11.7
+      jest: 27.3.1
 
   packages/database-mongo:
     specifiers:
@@ -5432,6 +5514,270 @@ packages:
     resolution: {integrity: sha512-H1rQc1ZOHANWBvPcW+JpGwr+juXSxM8Q8YCkm3GhZd8REu1fHR3z99CErO1p9pkcfcxZnMdIZdIsXkOHY0NilA==}
     dev: false
 
+  /@mikro-orm/cli/5.0.0-rc.0_95b141186260c6b5ca2690e851a29b53:
+    resolution: {integrity: sha512-z1f+dfgZsixpanuUV99F0NUI4MFG8rygIAjnfV0QYk0gKUmS05UlGPeECXikY9cQmuFu5eeLMepRsnvDHWMHzA==}
+    engines: {node: '>= 14.0.0'}
+    hasBin: true
+    peerDependencies:
+      '@mikro-orm/entity-generator': ^5.0.0-rc.0
+      '@mikro-orm/mariadb': ^5.0.0-rc.0
+      '@mikro-orm/migrations': ^5.0.0-rc.0
+      '@mikro-orm/mongodb': ^5.0.0-rc.0
+      '@mikro-orm/mysql': ^5.0.0-rc.0
+      '@mikro-orm/postgresql': ^5.0.0-rc.0
+      '@mikro-orm/seeder': ^5.0.0-rc.0
+      '@mikro-orm/sqlite': ^5.0.0-rc.0
+    peerDependenciesMeta:
+      '@mikro-orm/entity-generator':
+        optional: true
+      '@mikro-orm/mariadb':
+        optional: true
+      '@mikro-orm/migrations':
+        optional: true
+      '@mikro-orm/mongodb':
+        optional: true
+      '@mikro-orm/mysql':
+        optional: true
+      '@mikro-orm/postgresql':
+        optional: true
+      '@mikro-orm/seeder':
+        optional: true
+      '@mikro-orm/sqlite':
+        optional: true
+    dependencies:
+      '@mikro-orm/core': 5.0.0-rc.0_95b141186260c6b5ca2690e851a29b53
+      '@mikro-orm/entity-generator': 5.0.0-rc.0_7af7fe0a688765badc2bc842c547f373
+      '@mikro-orm/knex': 5.0.0-rc.0_7f1d59a545b41c153d221c011a5de0f5
+      '@mikro-orm/migrations': 5.0.0-rc.0_ac17597040deb8dc864dce39e04cc12d
+      '@mikro-orm/postgresql': 5.0.0-rc.0_7f1d59a545b41c153d221c011a5de0f5
+      fs-extra: 10.0.0
+      tsconfig-paths: 3.12.0
+      yargonaut: 1.1.4
+      yargs: 15.4.1
+    transitivePeerDependencies:
+      - '@vscode/sqlite3'
+      - better-sqlite3
+      - mssql
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  /@mikro-orm/core/5.0.0-rc.0_95b141186260c6b5ca2690e851a29b53:
+    resolution: {integrity: sha512-tMmAgsBbdBwG637QSDBXVv3CEaz/culuQ4OuORWygha3S/+AextWSzzQ4Kx7Q4zw+f0gqGzz5kw0etAaI2BpcA==}
+    engines: {node: '>= 14.0.0'}
+    peerDependencies:
+      '@mikro-orm/entity-generator': ^5.0.0-rc.0
+      '@mikro-orm/mariadb': ^5.0.0-rc.0
+      '@mikro-orm/migrations': ^5.0.0-rc.0
+      '@mikro-orm/mongodb': ^5.0.0-rc.0
+      '@mikro-orm/mysql': ^5.0.0-rc.0
+      '@mikro-orm/postgresql': ^5.0.0-rc.0
+      '@mikro-orm/seeder': ^5.0.0-rc.0
+      '@mikro-orm/sqlite': ^5.0.0-rc.0
+    peerDependenciesMeta:
+      '@mikro-orm/entity-generator':
+        optional: true
+      '@mikro-orm/mariadb':
+        optional: true
+      '@mikro-orm/migrations':
+        optional: true
+      '@mikro-orm/mongodb':
+        optional: true
+      '@mikro-orm/mysql':
+        optional: true
+      '@mikro-orm/postgresql':
+        optional: true
+      '@mikro-orm/seeder':
+        optional: true
+      '@mikro-orm/sqlite':
+        optional: true
+    dependencies:
+      '@mikro-orm/entity-generator': 5.0.0-rc.0_7af7fe0a688765badc2bc842c547f373
+      '@mikro-orm/migrations': 5.0.0-rc.0_ac17597040deb8dc864dce39e04cc12d
+      '@mikro-orm/postgresql': 5.0.0-rc.0_7f1d59a545b41c153d221c011a5de0f5
+      clone: 2.1.2
+      dotenv: 14.2.0
+      escaya: 0.0.61
+      fs-extra: 10.0.0
+      globby: 11.0.4
+      mikro-orm: 5.0.0-rc.0
+      reflect-metadata: 0.1.13
+
+  /@mikro-orm/entity-generator/5.0.0-rc.0_7af7fe0a688765badc2bc842c547f373:
+    resolution: {integrity: sha512-RAICB6T/owgcEoaxSDGJbIvCaHUdywPXaqefebITFdEFhpITbpielq970kdqbDIlQz8QKd9/IX64mtVDBoDGnA==}
+    engines: {node: '>= 14.0.0'}
+    peerDependencies:
+      '@mikro-orm/core': ^5.0.0-rc.0
+    dependencies:
+      '@mikro-orm/core': 5.0.0-rc.0_95b141186260c6b5ca2690e851a29b53
+      '@mikro-orm/knex': 5.0.0-rc.0_7f1d59a545b41c153d221c011a5de0f5
+      fs-extra: 10.0.0
+    transitivePeerDependencies:
+      - '@mikro-orm/migrations'
+      - '@vscode/sqlite3'
+      - better-sqlite3
+      - mssql
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  /@mikro-orm/knex/5.0.0-rc.0_20544257a353cad0b3b2b3d7b7fb21fd:
+    resolution: {integrity: sha512-g42yBkMNY1U6awAjITUZ94uLtyh1vBMlD8F/iggvNuBxTgVHE1mVcyuDXOQHco3B7PdZUlOqRHuMVSMnwT5PAQ==}
+    engines: {node: '>= 14.0.0'}
+    peerDependencies:
+      '@mikro-orm/core': ^5.0.0-rc.0
+      '@mikro-orm/entity-generator': ^5.0.0-rc.0
+      '@mikro-orm/migrations': ^5.0.0-rc.0
+      '@vscode/sqlite3': ^5.0.0
+      mssql: ^7.0.0
+      mysql: ^2.18.1
+      mysql2: ^2.1.0
+      pg: ^8.0.3
+    peerDependenciesMeta:
+      '@mikro-orm/entity-generator':
+        optional: true
+      '@mikro-orm/migrations':
+        optional: true
+      '@vscode/sqlite3':
+        optional: true
+      mssql:
+        optional: true
+      mysql:
+        optional: true
+      mysql2:
+        optional: true
+      pg:
+        optional: true
+    dependencies:
+      '@mikro-orm/core': 5.0.0-rc.0_95b141186260c6b5ca2690e851a29b53
+      '@mikro-orm/entity-generator': 5.0.0-rc.0_7af7fe0a688765badc2bc842c547f373
+      '@mikro-orm/migrations': 5.0.0-rc.0_ac17597040deb8dc864dce39e04cc12d
+      fs-extra: 10.0.0
+      knex: 1.0.1_pg@8.7.1
+      pg: 8.7.1
+      sqlstring: 2.3.2
+    transitivePeerDependencies:
+      - better-sqlite3
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  /@mikro-orm/knex/5.0.0-rc.0_7f1d59a545b41c153d221c011a5de0f5:
+    resolution: {integrity: sha512-g42yBkMNY1U6awAjITUZ94uLtyh1vBMlD8F/iggvNuBxTgVHE1mVcyuDXOQHco3B7PdZUlOqRHuMVSMnwT5PAQ==}
+    engines: {node: '>= 14.0.0'}
+    peerDependencies:
+      '@mikro-orm/core': ^5.0.0-rc.0
+      '@mikro-orm/entity-generator': ^5.0.0-rc.0
+      '@mikro-orm/migrations': ^5.0.0-rc.0
+      '@vscode/sqlite3': ^5.0.0
+      mssql: ^7.0.0
+      mysql: ^2.18.1
+      mysql2: ^2.1.0
+      pg: ^8.0.3
+    peerDependenciesMeta:
+      '@mikro-orm/entity-generator':
+        optional: true
+      '@mikro-orm/migrations':
+        optional: true
+      '@vscode/sqlite3':
+        optional: true
+      mssql:
+        optional: true
+      mysql:
+        optional: true
+      mysql2:
+        optional: true
+      pg:
+        optional: true
+    dependencies:
+      '@mikro-orm/core': 5.0.0-rc.0_95b141186260c6b5ca2690e851a29b53
+      '@mikro-orm/entity-generator': 5.0.0-rc.0_7af7fe0a688765badc2bc842c547f373
+      '@mikro-orm/migrations': 5.0.0-rc.0_ac17597040deb8dc864dce39e04cc12d
+      fs-extra: 10.0.0
+      knex: 1.0.1
+      sqlstring: 2.3.2
+    transitivePeerDependencies:
+      - better-sqlite3
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  /@mikro-orm/migrations/5.0.0-rc.0_ac17597040deb8dc864dce39e04cc12d:
+    resolution: {integrity: sha512-IYhwYgOPrGlt10hSVkEMvB+ONF9k8C6uZnQ09b3yaUupGxjJmr85iimk8y+FK7qcWzLdZ7Wt1PJan10KWu1tkw==}
+    engines: {node: '>= 14.0.0'}
+    peerDependencies:
+      '@mikro-orm/core': ^5.0.0-rc.0
+    dependencies:
+      '@mikro-orm/core': 5.0.0-rc.0_95b141186260c6b5ca2690e851a29b53
+      '@mikro-orm/knex': 5.0.0-rc.0_7f1d59a545b41c153d221c011a5de0f5
+      fs-extra: 10.0.0
+      knex: 1.0.1
+      umzug: 3.0.0
+    transitivePeerDependencies:
+      - '@mikro-orm/entity-generator'
+      - '@vscode/sqlite3'
+      - better-sqlite3
+      - mssql
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  /@mikro-orm/postgresql/5.0.0-rc.0_7f1d59a545b41c153d221c011a5de0f5:
+    resolution: {integrity: sha512-NbinrM6DymXV7mEzTjjYp7y1ona46NwL7QjOUmvAEHwQMvDyePDhy+DxFzidqsvNascJYVkbALHyXUzNpK8LSA==}
+    engines: {node: '>= 14.0.0'}
+    peerDependencies:
+      '@mikro-orm/core': ^5.0.0-rc.0
+      '@mikro-orm/entity-generator': ^5.0.0-rc.0
+      '@mikro-orm/migrations': ^5.0.0-rc.0
+      '@mikro-orm/seeder': ^5.0.0-rc.0
+    peerDependenciesMeta:
+      '@mikro-orm/entity-generator':
+        optional: true
+      '@mikro-orm/migrations':
+        optional: true
+      '@mikro-orm/seeder':
+        optional: true
+    dependencies:
+      '@mikro-orm/core': 5.0.0-rc.0_95b141186260c6b5ca2690e851a29b53
+      '@mikro-orm/entity-generator': 5.0.0-rc.0_7af7fe0a688765badc2bc842c547f373
+      '@mikro-orm/knex': 5.0.0-rc.0_20544257a353cad0b3b2b3d7b7fb21fd
+      '@mikro-orm/migrations': 5.0.0-rc.0_ac17597040deb8dc864dce39e04cc12d
+      pg: 8.7.1
+    transitivePeerDependencies:
+      - '@vscode/sqlite3'
+      - better-sqlite3
+      - mssql
+      - mysql
+      - mysql2
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  /@mikro-orm/reflection/5.0.0-rc.0_@mikro-orm+core@5.0.0-rc.0:
+    resolution: {integrity: sha512-PBLOecdL/jQPsKZkbCPrPoiJ6GEZAtFVmM6jVOcdi9ulm0ay+RS7LvE9e6Nyw3eMJKXGA50vGewx+NudtgNVog==}
+    engines: {node: '>= 14.0.0'}
+    peerDependencies:
+      '@mikro-orm/core': ^5.0.0-rc.0
+    dependencies:
+      '@mikro-orm/core': 5.0.0-rc.0_95b141186260c6b5ca2690e851a29b53
+      globby: 11.0.4
+      ts-morph: 13.0.2
+
   /@n1ru4l/graphql-live-query/0.9.0_graphql@15.6.1:
     resolution: {integrity: sha512-BTpWy1e+FxN82RnLz4x1+JcEewVdfmUhV1C6/XYD5AjS7PQp9QFF7K8bCD6gzPTr2l+prvqOyVueQhFJxB1vfg==}
     peerDependencies:
@@ -5775,6 +6121,14 @@ packages:
     resolution: {integrity: sha512-JLo+Y592QzIE+q7Dl2pMUtt4q8SKYI5jDrZxrozEQxnGVOyYE+GWK9eLkwTaeN9DDctlaRAQ3TBmzZ1qdLE30A==}
     dev: true
 
+  /@rushstack/ts-command-line/4.10.6:
+    resolution: {integrity: sha512-Y3GkUag39sTIlukDg9mUp8MCHrrlJ27POrBNRQGc/uF+VVgX8M7zMzHch5zP6O1QVquWgD7Engdpn2piPYaS/g==}
+    dependencies:
+      '@types/argparse': 1.0.38
+      argparse: 1.0.10
+      colors: 1.2.5
+      string-argv: 0.3.1
+
   /@samverschueren/stream-to-observable/0.3.1_rxjs@6.6.7:
     resolution: {integrity: sha512-c/qwwcHyafOQuVQJj0IlBjf5yYgBI7YPJ77k4fOJYesb41jio65eaJODRUmfYKhTOFBrIZ66kgvGPlNbjuoRdQ==}
     engines: {node: '>=6'}
@@ -5959,6 +6313,14 @@ packages:
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
     engines: {node: '>=10.13.0'}
 
+  /@ts-morph/common/0.12.3:
+    resolution: {integrity: sha512-4tUmeLyXJnJWvTFOKtcNJ1yh0a3SsTLi2MUoyj8iUNznFRN1ZquaNe7Oukqrnki2FzZkm0J9adCNLDZxUzvj+w==}
+    dependencies:
+      fast-glob: 3.2.11
+      minimatch: 3.0.4
+      mkdirp: 1.0.4
+      path-browserify: 1.0.1
+
   /@tsconfig/node10/1.0.8:
     resolution: {integrity: sha512-6XFfSQmMgq0CFLY1MslA/CPUfhIL919M1rMsa5lP2P097N2Wd1sSX0tx1u4olM16fLNhtHZpRhedZJphNJqmZg==}
     dev: true
@@ -5980,6 +6342,9 @@ packages:
     dependencies:
       '@types/node': 16.11.7
     dev: false
+
+  /@types/argparse/1.0.38:
+    resolution: {integrity: sha512-ebDJ9b0e702Yr7pWgB0jzm+CX4Srzz8RcXtLJDJB+BSccqMa36uyH/zUsSYao5+BD1ytv3k3rPYCq4mAE1hsXA==}
 
   /@types/babel__core/7.1.18:
     resolution: {integrity: sha512-S7unDjm/C7z2A2R9NzfKCK1I+BAALDtxEmsJBwlB3EzNfb929ykjL++1CK9LO++EIp2fQrC8O+BwjKvz6UeDyQ==}
@@ -6174,7 +6539,6 @@ packages:
 
   /@types/json5/0.0.29:
     resolution: {integrity: sha1-7ihweulOEdK4J7y+UnC86n8+ce4=}
-    dev: true
 
   /@types/jsonwebtoken/8.5.5:
     resolution: {integrity: sha512-OGqtHQ7N5/Ap/TUwO6IgHDuLiAoTmHhGpNvgkCm/F4N6pKzx/RBSfr2OXZSwC6vkfnsEdb6+7DNZVtiXiwdwFw==}
@@ -6411,6 +6775,9 @@ packages:
   /@types/unist/2.0.6:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
     dev: false
+
+  /@types/verror/1.10.5:
+    resolution: {integrity: sha512-9UjMCHK5GPgQRoNbqdLIAvAy0EInuiqbW0PBMtVP6B5B2HQJlvoJHM+KodPZMEjOa5VkSc+5LH7xy+cUzQdmHw==}
 
   /@types/websocket/1.0.4:
     resolution: {integrity: sha512-qn1LkcFEKK8RPp459jkjzsfpbsx36BBt3oC3pITYtkoBw/aVX+EZFa5j3ThCRTNpLFvIMr5dSTD4RaMdilIOpA==}
@@ -8390,7 +8757,6 @@ packages:
       string-width: 4.2.3
       strip-ansi: 6.0.1
       wrap-ansi: 6.2.0
-    dev: true
 
   /cliui/7.0.4:
     resolution: {integrity: sha512-OcRE68cOsVMXp1Yvonl/fzkQOyjLSu/8bhPDfQt0e0/Eb283TKP20Fs2MqoPsr9SwA595rRCA+QMzYc9nBP+JQ==}
@@ -8416,6 +8782,10 @@ packages:
     resolution: {integrity: sha1-2jCcwmPfFZlMaIypAheco8fNfH4=}
     engines: {node: '>=0.8'}
     dev: true
+
+  /clone/2.1.2:
+    resolution: {integrity: sha1-G39Ln1kfHo+DZwQBYANFoCiHQ18=}
+    engines: {node: '>=0.8'}
 
   /clsx/1.1.1:
     resolution: {integrity: sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==}
@@ -8446,6 +8816,11 @@ packages:
       '@types/q': 1.5.5
       chalk: 2.4.2
       q: 1.5.1
+
+  /code-block-writer/11.0.0:
+    resolution: {integrity: sha512-GEqWvEWWsOvER+g9keO4ohFoD3ymwyCnqY3hoTr7GZipYFwEhMHJw+TtV0rfgRhNImM6QWZGO2XYjlJVyYT62w==}
+    dependencies:
+      tslib: 2.3.1
 
   /code-point-at/1.1.0:
     resolution: {integrity: sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=}
@@ -8490,7 +8865,10 @@ packages:
 
   /colorette/2.0.16:
     resolution: {integrity: sha512-hUewv7oMjCp+wkBv5Rm0v87eJhq4woh5rSR+42YSQJKecCqgIqNkZ6lAlQms/BwHPJA5NKMRlpxPRv0n8HQW6g==}
-    dev: true
+
+  /colors/1.2.5:
+    resolution: {integrity: sha512-erNRLao/Y3Fv54qUa0LBB+//Uf3YwMUmdJinN20yMXm9zdKKqH9wt7R9IIVZ+K7ShzfpLV/Zg8+VyrBJYB4lpg==}
+    engines: {node: '>=0.1.90'}
 
   /columnify/1.5.4:
     resolution: {integrity: sha1-Rzfd8ce2mop8NAVweC6UfuyOeLs=}
@@ -9720,6 +10098,10 @@ packages:
     resolution: {integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==}
     engines: {node: '>=10'}
 
+  /dotenv/14.2.0:
+    resolution: {integrity: sha512-05POuPJyPpO6jqzTNweQFfAyMSD4qa4lvsMOWyTRTdpHKy6nnnN+IYWaXF+lHivhBH/ufDKlR4IWCAN3oPnHuw==}
+    engines: {node: '>=12'}
+
   /dotenv/8.6.0:
     resolution: {integrity: sha512-IrPdXQsk2BbzvCBGBOTmmSH5SodmqZNt4ERAZDmW4CT+tL8VtvinqywuANaFu4bOMWki16nqf0e4oC0QIaDr/g==}
     engines: {node: '>=10'}
@@ -9772,7 +10154,6 @@ packages:
   /emittery/0.10.0:
     resolution: {integrity: sha512-AGvFfs+d0JKCJQ4o01ASQLGPmSCxgfU9RFXvzPvZdjKK8oscynksuJhWrSTSw7j7Ep/sZct5b5ZhYCi8S/t0HQ==}
     engines: {node: '>=12'}
-    dev: false
 
   /emittery/0.8.1:
     resolution: {integrity: sha512-uDfvUjVrfGJJhymx/kz6prltenw1u7WrCg1oa94zYY8xxVpLLUu045LAT0dhDZdXG58/EpPL/5kA180fQ/qudg==}
@@ -9925,6 +10306,10 @@ packages:
   /escape-string-regexp/4.0.0:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
+
+  /escaya/0.0.61:
+    resolution: {integrity: sha512-WLLmvdG72Z0pCq8XUBd03GEJlAiMceXFanjdQeEzeSiuV1ZgrJqbkU7ZEe/hu0OsBlg5wLlySEeOvfzcGoO8mg==}
+    engines: {node: '>=6.0.0'}
 
   /escodegen/2.0.0:
     resolution: {integrity: sha512-mmHKys/C8BFUGI+MAWNcSYoORYLMdPzjrknd2Vc+bUsjN5bXcr8EhrNB+UTqfL1y3I9c4fw2ihgtMPQLBRiQxw==}
@@ -10276,6 +10661,10 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /esm/3.2.25:
+    resolution: {integrity: sha512-U1suiZ2oDVWv4zPO56S0NcR5QriEahGtdN2OR6FiOG4WJvcjBVFB0qI4+eKoWFH483PKGuLuu6V8Z4T5g63UVA==}
+    engines: {node: '>=6'}
 
   /espree/9.3.0:
     resolution: {integrity: sha512-d/5nCsb0JcqsSEeQzFZ8DH1RmxPcglRWh24EFTlUEmCKoehXGdpsx0RkHDubqUI8LSAIKMQp4r9SzQ3n+sm4HQ==}
@@ -10647,7 +11036,6 @@ packages:
   /figlet/1.5.2:
     resolution: {integrity: sha512-WOn21V8AhyE1QqVfPIVxe3tupJacq1xGkPTB4iagT6o+P2cAgEOOwIxMftr4+ZCTI6d551ij9j61DFr0nsP2uQ==}
     engines: {node: '>= 0.4.0'}
-    dev: false
 
   /figures/1.7.0:
     resolution: {integrity: sha1-y+Hjr/zxzUS4DK3+0o3Hk6lwHS4=}
@@ -10997,6 +11385,12 @@ packages:
       universalify: 2.0.0
     dev: true
 
+  /fs-jetpack/4.3.1:
+    resolution: {integrity: sha512-dbeOK84F6BiQzk2yqqCVwCPWTxAvVGJ3fMQc6E2wuEohS28mR6yHngbrKuVCK1KHRx/ccByDylqu4H5PCP2urQ==}
+    dependencies:
+      minimatch: 3.0.4
+      rimraf: 2.7.1
+
   /fs-minipass/1.2.7:
     resolution: {integrity: sha512-GWSSJGFy4e9GUeCcbIkED+bgAoFyj7XF1mV8rma3QW4NIqX9Kyx79N/PF61H5udOV3aY1IaMLs6pGbH71nlCTA==}
     dependencies:
@@ -11126,6 +11520,9 @@ packages:
     resolution: {integrity: sha1-3BXKHGcjh8p2vTesCjlbogQqLCg=}
     engines: {node: '>=0.10.0'}
     dev: false
+
+  /getopts/2.3.0:
+    resolution: {integrity: sha512-5eDf9fuSXwxBL6q5HX+dhDj+dslFGWzU5thZ9kNKUkcPtaPdatmUFKwHFrLb/uf/WpA4BHET+AX3Scl56cAjpA==}
 
   /getpass/0.1.7:
     resolution: {integrity: sha1-Xv+OPmhNVprkyysSgmBOi6YhSfo=}
@@ -11258,6 +11655,17 @@ packages:
       merge2: 1.4.1
       slash: 3.0.0
     dev: false
+
+  /globby/11.0.4:
+    resolution: {integrity: sha512-9O4MVG9ioZJ08ffbcyVYyLOJLk5JQ688pJ4eMGLpdWLHq/Wr1D9BlriLQyL0E+jbkuePVZXYFj47QM/v093wHg==}
+    engines: {node: '>=10'}
+    dependencies:
+      array-union: 2.1.0
+      dir-glob: 3.0.1
+      fast-glob: 3.2.11
+      ignore: 5.2.0
+      merge2: 1.4.1
+      slash: 3.0.0
 
   /globby/11.1.0:
     resolution: {integrity: sha512-jhIXaOzy1sb8IyocaruWSn1TjmnBVs8Ayhcy83rmxNJ8q2uWKCAj3CnJY+KpGSXCueAPc0i05kVvVKtP1t9S3g==}
@@ -12114,6 +12522,10 @@ packages:
 
   /interpret/1.4.0:
     resolution: {integrity: sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==}
+    engines: {node: '>= 0.10'}
+
+  /interpret/2.2.0:
+    resolution: {integrity: sha512-Ju0Bz/cEia55xDwUWEa8+olFpCiQoypjnQySseKtmjNrnps3P+xfpUmGr90T7yjlVJmOtybRvPXhKMbHr+fWnw==}
     engines: {node: '>= 0.10'}
 
   /invariant/2.2.4:
@@ -13625,6 +14037,101 @@ packages:
     resolution: {integrity: sha512-pJiBpiXMbt7dkzXe8Ghj/u4FfXOOa98fPW+bihOJ4SjnoijweJrNThJfd3ifXpXhREjpoF2mZVH1GfS9LV3kHQ==}
     engines: {node: '>= 8'}
 
+  /knex/1.0.1:
+    resolution: {integrity: sha512-pusgMo74lEbUxmri+YfWV8x/LJacP/2KcemTCKH7WnXFYz5RoMi+8WM4OJ05b0glfF+aWB4nkFsxsXxJ8qioLQ==}
+    engines: {node: '>=12'}
+    hasBin: true
+    peerDependencies:
+      '@vscode/sqlite3': '*'
+      better-sqlite3: '*'
+      mysql: '*'
+      mysql2: '*'
+      pg: '*'
+      pg-native: '*'
+      sqlite3: '*'
+      tedious: '*'
+    peerDependenciesMeta:
+      '@vscode/sqlite3':
+        optional: true
+      better-sqlite3:
+        optional: true
+      mysql:
+        optional: true
+      mysql2:
+        optional: true
+      pg:
+        optional: true
+      pg-native:
+        optional: true
+      sqlite3:
+        optional: true
+      tedious:
+        optional: true
+    dependencies:
+      colorette: 2.0.16
+      commander: 8.3.0
+      debug: 4.3.3
+      escalade: 3.1.1
+      esm: 3.2.25
+      getopts: 2.3.0
+      interpret: 2.2.0
+      lodash: 4.17.21
+      pg-connection-string: 2.5.0
+      rechoir: 0.8.0
+      resolve-from: 5.0.0
+      tarn: 3.0.2
+      tildify: 2.0.0
+    transitivePeerDependencies:
+      - supports-color
+
+  /knex/1.0.1_pg@8.7.1:
+    resolution: {integrity: sha512-pusgMo74lEbUxmri+YfWV8x/LJacP/2KcemTCKH7WnXFYz5RoMi+8WM4OJ05b0glfF+aWB4nkFsxsXxJ8qioLQ==}
+    engines: {node: '>=12'}
+    hasBin: true
+    peerDependencies:
+      '@vscode/sqlite3': '*'
+      better-sqlite3: '*'
+      mysql: '*'
+      mysql2: '*'
+      pg: '*'
+      pg-native: '*'
+      sqlite3: '*'
+      tedious: '*'
+    peerDependenciesMeta:
+      '@vscode/sqlite3':
+        optional: true
+      better-sqlite3:
+        optional: true
+      mysql:
+        optional: true
+      mysql2:
+        optional: true
+      pg:
+        optional: true
+      pg-native:
+        optional: true
+      sqlite3:
+        optional: true
+      tedious:
+        optional: true
+    dependencies:
+      colorette: 2.0.16
+      commander: 8.3.0
+      debug: 4.3.3
+      escalade: 3.1.1
+      esm: 3.2.25
+      getopts: 2.3.0
+      interpret: 2.2.0
+      lodash: 4.17.21
+      pg: 8.7.1
+      pg-connection-string: 2.5.0
+      rechoir: 0.8.0
+      resolve-from: 5.0.0
+      tarn: 3.0.2
+      tildify: 2.0.0
+    transitivePeerDependencies:
+      - supports-color
+
   /language-subtag-registry/0.3.21:
     resolution: {integrity: sha512-L0IqwlIXjilBVVYKFT37X9Ih11Um5NEl9cbJIuU/SwP/zEEAbBPOnEeeuxVMf45ydWQRDQN3Nqc96OgbH1K+Pg==}
     dev: true
@@ -14391,6 +14898,10 @@ packages:
     dependencies:
       braces: 3.0.2
       picomatch: 2.3.1
+
+  /mikro-orm/5.0.0-rc.0:
+    resolution: {integrity: sha512-wi7Pg10ZpkNbaae0T6J0MAC8AXiI3S0GGRvDvVqLHTFRs2ku9Fba/IaWLnY4paOZE8v+O+YIdfMgZVcu39RmPQ==}
+    engines: {node: '>= 14.0.0'}
 
   /mime-db/1.33.0:
     resolution: {integrity: sha512-BHJ/EKruNIqJf/QahvxwQZXKygOQ256myeN/Ew+THcAa5q+PjyTTMMeNQC4DZw5AwfvelsUrA6B67NKMqXDbzQ==}
@@ -15560,7 +16071,6 @@ packages:
   /parent-require/1.0.0:
     resolution: {integrity: sha1-dGoWdjgIOoYLDu9nMssn7UbDKXc=}
     engines: {node: '>= 0.4.0'}
-    dev: false
 
   /parse-entities/2.0.0:
     resolution: {integrity: sha512-kkywGpCcRYhqQIchaWqZ875wzpS/bMKhz5HnN3p7wveJTkTtyAB/AlnS0f8DFSqYW1T82t6yEAkEcB+A1I3MbQ==}
@@ -15648,6 +16158,9 @@ packages:
     resolution: {integrity: sha1-s2PlXoAGym/iF4TS2yK9FdeRfxQ=}
     engines: {node: '>=0.10.0'}
     dev: false
+
+  /path-browserify/1.0.1:
+    resolution: {integrity: sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==}
 
   /path-case/3.0.4:
     resolution: {integrity: sha512-qO4qCFjXqVTrcbPt/hQfhTQ+VhFsqNKOPtytgNKkKxSoEp3XPUQ8ObFuePylOIok5gjn69ry8XiULxCwot3Wfg==}
@@ -17452,6 +17965,12 @@ packages:
     dependencies:
       resolve: 1.21.0
 
+  /rechoir/0.8.0:
+    resolution: {integrity: sha512-/vxpCXddiX8NGfGO/mTafwjq4aFa/71pvamip0++IQk3zG8cbCj0fifNPrjjF1XMXUne91jL9OoxmdykoEtifQ==}
+    engines: {node: '>= 10.13.0'}
+    dependencies:
+      resolve: 1.21.0
+
   /recursive-readdir/2.2.2:
     resolution: {integrity: sha512-nRCcW9Sj7NuZwa2XvH9co8NPeXUBhZP7CRKJtU+cS6PW9FpCIFoI5ib0NT1ZrbNuPoRy0ylyCaUL8Gih4LSyFg==}
     engines: {node: '>=0.10.0'}
@@ -17484,7 +18003,6 @@ packages:
 
   /reflect-metadata/0.1.13:
     resolution: {integrity: sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==}
-    dev: false
 
   /regenerate-unicode-properties/9.0.0:
     resolution: {integrity: sha512-3E12UeNSPfjrgwjkR81m5J7Aw/T55Tu7nUyZVQYCKEOs+2dkxEY+DpPtZzO4YruuiPb7NkYLVcyJC4+zCbk5pA==}
@@ -17825,7 +18343,6 @@ packages:
   /resolve-from/5.0.0:
     resolution: {integrity: sha512-qYg9KP24dD5qka9J47d0aVky0N+b4fTU89LN9iDnjB5waksiC49rvMB0PrUJQGoTmH50XPiqOvAjDfaijGxYZw==}
     engines: {node: '>=8'}
-    dev: true
 
   /resolve-pathname/3.0.0:
     resolution: {integrity: sha512-C7rARubxI8bXFNB/hqcp/4iUeIXJhJZvFPFPiSPRnhU5UPxzMFIl+2E6yY6c4k9giDJAhtV+enfA+G89N6Csng==}
@@ -18729,6 +19246,10 @@ packages:
   /sprintf-js/1.0.3:
     resolution: {integrity: sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=}
 
+  /sqlstring/2.3.2:
+    resolution: {integrity: sha512-vF4ZbYdKS8OnoJAWBmMxCQDkiEBkGQYU7UZPtL8flbDRSNkhaXvRJ279ZtI6M+zDaQovVU4tuRgzK5fVhvFAhg==}
+    engines: {node: '>= 0.6'}
+
   /sshpk/1.17.0:
     resolution: {integrity: sha512-/9HIEs1ZXGhSPE8X6Ccm7Nam1z8KcoCqPdI7ecm1N33EzAetWahvQWVqLZtaZQ+IDKX4IyA2o0gBzqIMkAagHQ==}
     engines: {node: '>=0.10.0'}
@@ -18814,7 +19335,6 @@ packages:
   /string-argv/0.3.1:
     resolution: {integrity: sha512-a1uQGz7IyVy9YwhqjZIZu1c8JO8dNIe20xBmSS6qu9kv++k3JGzCVmprbNN5Kn+BgzD5E7YYwg1CcjuJMRNsvg==}
     engines: {node: '>=0.6.19'}
-    dev: true
 
   /string-env-interpolation/1.0.1:
     resolution: {integrity: sha512-78lwMoCcn0nNu8LszbP1UA7g55OeE4v7rCeWnM5B453rnNr4aq+5it3FEYtZrSEiMvHZOZ9Jlqb0OD0M2VInqg==}
@@ -18974,7 +19494,6 @@ packages:
   /strip-bom/3.0.0:
     resolution: {integrity: sha1-IzTBjpx1n3vdVv3vfprj1YjmjtM=}
     engines: {node: '>=4'}
-    dev: true
 
   /strip-bom/4.0.0:
     resolution: {integrity: sha512-3xurFv5tEgii33Zi8Jtp55wEIILR9eh34FAW00PZf+JnSsTmV/ioewSgQl97JHvgjoRGwPShsWm+IdrxB35d0w==}
@@ -19239,6 +19758,10 @@ packages:
       yallist: 4.0.0
     dev: true
 
+  /tarn/3.0.2:
+    resolution: {integrity: sha512-51LAVKUSZSVfI05vjPESNc5vwqqZpbXCsU+/+wxlOrUjk2SnFTt97v9ZgQrD4YmxYW1Px6w2KjaDitCfkvgxMQ==}
+    engines: {node: '>=8.0.0'}
+
   /temp-dir/1.0.0:
     resolution: {integrity: sha1-CnwOom06Oa+n4OvqnB/AvE2qAR0=}
     engines: {node: '>=4'}
@@ -19423,6 +19946,10 @@ packages:
   /thunky/1.1.0:
     resolution: {integrity: sha512-eHY7nBftgThBqOyHGVN+l8gF0BucP09fMo0oO/Lb0w1OF80dJv+lDVpXG60WMQvkcxAkNybKsrEIE3ZtKGmPrA==}
 
+  /tildify/2.0.0:
+    resolution: {integrity: sha512-Cc+OraorugtXNfs50hU9KS369rFXCfgGLpfCfvlc+Ud5u6VWmUQsOAa9HbTvheQdYnrdJqqv1e5oIqXppMYnSw==}
+    engines: {node: '>=8'}
+
   /timsort/0.3.0:
     resolution: {integrity: sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q=}
 
@@ -19604,6 +20131,12 @@ packages:
     resolution: {integrity: sha512-DEQrfv6l7IvN2jlzc/VTdZJYsWUnQNCsueYjMkC/iXoEoi5fNan6MjeDqkvhfzbmHgdz9UxDUluX3V5HdjTydQ==}
     dev: true
 
+  /ts-morph/13.0.2:
+    resolution: {integrity: sha512-SjeeHaRf/mFsNeR3KTJnx39JyEOzT4e+DX28gQx5zjzEOuFs2eGrqeN2PLKs/+AibSxPmzV7RD8nJVKmFJqtLA==}
+    dependencies:
+      '@ts-morph/common': 0.12.3
+      code-block-writer: 11.0.0
+
   /ts-node/10.4.0_822df8cc64711c2db8d43ce90a8558a3:
     resolution: {integrity: sha512-g0FlPvvCXSIO1JDF6S232P5jPYqBkRL9qly81ZgAOSU7rwI0stphCgd2kLiCrU9DjQCrJMWEqcNSjQL02s6d8A==}
     hasBin: true
@@ -19686,7 +20219,6 @@ packages:
       json5: 1.0.1
       minimist: 1.2.5
       strip-bom: 3.0.0
-    dev: true
 
   /tslib/1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
@@ -19782,6 +20314,10 @@ packages:
     resolution: {integrity: sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==}
     engines: {node: '>=8'}
     dev: true
+
+  /type-fest/2.10.0:
+    resolution: {integrity: sha512-u2yreDMllFI3VCpWt0rKrGs/E2LO0YHBwiiOIj+ilQh9+ALMaa4lNBSdoDvuHN3cbKcYk9L1BXP49x9RT+o/SA==}
+    engines: {node: '>=12.20'}
 
   /type-is/1.6.18:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==}
@@ -20084,6 +20620,18 @@ packages:
   /umask/1.1.0:
     resolution: {integrity: sha1-8pzr8B31F5ErtY/5xOUP3o4zMg0=}
     dev: true
+
+  /umzug/3.0.0:
+    resolution: {integrity: sha512-uHeJsOJ7qtoIkZmtknpg+iSlI25m7glBA237pYp5fMsEKnRfRY+F4FP8eGx28g6b0VujkniC6Zlz09lbDFuBbw==}
+    engines: {node: '>=12'}
+    dependencies:
+      '@rushstack/ts-command-line': 4.10.6
+      '@types/verror': 1.10.5
+      emittery: 0.10.0
+      fs-jetpack: 4.3.1
+      glob: 7.2.0
+      type-fest: 2.10.0
+      verror: 1.10.0
 
   /unbox-primitive/1.0.1:
     resolution: {integrity: sha512-tZU/3NqK3dA5gpE1KtyiJUrEB0lxnGkMFHptJ7q6ewdZ8s12QrODwNbhIJStmJkd1QDXa1NRA8aF2A1zk/Ypyw==}
@@ -21143,7 +21691,6 @@ packages:
       ansi-styles: 4.3.0
       string-width: 4.2.3
       strip-ansi: 6.0.1
-    dev: true
 
   /wrap-ansi/7.0.0:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}
@@ -21313,7 +21860,6 @@ packages:
       chalk: 1.1.3
       figlet: 1.5.2
       parent-require: 1.0.0
-    dev: false
 
   /yargs-parser/13.1.2:
     resolution: {integrity: sha512-3lbsNRf/j+A4QuSZfDRA7HRSfWrzO0YjqTJd5kjAq37Zep1CEgaYmrH9Q3GwPiB9cHyd1Y1UwggGhJGoxipbzg==}
@@ -21328,7 +21874,6 @@ packages:
     dependencies:
       camelcase: 5.3.1
       decamelize: 1.2.0
-    dev: true
 
   /yargs-parser/20.2.4:
     resolution: {integrity: sha512-WOkpgNhPTlE73h4VFAFsOnomJVaovO8VqLDzy5saChRBFQFBoMYirowyW+Q9HB4HFF4Z7VZTiG3iSzJJA29yRA==}
@@ -21373,7 +21918,6 @@ packages:
       which-module: 2.0.0
       y18n: 4.0.3
       yargs-parser: 18.1.3
-    dev: true
 
   /yargs/16.2.0:
     resolution: {integrity: sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw==}
