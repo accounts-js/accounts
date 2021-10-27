@@ -2,7 +2,7 @@ import { IUser } from '../entity/User';
 import { Email } from '../entity/Email';
 import { Service } from '../entity/Service';
 import { Session } from '../entity/Session';
-import { EntityManager, Constructor } from 'mikro-orm';
+import { EntityManager, Constructor } from '@mikro-orm/core';
 
 export interface AccountsMikroOrmOptions<
   CustomUser extends IUser<any, any, any>,

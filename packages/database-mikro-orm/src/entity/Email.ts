@@ -1,4 +1,4 @@
-import { IdentifiedReference, Reference, EntitySchema } from 'mikro-orm';
+import { IdentifiedReference, Reference, EntitySchema } from '@mikro-orm/core';
 import { IUser, UserCtor } from './User';
 
 export class Email<CustomUser extends IUser<any, any, any>> {
