@@ -1,12 +1,21 @@
 import 'reflect-metadata';
-import { ApolloServer, makeExecutableSchema, gql } from 'apollo-server';
-import { mergeTypeDefs, mergeResolvers } from '@graphql-toolkit/schema-merging';
-import { AccountsModule } from '@accounts/graphql-api';
+import { ApolloServer, gql } from 'apollo-server';
+import {
+  authDirective,
+  context,
+  createAccountsCoreModule,
+  createAccountsPasswordModule,
+} from '@accounts/graphql-api';
 import { AccountsPassword } from '@accounts/password';
 import { AccountsServer, ServerHooks } from '@accounts/server';
 import { AccountsMikroOrm } from '@accounts/mikro-orm';
-import { MikroORM } from 'mikro-orm';
-import config, { User, Email } from './mikro-orm-config';
+import { MikroORM } from '@mikro-orm/core';
+import config from './mikro-orm-config';
+import { User } from './entities/user';
+import { Email } from './entities/email';
+import { createApplication } from 'graphql-modules';
+import { makeExecutableSchema } from '@graphql-tools/schema';
+import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
 
 export const createAccounts = async () => {
   const orm = await MikroORM.init(config);
@@ -42,11 +51,6 @@ export const createAccounts = async () => {
     // If you throw an error here it will be returned to the client.
   });
 
-  // Creates resolvers, type definitions, and schema directives used by accounts-js
-  const accountsGraphQL = AccountsModule.forRoot({
-    accountsServer,
-  });
-
   const typeDefs = gql`
     type PrivateType @auth {
       field: String
@@ -54,15 +58,11 @@ export const createAccounts = async () => {
 
     # Our custom fields to add to the user
     extend input CreateUserInput {
-      profile: CreateUserProfileInput!
-    }
-
-    extend type User {
       firstName: String!
       lastName: String!
     }
 
-    input CreateUserProfileInput {
+    extend type User {
       firstName: String!
       lastName: String!
     }
@@ -98,22 +98,39 @@ export const createAccounts = async () => {
     },
   };
 
-  const schema = makeExecutableSchema({
-    typeDefs: mergeTypeDefs([typeDefs, accountsGraphQL.typeDefs]),
-    resolvers: mergeResolvers([accountsGraphQL.resolvers, resolvers]),
-    schemaDirectives: {
-      ...accountsGraphQL.schemaDirectives,
-    },
-  });
+  const { authDirectiveTypeDefs, authDirectiveTransformer } = authDirective('auth');
+
+  const schema = createApplication({
+    modules: [
+      createAccountsCoreModule({ accountsServer }),
+      createAccountsPasswordModule({ accountsPassword }),
+    ],
+    schemaBuilder: ({ typeDefs: accountsTypeDefs, resolvers: accountsResolvers }) =>
+      authDirectiveTransformer(
+        makeExecutableSchema({
+          typeDefs: mergeTypeDefs([typeDefs, authDirectiveTypeDefs, ...accountsTypeDefs]),
+          resolvers: mergeResolvers([resolvers, ...accountsResolvers]),
+        })
+      ),
+  }).createSchemaForApollo();
 
   // Create the Apollo Server that takes a schema and configures internal stuff
   const server = new ApolloServer({
     schema,
-    context: accountsGraphQL.context,
+    context: ({ req }) => {
+      return context({ req }, { accountsServer });
+    },
   });
 
-  server.listen(4000).then(({ url }) => {
+  server.listen(4000).then(async ({ url }) => {
     console.log(`🚀  Server ready at ${url}`);
+
+    try {
+      const generator = orm.getSchemaGenerator();
+      await generator.createSchema({ wrap: true });
+    } catch {
+      // Schema has already been created
+    }
   });
 };
 createAccounts();

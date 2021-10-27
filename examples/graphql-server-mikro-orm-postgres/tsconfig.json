@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
     "outDir": "./lib",
-    "target": "es5",
-    "lib": ["es2015", "esnext.asynciterable"],
+    "target": "es2021",
+    "lib": ["es2021", "esnext.asynciterable"],
+    "module": "commonjs",
+    "moduleResolution": "node",
     "sourceMap": true,
     "importHelpers": true,
     "esModuleInterop": true,
