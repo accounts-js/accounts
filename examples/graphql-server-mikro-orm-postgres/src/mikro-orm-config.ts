@@ -1,80 +1,13 @@
 import 'reflect-metadata';
 import {
-  UserCtorArgs as AccountsUserCtorArgs,
-  EmailCtorArgs as AccountsEmailCtorArgs,
   getEmailSchema,
   getServiceSchema,
   getSessionSchema,
-  getEmailCtor,
-  Session,
-  Service,
-  ServiceCtorArgs,
+  getUserSchema,
 } from '@accounts/mikro-orm';
-import { ReflectMetadataProvider, Entity, Property } from 'mikro-orm';
-import { UserCtor, getUserCtor, getUserSchema } from '@accounts/mikro-orm/lib/entity/User';
-
-const AccountsEmail = getEmailCtor<User>({ abstract: true });
-
-type EmailCtorArgs = AccountsEmailCtorArgs<User> & {
-  fullName?: string;
-};
-
-@Entity()
-export class Email extends AccountsEmail {
-  @Property({ nullable: true })
-  fullName?: string;
-
-  constructor({ fullName, ...otherProps }: EmailCtorArgs) {
-    super(otherProps);
-    if (fullName) {
-      this.fullName = fullName;
-    }
-  }
-}
-
-type UserCtorArgs = AccountsUserCtorArgs & {
-  profile: {
-    firstName: string;
-    lastName: string;
-  };
-};
-
-const AccountsUser: UserCtor<Email, Session<User>, Service<User>, UserCtorArgs> = getUserCtor<
-  Email,
-  Session<User>,
-  Service<User>,
-  UserCtorArgs,
-  EmailCtorArgs,
-  ServiceCtorArgs<User>
->({
-  abstract: true,
-  EmailEntity: Email,
-  getCustomEmailArgs: ({ profile: { firstName, lastName } }) => ({
-    fullName: `${firstName} ${lastName}`,
-  }),
-});
-
-@Entity()
-export class User extends AccountsUser {
-  @Property({ nullable: true })
-  firstName?: string;
-
-  @Property({ nullable: true })
-  lastName?: string;
-
-  constructor(args: UserCtorArgs) {
-    super(args);
-    const {
-      profile: { firstName, lastName },
-    } = args;
-    if (firstName) {
-      this.firstName = firstName;
-    }
-    if (lastName) {
-      this.lastName = lastName;
-    }
-  }
-}
+import { ReflectMetadataProvider } from '@mikro-orm/core';
+import { User, AccountsUser } from './entities/user';
+import { Email } from './entities/email';
 
 export default {
   metadataProvider: ReflectMetadataProvider,
