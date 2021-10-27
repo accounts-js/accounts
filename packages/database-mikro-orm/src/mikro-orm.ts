@@ -4,7 +4,7 @@ import { Email } from './entity/Email';
 import { Service } from './entity/Service';
 import { Session } from './entity/Session';
 import { AccountsMikroOrmOptions } from './types';
-import { EntityRepository, EntityManager, Constructor } from 'mikro-orm';
+import { EntityRepository, EntityManager, Constructor } from '@mikro-orm/core';
 import { User as AccountsUser } from '@accounts/types/lib/types/user';
 import { Session as ISession } from '@accounts/types/lib/types/session/session';
 
@@ -22,7 +22,7 @@ const toSession = async (session: Session<any> | null): Promise<ISession | null>
   session && {
     ...session,
     id: String(session.id),
-    userId: String(session.user.id),
+    userId: String((session.user as any).id), //FIXME
     createdAt: session.createdAt.toDateString(),
     updatedAt: session.updatedAt.toDateString(),
   };
@@ -32,7 +32,8 @@ export class AccountsMikroOrm<
   CustomEmail extends Email<any>,
   CustomSession extends Session<any>,
   CustomService extends Service<any>
-> implements DatabaseInterface {
+> implements DatabaseInterface
+{
   private em: EntityManager;
   private UserEntity: Constructor<CustomUser | IUser<any, any, any>>;
   private EmailEntity: Constructor<CustomEmail | Email<any>>;
@@ -145,7 +146,7 @@ export class AccountsMikroOrm<
       })) ??
       new this.ServiceEntity({
         name: serviceName,
-        user: this.em.getReference(this.UserEntity, Number(userId), true),
+        user: this.em.getReference(this.UserEntity, Number(userId), { wrapped: true }),
       });
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -212,7 +213,7 @@ export class AccountsMikroOrm<
   public async addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
     return this.em.persistAndFlush(
       new this.EmailEntity({
-        user: this.em.getReference(this.UserEntity, Number(userId), true),
+        user: this.em.getReference(this.UserEntity, Number(userId), { wrapped: true }),
         address: newEmail,
         verified,
       })
@@ -269,6 +270,35 @@ export class AccountsMikroOrm<
     return toSession(await this.sessionRepository.findOne({ token }));
   }
 
+  public async findUserByLoginToken(token: string): Promise<AccountsUser | null> {
+    const service = await this.serviceRepository.findOne({
+      name: 'magicLink.loginTokens',
+      token,
+    });
+
+    if (service) {
+      return this.findUserById((service.user as any).id); //FIXME
+    }
+
+    return null;
+  }
+
+  public async addLoginToken(userId: string, email: string, token: string) {
+    await this.setService(
+      userId,
+      'magicLink.loginTokens',
+      {
+        address: email.toLocaleLowerCase(),
+        when: new Date().toJSON(),
+      },
+      token
+    );
+  }
+
+  public async removeAllLoginTokens(userId: string) {
+    await this.unsetService(userId, 'magicLink.loginTokens');
+  }
+
   public async createSession(
     userId: string,
     token: string,
@@ -276,7 +306,7 @@ export class AccountsMikroOrm<
     extra?: object
   ): Promise<string> {
     const session = new this.SessionEntity({
-      user: this.em.getReference(this.UserEntity, Number(userId), true),
+      user: this.em.getReference(this.UserEntity, Number(userId), { wrapped: true }),
       token,
       userAgent: connection.userAgent,
       ip: connection.ip,
@@ -302,7 +332,7 @@ export class AccountsMikroOrm<
 
   public async invalidateAllSessions(userId: string, excludedSessionIds?: string[]): Promise<void> {
     const sessions = await this.sessionRepository.find({
-      user: this.em.getReference(this.UserEntity, Number(userId), true),
+      user: this.em.getReference(this.UserEntity, Number(userId), { wrapped: true }),
       ...(excludedSessionIds?.length && {
         id: { $nin: excludedSessionIds.map((id) => Number(id)) },
       }),

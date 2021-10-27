@@ -1,4 +1,4 @@
-import { Collection, EntitySchema } from 'mikro-orm';
+import { Collection, EntitySchema } from '@mikro-orm/core';
 import { Service, ServiceCtor, ServiceCtorArgs } from './Service';
 import { Email, EmailCtor, EmailCtorArgs } from './Email';
 import { Session, SessionCtor } from './Session';
