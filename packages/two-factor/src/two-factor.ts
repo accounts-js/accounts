@@ -1,4 +1,4 @@
-import { GeneratedSecret, generateSecret, totp } from 'speakeasy';
+import { GeneratedSecret, generateSecret, totp } from '@levminer/speakeasy';
 import { User, DatabaseInterface } from '@accounts/types';
 import { errors } from './errors';
 import { AccountsTwoFactorOptions } from './types';
