@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@types/jest": "27.0.2",
-    "@types/node": "16.11.4",
+    "@types/node": "16.11.7",
     "@types/request-promise": "4.1.48",
     "jest": "27.3.1",
     "rimraf": "3.0.2",

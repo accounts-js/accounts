@@ -41,7 +41,7 @@
     "@accounts/database-tests": "^0.32.2",
     "@types/ioredis": "4.27.8",
     "@types/jest": "27.0.2",
-    "@types/node": "16.11.4",
+    "@types/node": "16.11.7",
     "@types/shortid": "0.0.29",
     "jest": "27.3.1",
     "rimraf": "3.0.2",

@@ -19,15 +19,10 @@
     "reset": "pnpm run clean; pnpm run install; pnpm run compile",
     "prepare": "husky install"
   },
-  "workspaces": {
-    "packages": [
-      "packages/*",
-      "examples/*",
-      "website"
-    ],
-    "nohoist": [
-      "**/html-minifier-terser"
-    ]
+  "pnpm": {
+    "overrides": {
+      "graphql-modules@1.4.4>@graphql-tools/wrap": "^8.3.0"
+    }
   },
   "lint-staged": {
     "*.{json,md,js,ts,jsx,tsx,yml}": [
@@ -57,12 +52,12 @@
   "license": "MIT",
   "devDependencies": {
     "@changesets/changelog-github": "0.4.1",
-    "@changesets/cli": "2.17.0",
+    "@changesets/cli": "2.18.0",
     "@typescript-eslint/eslint-plugin": "5.1.0",
     "@typescript-eslint/parser": "5.1.0",
-    "eslint": "8.1.0",
+    "eslint": "8.2.0",
     "eslint-config-prettier": "8.3.0",
-    "eslint-plugin-jest": "25.2.2",
+    "eslint-plugin-jest": "25.2.4",
     "eslint-plugin-prettier": "4.0.0",
     "husky": "7.0.4",
     "lerna": "3.22.1",

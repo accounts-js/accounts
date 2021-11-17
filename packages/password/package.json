@@ -32,7 +32,7 @@
     "@types/bcryptjs": "2.4.2",
     "@types/jest": "27.0.2",
     "@types/lodash.set": "4.3.6",
-    "@types/node": "16.11.4",
+    "@types/node": "16.11.7",
     "jest": "27.3.1",
     "lodash.set": "4.3.2",
     "rimraf": "3.0.2",

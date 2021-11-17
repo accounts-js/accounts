@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@accounts/boost": "^0.32.2",
-    "@apollo/client": "3.4.16",
+    "@apollo/client": "3.4.17",
     "@graphql-tools/links": "7.1.0",
     "@graphql-tools/merge": "6.2.5",
     "@graphql-tools/schema": "7.0.0",
