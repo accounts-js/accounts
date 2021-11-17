@@ -19,6 +19,13 @@
     "reset": "pnpm run clean; pnpm run install; pnpm run compile",
     "prepare": "husky install"
   },
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "examples/*",
+      "website"
+    ]
+  },
   "pnpm": {
     "overrides": {
       "graphql-modules@1.4.4>@graphql-tools/wrap": "^8.3.0"
