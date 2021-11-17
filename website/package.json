@@ -15,15 +15,16 @@
     "generate-api-docs": "rm -rf docs/api && ts-node scripts/generate-api-docs.ts"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-beta.7",
-    "@docusaurus/plugin-content-docs": "2.0.0-beta.7",
-    "@docusaurus/preset-classic": "2.0.0-beta.7",
+    "@docusaurus/core": "2.0.0-beta.8",
+    "@docusaurus/plugin-content-docs": "2.0.0-beta.8",
+    "@docusaurus/preset-classic": "2.0.0-beta.8",
     "@mdx-js/react": "1.6.22",
     "clsx": "1.1.1",
     "docusaurus-plugin-fathom": "1.1.0",
     "prism-react-renderer": "1.2.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2"  },
+    "react-dom": "17.0.2"
+  },
   "browserslist": {
     "production": [
       ">0.5%",
@@ -37,7 +38,7 @@
     ]
   },
   "devDependencies": {
-    "ts-node": "10.3.0",
+    "ts-node": "10.4.0",
     "typedoc": "0.17.6",
     "typedoc-plugin-markdown": "2.3.1"
   }
