@@ -63,7 +63,7 @@
     "@types/jest": "27.0.2",
     "@types/request-ip": "0.0.37",
     "graphql": "14.6.0",
-    "graphql-tag": "2.11.0",
+    "graphql-tag": "2.12.6",
     "jest": "27.3.1",
     "rimraf": "3.0.2",
     "ts-jest": "27.0.7",
