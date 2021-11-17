@@ -28,7 +28,8 @@
   },
   "pnpm": {
     "overrides": {
-      "graphql-modules@1.4.4>@graphql-tools/wrap": "^8.3.0"
+      "graphql-modules@1.4.4>@graphql-tools/wrap": "^8.3.0",
+      "@types/eslint": "7.28.2"
     }
   },
   "lint-staged": {
