@@ -24,14 +24,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/js-accounts/graphql.git"
+    "url": "https://github.com/js-accounts/accounts"
   },
   "author": "David Yahalomi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/js-accounts/graphql-api/issues"
+    "url": "https://github.com/js-accounts/accounts/issues"
   },
-  "homepage": "https://github.com/js-accounts/graphql-api",
+  "homepage": "https://github.com/js-accounts/accounts",
   "peerDependencies": {
     "@accounts/magic-link": "^0.1.0",
     "@accounts/password": "^0.32.0",
