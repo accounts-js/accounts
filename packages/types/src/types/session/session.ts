@@ -7,4 +7,5 @@ export interface Session {
   ip?: string | null;
   createdAt: string;
   updatedAt: string;
+  extraData?: { impersonatorUserId?: string };
 }
