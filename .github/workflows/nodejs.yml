@@ -68,12 +68,6 @@ jobs:
         env:
           REACT_APP_API_URL: http://localhost:3000
 
-      - name: Test documentation
-        run: |
-          cd website
-          pnpm run generate-api-docs
-          pnpm run build
-
   test-documentation:
     runs-on: ubuntu-20.04
 
