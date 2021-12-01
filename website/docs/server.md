@@ -144,7 +144,7 @@ Logout a user and invalidate their session with the session access token.
 await accountsServer.logout(accessToken);
 ```
 
-#### Check if session is impersonated
+### Check if session is impersonated
 
 On the server you can check, if a request is done by an impersonated user by inspecting the session for the `extraData` property.
 There you may have `impersonatorUserId`. This is the `id` of the user who impersonates.
