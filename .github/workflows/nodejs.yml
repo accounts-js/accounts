@@ -90,9 +90,6 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Compile packages
-        run: pnpm run compile
-
       - name: Test documentation
         run: |
           cd website
