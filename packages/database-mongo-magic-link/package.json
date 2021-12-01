@@ -35,15 +35,15 @@
   },
   "dependencies": {
     "@accounts/types": "^0.33.1",
-    "tslib": "2.3.0"
+    "tslib": "2.3.1"
   },
   "devDependencies": {
     "@accounts/mongo-password": "^0.32.2",
-    "@types/jest": "26.0.24",
+    "@types/jest": "27.0.2",
     "@types/mongodb": "3.6.20",
-    "@types/node": "16.4.13",
-    "jest": "27.0.6",
+    "@types/node": "16.11.7",
+    "jest": "27.3.1",
     "rimraf": "3.0.2",
-    "ts-jest": "27.0.4"
+    "ts-jest": "27.0.7"
   }
 }

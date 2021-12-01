@@ -1,4 +1,4 @@
-import * as speakeasy from 'speakeasy';
+import { totp } from '@levminer/speakeasy';
 import { TwoFactor } from '../src/two-factor';
 
 const dbMock: any = {
@@ -49,7 +49,7 @@ describe('TwoFactor', () => {
     });
 
     it('should authenticate user with 2fa', async () => {
-      const spy = jest.spyOn(speakeasy.totp, 'verify').mockReturnValue(true);
+      const spy = jest.spyOn(totp, 'verify').mockReturnValue(true);
       await accountsTwoFactor.authenticate(mockedUserWithTwoFactor, 'validCode');
       expect(spy).toHaveBeenCalled();
     });
@@ -96,7 +96,7 @@ describe('TwoFactor', () => {
     });
 
     it('should set two-factor service', async () => {
-      const spy = jest.spyOn(speakeasy.totp, 'verify').mockReturnValue(true);
+      const spy = jest.spyOn(totp, 'verify').mockReturnValue(true);
       await accountsTwoFactor.set('userId', 'secret' as any, 'validCode');
       expect(spy).toHaveBeenCalled();
       expect(dbMock.setService.mock.calls).toMatchSnapshot();
@@ -132,7 +132,7 @@ describe('TwoFactor', () => {
 
     it('should unset two-factor service', async () => {
       dbMock.findUserById.mockImplementation(() => Promise.resolve(mockedUserWithTwoFactor));
-      const spy = jest.spyOn(speakeasy.totp, 'verify').mockReturnValue(true);
+      const spy = jest.spyOn(totp, 'verify').mockReturnValue(true);
       await accountsTwoFactor.unset('userId', 'validCode');
       expect(spy).toHaveBeenCalled();
       expect(dbMock.unsetService.mock.calls).toMatchSnapshot();

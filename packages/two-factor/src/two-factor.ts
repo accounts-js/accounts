@@ -1,4 +1,4 @@
-import * as speakeasy from 'speakeasy';
+import { GeneratedSecret, generateSecret, totp } from '@levminer/speakeasy';
 import { User, DatabaseInterface } from '@accounts/types';
 import { errors } from './errors';
 import { AccountsTwoFactorOptions } from './types';
@@ -40,7 +40,7 @@ export class TwoFactor {
       throw new Error(this.options.errors.userTwoFactorNotSet);
     }
     if (
-      !speakeasy.totp.verify({
+      !totp.verify({
         secret: twoFactorService.secret.base32,
         encoding: 'base32',
         token: code,
@@ -54,8 +54,8 @@ export class TwoFactor {
   /**
    * Generate a new two factor secret
    */
-  public getNewAuthSecret(): speakeasy.Key {
-    return speakeasy.generateSecret({
+  public getNewAuthSecret(): GeneratedSecret {
+    return generateSecret({
       length: this.options.secretLength,
       name: this.options.appName,
     });
@@ -66,7 +66,7 @@ export class TwoFactor {
    * Add the code to the user profile
    * Throw if user already have 2fa enabled
    */
-  public async set(userId: string, secret: speakeasy.Key, code: string): Promise<void> {
+  public async set(userId: string, secret: GeneratedSecret, code: string): Promise<void> {
     if (!code) {
       throw new Error(this.options.errors.codeRequired);
     }
@@ -82,7 +82,7 @@ export class TwoFactor {
     }
 
     if (
-      speakeasy.totp.verify({
+      totp.verify({
         secret: secret.base32,
         encoding: 'base32',
         token: code,
@@ -116,7 +116,7 @@ export class TwoFactor {
       throw new Error(this.options.errors.userTwoFactorNotSet);
     }
     if (
-      speakeasy.totp.verify({
+      totp.verify({
         secret: twoFactorService.secret.base32,
         encoding: 'base32',
         token: code,

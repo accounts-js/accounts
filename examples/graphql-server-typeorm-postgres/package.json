@@ -19,17 +19,17 @@
     "@graphql-modules/core": "0.7.17",
     "@graphql-tools/merge": "6.2.5",
     "apollo-server": "2.14.4",
-    "dotenv": "^8.2.0",
+    "dotenv": "^10.0.0",
     "graphql": "14.6.0",
     "pg": "8.1.0",
-    "tslib": "2.3.0",
-    "typeorm": "0.2.36"
+    "tslib": "2.3.1",
+    "typeorm": "0.2.38"
   },
   "devDependencies": {
     "@accounts/types": "^0.33.1",
-    "@types/node": "16.4.13",
-    "nodemon": "2.0.12",
-    "ts-node": "10.1.0",
+    "@types/node": "16.11.7",
+    "nodemon": "2.0.14",
+    "ts-node": "10.4.0",
     "typescript": "4.4.4"
   }
 }

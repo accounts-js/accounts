@@ -62,8 +62,8 @@ export class RedisSessions implements DatabaseInterfaceSessions {
   public async updateSession(sessionId: string, connection: ConnectionInformations): Promise<void> {
     if (await this.db.exists(`${this.options.sessionCollectionName}:${sessionId}`)) {
       await this.db.hmset(`${this.options.sessionCollectionName}:${sessionId}`, {
-        userAgent: connection.userAgent,
-        ip: connection.ip,
+        userAgent: connection.userAgent ?? undefined,
+        ip: connection.ip ?? undefined,
         [this.options.timestamps.updatedAt]: this.options.dateProvider(),
       });
     }
@@ -72,7 +72,7 @@ export class RedisSessions implements DatabaseInterfaceSessions {
   public async invalidateSession(sessionId: string): Promise<void> {
     if (await this.db.exists(`${this.options.sessionCollectionName}:${sessionId}`)) {
       await this.db.hmset(`${this.options.sessionCollectionName}:${sessionId}`, {
-        valid: false,
+        valid: 'false',
         [this.options.timestamps.updatedAt]: this.options.dateProvider(),
       });
     }

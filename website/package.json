@@ -14,15 +14,16 @@
     "write-heading-ids": "docusaurus write-heading-ids"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-beta.7",
-    "@docusaurus/plugin-content-docs": "2.0.0-beta.7",
-    "@docusaurus/preset-classic": "2.0.0-beta.7",
+    "@docusaurus/core": "2.0.0-beta.8",
+    "@docusaurus/plugin-content-docs": "2.0.0-beta.8",
+    "@docusaurus/preset-classic": "2.0.0-beta.8",
     "@mdx-js/react": "1.6.22",
     "clsx": "1.1.1",
     "docusaurus-plugin-fathom": "1.1.0",
     "prism-react-renderer": "1.2.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2"  },
+    "react-dom": "17.0.2"
+  },
   "browserslist": {
     "production": [
       ">0.5%",
@@ -36,9 +37,9 @@
     ]
   },
   "devDependencies": {
-    "docusaurus-plugin-typedoc": "0.16.3",
-    "ts-node": "10.3.0",
-    "typedoc": "0.22.6",
-    "typedoc-plugin-markdown": "3.11.3"
+    "docusaurus-plugin-typedoc": "0.16.5",
+    "ts-node": "10.4.0",
+    "typedoc": "0.22.10",
+    "typedoc-plugin-markdown": "3.11.7"
   }
 }
