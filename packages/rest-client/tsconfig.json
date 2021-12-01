@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "./lib",
     "importHelpers": true,
-    "target": "es5"
+    "target": "es5",
+    "lib": ["es2019", "dom"]
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
