@@ -1,10 +1,10 @@
 {
   "extends": "../../tsconfig",
   "compilerOptions": {
-    "rootDir": "./src",
     "outDir": "./lib",
     "importHelpers": true,
     "target": "es5"
   },
-  "exclude": ["node_modules", "__tests__", "lib"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }
