@@ -41,10 +41,60 @@ jobs:
       - name: Upload coverage
         uses: codecov/codecov-action@v1
 
+  test-examples:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.22.2
+
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Compile packages
+        run: pnpm run compile
+
       - name: Test examples
         run: pnpm run test:examples
         env:
           REACT_APP_API_URL: http://localhost:3000
+
+      - name: Test documentation
+        run: |
+          cd website
+          pnpm run generate-api-docs
+          pnpm run build
+
+  test-documentation:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.22.2
+
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Compile packages
+        run: pnpm run compile
 
       - name: Test documentation
         run: |
