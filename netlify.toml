@@ -1,7 +1,8 @@
 [build]
   base    = "."
   publish = "website/build"
-  command = "pnpm run compile && cd website && pnpm run generate-api-docs && pnpm run build"
+  command = "npx pnpm install --store=node_modules/.pnpm-store && cd website && pnpm run generate-api-docs && pnpm run build"
 
 [build.environment]
   NODE_VERSION = "14"
+  NPM_FLAGS = "--version"

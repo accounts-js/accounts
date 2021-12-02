@@ -7,7 +7,8 @@ on:
     branches: [master]
 
 jobs:
-  build:
+  test:
+    name: Test packages
     runs-on: ubuntu-20.04
 
     steps:
@@ -23,9 +24,6 @@ jobs:
           node-version: 14.x
           cache: 'pnpm'
 
-      - name: Docker compose
-        run: docker-compose up -d
-
       - name: Install Dependencies
         run: pnpm install
 
@@ -35,16 +33,62 @@ jobs:
       - name: Compile packages
         run: pnpm run compile
 
+      - name: Docker compose
+        run: docker-compose up -d
+
       - name: Run tests
         run: pnpm run coverage
 
       - name: Upload coverage
         uses: codecov/codecov-action@v1
 
+  test-examples:
+    name: Test examples
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.22.2
+
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Compile packages
+        run: pnpm run compile
+
       - name: Test examples
         run: pnpm run test:examples
         env:
           REACT_APP_API_URL: http://localhost:3000
+
+  test-documentation:
+    name: Test documentation
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.22.2
+
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
 
       - name: Test documentation
         run: |
