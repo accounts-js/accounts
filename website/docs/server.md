@@ -37,27 +37,6 @@ const accountsServer = new AccountsServer(
 );
 ```
 
-### Authorize to impersonate
-
-If you want to restrict impersonation to specific users, you have to set up the `impersonationAuthorize` property of `AccountsServer`.
-
-```javascript
-new AccountsServer(
-  {
-    ...
-    impersonationAuthorize: async (user, impersonateToUser) {
-      // Put your authorization logic in here
-      // E.g. your user has a role property and only admins should be allowed to impersonate:
-      if(user.role === 'admin')
-        return true;
-
-      return false;
-    },
-  },
-  ...
-);
-```
-
 ## Use cases
 
 The `@accounts/server` module exposes a set of methods that can be used directly in your server code.
@@ -142,6 +121,27 @@ Logout a user and invalidate their session with the session access token.
 
 ```javascript
 await accountsServer.logout(accessToken);
+```
+
+### Authorize to impersonate
+
+If you want to restrict impersonation to specific users, you have to set up the `impersonationAuthorize` property of `AccountsServer`.
+
+```javascript
+new AccountsServer(
+  {
+    ...
+    impersonationAuthorize: async (user, impersonateToUser) {
+      // Put your authorization logic in here
+      // E.g. your user has a role property and only admins should be allowed to impersonate:
+      if(user.role === 'admin')
+        return true;
+
+      return false;
+    },
+  },
+  ...
+);
 ```
 
 ### Check if session is impersonated
