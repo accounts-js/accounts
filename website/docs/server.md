@@ -123,6 +123,52 @@ Logout a user and invalidate their session with the session access token.
 await accountsServer.logout(accessToken);
 ```
 
+### Authorize to impersonate
+
+If you want to restrict impersonation to specific users, you have to set up the `impersonationAuthorize` property of `AccountsServer`.
+
+```javascript
+new AccountsServer(
+  {
+    ...
+    impersonationAuthorize: async (user, impersonateToUser) {
+      // Put your authorization logic in here
+      // E.g. your user has a role property and only admins should be allowed to impersonate:
+      if(user.role === 'admin')
+        return true;
+
+      return false;
+    },
+  },
+  ...
+);
+```
+
+### Check if session is impersonated
+
+On the server you can check, if a request is done by an impersonated user by inspecting the session for the `extraData` property.
+There you may have `impersonatorUserId`. This is the `id` of the user who impersonates.
+
+```javascript
+const accountsContext = await accountsGraphQL.context(networkSession);
+const session = await accountsServer.findSessionByAccessToken(accountsContext.authToken);
+
+/**
+ * session will have the following type
+ * {
+ *   id: string;
+ *   userId: string;
+ *   token: string;
+ *   valid: boolean;
+ *   userAgent?: string | null;
+ *   ip?: string | null;
+ *   createdAt: string;
+ *   updatedAt: string;
+ *   extraData?: { impersonatorUserId?: string };  <---
+ * }
+ */
+```
+
 ## Session
 
 accounts-js use [JWT](https://jwt.io/introduction/) to implement authentication via tokens.

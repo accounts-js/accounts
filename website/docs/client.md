@@ -68,8 +68,8 @@ await accountsClient.getUser();
 
 ### Impersonating another user
 
-If you need to you can allow some users to impersonate the other users accounts eg: only admin users can impersonate to other users.
-Your current session will be replaced by another session.
+If you need to you can allow some users via [server authorization](/docs/server#authorize-to-impersonate) to impersonate the other users accounts, e.g.: Only admin users can impersonate to other users.
+Your current session will be replaced by [another impersonated session](/docs/server#check-if-session-is-impersonated).
 Must be logged in.
 
 ```javascript
