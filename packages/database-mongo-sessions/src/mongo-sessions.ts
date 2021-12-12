@@ -102,7 +102,7 @@ export class MongoSessions implements DatabaseInterfaceSessions {
       [this.options.timestamps.updatedAt]: this.options.dateProvider(),
     };
 
-    if (this.options.idProvider) {
+    if (this.options.idProvider && !this.options.convertSessionIdToMongoObjectId) {
       session._id = this.options.idProvider();
     }
 

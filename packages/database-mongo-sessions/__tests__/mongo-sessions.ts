@@ -131,6 +131,21 @@ describe('MongoSessions', () => {
       expect((ret as any)._id).not.toEqual(new ObjectID((ret as any)._id));
       expect((ret as any)._id).toEqual(new ObjectID((ret as any)._id).toHexString());
     });
+
+    it('using id provider and convertSessionIdToMongoObjectId on create session', async () => {
+      const mongoSessions = new MongoSessions({
+        database,
+        convertSessionIdToMongoObjectId: true,
+        idProvider: () => `someprefix|${new ObjectID().toString()}`,
+      });
+      const sessionId = await mongoSessions.createSession(session.userId, 'token', {
+        ip: session.ip,
+        userAgent: session.userAgent,
+      });
+      const ret = await mongoSessions.findSessionById(sessionId);
+      expect((ret as any)._id).toBeTruthy();
+      expect((ret as any)._id).toBeInstanceOf(ObjectID);
+    });
   });
 
   describe('findSessionById', () => {
