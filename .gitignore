@@ -10,5 +10,6 @@ packages/*/package-lock.json
 schema.json
 .DS_Store
 .eslintcache
+.turbo
 
 build/
