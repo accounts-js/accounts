@@ -20,7 +20,7 @@ importers:
       lerna: 4.0.0
       lint-staged: 12.0.2
       prettier: 2.4.1
-      turbo: 1.0.9
+      turbo: 1.0.19
       typescript: 4.5.2
     devDependencies:
       '@changesets/changelog-github': 0.4.1
@@ -35,7 +35,7 @@ importers:
       lerna: 4.0.0
       lint-staged: 12.0.2
       prettier: 2.4.1
-      turbo: 1.0.9
+      turbo: 1.0.19
       typescript: 4.5.2
 
   examples/accounts-boost:
@@ -24812,12 +24812,10 @@ packages:
     dependencies:
       safe-buffer: 5.2.1
 
-  /turbo/1.0.9:
-    resolution: {integrity: sha512-th0vdSpiO0gWQfehhTsG6vDXnq2fRXwvWSy1/LW2PBosv7VGgD2RENRVpjvPCNo7xEnkF6hZXnBfz0Tlvwu32A==}
+  /turbo/1.0.19:
+    resolution: {integrity: sha512-/gdEdpdludyHX+344JQ84bglK33dI4IWTtGkBkfJnSQW+lC3/JFAu9jy+4zNK2gdzxjwcB2/qQK+Pv53SZd1Kw==}
     hasBin: true
     requiresBuild: true
-    dependencies:
-      zlib: 1.0.5
     dev: true
 
   /tweetnacl/0.14.5:
@@ -26558,11 +26556,6 @@ packages:
 
   /zen-observable/0.8.15:
     resolution: {integrity: sha512-PQ2PC7R9rslx84ndNBZB/Dkv8V8fZEpk83RLgXtYd0fwUgEjseMn1Dgajh2x6S8QbZAFa9p2qVCEuYZNgve0dQ==}
-
-  /zlib/1.0.5:
-    resolution: {integrity: sha1-bnyXL8NxxkWmr7A6sUdp3vEU/MA=}
-    engines: {node: '>=0.2.0'}
-    dev: true
 
   /zwitch/1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
