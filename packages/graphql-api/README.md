@@ -197,3 +197,80 @@ input CreateUserProfileInput {
 ```
 
 The user will be saved in the db with the profile key set.
+
+## Example: Authenticate with a Service
+
+```graphql
+mutation Authenticate {
+  authenticate(serviceName: "password", params: { password: "<pw>", user: { email: "<email>" } })
+}
+```
+
+1. `serviceName` - corresponds to the package you are using to authenticate (e.g. oauth, password, twitter, instagram, two factor, token, etc).
+2. `params` - These will be different depending on the service you are using.
+
+- Twitter/Instagram
+
+```graphql
+mutation Authenticate {
+  authenticate(
+    serviceName: "twitter"
+    params: { access_token: "<access-token>", access_token_secret: "<access-token-secret>" }
+  )
+}
+```
+
+- OAuth
+
+```graphql
+mutation Authenticate {
+  authenticate(serviceName: "oauth", params: { provider: "<your-provider>" })
+}
+```
+
+- Password: Below the `user` contains `email` but can contain one or more of `id`, `email` or `username` too.
+
+```graphql
+mutation Authenticate {
+  authenticate(serviceName: "password", params: { password: "<pw>", user: { email: "<email>" } })
+}
+```
+
+- Two Factor
+
+```graphql
+mutation Authenticate {
+  authenticate(serviceName: "two-factor", params: { code: "<two-factor-code>" })
+}
+```
+
+- Token
+
+```graphql
+mutation Authenticate {
+  authenticate(serviceName: "token", params: { token: "<token>" })
+}
+```
+
+### Verify Authentication
+
+The way to check if a user has been successfully authenticated is identical, with the exception that `verifyAuthentication` returns a `boolean` instead of a `LoginResult`:
+
+```graphql
+mutation Verify {
+  verifyAuthentication(
+    serviceName: "password"
+    params: { password: "<pw>", user: { email: "<email>" } }
+  )
+}
+```
+
+This will return a result similar to this, if your user has been successfully authenticated:
+
+```json
+{
+  "data": {
+    "verifyAuthentication": true
+  }
+}
+```
