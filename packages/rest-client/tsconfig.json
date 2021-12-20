@@ -4,7 +4,8 @@
     "outDir": "./lib",
     "importHelpers": true,
     "target": "es5",
-    "lib": ["es2019", "dom"]
+    "lib": ["es2019", "dom"],
+    "typeRoots": ["./node_modules/@types/"]
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]

@@ -2,7 +2,8 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./lib",
-    "importHelpers": true
+    "importHelpers": true,
+    "typeRoots": ["./node_modules/@types/"]
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
