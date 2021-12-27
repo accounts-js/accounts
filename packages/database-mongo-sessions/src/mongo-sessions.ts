@@ -22,11 +22,19 @@ export interface MongoSessionsOptions {
   };
   /**
    * Should the session collection use _id as string or ObjectId.
+   * If 'false' must include an 'idSessionProvider'.
    * Default 'true'.
    */
   convertSessionIdToMongoObjectId?: boolean;
   /**
+   * Function that generates the _id for new Session objects.
+   * If 'undefined' then 'convertSessionIdToMongoObjectId' must be 'true'.
+   * Default 'undefined'
+   */
+  idSessionProvider?: () => string | object;
+  /**
    * Function that generate the id for new objects.
+   * @deprecated - please use `idSessionProvider` instead.
    */
   idProvider?: () => string | object;
   /**
@@ -60,6 +68,23 @@ export class MongoSessions implements DatabaseInterfaceSessions {
       ...options,
       timestamps: { ...defaultOptions.timestamps, ...options.timestamps },
     };
+
+    if (typeof this.options.idProvider === 'function') {
+      this.options.idSessionProvider = this.options.idProvider;
+      console.warn(
+        `Deprecation Warning: The option "options.idProvider" is deprecated. 
+        Setting it to "options.idSessionProvider," please change your configuration, as "options.idProvider" will be removed in a future release.`
+      );
+    }
+
+    if (
+      typeof this.options.idSessionProvider === 'function' &&
+      this.options.convertSessionIdToMongoObjectId
+    ) {
+      console.warn(`You have set both "options.idSessionProvider" and "options.convertSessionIdToMongoObjectId = false" which will cause your "options.idSessionProvider" to be ignored. 
+      In order to fix this warning change "options.convertSessionIdToMongoObjectId" to "true" or remove your "options.idSessionProvider" from the configuration.
+      `);
+    }
 
     this.database = this.options.database;
     this.sessionCollection = this.database.collection(this.options.sessionCollectionName);
@@ -102,8 +127,8 @@ export class MongoSessions implements DatabaseInterfaceSessions {
       [this.options.timestamps.updatedAt]: this.options.dateProvider(),
     };
 
-    if (this.options.idProvider && !this.options.convertSessionIdToMongoObjectId) {
-      session._id = this.options.idProvider();
+    if (this.options.idSessionProvider && !this.options.convertSessionIdToMongoObjectId) {
+      session._id = this.options.idSessionProvider();
     }
 
     const ret = await this.sessionCollection.insertOne(session);

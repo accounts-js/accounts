@@ -136,7 +136,7 @@ describe('MongoSessions', () => {
       const mongoSessions = new MongoSessions({
         database,
         convertSessionIdToMongoObjectId: true,
-        idProvider: () => `someprefix|${new ObjectID().toString()}`,
+        idSessionProvider: () => `someprefix|${new ObjectID().toString()}`,
       });
       const sessionId = await mongoSessions.createSession(session.userId, 'token', {
         ip: session.ip,
@@ -145,6 +145,30 @@ describe('MongoSessions', () => {
       const ret = await mongoSessions.findSessionById(sessionId);
       expect((ret as any)._id).toBeTruthy();
       expect((ret as any)._id).toBeInstanceOf(ObjectID);
+    });
+
+    it('using id provider should show deprecation warning', async () => {
+      const consoleSpy = jest.spyOn(console, 'warn');
+      new MongoSessions({
+        database,
+        convertSessionIdToMongoObjectId: false,
+        idProvider: () => `someprefix|${new ObjectID().toString()}`,
+      });
+      expect(consoleSpy).toBeCalledTimes(1);
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Deprecation'));
+      consoleSpy.mockRestore();
+    });
+
+    it('using both idSessionProvider and convertToMongoObject Id should show warning', async () => {
+      const consoleSpy = jest.spyOn(console, 'warn');
+      new MongoSessions({
+        database,
+        convertSessionIdToMongoObjectId: true,
+        idSessionProvider: () => `someprefix|${new ObjectID().toString()}`,
+      });
+      expect(consoleSpy).toBeCalledTimes(1);
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('set both'));
+      consoleSpy.mockRestore();
     });
   });
 
