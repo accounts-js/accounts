@@ -33,8 +33,7 @@ export interface MongoSessionsOptions {
    */
   idSessionProvider?: () => string | object;
   /**
-   * Function that generate the id for new objects.
-   * @deprecated - please use `idSessionProvider` instead.
+   * Function that generate the id for new User objects.
    */
   idProvider?: () => string | object;
   /**
@@ -69,20 +68,12 @@ export class MongoSessions implements DatabaseInterfaceSessions {
       timestamps: { ...defaultOptions.timestamps, ...options.timestamps },
     };
 
-    if (typeof this.options.idProvider === 'function') {
-      this.options.idSessionProvider = this.options.idProvider;
-      console.warn(
-        `Deprecation Warning: The option "options.idProvider" is deprecated. 
-        Setting it to "options.idSessionProvider," please change your configuration, as "options.idProvider" will be removed in a future release.`
-      );
-    }
-
     if (
       typeof this.options.idSessionProvider === 'function' &&
       this.options.convertSessionIdToMongoObjectId
     ) {
-      console.warn(`You have set both "options.idSessionProvider" and "options.convertSessionIdToMongoObjectId = false" which will cause your "options.idSessionProvider" to be ignored. 
-      In order to fix this warning change "options.convertSessionIdToMongoObjectId" to "true" or remove your "options.idSessionProvider" from the configuration.
+      console.warn(`You have set both "options.idSessionProvider" and "options.convertSessionIdToMongoObjectId = true" which will cause your "options.idSessionProvider" to be ignored. 
+      In order to fix this warning change "options.convertSessionIdToMongoObjectId" to "false" or remove your "options.idSessionProvider" from the configuration.
       `);
     }
 
