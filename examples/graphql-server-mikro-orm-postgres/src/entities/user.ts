@@ -8,8 +8,7 @@ import {
   getUserCtor,
 } from '@accounts/mikro-orm';
 import { Entity, Property } from '@mikro-orm/core';
-import type { Email, EmailCtorArgs } from './email';
-import { Email as EmailEntity } from './email';
+import { Email, EmailCtorArgs } from './email';
 
 type UserCtorArgs = AccountsUserCtorArgs & {
   firstName: string;
@@ -30,7 +29,7 @@ export const AccountsUser: UserCtor<
   ServiceCtorArgs<User>
 >({
   abstract: true,
-  EmailEntity,
+  EmailEntity: Email,
   getCustomEmailArgs: ({ firstName, lastName }) => ({
     fullName: `${firstName} ${lastName}`,
   }),
