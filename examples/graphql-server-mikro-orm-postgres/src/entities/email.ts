@@ -1,9 +1,13 @@
 import 'reflect-metadata';
-import { EmailCtorArgs as AccountsEmailCtorArgs, getEmailCtor } from '@accounts/mikro-orm';
+import {
+  EmailCtor,
+  EmailCtorArgs as AccountsEmailCtorArgs,
+  getEmailCtor,
+} from '@accounts/mikro-orm';
 import { Entity, Property } from '@mikro-orm/core';
-import type { User } from './user';
+import { User } from './user';
 
-const AccountsEmail = getEmailCtor<User>({ abstract: true });
+const AccountsEmail: EmailCtor<User> = getEmailCtor<User>({ abstract: true });
 
 export type EmailCtorArgs = AccountsEmailCtorArgs<User> & {
   fullName?: string;
