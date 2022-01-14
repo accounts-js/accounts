@@ -259,7 +259,7 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
         },
       }
     );
-    if (ret.result.nModified === 0) {
+    if ((ret.modifiedCount && ret.modifiedCount === 0) || (ret.result && ret.result.nModified === 0)) {
       throw new Error('User not found');
     }
   }
@@ -280,7 +280,7 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
         },
       }
     );
-    if (ret.result.nModified === 0) {
+    if ((ret.modifiedCount && ret.modifiedCount === 0) || (ret.result && ret.result.nModified === 0)) {
       throw new Error('User not found');
     }
   }
