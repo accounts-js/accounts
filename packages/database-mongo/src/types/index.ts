@@ -33,6 +33,12 @@ export interface AccountsMongoOptions {
    */
   caseSensitiveUserName?: boolean;
   /**
+   * Function that generates the _id for new Session objects.
+   * If 'undefined' then 'convertSessionIdToMongoObjectId' must be 'true'.
+   * Default 'undefined'
+   */
+  idSessionProvider?: () => string | object;
+  /**
    * Function that generate the id for new objects.
    */
   idProvider?: () => string | object;

@@ -44,7 +44,8 @@ export class DatabaseTests {
 runDatabaseTests(
   new DatabaseTests({
     convertUserIdToMongoObjectId: false,
-    convertSessionIdToMongoObjectId: false,
     idProvider: () => new mongodb.ObjectId().toString(),
+    convertSessionIdToMongoObjectId: false,
+    idSessionProvider: () => new mongodb.ObjectId().toString(),
   })
 );
