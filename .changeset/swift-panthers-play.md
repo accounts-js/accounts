@@ -1,5 +1,6 @@
 ---
 '@accounts/mongo-sessions': minor
+'@accounts/database-mongo': minor
 ---
 
 Changed `idProvider` to `idSessionProvider` in `@mongo-sessions`. This change was made to give more granular control when creating custom identifiers for both sessions and users. The new option generates the _id for new Session objects. Going forward, the `idProvider` will only be used for the creation of user identifiers.
