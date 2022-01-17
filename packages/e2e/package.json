@@ -38,7 +38,7 @@
   "dependencies": {
     "@accounts/client": "^0.33.1",
     "@accounts/client-password": "^0.32.2",
-    "@accounts/graphql-api": "^0.33.1",
+    "@accounts/graphql-api": "^0.33.2",
     "@accounts/graphql-client": "^0.33.1",
     "@accounts/mongo": "^0.33.5",
     "@accounts/password": "^0.32.1",
@@ -46,7 +46,7 @@
     "@accounts/rest-express": "^0.33.1",
     "@accounts/server": "^0.33.1",
     "@accounts/typeorm": "^0.33.1",
-    "@accounts/types": "^0.33.1",
+    "@accounts/types": "^0.33.2",
     "@apollo/client": "3.4.17",
     "@graphql-modules/core": "0.7.17",
     "apollo-server": "2.14.4",

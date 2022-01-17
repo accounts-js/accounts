@@ -71,11 +71,11 @@ importers:
 
   examples/graphql-server-typeorm-postgres:
     specifiers:
-      '@accounts/graphql-api': ^0.33.1
+      '@accounts/graphql-api': ^0.33.2
       '@accounts/password': ^0.32.1
       '@accounts/server': ^0.33.1
       '@accounts/typeorm': ^0.33.1
-      '@accounts/types': ^0.33.1
+      '@accounts/types': ^0.33.2
       '@graphql-modules/core': 0.7.17
       '@graphql-tools/merge': 6.2.5
       '@types/node': 16.11.7
@@ -111,7 +111,7 @@ importers:
   examples/graphql-server-typescript:
     specifiers:
       '@accounts/database-manager': ^0.33.1
-      '@accounts/graphql-api': ^0.33.1
+      '@accounts/graphql-api': ^0.33.2
       '@accounts/mongo': ^0.33.5
       '@accounts/password': ^0.32.1
       '@accounts/rest-express': ^0.33.1
@@ -236,7 +236,7 @@ importers:
       '@accounts/client': ^0.33.1
       '@accounts/client-password': ^0.32.2
       '@accounts/rest-client': ^0.33.1
-      '@accounts/types': ^0.33.1
+      '@accounts/types': ^0.33.2
       '@material-ui/core': 4.12.3
       '@material-ui/icons': 4.11.2
       '@material-ui/lab': 4.0.0-alpha.60
@@ -499,7 +499,7 @@ importers:
 
   packages/database-mongo-password:
     specifiers:
-      '@accounts/types': ^0.33.1
+      '@accounts/types': ^0.33.2
       '@types/jest': 27.0.2
       '@types/mongodb': 3.6.20
       '@types/node': 16.11.7
@@ -620,7 +620,7 @@ importers:
     specifiers:
       '@accounts/client': ^0.33.1
       '@accounts/client-password': ^0.32.2
-      '@accounts/graphql-api': ^0.33.1
+      '@accounts/graphql-api': ^0.33.2
       '@accounts/graphql-client': ^0.33.1
       '@accounts/mongo': ^0.33.5
       '@accounts/password': ^0.32.1
@@ -628,7 +628,7 @@ importers:
       '@accounts/rest-express': ^0.33.1
       '@accounts/server': ^0.33.1
       '@accounts/typeorm': ^0.33.1
-      '@accounts/types': ^0.33.1
+      '@accounts/types': ^0.33.2
       '@apollo/client': 3.4.17
       '@graphql-modules/core': 0.7.17
       '@types/body-parser': 1.19.2
@@ -740,7 +740,7 @@ importers:
       '@accounts/magic-link': ^0.1.1
       '@accounts/password': ^0.32.1
       '@accounts/server': ^0.33.1
-      '@accounts/types': ^0.33.1
+      '@accounts/types': ^0.33.2
       '@graphql-codegen/add': 3.1.0
       '@graphql-codegen/cli': 2.2.1
       '@graphql-codegen/introspection': 2.1.0
@@ -1037,7 +1037,7 @@ importers:
 
   packages/two-factor:
     specifiers:
-      '@accounts/types': ^0.33.1
+      '@accounts/types': ^0.33.2
       '@levminer/speakeasy': 1.3.1
       '@types/jest': 27.0.2
       '@types/node': 16.11.7

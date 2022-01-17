@@ -12,7 +12,7 @@
     "test": "pnpm run build"
   },
   "dependencies": {
-    "@accounts/graphql-api": "^0.33.1",
+    "@accounts/graphql-api": "^0.33.2",
     "@accounts/password": "^0.32.1",
     "@accounts/server": "^0.33.1",
     "@accounts/typeorm": "^0.33.1",
@@ -26,7 +26,7 @@
     "typeorm": "0.2.38"
   },
   "devDependencies": {
-    "@accounts/types": "^0.33.1",
+    "@accounts/types": "^0.33.2",
     "@types/node": "16.11.7",
     "nodemon": "2.0.14",
     "ts-node": "10.4.0",
