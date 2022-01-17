@@ -1,5 +1,14 @@
 # @accounts/mongo-password
 
+## 0.32.3
+
+### Patch Changes
+
+- [#1209](https://github.com/accounts-js/accounts/pull/1209) [`5fa570d4`](https://github.com/accounts-js/accounts/commit/5fa570d4f5e8bd86ced571c3f4cef752da5cc8a8) Thanks [@gezquinndesign](https://github.com/gezquinndesign)! - If users are currently using the Node Mongo Driver v4/Mongoose v6 (both are designed for use with MongoDB 5), this patch ensures no errors thrown when using these methods.
+
+- Updated dependencies [[`c6b79add`](https://github.com/accounts-js/accounts/commit/c6b79addc59ebfd2835e0cc4bded3ad062f68adc)]:
+  - @accounts/types@0.33.2
+
 ## 0.32.2
 
 ### Patch Changes

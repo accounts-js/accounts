@@ -1,5 +1,11 @@
 # @accounts/types
 
+## 0.33.2
+
+### Patch Changes
+
+- [#1196](https://github.com/accounts-js/accounts/pull/1196) [`c6b79add`](https://github.com/accounts-js/accounts/commit/c6b79addc59ebfd2835e0cc4bded3ad062f68adc) Thanks [@BarbecueSilver](https://github.com/BarbecueSilver)! - Add missing `extraData` property to the `Session` type.
+
 ## 0.33.1
 
 ### Patch Changes

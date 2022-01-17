@@ -1,6 +1,6 @@
 {
   "name": "@accounts/graphql-api",
-  "version": "0.33.1",
+  "version": "0.33.2",
   "description": "Server side GraphQL transport for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -51,7 +51,7 @@
     "@accounts/magic-link": "^0.1.1",
     "@accounts/password": "^0.32.1",
     "@accounts/server": "^0.33.1",
-    "@accounts/types": "^0.33.1",
+    "@accounts/types": "^0.33.2",
     "@graphql-codegen/add": "3.1.0",
     "@graphql-codegen/cli": "2.2.1",
     "@graphql-codegen/introspection": "2.1.0",
