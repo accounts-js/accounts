@@ -590,7 +590,7 @@ describe('Mongo', () => {
 
     it('using id provider on create session', async () => {
       const mongoTestOptions = new Mongo(databaseTests.db, {
-        idProvider: () => new ObjectID().toHexString(),
+        idSessionProvider: () => new ObjectID().toHexString(),
         convertSessionIdToMongoObjectId: false,
       });
       const sessionId = await mongoTestOptions.createSession(session.userId, 'token', {

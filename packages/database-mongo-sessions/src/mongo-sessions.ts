@@ -22,11 +22,18 @@ export interface MongoSessionsOptions {
   };
   /**
    * Should the session collection use _id as string or ObjectId.
+   * If 'false' must include an 'idSessionProvider'.
    * Default 'true'.
    */
   convertSessionIdToMongoObjectId?: boolean;
   /**
-   * Function that generate the id for new objects.
+   * Function that generates the _id for new Session objects.
+   * If 'undefined' then 'convertSessionIdToMongoObjectId' must be 'true'.
+   * Default 'undefined'
+   */
+  idSessionProvider?: () => string | object;
+  /**
+   * Function that generate the id for new User objects.
    */
   idProvider?: () => string | object;
   /**
@@ -60,6 +67,15 @@ export class MongoSessions implements DatabaseInterfaceSessions {
       ...options,
       timestamps: { ...defaultOptions.timestamps, ...options.timestamps },
     };
+
+    if (
+      typeof this.options.idSessionProvider === 'function' &&
+      this.options.convertSessionIdToMongoObjectId
+    ) {
+      console.warn(`You have set both "options.idSessionProvider" and "options.convertSessionIdToMongoObjectId = true" which will cause your "options.idSessionProvider" to be ignored. 
+      In order to fix this warning change "options.convertSessionIdToMongoObjectId" to "false" or remove your "options.idSessionProvider" from the configuration.
+      `);
+    }
 
     this.database = this.options.database;
     this.sessionCollection = this.database.collection(this.options.sessionCollectionName);
@@ -102,8 +118,8 @@ export class MongoSessions implements DatabaseInterfaceSessions {
       [this.options.timestamps.updatedAt]: this.options.dateProvider(),
     };
 
-    if (this.options.idProvider) {
-      session._id = this.options.idProvider();
+    if (this.options.idSessionProvider && !this.options.convertSessionIdToMongoObjectId) {
+      session._id = this.options.idSessionProvider();
     }
 
     const ret = await this.sessionCollection.insertOne(session);

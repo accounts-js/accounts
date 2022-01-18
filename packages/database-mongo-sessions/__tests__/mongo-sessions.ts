@@ -119,7 +119,7 @@ describe('MongoSessions', () => {
     it('using id provider on create session', async () => {
       const mongoSessions = new MongoSessions({
         database,
-        idProvider: () => new ObjectID().toHexString(),
+        idSessionProvider: () => new ObjectID().toHexString(),
         convertSessionIdToMongoObjectId: false,
       });
       const sessionId = await mongoSessions.createSession(session.userId, 'token', {
@@ -130,6 +130,33 @@ describe('MongoSessions', () => {
       expect((ret as any)._id).toBeTruthy();
       expect((ret as any)._id).not.toEqual(new ObjectID((ret as any)._id));
       expect((ret as any)._id).toEqual(new ObjectID((ret as any)._id).toHexString());
+    });
+
+    it('using id provider and convertSessionIdToMongoObjectId on create session', async () => {
+      const mongoSessions = new MongoSessions({
+        database,
+        convertSessionIdToMongoObjectId: true,
+        idSessionProvider: () => `someprefix|${new ObjectID().toString()}`,
+      });
+      const sessionId = await mongoSessions.createSession(session.userId, 'token', {
+        ip: session.ip,
+        userAgent: session.userAgent,
+      });
+      const ret = await mongoSessions.findSessionById(sessionId);
+      expect((ret as any)._id).toBeTruthy();
+      expect((ret as any)._id).toBeInstanceOf(ObjectID);
+    });
+
+    it('using both idSessionProvider and convertToMongoObject Id should show warning', async () => {
+      const consoleSpy = jest.spyOn(console, 'warn');
+      new MongoSessions({
+        database,
+        convertSessionIdToMongoObjectId: true,
+        idSessionProvider: () => `someprefix|${new ObjectID().toString()}`,
+      });
+      expect(consoleSpy).toBeCalledTimes(1);
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('set both'));
+      consoleSpy.mockRestore();
     });
   });
 
