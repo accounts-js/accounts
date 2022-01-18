@@ -1,5 +1,19 @@
 # @accounts/mongo-sessions
 
+## 0.33.0
+
+### Minor Changes
+
+- [#1205](https://github.com/accounts-js/accounts/pull/1205) [`dc13f582`](https://github.com/accounts-js/accounts/commit/dc13f5827e7577d7825f5eaae1b87eea2055f0da) Thanks [@mrcleanandfresh](https://github.com/mrcleanandfresh)! - Changed `idProvider` to `idSessionProvider` in `@mongo-sessions`. This change was made to give more granular control when creating custom identifiers for both sessions and users. The new option generates the \_id for new Session objects. Going forward, the `idProvider` will only be used for the creation of user identifiers.
+
+  Updated `AccountsMongoOptions` in `@mongo` to have the new `idSessionProvider`.
+
+  **Migration:** If you are using `idProvider` for the creation of a custom identifier for sessions, then you will need to move that logic to the new `idSessionProvider` function in the configuration.
+
+### Patch Changes
+
+- [#1205](https://github.com/accounts-js/accounts/pull/1205) [`dc13f582`](https://github.com/accounts-js/accounts/commit/dc13f5827e7577d7825f5eaae1b87eea2055f0da) Thanks [@mrcleanandfresh](https://github.com/mrcleanandfresh)! - The configuration option of convertSessionIdToMongoObjectId is now checked when using idProvider
+
 ## 0.32.2
 
 ### Patch Changes
