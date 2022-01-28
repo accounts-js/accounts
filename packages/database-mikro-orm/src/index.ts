@@ -15,6 +15,7 @@ import {
   SessionCtor,
   getSessionCtor,
 } from './entity/Session';
+import { context } from './utils/context-builder';
 
 export {
   AccountsMikroOrm,
@@ -38,5 +39,6 @@ export {
   EmailCtorArgs,
   ServiceCtorArgs,
   SessionCtorArgs,
+  context,
 };
 export default AccountsMikroOrm;

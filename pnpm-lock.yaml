@@ -510,6 +510,7 @@ importers:
   packages/database-mikro-orm:
     specifiers:
       '@accounts/database-tests': ^0.32.2
+      '@accounts/graphql-api': ^0.33.2
       '@accounts/types': ^0.33.2
       '@mikro-orm/cli': 5.0.0-rc.0
       '@mikro-orm/core': 5.0.0-rc.0
@@ -527,6 +528,7 @@ importers:
       tslib: 2.3.1
     devDependencies:
       '@accounts/database-tests': link:../database-tests
+      '@accounts/graphql-api': link:../graphql-api
       '@mikro-orm/cli': 5.0.0-rc.0_95b141186260c6b5ca2690e851a29b53
       '@mikro-orm/core': 5.0.0-rc.0_95b141186260c6b5ca2690e851a29b53
       '@mikro-orm/entity-generator': 5.0.0-rc.0_7af7fe0a688765badc2bc842c547f373
