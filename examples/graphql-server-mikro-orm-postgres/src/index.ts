@@ -2,13 +2,12 @@ import 'reflect-metadata';
 import { ApolloServer, gql } from 'apollo-server';
 import {
   authDirective,
-  context,
   createAccountsCoreModule,
   createAccountsPasswordModule,
 } from '@accounts/graphql-api';
 import { AccountsPassword } from '@accounts/password';
 import { AccountsServer, ServerHooks } from '@accounts/server';
-import { AccountsMikroOrm } from '@accounts/mikro-orm';
+import { context, AccountsMikroOrm } from '@accounts/mikro-orm';
 import { MikroORM } from '@mikro-orm/core';
 import config from './mikro-orm-config';
 import { User } from './entities/user';
@@ -19,9 +18,8 @@ import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
 
 export const createAccounts = async () => {
   const orm = await MikroORM.init(config);
-  const { em } = orm;
 
-  const accountsDb = new AccountsMikroOrm({ em, UserEntity: User, EmailEntity: Email });
+  const accountsDb = new AccountsMikroOrm({ UserEntity: User, EmailEntity: Email });
 
   const accountsPassword = new AccountsPassword({
     // This option is called when a new user create an account
@@ -118,7 +116,7 @@ export const createAccounts = async () => {
   const server = new ApolloServer({
     schema,
     context: ({ req }) => {
-      return context({ req }, { accountsServer });
+      return context({ req }, { accountsServer, em: orm.em.fork() });
     },
   });
 

@@ -1,5 +1,6 @@
 import { QueryResolvers } from '../../../models';
 import { AccountsPassword } from '@accounts/password';
+import { ctxAsyncLocalStorage } from '@accounts/types';
 
 export const Query: QueryResolvers = {
   twoFactorSecret: async (_, args, ctx) => {
@@ -10,8 +11,10 @@ export const Query: QueryResolvers = {
       throw new Error('Unauthorized');
     }
 
-    // https://github.com/speakeasyjs/speakeasy/blob/master/index.js#L517
-    const secret = injector.get(AccountsPassword).twoFactor.getNewAuthSecret();
-    return secret;
+    return ctxAsyncLocalStorage.run(ctx, async () => {
+      // https://github.com/speakeasyjs/speakeasy/blob/master/index.js#L517
+      const secret = injector.get(AccountsPassword).twoFactor.getNewAuthSecret();
+      return secret;
+    });
   },
 };

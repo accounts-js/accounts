@@ -27,6 +27,7 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/database-tests": "^0.32.2",
+    "@accounts/graphql-api": "^0.33.2",
     "@types/jest": "27.0.2",
     "@types/node": "16.11.7",
     "@mikro-orm/cli": "5.0.0-rc.0",

@@ -1,21 +1,22 @@
 import AccountsServer from '@accounts/server';
 import { IncomingMessage } from 'http';
 import { getClientIp } from 'request-ip';
+import { IContext, User } from '@accounts/types';
 
-interface AccountsContextOptions {
-  accountsServer: AccountsServer;
+export interface AccountsContextOptions<IUser extends User = User> {
+  accountsServer: AccountsServer<IUser>;
   headerName?: string;
   excludeAddUserInContext?: boolean;
 }
 
-export const context = async (
+export const context = async <IUser extends User = User>(
   {
     req,
   }: {
     req: IncomingMessage;
   },
-  options: AccountsContextOptions
-) => {
+  options: AccountsContextOptions<IUser>
+): Promise<IContext<IUser>> => {
   if (!req) {
     return {
       ip: '',

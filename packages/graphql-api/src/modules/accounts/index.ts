@@ -1,6 +1,6 @@
 import { createModule } from 'graphql-modules';
 import { mergeTypeDefs } from '@graphql-tools/merge';
-import { User, ConnectionInformations } from '@accounts/types';
+import { User, IContext } from '@accounts/types';
 import { AccountsServer } from '@accounts/server';
 import TypesTypeDefs from './schema/types';
 import getQueryTypeDefs from './schema/query';
@@ -19,16 +19,7 @@ export interface AccountsCoreModuleConfig {
   userAsInterface?: boolean;
 }
 
-export interface AccountsContext<IUser = User> {
-  authToken?: string;
-  user?: IUser;
-  userId?: string;
-  userAgent: string | null;
-  ip: string | null;
-  infos: ConnectionInformations;
-}
-
-export type AccountsContextGraphQLModules<IUser = User> = AccountsContext<IUser> &
+export type AccountsContextGraphQLModules<IUser extends User = User> = IContext<IUser> &
   GraphQLModules.ModuleContext;
 
 export const createAccountsCoreModule = (config: AccountsCoreModuleConfig) =>

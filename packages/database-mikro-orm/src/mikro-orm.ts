@@ -1,10 +1,15 @@
-import { ConnectionInformations, CreateUser, DatabaseInterface } from '@accounts/types';
+import {
+  ConnectionInformations,
+  CreateUser,
+  ctxAsyncLocalStorage,
+  DatabaseInterface,
+} from '@accounts/types';
 import { IUser, getUserCtor } from './entity/User';
 import { Email } from './entity/Email';
 import { Service } from './entity/Service';
 import { Session } from './entity/Session';
-import { AccountsMikroOrmOptions } from './types';
-import { EntityRepository, EntityManager, Constructor } from '@mikro-orm/core';
+import { AccountsMikroOrmOptions, IContext } from './types';
+import { Constructor, RequestContext } from '@mikro-orm/core';
 import { User as AccountsUser } from '@accounts/types/lib/types/user';
 import { Session as ISession } from '@accounts/types/lib/types/session/session';
 
@@ -34,32 +39,41 @@ export class AccountsMikroOrm<
   CustomService extends Service<any>
 > implements DatabaseInterface
 {
-  private em: EntityManager;
+  private get em() {
+    const em =
+      (ctxAsyncLocalStorage.getStore() as IContext)?.em ?? RequestContext.getEntityManager();
+    if (!em) {
+      throw new Error('Cannot find EntityManager');
+    }
+    return em;
+  }
   private UserEntity: Constructor<CustomUser | IUser<any, any, any>>;
   private EmailEntity: Constructor<CustomEmail | Email<any>>;
   private ServiceEntity: Constructor<CustomService | Service<any>>;
   private SessionEntity: Constructor<CustomSession | Session<any>>;
-  private userRepository: EntityRepository<IUser<any, any, any>>;
-  private emailRepository: EntityRepository<Email<any>>;
-  private serviceRepository: EntityRepository<Service<any>>;
-  private sessionRepository: EntityRepository<Session<any>>;
+  private get userRepository() {
+    return this.em.getRepository<IUser<any, any, any>>(this.UserEntity);
+  }
+  private get emailRepository() {
+    return this.em.getRepository<Email<any>>(this.EmailEntity);
+  }
+  private get serviceRepository() {
+    return this.em.getRepository<Service<any>>(this.ServiceEntity);
+  }
+  private get sessionRepository() {
+    return this.em.getRepository<Session<any>>(this.SessionEntity);
+  }
 
   constructor({
-    em,
     EmailEntity = Email,
     ServiceEntity = Service,
     SessionEntity = Session,
     UserEntity = getUserCtor({ EmailEntity, ServiceEntity }),
   }: AccountsMikroOrmOptions<CustomUser, CustomEmail, CustomSession, CustomService>) {
-    this.em = em;
     this.UserEntity = UserEntity;
     this.EmailEntity = EmailEntity;
     this.ServiceEntity = ServiceEntity;
     this.SessionEntity = SessionEntity;
-    this.userRepository = this.em.getRepository(this.UserEntity);
-    this.emailRepository = this.em.getRepository(this.EmailEntity);
-    this.serviceRepository = this.em.getRepository(this.ServiceEntity);
-    this.sessionRepository = this.em.getRepository(this.SessionEntity);
   }
 
   public async findUserByEmail(email: string): Promise<AccountsUser | null> {
@@ -158,7 +172,7 @@ export class AccountsMikroOrm<
       service.token = token;
     }
 
-    await this.em.persist(service);
+    this.em.persist(service);
 
     if (flush) {
       return this.em.flush();
@@ -166,7 +180,7 @@ export class AccountsMikroOrm<
   }
 
   public async unsetService(userId: string, serviceName: string): Promise<void> {
-    await this.userRepository.remove(
+    this.userRepository.remove(
       await this.serviceRepository.findOneOrFail({
         name: serviceName,
         user: Number(userId),
@@ -221,7 +235,7 @@ export class AccountsMikroOrm<
   }
 
   public async removeEmail(userId: string, email: string): Promise<void> {
-    const deleted = await this.emailRepository.remove({ address: email.toLocaleLowerCase() });
+    const deleted = this.emailRepository.remove({ address: email.toLocaleLowerCase() });
     if (!deleted) {
       throw new Error('Email not found');
     }
