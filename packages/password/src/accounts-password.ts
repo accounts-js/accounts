@@ -9,6 +9,8 @@ import {
   LoginResult,
   CreateUserServicePassword,
   LoginUserPasswordService,
+  DatabaseInterfaceSessions,
+  DatabaseInterfaceUser,
 } from '@accounts/types';
 import { TwoFactor, AccountsTwoFactorOptions, getUserTwoFactorService } from '@accounts/two-factor';
 import {
@@ -16,6 +18,8 @@ import {
   ServerHooks,
   generateRandomToken,
   AccountsJsError,
+  DatabaseInterfaceUserToken,
+  DatabaseInterfaceSessionsToken,
 } from '@accounts/server';
 import {
   getUserResetTokens,
@@ -24,7 +28,7 @@ import {
   verifyPassword,
   isEmail,
 } from './utils';
-import { ErrorMessages } from './types';
+import { AccountsPasswordConfigToken, ErrorMessages } from './types';
 import {
   errors,
   AddEmailErrors,
@@ -39,6 +43,7 @@ import {
   VerifyEmailErrors,
 } from './errors';
 import { isObject, isString } from './utils/validation';
+import { Inject, Injectable } from 'graphql-modules';
 
 export interface AccountsPasswordOptions {
   /**
@@ -171,6 +176,9 @@ const defaultOptions = {
   verifyPassword,
 };
 
+@Injectable({
+  global: true,
+})
 export default class AccountsPassword<CustomUser extends User = User>
   implements AuthenticationService
 {
@@ -178,16 +186,34 @@ export default class AccountsPassword<CustomUser extends User = User>
   public server!: AccountsServer;
   public twoFactor: TwoFactor;
   private options: AccountsPasswordOptions & typeof defaultOptions;
-  private db!: DatabaseInterface<CustomUser>;
+  private db!: DatabaseInterfaceUser<CustomUser>;
+  private dbSessions!: DatabaseInterfaceSessions;
 
-  constructor(options: AccountsPasswordOptions = {}) {
+  constructor(
+    @Inject(AccountsPasswordConfigToken) options: AccountsPasswordOptions = {},
+    @Inject(DatabaseInterfaceUserToken)
+    db?: DatabaseInterface<CustomUser> | DatabaseInterfaceUser<CustomUser>,
+    @Inject(DatabaseInterfaceSessionsToken) dbSessions?: DatabaseInterfaceSessions,
+    server?: AccountsServer
+  ) {
     this.options = { ...defaultOptions, ...options };
     this.twoFactor = new TwoFactor(options.twoFactor);
+    if (db) {
+      this.db = db;
+      this.dbSessions = dbSessions ?? (db as DatabaseInterfaceSessions);
+    }
+    if (server) {
+      this.server = server;
+    }
   }
 
-  public setStore(store: DatabaseInterface<CustomUser>) {
+  public setUserStore(store: DatabaseInterfaceUser<CustomUser>) {
     this.db = store;
-    this.twoFactor.setStore(store);
+    this.twoFactor.setUserStore(store);
+  }
+
+  public setSessionsStore(store: DatabaseInterfaceSessions) {
+    this.dbSessions = store;
   }
 
   public async authenticate(params: LoginUserPasswordService): Promise<CustomUser> {
@@ -368,7 +394,7 @@ export default class AccountsPassword<CustomUser extends User = User>
 
     // Changing the password should invalidate existing sessions
     if (this.options.invalidateAllSessionsAfterPasswordReset) {
-      await this.db.invalidateAllSessions(user.id);
+      await this.dbSessions.invalidateAllSessions(user.id);
     }
 
     if (this.options.notifyUserAfterPasswordChanged) {
@@ -434,7 +460,7 @@ export default class AccountsPassword<CustomUser extends User = User>
     await this.server.getHooks().emit(ServerHooks.ChangePasswordSuccess, user);
 
     if (this.options.invalidateAllSessionsAfterPasswordChanged) {
-      await this.db.invalidateAllSessions(user.id);
+      await this.dbSessions.invalidateAllSessions(user.id);
     }
 
     if (this.options.removeAllResetPasswordTokensAfterPasswordChanged) {

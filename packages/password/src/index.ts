@@ -1,4 +1,4 @@
-import AccountsPassword from './accounts-password';
+import AccountsPassword, { AccountsPasswordOptions } from './accounts-password';
 export * from './types';
 export {
   AddEmailErrors,
@@ -11,4 +11,4 @@ export {
 } from './errors';
 
 export default AccountsPassword;
-export { AccountsPassword };
+export { AccountsPassword, AccountsPasswordOptions };

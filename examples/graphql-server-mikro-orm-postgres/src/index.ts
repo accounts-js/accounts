@@ -1,53 +1,21 @@
 import 'reflect-metadata';
 import { ApolloServer, gql } from 'apollo-server';
 import {
-  authDirective,
+  buildSchema,
   createAccountsCoreModule,
   createAccountsPasswordModule,
 } from '@accounts/graphql-api';
 import { AccountsPassword } from '@accounts/password';
-import { AccountsServer, ServerHooks } from '@accounts/server';
-import { context, AccountsMikroOrm } from '@accounts/mikro-orm';
 import { MikroORM } from '@mikro-orm/core';
 import config from './mikro-orm-config';
 import { User } from './entities/user';
 import { Email } from './entities/email';
 import { createApplication } from 'graphql-modules';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
+import AccountsServer, { AuthenticationServicesToken, ServerHooks } from '@accounts/server';
+import { context, createAccountsMikroORMModule } from '@accounts/module-mikro-orm';
 
 export const createAccounts = async () => {
   const orm = await MikroORM.init(config);
-
-  const accountsDb = new AccountsMikroOrm({ UserEntity: User, EmailEntity: Email });
-
-  const accountsPassword = new AccountsPassword({
-    // This option is called when a new user create an account
-    // Inside we can apply our logic to validate the user fields
-    // By default accounts-js only allow 'username', 'email' and 'password' for the user
-    // In order to add custom fields you need to pass the validateNewUser function when you
-    // instantiate the 'accounts-password' package
-    validateNewUser: (user) => {
-      // For example we can allow only some kind of emails
-      if (user.email.endsWith('.xyz')) {
-        throw new Error('Invalid email');
-      }
-      return user;
-    },
-  });
-
-  // Create accounts server that holds a lower level of all accounts operations
-  const accountsServer = new AccountsServer(
-    { db: accountsDb, tokenSecret: config.password },
-    { password: accountsPassword }
-  );
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  accountsServer.on(ServerHooks.ValidateLogin, ({ user }) => {
-    // This hook is called every time a user try to login.
-    // You can use it to only allow users with verified email to login.
-    // If you throw an error here it will be returned to the client.
-  });
 
   const typeDefs = gql`
     type PrivateType @auth {
@@ -79,12 +47,14 @@ export const createAccounts = async () => {
     }
   `;
 
+  // TODO: use resolvers typings from codegen
   const resolvers = {
     Query: {
       me: async (_, __, ctx) => {
         // ctx.userId will be set if user is logged in
         if (ctx.userId) {
-          return accountsServer.findUserById(ctx.userId);
+          // We could have simply returned ctx.user instead
+          return ctx.accountsServer.findUserById(ctx.userId);
         }
         return null;
       },
@@ -96,28 +66,65 @@ export const createAccounts = async () => {
     },
   };
 
-  const { authDirectiveTypeDefs, authDirectiveTransformer } = authDirective('auth');
-
-  const schema = createApplication({
+  const app = createApplication({
     modules: [
-      createAccountsCoreModule({ accountsServer }),
-      createAccountsPasswordModule({ accountsPassword }),
+      createAccountsCoreModule({ tokenSecret: config.password }),
+      createAccountsPasswordModule({
+        // This option is called when a new user create an account
+        // Inside we can apply our logic to validate the user fields
+        // By default accounts-js only allow 'username', 'email' and 'password' for the user
+        // In order to add custom fields you need to pass the validateNewUser function when you
+        // instantiate the 'accounts-password' package
+        validateNewUser: (user) => {
+          // For example we can allow only some kind of emails
+          if (user.email.endsWith('.xyz')) {
+            throw new Error('Invalid email');
+          }
+          return user;
+        },
+      }),
+      createAccountsMikroORMModule({
+        UserEntity: User,
+        EmailEntity: Email,
+        // Provide EntityManager either via context or via Providers
+        em: orm.em,
+      }),
     ],
-    schemaBuilder: ({ typeDefs: accountsTypeDefs, resolvers: accountsResolvers }) =>
-      authDirectiveTransformer(
-        makeExecutableSchema({
-          typeDefs: mergeTypeDefs([typeDefs, authDirectiveTypeDefs, ...accountsTypeDefs]),
-          resolvers: mergeResolvers([resolvers, ...accountsResolvers]),
-        })
-      ),
-  }).createSchemaForApollo();
+    providers: [
+      {
+        provide: AuthenticationServicesToken,
+        useValue: { password: AccountsPassword },
+        global: true,
+      },
+    ],
+    schemaBuilder: buildSchema({ typeDefs, resolvers }),
+  });
+  const { injector } = app;
+  const schema = app.createSchemaForApollo();
+
+  injector.get(AccountsServer).on(ServerHooks.ValidateLogin, ({ user }) => {
+    // This hook is called every time a user try to login.
+    // You can use it to only allow users with verified email to login.
+    // If you throw an error here it will be returned to the client.
+    console.log(`${user.firstName} ${user.lastName} logged in`);
+  });
 
   // Create the Apollo Server that takes a schema and configures internal stuff
   const server = new ApolloServer({
     schema,
-    context: ({ req }) => {
-      return context({ req }, { accountsServer, em: orm.em.fork() });
-    },
+    context: async ({ req }) => ({
+      ...(await context(
+        { req },
+        {
+          app,
+          // Provide EntityManager either via context or via Providers
+          //em: orm.em.fork()
+        }
+      )),
+      // If you don't use GraphQL Modules in your app you will have to share the
+      // accountsServer instance via context in order to access it via resolvers
+      accountsServer: injector.get(AccountsServer),
+    }),
   });
 
   server.listen(4000).then(async ({ url }) => {

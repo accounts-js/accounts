@@ -2,9 +2,10 @@ import AccountsServer from '@accounts/server';
 import { IncomingMessage } from 'http';
 import { getClientIp } from 'request-ip';
 import { IContext, User } from '@accounts/types';
+import { Injector } from 'graphql-modules';
 
-export interface AccountsContextOptions<IUser extends User = User> {
-  accountsServer: AccountsServer<IUser>;
+export interface AccountsContextOptions {
+  injector: Injector;
   headerName?: string;
   excludeAddUserInContext?: boolean;
 }
@@ -15,7 +16,7 @@ export const context = async <IUser extends User = User>(
   }: {
     req: IncomingMessage;
   },
-  options: AccountsContextOptions<IUser>
+  options: AccountsContextOptions
 ): Promise<IContext<IUser>> => {
   if (!req) {
     return {
@@ -35,7 +36,9 @@ export const context = async <IUser extends User = User>(
 
   if (authToken && !options.excludeAddUserInContext) {
     try {
-      user = await options.accountsServer.resumeSession(authToken);
+      user = await options.injector
+        .get<AccountsServer<IUser>>(AccountsServer)
+        .resumeSession(authToken);
     } catch (error) {
       // Empty catch
     }

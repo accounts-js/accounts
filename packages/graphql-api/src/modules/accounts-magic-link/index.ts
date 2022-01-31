@@ -1,15 +1,18 @@
-import { AccountsMagicLink } from '@accounts/magic-link';
+import {
+  AccountsMagicLink,
+  AccountsMagicLinkOptions,
+  AccountsMagicLinkConfigToken,
+} from '@accounts/magic-link';
 import { createModule } from 'graphql-modules';
 import getMutationTypeDefs from './schema/mutation';
 import { Mutation } from './resolvers/mutation';
 
-export interface AccountsMagicLinkModuleConfig {
-  accountsMagicLink: AccountsMagicLink;
+export interface AccountsMagicLinkModuleConfig extends AccountsMagicLinkOptions {
   rootMutationName?: string;
   extendTypeDefs?: boolean;
 }
 
-export const createAccountsMagicLinkModule = (config: AccountsMagicLinkModuleConfig) =>
+export const createAccountsMagicLinkModule = (config: AccountsMagicLinkModuleConfig = {}) =>
   createModule({
     id: 'accounts-magic-link',
     typeDefs: [getMutationTypeDefs(config)],
@@ -18,8 +21,9 @@ export const createAccountsMagicLinkModule = (config: AccountsMagicLinkModuleCon
     },
     providers: [
       {
-        provide: AccountsMagicLink,
-        useValue: config.accountsMagicLink,
+        provide: AccountsMagicLinkConfigToken,
+        useValue: config,
       },
+      AccountsMagicLink,
     ],
   });

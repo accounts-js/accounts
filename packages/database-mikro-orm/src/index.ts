@@ -15,7 +15,7 @@ import {
   SessionCtor,
   getSessionCtor,
 } from './entity/Session';
-import { context } from './utils/context-builder';
+import { EmailToken, ServiceToken, SessionToken, UserToken } from './types';
 
 export {
   AccountsMikroOrm,
@@ -39,6 +39,9 @@ export {
   EmailCtorArgs,
   ServiceCtorArgs,
   SessionCtorArgs,
-  context,
+  EmailToken,
+  ServiceToken,
+  SessionToken,
+  UserToken,
 };
 export default AccountsMikroOrm;

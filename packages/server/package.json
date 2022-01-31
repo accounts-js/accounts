@@ -43,6 +43,10 @@
   ],
   "author": "Tim Mikeladze",
   "license": "MIT",
+  "peerDependencies": {
+    "graphql": "^15.0.0",
+    "graphql-modules": "^2.0.0"
+  },
   "dependencies": {
     "@accounts/types": "^0.33.1",
     "@types/jsonwebtoken": "9.0.2",
@@ -56,6 +60,8 @@
     "@types/jest": "27.5.2",
     "@types/lodash.merge": "4.6.7",
     "@types/node": "20.2.3",
+    "graphql": "15.8.0",
+    "graphql-modules": "2.1.2",
     "jest": "27.3.1",
     "rimraf": "5.0.1",
     "ts-jest": "27.1.5"

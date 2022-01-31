@@ -1,17 +1,19 @@
-import {
-  ConnectionInformations,
-  CreateUser,
-  ctxAsyncLocalStorage,
-  DatabaseInterface,
-} from '@accounts/types';
+import { ConnectionInformations, CreateUser, DatabaseInterface } from '@accounts/types';
 import { IUser, getUserCtor } from './entity/User';
 import { Email } from './entity/Email';
 import { Service } from './entity/Service';
 import { Session } from './entity/Session';
-import { AccountsMikroOrmOptions, IContext } from './types';
-import { Constructor, RequestContext } from '@mikro-orm/core';
+import { EmailToken, ServiceToken, SessionToken, UserToken } from './types';
+import {
+  Connection,
+  Constructor,
+  EntityManager,
+  IDatabaseDriver,
+  RequestContext,
+} from '@mikro-orm/core';
 import { User as AccountsUser } from '@accounts/types/lib/types/user';
 import { Session as ISession } from '@accounts/types/lib/types/session/session';
+import { ExecutionContext, Inject, Injectable } from 'graphql-modules';
 
 const hasPassword = (opt: object): opt is { bcrypt: string } =>
   !!(opt as { bcrypt: string }).bcrypt;
@@ -32,25 +34,39 @@ const toSession = async (session: Session<any> | null): Promise<ISession | null>
     updatedAt: session.updatedAt.toDateString(),
   };
 
+@Injectable({
+  global: true,
+})
 export class AccountsMikroOrm<
   CustomUser extends IUser<any, any, any>,
   CustomEmail extends Email<any>,
   CustomSession extends Session<any>,
-  CustomService extends Service<any>
+  CustomService extends Service<any>,
 > implements DatabaseInterface
 {
+  @ExecutionContext()
+  private context?: ExecutionContext & { em?: EntityManager<IDatabaseDriver<Connection>> };
+
   private get em() {
-    const em =
-      (ctxAsyncLocalStorage.getStore() as IContext)?.em ?? RequestContext.getEntityManager();
+    let em: EntityManager<IDatabaseDriver<Connection>> | undefined;
+    try {
+      em =
+        RequestContext.getEntityManager() ??
+        this.context?.em ??
+        this.context?.injector.get(EntityManager);
+    } catch (e) {
+      console.error(e);
+    }
     if (!em) {
       throw new Error('Cannot find EntityManager');
     }
     return em;
   }
-  private UserEntity: Constructor<CustomUser | IUser<any, any, any>>;
-  private EmailEntity: Constructor<CustomEmail | Email<any>>;
-  private ServiceEntity: Constructor<CustomService | Service<any>>;
-  private SessionEntity: Constructor<CustomSession | Session<any>>;
+  private UserEntity!: Constructor<CustomUser | IUser<any, any, any>>;
+  private EmailEntity: Constructor<CustomEmail | Email<any>> = Email;
+  private ServiceEntity: Constructor<CustomService | Service<any>> = Service;
+  private SessionEntity: Constructor<CustomSession | Session<any>> = Session;
+
   private get userRepository() {
     return this.em.getRepository<IUser<any, any, any>>(this.UserEntity);
   }
@@ -64,16 +80,28 @@ export class AccountsMikroOrm<
     return this.em.getRepository<Session<any>>(this.SessionEntity);
   }
 
-  constructor({
-    EmailEntity = Email,
-    ServiceEntity = Service,
-    SessionEntity = Session,
-    UserEntity = getUserCtor({ EmailEntity, ServiceEntity }),
-  }: AccountsMikroOrmOptions<CustomUser, CustomEmail, CustomSession, CustomService>) {
-    this.UserEntity = UserEntity;
-    this.EmailEntity = EmailEntity;
-    this.ServiceEntity = ServiceEntity;
-    this.SessionEntity = SessionEntity;
+  constructor(
+    @Inject(EmailToken) EmailEntity?: Constructor<CustomEmail | Email<any>>,
+    @Inject(ServiceToken) ServiceEntity?: Constructor<CustomService | Service<any>>,
+    @Inject(SessionToken) SessionEntity?: Constructor<CustomSession | Session<any>>,
+    @Inject(UserToken) UserEntity?: Constructor<CustomUser | IUser<any, any, any>>
+  ) {
+    if (EmailEntity) {
+      this.EmailEntity = EmailEntity;
+    }
+    if (ServiceEntity) {
+      this.ServiceEntity = ServiceEntity;
+    }
+    if (SessionEntity) {
+      this.SessionEntity = SessionEntity;
+    }
+    this.UserEntity = getUserCtor({
+      EmailEntity: this.EmailEntity,
+      ServiceEntity: this.ServiceEntity,
+    });
+    if (UserEntity) {
+      this.UserEntity = UserEntity;
+    }
   }
 
   public async findUserByEmail(email: string): Promise<AccountsUser | null> {

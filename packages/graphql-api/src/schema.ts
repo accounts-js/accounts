@@ -1,18 +1,36 @@
+import 'reflect-metadata';
 import { createApplication } from 'graphql-modules';
 import {
-  AccountsCoreModuleConfig,
-  AccountsMagicLinkModuleConfig,
-  AccountsPasswordModuleConfig,
   createAccountsCoreModule,
   createAccountsMagicLinkModule,
   createAccountsPasswordModule,
 } from './modules';
+import {
+  AuthenticationServicesToken,
+  DatabaseInterfaceUserToken,
+  DatabaseInterfaceSessionsToken,
+} from '@accounts/server';
 
 const { schema } = createApplication({
   modules: [
-    createAccountsCoreModule({} as AccountsCoreModuleConfig),
-    createAccountsPasswordModule({} as AccountsPasswordModuleConfig),
-    createAccountsMagicLinkModule({} as AccountsMagicLinkModuleConfig),
+    createAccountsCoreModule({ tokenSecret: 'my-secret' }),
+    createAccountsPasswordModule(),
+    createAccountsMagicLinkModule(),
+  ],
+  providers: [
+    {
+      provide: DatabaseInterfaceUserToken,
+      useValue: {},
+    },
+    {
+      provide: DatabaseInterfaceSessionsToken,
+      useValue: {},
+    },
+    {
+      provide: AuthenticationServicesToken,
+      useValue: {},
+      global: true,
+    },
   ],
 });
 

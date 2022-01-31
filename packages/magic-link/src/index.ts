@@ -1,4 +1,4 @@
-import AccountsMagicLink from './accounts-magic-link';
+import AccountsMagicLink, { AccountsMagicLinkOptions } from './accounts-magic-link';
 export * from './types';
 export {
   errors,
@@ -8,4 +8,4 @@ export {
 } from './errors';
 
 export default AccountsMagicLink;
-export { AccountsMagicLink };
+export { AccountsMagicLink, AccountsMagicLinkOptions };

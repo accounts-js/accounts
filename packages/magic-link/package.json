@@ -35,12 +35,15 @@
     "@types/jest": "27.5.2",
     "@types/lodash.set": "4.3.7",
     "@types/node": "20.2.3",
+    "graphql": "15.8.0",
+    "graphql-modules": "2.1.2",
     "jest": "27.3.1",
     "lodash.set": "4.3.2",
     "rimraf": "5.0.1",
     "ts-jest": "27.1.5"
   },
   "peerDependencies": {
-    "@accounts/server": "^0.32.0 || ^0.33.0"
+    "@accounts/server": "^0.32.0 || ^0.33.0",
+    "graphql-modules": "^2.0.0"
   }
 }

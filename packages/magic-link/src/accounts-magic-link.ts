@@ -4,13 +4,20 @@ import {
   AuthenticationService,
   LoginUserMagicLinkService,
   TokenRecord,
+  DatabaseInterfaceUser,
 } from '@accounts/types';
-import { AccountsServer, AccountsJsError, generateRandomToken } from '@accounts/server';
-import { ErrorMessages } from './types';
+import {
+  AccountsServer,
+  AccountsJsError,
+  generateRandomToken,
+  DatabaseInterfaceUserToken,
+} from '@accounts/server';
+import { AccountsMagicLinkConfigToken, ErrorMessages } from './types';
 import { errors, AuthenticateErrors, MagicLinkAuthenticatorErrors } from './errors';
 import { isString } from './utils/validation';
 import { RequestMagicLinkEmailErrors } from './errors';
 import { getUserLoginTokens } from './utils/user';
+import { Injectable, Inject } from 'graphql-modules';
 
 export interface AccountsMagicLinkOptions {
   /**
@@ -30,20 +37,38 @@ const defaultOptions = {
   loginTokenExpiration: 900000,
 };
 
+@Injectable({
+  global: true,
+})
 export default class AccountsMagicLink<CustomUser extends User = User>
   implements AuthenticationService
 {
   public serviceName = 'magicLink';
   public server!: AccountsServer;
   private options: AccountsMagicLinkOptions & typeof defaultOptions;
-  private db!: DatabaseInterface<CustomUser>;
+  private db!: DatabaseInterfaceUser<CustomUser>;
 
-  constructor(options: AccountsMagicLinkOptions = {}) {
+  constructor(
+    @Inject(AccountsMagicLinkConfigToken) options: AccountsMagicLinkOptions = {},
+    server?: AccountsServer,
+    @Inject(DatabaseInterfaceUserToken)
+    db?: DatabaseInterface<CustomUser> | DatabaseInterfaceUser<CustomUser>
+  ) {
     this.options = { ...defaultOptions, ...options };
+    if (db) {
+      this.db = db;
+    }
+    if (server) {
+      this.server = server;
+    }
   }
 
-  public setStore(store: DatabaseInterface<CustomUser>) {
+  public setUserStore(store: DatabaseInterfaceUser<CustomUser>) {
     this.db = store;
+  }
+
+  public setSessionsStore() {
+    // Empty
   }
 
   public async requestMagicLinkEmail(email: string): Promise<void> {

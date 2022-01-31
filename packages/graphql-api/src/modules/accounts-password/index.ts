@@ -1,19 +1,21 @@
 import { createModule } from 'graphql-modules';
-import { AccountsPassword } from '@accounts/password';
 import TypesTypeDefs from './schema/types';
 import getQueryTypeDefs from './schema/query';
 import getMutationTypeDefs from './schema/mutation';
 import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
+import AccountsPassword, {
+  AccountsPasswordConfigToken,
+  AccountsPasswordOptions,
+} from '@accounts/password';
 
-export interface AccountsPasswordModuleConfig {
-  accountsPassword: AccountsPassword;
+export interface AccountsPasswordModuleConfig extends AccountsPasswordOptions {
   rootQueryName?: string;
   rootMutationName?: string;
   extendTypeDefs?: boolean;
 }
 
-export const createAccountsPasswordModule = (config: AccountsPasswordModuleConfig) =>
+export const createAccountsPasswordModule = (config: AccountsPasswordModuleConfig = {}) =>
   createModule({
     id: 'accounts-password',
     typeDefs: [TypesTypeDefs, getQueryTypeDefs(config), getMutationTypeDefs(config)],
@@ -23,8 +25,9 @@ export const createAccountsPasswordModule = (config: AccountsPasswordModuleConfi
     },
     providers: [
       {
-        provide: AccountsPassword,
-        useValue: config.accountsPassword,
+        provide: AccountsPasswordConfigToken,
+        useValue: config,
       },
+      AccountsPassword,
     ],
   });

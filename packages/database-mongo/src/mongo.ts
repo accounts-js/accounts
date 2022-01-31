@@ -9,7 +9,9 @@ import {
 import { MongoSessions } from '@accounts/mongo-sessions';
 import { MongoServicePassword } from '@accounts/mongo-password';
 import { MongoServiceMagicLink } from '@accounts/mongo-magic-link';
-import { AccountsMongoOptions } from './types';
+import { AccountsMongoConfigToken, AccountsMongoOptions } from './types';
+import { MongoConnectionToken } from './types/MongoConnection.symbol';
+import { Inject, Injectable } from 'graphql-modules';
 
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
@@ -32,11 +34,14 @@ const defaultOptions = {
   dateProvider: (date?: Date) => (date ? date.getTime() : Date.now()),
 };
 
+@Injectable({
+  global: true,
+})
 export class Mongo implements DatabaseInterface {
   // Options of Mongo class
   private options: AccountsMongoOptions & typeof defaultOptions;
-  // Db object
-  private db: Db;
+  // Database connection
+  private dbConn: Db;
   // Account collection
   private collection: Collection<PartialBy<User & { _id?: string | object }, 'id' | 'deactivated'>>;
   // Session adaptor
@@ -46,27 +51,30 @@ export class Mongo implements DatabaseInterface {
   // Magic link service
   private serviceMagicLink: MongoServiceMagicLink;
 
-  constructor(db: any, options: AccountsMongoOptions = {}) {
+  constructor(
+    @Inject(MongoConnectionToken) dbConn: any,
+    @Inject(AccountsMongoConfigToken) options: AccountsMongoOptions = {}
+  ) {
     this.options = {
       ...defaultOptions,
       ...options,
       timestamps: { ...defaultOptions.timestamps, ...options.timestamps },
     };
-    if (!db) {
+    if (!dbConn) {
       throw new Error('A database connection is required');
     }
-    this.db = db;
-    this.collection = this.db.collection(this.options.collectionName);
-    this.sessions = new MongoSessions({ ...this.options, database: this.db });
+    this.dbConn = dbConn;
+    this.collection = this.dbConn.collection(this.options.collectionName);
+    this.sessions = new MongoSessions({ ...this.options, database: this.dbConn });
     this.servicePassword = new MongoServicePassword({
       ...this.options,
       userCollectionName: this.options.collectionName,
-      database: this.db,
+      database: this.dbConn,
     });
     this.serviceMagicLink = new MongoServiceMagicLink({
       ...this.options,
       userCollectionName: this.options.collectionName,
-      database: this.db,
+      database: this.dbConn,
     });
   }
 

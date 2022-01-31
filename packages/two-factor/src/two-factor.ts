@@ -1,5 +1,5 @@
 import { GeneratedSecret, generateSecret, totp } from '@levminer/speakeasy';
-import { User, DatabaseInterface } from '@accounts/types';
+import { User, DatabaseInterfaceUser } from '@accounts/types';
 import { errors } from './errors';
 import { AccountsTwoFactorOptions } from './types';
 import { getUserTwoFactorService } from './utils';
@@ -10,9 +10,9 @@ const defaultOptions = {
   errors,
 };
 
-export class TwoFactor {
+export class TwoFactor<CustomUser extends User = User> {
   private options: AccountsTwoFactorOptions & typeof defaultOptions;
-  private db!: DatabaseInterface;
+  private db!: DatabaseInterfaceUser<CustomUser>;
   private serviceName = 'two-factor';
 
   private verifyTOTPCode(secret: string, code: string): Boolean {
@@ -37,7 +37,7 @@ export class TwoFactor {
   /**
    * Set two factor store
    */
-  public setStore(store: DatabaseInterface): void {
+  public setUserStore(store: DatabaseInterfaceUser<CustomUser>): void {
     this.db = store;
   }
 

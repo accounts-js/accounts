@@ -10,8 +10,9 @@ import {
   ImpersonationResult,
   HookListener,
   DatabaseInterface,
-  AuthenticationService,
   ConnectionInformations,
+  DatabaseInterfaceUser,
+  DatabaseInterfaceSessions,
 } from '@accounts/types';
 
 import { generateAccessToken, generateRefreshToken, generateRandomToken } from './utils/tokens';
@@ -34,8 +35,15 @@ import {
   ResumeSessionErrors,
 } from './errors';
 import { isString } from './utils/validation';
+import { ExecutionContext, Inject, Injectable } from 'graphql-modules';
+import { AccountsCoreConfigToken } from './types/AccountsCoreConfig.symbol';
+import { AuthenticationServicesToken } from './types/AuthenticationServices.symbol';
+import { AuthenticationServices } from './types/authentication-services';
+import { DatabaseInterfaceUserToken } from './types/DatabaseInterfaceUser.symbol';
+import { DatabaseInterfaceSessionsToken } from './types/DatabaseInterfaceSessions.symbol';
 
 const defaultOptions = {
+  micro: false,
   ambiguousErrorMessages: true,
   tokenSecret: 'secret' as
     | string
@@ -54,26 +62,35 @@ const defaultOptions = {
   emailTemplates,
   sendMail,
   siteUrl: 'http://localhost:3000',
-  userObjectSanitizer: (user: User) => user,
+  userObjectSanitizer: <CustomUser extends User = User>(user: CustomUser) => user,
   createNewSessionTokenOnRefresh: false,
   useInternalUserObjectSanitizer: true,
   useStatelessSession: false,
 };
 
+@Injectable({
+  global: true,
+})
 export class AccountsServer<CustomUser extends User = User> {
+  @ExecutionContext() public context!: ExecutionContext;
   public options: AccountsServerOptions<CustomUser> & typeof defaultOptions;
-  private services: { [key: string]: AuthenticationService<CustomUser> };
-  private db: DatabaseInterface<CustomUser>;
   private hooks: Emittery;
+  private micro: boolean;
+  private dbSessions: DatabaseInterfaceSessions;
 
   constructor(
-    options: AccountsServerOptions<CustomUser>,
-    services: { [key: string]: AuthenticationService<CustomUser> }
+    @Inject(AccountsCoreConfigToken) options: AccountsServerOptions<CustomUser>,
+    @Inject(AuthenticationServicesToken) public services: AuthenticationServices<CustomUser>,
+    @Inject(DatabaseInterfaceUserToken)
+    private db: DatabaseInterface<CustomUser> | DatabaseInterfaceUser<CustomUser>,
+    @Inject(DatabaseInterfaceSessionsToken) dbSessions?: DatabaseInterfaceSessions
   ) {
     this.options = merge({ ...defaultOptions }, options);
-    if (!this.options.db) {
+    this.micro = this.options.micro;
+    if (!db) {
       throw new Error('A database driver is required');
     }
+    this.dbSessions = dbSessions ?? (db as DatabaseInterfaceSessions);
     if (this.options.tokenSecret === defaultOptions.tokenSecret) {
       console.log(`
 You are using the default secret "${this.options.tokenSecret}" which is not secure.
@@ -87,19 +104,39 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     }
 
     this.services = services || {};
-    this.db = this.options.db;
 
-    // Set the db to all services
-    for (const service in this.services) {
-      this.services[service].setStore(this.db);
-      this.services[service].server = this;
+    for (const serviceName in this.services) {
+      const service = this.services[serviceName];
+      // We have an instance, thus no Dependency Injection is being used (REST)
+      // and we must manually set the db and server in all services
+      if (typeof service === 'object') {
+        service.setUserStore(this.db);
+        service.setSessionsStore(this.dbSessions);
+        service.server = this;
+      }
     }
 
     // Initialize hooks
     this.hooks = new Emittery();
   }
 
-  public getServices(): { [key: string]: AuthenticationService } {
+  private getService(serviceName: string) {
+    const instanceOrCtor = this.services[serviceName];
+    // If it's a constructor we use dependency injection (GraphQL), otherwise we already have an instance (REST)
+    const service =
+      typeof instanceOrCtor === 'function'
+        ? this.context.injector.get(instanceOrCtor)
+        : instanceOrCtor;
+    if (!service) {
+      throw new AccountsJsError(
+        `No service with the name ${serviceName} was registered.`,
+        AuthenticateWithServiceErrors.ServiceNotFound
+      );
+    }
+    return service;
+  }
+
+  public getServices(): AuthenticationServices<CustomUser> {
     return this.services;
   }
 
@@ -144,14 +181,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       params,
     };
     try {
-      if (!this.services[serviceName]) {
-        throw new AccountsJsError(
-          `No service with the name ${serviceName} was registered.`,
-          AuthenticateWithServiceErrors.ServiceNotFound
-        );
-      }
-
-      const user: CustomUser | null = await this.services[serviceName].authenticate(params);
+      const user: CustomUser | null = await this.getService(serviceName).authenticate(params);
       hooksInfo.user = user;
       if (!user) {
         throw new AccountsJsError(
@@ -191,14 +221,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       params,
     };
     try {
-      if (!this.services[serviceName]) {
-        throw new AccountsJsError(
-          `No service with the name ${serviceName} was registered.`,
-          LoginWithServiceErrors.ServiceNotFound
-        );
-      }
-
-      const user: CustomUser | null = await this.services[serviceName].authenticate(params);
+      const user: CustomUser | null = await this.getService(serviceName).authenticate(params);
       hooksInfo.user = user;
       if (!user) {
         throw new AccountsJsError(
@@ -237,7 +260,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
     infos: ConnectionInformations
   ): Promise<LoginResult> {
     const token = await this.createSessionToken(user);
-    const sessionId = await this.db.createSession(user.id, token, infos);
+    const sessionId = await this.dbSessions.createSession(user.id, token, infos);
 
     const { accessToken, refreshToken } = await this.createTokens({
       token,
@@ -311,7 +334,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       }
 
       const token = await this.createSessionToken(impersonatedUser);
-      const newSessionId = await this.db.createSession(impersonatedUser.id, token, infos, {
+      const newSessionId = await this.dbSessions.createSession(impersonatedUser.id, token, infos, {
         impersonatorUserId: user.id,
       });
 
@@ -375,7 +398,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         );
       }
 
-      const session: Session | null = await this.db.findSessionByToken(sessionToken);
+      const session: Session | null = await this.dbSessions.findSessionByToken(sessionToken);
       if (!session) {
         throw new AccountsJsError('Session not found', RefreshTokensErrors.SessionNotFound);
       }
@@ -392,7 +415,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         }
 
         const tokens = await this.createTokens({ token: newToken || sessionToken, user });
-        await this.db.updateSession(session.id, infos, newToken);
+        await this.dbSessions.updateSession(session.id, infos, newToken);
 
         const result = {
           sessionId: session.id,
@@ -460,7 +483,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       const session: Session = await this.findSessionByAccessToken(accessToken);
 
       if (session.valid) {
-        await this.db.invalidateSession(session.id);
+        await this.dbSessions.invalidateSession(session.id);
         await this.hooks.emit(ServerHooks.LogoutSuccess, {
           session,
           accessToken,
@@ -504,10 +527,15 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
         );
       }
 
+      if (this.micro) {
+        // We need to only verify the access tokens without any additional session logic
+        return { id: userId } as CustomUser;
+      }
+
       // If the session is stateful we check the validity of the token against the db
       let session: Session | null = null;
       if (!this.options.useStatelessSession) {
-        session = await this.db.findSessionByToken(sessionToken);
+        session = await this.dbSessions.findSessionByToken(sessionToken);
         if (!session) {
           throw new AccountsJsError('Session not found', ResumeSessionErrors.SessionNotFound);
         }
@@ -559,7 +587,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       );
     }
 
-    const session: Session | null = await this.db.findSessionByToken(sessionToken);
+    const session: Session | null = await this.dbSessions.findSessionByToken(sessionToken);
     if (!session) {
       throw new AccountsJsError(
         'Session not found',

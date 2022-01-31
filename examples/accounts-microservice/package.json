@@ -1,0 +1,39 @@
+{
+  "name": "@examples/accounts-microservice",
+  "private": true,
+  "version": "0.34.0",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "NODE_ENV=development nodemon -w src -x ts-node src/accounts-microservice.ts & sleep 2 && nodemon -w src -x ts-node src/app-server.ts",
+    "start-services": "docker-compose up -d",
+    "prestart": "pnpm run start-services",
+    "build": "tsc",
+    "test": "pnpm run build"
+  },
+  "dependencies": {
+    "@accounts/graphql-api": "^0.33.1",
+    "@accounts/module-mongo": "^0.34.0",
+    "@accounts/mongo": "^0.34.0",
+    "@accounts/password": "^0.32.1",
+    "@accounts/server": "^0.33.1",
+    "@graphql-tools/delegate": "9.0.35",
+    "@graphql-tools/merge": "8.4.2",
+    "@graphql-tools/schema": "9.0.19",
+    "@graphql-tools/stitch": "8.7.50",
+    "@graphql-tools/utils": "9.2.1",
+    "@graphql-tools/wrap": "9.4.2",
+    "apollo-server": "3.12.0",
+    "graphql": "15.8.0",
+    "graphql-modules": "2.1.2",
+    "lodash": "4.17.21",
+    "node-fetch": "2.6.11",
+    "tslib": "2.5.2"
+  },
+  "devDependencies": {
+    "@types/lodash": "4.14.194",
+    "nodemon": "2.0.22",
+    "ts-node": "10.9.1",
+    "typescript": "5.0.4"
+  }
+}

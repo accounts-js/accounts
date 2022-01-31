@@ -1,7 +1,13 @@
-import { createModule } from 'graphql-modules';
+import { createModule, Provider } from 'graphql-modules';
 import { mergeTypeDefs } from '@graphql-tools/merge';
 import { User, IContext } from '@accounts/types';
-import { AccountsServer } from '@accounts/server';
+import {
+  AccountsServer,
+  AccountsServerOptions,
+  AccountsCoreConfigToken,
+  DatabaseInterfaceUserToken,
+  DatabaseInterfaceSessionsToken,
+} from '@accounts/server';
 import TypesTypeDefs from './schema/types';
 import getQueryTypeDefs from './schema/query';
 import getMutationTypeDefs from './schema/mutation';
@@ -10,8 +16,7 @@ import { Query } from './resolvers/query';
 import { Mutation } from './resolvers/mutation';
 import makeSchema from './schema/schema';
 
-export interface AccountsCoreModuleConfig {
-  accountsServer: AccountsServer;
+export interface AccountsCoreModuleConfig extends AccountsServerOptions {
   rootQueryName?: string;
   rootMutationName?: string;
   extendTypeDefs?: boolean;
@@ -41,11 +46,28 @@ export const createAccountsCoreModule = (config: AccountsCoreModuleConfig) =>
       [config.rootQueryName || 'Query']: Query,
       [config.rootMutationName || 'Mutation']: Mutation,
     },
-    providers: [
-      {
-        provide: AccountsServer,
-        useValue: config.accountsServer,
-        global: true,
-      },
-    ],
+    providers: () => {
+      const providers: Provider[] = [
+        {
+          provide: AccountsCoreConfigToken,
+          useValue: config,
+        },
+        AccountsServer,
+      ];
+      if (config.micro) {
+        providers.push(
+          {
+            provide: DatabaseInterfaceUserToken,
+            useValue: {},
+            global: true,
+          },
+          {
+            provide: DatabaseInterfaceSessionsToken,
+            useValue: undefined,
+            global: true,
+          }
+        );
+      }
+      return providers;
+    },
   });

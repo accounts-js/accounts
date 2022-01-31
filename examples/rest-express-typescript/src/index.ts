@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -7,11 +8,7 @@ import { AccountsPassword } from '@accounts/password';
 import accountsExpress, { userLoader } from '@accounts/rest-express';
 import { Mongo } from '@accounts/mongo';
 
-mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/accounts-js-rest-example', {
-  useNewUrlParser: true,
-  // We can't set this variable to true since there is an issue and mongodb fail to connect in a lambda environment
-  // useUnifiedTopology: true,
-});
+mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/accounts-js-rest-example');
 const db = mongoose.connection;
 
 const app = express();
@@ -44,18 +41,19 @@ const accountsPassword = new AccountsPassword({
 
 const accountsServer = new AccountsServer(
   {
-    db: new Mongo(db),
     tokenSecret: 'secret',
   },
   {
     password: accountsPassword,
-  }
+  },
+  new Mongo(db)
 );
 
 accountsServer.on(ServerHooks.ValidateLogin, ({ user }) => {
   // This hook is called every time a user try to login.
   // You can use it to only allow users with verified email to login.
   // If you throw an error here it will be returned to the client.
+  console.log('Logged in', user);
 });
 
 /**
