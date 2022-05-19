@@ -1,6 +1,6 @@
 {
   "name": "@accounts/mongo-password",
-  "version": "0.32.3",
+  "version": "0.32.4",
   "description": "MongoDB password adaptor for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",

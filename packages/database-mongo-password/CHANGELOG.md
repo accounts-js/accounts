@@ -1,5 +1,11 @@
 # @accounts/mongo-password
 
+## 0.32.4
+
+### Patch Changes
+
+- [#1220](https://github.com/accounts-js/accounts/pull/1220) [`fb49d62a`](https://github.com/accounts-js/accounts/commit/fb49d62adec474b8aabac78fa77775a0fbeba80f) Thanks [@abhishekk-raj](https://github.com/abhishekk-raj)! - MongoDB 5 compatability in all mongo-password methods
+
 ## 0.32.3
 
 ### Patch Changes
