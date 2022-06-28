@@ -1,6 +1,6 @@
 {
   "name": "@accounts/password",
-  "version": "0.32.1",
+  "version": "0.32.2",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -22,7 +22,7 @@
     "preset": "ts-jest"
   },
   "dependencies": {
-    "@accounts/two-factor": "^0.32.2",
+    "@accounts/two-factor": "^0.32.4",
     "bcryptjs": "^2.4.3",
     "tslib": "2.3.1"
   },

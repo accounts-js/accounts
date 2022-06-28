@@ -1,6 +1,6 @@
 {
   "name": "@accounts/two-factor",
-  "version": "0.32.3",
+  "version": "0.32.4",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
