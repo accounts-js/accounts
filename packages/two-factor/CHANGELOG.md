@@ -1,5 +1,11 @@
 # @accounts/two-factor
 
+## 0.32.4
+
+### Patch Changes
+
+- [#1228](https://github.com/accounts-js/accounts/pull/1228) [`2afcb843`](https://github.com/accounts-js/accounts/commit/2afcb8435615bb8c85bdba39101a2c25a451df12) Thanks [@pozylon](https://github.com/pozylon)! - Fix critical issue with "Two-Factor" not validating TOTP codes correctly due to a flawed version of @levminer/speakeasy
+
 ## 0.32.3
 
 ### Patch Changes

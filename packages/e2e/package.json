@@ -41,7 +41,7 @@
     "@accounts/graphql-api": "^0.33.2",
     "@accounts/graphql-client": "^0.33.1",
     "@accounts/mongo": "^0.34.0",
-    "@accounts/password": "^0.32.1",
+    "@accounts/password": "^0.32.2",
     "@accounts/rest-client": "^0.33.1",
     "@accounts/rest-express": "^0.33.1",
     "@accounts/server": "^0.33.1",
