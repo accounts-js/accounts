@@ -15,6 +15,21 @@ export class TwoFactor {
   private db!: DatabaseInterface;
   private serviceName = 'two-factor';
 
+  private verifyTOTPCode(secret: string, code: string): Boolean {
+    try {
+      const verified = totp.verify({
+        secret,
+        encoding: 'base32',
+        token: code,
+        window: this.options.window,
+      });
+      if (verified) return true;
+    } catch (e) {
+      //
+    }
+    return false;
+  }
+
   constructor(options: AccountsTwoFactorOptions = {}) {
     this.options = { ...defaultOptions, ...options };
   }
@@ -39,14 +54,8 @@ export class TwoFactor {
     if (!twoFactorService) {
       throw new Error(this.options.errors.userTwoFactorNotSet);
     }
-    if (
-      !totp.verify({
-        secret: twoFactorService.secret.base32,
-        encoding: 'base32',
-        token: code,
-        window: this.options.window,
-      })
-    ) {
+
+    if (!this.verifyTOTPCode(twoFactorService.secret.base32, code)) {
       throw new Error(this.options.errors.codeDidNotMatch);
     }
   }
@@ -81,14 +90,7 @@ export class TwoFactor {
       throw new Error(this.options.errors.userTwoFactorAlreadySet);
     }
 
-    if (
-      totp.verify({
-        secret: secret.base32,
-        encoding: 'base32',
-        token: code,
-        window: this.options.window,
-      })
-    ) {
+    if (this.verifyTOTPCode(secret.base32, code)) {
       twoFactorService = {
         secret,
       };
@@ -115,14 +117,7 @@ export class TwoFactor {
     if (!twoFactorService) {
       throw new Error(this.options.errors.userTwoFactorNotSet);
     }
-    if (
-      totp.verify({
-        secret: twoFactorService.secret.base32,
-        encoding: 'base32',
-        token: code,
-        window: this.options.window,
-      })
-    ) {
+    if (this.verifyTOTPCode(twoFactorService.secret.base32, code)) {
       await this.db.unsetService(userId, this.serviceName);
     } else {
       throw new Error(this.options.errors.codeDidNotMatch);
