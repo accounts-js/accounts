@@ -27,6 +27,11 @@ export type CreateUserInput = {
   email?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
+  receiveOther: Maybe<Scalars['Boolean']>;
+  receiveFastep: Maybe<Scalars['Boolean']>;
+  certifyAge: Maybe<Scalars['Boolean']>;
+  readTerms: Maybe<Scalars['Boolean']>;
+  allSelect: Maybe<Scalars['Boolean']>;
 };
 
 export type CreateUserResult = {
