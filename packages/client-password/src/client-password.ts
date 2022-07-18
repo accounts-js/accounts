@@ -4,7 +4,7 @@ import {
   CreateUserServicePassword,
   CreateUserResult,
   LoginUserPasswordService,
-} from '@accounts/types';
+} from '@maxbezs/typescustom';
 import { AccountsClientPasswordOptions } from './types';
 
 export class AccountsClientPassword {
