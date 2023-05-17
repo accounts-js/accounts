@@ -15,7 +15,7 @@
     "prepublishOnly": "pnpm run compile",
     "test": "pnpm run testonly",
     "test-ci": "pnpm run lint && pnpm run coverage",
-    "testonly": "jest",
+    "testonly": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "coverage": "pnpm run testonly -- --coverage"
   },

@@ -48,6 +48,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "27.0.2",
+    "@types/jsonwebtoken": "8.5.5",
     "@types/node": "16.11.7",
     "jest": "27.3.1",
     "jest-localstorage-mock": "2.4.18",

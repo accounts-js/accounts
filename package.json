@@ -28,7 +28,8 @@
   },
   "pnpm": {
     "overrides": {
-      "@types/eslint": "8.4.0"
+      "@types/eslint": "8.4.0",
+      "@types/node": "16.11.7"
     }
   },
   "lint-staged": {

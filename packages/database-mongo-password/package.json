@@ -13,7 +13,7 @@
     "precompile": "pnpm run clean",
     "compile": "tsc",
     "prepublishOnly": "pnpm run compile",
-    "testonly": "jest --runInBand",
+    "testonly": "jest --runInBand --passWithNoTests",
     "test:watch": "jest --watch",
     "coverage": "pnpm run testonly -- --coverage"
   },
@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@types/jest": "27.0.2",
+    "@types/mongodb": "3.6.20",
     "@types/node": "16.11.7",
     "jest": "27.3.1",
     "rimraf": "3.0.2",

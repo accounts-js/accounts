@@ -10,7 +10,7 @@
     "precompile": "pnpm run clean",
     "compile": "tsc",
     "prepublishOnly": "pnpm run compile",
-    "testonly": "jest --runInBand",
+    "testonly": "jest --runInBand --passWithNoTests",
     "test:watch": "jest --watch",
     "coverage": "pnpm run testonly -- --coverage"
   },
@@ -31,6 +31,7 @@
   "devDependencies": {
     "@accounts/database-tests": "^0.32.2",
     "@types/jest": "27.0.2",
+    "@types/lodash": "4.14.194",
     "@types/node": "16.11.7",
     "jest": "27.3.1",
     "pg": "8.7.1",
@@ -39,7 +40,7 @@
   },
   "dependencies": {
     "@accounts/types": "^0.33.1",
-    "lodash": "^4.17.21",
+    "lodash": "4.17.21",
     "reflect-metadata": "^0.1.13",
     "tslib": "2.3.1",
     "typeorm": "^0.2.38"

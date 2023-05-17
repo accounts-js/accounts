@@ -10,7 +10,7 @@
     "precompile": "pnpm run clean",
     "compile": "tsc",
     "prepublishOnly": "pnpm run compile",
-    "testonly": "jest",
+    "testonly": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "coverage": "pnpm run testonly -- --coverage"
   },
