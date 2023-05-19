@@ -32,7 +32,7 @@ Object.keys(servers).forEach((key) => {
             },
             password: 'heya',
           })
-        ).rejects.toThrowError('Invalid credentials');
+        ).rejects.toThrow('Invalid credentials');
       });
 
       it('should login the user and get the session', async () => {
@@ -50,7 +50,7 @@ Object.keys(servers).forEach((key) => {
 
     describe('verify user email', () => {
       it('should throw when wrong token', async () => {
-        await expect(server.accountsClientPassword.verifyEmail('wrongToken')).rejects.toThrowError(
+        await expect(server.accountsClientPassword.verifyEmail('wrongToken')).rejects.toThrow(
           'Verify email link expired'
         );
       });
@@ -75,7 +75,7 @@ Object.keys(servers).forEach((key) => {
       it('should throw when wrong token', async () => {
         await expect(
           server.accountsClientPassword.resetPassword('wrongToken', 'newPassword')
-        ).rejects.toThrowError('Reset password link expired');
+        ).rejects.toThrow('Reset password link expired');
       });
 
       it('should request a new token for the user', async () => {
@@ -107,7 +107,7 @@ Object.keys(servers).forEach((key) => {
       it('should throw when wrong password', async () => {
         await expect(
           server.accountsClientPassword.changePassword('wrongPassword', 'newPassword')
-        ).rejects.toThrowError('Invalid credential');
+        ).rejects.toThrow('Invalid credential');
       });
 
       it('should change the user password and be able to login with it', async () => {

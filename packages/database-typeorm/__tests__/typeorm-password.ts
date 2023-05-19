@@ -279,7 +279,7 @@ describe('TypeormServicePassword', () => {
       const accountsTypeorm = new AccountsTypeorm({ connection });
       await expect(
         accountsTypeorm.addEmail('402fcb56-e325-4950-9166-63855da0a3fe', 'unknowemail', false)
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
 
     it('should add email', async () => {
@@ -308,13 +308,13 @@ describe('TypeormServicePassword', () => {
       const accountsTypeorm = new AccountsTypeorm({ connection });
       await expect(
         accountsTypeorm.removeEmail('402fcb56-e325-4950-9166-63855da0a3fe', 'unknowemail')
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
 
     it('should throw if email is not found', async () => {
       const accountsTypeorm = new AccountsTypeorm({ connection });
       const userId = await accountsTypeorm.createUser(user);
-      await expect(accountsTypeorm.removeEmail(userId, 'unknowemail')).rejects.toThrowError(
+      await expect(accountsTypeorm.removeEmail(userId, 'unknowemail')).rejects.toThrow(
         'Email not found'
       );
     });
@@ -348,13 +348,13 @@ describe('TypeormServicePassword', () => {
       const accountsTypeorm = new AccountsTypeorm({ connection });
       await expect(
         accountsTypeorm.verifyEmail('402fcb56-e325-4950-9166-63855da0a3fe', 'unknowemail')
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
 
     it('should throw if email is not found', async () => {
       const accountsTypeorm = new AccountsTypeorm({ connection });
       const userId = await accountsTypeorm.createUser(user);
-      await expect(accountsTypeorm.verifyEmail(userId, 'unknowemail')).rejects.toThrowError(
+      await expect(accountsTypeorm.verifyEmail(userId, 'unknowemail')).rejects.toThrow(
         'Email not found'
       );
     });
@@ -380,7 +380,7 @@ describe('TypeormServicePassword', () => {
       const accountsTypeorm = new AccountsTypeorm({ connection });
       await expect(
         accountsTypeorm.setUsername('402fcb56-e325-4950-9166-63855da0a3fe', 'username')
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
 
     it('should change username', async () => {
@@ -399,7 +399,7 @@ describe('TypeormServicePassword', () => {
       const accountsTypeorm = new AccountsTypeorm({ connection });
       await expect(
         accountsTypeorm.setPassword('402fcb56-e325-4950-9166-63855da0a3fe', 'toto')
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
 
     it('should change password', async () => {
@@ -445,7 +445,7 @@ describe('TypeormServicePassword', () => {
     //   const accountsTypeorm = new AccountsTypeorm({ connection });
     //   await expect(
     //     accountsTypeorm.setUserDeactivated('402fcb56-e325-4950-9166-63855da0a3fe', true)
-    //   ).rejects.toThrowError('User not found');
+    //   ).rejects.toThrow('User not found');
     // });
 
     it('should deactivate user', async () => {

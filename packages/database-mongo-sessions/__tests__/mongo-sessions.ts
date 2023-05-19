@@ -154,7 +154,7 @@ describe('MongoSessions', () => {
         convertSessionIdToMongoObjectId: true,
         idSessionProvider: () => `someprefix|${new ObjectID().toString()}`,
       });
-      expect(consoleSpy).toBeCalledTimes(1);
+      expect(consoleSpy).toHaveBeenCalledTimes(1);
       expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('set both'));
       consoleSpy.mockRestore();
     });
@@ -201,7 +201,7 @@ describe('MongoSessions', () => {
       expect(
         async () =>
           await mongoSessions.updateSession('toto', { ip: 'new ip', userAgent: 'new user agent' })
-      ).not.toThrowError();
+      ).not.toThrow();
     });
 
     it('should update session', async () => {
@@ -260,7 +260,7 @@ describe('MongoSessions', () => {
     // eslint-disable-next-line jest/expect-expect
     it('should not convert id', async () => {
       const mongoSessions = new MongoSessions({ database, convertSessionIdToMongoObjectId: false });
-      expect(async () => await mongoSessions.invalidateSession('toto')).not.toThrowError();
+      expect(async () => await mongoSessions.invalidateSession('toto')).not.toThrow();
     });
 
     it('invalidates a session', async () => {

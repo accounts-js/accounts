@@ -100,7 +100,7 @@ describe('MongoServiceMagicLink', () => {
         const userId = await mongoServicePassword.createUser(user);
         await expect(
           mongoServiceMagicLink.addLoginToken(userId, 'john@doe.com', 'token')
-        ).resolves.not.toThrowError();
+        ).resolves.not.toThrow();
       });
 
       it('should add a token', async () => {
@@ -130,9 +130,7 @@ describe('MongoServiceMagicLink', () => {
           convertUserIdToMongoObjectId: false,
         });
         const userId = await mongoServicePassword.createUser(user);
-        await expect(
-          mongoServiceMagicLink.removeAllLoginTokens(userId)
-        ).resolves.not.toThrowError();
+        await expect(mongoServiceMagicLink.removeAllLoginTokens(userId)).resolves.not.toThrow();
       });
 
       it('should remove the login tokens', async () => {

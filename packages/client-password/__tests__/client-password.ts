@@ -31,7 +31,7 @@ describe('AccountsClientPassword', () => {
   });
 
   it('requires the client', async () => {
-    expect(() => new AccountsClientPassword(null as any)).toThrowError(
+    expect(() => new AccountsClientPassword(null as any)).toThrow(
       'A valid client instance is required'
     );
   });

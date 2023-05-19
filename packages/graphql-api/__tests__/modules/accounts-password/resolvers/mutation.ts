@@ -43,7 +43,7 @@ describe('accounts-password resolvers mutation', () => {
     const newEmail = 'newEmailTest';
 
     it('should throw if no user in context', async () => {
-      await expect(Mutation.addEmail!({}, { newEmail }, {} as any, {} as any)).rejects.toThrowError(
+      await expect(Mutation.addEmail!({}, { newEmail }, {} as any, {} as any)).rejects.toThrow(
         'Unauthorized'
       );
     });
@@ -62,7 +62,7 @@ describe('accounts-password resolvers mutation', () => {
     it('should throw if no user in context', async () => {
       await expect(
         Mutation.changePassword!({}, { oldPassword, newPassword }, {} as any, {} as any)
-      ).rejects.toThrowError('Unauthorized');
+      ).rejects.toThrow('Unauthorized');
     });
 
     it('should call changePassword', async () => {
@@ -144,7 +144,7 @@ describe('accounts-password resolvers mutation', () => {
       );
       await expect(
         Mutation.createUser!({}, { user } as any, { injector } as any, {} as any)
-      ).rejects.toThrowError('AnyError');
+      ).rejects.toThrow('AnyError');
     });
 
     it('should automatically login user after registration if enableAutologin flag is set to true', async () => {
@@ -215,7 +215,7 @@ describe('accounts-password resolvers mutation', () => {
     it('should throw if no user in context', async () => {
       await expect(
         Mutation.twoFactorSet!({}, { code, secret } as any, {} as any, {} as any)
-      ).rejects.toThrowError('Unauthorized');
+      ).rejects.toThrow('Unauthorized');
     });
 
     it('should call twoFactor.set', async () => {
@@ -236,7 +236,7 @@ describe('accounts-password resolvers mutation', () => {
     it('should throw if no user in context', async () => {
       await expect(
         Mutation.twoFactorUnset!({}, { code } as any, {} as any, {} as any)
-      ).rejects.toThrowError('Unauthorized');
+      ).rejects.toThrow('Unauthorized');
     });
 
     it('should call twoFactor.unset', async () => {
@@ -286,7 +286,7 @@ describe('accounts-password resolvers mutation', () => {
       );
       await expect(
         Mutation.sendResetPasswordEmail!({}, { email } as any, { injector } as any, {} as any)
-      ).rejects.toThrowError('AnyError');
+      ).rejects.toThrow('AnyError');
     });
 
     it('should hide UserNotFound error when ambiguousErrorMessages is true', async () => {
@@ -343,7 +343,7 @@ describe('accounts-password resolvers mutation', () => {
       );
       await expect(
         Mutation.sendVerificationEmail!({}, { email } as any, { injector } as any, {} as any)
-      ).rejects.toThrowError('AnyError');
+      ).rejects.toThrow('AnyError');
     });
 
     it('should hide UserNotFound error when ambiguousErrorMessages is true', async () => {

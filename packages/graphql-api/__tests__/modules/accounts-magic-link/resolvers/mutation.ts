@@ -44,7 +44,7 @@ describe('accounts-magic-link resolvers mutation', () => {
       );
       await expect(
         Mutation.requestMagicLinkEmail!({}, { email } as any, { injector } as any, {} as any)
-      ).rejects.toThrowError('AnyError');
+      ).rejects.toThrow('AnyError');
     });
 
     it('should hide UserNotFound error when ambiguousErrorMessages is true', async () => {

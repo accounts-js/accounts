@@ -18,7 +18,7 @@ describe('accounts-password resolvers query', () => {
 
   describe('twoFactorSecret', () => {
     it('should throw if no user in context', async () => {
-      await expect(Query.twoFactorSecret!({}, {}, {} as any, {} as any)).rejects.toThrowError(
+      await expect(Query.twoFactorSecret!({}, {}, {} as any, {} as any)).rejects.toThrow(
         'Unauthorized'
       );
     });

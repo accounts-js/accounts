@@ -25,15 +25,15 @@ describe('AccountsPassword', () => {
 
   describe('authenticate', () => {
     it('throws on invalid params', async () => {
-      await expect(password.authenticate({} as any)).rejects.toThrowError(
+      await expect(password.authenticate({} as any)).rejects.toThrow(
         'Unrecognized options for login request'
       );
     });
 
     it('throws on invalid type params', async () => {
-      await expect(
-        password.authenticate({ user: 'toto', password: 3 } as any)
-      ).rejects.toThrowError('Match failed');
+      await expect(password.authenticate({ user: 'toto', password: 3 } as any)).rejects.toThrow(
+        'Match failed'
+      );
     });
 
     it('return user', async () => {
@@ -57,7 +57,7 @@ describe('AccountsPassword', () => {
           user: 'toto@toto.com',
           password: 'toto',
         } as any)
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
 
     it('throws when hash not found', async () => {
@@ -69,7 +69,7 @@ describe('AccountsPassword', () => {
           user: 'toto@toto.com',
           password: 'toto',
         } as any)
-      ).rejects.toThrowError('User has no password set');
+      ).rejects.toThrow('User has no password set');
     });
 
     it('throws on incorrect password', async () => {
@@ -81,7 +81,7 @@ describe('AccountsPassword', () => {
           user: 'toto@toto.com',
           password: 'toto',
         } as any)
-      ).rejects.toThrowError('Incorrect password');
+      ).rejects.toThrow('Incorrect password');
     });
   });
 
@@ -107,7 +107,7 @@ describe('AccountsPassword', () => {
 
   describe('addEmail', () => {
     it('throws on invalid email', async () => {
-      expect(() => password.addEmail('id', 'email', true)).toThrowError('Invalid email');
+      expect(() => password.addEmail('id', 'email', true)).toThrow('Invalid email');
     });
 
     it('call this.db.addEmail', async () => {
@@ -137,13 +137,13 @@ describe('AccountsPassword', () => {
     invalidUser.emails = [];
 
     it('throws on invalid token', async () => {
-      await expect(password.verifyEmail('')).rejects.toThrowError('Invalid token');
+      await expect(password.verifyEmail('')).rejects.toThrow('Invalid token');
     });
 
     it('throws when no user is found', async () => {
       const findUserByEmailVerificationToken = jest.fn(() => Promise.resolve());
       password.setStore({ findUserByEmailVerificationToken } as any);
-      await expect(password.verifyEmail(token)).rejects.toThrowError('Verify email link expired');
+      await expect(password.verifyEmail(token)).rejects.toThrow('Verify email link expired');
     });
 
     it('throws when token not found', async () => {
@@ -151,7 +151,7 @@ describe('AccountsPassword', () => {
       password.server = { isTokenExpired } as any;
       const findUserByEmailVerificationToken = jest.fn(() => Promise.resolve({}));
       password.setStore({ findUserByEmailVerificationToken } as any);
-      await expect(password.verifyEmail(token)).rejects.toThrowError('Verify email link expired');
+      await expect(password.verifyEmail(token)).rejects.toThrow('Verify email link expired');
     });
 
     it('throws when email not found', async () => {
@@ -159,7 +159,7 @@ describe('AccountsPassword', () => {
       password.server = { isTokenExpired } as any;
       const findUserByEmailVerificationToken = jest.fn(() => Promise.resolve(invalidUser));
       password.setStore({ findUserByEmailVerificationToken } as any);
-      await expect(password.verifyEmail(token)).rejects.toThrowError(
+      await expect(password.verifyEmail(token)).rejects.toThrow(
         'Verify email link is for unknown address'
       );
     });
@@ -200,13 +200,11 @@ describe('AccountsPassword', () => {
     invalidUser.emails = [];
 
     it('throws on invalid token', async () => {
-      await expect(password.resetPassword('', '', connectionInfo)).rejects.toThrowError(
-        'Invalid token'
-      );
+      await expect(password.resetPassword('', '', connectionInfo)).rejects.toThrow('Invalid token');
     });
 
     it('throws on invalid password', async () => {
-      await expect(password.resetPassword(token, '', connectionInfo)).rejects.toThrowError(
+      await expect(password.resetPassword(token, '', connectionInfo)).rejects.toThrow(
         'Invalid new password'
       );
     });
@@ -214,7 +212,7 @@ describe('AccountsPassword', () => {
     it('throws when token not found', async () => {
       const findUserByResetPasswordToken = jest.fn(() => Promise.resolve());
       password.setStore({ findUserByResetPasswordToken } as any);
-      await expect(password.resetPassword(token, newPassword, connectionInfo)).rejects.toThrowError(
+      await expect(password.resetPassword(token, newPassword, connectionInfo)).rejects.toThrow(
         'Reset password link expired'
       );
     });
@@ -223,7 +221,7 @@ describe('AccountsPassword', () => {
       const findUserByResetPasswordToken = jest.fn(() => Promise.resolve(invalidUser));
       password.isTokenExpired = jest.fn(() => true);
       password.setStore({ findUserByResetPasswordToken } as any);
-      await expect(password.resetPassword(token, newPassword, connectionInfo)).rejects.toThrowError(
+      await expect(password.resetPassword(token, newPassword, connectionInfo)).rejects.toThrow(
         'Reset password link expired'
       );
     });
@@ -232,7 +230,7 @@ describe('AccountsPassword', () => {
       const findUserByResetPasswordToken = jest.fn(() => Promise.resolve(invalidUser));
       password.isTokenExpired = jest.fn(() => false);
       password.setStore({ findUserByResetPasswordToken } as any);
-      await expect(password.resetPassword(token, newPassword, connectionInfo)).rejects.toThrowError(
+      await expect(password.resetPassword(token, newPassword, connectionInfo)).rejects.toThrow(
         'Reset password link is for unknown address'
       );
     });
@@ -369,7 +367,7 @@ describe('AccountsPassword', () => {
     it('throws when new password is invalid', async () => {
       await expect(
         tmpAccountsPassword.changePassword('userId', 'old-password', null as any)
-      ).rejects.toThrowError('Invalid password');
+      ).rejects.toThrow('Invalid password');
     });
 
     it('call invalidateAllSessions', async () => {
@@ -477,13 +475,13 @@ describe('AccountsPassword', () => {
     };
 
     it('throws if email is empty', async () => {
-      await expect(password.sendVerificationEmail('')).rejects.toThrowError('Invalid email');
+      await expect(password.sendVerificationEmail('')).rejects.toThrow('Invalid email');
     });
 
     it('throws if user is not found', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
       password.setStore({ findUserByEmail } as any);
-      await expect(password.sendVerificationEmail(unverifiedEmail)).rejects.toThrowError(
+      await expect(password.sendVerificationEmail(unverifiedEmail)).rejects.toThrow(
         'User not found'
       );
     });
@@ -549,13 +547,13 @@ describe('AccountsPassword', () => {
     const validUser = { emails: [{ address: email }] };
 
     it('throws if email is empty', async () => {
-      await expect(password.sendResetPasswordEmail('')).rejects.toThrowError('Invalid email');
+      await expect(password.sendResetPasswordEmail('')).rejects.toThrow('Invalid email');
     });
 
     it('throws if user is not found', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
       password.setStore({ findUserByEmail } as any);
-      await expect(password.sendResetPasswordEmail(email)).rejects.toThrowError('User not found');
+      await expect(password.sendResetPasswordEmail(email)).rejects.toThrow('User not found');
     });
 
     it('send email', async () => {
@@ -585,13 +583,13 @@ describe('AccountsPassword', () => {
     const validUser = { emails: [{ address: email }] };
 
     it('throws if email is empty', async () => {
-      await expect(password.sendEnrollmentEmail('')).rejects.toThrowError('Invalid email');
+      await expect(password.sendEnrollmentEmail('')).rejects.toThrow('Invalid email');
     });
 
     it('throws if user is not found', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
       password.setStore({ findUserByEmail } as any);
-      await expect(password.sendEnrollmentEmail(email)).rejects.toThrowError('User not found');
+      await expect(password.sendEnrollmentEmail(email)).rejects.toThrow('User not found');
     });
 
     it('send email', async () => {
@@ -624,7 +622,7 @@ describe('AccountsPassword', () => {
           username: '',
           email: '',
         })
-      ).rejects.toThrowError('Username or Email is required');
+      ).rejects.toThrow('Username or Email is required');
     });
 
     it('throws when username already exists', async () => {
@@ -635,7 +633,7 @@ describe('AccountsPassword', () => {
           password: '123456',
           username: 'user1',
         })
-      ).rejects.toThrowError('Username already exists');
+      ).rejects.toThrow('Username already exists');
     });
 
     it('throws when email already exists', async () => {
@@ -646,7 +644,7 @@ describe('AccountsPassword', () => {
           password: '123456',
           email: 'email1@email.com',
         })
-      ).rejects.toThrowError('Email already exists');
+      ).rejects.toThrow('Email already exists');
     });
 
     it('validateNewUser allow more fields', async () => {

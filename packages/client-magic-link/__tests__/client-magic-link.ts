@@ -19,7 +19,7 @@ describe('AccountsClientMagicLink', () => {
   });
 
   it('requires the client', async () => {
-    expect(() => new AccountsClientMagicLink(null as any)).toThrowError(
+    expect(() => new AccountsClientMagicLink(null as any)).toThrow(
       'A valid client instance is required'
     );
   });

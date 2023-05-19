@@ -34,13 +34,13 @@ describe('AccountsMagicLink', () => {
 
   describe('authenticate', () => {
     it('throws on invalid params', async () => {
-      await expect(magicLink.authenticate({} as any)).rejects.toThrowError(
+      await expect(magicLink.authenticate({} as any)).rejects.toThrow(
         'Unrecognized options for login request'
       );
     });
 
     it('throws on invalid type params', async () => {
-      await expect(magicLink.authenticate({ user: 'toto', token: 3 } as any)).rejects.toThrowError(
+      await expect(magicLink.authenticate({ user: 'toto', token: 3 } as any)).rejects.toThrow(
         'Match failed'
       );
     });
@@ -69,7 +69,7 @@ describe('AccountsMagicLink', () => {
           user: 'toto@toto.com',
           token: 'toto',
         } as any)
-      ).rejects.toThrowError('Login token expired');
+      ).rejects.toThrow('Login token expired');
     });
 
     it('throws on incorrect token', async () => {
@@ -80,7 +80,7 @@ describe('AccountsMagicLink', () => {
           user: 'toto@toto.com',
           token: 'toto',
         } as any)
-      ).rejects.toThrowError('Login token expired');
+      ).rejects.toThrow('Login token expired');
     });
 
     it('throws when token is expired', async () => {
@@ -92,7 +92,7 @@ describe('AccountsMagicLink', () => {
           user: 'toto@toto.com',
           token: 'toto',
         } as any)
-      ).rejects.toThrowError('Login token expired');
+      ).rejects.toThrow('Login token expired');
     });
   });
 
@@ -107,13 +107,13 @@ describe('AccountsMagicLink', () => {
     };
 
     it('throws if email is empty', async () => {
-      await expect(magicLink.requestMagicLinkEmail('')).rejects.toThrowError('Invalid email');
+      await expect(magicLink.requestMagicLinkEmail('')).rejects.toThrow('Invalid email');
     });
 
     it('throws if user is not found', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
       magicLink.setStore({ findUserByEmail } as any);
-      await expect(magicLink.requestMagicLinkEmail(unverifiedEmail)).rejects.toThrowError(
+      await expect(magicLink.requestMagicLinkEmail(unverifiedEmail)).rejects.toThrow(
         'User not found'
       );
     });

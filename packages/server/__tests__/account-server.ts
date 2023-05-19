@@ -15,7 +15,7 @@ describe('AccountsServer', () => {
 
   describe('config', () => {
     it('throws on invalid db', async () => {
-      expect(() => new AccountsServer({} as any, {})).toThrowError('A database driver is required');
+      expect(() => new AccountsServer({} as any, {})).toThrow('A database driver is required');
     });
 
     it('should throw if ambiguousErrorMessages and enableAutologin flags enabled at the same time', async () => {
@@ -29,7 +29,7 @@ describe('AccountsServer', () => {
             } as any,
             {}
           )
-      ).toThrowError();
+      ).toThrow();
     });
   });
 
@@ -48,7 +48,7 @@ describe('AccountsServer', () => {
   describe('loginWithService', () => {
     it('throws on invalid service', async () => {
       const accountServer = new AccountsServer({ db: {} } as any, {});
-      await expect(accountServer.loginWithService('facebook', {}, {})).rejects.toThrowError(
+      await expect(accountServer.loginWithService('facebook', {}, {})).rejects.toThrow(
         'No service with the name facebook was registered.'
       );
     });
@@ -59,7 +59,7 @@ describe('AccountsServer', () => {
       const accountServer = new AccountsServer({ db: {} } as any, {
         facebook: service,
       });
-      await expect(accountServer.loginWithService('facebook', {}, {})).rejects.toThrowError(
+      await expect(accountServer.loginWithService('facebook', {}, {})).rejects.toThrow(
         'Service facebook was not able to authenticate user'
       );
     });
@@ -70,7 +70,7 @@ describe('AccountsServer', () => {
       const accountServer = new AccountsServer({ db: {} } as any, {
         facebook: service,
       });
-      await expect(accountServer.loginWithService('facebook', {}, {})).rejects.toThrowError(
+      await expect(accountServer.loginWithService('facebook', {}, {})).rejects.toThrow(
         'Your account has been deactivated'
       );
     });
@@ -96,7 +96,7 @@ describe('AccountsServer', () => {
   describe('authenticateWithService', () => {
     it('throws on invalid service', async () => {
       const accountServer = new AccountsServer({ db: {} } as any, {});
-      await expect(accountServer.authenticateWithService('facebook', {}, {})).rejects.toThrowError(
+      await expect(accountServer.authenticateWithService('facebook', {}, {})).rejects.toThrow(
         'No service with the name facebook was registered.'
       );
     });
@@ -107,7 +107,7 @@ describe('AccountsServer', () => {
       const accountServer = new AccountsServer({ db: {} } as any, {
         facebook: service,
       });
-      await expect(accountServer.authenticateWithService('facebook', {}, {})).rejects.toThrowError(
+      await expect(accountServer.authenticateWithService('facebook', {}, {})).rejects.toThrow(
         'Service facebook was not able to authenticate user'
       );
     });
@@ -118,7 +118,7 @@ describe('AccountsServer', () => {
       const accountServer = new AccountsServer({ db: {} } as any, {
         facebook: service,
       });
-      await expect(accountServer.authenticateWithService('facebook', {}, {})).rejects.toThrowError(
+      await expect(accountServer.authenticateWithService('facebook', {}, {})).rejects.toThrow(
         'Your account has been deactivated'
       );
     });
@@ -723,7 +723,7 @@ describe('AccountsServer', () => {
           ip: 'ip',
           userAgent: 'userAgent',
         })
-      ).rejects.toThrowError('An accessToken and refreshToken are required');
+      ).rejects.toThrow('An accessToken and refreshToken are required');
     });
     it('throws error if tokens are not valid', async () => {
       const accountsServer = new AccountsServer(
@@ -738,7 +738,7 @@ describe('AccountsServer', () => {
           ip: 'ip',
           userAgent: 'userAgent',
         })
-      ).rejects.toThrowError('Tokens are not valid');
+      ).rejects.toThrow('Tokens are not valid');
     });
 
     it('throws error if session not found', async () => {
@@ -763,7 +763,7 @@ describe('AccountsServer', () => {
           ip: 'ip',
           userAgent: 'userAgent',
         })
-      ).rejects.toThrowError('Session not found');
+      ).rejects.toThrow('Session not found');
     });
 
     it('throws error if session not valid', async () => {
@@ -791,7 +791,7 @@ describe('AccountsServer', () => {
           ip: 'ip',
           userAgent: 'userAgent',
         })
-      ).rejects.toThrowError('Session is no longer valid');
+      ).rejects.toThrow('Session is no longer valid');
     });
 
     it('throws error if user not found', async () => {
@@ -823,7 +823,7 @@ describe('AccountsServer', () => {
           ip: 'ip',
           userAgent: 'userAgent',
         })
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
   });
 
@@ -836,7 +836,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      await expect(accountsServer.logout(null as any)).rejects.toThrowError(
+      await expect(accountsServer.logout(null as any)).rejects.toThrow(
         'An accessToken is required'
       );
     });
@@ -849,7 +849,7 @@ describe('AccountsServer', () => {
         },
         {}
       );
-      await expect(accountsServer.logout('bad access token')).rejects.toThrowError(
+      await expect(accountsServer.logout('bad access token')).rejects.toThrow(
         'Tokens are not valid'
       );
     });
@@ -872,7 +872,7 @@ describe('AccountsServer', () => {
           deactivated: false,
         },
       });
-      await expect(accountsServer.logout(accessToken)).rejects.toThrowError('Session not found');
+      await expect(accountsServer.logout(accessToken)).rejects.toThrow('Session not found');
     });
 
     it('throws error if session not valid', async () => {
@@ -895,7 +895,7 @@ describe('AccountsServer', () => {
           deactivated: false,
         },
       });
-      await expect(accountsServer.logout(accessToken)).rejects.toThrowError(
+      await expect(accountsServer.logout(accessToken)).rejects.toThrow(
         'Session is no longer valid'
       );
     });
@@ -927,7 +927,7 @@ describe('AccountsServer', () => {
         {}
       );
 
-      await expect(accountsServer.resumeSession(undefined as any)).rejects.toThrowError(
+      await expect(accountsServer.resumeSession(undefined as any)).rejects.toThrow(
         'An accessToken is required'
       );
     });
@@ -956,9 +956,7 @@ describe('AccountsServer', () => {
           deactivated: false,
         },
       });
-      await expect(accountsServer.resumeSession(accessToken)).rejects.toThrowError(
-        'User not found'
-      );
+      await expect(accountsServer.resumeSession(accessToken)).rejects.toThrow('User not found');
     });
 
     it('should throw if session is not found', async () => {
@@ -978,9 +976,7 @@ describe('AccountsServer', () => {
       );
 
       const { accessToken } = await accountsServer.createTokens({ token: '456', user });
-      await expect(accountsServer.resumeSession(accessToken)).rejects.toThrowError(
-        'Session not found'
-      );
+      await expect(accountsServer.resumeSession(accessToken)).rejects.toThrow('Session not found');
     });
 
     it('should throw if session is not valid', async () => {
@@ -1006,9 +1002,7 @@ describe('AccountsServer', () => {
       );
 
       const { accessToken } = await accountsServer.createTokens({ token: '456', user });
-      await expect(accountsServer.resumeSession(accessToken)).rejects.toThrowError(
-        'Invalid Session'
-      );
+      await expect(accountsServer.resumeSession(accessToken)).rejects.toThrow('Invalid Session');
     });
 
     it('return user', async () => {
@@ -1090,7 +1084,7 @@ describe('AccountsServer', () => {
           ip: 'ip',
           userAgent: 'userAgent',
         })
-      ).rejects.toThrowError('An accessToken is required');
+      ).rejects.toThrow('An accessToken is required');
     });
 
     it('throws error if access token is not valid', async () => {
@@ -1111,7 +1105,7 @@ describe('AccountsServer', () => {
             userAgent: 'userAgent',
           }
         )
-      ).rejects.toThrowError('Tokens are not valid');
+      ).rejects.toThrow('Tokens are not valid');
     });
 
     it('throws error if session is not valid', async () => {
@@ -1145,7 +1139,7 @@ describe('AccountsServer', () => {
             userAgent: 'userAgent',
           }
         )
-      ).rejects.toThrowError('Session is not valid for user');
+      ).rejects.toThrow('Session is not valid for user');
     });
 
     it('throws error if user is not found', async () => {
@@ -1181,7 +1175,7 @@ describe('AccountsServer', () => {
             userAgent: 'userAgent',
           }
         )
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
 
     it('throws error if impersonated user is not found', async () => {
@@ -1221,7 +1215,7 @@ describe('AccountsServer', () => {
             userAgent: 'userAgent',
           }
         )
-      ).rejects.toThrowError('Impersonated user not found');
+      ).rejects.toThrow('Impersonated user not found');
     });
 
     it('returns not authorized if impersonationAuthorize function is not passed in config', async () => {

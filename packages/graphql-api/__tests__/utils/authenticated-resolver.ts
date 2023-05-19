@@ -3,7 +3,7 @@ import { authenticated } from '../../src/utils/authenticated-resolver';
 describe('authenticated-resolver', () => {
   it('should throw if no user in context', async () => {
     const spy = jest.fn();
-    await expect(authenticated(spy)({}, {}, {}, {})).rejects.toThrowError('Unauthorized');
+    await expect(authenticated(spy)({}, {}, {}, {})).rejects.toThrow('Unauthorized');
     expect(spy).not.toHaveBeenCalled();
   });
 

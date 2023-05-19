@@ -41,7 +41,7 @@ describe('Accounts', () => {
   });
 
   it('requires a transport', async () => {
-    expect(() => new AccountsClient(null as any, null as any)).toThrowError(
+    expect(() => new AccountsClient(null as any, null as any)).toThrow(
       'A valid transport is required'
     );
   });
@@ -221,7 +221,7 @@ describe('Accounts', () => {
         throw new Error('Err');
       });
       await accountsClient.setTokens(tokens);
-      await expect(accountsClient.refreshSession()).rejects.toThrowError('Err');
+      await expect(accountsClient.refreshSession()).rejects.toThrow('Err');
       expect(localStorage.removeItem).toHaveBeenCalledTimes(2);
       expect(mockTransport.refreshTokens).not.toHaveBeenCalledWith();
     });
@@ -229,7 +229,7 @@ describe('Accounts', () => {
 
   describe('impersonate', () => {
     it('should throw error if no tokens', async () => {
-      await expect(accountsClient.impersonate({ userId: 'test' })).rejects.toThrowError(
+      await expect(accountsClient.impersonate({ userId: 'test' })).rejects.toThrow(
         'An access token is required'
       );
     });
@@ -239,7 +239,7 @@ describe('Accounts', () => {
         Promise.resolve({ authorized: false })
       );
       await accountsClient.setTokens(tokens);
-      await expect(accountsClient.impersonate({ userId: 'test' })).rejects.toThrowError(
+      await expect(accountsClient.impersonate({ userId: 'test' })).rejects.toThrow(
         'User unauthorized to impersonate'
       );
     });

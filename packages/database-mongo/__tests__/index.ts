@@ -37,7 +37,7 @@ describe('Mongo', () => {
 
     it('should throw when mongo id is not valid', async () => {
       const mongoTmp = new Mongo(databaseTests.db);
-      await expect(mongoTmp.findUserById('invalid_hex')).rejects.toThrowError(
+      await expect(mongoTmp.findUserById('invalid_hex')).rejects.toThrow(
         'Argument passed in must be a single String of 12 bytes or a string of 24 hex characters'
       );
     });
@@ -70,7 +70,7 @@ describe('Mongo', () => {
     });
 
     it('should throw with an invalid database connection object', () => {
-      expect(() => new Mongo(null as any)).toThrowError('A database connection is required');
+      expect(() => new Mongo(null as any)).toThrow('A database connection is required');
     });
   });
 
@@ -346,7 +346,7 @@ describe('Mongo', () => {
     it('should throw if user is not found', async () => {
       await expect(
         databaseTests.database.addEmail('589871d1c9393d445745a57c', 'unknowemail', false)
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
 
     it('should add email', async () => {
@@ -383,7 +383,7 @@ describe('Mongo', () => {
     it('should throw if user is not found', async () => {
       await expect(
         databaseTests.database.removeEmail('589871d1c9393d445745a57c', 'unknowemail')
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
 
     it('should remove email', async () => {
@@ -414,13 +414,13 @@ describe('Mongo', () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
       });
-      await expect(mongoOptions.verifyEmail('toto', 'hey')).rejects.toThrowError('User not found');
+      await expect(mongoOptions.verifyEmail('toto', 'hey')).rejects.toThrow('User not found');
     });
 
     it('should throw if user is not found', async () => {
       await expect(
         databaseTests.database.verifyEmail('589871d1c9393d445745a57c', 'unknowemail')
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
 
     it('should verify email', async () => {
@@ -444,13 +444,13 @@ describe('Mongo', () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
       });
-      await expect(mongoOptions.setUsername('toto', 'hey')).rejects.toThrowError('User not found');
+      await expect(mongoOptions.setUsername('toto', 'hey')).rejects.toThrow('User not found');
     });
 
     it('should throw if user is not found', async () => {
       await expect(
         databaseTests.database.setUsername('589871d1c9393d445745a57c', 'username')
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
 
     it('should change username', async () => {
@@ -469,13 +469,13 @@ describe('Mongo', () => {
       const mongoOptions = new Mongo(databaseTests.db, {
         convertUserIdToMongoObjectId: false,
       });
-      await expect(mongoOptions.setPassword('toto', 'hey')).rejects.toThrowError('User not found');
+      await expect(mongoOptions.setPassword('toto', 'hey')).rejects.toThrow('User not found');
     });
 
     it('should throw if user is not found', async () => {
       await expect(
         databaseTests.database.setPassword('589871d1c9393d445745a57c', 'toto')
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
 
     it('should change password', async () => {

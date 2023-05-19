@@ -321,7 +321,7 @@ describe('MongoServicePassword', () => {
       const mongoServicePassword = new MongoServicePassword({ database });
       await expect(
         mongoServicePassword.addEmail('589871d1c9393d445745a57c', 'unknowemail', false)
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
 
     it('should add email', async () => {
@@ -363,7 +363,7 @@ describe('MongoServicePassword', () => {
       const mongoServicePassword = new MongoServicePassword({ database });
       await expect(
         mongoServicePassword.removeEmail('589871d1c9393d445745a57c', 'unknowemail')
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
 
     it('should remove email', async () => {
@@ -397,7 +397,7 @@ describe('MongoServicePassword', () => {
         database,
         convertUserIdToMongoObjectId: false,
       });
-      await expect(mongoServicePassword.verifyEmail('toto', 'hey')).rejects.toThrowError(
+      await expect(mongoServicePassword.verifyEmail('toto', 'hey')).rejects.toThrow(
         'User not found'
       );
     });
@@ -406,7 +406,7 @@ describe('MongoServicePassword', () => {
       const mongoServicePassword = new MongoServicePassword({ database });
       await expect(
         mongoServicePassword.verifyEmail('589871d1c9393d445745a57c', 'unknowemail')
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
 
     it('should verify email', async () => {
@@ -432,7 +432,7 @@ describe('MongoServicePassword', () => {
         database,
         convertUserIdToMongoObjectId: false,
       });
-      await expect(mongoServicePassword.setUsername('toto', 'hey')).rejects.toThrowError(
+      await expect(mongoServicePassword.setUsername('toto', 'hey')).rejects.toThrow(
         'User not found'
       );
     });
@@ -441,7 +441,7 @@ describe('MongoServicePassword', () => {
       const mongoServicePassword = new MongoServicePassword({ database });
       await expect(
         mongoServicePassword.setUsername('589871d1c9393d445745a57c', 'username')
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
 
     it('should change username', async () => {
@@ -462,7 +462,7 @@ describe('MongoServicePassword', () => {
         database,
         convertUserIdToMongoObjectId: false,
       });
-      await expect(mongoServicePassword.setPassword('toto', 'hey')).rejects.toThrowError(
+      await expect(mongoServicePassword.setPassword('toto', 'hey')).rejects.toThrow(
         'User not found'
       );
     });
@@ -471,7 +471,7 @@ describe('MongoServicePassword', () => {
       const mongoServicePassword = new MongoServicePassword({ database });
       await expect(
         mongoServicePassword.setPassword('589871d1c9393d445745a57c', 'toto')
-      ).rejects.toThrowError('User not found');
+      ).rejects.toThrow('User not found');
     });
 
     it('should change password', async () => {
@@ -497,7 +497,7 @@ describe('MongoServicePassword', () => {
       const userId = await mongoServicePassword.createUser(user);
       await expect(
         mongoServicePassword.removeAllResetPasswordTokens(userId)
-      ).resolves.not.toThrowError();
+      ).resolves.not.toThrow();
     });
 
     it('should remove the password reset tokens', async () => {
@@ -527,7 +527,7 @@ describe('MongoServicePassword', () => {
       const userId = await mongoServicePassword.createUser(user);
       await expect(
         mongoServicePassword.addEmailVerificationToken(userId, 'john@doe.com', 'token')
-      ).resolves.not.toThrowError();
+      ).resolves.not.toThrow();
     });
 
     it('should add a token', async () => {
@@ -554,7 +554,7 @@ describe('MongoServicePassword', () => {
       const userId = await mongoServicePassword.createUser(user);
       await expect(
         mongoServicePassword.addResetPasswordToken(userId, 'john@doe.com', 'token', 'reset')
-      ).resolves.not.toThrowError();
+      ).resolves.not.toThrow();
     });
 
     it('should add a token', async () => {
