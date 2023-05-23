@@ -2,10 +2,11 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { AccountsContextGraphQLModules } from './modules/accounts/';
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -16,19 +17,19 @@ export type Scalars = {
 };
 
 export type AuthenticateParamsInput = {
-  access_token?: Maybe<Scalars['String']>;
-  access_token_secret?: Maybe<Scalars['String']>;
-  code?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  provider?: Maybe<Scalars['String']>;
-  token?: Maybe<Scalars['String']>;
-  user?: Maybe<UserInput>;
+  access_token?: InputMaybe<Scalars['String']>;
+  access_token_secret?: InputMaybe<Scalars['String']>;
+  code?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  provider?: InputMaybe<Scalars['String']>;
+  token?: InputMaybe<Scalars['String']>;
+  user?: InputMaybe<UserInput>;
 };
 
 export type CreateUserInput = {
-  email?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  username?: Maybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 export type CreateUserResult = {
@@ -51,9 +52,9 @@ export type ImpersonateReturn = {
 };
 
 export type ImpersonationUserIdentityInput = {
-  email?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['String']>;
-  username?: Maybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  userId?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 export type LoginResult = {
@@ -184,14 +185,14 @@ export type TwoFactorSecretKey = {
 };
 
 export type TwoFactorSecretKeyInput = {
-  ascii?: Maybe<Scalars['String']>;
-  base32?: Maybe<Scalars['String']>;
-  google_auth_qr?: Maybe<Scalars['String']>;
-  hex?: Maybe<Scalars['String']>;
-  otpauth_url?: Maybe<Scalars['String']>;
-  qr_code_ascii?: Maybe<Scalars['String']>;
-  qr_code_base32?: Maybe<Scalars['String']>;
-  qr_code_hex?: Maybe<Scalars['String']>;
+  ascii?: InputMaybe<Scalars['String']>;
+  base32?: InputMaybe<Scalars['String']>;
+  google_auth_qr?: InputMaybe<Scalars['String']>;
+  hex?: InputMaybe<Scalars['String']>;
+  otpauth_url?: InputMaybe<Scalars['String']>;
+  qr_code_ascii?: InputMaybe<Scalars['String']>;
+  qr_code_base32?: InputMaybe<Scalars['String']>;
+  qr_code_hex?: InputMaybe<Scalars['String']>;
 };
 
 export type User = {
@@ -202,9 +203,9 @@ export type User = {
 };
 
 export type UserInput = {
-  email?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['ID']>;
-  username?: Maybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -225,7 +226,7 @@ export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
-) => AsyncIterator<TResult> | Promise<AsyncIterator<TResult>>;
+) => AsyncIterable<TResult> | Promise<AsyncIterable<TResult>>;
 
 export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -269,6 +270,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   context: TContext,
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
+
+
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {

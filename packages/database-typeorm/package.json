@@ -30,19 +30,19 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/database-tests": "^0.32.2",
-    "@types/jest": "27.0.2",
+    "@types/jest": "27.5.2",
     "@types/lodash": "4.14.194",
-    "@types/node": "16.11.7",
+    "@types/node": "20.2.3",
     "jest": "27.3.1",
-    "pg": "8.7.1",
-    "rimraf": "3.0.2",
-    "ts-jest": "27.0.7"
+    "pg": "8.11.0",
+    "rimraf": "5.0.1",
+    "ts-jest": "27.1.5"
   },
   "dependencies": {
     "@accounts/types": "^0.33.1",
     "lodash": "4.17.21",
     "reflect-metadata": "^0.1.13",
-    "tslib": "2.3.1",
-    "typeorm": "^0.2.38"
+    "tslib": "2.5.2",
+    "typeorm": "0.3.16"
   }
 }

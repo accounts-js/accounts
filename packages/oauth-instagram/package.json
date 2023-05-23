@@ -23,16 +23,16 @@
   },
   "dependencies": {
     "@accounts/oauth": "^0.32.2",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.6",
-    "tslib": "2.3.1"
+    "request": "2.88.2",
+    "request-promise": "4.2.6",
+    "tslib": "2.5.2"
   },
   "devDependencies": {
-    "@types/jest": "27.0.2",
-    "@types/node": "16.11.7",
+    "@types/jest": "27.5.2",
+    "@types/node": "20.2.3",
     "@types/request-promise": "4.1.48",
     "jest": "27.3.1",
-    "rimraf": "3.0.2",
-    "ts-jest": "27.0.7"
+    "rimraf": "5.0.1",
+    "ts-jest": "27.1.5"
   }
 }

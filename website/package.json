@@ -38,7 +38,7 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "16.11.7",
+    "@types/node": "20.2.3",
     "@types/react": "17.0.38",
     "ts-node": "10.4.0",
     "typedoc": "0.17.8",

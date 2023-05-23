@@ -81,7 +81,8 @@ export class AccountsTypeorm implements DatabaseInterface {
   }
 
   public async findUserById(userId: string): Promise<User | null> {
-    const user = await this.userRepository.findOne(userId, {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
       cache: this.options.cache,
     });
     if (!user) {
@@ -348,7 +349,8 @@ export class AccountsTypeorm implements DatabaseInterface {
 
   public async findSessionById(sessionId: string): Promise<UserSession | null> {
     try {
-      const session = await this.sessionRepository.findOne(sessionId, {
+      const session = await this.sessionRepository.findOne({
+        where: { id: sessionId },
         cache: this.options.cache,
       });
 
@@ -363,12 +365,10 @@ export class AccountsTypeorm implements DatabaseInterface {
   }
 
   public async findSessionByToken(token: string) {
-    const session = await this.sessionRepository.findOne(
-      { token },
-      {
-        cache: this.options.cache,
-      }
-    );
+    const session = await this.sessionRepository.findOne({
+      where: { token },
+      cache: this.options.cache,
+    });
     if (!session) {
       return null;
     }

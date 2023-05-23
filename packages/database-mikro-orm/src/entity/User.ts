@@ -6,7 +6,7 @@ import { Session, SessionCtor } from './Session';
 export interface IUser<
   CustomEmail extends Email<any>,
   CustomSession extends Session<any>,
-  CustomService extends Service<any>
+  CustomService extends Service<any>,
 > {
   id: number;
   username?: string;
@@ -24,7 +24,7 @@ export const getUserCtor = <
   CustomService extends Service<any>,
   CustomUserCtorArgs extends UserCtorArgs,
   CustomEmailCtorArgs extends EmailCtorArgs<any>,
-  CustomServiceCtorArgs extends ServiceCtorArgs<any>
+  CustomServiceCtorArgs extends ServiceCtorArgs<any>,
 >({
   abstract = false,
   EmailEntity = Email as new (args: CustomEmailCtorArgs) => CustomEmail,
@@ -85,7 +85,7 @@ export type UserCtor<
   CustomEmail extends Email<any>,
   CustomSession extends Session<any>,
   CustomService extends Service<any>,
-  CustomUserCtorArgs extends UserCtorArgs
+  CustomUserCtorArgs extends UserCtorArgs,
 > = new (args: CustomUserCtorArgs) => IUser<CustomEmail, CustomSession, CustomService>;
 
 export const getUserSchema = ({
@@ -121,17 +121,17 @@ export const getUserSchema = ({
       services: {
         reference: '1:m',
         entity: () => ServiceEntity?.name ?? Service.name,
-        mappedBy: (service) => service.user,
+        mappedBy: (service: any) => service.user,
       },
       emails: {
         reference: '1:m',
         entity: () => EmailEntity?.name ?? Email.name,
-        mappedBy: (email) => email.user,
+        mappedBy: (email: any) => email.user,
       },
       sessions: {
         reference: '1:m',
         entity: () => SessionEntity?.name ?? Session.name,
-        mappedBy: (session) => session.user,
+        mappedBy: (session: any) => session.user,
       },
     },
   });

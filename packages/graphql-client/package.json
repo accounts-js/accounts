@@ -35,18 +35,18 @@
   "dependencies": {
     "@accounts/client": "^0.33.1",
     "@accounts/types": "^0.33.1",
-    "@graphql-typed-document-node/core": "3.1.0",
-    "tslib": "2.3.1"
+    "@graphql-typed-document-node/core": "3.2.0",
+    "tslib": "2.5.2"
   },
   "devDependencies": {
-    "@graphql-codegen/add": "3.1.0",
-    "@graphql-codegen/cli": "2.2.1",
-    "@graphql-codegen/typed-document-node": "2.1.6",
-    "@graphql-codegen/typescript": "2.2.4",
-    "@graphql-codegen/typescript-operations": "2.1.8",
-    "@types/jest": "27.0.2",
-    "graphql": "15.6.1",
+    "@graphql-codegen/add": "4.0.1",
+    "@graphql-codegen/cli": "3.3.1",
+    "@graphql-codegen/typed-document-node": "4.0.1",
+    "@graphql-codegen/typescript": "3.0.4",
+    "@graphql-codegen/typescript-operations": "3.0.4",
+    "@types/jest": "27.5.2",
+    "graphql": "15.8.0",
     "jest": "27.3.1",
-    "ts-jest": "27.0.7"
+    "ts-jest": "27.1.5"
   }
 }

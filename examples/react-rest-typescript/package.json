@@ -40,11 +40,11 @@
     "react-dom": "17.0.2",
     "react-router": "5.2.1",
     "react-router-dom": "5.3.0",
-    "tslib": "2.3.1"
+    "tslib": "2.5.2"
   },
   "devDependencies": {
     "@accounts/types": "^0.33.2",
-    "@types/node": "16.11.7",
+    "@types/node": "20.2.3",
     "@types/qrcode.react": "1.0.2",
     "@types/react": "17.0.38",
     "@types/react-dom": "17.0.11",

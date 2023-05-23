@@ -33,18 +33,18 @@
   "license": "MIT",
   "dependencies": {
     "@accounts/types": "^0.33.1",
-    "ioredis": "^4.28.0",
-    "shortid": "^2.2.15",
-    "tslib": "2.3.1"
+    "ioredis": "4.28.5",
+    "shortid": "2.2.16",
+    "tslib": "2.5.2"
   },
   "devDependencies": {
     "@accounts/database-tests": "^0.32.2",
-    "@types/ioredis": "4.27.8",
-    "@types/jest": "27.0.2",
-    "@types/node": "16.11.7",
+    "@types/ioredis": "4.28.10",
+    "@types/jest": "27.5.2",
+    "@types/node": "20.2.3",
     "@types/shortid": "0.0.29",
     "jest": "27.3.1",
-    "rimraf": "3.0.2",
-    "ts-jest": "27.0.7"
+    "rimraf": "5.0.1",
+    "ts-jest": "27.1.5"
   }
 }

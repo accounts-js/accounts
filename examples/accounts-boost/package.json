@@ -17,21 +17,21 @@
     "@accounts/graphql-api": "^0.33.1",
     "@accounts/mongo": "^0.34.0",
     "@accounts/password": "^0.32.1",
-    "@graphql-tools/delegate": "8.4.0",
-    "@graphql-tools/merge": "8.2.0",
-    "@graphql-tools/schema": "8.3.0",
-    "@graphql-tools/stitch": "8.4.0",
-    "@graphql-tools/utils": "8.5.0",
-    "@graphql-tools/wrap": "8.3.0",
-    "apollo-server": "3.4.0",
-    "graphql": "15.6.1",
+    "@graphql-tools/delegate": "9.0.35",
+    "@graphql-tools/merge": "8.4.2",
+    "@graphql-tools/schema": "9.0.19",
+    "@graphql-tools/stitch": "8.7.50",
+    "@graphql-tools/utils": "9.2.1",
+    "@graphql-tools/wrap": "9.4.2",
+    "apollo-server": "3.12.0",
+    "graphql": "15.8.0",
     "lodash": "4.17.21",
-    "node-fetch": "2.6.5",
-    "tslib": "2.3.1"
+    "node-fetch": "2.6.11",
+    "tslib": "2.5.2"
   },
   "devDependencies": {
     "@types/lodash": "4.14.194",
-    "nodemon": "2.0.14",
+    "nodemon": "2.0.22",
     "ts-node": "10.4.0",
     "typescript": "4.6.4"
   }

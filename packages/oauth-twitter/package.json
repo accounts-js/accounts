@@ -24,14 +24,14 @@
   "dependencies": {
     "@accounts/oauth": "^0.32.2",
     "oauth": "^0.9.15",
-    "tslib": "2.3.1"
+    "tslib": "2.5.2"
   },
   "devDependencies": {
-    "@types/jest": "27.0.2",
-    "@types/node": "16.11.7",
+    "@types/jest": "27.5.2",
+    "@types/node": "20.2.3",
     "@types/oauth": "0.9.1",
     "jest": "27.3.1",
-    "rimraf": "3.0.2",
-    "ts-jest": "27.0.7"
+    "rimraf": "5.0.1",
+    "ts-jest": "27.1.5"
   }
 }
