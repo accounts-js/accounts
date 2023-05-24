@@ -22,7 +22,7 @@
     "graphql": "15.8.0",
     "graphql-modules": "2.1.2",
     "graphql-tag": "2.12.6",
-    "mongoose": "5.13.17",
+    "mongoose": "7.2.0",
     "tslib": "2.5.2"
   },
   "devDependencies": {

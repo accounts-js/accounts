@@ -14,10 +14,7 @@ describe('MongoServiceMagicLink', () => {
 
   beforeAll(async () => {
     const url = 'mongodb://localhost:27017';
-    connection = await MongoClient.connect(url, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    connection = await MongoClient.connect(url);
     database = await connection.db('accounts-mongo-magic-link-tests');
   });
 

@@ -1,6 +1,8 @@
-import { Collection, Db, ObjectID, IndexOptions } from 'mongodb';
+import { Collection, Db, ObjectId, CreateIndexesOptions } from 'mongodb';
 import { CreateUserServicePassword, DatabaseInterfaceServicePassword, User } from '@accounts/types';
 import { toMongoID } from './utils';
+
+type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 export interface MongoUser {
   _id?: string | object;
@@ -14,7 +16,7 @@ export interface MongoUser {
     {
       address: string;
       verified: boolean;
-    }
+    },
   ];
   [key: string]: any;
 }
@@ -75,7 +77,9 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
   // Mongo database object
   private database: Db;
   // Mongo user collection
-  private userCollection: Collection;
+  private userCollection: Collection<
+    PartialBy<User & { _id?: string | object }, 'id' | 'deactivated'>
+  >;
 
   constructor(options: MongoServicePasswordOptions) {
     this.options = {
@@ -92,7 +96,9 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
    * Setup the mongo indexes needed for the password service.
    * @param options Options passed to the mongo native `createIndex` method.
    */
-  public async setupIndexes(options: Omit<IndexOptions, 'unique' | 'sparse'> = {}): Promise<void> {
+  public async setupIndexes(
+    options: Omit<CreateIndexesOptions, 'unique' | 'sparse'> = {}
+  ): Promise<void> {
     // Username index to allow fast queries made with username
     // Username is unique
     await this.userCollection.createIndex('username', {
@@ -149,9 +155,9 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
       user._id = this.options.idProvider();
     }
     const ret = await this.userCollection.insertOne(user);
-    
+
     // keep ret.ops for compatibility with MongoDB 3.X, version 4.X uses insertedId
-    return ((ret.insertedId ? ret.insertedId : ret.ops[0]._id) as ObjectID).toString();
+    return ((ret.insertedId ? ret.insertedId : (ret as any).ops[0]._id) as ObjectId).toString();
   }
 
   /**
@@ -164,7 +170,7 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
     if (user) {
       user.id = user._id.toString();
     }
-    return user;
+    return user as User;
   }
 
   /**
@@ -179,7 +185,7 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
     if (user) {
       user.id = user._id.toString();
     }
-    return user;
+    return user as User;
   }
 
   /**
@@ -197,7 +203,7 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
     if (user) {
       user.id = user._id.toString();
     }
-    return user;
+    return user as User;
   }
 
   /**
@@ -221,7 +227,7 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
     if (user) {
       user.id = user._id.toString();
     }
-    return user;
+    return user as User;
   }
 
   /**
@@ -235,7 +241,7 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
     if (user) {
       user.id = user._id.toString();
     }
-    return user;
+    return user as User;
   }
 
   /**
@@ -262,7 +268,8 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
     );
     if (
       (ret.modifiedCount && ret.modifiedCount === 0) ||
-      (ret.result && ret.result.nModified === 0)
+      // keep ret.result.nModified for compatibility with MongoDB 3.X, version 4.X uses modifiedCount
+      ((ret as any).result && (ret as any).result.nModified === 0)
     ) {
       throw new Error('User not found');
     }
@@ -286,7 +293,8 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
     );
     if (
       (ret.modifiedCount && ret.modifiedCount === 0) ||
-      (ret.result && ret.result.nModified === 0)
+      // keep ret.result.nModified for compatibility with MongoDB 3.X, version 4.X uses modifiedCount
+      ((ret as any).result && (ret as any).result.nModified === 0)
     ) {
       throw new Error('User not found');
     }
@@ -311,7 +319,8 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
     );
     if (
       (ret.modifiedCount && ret.modifiedCount === 0) ||
-      (ret.result && ret.result.nModified === 0)
+      // keep ret.result.nModified for compatibility with MongoDB 3.X, version 4.X uses modifiedCount
+      ((ret as any).result && (ret as any).result.nModified === 0)
     ) {
       throw new Error('User not found');
     }
@@ -336,7 +345,8 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
     );
     if (
       (ret.modifiedCount && ret.modifiedCount === 0) ||
-      (ret.result && ret.result.nModified === 0)
+      // keep ret.result.nModified for compatibility with MongoDB 3.X, version 4.X uses modifiedCount
+      ((ret as any).result && (ret as any).result.nModified === 0)
     ) {
       throw new Error('User not found');
     }
@@ -363,7 +373,8 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
     );
     if (
       (ret.modifiedCount && ret.modifiedCount === 0) ||
-      (ret.result && ret.result.nModified === 0)
+      // keep ret.result.nModified for compatibility with MongoDB 3.X, version 4.X uses modifiedCount
+      ((ret as any).result && (ret as any).result.nModified === 0)
     ) {
       throw new Error('User not found');
     }

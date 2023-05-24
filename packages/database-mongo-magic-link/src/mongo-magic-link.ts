@@ -1,6 +1,8 @@
-import { Collection, Db, IndexOptions } from 'mongodb';
+import { Collection, Db, CreateIndexesOptions } from 'mongodb';
 import { DatabaseInterfaceServiceMagicLink, User } from '@accounts/types';
 import { toMongoID } from './utils';
+
+type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 export interface MongoServiceMagicLinkOptions {
   /**
@@ -36,7 +38,9 @@ export class MongoServiceMagicLink implements DatabaseInterfaceServiceMagicLink 
   // Mongo database object
   private database: Db;
   // Mongo user collection
-  private userCollection: Collection;
+  private userCollection: Collection<
+    PartialBy<User & { _id?: string | object }, 'id' | 'deactivated'>
+  >;
 
   constructor(options: MongoServiceMagicLinkOptions) {
     this.options = {
@@ -52,7 +56,9 @@ export class MongoServiceMagicLink implements DatabaseInterfaceServiceMagicLink 
    * Setup the mongo indexes needed for the token service.
    * @param options Options passed to the mongo native `createIndex` method.
    */
-  public async setupIndexes(options: Omit<IndexOptions, 'unique' | 'sparse'> = {}): Promise<void> {
+  public async setupIndexes(
+    options: Omit<CreateIndexesOptions, 'unique' | 'sparse'> = {}
+  ): Promise<void> {
     // Token index used to verify the email address of a user
     await this.userCollection.createIndex('services.magicLink.loginTokens.token', {
       ...options,
@@ -71,7 +77,7 @@ export class MongoServiceMagicLink implements DatabaseInterfaceServiceMagicLink 
     if (user) {
       user.id = user._id.toString();
     }
-    return user;
+    return user as User;
   }
 
   /**

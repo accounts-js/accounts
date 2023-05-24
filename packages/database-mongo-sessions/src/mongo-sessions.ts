@@ -1,6 +1,8 @@
-import { Collection, Db, ObjectID, IndexOptions } from 'mongodb';
+import { Collection, Db, ObjectId, CreateIndexesOptions } from 'mongodb';
 import { ConnectionInformations, DatabaseInterfaceSessions, Session } from '@accounts/types';
 import { toMongoID } from './utils';
+
+type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 export interface MongoSessionsOptions {
   /**
@@ -59,7 +61,9 @@ export class MongoSessions implements DatabaseInterfaceSessions {
   // Mongo database object
   private database: Db;
   // Mongo session collection
-  private sessionCollection: Collection;
+  private sessionCollection: Collection<
+    PartialBy<Session & { _id?: string | object }, 'createdAt' | 'updatedAt' | 'id'>
+  >;
 
   constructor(options: MongoSessionsOptions) {
     this.options = {
@@ -85,7 +89,9 @@ export class MongoSessions implements DatabaseInterfaceSessions {
    * Setup the mongo indexes needed for the sessions.
    * @param options Options passed to the mongo native `createIndex` method.
    */
-  public async setupIndexes(options: Omit<IndexOptions, 'unique' | 'sparse'> = {}): Promise<void> {
+  public async setupIndexes(
+    options: Omit<CreateIndexesOptions, 'unique' | 'sparse'> = {}
+  ): Promise<void> {
     // Token index used to query a session
     await this.sessionCollection.createIndex('token', {
       ...options,
@@ -124,8 +130,7 @@ export class MongoSessions implements DatabaseInterfaceSessions {
 
     const ret = await this.sessionCollection.insertOne(session);
     // keep ret.ops for compatibility with MongoDB 3.X, version 4.X uses insertedId
-    return ((ret.insertedId ? ret.insertedId : ret.ops[0]._id) as ObjectID).toString();
-
+    return ((ret.insertedId ? ret.insertedId : (ret as any).ops[0]._id) as ObjectId).toString();
   }
 
   /**
@@ -138,7 +143,7 @@ export class MongoSessions implements DatabaseInterfaceSessions {
     if (session) {
       session.id = session._id.toString();
     }
-    return session;
+    return session as Session;
   }
 
   /**
@@ -150,7 +155,7 @@ export class MongoSessions implements DatabaseInterfaceSessions {
     if (session) {
       session.id = session._id.toString();
     }
-    return session;
+    return session as Session;
   }
 
   /**
@@ -206,7 +211,7 @@ export class MongoSessions implements DatabaseInterfaceSessions {
     const selector: { userId: string; _id?: object } = { userId };
 
     if (excludedSessionIds && excludedSessionIds.length > 0) {
-      let excludedObjectIds: string[] | ObjectID[] = excludedSessionIds;
+      let excludedObjectIds: string[] | ObjectId[] = excludedSessionIds;
 
       if (this.options.convertSessionIdToMongoObjectId) {
         excludedObjectIds = excludedSessionIds.map((sessionId) => {

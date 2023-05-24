@@ -1,4 +1,4 @@
-import { Collection, Db, ObjectID, IndexOptions } from 'mongodb';
+import { Collection, Db, ObjectId, CreateIndexesOptions } from 'mongodb';
 import {
   ConnectionInformations,
   CreateUserServicePassword,
@@ -11,9 +11,11 @@ import { MongoServicePassword } from '@accounts/mongo-password';
 import { MongoServiceMagicLink } from '@accounts/mongo-magic-link';
 import { AccountsMongoOptions } from './types';
 
-const toMongoID = (objectId: string | ObjectID) => {
+type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
+const toMongoID = (objectId: string | ObjectId) => {
   if (typeof objectId === 'string') {
-    return new ObjectID(objectId);
+    return new ObjectId(objectId);
   }
   return objectId;
 };
@@ -36,7 +38,7 @@ export class Mongo implements DatabaseInterface {
   // Db object
   private db: Db;
   // Account collection
-  private collection: Collection;
+  private collection: Collection<PartialBy<User & { _id?: string | object }, 'id' | 'deactivated'>>;
   // Session adaptor
   private sessions: MongoSessions;
   // Password service
@@ -72,7 +74,9 @@ export class Mongo implements DatabaseInterface {
    * Setup the mongo indexes needed.
    * @param options Options passed to the mongo native `createIndex` method.
    */
-  public async setupIndexes(options: Omit<IndexOptions, 'unique' | 'sparse'> = {}): Promise<void> {
+  public async setupIndexes(
+    options: Omit<CreateIndexesOptions, 'unique' | 'sparse'> = {}
+  ): Promise<void> {
     await this.sessions.setupIndexes(options);
     await this.servicePassword.setupIndexes(options);
     await this.serviceMagicLink.setupIndexes(options);
@@ -198,7 +202,7 @@ export class Mongo implements DatabaseInterface {
     if (user) {
       user.id = user._id.toString();
     }
-    return user;
+    return user as User;
   }
 
   public async setService(userId: string, serviceName: string, service: object): Promise<void> {

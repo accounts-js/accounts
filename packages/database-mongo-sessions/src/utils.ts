@@ -1,8 +1,8 @@
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 
-export const toMongoID = (objectId: string | ObjectID) => {
+export const toMongoID = (objectId: string | ObjectId) => {
   if (typeof objectId === 'string') {
-    return new ObjectID(objectId);
+    return new ObjectId(objectId);
   }
   return objectId;
 };
