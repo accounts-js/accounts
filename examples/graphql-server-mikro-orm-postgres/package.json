@@ -19,9 +19,10 @@
     "test": "yarn build"
   },
   "dependencies": {
-    "@accounts/graphql-api": "^0.33.2",
     "@accounts/mikro-orm": "^0.34.0",
+    "@accounts/module-core": "^0.34.0",
     "@accounts/module-mikro-orm": "^0.34.0",
+    "@accounts/module-password": "^0.34.0",
     "@accounts/password": "^0.32.1",
     "@accounts/server": "^0.33.1",
     "graphql-modules": "2.1.2",

@@ -1,16 +1,17 @@
 {
-  "name": "@accounts/module-mikro-orm",
+  "name": "@accounts/module-core",
   "version": "0.34.0",
-  "description": "MikroORM Database Interface GraphQL Module",
+  "description": "Server side GraphQL transport for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf lib",
     "start": "tsc --watch",
     "precompile": "pnpm run clean",
-    "compile": "tsc",
+    "compile": "pnpm run generate:graphql && tsc",
     "testonly": "jest",
     "coverage": "pnpm run testonly -- --coverage",
+    "generate:graphql": "gql-gen",
     "prepublishOnly": "pnpm run compile"
   },
   "files": [
@@ -32,13 +33,9 @@
   },
   "homepage": "https://github.com/js-accounts/accounts",
   "peerDependencies": {
-    "@accounts/magic-link": "^0.1.0",
-    "@accounts/mikro-orm": "^0.34.0",
-    "@accounts/module-core": "^0.34.0",
-    "@accounts/password": "^0.32.0",
     "@accounts/server": "^0.32.0 || ^0.33.0",
     "@accounts/types": "^0.32.0 || ^0.33.0",
-    "@mikro-orm/core": "^5.0.0",
+    "@graphql-tools/schema": "^9.0.0",
     "graphql": "^15.0.0",
     "graphql-modules": "^2.0.0",
     "graphql-tag": "^2.10.0"
@@ -50,10 +47,6 @@
     "tslib": "2.5.2"
   },
   "devDependencies": {
-    "@accounts/magic-link": "^0.1.1",
-    "@accounts/mikro-orm": "^0.34.0",
-    "@accounts/module-core": "^0.34.0",
-    "@accounts/password": "^0.32.1",
     "@accounts/server": "^0.33.1",
     "@accounts/types": "^0.33.2",
     "@graphql-codegen/add": "4.0.1",
@@ -63,13 +56,7 @@
     "@graphql-codegen/typescript-operations": "3.0.4",
     "@graphql-codegen/typescript-resolvers": "3.2.1",
     "@graphql-codegen/typescript-type-graphql": "2.3.6",
-    "@mikro-orm/cli": "5.7.9",
-    "@mikro-orm/core": "5.7.9",
-    "@mikro-orm/entity-generator": "5.7.9",
-    "@mikro-orm/knex": "5.7.9",
-    "@mikro-orm/migrations": "5.7.9",
-    "@mikro-orm/postgresql": "5.7.9",
-    "@mikro-orm/reflection": "5.7.9",
+    "@graphql-tools/schema": "9.0.19",
     "@types/jest": "27.5.2",
     "@types/node": "20.2.3",
     "@types/request-ip": "0.0.37",
@@ -77,7 +64,6 @@
     "graphql-modules": "2.1.2",
     "graphql-tag": "2.12.6",
     "jest": "27.3.1",
-    "reflect-metadata": "0.1.13",
     "rimraf": "5.0.1",
     "ts-jest": "27.1.5",
     "ts-node": "10.9.1"

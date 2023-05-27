@@ -1,10 +1,7 @@
 import { AccountsClient } from '@accounts/client';
 import { AccountsClientPassword } from '@accounts/client-password';
-import {
-  context,
-  createAccountsCoreModule,
-  createAccountsPasswordModule,
-} from '@accounts/graphql-api';
+import { context, createAccountsCoreModule } from '@accounts/module-core';
+import { createAccountsPasswordModule } from '@accounts/module-password';
 import { createApplication } from 'graphql-modules';
 import { AccountsGraphQLClient } from '@accounts/graphql-client';
 import { AccountsPassword } from '@accounts/password';

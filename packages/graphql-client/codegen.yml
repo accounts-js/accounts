@@ -1,4 +1,7 @@
-schema: ../graphql-api/introspection.json
+schema:
+  - ../../modules/core/introspection.json
+  - ../../modules/password/introspection.json
+  - ../../modules/magic-link/introspection.json
 documents: ./src/**/*.graphql
 generates:
   ./src/graphql-operations.ts:

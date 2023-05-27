@@ -10,8 +10,8 @@ import {
   authenticated,
   context,
   createAccountsCoreModule,
-  createAccountsPasswordModule,
-} from '@accounts/graphql-api';
+} from '@accounts/module-core';
+import { createAccountsPasswordModule } from '@accounts/module-password';
 import { ApolloServer, gql } from 'apollo-server';
 import { delegateToSchema } from '@graphql-tools/delegate';
 import { createApplication, createModule } from 'graphql-modules';

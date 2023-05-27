@@ -1,7 +1,7 @@
 import {
   AccountsContextOptions as AccountsContextOptionsBase,
   context as contextBase,
-} from '@accounts/graphql-api';
+} from '@accounts/module-core';
 import { User } from '@accounts/types';
 import { Connection, EntityManager, IDatabaseDriver } from '@mikro-orm/core';
 import { IncomingMessage } from 'http';

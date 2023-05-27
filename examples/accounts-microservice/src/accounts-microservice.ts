@@ -1,10 +1,6 @@
 import 'reflect-metadata';
-import {
-  buildSchema,
-  context,
-  createAccountsCoreModule,
-  createAccountsPasswordModule,
-} from '@accounts/graphql-api';
+import { buildSchema, context, createAccountsCoreModule } from '@accounts/module-core';
+import { createAccountsPasswordModule } from '@accounts/module-password';
 import { createAccountsMongoModule } from '@accounts/module-mongo';
 import { ApolloServer, gql } from 'apollo-server';
 import { createApplication, createModule } from 'graphql-modules';

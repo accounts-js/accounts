@@ -1,10 +1,7 @@
 import 'reflect-metadata';
 import { ApolloServer, gql } from 'apollo-server';
-import {
-  buildSchema,
-  createAccountsCoreModule,
-  createAccountsPasswordModule,
-} from '@accounts/graphql-api';
+import { buildSchema, createAccountsCoreModule } from '@accounts/module-core';
+import { createAccountsPasswordModule } from '@accounts/module-password';
 import { AccountsPassword } from '@accounts/password';
 import { MikroORM } from '@mikro-orm/core';
 import config from './mikro-orm-config';

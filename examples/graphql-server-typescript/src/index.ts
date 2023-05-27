@@ -4,8 +4,8 @@ import {
   buildSchema,
   context,
   createAccountsCoreModule,
-  createAccountsPasswordModule,
-} from '@accounts/graphql-api';
+} from '@accounts/module-core';
+import { createAccountsPasswordModule } from '@accounts/module-password';
 import { AccountsPassword } from '@accounts/password';
 import { AccountsServer, AuthenticationServicesToken, ServerHooks } from '@accounts/server';
 import { ApolloServer } from 'apollo-server';
