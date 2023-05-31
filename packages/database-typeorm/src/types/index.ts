@@ -1,15 +1,11 @@
-import { User } from '../entity/User';
-import { UserEmail } from '../entity/UserEmail';
-import { UserService } from '../entity/UserService';
-import { UserSession } from '../entity/UserSession';
-import { Connection } from 'typeorm';
+export * from './AccountsTypeORMConfig.symbol';
+export * from './User.symbol';
+export * from './UserEmail.symbol';
+export * from './UserService.symbol';
+export * from './UserSession.symbol';
 
 export interface AccountsTypeormOptions {
   cache?: undefined | number;
-  connection?: Connection;
+  // connection?: Connection;
   connectionName?: string;
-  userEntity?: typeof User;
-  userServiceEntity?: typeof UserService;
-  userEmailEntity?: typeof UserEmail;
-  userSessionEntity?: typeof UserSession;
 }

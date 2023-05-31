@@ -1,48 +1,51 @@
 import { ConnectionInformations, CreateUser, DatabaseInterface } from '@accounts/types';
-import { Repository, getRepository, Not, In, FindOperator } from 'typeorm';
+import { Repository, getRepository, Not, In, FindOperator, Connection } from 'typeorm';
 import { User } from './entity/User';
 import { UserEmail } from './entity/UserEmail';
 import { UserService } from './entity/UserService';
 import { UserSession } from './entity/UserSession';
-import { AccountsTypeormOptions } from './types';
+import {
+  AccountsTypeormOptions,
+  AccountsTypeORMConfigToken,
+  UserToken,
+  UserEmailToken,
+  UserServiceToken,
+  UserSessionToken,
+} from './types';
+import { Inject, Injectable } from 'graphql-modules';
 
-const defaultOptions = {
-  userEntity: User,
-  userEmailEntity: UserEmail,
-  userServiceEntity: UserService,
-  userSessionEntity: UserSession,
-};
-
+@Injectable({
+  global: true,
+})
 export class AccountsTypeorm implements DatabaseInterface {
-  private options: AccountsTypeormOptions & typeof defaultOptions;
   private userRepository: Repository<User> = null as any;
   private emailRepository: Repository<UserEmail> = null as any;
   private serviceRepository: Repository<UserService> = null as any;
   private sessionRepository: Repository<UserSession> = null as any;
 
-  constructor(options?: AccountsTypeormOptions) {
-    this.options = { ...defaultOptions, ...options };
-
-    const {
-      connection,
-      connectionName,
-      userEntity,
-      userEmailEntity,
-      userServiceEntity,
-      userSessionEntity,
-    } = this.options;
+  constructor(
+    @Inject(UserToken) private UserEntity: typeof User,
+    @Inject(UserEmailToken) private UserEmailEntity: typeof UserEmail,
+    @Inject(UserServiceToken) private UserServiceEntity: typeof UserService,
+    @Inject(UserSessionToken) private UserSessionEntity: typeof UserSession,
+    @Inject(AccountsTypeORMConfigToken) private options: AccountsTypeormOptions,
+    private connection?: Connection
+  ) {
+    if (this.connection == null && this.options.connectionName == null) {
+      throw new Error('You must provide either a Connection or a ConnectionName');
+    }
 
     const setRepositories = () => {
-      if (connection) {
-        this.userRepository = connection.getRepository(userEntity);
-        this.emailRepository = connection.getRepository(userEmailEntity);
-        this.serviceRepository = connection.getRepository(userServiceEntity);
-        this.sessionRepository = connection.getRepository(userSessionEntity);
+      if (this.connection) {
+        this.userRepository = this.connection.getRepository(this.UserEntity);
+        this.emailRepository = this.connection.getRepository(this.UserEmailEntity);
+        this.serviceRepository = this.connection.getRepository(this.UserServiceEntity);
+        this.sessionRepository = this.connection.getRepository(this.UserSessionEntity);
       } else {
-        this.userRepository = getRepository(userEntity, connectionName);
-        this.emailRepository = getRepository(userEmailEntity, connectionName);
-        this.serviceRepository = getRepository(userServiceEntity, connectionName);
-        this.sessionRepository = getRepository(userSessionEntity, connectionName);
+        this.userRepository = getRepository(this.UserEntity, this.options.connectionName);
+        this.emailRepository = getRepository(this.UserEmailEntity, this.options.connectionName);
+        this.serviceRepository = getRepository(this.UserServiceEntity, this.options.connectionName);
+        this.sessionRepository = getRepository(this.UserSessionEntity, this.options.connectionName);
       }
     };
 
@@ -127,10 +130,10 @@ export class AccountsTypeorm implements DatabaseInterface {
   public async createUser(createUser: CreateUser): Promise<string> {
     const { username, email, password, ...otherFields } = createUser;
 
-    const user = new this.options.userEntity();
+    const user = new this.UserEntity();
 
     if (email) {
-      const userEmail = new this.options.userEmailEntity();
+      const userEmail = new this.UserEmailEntity();
       userEmail.address = email.toLocaleLowerCase();
       userEmail.verified = false;
       await this.emailRepository.save(userEmail);
@@ -138,7 +141,7 @@ export class AccountsTypeorm implements DatabaseInterface {
     }
 
     if (password) {
-      const userService = new this.options.userServiceEntity();
+      const userService = new this.UserServiceEntity();
       userService.name = 'password';
       userService.options = { bcrypt: password };
       await this.serviceRepository.save(userService);
@@ -205,7 +208,7 @@ export class AccountsTypeorm implements DatabaseInterface {
     if (!service) {
       const user = await this.findUserById(userId);
       if (user) {
-        service = new this.options.userServiceEntity();
+        service = new this.UserServiceEntity();
         service.name = serviceName;
         service.user = user;
       }
@@ -277,7 +280,7 @@ export class AccountsTypeorm implements DatabaseInterface {
   public async addEmail(userId: string, newEmail: string, verified: boolean): Promise<void> {
     const user = await this.findUserById(userId);
     if (user) {
-      const userEmail = new this.options.userEmailEntity();
+      const userEmail = new this.UserEmailEntity();
       userEmail.user = user;
       userEmail.address = newEmail.toLocaleLowerCase();
       userEmail.verified = verified;
@@ -414,7 +417,7 @@ export class AccountsTypeorm implements DatabaseInterface {
     extra?: object
   ) {
     const user = await this.findUserById(userId);
-    const session = new this.options.userSessionEntity();
+    const session = new this.UserSessionEntity();
     session.user = user!;
     session.token = token;
     session.userAgent = connection.userAgent;
