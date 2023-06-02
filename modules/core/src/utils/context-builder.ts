@@ -2,30 +2,41 @@ import AccountsServer from '@accounts/server';
 import { IncomingMessage } from 'http';
 import { getClientIp } from 'request-ip';
 import { IContext, User } from '@accounts/types';
-import { Injector } from 'graphql-modules';
+import { Application } from 'graphql-modules';
 
-export interface AccountsContextOptions {
-  injector: Injector;
+export interface AccountsContextOptions<Ctx extends object> {
+  app: Application;
+  ctx?: Ctx;
   headerName?: string;
   excludeAddUserInContext?: boolean;
 }
 
-export const context = async <IUser extends User = User>(
+export const context = async <IUser extends User = User, Ctx extends object = object>(
   {
     req,
   }: {
     req: IncomingMessage;
   },
-  options: AccountsContextOptions
-): Promise<IContext<IUser>> => {
+  { app, ctx, ...options }: AccountsContextOptions<Ctx>
+): AccountsContextOptions<Ctx> extends { ctx: any }
+  ? Promise<IContext<IUser> & Ctx>
+  : Promise<IContext<IUser>> => {
+  // To inject the ExecutionContext into Providers which are called from the context
+  const controller = app.createOperationController({
+    context: { ...ctx },
+    autoDestroy: true, // destroys the session when GraphQL Execution finishes
+  });
+
   if (!req) {
     return {
+      injector: controller.injector,
       ip: '',
       userAgent: '',
       infos: {
         ip: '',
         userAgent: '',
       },
+      ...ctx,
     };
   }
 
@@ -36,11 +47,12 @@ export const context = async <IUser extends User = User>(
 
   if (authToken && !options.excludeAddUserInContext) {
     try {
-      user = await options.injector
+      user = await controller.injector
         .get<AccountsServer<IUser>>(AccountsServer)
         .resumeSession(authToken);
     } catch (error) {
       // Empty catch
+      console.error(error);
     }
   }
 
@@ -52,6 +64,7 @@ export const context = async <IUser extends User = User>(
   }
 
   return {
+    injector: controller.injector,
     authToken,
     user,
     userId: user && user.id,
@@ -61,5 +74,6 @@ export const context = async <IUser extends User = User>(
       userAgent,
       ip,
     },
+    ...ctx,
   };
 };

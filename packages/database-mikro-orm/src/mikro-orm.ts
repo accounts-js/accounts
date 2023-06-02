@@ -44,19 +44,15 @@ export class AccountsMikroOrm<
   CustomService extends Service<any>,
 > implements DatabaseInterface
 {
-  @ExecutionContext()
-  private context?: ExecutionContext & { em?: EntityManager<IDatabaseDriver<Connection>> };
+  @ExecutionContext() private context?: ExecutionContext & {
+    em?: EntityManager<IDatabaseDriver<Connection>>;
+  };
 
   private get em() {
-    let em: EntityManager<IDatabaseDriver<Connection>> | undefined;
-    try {
-      em =
-        RequestContext.getEntityManager() ??
-        this.context?.em ??
-        this.context?.injector.get(EntityManager);
-    } catch (e) {
-      console.error(e);
-    }
+    const em =
+      RequestContext.getEntityManager() ??
+      this.context?.em ??
+      this.context?.injector.get(EntityManager);
     if (!em) {
       throw new Error('Cannot find EntityManager');
     }
