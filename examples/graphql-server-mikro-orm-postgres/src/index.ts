@@ -1,5 +1,4 @@
 import 'reflect-metadata';
-import { ApolloServer, gql } from 'apollo-server';
 import { buildSchema, createAccountsCoreModule } from '@accounts/module-core';
 import { createAccountsPasswordModule } from '@accounts/module-password';
 import { AccountsPassword } from '@accounts/password';
@@ -7,9 +6,13 @@ import { MikroORM } from '@mikro-orm/core';
 import config from './mikro-orm-config';
 import { User } from './entities/user';
 import { Email } from './entities/email';
-import { createApplication } from 'graphql-modules';
+import { createApplication, gql } from 'graphql-modules';
 import AccountsServer, { AuthenticationServicesToken, ServerHooks } from '@accounts/server';
 import { context, createAccountsMikroORMModule } from '@accounts/module-mikro-orm';
+import { ApolloServer } from '@apollo/server';
+import { startStandaloneServer } from '@apollo/server/standalone';
+import { ApolloServerPluginLandingPageDisabled } from '@apollo/server/plugin/disabled';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
 
 export const createAccounts = async () => {
   const orm = await MikroORM.init(config);
@@ -109,6 +112,15 @@ export const createAccounts = async () => {
   // Create the Apollo Server that takes a schema and configures internal stuff
   const server = new ApolloServer({
     schema,
+    plugins: [
+      process.env.NODE_ENV === 'production'
+        ? ApolloServerPluginLandingPageDisabled()
+        : ApolloServerPluginLandingPageGraphQLPlayground(),
+    ],
+  });
+
+  const { url } = await startStandaloneServer(server, {
+    listen: { port: 4000 },
     context: (ctx) =>
       context(ctx, {
         app,
@@ -117,15 +129,13 @@ export const createAccounts = async () => {
       }),
   });
 
-  server.listen(4000).then(async ({ url }) => {
-    console.log(`🚀  Server ready at ${url}`);
+  console.log(`🚀  Server ready at ${url}`);
 
-    try {
-      const generator = orm.getSchemaGenerator();
-      await generator.createSchema({ wrap: true });
-    } catch {
-      // Schema has already been created
-    }
-  });
+  try {
+    const generator = orm.getSchemaGenerator();
+    await generator.createSchema({ wrap: true });
+  } catch {
+    // Schema has already been created
+  }
 };
 createAccounts();

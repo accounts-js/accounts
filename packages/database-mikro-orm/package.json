@@ -37,7 +37,7 @@
     "@mikro-orm/migrations": "5.7.9",
     "@mikro-orm/postgresql": "5.7.9",
     "@mikro-orm/reflection": "5.7.9",
-    "graphql": "15.8.0",
+    "graphql": "16.6.0",
     "graphql-modules": "2.1.2",
     "jest": "27.3.1"
   },

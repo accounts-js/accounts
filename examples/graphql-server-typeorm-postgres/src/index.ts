@@ -1,13 +1,16 @@
-require('dotenv').config();
+import 'dotenv/config';
 import 'reflect-metadata';
-import { ApolloServer, gql } from 'apollo-server';
 import { AccountsPassword } from '@accounts/password';
 import { AccountsServer, AuthenticationServicesToken } from '@accounts/server';
 import { connect } from './connect';
-import { createApplication } from 'graphql-modules';
+import { createApplication, gql } from 'graphql-modules';
 import { buildSchema, context, createAccountsCoreModule } from '@accounts/module-core';
 import { createAccountsPasswordModule } from '@accounts/module-password';
 import { createAccountsTypeORMModule } from '@accounts/module-typeorm';
+import { ApolloServer } from '@apollo/server';
+import { startStandaloneServer } from '@apollo/server/standalone';
+import { ApolloServerPluginLandingPageDisabled } from '@apollo/server/plugin/disabled';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
 
 export const createAccounts = async () => {
   const connection = await connect(process.env.DATABASE_URL);
@@ -53,7 +56,7 @@ export const createAccounts = async () => {
         // ctx.userId will be set if user is logged in
         if (ctx.userId) {
           // We could have simply returned ctx.user instead
-          return ctx.accountsServer.findUserById(ctx.userId);
+          return ctx.injector.get(AccountsServer).findUserById(ctx.userId);
         }
         return null;
       },
@@ -83,22 +86,23 @@ export const createAccounts = async () => {
     ],
     schemaBuilder: buildSchema({ typeDefs, resolvers }),
   });
-  const { injector } = app;
   const schema = app.createSchemaForApollo();
 
   // Create the Apollo Server that takes a schema and configures internal stuff
   const server = new ApolloServer({
     schema,
-    context: async ({ req }) => ({
-      ...(await context({ req }, { injector })),
-      // If you don't use GraphQL Modules in your app you will have to share the
-      // accountsServer instance via context in order to access it via resolvers
-      accountsServer: injector.get(AccountsServer),
-    }),
+    plugins: [
+      process.env.NODE_ENV === 'production'
+        ? ApolloServerPluginLandingPageDisabled()
+        : ApolloServerPluginLandingPageGraphQLPlayground(),
+    ],
   });
 
-  server.listen(4000).then(async ({ url }) => {
-    console.log(`🚀  Server ready at ${url}`);
+  const { url } = await startStandaloneServer(server, {
+    listen: { port: 4000 },
+    context: (ctx) => context(ctx, { app }),
   });
+
+  console.log(`🚀  Server ready at ${url}`);
 };
 createAccounts();

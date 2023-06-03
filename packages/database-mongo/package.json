@@ -40,7 +40,7 @@
     "@accounts/database-tests": "^0.32.2",
     "@types/jest": "27.5.2",
     "@types/node": "20.2.3",
-    "graphql": "15.8.0",
+    "graphql": "16.6.0",
     "graphql-modules": "2.1.2",
     "jest": "27.3.1",
     "rimraf": "5.0.1",

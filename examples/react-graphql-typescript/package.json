@@ -34,7 +34,7 @@
     "@apollo/client": "3.7.14",
     "@material-ui/core": "4.12.3",
     "@material-ui/styles": "4.11.4",
-    "graphql": "15.8.0",
+    "graphql": "16.6.0",
     "graphql-tag": "2.12.6",
     "qrcode.react": "1.0.1",
     "react": "17.0.2",

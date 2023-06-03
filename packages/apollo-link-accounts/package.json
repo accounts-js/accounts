@@ -32,7 +32,7 @@
   "devDependencies": {
     "@accounts/client": "^0.33.1",
     "@apollo/client": "3.7.14",
-    "graphql": "15.8.0",
+    "graphql": "16.6.0",
     "rimraf": "5.0.1"
   }
 }

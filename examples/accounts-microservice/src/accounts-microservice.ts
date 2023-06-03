@@ -2,10 +2,13 @@ import 'reflect-metadata';
 import { buildSchema, context, createAccountsCoreModule } from '@accounts/module-core';
 import { createAccountsPasswordModule } from '@accounts/module-password';
 import { createAccountsMongoModule } from '@accounts/module-mongo';
-import { ApolloServer, gql } from 'apollo-server';
-import { createApplication, createModule } from 'graphql-modules';
+import { createApplication, createModule, gql } from 'graphql-modules';
 import { AuthenticationServicesToken } from '@accounts/server';
 import { AccountsPassword } from '@accounts/password';
+import { ApolloServer } from '@apollo/server';
+import { startStandaloneServer } from '@apollo/server/standalone';
+import { ApolloServerPluginLandingPageDisabled } from '@apollo/server/plugin/disabled';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
 
 (async () => {
   const typeDefs = gql`
@@ -55,13 +58,22 @@ import { AccountsPassword } from '@accounts/password';
     schemaBuilder: buildSchema({ typeDefs }),
   });
 
+  const schema = app.createSchemaForApollo();
+
   // Create the Apollo Server that takes a schema and configures internal stuff
   const server = new ApolloServer({
-    schema: app.createSchemaForApollo(),
-    context: async ({ req }) => context({ req }, { injector: app.injector }),
+    schema,
+    plugins: [
+      process.env.NODE_ENV === 'production'
+        ? ApolloServerPluginLandingPageDisabled()
+        : ApolloServerPluginLandingPageGraphQLPlayground(),
+    ],
   });
 
-  server.listen(4003).then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`);
+  const { url } = await startStandaloneServer(server, {
+    listen: { port: 4003 },
+    context: (ctx) => context(ctx, { app }),
   });
+
+  console.log(`🚀  Server ready at ${url}`);
 })();
