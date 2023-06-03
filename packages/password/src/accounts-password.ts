@@ -180,7 +180,7 @@ const defaultOptions = {
   global: true,
 })
 export default class AccountsPassword<CustomUser extends User = User>
-  implements AuthenticationService
+  implements AuthenticationService<CustomUser>
 {
   public serviceName = 'password';
   public server!: AccountsServer;

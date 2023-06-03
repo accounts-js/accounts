@@ -1,7 +1,19 @@
-import { User, DatabaseInterface, AuthenticationService } from '@accounts/types';
-import { AccountsServer, ServerHooks } from '@accounts/server';
-import { OAuthOptions } from './types/oauth-options';
+import {
+  User,
+  DatabaseInterface,
+  AuthenticationService,
+  DatabaseInterfaceSessions,
+  DatabaseInterfaceUser,
+} from '@accounts/types';
+import {
+  AccountsServer,
+  /*DatabaseInterfaceSessionsToken,*/ DatabaseInterfaceUserToken,
+  ServerHooks,
+} from '@accounts/server';
+import { OAuthProviders } from './types/oauth-providers';
 import { OAuthUser } from './types/oauth-user';
+import { ExecutionContext, Inject, Injectable } from 'graphql-modules';
+import { OAuthProvidersToken } from './types/OAuthProviders.symbol';
 
 const getRegistrationPayloadDefault = async (oauthUser: OAuthUser) => {
   return {
@@ -9,26 +21,67 @@ const getRegistrationPayloadDefault = async (oauthUser: OAuthUser) => {
   };
 };
 
-export class AccountsOauth implements AuthenticationService {
+@Injectable({
+  global: true,
+})
+export class AccountsOauth<CustomUser extends User = User>
+  implements AuthenticationService<CustomUser>
+{
+  @ExecutionContext() public context!: ExecutionContext;
   public server!: AccountsServer;
   public serviceName = 'oauth';
-  private db!: DatabaseInterface;
-  private options: OAuthOptions;
+  private db!: DatabaseInterfaceUser<CustomUser>;
+  // private dbSessions!: DatabaseInterfaceSessions;
 
-  constructor(options: OAuthOptions) {
-    this.options = options;
+  constructor(
+    @Inject(OAuthProvidersToken) public oauthProviders: OAuthProviders,
+    @Inject(DatabaseInterfaceUserToken)
+    db?: DatabaseInterface<CustomUser> | DatabaseInterfaceUser<CustomUser>,
+    // @Inject(DatabaseInterfaceSessionsToken) dbSessions?: DatabaseInterfaceSessions,
+    server?: AccountsServer
+  ) {
+    if (db) {
+      this.db = db;
+      // this.dbSessions = dbSessions ?? (db as DatabaseInterfaceSessions);
+    }
+
+    if (server) {
+      this.server = server;
+    }
   }
 
-  public setStore(store: DatabaseInterface) {
+  private getOAuthProvider(providerName: string) {
+    const instanceOrCtor = this.oauthProviders[providerName];
+    // If it's a constructor we use dependency injection (GraphQL), otherwise we already have an instance (REST)
+    const provider =
+      typeof instanceOrCtor === 'function'
+        ? this.context.injector.get(instanceOrCtor)
+        : instanceOrCtor;
+    if (!provider) {
+      throw new Error(`No OAuth provider with the name ${providerName} was registered.`);
+    }
+    return provider;
+  }
+
+  public getOAuthProviders(): OAuthProviders {
+    return this.oauthProviders;
+  }
+
+  public setUserStore(store: DatabaseInterfaceUser<CustomUser>) {
     this.db = store;
   }
 
-  public async authenticate(params: any): Promise<User | null> {
-    if (!params.provider || !this.options[params.provider]) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public setSessionsStore(store: DatabaseInterfaceSessions) {
+    //this.dbSessions = store;
+  }
+
+  public async authenticate(params: any): Promise<CustomUser | null> {
+    if (!params.provider || !this.getOAuthProvider(params.provider)) {
       throw new Error('Invalid provider');
     }
 
-    const userProvider = this.options[params.provider];
+    const userProvider = this.getOAuthProvider(params.provider);
 
     if (typeof userProvider.authenticate !== 'function') {
       throw new Error('Invalid provider');
@@ -49,7 +102,11 @@ export class AccountsOauth implements AuthenticationService {
 
         const userId = await this.db.createUser(userData);
 
-        user = (await this.db.findUserById(userId)) as User;
+        user = await this.db.findUserById(userId);
+
+        if (user == null) {
+          throw new Error(`Cannot find user ${userId}`);
+        }
 
         if (this.server) {
           await this.server.getHooks().emit(ServerHooks.CreateUserSuccess, user);
@@ -69,7 +126,7 @@ export class AccountsOauth implements AuthenticationService {
   }
 
   public async unlink(userId: string, provider: string) {
-    if (!provider || !this.options[provider]) {
+    if (!provider || !this.getOAuthProvider(provider)) {
       throw new Error('Invalid provider');
     }
 
