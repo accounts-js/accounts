@@ -41,8 +41,8 @@
     "graphql-tag": "^2.10.0"
   },
   "dependencies": {
-    "@graphql-tools/merge": "8.4.2",
-    "@graphql-tools/utils": "9.2.1",
+    "@graphql-tools/merge": "9.0.0",
+    "@graphql-tools/utils": "10.0.0",
     "request-ip": "3.3.0",
     "tslib": "2.5.2"
   },
@@ -56,7 +56,7 @@
     "@graphql-codegen/typescript-operations": "3.0.4",
     "@graphql-codegen/typescript-resolvers": "3.2.1",
     "@graphql-codegen/typescript-type-graphql": "2.3.6",
-    "@graphql-tools/schema": "9.0.19",
+    "@graphql-tools/schema": "10.0.0",
     "@types/jest": "27.5.2",
     "@types/node": "20.2.3",
     "@types/request-ip": "0.0.37",

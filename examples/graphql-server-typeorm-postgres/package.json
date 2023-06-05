@@ -20,7 +20,7 @@
     "@accounts/typeorm": "^0.34.0",
     "@apollo/server": "4.7.1",
     "@apollo/server-plugin-landing-page-graphql-playground": "4.0.1",
-    "@graphql-tools/merge": "8.4.2",
+    "@graphql-tools/merge": "9.0.0",
     "dotenv": "10.0.0",
     "graphql": "16.6.0",
     "graphql-modules": "2.1.2",
