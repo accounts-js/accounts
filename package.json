@@ -77,5 +77,8 @@
     "type": "opencollective",
     "url": "https://opencollective.com/accounts-js",
     "logo": "https://opencollective.com/accounts-js/logo.txt"
+  },
+  "dependencies": {
+    "changeset": "^0.2.6"
   }
 }
