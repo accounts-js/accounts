@@ -20,7 +20,7 @@ const mockedUserWithTwoFactor: any = {
 const accountsTwoFactor = new TwoFactor({
   appName: 'Accounts-js test',
 });
-accountsTwoFactor.setStore(dbMock);
+accountsTwoFactor.setUserStore(dbMock);
 
 describe('TwoFactor', () => {
   beforeEach(() => {

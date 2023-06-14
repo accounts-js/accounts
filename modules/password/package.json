@@ -9,7 +9,7 @@
     "start": "tsc --watch",
     "precompile": "pnpm run clean",
     "compile": "pnpm run generate:graphql && tsc",
-    "testonly": "jest",
+    "testonly": "jest --passWithNoTests",
     "coverage": "pnpm run testonly -- --coverage",
     "generate:graphql": "gql-gen",
     "prepublishOnly": "pnpm run compile"

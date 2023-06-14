@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { servers } from './servers';
 
 const user = {

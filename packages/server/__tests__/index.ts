@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import AccountsServer from '../src';
 
 describe('AccountsServer', () => {

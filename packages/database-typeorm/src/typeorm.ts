@@ -18,18 +18,18 @@ import { Inject, Injectable } from 'graphql-modules';
   global: true,
 })
 export class AccountsTypeorm implements DatabaseInterface {
-  private userRepository: Repository<User> = null as any;
-  private emailRepository: Repository<UserEmail> = null as any;
-  private serviceRepository: Repository<UserService> = null as any;
-  private sessionRepository: Repository<UserSession> = null as any;
+  private userRepository!: Repository<User>;
+  private emailRepository!: Repository<UserEmail>;
+  private serviceRepository!: Repository<UserService>;
+  private sessionRepository!: Repository<UserSession>;
 
   constructor(
-    @Inject(UserToken) private UserEntity: typeof User,
-    @Inject(UserEmailToken) private UserEmailEntity: typeof UserEmail,
-    @Inject(UserServiceToken) private UserServiceEntity: typeof UserService,
-    @Inject(UserSessionToken) private UserSessionEntity: typeof UserSession,
     @Inject(AccountsTypeORMConfigToken) private options: AccountsTypeormOptions,
-    private connection?: Connection
+    private connection?: Connection,
+    @Inject(UserToken) private UserEntity: typeof User = User,
+    @Inject(UserEmailToken) private UserEmailEntity: typeof UserEmail = UserEmail,
+    @Inject(UserServiceToken) private UserServiceEntity: typeof UserService = UserService,
+    @Inject(UserSessionToken) private UserSessionEntity: typeof UserSession = UserSession
   ) {
     if (this.connection == null && this.options.connectionName == null) {
       throw new Error('You must provide either a Connection or a ConnectionName');

@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import set from 'lodash.set';
 import { AccountsMagicLink } from '../src';
 
@@ -52,7 +53,7 @@ describe('AccountsMagicLink', () => {
       const tmpAccountsMagicLink = new AccountsMagicLink({});
       (tmpAccountsMagicLink as any).magicLinkAuthenticator = jest.fn(() => Promise.resolve(user));
       const removeAllLoginTokens = jest.fn(() => Promise.resolve());
-      tmpAccountsMagicLink.setStore({ removeAllLoginTokens } as any);
+      tmpAccountsMagicLink.setUserStore({ removeAllLoginTokens } as any);
       const ret = await tmpAccountsMagicLink.authenticate({
         user: 'toto',
         token: 'toto',
@@ -63,7 +64,7 @@ describe('AccountsMagicLink', () => {
 
     it('throws when user not found', async () => {
       const findUserByLoginToken = jest.fn(() => Promise.resolve());
-      magicLink.setStore({ findUserByLoginToken } as any);
+      magicLink.setUserStore({ findUserByLoginToken } as any);
       await expect(
         magicLink.authenticate({
           user: 'toto@toto.com',
@@ -74,7 +75,7 @@ describe('AccountsMagicLink', () => {
 
     it('throws on incorrect token', async () => {
       const findUserByLoginToken = jest.fn(() => Promise.resolve({ id: 'id' }));
-      magicLink.setStore({ findUserByLoginToken } as any);
+      magicLink.setUserStore({ findUserByLoginToken } as any);
       await expect(
         magicLink.authenticate({
           user: 'toto@toto.com',
@@ -86,7 +87,7 @@ describe('AccountsMagicLink', () => {
     it('throws when token is expired', async () => {
       const findUserByLoginToken = jest.fn(() => Promise.resolve(validUser));
       magicLink.isTokenExpired = jest.fn(() => true);
-      magicLink.setStore({ findUserByLoginToken } as any);
+      magicLink.setUserStore({ findUserByLoginToken } as any);
       await expect(
         magicLink.authenticate({
           user: 'toto@toto.com',
@@ -112,7 +113,7 @@ describe('AccountsMagicLink', () => {
 
     it('throws if user is not found', async () => {
       const findUserByEmail = jest.fn(() => Promise.resolve());
-      magicLink.setStore({ findUserByEmail } as any);
+      magicLink.setUserStore({ findUserByEmail } as any);
       await expect(magicLink.requestMagicLinkEmail(unverifiedEmail)).rejects.toThrow(
         'User not found'
       );
@@ -125,7 +126,7 @@ describe('AccountsMagicLink', () => {
       const prepareMail = jest.fn(() => Promise.resolve());
       const sanitizeUser = jest.fn(() => Promise.resolve());
       const sendMail = jest.fn(() => Promise.resolve());
-      magicLink.setStore({ findUserByEmail, addLoginToken, removeAllLoginTokens } as any);
+      magicLink.setUserStore({ findUserByEmail, addLoginToken, removeAllLoginTokens } as any);
       magicLink.server = {
         prepareMail,
         options: { sendMail },

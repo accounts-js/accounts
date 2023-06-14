@@ -2,7 +2,6 @@ import {
   User,
   DatabaseInterface,
   AuthenticationService,
-  DatabaseInterfaceSessions,
   DatabaseInterfaceUser,
 } from '@accounts/types';
 import {
@@ -71,13 +70,12 @@ export class AccountsOauth<CustomUser extends User = User>
     this.db = store;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public setSessionsStore(store: DatabaseInterfaceSessions) {
-    //this.dbSessions = store;
+  public setSessionsStore() {
+    // Empty
   }
 
   public async authenticate(params: any): Promise<CustomUser | null> {
-    if (!params.provider || !this.getOAuthProvider(params.provider)) {
+    if (!params.provider) {
       throw new Error('Invalid provider');
     }
 
@@ -126,9 +124,12 @@ export class AccountsOauth<CustomUser extends User = User>
   }
 
   public async unlink(userId: string, provider: string) {
-    if (!provider || !this.getOAuthProvider(provider)) {
+    if (!provider) {
       throw new Error('Invalid provider');
     }
+
+    // Check whether the service has been provided, throws if not
+    this.getOAuthProvider(provider);
 
     await this.db.setService(userId, provider, null as any);
   }

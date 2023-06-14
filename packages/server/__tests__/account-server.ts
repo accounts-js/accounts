@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import jwtDecode from 'jwt-decode';
 import { AccountsServer } from '../src/accounts-server';
 import { JwtData } from '../src/types/jwt-data';
@@ -14,22 +15,21 @@ describe('AccountsServer', () => {
   };
 
   describe('config', () => {
-    it('throws on invalid db', async () => {
-      expect(() => new AccountsServer({} as any, {})).toThrow('A database driver is required');
-    });
-
     it('should throw if ambiguousErrorMessages and enableAutologin flags enabled at the same time', async () => {
       expect(
         () =>
           new AccountsServer(
             {
-              db: {},
+              tokenSecret: 'secret1',
               enableAutologin: true,
               ambiguousErrorMessages: true,
-            } as any,
-            {}
+            },
+            {},
+            {} as any
           )
-      ).toThrow();
+      )
+        .toThrow(`Can't enable autologin when ambiguous error messages are enabled (https://www.accountsjs.com/docs/api/server/globals#ambiguouserrormessages).
+Please set ambiguousErrorMessages to false to be able to use autologin.`);
     });
   });
 
@@ -37,17 +37,18 @@ describe('AccountsServer', () => {
     it('should return instance services', async () => {
       const services: any = {
         password: {
-          setStore: () => null,
+          setUserStore: jest.fn(),
+          setSessionsStore: jest.fn(),
         },
       };
-      const account = new AccountsServer({ db: {} } as any, services);
+      const account = new AccountsServer({ tokenSecret: 'secret1' }, services, {} as any);
       expect(account.getServices()).toEqual(services);
     });
   });
 
   describe('loginWithService', () => {
     it('throws on invalid service', async () => {
-      const accountServer = new AccountsServer({ db: {} } as any, {});
+      const accountServer = new AccountsServer({ tokenSecret: 'secret1' }, {}, {} as any);
       await expect(accountServer.loginWithService('facebook', {}, {})).rejects.toThrow(
         'No service with the name facebook was registered.'
       );
@@ -55,10 +56,14 @@ describe('AccountsServer', () => {
 
     it('throws when user not found', async () => {
       const authenticate = jest.fn(() => Promise.resolve());
-      const service: any = { authenticate, setStore: jest.fn() };
-      const accountServer = new AccountsServer({ db: {} } as any, {
-        facebook: service,
-      });
+      const service: any = { authenticate, setUserStore: jest.fn(), setSessionsStore: jest.fn() };
+      const accountServer = new AccountsServer(
+        { tokenSecret: 'secret1' },
+        {
+          facebook: service,
+        },
+        {} as any
+      );
       await expect(accountServer.loginWithService('facebook', {}, {})).rejects.toThrow(
         'Service facebook was not able to authenticate user'
       );
@@ -66,10 +71,14 @@ describe('AccountsServer', () => {
 
     it('throws when user is deactivated', async () => {
       const authenticate = jest.fn(() => Promise.resolve({ id: 'userId', deactivated: true }));
-      const service: any = { authenticate, setStore: jest.fn() };
-      const accountServer = new AccountsServer({ db: {} } as any, {
-        facebook: service,
-      });
+      const service: any = { authenticate, setUserStore: jest.fn(), setSessionsStore: jest.fn() };
+      const accountServer = new AccountsServer(
+        { tokenSecret: 'secret1' },
+        {
+          facebook: service,
+        },
+        {} as any
+      );
       await expect(accountServer.loginWithService('facebook', {}, {})).rejects.toThrow(
         'Your account has been deactivated'
       );
@@ -78,15 +87,17 @@ describe('AccountsServer', () => {
     it('should return tokens', async () => {
       const authenticate = jest.fn(() => Promise.resolve({ id: 'userId' }));
       const createSession = jest.fn(() => Promise.resolve('sessionId'));
-      const service: any = { authenticate, setStore: jest.fn() };
+      const service: any = { authenticate, setUserStore: jest.fn(), setSessionsStore: jest.fn() };
       const accountServer = new AccountsServer(
         {
-          db: { createSession } as any,
           tokenSecret: 'secret1',
         },
         {
           facebook: service,
-        }
+        },
+        {
+          createSession,
+        } as any
       );
       const res = await accountServer.loginWithService('facebook', {}, {});
       expect(res.tokens).toBeTruthy();
@@ -95,7 +106,7 @@ describe('AccountsServer', () => {
 
   describe('authenticateWithService', () => {
     it('throws on invalid service', async () => {
-      const accountServer = new AccountsServer({ db: {} } as any, {});
+      const accountServer = new AccountsServer({ tokenSecret: 'secret1' }, {}, {} as any);
       await expect(accountServer.authenticateWithService('facebook', {}, {})).rejects.toThrow(
         'No service with the name facebook was registered.'
       );
@@ -103,10 +114,14 @@ describe('AccountsServer', () => {
 
     it('throws when user not found', async () => {
       const authenticate = jest.fn(() => Promise.resolve());
-      const service: any = { authenticate, setStore: jest.fn() };
-      const accountServer = new AccountsServer({ db: {} } as any, {
-        facebook: service,
-      });
+      const service: any = { authenticate, setUserStore: jest.fn(), setSessionsStore: jest.fn() };
+      const accountServer = new AccountsServer(
+        { tokenSecret: 'secret1' },
+        {
+          facebook: service,
+        },
+        {} as any
+      );
       await expect(accountServer.authenticateWithService('facebook', {}, {})).rejects.toThrow(
         'Service facebook was not able to authenticate user'
       );
@@ -114,10 +129,14 @@ describe('AccountsServer', () => {
 
     it('throws when user is deactivated', async () => {
       const authenticate = jest.fn(() => Promise.resolve({ id: 'userId', deactivated: true }));
-      const service: any = { authenticate, setStore: jest.fn() };
-      const accountServer = new AccountsServer({ db: {} } as any, {
-        facebook: service,
-      });
+      const service: any = { authenticate, setUserStore: jest.fn(), setSessionsStore: jest.fn() };
+      const accountServer = new AccountsServer(
+        { tokenSecret: 'secret1' },
+        {
+          facebook: service,
+        },
+        {} as any
+      );
       await expect(accountServer.authenticateWithService('facebook', {}, {})).rejects.toThrow(
         'Your account has been deactivated'
       );
@@ -126,15 +145,17 @@ describe('AccountsServer', () => {
     it('should return true upon success', async () => {
       const authenticate = jest.fn(() => Promise.resolve({ id: 'userId' }));
       const createSession = jest.fn(() => Promise.resolve('sessionId'));
-      const service: any = { authenticate, setStore: jest.fn() };
+      const service: any = { authenticate, setUserStore: jest.fn(), setSessionsStore: jest.fn() };
       const accountServer = new AccountsServer(
         {
-          db: { createSession } as any,
           tokenSecret: 'secret1',
         },
         {
           facebook: service,
-        }
+        },
+        {
+          createSession,
+        } as any
       );
       const res = await accountServer.authenticateWithService('facebook', {}, {});
       expect(res).toBeTruthy();
@@ -151,15 +172,15 @@ describe('AccountsServer', () => {
       };
       const accountsServer = new AccountsServer(
         {
-          db: {
-            createSession: () => Promise.resolve('sessionId'),
-          } as any,
           tokenSecret: 'secret1',
           createJwtPayload: async (data, user) => {
             return { username: user.username };
           },
         },
-        {}
+        {},
+        {
+          createSession: () => Promise.resolve('sessionId'),
+        } as any
       );
 
       const res = await accountsServer.loginWithUser(user, {});
@@ -187,18 +208,18 @@ describe('AccountsServer', () => {
 
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                id: '456',
-                valid: true,
-                userId: '123',
-              }),
-            invalidateSession,
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findSessionByToken: () =>
+            Promise.resolve({
+              id: '456',
+              valid: true,
+              userId: '123',
+            }),
+          invalidateSession,
+        } as any
       );
 
       const { accessToken } = await accountsServer.createTokens({ token: '456', user });
@@ -217,18 +238,19 @@ describe('AccountsServer', () => {
       const hookSpy = jest.fn(() => null);
       const services: any = {
         password: {
-          setStore: jest.fn(),
+          setUserStore: jest.fn(),
+          setSessionsStore: jest.fn(),
           authenticate: jest.fn(() => Promise.resolve(user)),
         },
       };
       const accountsServer = new AccountsServer(
         {
-          db: {
-            createSession: () => '123',
-          } as any,
           tokenSecret: 'secret1',
         },
-        services
+        services,
+        {
+          createSession: () => '123',
+        } as any
       );
       accountsServer.on(ServerHooks.LoginSuccess, hookSpy);
       await accountsServer.loginWithService('password', { key: 'value' }, connectionInfo);
@@ -245,7 +267,8 @@ describe('AccountsServer', () => {
       const user = { id: 'id-test' };
       const services: any = {
         password: {
-          setStore: jest.fn(),
+          setUserStore: jest.fn(),
+          setSessionsStore: jest.fn(),
           authenticate: jest.fn(() => Promise.resolve(user)),
         },
       };
@@ -253,14 +276,14 @@ describe('AccountsServer', () => {
       const SessionError = new Error('Could not create session');
       const accountsServer = new AccountsServer(
         {
-          db: {
-            createSession: () => {
-              throw SessionError;
-            },
-          } as any,
           tokenSecret: 'secret1',
         },
-        services
+        services,
+        {
+          createSession: () => {
+            throw SessionError;
+          },
+        } as any
       );
       accountsServer.on(ServerHooks.LoginError, hookSpy);
 
@@ -290,19 +313,19 @@ describe('AccountsServer', () => {
       const invalidateSession = jest.fn(() => Promise.resolve());
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                id: '456',
-                valid: true,
-                userId: '123',
-              }),
-            findUserById: () => Promise.resolve(user),
-            invalidateSession,
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findSessionByToken: () =>
+            Promise.resolve({
+              id: '456',
+              valid: true,
+              userId: '123',
+            }),
+          findUserById: () => Promise.resolve(user),
+          invalidateSession,
+        } as any
       );
       accountsServer.on(ServerHooks.LogoutSuccess, hookSpy);
 
@@ -322,18 +345,18 @@ describe('AccountsServer', () => {
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                id: '456',
-                valid: true,
-                userId: '123',
-              }),
-            findUserById: () => Promise.resolve(null),
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findSessionByToken: () =>
+            Promise.resolve({
+              id: '456',
+              valid: true,
+              userId: '123',
+            }),
+          findUserById: () => Promise.resolve(null),
+        } as any
       );
       accountsServer.on(ServerHooks.LogoutError, hookSpy);
 
@@ -356,19 +379,19 @@ describe('AccountsServer', () => {
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                id: '456',
-                valid: true,
-                userId: '123',
-              }),
-            findUserById: () => Promise.resolve(user),
-            resumeSessionValidator: () => Promise.resolve(user),
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findSessionByToken: () =>
+            Promise.resolve({
+              id: '456',
+              valid: true,
+              userId: '123',
+            }),
+          findUserById: () => Promise.resolve(user),
+          resumeSessionValidator: () => Promise.resolve(user),
+        } as any
       );
       accountsServer.on(ServerHooks.ResumeSessionSuccess, hookSpy);
 
@@ -387,19 +410,19 @@ describe('AccountsServer', () => {
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                id: '456',
-                valid: false,
-                userId: '123',
-              }),
-            findUserById: () => Promise.resolve(user),
-          } as any,
           tokenSecret: 'secret1',
           resumeSessionValidator: () => Promise.resolve(),
         },
-        {}
+        {},
+        {
+          findSessionByToken: () =>
+            Promise.resolve({
+              id: '456',
+              valid: false,
+              userId: '123',
+            }),
+          findUserById: () => Promise.resolve(user),
+        } as any
       );
       accountsServer.on(ServerHooks.ResumeSessionError, hookSpy);
 
@@ -423,14 +446,14 @@ describe('AccountsServer', () => {
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () => Promise.reject(''),
-            findUserById: () => Promise.resolve(user),
-          } as any,
           tokenSecret: 'secret1',
           resumeSessionValidator: () => Promise.resolve(),
         },
-        {}
+        {},
+        {
+          findSessionByToken: () => Promise.reject(''),
+          findUserById: () => Promise.resolve(user),
+        } as any
       );
       accountsServer.on(ServerHooks.ResumeSessionError, hookSpy);
 
@@ -449,15 +472,15 @@ describe('AccountsServer', () => {
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                valid: false,
-              }),
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findSessionByToken: () =>
+            Promise.resolve({
+              valid: false,
+            }),
+        } as any
       );
       accountsServer.on(ServerHooks.RefreshTokensError, hookSpy);
 
@@ -489,19 +512,19 @@ describe('AccountsServer', () => {
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                id: '456',
-                valid: true,
-                userId: '123',
-              }),
-            findUserById: () => Promise.resolve(user),
-            updateSession: () => Promise.resolve(),
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findSessionByToken: () =>
+            Promise.resolve({
+              id: '456',
+              valid: true,
+              userId: '123',
+            }),
+          findUserById: () => Promise.resolve(user),
+          updateSession: () => Promise.resolve(),
+        } as any
       );
       accountsServer.on(ServerHooks.RefreshTokensSuccess, hookSpy);
 
@@ -526,10 +549,10 @@ describe('AccountsServer', () => {
       const hookSpy = jest.fn(() => null);
       const accountsServer = new AccountsServer(
         {
-          db: db as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        db as any
       );
       accountsServer.on(ServerHooks.ImpersonationError, hookSpy);
 
@@ -554,16 +577,16 @@ describe('AccountsServer', () => {
       findUserById.mockReturnValueOnce(user).mockReturnValueOnce(impersonatedUser);
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findUserById,
-            createSession: () => Promise.resolve('001'),
-          } as any,
           tokenSecret: 'secret1',
           impersonationAuthorize: async (userObject, impersonateToUser) => {
             return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
         },
-        {}
+        {},
+        {
+          findUserById,
+          createSession: () => Promise.resolve('001'),
+        } as any
       );
       const { accessToken } = await accountsServer.createTokens({ token: '456', user });
       const hookSpy = jest.fn(() => null);
@@ -579,7 +602,7 @@ describe('AccountsServer', () => {
           isImpersonated,
           token,
           user,
-        } as any);
+        }) as any;
 
       await accountsServer.impersonate(
         accessToken,
@@ -604,19 +627,19 @@ describe('AccountsServer', () => {
       };
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                id: '456',
-                valid: true,
-                userId: '123',
-              }),
-            findUserById: () => Promise.resolve(user),
-            updateSession,
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findSessionByToken: () =>
+            Promise.resolve({
+              id: '456',
+              valid: true,
+              userId: '123',
+            }),
+          findUserById: () => Promise.resolve(user),
+          updateSession,
+        } as any
       );
       const { accessToken, refreshToken } = await accountsServer.createTokens({
         token: '456',
@@ -658,16 +681,6 @@ describe('AccountsServer', () => {
       };
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                id: '456',
-                valid: true,
-                userId: '123',
-              }),
-            findUserById: () => Promise.resolve(user),
-            updateSession,
-          } as any,
           tokenSecret: 'secret1',
           createNewSessionTokenOnRefresh: true,
           tokenCreator: {
@@ -676,7 +689,17 @@ describe('AccountsServer', () => {
             },
           },
         },
-        {}
+        {},
+        {
+          findSessionByToken: () =>
+            Promise.resolve({
+              id: '456',
+              valid: true,
+              userId: '123',
+            }),
+          findUserById: () => Promise.resolve(user),
+          updateSession,
+        } as any
       );
       const { accessToken, refreshToken } = await accountsServer.createTokens({
         token: '456',
@@ -713,10 +736,10 @@ describe('AccountsServer', () => {
     it('requires access and refresh tokens', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {} as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {} as any
       );
       await expect(
         accountsServer.refreshTokens(null as any, null as any, {
@@ -728,10 +751,10 @@ describe('AccountsServer', () => {
     it('throws error if tokens are not valid', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {} as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {} as any
       );
       await expect(
         accountsServer.refreshTokens('bad access token', 'bad refresh token', {
@@ -744,12 +767,12 @@ describe('AccountsServer', () => {
     it('throws error if session not found', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () => Promise.resolve(null),
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findSessionByToken: () => Promise.resolve(null),
+        } as any
       );
       const { accessToken, refreshToken } = await accountsServer.createTokens({
         token: '123',
@@ -769,15 +792,15 @@ describe('AccountsServer', () => {
     it('throws error if session not valid', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                valid: false,
-              }),
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findSessionByToken: () =>
+            Promise.resolve({
+              valid: false,
+            }),
+        } as any
       );
       const { accessToken, refreshToken } = await accountsServer.createTokens({
         token: '456',
@@ -797,18 +820,18 @@ describe('AccountsServer', () => {
     it('throws error if user not found', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                id: '456',
-                valid: true,
-                userId: '123',
-              }),
-            findUserById: () => Promise.resolve(null),
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findSessionByToken: () =>
+            Promise.resolve({
+              id: '456',
+              valid: true,
+              userId: '123',
+            }),
+          findUserById: () => Promise.resolve(null),
+        } as any
       );
 
       const { accessToken, refreshToken } = await accountsServer.createTokens({
@@ -831,10 +854,10 @@ describe('AccountsServer', () => {
     it('requires access token', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {} as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {} as any
       );
       await expect(accountsServer.logout(null as any)).rejects.toThrow(
         'An accessToken is required'
@@ -844,10 +867,10 @@ describe('AccountsServer', () => {
     it('throws error if tokens are not valid', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {} as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {} as any
       );
       await expect(accountsServer.logout('bad access token')).rejects.toThrow(
         'Tokens are not valid'
@@ -857,12 +880,12 @@ describe('AccountsServer', () => {
     it('throws error if session not found', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () => Promise.resolve(null),
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findSessionByToken: () => Promise.resolve(null),
+        } as any
       );
 
       const { accessToken } = await accountsServer.createTokens({
@@ -878,15 +901,15 @@ describe('AccountsServer', () => {
     it('throws error if session not valid', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                valid: false,
-              }),
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findSessionByToken: () =>
+            Promise.resolve({
+              valid: false,
+            }),
+        } as any
       );
       const { accessToken } = await accountsServer.createTokens({
         token: '456',
@@ -906,10 +929,10 @@ describe('AccountsServer', () => {
       const findUserById = jest.fn(() => Promise.resolve('user'));
       const accountsServer = new AccountsServer(
         {
-          db: { findUserById } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        { findUserById } as any
       );
       const user = await accountsServer.findUserById('id');
       expect(findUserById.mock.calls[0]).toEqual(['id']);
@@ -921,10 +944,10 @@ describe('AccountsServer', () => {
     it('throws error if access token is not provided', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {} as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {} as any
       );
 
       await expect(accountsServer.resumeSession(undefined as any)).rejects.toThrow(
@@ -935,18 +958,18 @@ describe('AccountsServer', () => {
     it('throws error if user is not found', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                id: '456',
-                valid: true,
-                userId: '123',
-              }),
-            findUserById: () => Promise.resolve(null),
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findSessionByToken: () =>
+            Promise.resolve({
+              id: '456',
+              valid: true,
+              userId: '123',
+            }),
+          findUserById: () => Promise.resolve(null),
+        } as any
       );
 
       const { accessToken } = await accountsServer.createTokens({
@@ -967,12 +990,12 @@ describe('AccountsServer', () => {
       };
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () => Promise.resolve(null),
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findSessionByToken: () => Promise.resolve(null),
+        } as any
       );
 
       const { accessToken } = await accountsServer.createTokens({ token: '456', user });
@@ -987,18 +1010,18 @@ describe('AccountsServer', () => {
       };
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                id: '456',
-                valid: false,
-                userId: '123',
-              }),
-            findUserById: () => Promise.resolve(user),
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findSessionByToken: () =>
+            Promise.resolve({
+              id: '456',
+              valid: false,
+              userId: '123',
+            }),
+          findUserById: () => Promise.resolve(user),
+        } as any
       );
 
       const { accessToken } = await accountsServer.createTokens({ token: '456', user });
@@ -1013,18 +1036,18 @@ describe('AccountsServer', () => {
       };
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findSessionByToken: () =>
-              Promise.resolve({
-                id: '456',
-                valid: true,
-                userId: '123',
-              }),
-            findUserById: () => Promise.resolve(user),
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findSessionByToken: () =>
+            Promise.resolve({
+              id: '456',
+              valid: true,
+              userId: '123',
+            }),
+          findUserById: () => Promise.resolve(user),
+        } as any
       );
 
       const { accessToken } = await accountsServer.createTokens({ token: '456', user });
@@ -1038,10 +1061,10 @@ describe('AccountsServer', () => {
       const setUserDeactivated = jest.fn(() => Promise.resolve('user'));
       const accountsServer = new AccountsServer(
         {
-          db: { setUserDeactivated } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        { setUserDeactivated } as any
       );
       await accountsServer.deactivateUser('id');
       expect(setUserDeactivated.mock.calls[0]).toEqual(['id', true]);
@@ -1053,10 +1076,10 @@ describe('AccountsServer', () => {
       const setUserDeactivated = jest.fn(() => Promise.resolve('user'));
       const accountsServer = new AccountsServer(
         {
-          db: { setUserDeactivated } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        { setUserDeactivated } as any
       );
       await accountsServer.activateUser('id');
       expect(setUserDeactivated.mock.calls[0]).toEqual(['id', false]);
@@ -1071,10 +1094,10 @@ describe('AccountsServer', () => {
     it('throws error if no access token is provided', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: db as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        db as any
       );
 
       const accessToken = null as any;
@@ -1090,10 +1113,10 @@ describe('AccountsServer', () => {
     it('throws error if access token is not valid', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {} as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {} as any
       );
 
       await expect(
@@ -1111,10 +1134,10 @@ describe('AccountsServer', () => {
     it('throws error if session is not valid', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {} as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {} as any
       );
       const { accessToken } = await accountsServer.createTokens({
         token: '456',
@@ -1145,12 +1168,12 @@ describe('AccountsServer', () => {
     it('throws error if user is not found', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findUserById: () => Promise.resolve(null),
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findUserById: () => Promise.resolve(null),
+        } as any
       );
       const { accessToken } = await accountsServer.createTokens({
         token: '456',
@@ -1183,14 +1206,14 @@ describe('AccountsServer', () => {
       findUserById.mockReturnValueOnce(user);
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findUserById,
-            findUserByUsername: () => Promise.resolve(null),
-          } as any,
           tokenSecret: 'secret1',
           ambiguousErrorMessages: false,
         },
-        {}
+        {},
+        {
+          findUserById,
+          findUserByUsername: () => Promise.resolve(null),
+        } as any
       );
       const { accessToken } = await accountsServer.createTokens({
         token: '456',
@@ -1221,13 +1244,13 @@ describe('AccountsServer', () => {
     it('returns not authorized if impersonationAuthorize function is not passed in config', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findUserById: () => Promise.resolve(user),
-            findUserByUsername: () => Promise.resolve(someUser),
-          } as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {
+          findUserById: () => Promise.resolve(user),
+          findUserByUsername: () => Promise.resolve(someUser),
+        } as any
       );
       const { accessToken } = await accountsServer.createTokens({
         token: '456',
@@ -1257,16 +1280,16 @@ describe('AccountsServer', () => {
     it('returns not authorized if impersonationAuthorize return false', async () => {
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findUserById: () => Promise.resolve(user),
-            findUserByUsername: () => Promise.resolve(someUser),
-          } as any,
           tokenSecret: 'secret1',
           impersonationAuthorize: async (userObject, impersonateToUser) => {
             return userObject.id === user.id && impersonateToUser === impersonatedUser;
           },
         },
-        {}
+        {},
+        {
+          findUserById: () => Promise.resolve(user),
+          findUserByUsername: () => Promise.resolve(someUser),
+        } as any
       );
       const { accessToken } = await accountsServer.createTokens({
         token: '456',
@@ -1302,10 +1325,6 @@ describe('AccountsServer', () => {
       findUserById.mockReturnValueOnce(user).mockReturnValueOnce(impersonatedUser);
       const accountsServer = new AccountsServer(
         {
-          db: {
-            findUserById,
-            createSession,
-          } as any,
           tokenSecret: 'secret1',
           impersonationAuthorize: async (userObject, impersonateToUser) => {
             return userObject.id === user.id && impersonateToUser === impersonatedUser;
@@ -1316,7 +1335,11 @@ describe('AccountsServer', () => {
             },
           },
         },
-        {}
+        {},
+        {
+          findUserById,
+          createSession,
+        } as any
       );
       const { accessToken } = await accountsServer.createTokens({ token: '456', user });
 
@@ -1329,7 +1352,7 @@ describe('AccountsServer', () => {
         ({
           token,
           isImpersonated,
-        } as any);
+        }) as any;
 
       const res = await accountsServer.impersonate(
         accessToken,
@@ -1361,10 +1384,10 @@ describe('AccountsServer', () => {
     it('internal sanitizer should clean services field from the user object', () => {
       const accountsServer = new AccountsServer(
         {
-          db: db as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        db as any
       );
       const modifiedUser = accountsServer.sanitizeUser(userObject);
       expect(modifiedUser.services).toBeUndefined();
@@ -1373,7 +1396,6 @@ describe('AccountsServer', () => {
     it('should run external sanitizier when provided one', () => {
       const accountsServer = new AccountsServer(
         {
-          db: db as any,
           tokenSecret: 'secret1',
           userObjectSanitizer: (user) => {
             const {
@@ -1384,7 +1406,8 @@ describe('AccountsServer', () => {
             return sanitizedUser;
           },
         },
-        {}
+        {},
+        db as any
       );
       const modifiedUser = accountsServer.sanitizeUser(userObject);
       expect(modifiedUser.username).toBeUndefined();
@@ -1395,10 +1418,10 @@ describe('AccountsServer', () => {
     it('return secert', async () => {
       const accountsServer: any = new AccountsServer(
         {
-          db: {} as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {} as any
       );
       expect(accountsServer.getSecretOrPublicKey()).toEqual('secret1');
     });
@@ -1406,13 +1429,13 @@ describe('AccountsServer', () => {
     it('return public key', async () => {
       const accountsServer: any = new AccountsServer(
         {
-          db: {} as any,
           tokenSecret: {
             publicKey: 'publicKey1',
             privateKey: 'privateKey1',
           },
         },
-        {}
+        {},
+        {} as any
       );
       expect(accountsServer.getSecretOrPublicKey()).toEqual('publicKey1');
     });
@@ -1422,10 +1445,10 @@ describe('AccountsServer', () => {
     it('return secert', async () => {
       const accountsServer: any = new AccountsServer(
         {
-          db: {} as any,
           tokenSecret: 'secret1',
         },
-        {}
+        {},
+        {} as any
       );
       expect(accountsServer.getSecretOrPrivateKey()).toEqual('secret1');
     });
@@ -1433,13 +1456,13 @@ describe('AccountsServer', () => {
     it('return private key', async () => {
       const accountsServer: any = new AccountsServer(
         {
-          db: {} as any,
           tokenSecret: {
             publicKey: 'publicKey1',
             privateKey: 'privateKey1',
           },
         },
-        {}
+        {},
+        {} as any
       );
       expect(accountsServer.getSecretOrPrivateKey()).toEqual('privateKey1');
     });

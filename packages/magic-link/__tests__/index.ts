@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import AccountsMagicLink from '../src';
 
 describe('AccountsMagicLink', () => {

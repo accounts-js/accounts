@@ -9,7 +9,7 @@
     "start": "tsc --watch",
     "precompile": "pnpm run clean",
     "compile": "tsc",
-    "testonly": "jest",
+    "testonly": "jest --passWithNoTests",
     "coverage": "pnpm run testonly -- --coverage",
     "prepublishOnly": "pnpm run compile"
   },

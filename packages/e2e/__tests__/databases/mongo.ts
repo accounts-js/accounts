@@ -3,10 +3,12 @@ import { DatabaseInterface } from '@accounts/types';
 // TODO rename to AccountsMongo ?
 import { Mongo } from '@accounts/mongo';
 import { DatabaseTestInterface } from './index';
+import { createAccountsMongoModule } from '@accounts/module-mongo';
 
 const connectionString = 'mongodb://localhost/accounts-js-tests-e2e';
 
 export class DatabaseTest implements DatabaseTestInterface {
+  public databaseModule = createAccountsMongoModule({ dbConn: mongoose.connection });
   public accountsDatabase: DatabaseInterface;
 
   constructor() {

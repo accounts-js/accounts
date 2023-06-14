@@ -87,9 +87,6 @@ export class AccountsServer<CustomUser extends User = User> {
   ) {
     this.options = merge({ ...defaultOptions }, options);
     this.micro = this.options.micro;
-    if (!db) {
-      throw new Error('A database driver is required');
-    }
     this.dbSessions = dbSessions ?? (db as DatabaseInterfaceSessions);
     if (this.options.tokenSecret === defaultOptions.tokenSecret) {
       console.log(`

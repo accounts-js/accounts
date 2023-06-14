@@ -1,8 +1,10 @@
 import { AccountsTypeorm, entities } from '@accounts/typeorm';
 import { DatabaseInterface } from '@accounts/types';
 import { Connection, ConnectionManager, ConnectionOptions } from 'typeorm';
+import { createAccountsTypeORMModule } from '@accounts/module-typeorm';
 
 import { DatabaseTestInterface } from '.';
+import { Module } from 'graphql-modules';
 
 const connectionName = 'typeorm-accounts-js-test';
 const connectionConfig: ConnectionOptions = {
@@ -20,12 +22,12 @@ export class DatabaseTest implements DatabaseTestInterface {
   public connectionManager = new ConnectionManager();
   public accountsDatabase: DatabaseInterface;
   public connection: Connection;
+  public databaseModule: Module;
 
   constructor() {
     this.connection = this.connectionManager.create(connectionConfig);
-    this.accountsDatabase = new AccountsTypeorm({
-      connection: this.connection,
-    });
+    this.databaseModule = createAccountsTypeORMModule({ connection: this.connection });
+    this.accountsDatabase = new AccountsTypeorm({}, this.connection);
   }
 
   public async start() {

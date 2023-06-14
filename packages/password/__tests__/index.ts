@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import AccountsPassword from '../src';
 
 describe('AccountsPassword', () => {

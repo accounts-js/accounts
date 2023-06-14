@@ -212,8 +212,8 @@ export default class AccountsPassword<CustomUser extends User = User>
     this.twoFactor.setUserStore(store);
   }
 
-  public setSessionsStore(store: DatabaseInterfaceSessions) {
-    this.dbSessions = store;
+  public setSessionsStore(store?: DatabaseInterfaceSessions) {
+    this.dbSessions = store ?? (this.db as unknown as DatabaseInterfaceSessions);
   }
 
   public async authenticate(params: LoginUserPasswordService): Promise<CustomUser> {

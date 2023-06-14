@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import AccountsOauth from '../src';
 
 describe('AccountsOauth', () => {

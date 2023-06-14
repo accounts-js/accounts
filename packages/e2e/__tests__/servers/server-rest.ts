@@ -47,7 +47,6 @@ export class ServerRestTest implements ServerTestInterface {
     this.accountsPassword = new AccountsPassword();
     this.accountsServer = new AccountsServer(
       {
-        db: this.accountsDatabase,
         tokenSecret: 'test',
         emailTemplates: {
           from: 'accounts-js <no-reply@accounts-js.com>',
@@ -79,7 +78,8 @@ export class ServerRestTest implements ServerTestInterface {
       },
       {
         password: this.accountsPassword,
-      }
+      },
+      this.databaseTest.accountsDatabase
     );
 
     /**

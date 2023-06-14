@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import accountsExpress from '../src';
 import * as express from 'express';
 

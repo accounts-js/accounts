@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { registerPassword } from '../../../src/endpoints/password/register';
 import { LoginResult } from '@accounts/types';
 import { AccountsJsError } from '@accounts/server';

@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { SendResetPasswordEmailErrors } from '@accounts/password';
 import { AccountsJsError } from '@accounts/server';
 import { resetPassword, sendResetPasswordEmail } from '../../../src/endpoints/password/reset';

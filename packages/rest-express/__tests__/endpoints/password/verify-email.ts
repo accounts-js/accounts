@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { SendVerificationEmailErrors } from '@accounts/password';
 import { AccountsJsError } from '@accounts/server';
 import { verifyEmail, sendVerificationEmail } from '../../../src/endpoints/password/verify-email';

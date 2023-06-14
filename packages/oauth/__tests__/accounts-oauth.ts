@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { AccountsOauth } from '../src';
 
 const user = {
@@ -41,7 +42,7 @@ describe('AccountsOauth', () => {
         oauth.authenticate({
           provider: 'facebook',
         })
-      ).rejects.toThrow('Invalid provider');
+      ).rejects.toThrow('No OAuth provider with the name facebook was registered.');
     });
 
     it('should throw invalid provider if user provider was not supplied', async () => {
@@ -67,7 +68,7 @@ describe('AccountsOauth', () => {
           authenticate: authSpy as any,
         },
       });
-      oauth.setStore(mockStore as any);
+      oauth.setUserStore(mockStore as any);
 
       const params = {
         provider: 'facebook',
@@ -93,7 +94,7 @@ describe('AccountsOauth', () => {
         findUserByServiceId: jest.fn(),
         findUserByEmail: jest.fn(() => user),
       };
-      oauth.setStore(store as any);
+      oauth.setUserStore(store as any);
 
       const params = {
         provider: 'facebook',
@@ -127,7 +128,7 @@ describe('AccountsOauth', () => {
           email: user2.email,
         })),
       };
-      oauth.setStore(store as any);
+      oauth.setUserStore(store as any);
 
       const params = {
         provider: 'facebook',
@@ -158,7 +159,7 @@ describe('AccountsOauth', () => {
         authenticate: authSpy as any,
       },
     });
-    oauth.setStore(mockStore as any);
+    oauth.setUserStore(mockStore as any);
 
     const params = {
       provider: 'facebook',
@@ -177,10 +178,12 @@ describe('unlink', () => {
       authenticate: jest.fn(),
     },
   });
-  oauth.setStore(mockStore as any);
+  oauth.setUserStore(mockStore as any);
 
   it('should throw if given wrong provider', async () => {
-    await expect(oauth.unlink('1', 'twitter')).rejects.toThrow('Invalid provider');
+    await expect(oauth.unlink('1', 'twitter')).rejects.toThrow(
+      'No OAuth provider with the name twitter was registered.'
+    );
   });
 
   it('should unset data of oauth provider', async () => {

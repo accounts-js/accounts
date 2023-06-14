@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { RequestMagicLinkEmailErrors } from '@accounts/magic-link';
 import { AccountsJsError } from '@accounts/server';
 import { requestMagicLinkEmail } from '../../../src/endpoints/magic-link/request-magic-link-email';

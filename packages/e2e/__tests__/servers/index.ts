@@ -1,5 +1,3 @@
-import { AccountsServer } from '@accounts/server';
-import { AccountsPassword } from '@accounts/password';
 import { DatabaseInterface } from '@accounts/types';
 import { AccountsClient } from '@accounts/client';
 import { AccountsClientPassword } from '@accounts/client-password';
@@ -15,17 +13,7 @@ export const servers: {
 
 export interface ServerTestInterface {
   port: number;
-  /**
-   * The server
-   */
-  accountsServer: AccountsServer;
-  /**
-   * The server password service
-   */
-  accountsPassword: AccountsPassword;
-  /**
-   * The server database
-   */
+
   accountsDatabase: DatabaseInterface;
 
   /**
