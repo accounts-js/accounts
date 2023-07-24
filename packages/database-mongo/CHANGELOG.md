@@ -1,5 +1,13 @@
 # @accounts/mongo
 
+## 0.34.1
+
+### Patch Changes
+
+- Updated dependencies [[`3f1c4945`](https://github.com/accounts-js/accounts/commit/3f1c4945526f27bdb51bf80ef65bcde6f9b033ed)]:
+  - @accounts/mongo-password@0.33.0
+  - @accounts/mongo-sessions@0.34.0
+
 ## 0.34.0
 
 ### Minor Changes

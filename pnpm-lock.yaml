@@ -112,7 +112,7 @@ importers:
     specifiers:
       '@accounts/database-manager': ^0.33.1
       '@accounts/graphql-api': ^0.33.2
-      '@accounts/mongo': ^0.34.0
+      '@accounts/mongo': ^0.34.1
       '@accounts/password': ^0.32.2
       '@accounts/rest-express': ^0.33.1
       '@accounts/server': ^0.33.1
@@ -153,7 +153,7 @@ importers:
     specifiers:
       '@accounts/database-manager': ^0.33.1
       '@accounts/magic-link': ^0.1.1
-      '@accounts/mongo': ^0.34.0
+      '@accounts/mongo': ^0.34.1
       '@accounts/server': ^0.33.1
       '@types/mongoose': 5.7.16
       '@types/node': 16.11.7
@@ -288,7 +288,7 @@ importers:
 
   examples/rest-express-typescript:
     specifiers:
-      '@accounts/mongo': ^0.34.0
+      '@accounts/mongo': ^0.34.1
       '@accounts/password': ^0.32.2
       '@accounts/rest-express': ^0.33.1
       '@accounts/server': ^0.33.1
@@ -447,8 +447,8 @@ importers:
     specifiers:
       '@accounts/database-tests': ^0.32.2
       '@accounts/mongo-magic-link': ^0.1.1
-      '@accounts/mongo-password': ^0.32.2
-      '@accounts/mongo-sessions': ^0.33.0
+      '@accounts/mongo-password': ^0.33.0
+      '@accounts/mongo-sessions': ^0.34.0
       '@accounts/types': ^0.33.1
       '@types/jest': 27.0.2
       '@types/mongodb': ^3.6.20
@@ -476,7 +476,7 @@ importers:
 
   packages/database-mongo-magic-link:
     specifiers:
-      '@accounts/mongo-password': ^0.32.2
+      '@accounts/mongo-password': ^0.33.0
       '@accounts/types': ^0.33.1
       '@types/jest': 27.0.2
       '@types/mongodb': 3.6.20
@@ -622,7 +622,7 @@ importers:
       '@accounts/client-password': ^0.32.2
       '@accounts/graphql-api': ^0.33.2
       '@accounts/graphql-client': ^0.33.1
-      '@accounts/mongo': ^0.34.0
+      '@accounts/mongo': ^0.34.1
       '@accounts/password': ^0.32.2
       '@accounts/rest-client': ^0.33.1
       '@accounts/rest-express': ^0.33.1
@@ -15166,7 +15166,7 @@ packages:
     resolution: {integrity: sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==}
     engines: {node: '>= 4.0'}
     os: [darwin]
-    deprecated: fsevents 1 will break on node v14+ and could be using insecure binaries. Upgrade to fsevents 2.
+    deprecated: The v1 package contains DANGEROUS / INSECURE binaries. Upgrade to safe fsevents v2
     requiresBuild: true
     dependencies:
       bindings: 1.5.0
