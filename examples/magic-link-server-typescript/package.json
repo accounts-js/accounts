@@ -12,7 +12,7 @@
   "dependencies": {
     "@accounts/database-manager": "^0.33.1",
     "@accounts/magic-link": "^0.1.1",
-    "@accounts/mongo": "^0.34.0",
+    "@accounts/mongo": "^0.34.1",
     "@accounts/server": "^0.33.1",
     "mongoose": "5.9.25",
     "tslib": "2.3.1"

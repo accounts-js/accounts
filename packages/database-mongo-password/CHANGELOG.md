@@ -1,5 +1,11 @@
 # @accounts/mongo-password
 
+## 0.33.0
+
+### Minor Changes
+
+- [#1251](https://github.com/accounts-js/accounts/pull/1251) [`3f1c4945`](https://github.com/accounts-js/accounts/commit/3f1c4945526f27bdb51bf80ef65bcde6f9b033ed) Thanks [@awatson1978](https://github.com/awatson1978)! - MongoDB 4.X support for Meteor@2.5.1 - Mongo.createUser and Mongo.createSession bugfixes
+
 ## 0.32.4
 
 ### Patch Changes
