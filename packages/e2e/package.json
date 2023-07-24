@@ -54,7 +54,7 @@
     "core-js": "3.19.0",
     "express": "4.17.1",
     "graphql": "14.6.0",
-    "mongoose": "5.9.13",
+    "mongoose": "5.13.20",
     "node-fetch": "2.6.1",
     "tslib": "2.3.1",
     "typeorm": "0.2.38"

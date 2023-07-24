@@ -21,7 +21,7 @@
     "apollo-server": "2.16.0",
     "graphql": "14.6.0",
     "graphql-tag": "2.12.6",
-    "mongoose": "5.9.25",
+    "mongoose": "5.13.20",
     "tslib": "2.3.1"
   },
   "devDependencies": {
