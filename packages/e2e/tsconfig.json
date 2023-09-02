@@ -3,6 +3,7 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./lib",
-    "importHelpers": true
+    "importHelpers": true,
+    "typeRoots": ["./node_modules/@types/"]
   }
 }
