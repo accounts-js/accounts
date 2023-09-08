@@ -5,13 +5,13 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "clean": "rimraf lib",
-    "start": "tsc --watch",
-    "precompile": "pnpm run clean",
-    "compile": "tsc",
-    "prepublishOnly": "pnpm run compile",
-    "testonly": "jest",
-    "coverage": "jest --coverage"
+    "clean": "yarn run -T rimraf lib",
+    "start": "yarn run -T tsc --watch",
+    "precompile": "yarn run clean",
+    "compile": "yarn run -T tsc",
+    "prepublishOnly": "yarn run compile",
+    "testonly": "yarn run -T jest",
+    "coverage": "yarn run -T jest --coverage"
   },
   "files": [
     "src",
@@ -28,11 +28,6 @@
     "tslib": "2.5.2"
   },
   "devDependencies": {
-    "@types/jest": "27.5.2",
-    "@types/node": "20.2.3",
-    "@types/request-promise": "4.1.48",
-    "jest": "27.3.1",
-    "rimraf": "5.0.1",
-    "ts-jest": "27.1.5"
+    "@types/request-promise": "4.1.48"
   }
 }

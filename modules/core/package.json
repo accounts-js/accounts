@@ -5,14 +5,14 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "clean": "rimraf lib",
-    "start": "tsc --watch",
-    "precompile": "pnpm run clean",
-    "compile": "pnpm run generate:graphql && tsc",
-    "testonly": "jest --passWithNoTests",
-    "coverage": "pnpm run testonly -- --coverage",
-    "generate:graphql": "gql-gen",
-    "prepublishOnly": "pnpm run compile"
+    "clean": "yarn run -T rimraf lib",
+    "start": "yarn run -T tsc --watch",
+    "precompile": "yarn run clean",
+    "compile": "yarn run generate:graphql && yarn run -T tsc",
+    "testonly": "yarn run -T jest",
+    "coverage": "yarn run testonly --coverage",
+    "generate:graphql": "yarn run gql-gen",
+    "prepublishOnly": "yarn run compile"
   },
   "files": [
     "src",
@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@graphql-tools/merge": "9.0.0",
-    "@graphql-tools/utils": "10.0.0",
+    "@graphql-tools/utils": "10.0.6",
     "request-ip": "3.3.0",
     "tslib": "2.5.2"
   },
@@ -57,15 +57,9 @@
     "@graphql-codegen/typescript-resolvers": "3.2.1",
     "@graphql-codegen/typescript-type-graphql": "2.3.6",
     "@graphql-tools/schema": "10.0.0",
-    "@types/jest": "27.5.2",
-    "@types/node": "20.2.3",
     "@types/request-ip": "0.0.37",
-    "graphql": "16.6.0",
-    "graphql-modules": "2.1.2",
-    "graphql-tag": "2.12.6",
-    "jest": "27.3.1",
-    "rimraf": "5.0.1",
-    "ts-jest": "27.1.5",
-    "ts-node": "10.9.1"
+    "graphql": "16.8.0",
+    "graphql-modules": "2.2.0",
+    "graphql-tag": "2.12.6"
   }
 }

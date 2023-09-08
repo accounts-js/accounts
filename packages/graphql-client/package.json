@@ -5,12 +5,12 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "clean": "rimraf lib",
-    "start": "tsc --watch",
-    "precompile": "pnpm run clean",
-    "compile": "pnpm run generate:graphql && tsc",
-    "generate:graphql": "gql-gen",
-    "prepublishOnly": "pnpm run compile"
+    "clean": "yarn run -T rimraf lib",
+    "start": "yarn run -T tsc --watch",
+    "precompile": "yarn run clean",
+    "compile": "yarn run generate:graphql && yarn run -T tsc",
+    "generate:graphql": "yarn run gql-gen",
+    "prepublishOnly": "yarn run compile"
   },
   "files": [
     "src",
@@ -44,9 +44,6 @@
     "@graphql-codegen/typed-document-node": "4.0.1",
     "@graphql-codegen/typescript": "3.0.4",
     "@graphql-codegen/typescript-operations": "3.0.4",
-    "@types/jest": "27.5.2",
-    "graphql": "16.6.0",
-    "jest": "27.3.1",
-    "ts-jest": "27.1.5"
+    "graphql": "16.8.0"
   }
 }

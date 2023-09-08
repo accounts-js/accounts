@@ -5,14 +5,14 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "clean": "rimraf lib",
-    "start": "tsc --watch",
-    "precompile": "pnpm run clean",
-    "compile": "tsc",
-    "prepublishOnly": "pnpm run compile",
-    "testonly": "jest --runInBand --passWithNoTests",
-    "test:watch": "jest --watch",
-    "coverage": "pnpm run testonly -- --coverage"
+    "clean": "yarn run -T rimraf lib",
+    "start": "yarn run -T tsc --watch",
+    "precompile": "yarn run clean",
+    "compile": "yarn run -T tsc",
+    "prepublishOnly": "yarn run compile",
+    "testonly": "yarn run -T jest --runInBand",
+    "test:watch": "yarn run -T jest --watch",
+    "coverage": "yarn run testonly --coverage"
   },
   "files": [
     "src",
@@ -30,14 +30,10 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/database-tests": "^0.32.2",
-    "@types/jest": "27.5.2",
     "@types/lodash": "4.14.194",
-    "@types/node": "20.2.3",
-    "graphql-modules": "2.1.2",
-    "jest": "27.3.1",
+    "graphql": "16.8.0",
+    "graphql-modules": "2.2.0",
     "pg": "8.11.0",
-    "rimraf": "5.0.1",
-    "ts-jest": "27.1.5",
     "typeorm": "0.3.16"
   },
   "dependencies": {
@@ -47,6 +43,7 @@
     "tslib": "2.5.2"
   },
   "peerDependencies": {
+    "graphql": "^16.0.0",
     "graphql-modules": "^2.0.0",
     "typeorm": "^0.3.0"
   }

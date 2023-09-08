@@ -1,4 +1,4 @@
-import { ApolloLink } from '@apollo/client';
+import { ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import { AccountsClient } from '@accounts/client';
 

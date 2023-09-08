@@ -8,11 +8,11 @@
     "access": "public"
   },
   "scripts": {
-    "clean": "rimraf lib",
-    "start": "tsc --watch",
-    "precompile": "pnpm run clean",
-    "compile": "tsc",
-    "prepublishOnly": "pnpm run compile"
+    "clean": "yarn run -T rimraf lib",
+    "start": "yarn run -T tsc --watch",
+    "precompile": "yarn run clean",
+    "compile": "yarn run -T tsc",
+    "prepublishOnly": "yarn run compile"
   },
   "files": [
     "src",
@@ -32,7 +32,7 @@
   "devDependencies": {
     "@accounts/client": "^0.33.1",
     "@apollo/client": "3.7.14",
-    "graphql": "16.6.0",
+    "graphql": "16.8.0",
     "rimraf": "5.0.1"
   }
 }

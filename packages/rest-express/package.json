@@ -8,15 +8,15 @@
     "access": "public"
   },
   "scripts": {
-    "clean": "rimraf lib",
-    "start": "tsc --watch",
-    "precompile": "pnpm run clean",
-    "compile": "tsc",
-    "prepublishOnly": "pnpm run compile",
-    "test": "npm run testonly",
-    "test:watch": "npm run testonly -- --watch --coverage",
-    "testonly": "jest",
-    "coverage": "npm run testonly -- --coverage"
+    "clean": "yarn run -T rimraf lib",
+    "start": "yarn run -T tsc --watch",
+    "precompile": "yarn run clean",
+    "compile": "yarn run -T tsc",
+    "prepublishOnly": "yarn run compile",
+    "test": "yarn run testonly",
+    "test:watch": "yarn run testonly --watch",
+    "testonly": "yarn run -T jest",
+    "coverage": "yarn run testonly --coverage"
   },
   "files": [
     "src",
@@ -52,12 +52,7 @@
     "@accounts/password": "^0.32.1",
     "@accounts/server": "^0.33.1",
     "@types/express": "4.17.17",
-    "@types/jest": "27.5.2",
-    "@types/node": "20.2.3",
     "@types/request-ip": "0.0.37",
-    "jest": "27.3.1",
-    "reflect-metadata": "0.1.13",
-    "rimraf": "5.0.1",
-    "ts-jest": "27.1.5"
+    "reflect-metadata": "0.1.13"
   }
 }

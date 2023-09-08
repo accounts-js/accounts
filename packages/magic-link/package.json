@@ -8,13 +8,13 @@
     "access": "public"
   },
   "scripts": {
-    "clean": "rimraf lib",
-    "start": "tsc --watch",
-    "precompile": "pnpm run clean",
-    "compile": "tsc",
-    "prepublishOnly": "pnpm run compile",
-    "testonly": "jest --coverage",
-    "coverage": "jest --coverage"
+    "clean": "yarn run -T rimraf lib",
+    "start": "yarn run -T tsc --watch",
+    "precompile": "yarn run clean",
+    "compile": "yarn run -T tsc",
+    "prepublishOnly": "yarn run compile",
+    "testonly": "yarn run -T jest --coverage",
+    "coverage": "yarn run -T jest --coverage"
   },
   "files": [
     "src",
@@ -32,16 +32,11 @@
     "@accounts/server": "^0.33.1",
     "@accounts/types": "^0.33.1",
     "@types/bcryptjs": "2.4.2",
-    "@types/jest": "27.5.2",
     "@types/lodash.set": "4.3.7",
-    "@types/node": "20.2.3",
-    "graphql": "16.6.0",
-    "graphql-modules": "2.1.2",
-    "jest": "27.3.1",
+    "graphql": "16.8.0",
+    "graphql-modules": "2.2.0",
     "lodash.set": "4.3.2",
-    "reflect-metadata": "0.1.13",
-    "rimraf": "5.0.1",
-    "ts-jest": "27.1.5"
+    "reflect-metadata": "0.1.13"
   },
   "peerDependencies": {
     "@accounts/server": "^0.32.0 || ^0.33.0",

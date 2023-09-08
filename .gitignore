@@ -12,3 +12,4 @@ schema.json
 .eslintcache
 
 build/
+.yarn

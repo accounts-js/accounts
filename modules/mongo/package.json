@@ -5,13 +5,13 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "clean": "rimraf lib",
-    "start": "tsc --watch",
-    "precompile": "pnpm run clean",
-    "compile": "tsc",
-    "testonly": "jest --passWithNoTests",
-    "coverage": "pnpm run testonly -- --coverage",
-    "prepublishOnly": "pnpm run compile"
+    "clean": "yarn run -T rimraf lib",
+    "start": "yarn run -T tsc --watch",
+    "precompile": "yarn run clean",
+    "compile": "yarn run -T tsc",
+    "testonly": "yarn run -T jest --passWithNoTests",
+    "coverage": "yarn run testonly --coverage",
+    "prepublishOnly": "yarn run compile"
   },
   "files": [
     "src",
@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@graphql-tools/merge": "9.0.0",
-    "@graphql-tools/utils": "10.0.0",
+    "@graphql-tools/utils": "10.0.6",
     "request-ip": "3.3.0",
     "tslib": "2.5.2"
   },
@@ -70,17 +70,11 @@
     "@mikro-orm/migrations": "5.7.9",
     "@mikro-orm/postgresql": "5.7.9",
     "@mikro-orm/reflection": "5.7.9",
-    "@types/jest": "27.5.2",
-    "@types/node": "20.2.3",
     "@types/request-ip": "0.0.37",
-    "graphql": "16.6.0",
-    "graphql-modules": "2.1.2",
+    "graphql": "16.8.0",
+    "graphql-modules": "2.2.0",
     "graphql-tag": "2.12.6",
-    "jest": "27.3.1",
     "mongodb": "5.5.0",
-    "reflect-metadata": "0.1.13",
-    "rimraf": "5.0.1",
-    "ts-jest": "27.1.5",
-    "ts-node": "10.9.1"
+    "reflect-metadata": "0.1.13"
   }
 }

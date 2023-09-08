@@ -7,7 +7,7 @@ import { AccountsGraphQLClient } from '@accounts/graphql-client';
 import { AccountsPassword } from '@accounts/password';
 import { AuthenticationServicesToken, DatabaseInterfaceUserToken } from '@accounts/server';
 import { DatabaseInterface, User } from '@accounts/types';
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, InMemoryCache } from '@apollo/client/core';
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import fetch from 'node-fetch';

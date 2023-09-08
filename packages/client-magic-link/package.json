@@ -8,16 +8,16 @@
     "access": "public"
   },
   "scripts": {
-    "clean": "rimraf lib",
-    "start": "tsc --watch",
-    "precompile": "pnpm run clean",
-    "compile": "tsc",
-    "prepublishOnly": "pnpm run compile",
-    "test": "pnpm run testonly",
-    "test-ci": "pnpm run lint && pnpm run coverage",
-    "testonly": "jest --passWithNoTests",
-    "test:watch": "jest --watch",
-    "coverage": "pnpm run testonly -- --coverage"
+    "clean": "yarn run -T rimraf lib",
+    "start": "yarn run -T tsc --watch",
+    "precompile": "yarn run clean",
+    "compile": "yarn run -T tsc",
+    "prepublishOnly": "yarn run compile",
+    "test": "yarn run testonly",
+    "test-ci": "yarn run lint && yarn run coverage",
+    "testonly": "yarn run -T jest",
+    "test:watch": "yarn run -T jest --watch",
+    "coverage": "yarn run testonly --coverage"
   },
   "files": [
     "src",
@@ -32,13 +32,6 @@
   },
   "author": "Leo Pradel",
   "license": "MIT",
-  "devDependencies": {
-    "@types/jest": "27.5.2",
-    "@types/node": "20.2.3",
-    "jest": "27.3.1",
-    "rimraf": "5.0.1",
-    "ts-jest": "27.1.5"
-  },
   "dependencies": {
     "@accounts/client": "^0.33.1",
     "@accounts/types": "^0.33.1",

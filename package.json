@@ -2,35 +2,28 @@
   "private": true,
   "version": "0.22.0",
   "scripts": {
-    "start": "lerna exec -- pnpm run start",
+    "start": "lerna exec -- yarn run start",
     "clean": "lerna run clean; rm -rf node_modules; rm -rf packages/**/node_modules;",
     "compile": "lerna run compile",
     "publish": "lerna publish",
-    "publish:canary": "pnpm run publish -- --canary",
-    "test": "pnpm run test:lint && pnpm run compile && pnpm run coverage",
+    "publish:canary": "yarn run publish -- --canary",
+    "test": "yarn run test:lint && yarn run compile && yarn run coverage",
     "testonly": "lerna run testonly",
     "prettier": "prettier --write '**/*.{json,md,js,ts,jsx,tsx,yml}'",
     "test:lint": "eslint 'packages/*/{src,__tests__}/**/*.ts'",
     "test:examples": "lerna run test --scope=\"@examples/*\"",
     "coverage": "lerna run coverage",
     "codecov": "codecov",
-    "version": "pnpx changeset version && pnpm install --lockfile-only",
-    "release": "pnpm run compile && pnpx changeset publish",
-    "reset": "pnpm run clean; pnpm run install; pnpm run compile",
-    "prepare": "husky install"
+    "version": "pnpx changeset version && yarn install --lockfile-only",
+    "release": "yarn run compile && pnpx changeset publish",
+    "reset": "yarn run clean; yarn run install; yarn run compile",
+    "postinstall": "husky install"
   },
   "workspaces": {
     "packages": [
       "modules/*",
-      "packages/*",
-      "examples/*",
-      "website"
+      "packages/*"
     ]
-  },
-  "pnpm": {
-    "overrides": {
-      "@types/eslint": "8.4.0"
-    }
   },
   "lint-staged": {
     "*.{json,md,js,ts,jsx,tsx,yml}": [
@@ -61,6 +54,8 @@
   "devDependencies": {
     "@changesets/changelog-github": "0.4.8",
     "@changesets/cli": "2.26.1",
+    "@types/jest": "27.5.2",
+    "@types/node": "20.2.3",
     "@typescript-eslint/eslint-plugin": "5.59.6",
     "@typescript-eslint/parser": "5.59.6",
     "eslint": "8.41.0",
@@ -68,14 +63,23 @@
     "eslint-plugin-jest": "27.2.1",
     "eslint-plugin-prettier": "4.2.1",
     "husky": "8.0.3",
+    "jest": "27.3.1",
     "lerna": "6.6.2",
     "lint-staged": "13.2.2",
     "prettier": "2.8.8",
+    "rimraf": "5.0.1",
+    "ts-jest": "27.1.5",
+    "ts-node": "10.9.1",
     "typescript": "5.0.4"
   },
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/accounts-js",
     "logo": "https://opencollective.com/accounts-js/logo.txt"
-  }
+  },
+  "engines": {
+    "node": ">= 16.0.0",
+    "yarn": ">=3.2.0"
+  },
+  "packageManager": "yarn@4.0.0-rc.50"
 }

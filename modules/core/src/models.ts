@@ -61,20 +61,24 @@ export type Mutation = {
   verifyAuthentication?: Maybe<Scalars['Boolean']>;
 };
 
+
 export type MutationAuthenticateArgs = {
   params: AuthenticateParamsInput;
   serviceName: Scalars['String'];
 };
+
 
 export type MutationImpersonateArgs = {
   accessToken: Scalars['String'];
   impersonated: ImpersonationUserIdentityInput;
 };
 
+
 export type MutationRefreshTokensArgs = {
   accessToken: Scalars['String'];
   refreshToken: Scalars['String'];
 };
+
 
 export type MutationVerifyAuthenticationArgs = {
   params: AuthenticateParamsInput;
@@ -105,14 +109,11 @@ export type UserInput = {
   username?: InputMaybe<Scalars['String']>;
 };
 
+
+
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<
-  TResult,
-  TParent,
-  TContext,
-  TArgs
->;
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -135,13 +136,7 @@ export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
-export interface SubscriptionSubscriberObject<
-  TResult,
-  TKey extends string,
-  TParent,
-  TContext,
-  TArgs,
-> {
+export interface SubscriptionSubscriberObject<TResult, TKey extends string, TParent, TContext, TArgs> {
   subscribe: SubscriptionSubscribeFn<{ [key in TKey]: TResult }, TParent, TContext, TArgs>;
   resolve?: SubscriptionResolveFn<TResult, { [key in TKey]: TResult }, TContext, TArgs>;
 }
@@ -155,13 +150,7 @@ export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, 
   | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
   | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
 
-export type SubscriptionResolver<
-  TResult,
-  TKey extends string,
-  TParent = {},
-  TContext = {},
-  TArgs = {},
-> =
+export type SubscriptionResolver<TResult, TKey extends string, TParent = {}, TContext = {}, TArgs = {}> =
   | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
   | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
 
@@ -171,11 +160,7 @@ export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   info: GraphQLResolveInfo
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type IsTypeOfResolverFn<T = {}, TContext = {}> = (
-  obj: T,
-  context: TContext,
-  info: GraphQLResolveInfo
-) => boolean | Promise<boolean>;
+export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
 
@@ -186,6 +171,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   context: TContext,
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
+
+
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
@@ -221,87 +208,45 @@ export type ResolversParentTypes = {
   UserInput: UserInput;
 };
 
-export type EmailRecordResolvers<
-  ContextType = AccountsContextGraphQLModules,
-  ParentType extends ResolversParentTypes['EmailRecord'] = ResolversParentTypes['EmailRecord'],
-> = {
+export type EmailRecordResolvers<ContextType = AccountsContextGraphQLModules, ParentType extends ResolversParentTypes['EmailRecord'] = ResolversParentTypes['EmailRecord']> = {
   address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   verified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ImpersonateReturnResolvers<
-  ContextType = AccountsContextGraphQLModules,
-  ParentType extends
-    ResolversParentTypes['ImpersonateReturn'] = ResolversParentTypes['ImpersonateReturn'],
-> = {
+export type ImpersonateReturnResolvers<ContextType = AccountsContextGraphQLModules, ParentType extends ResolversParentTypes['ImpersonateReturn'] = ResolversParentTypes['ImpersonateReturn']> = {
   authorized?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   tokens?: Resolver<Maybe<ResolversTypes['Tokens']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type LoginResultResolvers<
-  ContextType = AccountsContextGraphQLModules,
-  ParentType extends ResolversParentTypes['LoginResult'] = ResolversParentTypes['LoginResult'],
-> = {
+export type LoginResultResolvers<ContextType = AccountsContextGraphQLModules, ParentType extends ResolversParentTypes['LoginResult'] = ResolversParentTypes['LoginResult']> = {
   sessionId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tokens?: Resolver<Maybe<ResolversTypes['Tokens']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type MutationResolvers<
-  ContextType = AccountsContextGraphQLModules,
-  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation'],
-> = {
-  authenticate?: Resolver<
-    Maybe<ResolversTypes['LoginResult']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationAuthenticateArgs, 'params' | 'serviceName'>
-  >;
-  impersonate?: Resolver<
-    Maybe<ResolversTypes['ImpersonateReturn']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationImpersonateArgs, 'accessToken' | 'impersonated'>
-  >;
+export type MutationResolvers<ContextType = AccountsContextGraphQLModules, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  authenticate?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationAuthenticateArgs, 'params' | 'serviceName'>>;
+  impersonate?: Resolver<Maybe<ResolversTypes['ImpersonateReturn']>, ParentType, ContextType, RequireFields<MutationImpersonateArgs, 'accessToken' | 'impersonated'>>;
   logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  refreshTokens?: Resolver<
-    Maybe<ResolversTypes['LoginResult']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationRefreshTokensArgs, 'accessToken' | 'refreshToken'>
-  >;
-  verifyAuthentication?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationVerifyAuthenticationArgs, 'params' | 'serviceName'>
-  >;
+  refreshTokens?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationRefreshTokensArgs, 'accessToken' | 'refreshToken'>>;
+  verifyAuthentication?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationVerifyAuthenticationArgs, 'params' | 'serviceName'>>;
 };
 
-export type QueryResolvers<
-  ContextType = AccountsContextGraphQLModules,
-  ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query'],
-> = {
+export type QueryResolvers<ContextType = AccountsContextGraphQLModules, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 };
 
-export type TokensResolvers<
-  ContextType = AccountsContextGraphQLModules,
-  ParentType extends ResolversParentTypes['Tokens'] = ResolversParentTypes['Tokens'],
-> = {
+export type TokensResolvers<ContextType = AccountsContextGraphQLModules, ParentType extends ResolversParentTypes['Tokens'] = ResolversParentTypes['Tokens']> = {
   accessToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   refreshToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type UserResolvers<
-  ContextType = AccountsContextGraphQLModules,
-  ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User'],
-> = {
+export type UserResolvers<ContextType = AccountsContextGraphQLModules, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   emails?: Resolver<Maybe<Array<ResolversTypes['EmailRecord']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -317,3 +262,4 @@ export type Resolvers<ContextType = AccountsContextGraphQLModules> = {
   Tokens?: TokensResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
+
