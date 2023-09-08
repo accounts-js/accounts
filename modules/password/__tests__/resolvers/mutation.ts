@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { AccountsServer, AccountsJsError } from '@accounts/server';
 import {
   AccountsPassword,

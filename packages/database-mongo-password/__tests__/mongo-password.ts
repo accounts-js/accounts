@@ -1,4 +1,4 @@
-import { MongoClient, Db, ObjectID, ObjectId } from 'mongodb';
+import { MongoClient, Db, ObjectId } from 'mongodb';
 import { MongoServicePassword } from '../src/mongo-password';
 
 const delay = (time: number) => new Promise((resolve) => setTimeout(resolve, time));
@@ -66,7 +66,7 @@ describe('MongoServicePassword', () => {
       const ret = await mongoServicePassword.findUserById(userId);
       expect(userId).toBeTruthy();
       expect(ret).toEqual({
-        _id: expect.any(ObjectID),
+        _id: expect.any(ObjectId),
         id: expect.any(String),
         username: 'johndoe',
         emails: [

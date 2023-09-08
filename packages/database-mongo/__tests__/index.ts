@@ -1,5 +1,6 @@
+import 'reflect-metadata';
 import { randomBytes } from 'crypto';
-import { ObjectID, ObjectId } from 'mongodb';
+import { ObjectId } from 'mongodb';
 
 import { Mongo } from '../src';
 import { DatabaseTests } from './database-tests';
@@ -38,7 +39,7 @@ describe('Mongo', () => {
     it('should throw when mongo id is not valid', async () => {
       const mongoTmp = new Mongo(databaseTests.db);
       await expect(mongoTmp.findUserById('invalid_hex')).rejects.toThrow(
-        'Argument passed in must be a single String of 12 bytes or a string of 24 hex characters'
+        'Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer'
       );
     });
 
@@ -91,7 +92,7 @@ describe('Mongo', () => {
       const ret = await databaseTests.database.findUserById(userId);
       expect(userId).toBeTruthy();
       expect(ret).toEqual({
-        _id: expect.any(ObjectID),
+        _id: expect.any(ObjectId),
         id: expect.any(String),
         username: 'johndoe',
         emails: [
@@ -590,7 +591,7 @@ describe('Mongo', () => {
 
     it('using id provider on create session', async () => {
       const mongoTestOptions = new Mongo(databaseTests.db, {
-        idSessionProvider: () => new ObjectID().toHexString(),
+        idSessionProvider: () => new ObjectId().toHexString(),
         convertSessionIdToMongoObjectId: false,
       });
       const sessionId = await mongoTestOptions.createSession(session.userId, 'token', {
@@ -599,8 +600,8 @@ describe('Mongo', () => {
       });
       const ret = await mongoTestOptions.findSessionById(sessionId);
       expect((ret as any)._id).toBeTruthy();
-      expect((ret as any)._id).not.toEqual(new ObjectID((ret as any)._id));
-      expect((ret as any)._id).toEqual(new ObjectID((ret as any)._id).toHexString());
+      expect((ret as any)._id).not.toEqual(new ObjectId((ret as any)._id));
+      expect((ret as any)._id).toEqual(new ObjectId((ret as any)._id).toHexString());
     });
   });
 
@@ -810,9 +811,8 @@ describe('Mongo', () => {
       const userWithTokens = await databaseTests.database.findUserByResetPasswordToken(testToken);
       expect(userWithTokens).toBeTruthy();
       await databaseTests.database.removeAllResetPasswordTokens(userId);
-      const userWithDeletedTokens = await databaseTests.database.findUserByResetPasswordToken(
-        testToken
-      );
+      const userWithDeletedTokens =
+        await databaseTests.database.findUserByResetPasswordToken(testToken);
       expect(userWithDeletedTokens).not.toBeTruthy();
     });
   });

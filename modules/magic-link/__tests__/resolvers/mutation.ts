@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { AccountsJsError } from '@accounts/server';
 import { AccountsMagicLink, RequestMagicLinkEmailErrors } from '@accounts/magic-link';
 import { Mutation } from '../../src/resolvers/mutation';

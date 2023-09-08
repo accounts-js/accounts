@@ -267,7 +267,7 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
       }
     );
     if (
-      (ret.modifiedCount && ret.modifiedCount === 0) ||
+      ret.modifiedCount === 0 ||
       // keep ret.result.nModified for compatibility with MongoDB 3.X, version 4.X uses modifiedCount
       ((ret as any).result && (ret as any).result.nModified === 0)
     ) {
@@ -292,7 +292,7 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
       }
     );
     if (
-      (ret.modifiedCount && ret.modifiedCount === 0) ||
+      ret.modifiedCount === 0 ||
       // keep ret.result.nModified for compatibility with MongoDB 3.X, version 4.X uses modifiedCount
       ((ret as any).result && (ret as any).result.nModified === 0)
     ) {
@@ -318,7 +318,7 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
       }
     );
     if (
-      (ret.modifiedCount && ret.modifiedCount === 0) ||
+      ret.modifiedCount === 0 ||
       // keep ret.result.nModified for compatibility with MongoDB 3.X, version 4.X uses modifiedCount
       ((ret as any).result && (ret as any).result.nModified === 0)
     ) {
@@ -344,7 +344,7 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
       }
     );
     if (
-      (ret.modifiedCount && ret.modifiedCount === 0) ||
+      ret.modifiedCount === 0 ||
       // keep ret.result.nModified for compatibility with MongoDB 3.X, version 4.X uses modifiedCount
       ((ret as any).result && (ret as any).result.nModified === 0)
     ) {
@@ -372,7 +372,7 @@ export class MongoServicePassword implements DatabaseInterfaceServicePassword {
       }
     );
     if (
-      (ret.modifiedCount && ret.modifiedCount === 0) ||
+      ret.modifiedCount === 0 ||
       // keep ret.result.nModified for compatibility with MongoDB 3.X, version 4.X uses modifiedCount
       ((ret as any).result && (ret as any).result.nModified === 0)
     ) {

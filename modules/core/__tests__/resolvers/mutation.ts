@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { AccountsServer } from '@accounts/server';
 import { Mutation } from '../../src/resolvers/mutation';
 

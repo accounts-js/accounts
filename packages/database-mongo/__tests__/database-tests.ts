@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import * as mongodb from 'mongodb';
 import { runDatabaseTests } from '@accounts/database-tests';
 import { Mongo } from '../src';

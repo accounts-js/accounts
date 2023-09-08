@@ -33,12 +33,12 @@ describe('TypeormServicePassword', () => {
 
   describe('#constructor', () => {
     it('should have default options', () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       expect((accountsTypeorm as any).options).toBeTruthy();
     });
 
     it('should get default connection if connection is not provided', () => {
-      const accountsTypeorm = new AccountsTypeorm();
+      const accountsTypeorm = new AccountsTypeorm({});
       expect((accountsTypeorm as any).userRepository).toBeTruthy();
       expect((accountsTypeorm as any).emailRepository).toBeTruthy();
       expect((accountsTypeorm as any).serviceRepository).toBeTruthy();
@@ -48,7 +48,7 @@ describe('TypeormServicePassword', () => {
 
   describe('createUser', () => {
     it('should create a new user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser(user);
       const ret = await accountsTypeorm.findUserById(userId);
       expect(userId).toBeTruthy();
@@ -74,7 +74,7 @@ describe('TypeormServicePassword', () => {
     });
 
     it('should not overwrite service', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser({
         ...user,
         services: 'test',
@@ -91,7 +91,7 @@ describe('TypeormServicePassword', () => {
     });
 
     it('should not set username', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser({
         email: user.email,
         password: user.password,
@@ -102,7 +102,7 @@ describe('TypeormServicePassword', () => {
     });
 
     it('should not set email', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser({
         username: user.username,
         password: user.password,
@@ -113,7 +113,7 @@ describe('TypeormServicePassword', () => {
     });
 
     it('email should be lowercase', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser({
         email: 'JohN@doe.com',
         password: user.password,
@@ -126,13 +126,13 @@ describe('TypeormServicePassword', () => {
 
   describe('findUserById', () => {
     it('should return null for not found user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const ret = await accountsTypeorm.findUserById('402fcb56-e325-4950-9166-63855da0a3fe');
       expect(ret).not.toBeTruthy();
     });
 
     it('should return user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser(user);
       const ret = await accountsTypeorm.findUserById(userId);
       expect(ret).toBeTruthy();
@@ -142,13 +142,13 @@ describe('TypeormServicePassword', () => {
 
   describe('findUserByEmail', () => {
     it('should return null for not found user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const ret = await accountsTypeorm.findUserByEmail('unknow@user.com');
       expect(ret).not.toBeTruthy();
     });
 
     it('should return user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       await accountsTypeorm.createUser(user);
       const ret = await accountsTypeorm.findUserByEmail(user.email);
       expect(ret).toBeTruthy();
@@ -156,7 +156,7 @@ describe('TypeormServicePassword', () => {
     });
 
     it('should return user with uppercase email', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       await accountsTypeorm.createUser({ email: 'JOHN@DOES.COM', password: user.password });
       const ret = await accountsTypeorm.findUserByEmail('JOHN@DOES.COM');
       expect(ret!.id).toBeTruthy();
@@ -166,13 +166,13 @@ describe('TypeormServicePassword', () => {
 
   describe('findUserByUsername', () => {
     it('should return null for not found user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const ret = await accountsTypeorm.findUserByUsername('unknowuser');
       expect(ret).not.toBeTruthy();
     });
 
     it('should return user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       await accountsTypeorm.createUser(user);
       const ret = await accountsTypeorm.findUserByUsername(user.username);
       expect(ret).toBeTruthy();
@@ -182,7 +182,7 @@ describe('TypeormServicePassword', () => {
 
   describe('findUserByServiceIdd', () => {
     it('should return null for not found user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection, cache: 1 });
+      const accountsTypeorm = new AccountsTypeorm({ cache: 1 }, connection);
       const ret = await accountsTypeorm.findUserByServiceId(
         'password',
         '11111111-1111-1111-1111-11111111'
@@ -191,7 +191,7 @@ describe('TypeormServicePassword', () => {
     });
 
     it('should return user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection, cache: 1 });
+      const accountsTypeorm = new AccountsTypeorm({ cache: 1 }, connection);
       const userId = await accountsTypeorm.createUser(user);
 
       let ret = await accountsTypeorm.findUserByServiceId('facebook', '1');
@@ -205,13 +205,13 @@ describe('TypeormServicePassword', () => {
 
   describe('findUserByEmailVerificationToken', () => {
     it('should return null for not found user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const ret = await accountsTypeorm.findUserByEmailVerificationToken('token');
       expect(ret).not.toBeTruthy();
     });
 
     it('should return user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser(user);
       await accountsTypeorm.addEmailVerificationToken(userId, 'john@doe.com', 'token');
       const ret = await accountsTypeorm.findUserByEmailVerificationToken('token');
@@ -222,13 +222,13 @@ describe('TypeormServicePassword', () => {
 
   describe('findUserByResetPasswordToken', () => {
     it('should return null for not found user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const ret = await accountsTypeorm.findUserByResetPasswordToken('token');
       expect(ret).not.toBeTruthy();
     });
 
     it('should return user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser(user);
       await accountsTypeorm.addResetPasswordToken(userId, 'john@doe.com', 'token', 'test');
       const ret = await accountsTypeorm.findUserByResetPasswordToken('token');
@@ -239,13 +239,13 @@ describe('TypeormServicePassword', () => {
 
   describe('findUserByServiceId', () => {
     it('should return null for not found user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const ret = await accountsTypeorm.findUserByServiceId('facebook', 'invalid');
       expect(ret).not.toBeTruthy();
     });
 
     it('should return user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser(user);
       let ret = await accountsTypeorm.findUserByServiceId('facebook', '1');
       expect(ret).not.toBeTruthy();
@@ -258,13 +258,13 @@ describe('TypeormServicePassword', () => {
 
   describe('findPasswordHash', () => {
     it('should return null on not found user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const ret = await accountsTypeorm.findPasswordHash('402fcb56-e325-4950-9166-63855da0a3fe');
       expect(ret).toEqual(null);
     });
 
     it('should return hash', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser(user);
       const retUser = await accountsTypeorm.findUserById(userId);
       const ret = await accountsTypeorm.findPasswordHash(userId);
@@ -276,14 +276,14 @@ describe('TypeormServicePassword', () => {
 
   describe('addEmail', () => {
     it('should throw if user is not found', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       await expect(
         accountsTypeorm.addEmail('402fcb56-e325-4950-9166-63855da0a3fe', 'unknowemail', false)
       ).rejects.toThrow('User not found');
     });
 
     it('should add email', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const email = 'johns@doe.com';
       const userId = await accountsTypeorm.createUser(user);
       await accountsTypeorm.addEmail(userId, email, false);
@@ -293,7 +293,7 @@ describe('TypeormServicePassword', () => {
     });
 
     it('should add lowercase email', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const email = 'johnS@doe.com';
       const userId = await accountsTypeorm.createUser(user);
       await accountsTypeorm.addEmail(userId, email, false);
@@ -305,14 +305,14 @@ describe('TypeormServicePassword', () => {
 
   describe('removeEmail', () => {
     it('should throw if user is not found', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       await expect(
         accountsTypeorm.removeEmail('402fcb56-e325-4950-9166-63855da0a3fe', 'unknowemail')
       ).rejects.toThrow('User not found');
     });
 
     it('should throw if email is not found', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser(user);
       await expect(accountsTypeorm.removeEmail(userId, 'unknowemail')).rejects.toThrow(
         'Email not found'
@@ -320,7 +320,7 @@ describe('TypeormServicePassword', () => {
     });
 
     it('should remove email', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const email = 'johns@doe.com';
       const userId = await accountsTypeorm.createUser(user);
       await accountsTypeorm.addEmail(userId, email, false);
@@ -332,7 +332,7 @@ describe('TypeormServicePassword', () => {
     });
 
     it('should remove uppercase email', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const email = 'johns@doe.com';
       const userId = await accountsTypeorm.createUser(user);
       await accountsTypeorm.addEmail(userId, email, false);
@@ -345,14 +345,14 @@ describe('TypeormServicePassword', () => {
 
   describe('verifyEmail', () => {
     it('should throw if user is not found', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       await expect(
         accountsTypeorm.verifyEmail('402fcb56-e325-4950-9166-63855da0a3fe', 'unknowemail')
       ).rejects.toThrow('User not found');
     });
 
     it('should throw if email is not found', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser(user);
       await expect(accountsTypeorm.verifyEmail(userId, 'unknowemail')).rejects.toThrow(
         'Email not found'
@@ -360,7 +360,7 @@ describe('TypeormServicePassword', () => {
     });
 
     it('should verify email', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser(user);
       let retUser = await accountsTypeorm.findUserById(userId);
       expect(retUser!.emails!.length).toEqual(1);
@@ -377,14 +377,14 @@ describe('TypeormServicePassword', () => {
 
   describe('setUsername', () => {
     it('should throw if user is not found', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       await expect(
         accountsTypeorm.setUsername('402fcb56-e325-4950-9166-63855da0a3fe', 'username')
       ).rejects.toThrow('User not found');
     });
 
     it('should change username', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const username = 'johnsdoe';
       const userId = await accountsTypeorm.createUser(user);
       await accountsTypeorm.setUsername(userId, username);
@@ -396,14 +396,14 @@ describe('TypeormServicePassword', () => {
 
   describe('setPassword', () => {
     it('should throw if user is not found', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       await expect(
         accountsTypeorm.setPassword('402fcb56-e325-4950-9166-63855da0a3fe', 'toto')
       ).rejects.toThrow('User not found');
     });
 
     it('should change password', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const newPassword = 'newpass';
       const userId = await accountsTypeorm.createUser(user);
       await accountsTypeorm.setPassword(userId, newPassword);
@@ -417,7 +417,7 @@ describe('TypeormServicePassword', () => {
 
   describe('setService', () => {
     it('should set service', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser(user);
       let ret = await accountsTypeorm.findUserByServiceId('google', '1');
       expect(ret).not.toBeTruthy();
@@ -430,7 +430,7 @@ describe('TypeormServicePassword', () => {
 
   describe('unsetService', () => {
     it('should unset service', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser(user);
       await accountsTypeorm.setService(userId, 'telegram', { id: '1' });
       await accountsTypeorm.unsetService(userId, 'telegram');
@@ -442,14 +442,14 @@ describe('TypeormServicePassword', () => {
   describe('setUserDeactivated', () => {
     // TODO: This should be added
     // it('should throw if user is not found', async () => {
-    //   const accountsTypeorm = new AccountsTypeorm({ connection });
+    //   const accountsTypeorm = new AccountsTypeorm({}, connection);
     //   await expect(
     //     accountsTypeorm.setUserDeactivated('402fcb56-e325-4950-9166-63855da0a3fe', true)
     //   ).rejects.toThrow('User not found');
     // });
 
     it('should deactivate user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser(user);
       const ret = await accountsTypeorm.findUserById(userId);
       expect(ret!.deactivated).toBeFalsy();
@@ -461,7 +461,7 @@ describe('TypeormServicePassword', () => {
 
   describe('removeAllResetPasswordTokens', () => {
     it('should remove the password reset tokens', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const testToken = 'testVerificationToken';
       const testReason = 'testReason';
       const userId = await accountsTypeorm.createUser(user);
@@ -476,7 +476,7 @@ describe('TypeormServicePassword', () => {
 
   describe('addEmailVerificationToken', () => {
     it('should add a token', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser(user);
       await accountsTypeorm.addEmailVerificationToken(userId, 'john@doe.com', 'token');
       const retUser = await accountsTypeorm.findUserById(userId);
@@ -490,7 +490,7 @@ describe('TypeormServicePassword', () => {
 
   describe('addResetPasswordToken', () => {
     it('should add a token', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser(user);
       await accountsTypeorm.addResetPasswordToken(userId, 'john@doe.com', 'token', 'reset');
       const retUser = await accountsTypeorm.findUserById(userId);

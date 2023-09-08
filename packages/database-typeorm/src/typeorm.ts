@@ -31,10 +31,6 @@ export class AccountsTypeorm implements DatabaseInterface {
     @Inject(UserServiceToken) private UserServiceEntity: typeof UserService = UserService,
     @Inject(UserSessionToken) private UserSessionEntity: typeof UserSession = UserSession
   ) {
-    if (this.connection == null && this.options.connectionName == null) {
-      throw new Error('You must provide either a Connection or a ConnectionName');
-    }
-
     const setRepositories = () => {
       if (this.connection) {
         this.userRepository = this.connection.getRepository(this.UserEntity);

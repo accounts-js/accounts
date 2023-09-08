@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { AccountsPassword } from '@accounts/password';
 import { Query } from '../../src/resolvers/query';
 

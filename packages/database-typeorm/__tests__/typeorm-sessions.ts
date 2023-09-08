@@ -27,7 +27,7 @@ describe('TypeormSessions', () => {
 
   beforeEach(async () => {
     // Session needs a valid userId
-    const accountsTypeorm = new AccountsTypeorm({ connection });
+    const accountsTypeorm = new AccountsTypeorm({}, connection);
     userId = await accountsTypeorm.createUser(user);
     session = { userId, ip: '127.0.0.1', userAgent: 'user agent' };
   });
@@ -45,7 +45,7 @@ describe('TypeormSessions', () => {
 
   describe('createSession', () => {
     it('should create session', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const token = generateRandomToken();
       const sessionId = await accountsTypeorm.createSession(session.userId, token, {
         ip: session.ip,
@@ -65,7 +65,7 @@ describe('TypeormSessions', () => {
     });
 
     it('should create session with extra data', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const impersonatorUserId = '789';
       const token = generateRandomToken();
       const sessionId = await accountsTypeorm.createSession(
@@ -90,13 +90,13 @@ describe('TypeormSessions', () => {
 
   describe('findSessionById', () => {
     it('should return null for not found session', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const ret = await accountsTypeorm.findSessionById('589871d1c9393d445745a57c');
       expect(ret).not.toBeTruthy();
     });
 
     it('should find session', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const sessionId = await accountsTypeorm.createSession(session.userId, 'token');
       const ret = await accountsTypeorm.findSessionById(sessionId);
       expect(ret).toBeTruthy();
@@ -105,13 +105,13 @@ describe('TypeormSessions', () => {
 
   describe('findSessionByToken', () => {
     it('should return null for not found session', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const ret = await accountsTypeorm.findSessionByToken('589871d1-c939-3d44-5745-a57c1111');
       expect(ret).not.toBeTruthy();
     });
 
     it('should find session', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const token = generateRandomToken();
       await accountsTypeorm.createSession(session.userId, token, {
         ip: session.ip,
@@ -124,7 +124,7 @@ describe('TypeormSessions', () => {
 
   describe('updateSession', () => {
     it('should update session', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const token = generateRandomToken();
       const sessionId = await accountsTypeorm.createSession(session.userId, token, {
         ip: session.ip,
@@ -147,7 +147,7 @@ describe('TypeormSessions', () => {
 
     // TODO: updateSession does not accept a token like mongodb
     // it('should update session with token', async () => {
-    //   const accountsTypeorm = new AccountsTypeorm({ connection });
+    //   const accountsTypeorm = new AccountsTypeorm({}, connection);
     //   const token = generateRandomToken();
     //   const token2 = generateRandomToken();
     //   const sessionId = await accountsTypeorm.createSession(session.userId, token, {
@@ -176,7 +176,7 @@ describe('TypeormSessions', () => {
 
   describe('invalidateSession', () => {
     it('invalidates a session', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const token = generateRandomToken();
       const sessionId = await accountsTypeorm.createSession(session.userId, token, {
         ip: session.ip,
@@ -191,7 +191,7 @@ describe('TypeormSessions', () => {
 
   describe('invalidateAllSessions', () => {
     it('invalidates all sessions', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const sessionId1 = await accountsTypeorm.createSession(
         session.userId,
         generateRandomToken(),
@@ -218,7 +218,7 @@ describe('TypeormSessions', () => {
     });
 
     it('invalidates all sessions except given list', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const sessionId1 = await accountsTypeorm.createSession(
         session.userId,
         generateRandomToken(),

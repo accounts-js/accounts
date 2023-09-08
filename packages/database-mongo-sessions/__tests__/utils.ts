@@ -1,4 +1,4 @@
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import { toMongoID } from '../src/utils';
 
 describe('toMongoID', () => {
@@ -7,7 +7,7 @@ describe('toMongoID', () => {
   });
 
   it('should do nothing if passing an ObjectId', () => {
-    const id = new ObjectID('589871d1c9393d445745a57c');
-    expect(toMongoID(new ObjectID('589871d1c9393d445745a57c'))).toEqual(id);
+    const id = new ObjectId('589871d1c9393d445745a57c');
+    expect(toMongoID(new ObjectId('589871d1c9393d445745a57c'))).toEqual(id);
   });
 });

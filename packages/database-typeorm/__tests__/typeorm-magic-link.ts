@@ -33,12 +33,12 @@ describe('TypeormServiceMagicLink', () => {
 
   describe('#constructor', () => {
     it('should have default options', () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       expect((accountsTypeorm as any).options).toBeTruthy();
     });
 
     it('should get default connection if connection is not provided', () => {
-      const accountsTypeorm = new AccountsTypeorm();
+      const accountsTypeorm = new AccountsTypeorm({});
       expect((accountsTypeorm as any).userRepository).toBeTruthy();
       expect((accountsTypeorm as any).emailRepository).toBeTruthy();
       expect((accountsTypeorm as any).serviceRepository).toBeTruthy();
@@ -48,13 +48,13 @@ describe('TypeormServiceMagicLink', () => {
 
   describe('findUserByLoginToken', () => {
     it('should return null for not found user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const ret = await accountsTypeorm.findUserByLoginToken('token');
       expect(ret).not.toBeTruthy();
     });
 
     it('should return user', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser(user);
       await accountsTypeorm.addLoginToken(userId, 'john@doe.com', 'token');
       const ret = await accountsTypeorm.findUserByLoginToken('token');
@@ -65,7 +65,7 @@ describe('TypeormServiceMagicLink', () => {
 
   describe('removeAllLoginTokens', () => {
     it('should remove the login tokens', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const testToken = 'testVerificationToken';
       const userId = await accountsTypeorm.createUser(user);
       await accountsTypeorm.addLoginToken(userId, user.email, testToken);
@@ -79,7 +79,7 @@ describe('TypeormServiceMagicLink', () => {
 
   describe('addLoginToken', () => {
     it('should add a login token', async () => {
-      const accountsTypeorm = new AccountsTypeorm({ connection });
+      const accountsTypeorm = new AccountsTypeorm({}, connection);
       const userId = await accountsTypeorm.createUser(user);
       await accountsTypeorm.addLoginToken(userId, 'john@doe.com', 'token');
       const retUser = await accountsTypeorm.findUserById(userId);

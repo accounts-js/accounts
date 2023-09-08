@@ -1,5 +1,5 @@
 import { randomBytes } from 'crypto';
-import { MongoClient, Db, ObjectID } from 'mongodb';
+import { MongoClient, Db, ObjectId } from 'mongodb';
 import { MongoSessions } from '../src/mongo-sessions';
 
 const delay = (time: number) => new Promise((resolve) => setTimeout(resolve, time));
@@ -116,7 +116,7 @@ describe('MongoSessions', () => {
     it('using id provider on create session', async () => {
       const mongoSessions = new MongoSessions({
         database,
-        idSessionProvider: () => new ObjectID().toHexString(),
+        idSessionProvider: () => new ObjectId().toHexString(),
         convertSessionIdToMongoObjectId: false,
       });
       const sessionId = await mongoSessions.createSession(session.userId, 'token', {
@@ -125,15 +125,15 @@ describe('MongoSessions', () => {
       });
       const ret = await mongoSessions.findSessionById(sessionId);
       expect((ret as any)._id).toBeTruthy();
-      expect((ret as any)._id).not.toEqual(new ObjectID((ret as any)._id));
-      expect((ret as any)._id).toEqual(new ObjectID((ret as any)._id).toHexString());
+      expect((ret as any)._id).not.toEqual(new ObjectId((ret as any)._id));
+      expect((ret as any)._id).toEqual(new ObjectId((ret as any)._id).toHexString());
     });
 
     it('using id provider and convertSessionIdToMongoObjectId on create session', async () => {
       const mongoSessions = new MongoSessions({
         database,
         convertSessionIdToMongoObjectId: true,
-        idSessionProvider: () => `someprefix|${new ObjectID().toString()}`,
+        idSessionProvider: () => `someprefix|${new ObjectId().toString()}`,
       });
       const sessionId = await mongoSessions.createSession(session.userId, 'token', {
         ip: session.ip,
@@ -141,7 +141,7 @@ describe('MongoSessions', () => {
       });
       const ret = await mongoSessions.findSessionById(sessionId);
       expect((ret as any)._id).toBeTruthy();
-      expect((ret as any)._id).toBeInstanceOf(ObjectID);
+      expect((ret as any)._id).toBeInstanceOf(ObjectId);
     });
 
     it('using both idSessionProvider and convertToMongoObject Id should show warning', async () => {
@@ -149,7 +149,7 @@ describe('MongoSessions', () => {
       new MongoSessions({
         database,
         convertSessionIdToMongoObjectId: true,
-        idSessionProvider: () => `someprefix|${new ObjectID().toString()}`,
+        idSessionProvider: () => `someprefix|${new ObjectId().toString()}`,
       });
       expect(consoleSpy).toHaveBeenCalledTimes(1);
       expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('set both'));
