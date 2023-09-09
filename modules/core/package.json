@@ -35,7 +35,7 @@
   "peerDependencies": {
     "@accounts/server": "^0.32.0 || ^0.33.0",
     "@accounts/types": "^0.32.0 || ^0.33.0",
-    "@graphql-tools/schema": "^9.0.0",
+    "@graphql-tools/schema": "^10.0.0",
     "graphql": "^16.0.0",
     "graphql-modules": "^2.0.0",
     "graphql-tag": "^2.10.0"

@@ -12,11 +12,11 @@
     ]
   },
   "scripts": {
-    "start-only": "NODE_ENV=development nodemon -w src -x ts-node src/index.ts",
+    "start-only": "NODE_ENV=development yarn run -T nodemon -w src -x ts-node src/index.ts",
     "start": "yarn start-only",
     "start-services": "docker-compose up -d",
-    "build": "tsc",
-    "test": "yarn build"
+    "build": "yarn run -T tsc",
+    "test": "yarn run build"
   },
   "dependencies": {
     "@accounts/mikro-orm": "^0.34.0",
@@ -25,26 +25,22 @@
     "@accounts/module-password": "^0.34.0",
     "@accounts/password": "^0.32.1",
     "@accounts/server": "^0.33.1",
-    "@apollo/server": "4.7.1",
+    "@apollo/server": "4.9.3",
     "@apollo/server-plugin-landing-page-graphql-playground": "4.0.1",
     "@graphql-tools/merge": "9.0.0",
     "@graphql-tools/schema": "10.0.0",
-    "@mikro-orm/cli": "5.7.9",
-    "@mikro-orm/core": "5.7.9",
-    "@mikro-orm/entity-generator": "5.7.9",
-    "@mikro-orm/knex": "5.7.9",
-    "@mikro-orm/migrations": "5.7.9",
-    "@mikro-orm/postgresql": "5.7.9",
-    "@mikro-orm/reflection": "5.7.9",
-    "graphql": "16.6.0",
-    "graphql-modules": "2.1.2",
-    "tslib": "2.5.2"
+    "@mikro-orm/cli": "5.7.14",
+    "@mikro-orm/core": "5.7.14",
+    "@mikro-orm/entity-generator": "5.7.14",
+    "@mikro-orm/knex": "5.7.14",
+    "@mikro-orm/migrations": "5.7.14",
+    "@mikro-orm/postgresql": "5.7.14",
+    "@mikro-orm/reflection": "5.7.14",
+    "graphql": "16.8.0",
+    "graphql-modules": "2.2.0",
+    "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@accounts/types": "^0.33.2",
-    "@types/node": "20.2.3",
-    "nodemon": "2.0.22",
-    "ts-node": "10.9.1",
-    "typescript": "5.0.4"
+    "@accounts/types": "^0.33.2"
   }
 }

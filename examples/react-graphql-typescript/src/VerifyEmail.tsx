@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
-import { Button, Typography } from '@material-ui/core';
+import { Button, Typography } from '@mui/material';
 
 import { accountsGraphQL } from './utils/accounts';
 import FormError from './components/FormError';

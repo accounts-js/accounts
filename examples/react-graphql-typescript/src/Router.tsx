@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
-import { CssBaseline, Grid, Paper } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+import { CssBaseline, Grid, Paper } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 import Signup from './Signup';
 import Login from './Login';

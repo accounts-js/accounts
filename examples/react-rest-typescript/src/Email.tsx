@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Typography,
-  makeStyles,
   Card,
   CardContent,
   CardHeader,
@@ -12,9 +11,10 @@ import {
   Button,
   Grid,
   TextField,
-} from '@material-ui/core';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import SendIcon from '@material-ui/icons/Send';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import SendIcon from '@mui/icons-material/Send';
 import { useFormik, FormikErrors } from 'formik';
 import { User } from '@accounts/types';
 import { accountsClient, accountsRest, accountsPassword } from './accounts';
@@ -126,7 +126,11 @@ export const Email = () => {
                 </div>
                 {!email.verified && (
                   <Tooltip arrow placement="top-end" title="Resend verification email">
-                    <IconButton aria-label="Send" onClick={() => onResendEmail(email.address)}>
+                    <IconButton
+                      aria-label="Send"
+                      onClick={() => onResendEmail(email.address)}
+                      size="large"
+                    >
                       <SendIcon />
                     </IconButton>
                   </Tooltip>

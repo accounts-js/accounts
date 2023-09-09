@@ -3,7 +3,6 @@ import { RouteComponentProps, Link as RouterLink } from 'react-router-dom';
 import {
   Button,
   Typography,
-  makeStyles,
   CardContent,
   Card,
   Divider,
@@ -11,7 +10,8 @@ import {
   Grid,
   TextField,
   Snackbar,
-} from '@material-ui/core';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useFormik, FormikErrors } from 'formik';
 import { accountsPassword } from './accounts';
 import { SnackBarContentError } from './components/SnackBarContentError';

@@ -5,21 +5,15 @@
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
-    "start": "NODE_ENV=development nodemon -w src -x ts-node src/index.ts",
-    "build": "tsc",
-    "test": "pnpm run build"
+    "start": "NODE_ENV=development yarn run -T nodemon -w src -x ts-node src/index.ts",
+    "build": "yarn run -T tsc",
+    "test": "yarn run build"
   },
   "dependencies": {
     "@accounts/magic-link": "^0.1.1",
     "@accounts/mongo": "^0.34.1",
     "@accounts/server": "^0.33.1",
-    "mongoose": "7.2.0",
-    "tslib": "2.5.2"
-  },
-  "devDependencies": {
-    "@types/node": "20.2.3",
-    "nodemon": "2.0.22",
-    "ts-node": "10.9.1",
-    "typescript": "5.0.4"
+    "mongoose": "7.5.0",
+    "tslib": "2.6.2"
   }
 }

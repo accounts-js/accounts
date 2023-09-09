@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
-import { FormControl, InputLabel, Input, Button, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+import { FormControl, InputLabel, Input, Button, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 import { accountsGraphQL } from './utils/accounts';
 import FormError from './components/FormError';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
-import { CssBaseline } from '@material-ui/core';
+import { CssBaseline } from '@mui/material';
 import { AuthProvider, useAuth } from './components/AuthContext';
 import Signup from './Signup';
 import Login from './Login';

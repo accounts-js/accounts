@@ -3,7 +3,6 @@ import { RouteComponentProps, Link as RouterLink } from 'react-router-dom';
 import {
   Button,
   Typography,
-  makeStyles,
   Card,
   CardContent,
   Divider,
@@ -11,7 +10,8 @@ import {
   TextField,
   Grid,
   Snackbar,
-} from '@material-ui/core';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useFormik, FormikErrors } from 'formik';
 import { SnackBarContentError } from './components/SnackBarContentError';
 import { useAuth } from './components/AuthContext';
@@ -153,7 +153,7 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
                 </Button>
               </Grid>
               <Grid item xs={12} md={6}>
-                <Grid container justify="flex-end" alignContent="center">
+                <Grid container justifyContent="flex-end" alignContent="center">
                   <Link component={ResetPasswordLink}>Lost your password?</Link>
                 </Grid>
               </Grid>

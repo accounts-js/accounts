@@ -1,25 +1,40 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core';
+import {
+  createTheme,
+  ThemeProvider,
+  Theme,
+  StyledEngineProvider,
+  adaptV4Theme,
+} from '@mui/material';
 import Router from './Router';
 import reportWebVitals from './reportWebVitals';
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#5e4b8e',
+declare module '@mui/styles/defaultTheme' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
+
+const theme = createTheme(
+  adaptV4Theme({
+    palette: {
+      primary: {
+        main: '#5e4b8e',
+      },
+      secondary: {
+        main: '#5cbdbc',
+      },
     },
-    secondary: {
-      main: '#5cbdbc',
-    },
-  },
-});
+  })
+);
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <Router />
-    </ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <Router />
+      </ThemeProvider>
+    </StyledEngineProvider>
     ,
   </React.StrictMode>,
   document.getElementById('root')

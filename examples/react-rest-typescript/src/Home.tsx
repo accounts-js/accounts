@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import {
   Typography,
-  makeStyles,
   Card,
   CardContent,
   CardHeader,
@@ -10,7 +9,8 @@ import {
   Grid,
   CardActions,
   Button,
-} from '@material-ui/core';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useFormik, FormikErrors } from 'formik';
 import { accountsClient } from './accounts';
 import { AuthenticatedContainer } from './components/AuthenticatedContainer';

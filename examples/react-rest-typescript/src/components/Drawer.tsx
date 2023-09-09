@@ -1,13 +1,6 @@
 import React from 'react';
-import {
-  makeStyles,
-  Hidden,
-  Drawer as MuiDrawer,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-} from '@material-ui/core';
+import { Hidden, Drawer as MuiDrawer, List, ListItem, ListItemText, Divider } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useHistory, useLocation } from 'react-router';
 
 const drawerWidth = 240;
@@ -118,7 +111,7 @@ export const Drawer = ({ open, onDrawerToggle, onLogout }: DrawerProps) => {
           {drawer}
         </MuiDrawer>
       </Hidden>
-      <Hidden xsDown implementation="css">
+      <Hidden smDown implementation="css">
         <MuiDrawer
           classes={{
             paper: classes.drawerPaper,

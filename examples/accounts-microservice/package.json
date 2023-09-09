@@ -5,11 +5,11 @@
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
-    "start": "NODE_ENV=development nodemon -w src -x ts-node src/accounts-microservice.ts & sleep 2 && nodemon -w src -x ts-node src/app-server.ts",
+    "start": "NODE_ENV=development yarn run -T nodemon -w src -x ts-node src/accounts-microservice.ts & sleep 2 && yarn run -T nodemon -w src -x ts-node src/app-server.ts",
     "start-services": "docker-compose up -d",
-    "prestart": "pnpm run start-services",
-    "build": "tsc",
-    "test": "pnpm run build"
+    "prestart": "yarn run start-services",
+    "build": "yarn run -T tsc",
+    "test": "yarn run build"
   },
   "dependencies": {
     "@accounts/module-core": "^0.34.0",
@@ -18,24 +18,21 @@
     "@accounts/mongo": "^0.34.0",
     "@accounts/password": "^0.32.1",
     "@accounts/server": "^0.33.1",
-    "@apollo/server": "4.7.1",
+    "@apollo/server": "4.9.3",
     "@apollo/server-plugin-landing-page-graphql-playground": "4.0.1",
-    "@graphql-tools/delegate": "10.0.0",
+    "@graphql-tools/delegate": "10.0.3",
     "@graphql-tools/merge": "9.0.0",
     "@graphql-tools/schema": "10.0.0",
-    "@graphql-tools/stitch": "9.0.0",
-    "@graphql-tools/utils": "10.0.0",
-    "@graphql-tools/wrap": "10.0.0",
-    "graphql": "16.6.0",
-    "graphql-modules": "2.1.2",
+    "@graphql-tools/stitch": "9.0.1",
+    "@graphql-tools/utils": "10.0.6",
+    "@graphql-tools/wrap": "10.0.1",
+    "graphql": "16.8.0",
+    "graphql-modules": "2.2.0",
     "lodash": "4.17.21",
-    "node-fetch": "2.6.11",
-    "tslib": "2.5.2"
+    "node-fetch": "2.7.0",
+    "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@types/lodash": "4.14.194",
-    "nodemon": "2.0.22",
-    "ts-node": "10.9.1",
-    "typescript": "5.0.4"
+    "@types/lodash": "4.14.198"
   }
 }

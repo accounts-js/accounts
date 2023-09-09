@@ -22,7 +22,8 @@
   "workspaces": {
     "packages": [
       "modules/*",
-      "packages/*"
+      "packages/*",
+      "examples/*"
     ]
   },
   "lint-staged": {
@@ -67,6 +68,7 @@
     "jest-environment-jsdom": "29.6.4",
     "lerna": "6.6.2",
     "lint-staged": "14.0.1",
+    "nodemon": "3.0.1",
     "prettier": "3.0.3",
     "rimraf": "5.0.1",
     "ts-jest": "29.1.1",

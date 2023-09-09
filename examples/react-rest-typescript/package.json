@@ -5,8 +5,8 @@
   "scripts": {
     "start": "SKIP_PREFLIGHT_CHECK=true react-scripts start",
     "build": "SKIP_PREFLIGHT_CHECK=true react-scripts build",
-    "test": "pnpm run build",
-    "testonly": "pnpm run build"
+    "test": "yarn run build",
+    "testonly": "yarn run build"
   },
   "eslintConfig": {
     "extends": [
@@ -30,29 +30,30 @@
     "@accounts/client": "^0.33.1",
     "@accounts/client-password": "^0.32.2",
     "@accounts/rest-client": "^0.33.1",
-    "@material-ui/core": "4.12.3",
-    "@material-ui/icons": "4.11.2",
-    "@material-ui/lab": "4.0.0-alpha.60",
-    "@material-ui/styles": "4.11.4",
-    "formik": "2.2.9",
-    "qrcode.react": "1.0.1",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "react-router": "5.2.1",
-    "react-router-dom": "5.3.0",
-    "tslib": "2.5.2"
+    "@emotion/react": "11.11.1",
+    "@emotion/styled": "11.11.0",
+    "@mui/icons-material": "5.14.8",
+    "@mui/lab": "5.0.0-alpha.142",
+    "@mui/material": "5.14.8",
+    "@mui/styles": "5.14.7",
+    "formik": "2.4.4",
+    "qrcode.react": "3.1.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-router": "5.3.4",
+    "react-router-dom": "5.3.4",
+    "tslib": "2.6.2"
   },
   "devDependencies": {
     "@accounts/types": "^0.33.2",
-    "@types/node": "20.2.3",
-    "@types/qrcode.react": "1.0.2",
-    "@types/react": "17.0.38",
-    "@types/react-dom": "17.0.11",
-    "@types/react-router": "5.1.18",
+    "@types/qrcode.react": "1.0.3",
+    "@types/react": "18.2.21",
+    "@types/react-dom": "18.2.7",
+    "@types/react-router": "5.1.20",
     "@types/react-router-dom": "5.3.3",
-    "eslint-config-react-app": "7.0.0",
-    "react-scripts": "5.0.0",
-    "typescript": "5.0.4",
-    "web-vitals": "1.1.2"
+    "eslint": "8.49.0",
+    "eslint-config-react-app": "7.0.1",
+    "react-scripts": "5.0.1",
+    "web-vitals": "3.4.0"
   }
 }

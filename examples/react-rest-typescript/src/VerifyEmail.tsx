@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import { Typography, makeStyles, Link } from '@material-ui/core';
+import { Typography, Link } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { accountsRest } from './accounts';
 import FormError from './components/FormError';
 import { UnauthenticatedContainer } from './components/UnauthenticatedContainer';

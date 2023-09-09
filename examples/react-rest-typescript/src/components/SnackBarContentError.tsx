@@ -1,5 +1,7 @@
 import React from 'react';
-import { SnackbarContent, makeStyles } from '@material-ui/core';
+import { SnackbarContent } from '@mui/material';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
   message: {

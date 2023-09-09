@@ -1,6 +1,6 @@
 import React from 'react';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom';
-import { Button, Typography } from '@material-ui/core';
+import { Button, Typography } from '@mui/material';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 

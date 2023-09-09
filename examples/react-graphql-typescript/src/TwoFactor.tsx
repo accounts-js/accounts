@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Typography, FormControl, InputLabel, Input } from '@material-ui/core';
+import { Button, Typography, FormControl, InputLabel, Input } from '@mui/material';
 import QRCode from 'qrcode.react';
 
 import { accountsGraphQL } from './utils/accounts';

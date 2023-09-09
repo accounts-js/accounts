@@ -1,13 +1,7 @@
 import React from 'react';
-import {
-  AppBar as MuiAppBar,
-  Toolbar,
-  Typography,
-  Button,
-  makeStyles,
-  IconButton,
-} from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
+import { AppBar as MuiAppBar, Toolbar, Typography, Button, IconButton } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth } from './AuthContext';
 
 const drawerWidth = 240;
@@ -50,6 +44,7 @@ export const AppBar = ({ onDrawerToggle, onLogout }: AppBarProps) => {
             edge="start"
             onClick={onDrawerToggle}
             className={classes.menuButton}
+            size="large"
           >
             <MenuIcon />
           </IconButton>

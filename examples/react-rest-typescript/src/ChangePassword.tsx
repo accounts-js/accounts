@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  makeStyles,
   Card,
   CardHeader,
   Divider,
@@ -9,8 +8,9 @@ import {
   TextField,
   CardActions,
   Button,
-} from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Alert } from '@mui/material';
 import { useFormik, FormikErrors } from 'formik';
 import { accountsPassword } from './accounts';
 

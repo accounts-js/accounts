@@ -1,5 +1,6 @@
 import React from 'react';
-import { Typography, Divider, makeStyles } from '@material-ui/core';
+import { Typography, Divider } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { TwoFactor } from './TwoFactor';
 import { ChangePassword } from './ChangePassword';
 import { AuthenticatedContainer } from './components/AuthenticatedContainer';

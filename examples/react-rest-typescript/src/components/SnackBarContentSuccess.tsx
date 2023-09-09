@@ -1,6 +1,7 @@
 import React from 'react';
-import { SnackbarContent, makeStyles } from '@material-ui/core';
-import { green } from '@material-ui/core/colors';
+import { SnackbarContent } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { green } from '@mui/material/colors';
 
 const useStyles = makeStyles({
   message: {

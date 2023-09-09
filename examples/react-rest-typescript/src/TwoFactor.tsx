@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import {
   Button,
   Typography,
-  makeStyles,
   Card,
   CardContent,
   CardHeader,
   Divider,
   CardActions,
   TextField,
-} from '@material-ui/core';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import QRCode from 'qrcode.react';
 import { useFormik, FormikErrors } from 'formik';
 import { accountsRest } from './accounts';
