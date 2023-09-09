@@ -23,6 +23,6 @@
   "license": "MIT",
   "dependencies": {
     "@accounts/types": "^0.33.1",
-    "tslib": "2.5.2"
+    "tslib": "2.6.2"
   }
 }

@@ -44,6 +44,6 @@
   "author": "Elies Lou (Aetherall)",
   "license": "MIT",
   "dependencies": {
-    "tslib": "2.5.2"
+    "tslib": "2.6.2"
   }
 }

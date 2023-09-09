@@ -5,97 +5,99 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
 };
 
 export type AuthenticateParamsInput = {
-  access_token?: InputMaybe<Scalars['String']>;
-  access_token_secret?: InputMaybe<Scalars['String']>;
-  code?: InputMaybe<Scalars['String']>;
-  password?: InputMaybe<Scalars['String']>;
-  provider?: InputMaybe<Scalars['String']>;
-  token?: InputMaybe<Scalars['String']>;
+  access_token?: InputMaybe<Scalars['String']['input']>;
+  access_token_secret?: InputMaybe<Scalars['String']['input']>;
+  code?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
+  provider?: InputMaybe<Scalars['String']['input']>;
+  token?: InputMaybe<Scalars['String']['input']>;
   user?: InputMaybe<UserInput>;
 };
 
 export type CreateUserInput = {
-  email?: InputMaybe<Scalars['String']>;
-  password?: InputMaybe<Scalars['String']>;
-  username?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateUserResult = {
   __typename?: 'CreateUserResult';
   loginResult?: Maybe<LoginResult>;
-  userId?: Maybe<Scalars['ID']>;
+  userId?: Maybe<Scalars['ID']['output']>;
 };
 
 export type EmailRecord = {
   __typename?: 'EmailRecord';
-  address?: Maybe<Scalars['String']>;
-  verified?: Maybe<Scalars['Boolean']>;
+  address?: Maybe<Scalars['String']['output']>;
+  verified?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export type ImpersonateReturn = {
   __typename?: 'ImpersonateReturn';
-  authorized?: Maybe<Scalars['Boolean']>;
+  authorized?: Maybe<Scalars['Boolean']['output']>;
   tokens?: Maybe<Tokens>;
   user?: Maybe<User>;
 };
 
 export type ImpersonationUserIdentityInput = {
-  email?: InputMaybe<Scalars['String']>;
-  userId?: InputMaybe<Scalars['String']>;
-  username?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type LoginResult = {
   __typename?: 'LoginResult';
-  sessionId?: Maybe<Scalars['String']>;
+  sessionId?: Maybe<Scalars['String']['output']>;
   tokens?: Maybe<Tokens>;
   user?: Maybe<User>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addEmail?: Maybe<Scalars['Boolean']>;
+  addEmail?: Maybe<Scalars['Boolean']['output']>;
   authenticate?: Maybe<LoginResult>;
-  changePassword?: Maybe<Scalars['Boolean']>;
+  changePassword?: Maybe<Scalars['Boolean']['output']>;
   createUser?: Maybe<CreateUserResult>;
   impersonate?: Maybe<ImpersonateReturn>;
-  logout?: Maybe<Scalars['Boolean']>;
+  logout?: Maybe<Scalars['Boolean']['output']>;
   refreshTokens?: Maybe<LoginResult>;
-  requestMagicLinkEmail?: Maybe<Scalars['Boolean']>;
+  requestMagicLinkEmail?: Maybe<Scalars['Boolean']['output']>;
   resetPassword?: Maybe<LoginResult>;
-  sendResetPasswordEmail?: Maybe<Scalars['Boolean']>;
-  sendVerificationEmail?: Maybe<Scalars['Boolean']>;
-  twoFactorSet?: Maybe<Scalars['Boolean']>;
-  twoFactorUnset?: Maybe<Scalars['Boolean']>;
-  verifyAuthentication?: Maybe<Scalars['Boolean']>;
-  verifyEmail?: Maybe<Scalars['Boolean']>;
+  sendResetPasswordEmail?: Maybe<Scalars['Boolean']['output']>;
+  sendVerificationEmail?: Maybe<Scalars['Boolean']['output']>;
+  twoFactorSet?: Maybe<Scalars['Boolean']['output']>;
+  twoFactorUnset?: Maybe<Scalars['Boolean']['output']>;
+  verifyAuthentication?: Maybe<Scalars['Boolean']['output']>;
+  verifyEmail?: Maybe<Scalars['Boolean']['output']>;
 };
 
 
 export type MutationAddEmailArgs = {
-  newEmail: Scalars['String'];
+  newEmail: Scalars['String']['input'];
 };
 
 
 export type MutationAuthenticateArgs = {
   params: AuthenticateParamsInput;
-  serviceName: Scalars['String'];
+  serviceName: Scalars['String']['input'];
 };
 
 
 export type MutationChangePasswordArgs = {
-  newPassword: Scalars['String'];
-  oldPassword: Scalars['String'];
+  newPassword: Scalars['String']['input'];
+  oldPassword: Scalars['String']['input'];
 };
 
 
@@ -105,57 +107,57 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationImpersonateArgs = {
-  accessToken: Scalars['String'];
+  accessToken: Scalars['String']['input'];
   impersonated: ImpersonationUserIdentityInput;
 };
 
 
 export type MutationRefreshTokensArgs = {
-  accessToken: Scalars['String'];
-  refreshToken: Scalars['String'];
+  accessToken: Scalars['String']['input'];
+  refreshToken: Scalars['String']['input'];
 };
 
 
 export type MutationRequestMagicLinkEmailArgs = {
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 };
 
 
 export type MutationResetPasswordArgs = {
-  newPassword: Scalars['String'];
-  token: Scalars['String'];
+  newPassword: Scalars['String']['input'];
+  token: Scalars['String']['input'];
 };
 
 
 export type MutationSendResetPasswordEmailArgs = {
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 };
 
 
 export type MutationSendVerificationEmailArgs = {
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 };
 
 
 export type MutationTwoFactorSetArgs = {
-  code: Scalars['String'];
+  code: Scalars['String']['input'];
   secret: TwoFactorSecretKeyInput;
 };
 
 
 export type MutationTwoFactorUnsetArgs = {
-  code: Scalars['String'];
+  code: Scalars['String']['input'];
 };
 
 
 export type MutationVerifyAuthenticationArgs = {
   params: AuthenticateParamsInput;
-  serviceName: Scalars['String'];
+  serviceName: Scalars['String']['input'];
 };
 
 
 export type MutationVerifyEmailArgs = {
-  token: Scalars['String'];
+  token: Scalars['String']['input'];
 };
 
 export type Query = {
@@ -166,57 +168,57 @@ export type Query = {
 
 export type Tokens = {
   __typename?: 'Tokens';
-  accessToken?: Maybe<Scalars['String']>;
-  refreshToken?: Maybe<Scalars['String']>;
+  accessToken?: Maybe<Scalars['String']['output']>;
+  refreshToken?: Maybe<Scalars['String']['output']>;
 };
 
 export type TwoFactorSecretKey = {
   __typename?: 'TwoFactorSecretKey';
-  ascii?: Maybe<Scalars['String']>;
-  base32?: Maybe<Scalars['String']>;
-  google_auth_qr?: Maybe<Scalars['String']>;
-  hex?: Maybe<Scalars['String']>;
-  otpauth_url?: Maybe<Scalars['String']>;
-  qr_code_ascii?: Maybe<Scalars['String']>;
-  qr_code_base32?: Maybe<Scalars['String']>;
-  qr_code_hex?: Maybe<Scalars['String']>;
+  ascii?: Maybe<Scalars['String']['output']>;
+  base32?: Maybe<Scalars['String']['output']>;
+  google_auth_qr?: Maybe<Scalars['String']['output']>;
+  hex?: Maybe<Scalars['String']['output']>;
+  otpauth_url?: Maybe<Scalars['String']['output']>;
+  qr_code_ascii?: Maybe<Scalars['String']['output']>;
+  qr_code_base32?: Maybe<Scalars['String']['output']>;
+  qr_code_hex?: Maybe<Scalars['String']['output']>;
 };
 
 export type TwoFactorSecretKeyInput = {
-  ascii?: InputMaybe<Scalars['String']>;
-  base32?: InputMaybe<Scalars['String']>;
-  google_auth_qr?: InputMaybe<Scalars['String']>;
-  hex?: InputMaybe<Scalars['String']>;
-  otpauth_url?: InputMaybe<Scalars['String']>;
-  qr_code_ascii?: InputMaybe<Scalars['String']>;
-  qr_code_base32?: InputMaybe<Scalars['String']>;
-  qr_code_hex?: InputMaybe<Scalars['String']>;
+  ascii?: InputMaybe<Scalars['String']['input']>;
+  base32?: InputMaybe<Scalars['String']['input']>;
+  google_auth_qr?: InputMaybe<Scalars['String']['input']>;
+  hex?: InputMaybe<Scalars['String']['input']>;
+  otpauth_url?: InputMaybe<Scalars['String']['input']>;
+  qr_code_ascii?: InputMaybe<Scalars['String']['input']>;
+  qr_code_base32?: InputMaybe<Scalars['String']['input']>;
+  qr_code_hex?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
   __typename?: 'User';
   emails?: Maybe<Array<EmailRecord>>;
-  id: Scalars['ID'];
-  username?: Maybe<Scalars['String']>;
+  id: Scalars['ID']['output'];
+  username?: Maybe<Scalars['String']['output']>;
 };
 
 export type UserInput = {
-  email?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['ID']>;
-  username?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UserFieldsFragment = { __typename?: 'User', id: string, username?: string | null, emails?: Array<{ __typename?: 'EmailRecord', address?: string | null, verified?: boolean | null }> | null };
 
 export type AddEmailMutationVariables = Exact<{
-  newEmail: Scalars['String'];
+  newEmail: Scalars['String']['input'];
 }>;
 
 
 export type AddEmailMutation = { __typename?: 'Mutation', addEmail?: boolean | null };
 
 export type AuthenticateWithServiceMutationVariables = Exact<{
-  serviceName: Scalars['String'];
+  serviceName: Scalars['String']['input'];
   params: AuthenticateParamsInput;
 }>;
 
@@ -224,8 +226,8 @@ export type AuthenticateWithServiceMutationVariables = Exact<{
 export type AuthenticateWithServiceMutation = { __typename?: 'Mutation', verifyAuthentication?: boolean | null };
 
 export type ChangePasswordMutationVariables = Exact<{
-  oldPassword: Scalars['String'];
-  newPassword: Scalars['String'];
+  oldPassword: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
 }>;
 
 
@@ -239,7 +241,7 @@ export type CreateUserMutationVariables = Exact<{
 export type CreateUserMutation = { __typename?: 'Mutation', createUser?: { __typename?: 'CreateUserResult', userId?: string | null, loginResult?: { __typename?: 'LoginResult', sessionId?: string | null, tokens?: { __typename?: 'Tokens', refreshToken?: string | null, accessToken?: string | null } | null, user?: { __typename?: 'User', id: string, username?: string | null, emails?: Array<{ __typename?: 'EmailRecord', address?: string | null, verified?: boolean | null }> | null } | null } | null } | null };
 
 export type ImpersonateMutationVariables = Exact<{
-  accessToken: Scalars['String'];
+  accessToken: Scalars['String']['input'];
   impersonated: ImpersonationUserIdentityInput;
 }>;
 
@@ -247,7 +249,7 @@ export type ImpersonateMutationVariables = Exact<{
 export type ImpersonateMutation = { __typename?: 'Mutation', impersonate?: { __typename?: 'ImpersonateReturn', authorized?: boolean | null, tokens?: { __typename?: 'Tokens', refreshToken?: string | null, accessToken?: string | null } | null, user?: { __typename?: 'User', id: string, username?: string | null, emails?: Array<{ __typename?: 'EmailRecord', address?: string | null, verified?: boolean | null }> | null } | null } | null };
 
 export type AuthenticateMutationVariables = Exact<{
-  serviceName: Scalars['String'];
+  serviceName: Scalars['String']['input'];
   params: AuthenticateParamsInput;
 }>;
 
@@ -260,37 +262,37 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 export type LogoutMutation = { __typename?: 'Mutation', logout?: boolean | null };
 
 export type RefreshTokensMutationVariables = Exact<{
-  accessToken: Scalars['String'];
-  refreshToken: Scalars['String'];
+  accessToken: Scalars['String']['input'];
+  refreshToken: Scalars['String']['input'];
 }>;
 
 
 export type RefreshTokensMutation = { __typename?: 'Mutation', refreshTokens?: { __typename?: 'LoginResult', sessionId?: string | null, tokens?: { __typename?: 'Tokens', refreshToken?: string | null, accessToken?: string | null } | null } | null };
 
 export type RequestMagicLinkEmailMutationVariables = Exact<{
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 }>;
 
 
 export type RequestMagicLinkEmailMutation = { __typename?: 'Mutation', requestMagicLinkEmail?: boolean | null };
 
 export type ResetPasswordMutationVariables = Exact<{
-  token: Scalars['String'];
-  newPassword: Scalars['String'];
+  token: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
 }>;
 
 
 export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword?: { __typename?: 'LoginResult', sessionId?: string | null, tokens?: { __typename?: 'Tokens', refreshToken?: string | null, accessToken?: string | null } | null } | null };
 
 export type SendResetPasswordEmailMutationVariables = Exact<{
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 }>;
 
 
 export type SendResetPasswordEmailMutation = { __typename?: 'Mutation', sendResetPasswordEmail?: boolean | null };
 
 export type SendVerificationEmailMutationVariables = Exact<{
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 }>;
 
 
@@ -298,21 +300,21 @@ export type SendVerificationEmailMutation = { __typename?: 'Mutation', sendVerif
 
 export type TwoFactorSetMutationVariables = Exact<{
   secret: TwoFactorSecretKeyInput;
-  code: Scalars['String'];
+  code: Scalars['String']['input'];
 }>;
 
 
 export type TwoFactorSetMutation = { __typename?: 'Mutation', twoFactorSet?: boolean | null };
 
 export type TwoFactorUnsetMutationVariables = Exact<{
-  code: Scalars['String'];
+  code: Scalars['String']['input'];
 }>;
 
 
 export type TwoFactorUnsetMutation = { __typename?: 'Mutation', twoFactorUnset?: boolean | null };
 
 export type VerifyEmailMutationVariables = Exact<{
-  token: Scalars['String'];
+  token: Scalars['String']['input'];
 }>;
 
 

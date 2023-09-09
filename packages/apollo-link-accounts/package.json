@@ -27,11 +27,11 @@
     "@apollo/client": "^3.0.0"
   },
   "dependencies": {
-    "tslib": "2.5.2"
+    "tslib": "2.6.2"
   },
   "devDependencies": {
     "@accounts/client": "^0.33.1",
-    "@apollo/client": "3.7.14",
+    "@apollo/client": "3.8.3",
     "graphql": "16.8.0",
     "rimraf": "5.0.1"
   }

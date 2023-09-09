@@ -46,16 +46,16 @@
     "@accounts/server": "^0.33.1",
     "@accounts/typeorm": "^0.34.0",
     "@accounts/types": "^0.33.2",
-    "@apollo/client": "3.7.14",
-    "@apollo/server": "4.7.1",
+    "@apollo/client": "3.8.3",
+    "@apollo/server": "4.9.3",
     "body-parser": "1.20.2",
-    "core-js": "3.20.2",
+    "core-js": "3.32.2",
     "express": "4.18.2",
     "graphql": "16.8.0",
     "graphql-modules": "2.2.0",
-    "mongoose": "7.2.0",
-    "node-fetch": "2.6.11",
-    "tslib": "2.5.2",
-    "typeorm": "0.3.16"
+    "mongoose": "7.5.0",
+    "node-fetch": "2.7.0",
+    "tslib": "2.6.2",
+    "typeorm": "0.3.17"
   }
 }

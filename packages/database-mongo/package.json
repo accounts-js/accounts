@@ -33,8 +33,8 @@
     "@accounts/mongo-password": "^0.33.0",
     "@accounts/mongo-sessions": "^0.34.0",
     "@accounts/types": "^0.33.1",
-    "mongodb": "5.5.0",
-    "tslib": "2.5.2"
+    "mongodb": "5.8.1",
+    "tslib": "2.6.2"
   },
   "devDependencies": {
     "@accounts/database-tests": "^0.32.2",

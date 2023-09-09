@@ -26,12 +26,12 @@
   },
   "dependencies": {
     "bcryptjs": "2.4.3",
-    "tslib": "2.5.2"
+    "tslib": "2.6.2"
   },
   "devDependencies": {
     "@accounts/server": "^0.33.1",
     "@accounts/types": "^0.33.1",
-    "@types/bcryptjs": "2.4.2",
+    "@types/bcryptjs": "2.4.3",
     "@types/lodash.set": "4.3.7",
     "graphql": "16.8.0",
     "graphql-modules": "2.2.0",

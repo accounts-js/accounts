@@ -7,11 +7,11 @@ exports[`TwoFactor authenticate should throw if invalid code 1`] = `"2FA code di
 exports[`TwoFactor authenticate should throw that 2fa is not set 1`] = `"2FA not set"`;
 
 exports[`TwoFactor set should set two-factor service 1`] = `
-Array [
-  Array [
+[
+  [
     "userId",
     "two-factor",
-    Object {
+    {
       "secret": "secret",
     },
   ],
@@ -35,8 +35,8 @@ exports[`TwoFactor unset should throw if user not found 1`] = `"User not found"`
 exports[`TwoFactor unset should throw that 2fa is not set 1`] = `"2FA not set"`;
 
 exports[`TwoFactor unset should unset two-factor service 1`] = `
-Array [
-  Array [
+[
+  [
     "userId",
     "two-factor",
   ],
