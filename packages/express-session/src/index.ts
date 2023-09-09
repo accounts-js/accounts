@@ -17,7 +17,10 @@ export interface AccountsSessionOptions {
 export class AccountsSession {
   private options: Required<AccountsSessionOptions>;
 
-  constructor(private accountsServer: AccountsServer, options?: AccountsSessionOptions) {
+  constructor(
+    private accountsServer: AccountsServer,
+    options?: AccountsSessionOptions
+  ) {
     this.options = merge(
       {
         name: 'accounts-js-tokens',

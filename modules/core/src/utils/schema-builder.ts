@@ -29,7 +29,9 @@ export const buildSchema =
           authDirectiveTypeDefs,
         ]),
         resolvers: resolvers
-          ? mergeResolvers([resolvers, ...accountsResolvers] as Maybe<Maybe<IResolvers<TSource, TContext>>[]>)
+          ? mergeResolvers([resolvers, ...accountsResolvers] as Maybe<
+              Maybe<IResolvers<TSource, TContext>>[]
+            >)
           : accountsResolvers,
       })
     );

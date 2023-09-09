@@ -9,3 +9,5 @@ website/.docusaurus
 website/docs/api
 .changeset/*.md
 packages/*/CHANGELOG.md
+modules/*/introspection.json
+modules/*/src/models.ts
