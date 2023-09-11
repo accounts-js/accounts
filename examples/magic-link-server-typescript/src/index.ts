@@ -1,32 +1,28 @@
+import 'reflect-metadata';
 import mongoose from 'mongoose';
 import MongoDBInterface from '@accounts/mongo';
-import { DatabaseManager } from '@accounts/database-manager';
 import AccountsMagicLink from '@accounts/magic-link';
 import { AccountsServer } from '@accounts/server/lib/accounts-server';
 
 const start = async () => {
-  await mongoose.connect('mongodb://localhost:27017/accounts-js-magic-link-example', {
-    useNewUrlParser: true,
-  });
+  await mongoose.connect('mongodb://localhost:27017/accounts-js-magic-link-example');
   const mongoConn = mongoose.connection;
 
   // Build a storage for storing users
   const userStorage = new MongoDBInterface(mongoConn);
-  // Create database manager (create user, find users, sessions etc) for accounts-js
-  const accountsDb = new DatabaseManager({
-    sessionStorage: userStorage,
-    userStorage,
-  });
 
   const accountsMagicLink = new AccountsMagicLink({});
 
   // Create accounts server that holds a lower level of all accounts operations
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const accountsServer = new AccountsServer(
-    { db: accountsDb, tokenSecret: 'secret' },
+    {
+      tokenSecret: 'secret',
+    },
     {
       magicLink: accountsMagicLink,
-    }
+    },
+    new MongoDBInterface(mongoConn)
   );
 
   // Setup a user (or use one from a previous run)
