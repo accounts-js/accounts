@@ -23,7 +23,7 @@
     "graphql": "16.8.0",
     "graphql-modules": "2.2.0",
     "graphql-tag": "2.12.6",
-    "mongoose": "7.5.0",
+    "mongoose": "7.5.1",
     "tslib": "2.6.2"
   }
 }
