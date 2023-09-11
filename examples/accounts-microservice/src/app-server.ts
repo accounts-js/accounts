@@ -1,10 +1,10 @@
 import 'reflect-metadata';
 import fetch from 'node-fetch';
 import { mergeTypeDefs } from '@graphql-tools/merge';
-import { introspectSchema } from '@graphql-tools/wrap';
+import { schemaFromExecutor } from '@graphql-tools/wrap';
 import { stitchSchemas } from '@graphql-tools/stitch';
 import { AsyncExecutor } from '@graphql-tools/utils';
-import { print } from 'graphql';
+import { OperationTypeNode, print } from 'graphql';
 import {
   authDirective,
   authenticated,
@@ -51,7 +51,7 @@ const accountsServerUri = 'http://localhost:4003/';
         resolve: (parent, args, context, info) => {
           return delegateToSchema({
             schema: remoteSubschema,
-            operation: 'query',
+            operation: OperationTypeNode.QUERY,
             fieldName: 'getUser',
             args,
             context,
@@ -93,7 +93,7 @@ const accountsServerUri = 'http://localhost:4003/';
   };
 
   const remoteSubschema = {
-    schema: await introspectSchema(remoteExecutor),
+    schema: await schemaFromExecutor(remoteExecutor),
     executor: remoteExecutor,
   };
 
