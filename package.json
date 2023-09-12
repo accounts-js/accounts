@@ -23,7 +23,8 @@
     "packages": [
       "modules/*",
       "packages/*",
-      "examples/*"
+      "examples/*",
+      "website"
     ]
   },
   "lint-staged": {

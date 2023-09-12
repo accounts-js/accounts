@@ -1,8 +1,9 @@
 // @ts-check
-const { readdirSync } = require('fs');
+const { readdirSync, existsSync } = require('fs');
 const { resolve } = require('path');
 
 const packagesDir = resolve(__dirname, '..', 'packages');
+const modulesDir = resolve(__dirname, '..', 'modules');
 const apiDocsDir = resolve(__dirname, '..', 'website', 'docs', 'api');
 
 const dirs = readdirSync(apiDocsDir);
@@ -10,8 +11,13 @@ const dirs = readdirSync(apiDocsDir);
 /** @type any */
 const generatedApi = {};
 
+function resolvePackage(dir) {
+  let path = resolve(packagesDir, dir, 'package.json');
+  return existsSync(path) ? path : resolve(modulesDir, dir, 'package.json');
+}
+
 dirs.forEach((dir) => {
-  const packageName = require(resolve(packagesDir, dir, 'package.json')).name;
+  const packageName = require(resolvePackage(dir)).name;
   const generatedSidebar = require(resolve(apiDocsDir, dir, 'sidebars'));
   generatedApi[packageName] = [];
   if (Object.keys(generatedSidebar.docs).length > 0) {

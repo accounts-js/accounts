@@ -19,10 +19,6 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      algolia: {
-        apiKey: 'c872074b5f5ecd186d94d7c19b27d757',
-        indexName: 'accounts',
-      },
       fathomAnalytics: {
         siteId: 'NZPJJZTJ',
         customDomain: 'https://goose.accountsjs.com',
@@ -40,7 +36,7 @@ const config = {
         items: [
           { to: 'docs/introduction', label: 'Documentation', position: 'right' },
           {
-            to: 'docs/api/server/index',
+            to: 'docs/api/server',
             label: 'Api reference',
             position: 'right',
           },
@@ -63,7 +59,7 @@ const config = {
               },
               {
                 label: 'Api reference',
-                to: '/docs/api/server/index',
+                to: '/docs/api/server',
               },
             ],
           },
