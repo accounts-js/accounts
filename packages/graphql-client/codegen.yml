@@ -1,7 +1,7 @@
 schema:
-  - ../../modules/core/introspection.json
-  - ../../modules/password/introspection.json
-  - ../../modules/magic-link/introspection.json
+  - ../../modules/module-core/introspection.json
+  - ../../modules/module-password/introspection.json
+  - ../../modules/module-magic-link/introspection.json
 documents: ./src/**/*.graphql
 generates:
   ./src/graphql-operations.ts:
