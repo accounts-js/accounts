@@ -85,7 +85,7 @@ __metadata:
     "@accounts/rest-client": "npm:^0.33.1"
     "@accounts/rest-express": "npm:^0.33.1"
     "@accounts/server": "npm:^0.33.1"
-    "@accounts/typeorm": "npm:^0.34.0"
+    "@accounts/typeorm": "npm:^0.33.1"
     "@accounts/types": "npm:^0.33.2"
     "@apollo/client": "npm:3.8.3"
     "@apollo/server": "npm:4.9.3"
@@ -407,7 +407,7 @@ __metadata:
     "@accounts/module-core": "npm:^0.34.0"
     "@accounts/password": "npm:^0.32.1"
     "@accounts/server": "npm:^0.33.1"
-    "@accounts/typeorm": "npm:^0.34.0"
+    "@accounts/typeorm": "npm:^0.33.1"
     "@accounts/types": "npm:^0.33.2"
     "@graphql-codegen/add": "npm:5.0.0"
     "@graphql-codegen/cli": "npm:5.0.0"
@@ -431,7 +431,7 @@ __metadata:
     "@accounts/module-core": ^0.34.0
     "@accounts/password": ^0.32.0
     "@accounts/server": ^0.32.0 || ^0.33.0
-    "@accounts/typeorm": ^0.34.0
+    "@accounts/typeorm": ^0.33.1
     "@accounts/types": ^0.32.0 || ^0.33.0
     graphql: ^16.0.0
     graphql-modules: ^2.0.0
@@ -635,7 +635,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/typeorm@npm:^0.34.0, @accounts/typeorm@workspace:packages/database-typeorm":
+"@accounts/typeorm@npm:^0.33.1, @accounts/typeorm@workspace:packages/database-typeorm":
   version: 0.0.0-use.local
   resolution: "@accounts/typeorm@workspace:packages/database-typeorm"
   dependencies:
@@ -4256,7 +4256,7 @@ __metadata:
     "@accounts/module-typeorm": "npm:^0.34.0"
     "@accounts/password": "npm:^0.32.2"
     "@accounts/server": "npm:^0.33.1"
-    "@accounts/typeorm": "npm:^0.34.0"
+    "@accounts/typeorm": "npm:^0.33.1"
     "@accounts/types": "npm:^0.33.2"
     "@apollo/server": "npm:4.9.3"
     "@apollo/server-plugin-landing-page-graphql-playground": "npm:4.0.1"

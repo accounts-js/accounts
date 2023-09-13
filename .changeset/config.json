@@ -6,7 +6,24 @@
   "access": "public",
   "baseBranch": "master",
   "updateInternalDependencies": "patch",
-  "ignore": ["@accounts/e2e", "@examples/*"],
+  "ignore": [
+    "@accounts/e2e",
+    "@accounts/mikro-orm",
+    "@accounts/module-core",
+    "@accounts/module-magic-link",
+    "@accounts/module-mikro-orm",
+    "@accounts/module-mongo",
+    "@accounts/module-password",
+    "@accounts/module-typeorm",
+    "@examples/accounts-microservice",
+    "@examples/graphql-mikro-orm-typescript",
+    "@examples/graphql-typeorm-typescript",
+    "@examples/graphql-server-typescript",
+    "@examples/magic-link-server-typescript",
+    "@examples/react-graphql-typescript",
+    "@examples/react-rest-typescript",
+    "@examples/rest-express-typescript"
+  ],
   "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
     "onlyUpdatePeerDependentsWhenOutOfRange": true
   }

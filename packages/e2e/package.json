@@ -44,7 +44,7 @@
     "@accounts/rest-client": "^0.33.1",
     "@accounts/rest-express": "^0.33.1",
     "@accounts/server": "^0.33.1",
-    "@accounts/typeorm": "^0.34.0",
+    "@accounts/typeorm": "^0.33.1",
     "@accounts/types": "^0.33.2",
     "@apollo/client": "3.8.3",
     "@apollo/server": "4.9.3",

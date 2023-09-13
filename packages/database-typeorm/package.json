@@ -1,6 +1,6 @@
 {
   "name": "@accounts/typeorm",
-  "version": "0.34.0",
+  "version": "0.33.1",
   "description": "TypeORM adaptor for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",

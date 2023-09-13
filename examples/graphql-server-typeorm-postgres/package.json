@@ -17,7 +17,7 @@
     "@accounts/module-typeorm": "^0.34.0",
     "@accounts/password": "^0.32.2",
     "@accounts/server": "^0.33.1",
-    "@accounts/typeorm": "^0.34.0",
+    "@accounts/typeorm": "^0.33.1",
     "@apollo/server": "4.9.3",
     "@apollo/server-plugin-landing-page-graphql-playground": "4.0.1",
     "@graphql-tools/merge": "9.0.0",
