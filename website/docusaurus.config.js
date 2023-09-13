@@ -23,6 +23,12 @@ module.exports = {
     repoUrl: 'https://github.com/accounts-js/accounts',
   },
   themeConfig: {
+    algolia: {
+      apiKey: '016cff68ff1e2085dfbc51fda088bb08',
+      appId: 'LKY03361YR',
+      indexName: 'accounts',
+      contextualSearch: true,
+    },
     fathomAnalytics: {
       siteId: 'NZPJJZTJ',
       customDomain: 'https://goose.accountsjs.com',
