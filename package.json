@@ -14,8 +14,8 @@
     "test:examples": "lerna run test --scope=\"@examples/*\"",
     "coverage": "lerna run coverage",
     "codecov": "codecov",
-    "version": "pnpx changeset version && yarn install --lockfile-only",
-    "release": "yarn run compile && pnpx changeset publish",
+    "version": "yarn changeset version && yarn install --immutable",
+    "release": "yarn run compile && yarn changeset publish",
     "reset": "yarn run clean; yarn run install; yarn run compile",
     "postinstall": "husky install"
   },

@@ -8,7 +8,7 @@ on:
 jobs:
   release:
     name: Release
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
@@ -16,28 +16,28 @@ jobs:
           # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
           fetch-depth: 0
 
-      - name: Setup Node.js 14.x
+      - name: Set Node.js 18.x
         uses: actions/setup-node@master
         with:
-          node-version: 14.x
+          node-version: 18.x
 
-      - name: Cache .pnpm-store
-        uses: actions/cache@v1
+      - name: Cache .yarn
+        uses: actions/cache@v3
         with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node14-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: ~/.yarn
+          key: ${{ runner.os }}-node18-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Install pnpm
-        run: curl -f https://get.pnpm.io/v6.7.js | node - add --global pnpm@6
+      - name: Enable corepack
+        run: corepack enable
 
       - name: Install Dependencies
-        run: pnpm install
+        run: yarn install
 
       - name: Create Release Pull Request
         uses: changesets/action@master
         with:
-          version: pnpm run version
-          publish: pnpm run release
+          version: yarn run version
+          publish: yarn run release
           commit: 'chore: update versions'
           title: 'chore: version packages'
         env:

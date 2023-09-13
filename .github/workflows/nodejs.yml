@@ -9,89 +9,83 @@ on:
 jobs:
   test:
     name: Test packages
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: pnpm/action-setup@v2.0.1
+      - name: Set Node.js 18.x
+        uses: actions/setup-node@v3
         with:
-          version: 6.22.2
+          node-version: 18.x
+          cache: 'yarn'
 
-      - name: Use Node.js 14.x
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14.x
-          cache: 'pnpm'
+      - name: Enable corepack
+        run: corepack enable
 
       - name: Install Dependencies
-        run: pnpm install
+        run: yarn install
 
       - name: Check lint
-        run: pnpm run test:lint
+        run: yarn run test:lint
 
       - name: Compile packages
-        run: pnpm run compile
+        run: yarn run compile
 
       - name: Docker compose
         run: docker-compose up -d
 
       - name: Run tests
-        run: pnpm run coverage
+        run: yarn run coverage
 
       - name: Upload coverage
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
 
   test-examples:
     name: Test examples
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: pnpm/action-setup@v2.0.1
+      - name: Set Node.js 18.x
+        uses: actions/setup-node@v3
         with:
-          version: 6.22.2
+          node-version: 18.x
+          cache: 'yarn'
 
-      - name: Use Node.js 14.x
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14.x
-          cache: 'pnpm'
+      - name: Enable corepack
+        run: corepack enable
 
       - name: Install Dependencies
-        run: pnpm install
+        run: yarn install
 
       - name: Compile packages
-        run: pnpm run compile
+        run: yarn run compile
 
       - name: Test examples
-        run: pnpm run test:examples
+        run: yarn run test:examples
         env:
           REACT_APP_API_URL: http://localhost:3000
 
   test-documentation:
     name: Test documentation
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: pnpm/action-setup@v2.0.1
+      - name: Set Node.js 18.x
+        uses: actions/setup-node@v3
         with:
-          version: 6.22.2
+          node-version: 18.x
+          cache: 'yarn'
 
-      - name: Use Node.js 14.x
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14.x
-          cache: 'pnpm'
+      - name: Enable corepack
+        run: corepack enable
 
       - name: Install Dependencies
-        run: pnpm install
+        run: yarn install
 
       - name: Test documentation
-        run: |
-          cd website
-          pnpm run generate-api-docs
-          pnpm run build
+        run: yarn workspace accounts-js run build

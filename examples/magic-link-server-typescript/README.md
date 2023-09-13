@@ -7,8 +7,8 @@ This example demonstrate how to use setup [accounts-js](https://github.com/accou
 In order to be able to run this example on your machine you first need to do the following steps:
 
 - Clone the repository `git clone git@github.com:accounts-js/accounts.git`
-- Install project dependencies: `pnpm install`
-- Compile the packages `pnpm run compile`
+- Install project dependencies: `yarn install`
+- Compile the packages `yarn run compile`
 - Go to the example folder `cd examples/magic-link-server-typescript`
 
 ## Prerequisites
@@ -29,7 +29,7 @@ for a more comprehensive example of general accounts use.
 To run the example:
 
 ```bash
-pnpm run start
+yarn run start
 ```
 
 You should see output on the console suggesting that authenticating using a token was
