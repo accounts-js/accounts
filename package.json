@@ -57,7 +57,7 @@
     "@changesets/changelog-github": "0.4.8",
     "@changesets/cli": "2.26.2",
     "@types/jest": "29.5.4",
-    "@types/node": "20.6.0",
+    "@types/node": "20.6.1",
     "@typescript-eslint/eslint-plugin": "6.7.0",
     "@typescript-eslint/parser": "6.7.0",
     "eslint": "8.49.0",

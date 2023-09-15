@@ -74,7 +74,7 @@
     "graphql": "16.8.0",
     "graphql-modules": "2.2.0",
     "graphql-tag": "2.12.6",
-    "mongodb": "5.8.1",
+    "mongodb": "5.9.0",
     "reflect-metadata": "0.1.13"
   }
 }
