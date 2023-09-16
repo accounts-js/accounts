@@ -99,8 +99,8 @@ export const createAccounts = async () => {
     ],
     schemaBuilder: buildSchema({ typeDefs, resolvers }),
   });
-  const { injector } = app;
-  const schema = app.createSchemaForApollo();
+  const { injector, createOperationController, createSchemaForApollo } = app;
+  const schema = createSchemaForApollo();
 
   injector.get(AccountsServer).on(ServerHooks.ValidateLogin, ({ user }) => {
     // This hook is called every time a user try to login.
@@ -123,7 +123,7 @@ export const createAccounts = async () => {
     listen: { port: 4000 },
     context: (ctx) =>
       context(ctx, {
-        app,
+        createOperationController,
         // Provide EntityManager either via context or via Providers
         // ctx: { em: orm.em.fork() }
       }),

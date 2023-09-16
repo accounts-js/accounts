@@ -24,7 +24,7 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-p
     }
   `;
 
-  const app = createApplication({
+  const { createOperationController, createSchemaForApollo } = createApplication({
     modules: [
       createAccountsCoreModule({ tokenSecret: 'secret' }),
       createAccountsPasswordModule({
@@ -58,7 +58,7 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-p
     schemaBuilder: buildSchema({ typeDefs }),
   });
 
-  const schema = app.createSchemaForApollo();
+  const schema = createSchemaForApollo();
 
   // Create the Apollo Server that takes a schema and configures internal stuff
   const server = new ApolloServer({
@@ -72,7 +72,7 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-p
 
   const { url } = await startStandaloneServer(server, {
     listen: { port: 4003 },
-    context: (ctx) => context(ctx, { app }),
+    context: (ctx) => context(ctx, { createOperationController }),
   });
 
   console.log(`🚀  Server ready at ${url}`);

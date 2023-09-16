@@ -68,7 +68,7 @@ export const createAccounts = async () => {
     },
   };
 
-  const app = createApplication({
+  const { createOperationController, createSchemaForApollo } = createApplication({
     modules: [
       createAccountsCoreModule({ tokenSecret }),
       createAccountsPasswordModule(),
@@ -86,7 +86,7 @@ export const createAccounts = async () => {
     ],
     schemaBuilder: buildSchema({ typeDefs, resolvers }),
   });
-  const schema = app.createSchemaForApollo();
+  const schema = createSchemaForApollo();
 
   // Create the Apollo Server that takes a schema and configures internal stuff
   const server = new ApolloServer({
@@ -100,7 +100,7 @@ export const createAccounts = async () => {
 
   const { url } = await startStandaloneServer(server, {
     listen: { port: 4000 },
-    context: (ctx) => context(ctx, { app }),
+    context: (ctx) => context(ctx, { createOperationController }),
   });
 
   console.log(`🚀  Server ready at ${url}`);

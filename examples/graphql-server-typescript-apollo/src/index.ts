@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import {
-  authDirective,
   authenticated,
   buildSchema,
   context,
@@ -11,14 +10,12 @@ import { AccountsPassword } from '@accounts/password';
 import { AccountsServer, AuthenticationServicesToken, ServerHooks } from '@accounts/server';
 import gql from 'graphql-tag';
 import mongoose from 'mongoose';
-import { Application, createApplication } from 'graphql-modules';
+import { createApplication } from 'graphql-modules';
 import { createAccountsMongoModule } from '@accounts/module-mongo';
-import { createServer } from 'node:http';
-import { createYoga } from 'graphql-yoga';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
-import { useGraphQLModules } from '@envelop/graphql-modules';
-import type { Plugin, TypedExecutionArgs } from '@envelop/core';
+import { ApolloServer } from '@apollo/server';
+import { startStandaloneServer } from '@apollo/server/standalone';
+import { ApolloServerPluginLandingPageDisabled } from '@apollo/server/plugin/disabled';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
 
 void (async () => {
   // Create database connection
@@ -115,10 +112,8 @@ void (async () => {
     ],
     schemaBuilder: buildSchema({ typeDefs, resolvers }),
   });
-  const {
-    injector,
-    createOperationController /*, typeDefs: accountsTypeDefs, resolvers: accountsResolvers*/,
-  } = app;
+  const { injector, createOperationController } = app;
+  const schema = app.createSchemaForApollo();
 
   injector.get(AccountsServer).on(ServerHooks.ValidateLogin, ({ user }) => {
     // This hook is called every time a user try to login.
@@ -127,79 +122,20 @@ void (async () => {
     console.log(`${user.firstName} ${user.lastName} logged in`);
   });
 
-  //const { authDirectiveTypeDefs, authDirectiveTransformer } = authDirective('auth');
-
-  const graphqlModulesControllerSymbol = Symbol('GRAPHQL_MODULES');
-
-  function destroy<T>(context: TypedExecutionArgs<T>) {
-    if (context.contextValue?.[graphqlModulesControllerSymbol]) {
-      context.contextValue[graphqlModulesControllerSymbol].destroy();
-      context.contextValue[graphqlModulesControllerSymbol] = null;
-    }
-  }
-
-  // Create a Yoga instance with a GraphQL schema.
-  const yoga = createYoga({
-    //plugins: [useGraphQLModules(app)],
+  // Create the Apollo Server that takes a schema and configures internal stuff
+  const server = new ApolloServer({
+    schema,
     plugins: [
-      {
-        onPluginInit({ setSchema }) {
-          setSchema(app.schema);
-        },
-        onContextBuilding({ extendContext, context }) {
-          console.log('onContextBuilding');
-          //console.log(context);
-          const controller = app.createOperationController({
-            context,
-            autoDestroy: false,
-          });
-
-          extendContext({
-            ...controller.context,
-            [graphqlModulesControllerSymbol]: controller,
-          });
-        },
-        onExecute({ args }) {
-          return {
-            onExecuteDone() {
-              destroy(args);
-            },
-          };
-        },
-        onSubscribe({ args }) {
-          return {
-            onSubscribeResult({ args }) {
-              return {
-                onEnd() {
-                  destroy(args);
-                },
-              };
-            },
-            onSubscribeError() {
-              destroy(args);
-            },
-          };
-        },
-      },
+      process.env.NODE_ENV === 'production'
+        ? ApolloServerPluginLandingPageDisabled()
+        : ApolloServerPluginLandingPageGraphQLPlayground(),
     ],
-    /*schema: authDirectiveTransformer(
-      makeExecutableSchema({
-        typeDefs: mergeTypeDefs([
-          typeDefs,
-          accountsTypeDefs,
-          authDirectiveTypeDefs,
-        ]),
-        resolvers: mergeResolvers([accountsResolvers, resolvers]),
-      })
-    ),*/
+  });
+
+  const { url } = await startStandaloneServer(server, {
+    listen: { port: 4000 },
     context: (ctx) => context(ctx, { createOperationController }),
   });
 
-  // Pass it into a server to hook into request handlers.
-  const server = createServer(yoga);
-
-  // Start the server and you're done!
-  server.listen(4000, () => {
-    console.info('Server is running on http://localhost:4000/graphql');
-  });
+  console.log(`🚀  Server ready at ${url}`);
 })();

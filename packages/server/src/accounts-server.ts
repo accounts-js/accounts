@@ -218,6 +218,7 @@ Please set ambiguousErrorMessages to false to be able to use autologin.`
       params,
     };
     try {
+      console.log('loginWithService');
       const user: CustomUser | null = await this.getService(serviceName).authenticate(params);
       hooksInfo.user = user;
       if (!user) {

@@ -99,7 +99,7 @@ const accountsServerUri = 'http://localhost:4003/';
 
   const { authDirectiveTypeDefs, authDirectiveTransformer } = authDirective('auth');
 
-  const app = createApplication({
+  const { createOperationController, createSchemaForApollo } = createApplication({
     modules: [
       createAccountsCoreModule({
         tokenSecret: 'secret',
@@ -127,7 +127,7 @@ const accountsServerUri = 'http://localhost:4003/';
       ),
   });
 
-  const schema = app.createSchemaForApollo();
+  const schema = createSchemaForApollo();
 
   // Create the Apollo Server that takes a schema and configures internal stuff
   const server = new ApolloServer({
@@ -141,7 +141,7 @@ const accountsServerUri = 'http://localhost:4003/';
 
   const { url } = await startStandaloneServer(server, {
     listen: { port: 4000 },
-    context: (ctx) => context(ctx, { app }),
+    context: (ctx) => context(ctx, { createOperationController }),
   });
 
   console.log(`🚀  Server ready at ${url}`);

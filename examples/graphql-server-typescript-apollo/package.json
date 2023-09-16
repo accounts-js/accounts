@@ -1,5 +1,5 @@
 {
-  "name": "@examples/graphql-server-typescript",
+  "name": "@examples/graphql-server-typescript-apollo",
   "private": true,
   "version": "0.32.0",
   "main": "lib/index.js",
@@ -16,14 +16,13 @@
     "@accounts/password": "^0.32.2",
     "@accounts/rest-express": "^0.33.1",
     "@accounts/server": "^0.33.1",
-    "@envelop/core": "^4.0.1",
-    "@envelop/graphql-modules": "^5.0.1",
+    "@apollo/server": "4.9.3",
+    "@apollo/server-plugin-landing-page-graphql-playground": "4.0.1",
     "@graphql-tools/merge": "9.0.0",
     "@graphql-tools/schema": "10.0.0",
     "graphql": "16.8.0",
     "graphql-modules": "2.2.0",
     "graphql-tag": "2.12.6",
-    "graphql-yoga": "4.0.4",
     "mongoose": "7.5.1",
     "tslib": "2.6.2"
   }
