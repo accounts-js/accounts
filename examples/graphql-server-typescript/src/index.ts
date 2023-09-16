@@ -12,12 +12,11 @@ import gql from 'graphql-tag';
 import mongoose from 'mongoose';
 import { createApplication } from 'graphql-modules';
 import { createAccountsMongoModule } from '@accounts/module-mongo';
-import { ApolloServer } from '@apollo/server';
-import { startStandaloneServer } from '@apollo/server/standalone';
-import { ApolloServerPluginLandingPageDisabled } from '@apollo/server/plugin/disabled';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
+import { createServer } from 'node:http';
+import { createYoga } from 'graphql-yoga';
+import { useGraphQLModules } from '@envelop/graphql-modules';
 
-const start = async () => {
+void (async () => {
   // Create database connection
   await mongoose.connect('mongodb://localhost:27017/accounts-js-graphql-example');
   const dbConn = mongoose.connection;
@@ -112,8 +111,8 @@ const start = async () => {
     ],
     schemaBuilder: buildSchema({ typeDefs, resolvers }),
   });
-  const { injector } = app;
-  const schema = app.createSchemaForApollo();
+
+  const { injector, createOperationController } = app;
 
   injector.get(AccountsServer).on(ServerHooks.ValidateLogin, ({ user }) => {
     // This hook is called every time a user try to login.
@@ -122,22 +121,17 @@ const start = async () => {
     console.log(`${user.firstName} ${user.lastName} logged in`);
   });
 
-  // Create the Apollo Server that takes a schema and configures internal stuff
-  const server = new ApolloServer({
-    schema,
-    plugins: [
-      process.env.NODE_ENV === 'production'
-        ? ApolloServerPluginLandingPageDisabled()
-        : ApolloServerPluginLandingPageGraphQLPlayground(),
-    ],
+  // Create a Yoga instance with a GraphQL schema.
+  const yoga = createYoga({
+    plugins: [useGraphQLModules(app)],
+    context: (ctx) => context(ctx, { createOperationController }),
   });
 
-  const { url } = await startStandaloneServer(server, {
-    listen: { port: 4000 },
-    context: (ctx) => context(ctx, { app }),
+  // Pass it into a server to hook into request handlers.
+  const server = createServer(yoga);
+
+  // Start the server and you're done!
+  server.listen(4000, () => {
+    console.info('Server is running on http://localhost:4000/graphql');
   });
-
-  console.log(`🚀  Server ready at ${url}`);
-};
-
-start();
+})();

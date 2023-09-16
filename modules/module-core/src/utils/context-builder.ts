@@ -4,32 +4,47 @@ import { getClientIp } from 'request-ip';
 import { IContext, User } from '@accounts/types';
 import { Application } from 'graphql-modules';
 
-export interface AccountsContextOptions<Ctx extends object> {
-  app: Application;
+export type AccountsContextOptions<Ctx extends object> = {
+  createOperationController: Application['createOperationController'];
   ctx?: Ctx;
   headerName?: string;
   excludeAddUserInContext?: boolean;
+};
+
+function isFetchRequest(request: Request | IncomingMessage): request is Request {
+  return (request as Request).headers.get != null;
+}
+
+function getHeader(request: Request | IncomingMessage, headerName: string): string | null {
+  const header = isFetchRequest(request)
+    ? request.headers.get(headerName)
+    : request.headers[headerName];
+  if (Array.isArray(header)) {
+    throw new Error('Header should be a string, not array');
+  }
+  return header ?? null;
 }
 
 export const context = async <IUser extends User = User, Ctx extends object = object>(
   {
     req,
-  }: {
-    req: IncomingMessage;
-  },
-  { app, ctx, ...options }: AccountsContextOptions<Ctx>
+    request,
+  }:
+    | {
+        req: IncomingMessage;
+        request?: undefined;
+      }
+    | {
+        req?: undefined;
+        request: Request;
+      },
+  { createOperationController, ctx, ...options }: AccountsContextOptions<Ctx>
 ): AccountsContextOptions<Ctx> extends { ctx: any }
   ? Promise<IContext<IUser> & Ctx>
   : Promise<IContext<IUser>> => {
-  // To inject the ExecutionContext into Providers which are called from the context
-  const controller = app.createOperationController({
-    context: { ...ctx },
-    autoDestroy: true, // destroys the session when GraphQL Execution finishes
-  });
-
-  if (!req) {
+  const reqOrRequest = request ?? req;
+  if (!reqOrRequest) {
     return {
-      injector: controller.injector,
       ip: '',
       userAgent: '',
       infos: {
@@ -40,12 +55,24 @@ export const context = async <IUser extends User = User, Ctx extends object = ob
     };
   }
 
+  const controller = createOperationController({
+    context: { ...ctx },
+    autoDestroy: false,
+  });
+
   const headerName = options.headerName || 'Authorization';
-  let authToken = (req.headers[headerName] || req.headers[headerName.toLowerCase()]) as string;
+  let authToken =
+    getHeader(reqOrRequest, headerName) ??
+    getHeader(reqOrRequest, headerName.toLowerCase()) ??
+    undefined;
   authToken = authToken && authToken.replace('Bearer ', '');
   let user;
 
   if (authToken && !options.excludeAddUserInContext) {
+    /*const controller = createOperationController({
+      context: { ...ctx },
+      autoDestroy: false,
+    });*/
     try {
       user = await controller.injector
         .get<AccountsServer<IUser>>(AccountsServer)
@@ -54,20 +81,21 @@ export const context = async <IUser extends User = User, Ctx extends object = ob
       // Empty catch
       console.error(error);
     }
+    //controller.destroy();
   }
 
-  const ip = getClientIp(req);
-  let userAgent: string = (req.headers['user-agent'] as string) || '';
-  if (req.headers['x-ucbrowser-ua']) {
-    // special case of UC Browser
-    userAgent = req.headers['x-ucbrowser-ua'] as string;
-  }
+  const ip = getClientIp(req!); // TODO: we should be able to retrieve the ip from the request object as well
+  const userAgent =
+    /* special case of UC Browser */ getHeader(reqOrRequest, 'x-ucbrowser-ua') ??
+    getHeader(reqOrRequest, 'user-agent') ??
+    '';
+
+  controller.destroy();
 
   return {
-    injector: controller.injector,
     authToken,
     user,
-    userId: user && user.id,
+    userId: user?.id,
     userAgent,
     ip,
     infos: {

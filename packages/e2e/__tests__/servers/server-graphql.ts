@@ -110,7 +110,8 @@ export class ServerGraphqlTest implements ServerTestInterface {
     await new Promise((resolve) => setTimeout(resolve, 3000));
     await startStandaloneServer(this.apolloServer, {
       listen: { port: this.port },
-      context: (ctx) => context(ctx, { app: this.accountsApp }),
+      context: (ctx) =>
+        context(ctx, { createOperationController: this.accountsApp.createOperationController }),
     });
     await this.databaseTest.start();
   }

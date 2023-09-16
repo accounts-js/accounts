@@ -1,20 +1,26 @@
 import 'reflect-metadata';
-import { buildSchema, createAccountsCoreModule } from '@accounts/module-core';
+import {
+  authenticated,
+  buildSchema,
+  context,
+  createAccountsCoreModule,
+} from '@accounts/module-core';
 import { createAccountsPasswordModule } from '@accounts/module-password';
 import { AccountsPassword } from '@accounts/password';
-import { MikroORM } from '@mikro-orm/core';
-import config from './mikro-orm-config';
-import { User } from './entities/user';
-import { Email } from './entities/email';
-import { createApplication, gql } from 'graphql-modules';
-import AccountsServer, { AuthenticationServicesToken, ServerHooks } from '@accounts/server';
-import { context, createAccountsMikroORMModule } from '@accounts/module-mikro-orm';
-import { createServer } from 'node:http';
-import { createYoga } from 'graphql-yoga';
-import { useGraphQLModules } from '@envelop/graphql-modules';
+import { AccountsServer, AuthenticationServicesToken, ServerHooks } from '@accounts/server';
+import gql from 'graphql-tag';
+import mongoose from 'mongoose';
+import { createApplication } from 'graphql-modules';
+import { createAccountsMongoModule } from '@accounts/module-mongo';
+import { ApolloServer } from '@apollo/server';
+import { startStandaloneServer } from '@apollo/server/standalone';
+import { ApolloServerPluginLandingPageDisabled } from '@apollo/server/plugin/disabled';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
 
 void (async () => {
-  const orm = await MikroORM.init(config);
+  // Create database connection
+  await mongoose.connect('mongodb://localhost:27017/accounts-js-graphql-example');
+  const dbConn = mongoose.connection;
 
   const typeDefs = gql`
     type PrivateType @auth {
@@ -32,24 +38,26 @@ void (async () => {
       lastName: String!
     }
 
-    type Query {
+    extend type Query {
       # Example of how to get the userId from the context and return the current logged in user or null
       me: User
       publicField: String
       # You can only query this if you are logged in
       privateField: String @auth
       privateType: PrivateType
+      privateFieldWithAuthResolver: String
     }
 
-    type Mutation {
-      _: String
+    extend type Mutation {
+      privateMutation: String @auth
+      publicMutation: String
     }
   `;
 
   // TODO: use resolvers typings from codegen
   const resolvers = {
     Query: {
-      me: async (_, __, ctx) => {
+      me: (_, __, ctx) => {
         // ctx.userId will be set if user is logged in
         if (ctx.userId) {
           // We could have simply returned ctx.user instead
@@ -59,22 +67,33 @@ void (async () => {
       },
       publicField: () => 'public',
       privateField: () => 'private',
+      privateFieldWithAuthResolver: authenticated(() => {
+        return 'private';
+      }),
       privateType: () => ({
         field: () => 'private',
       }),
+    },
+    Mutation: {
+      privateMutation: () => 'private',
+      publicMutation: () => 'public',
     },
   };
 
   const app = createApplication({
     modules: [
-      createAccountsCoreModule({ tokenSecret: config.password }),
+      createAccountsCoreModule({ tokenSecret: 'secret' }),
       createAccountsPasswordModule({
         // This option is called when a new user create an account
         // Inside we can apply our logic to validate the user fields
-        // By default accounts-js only allow 'username', 'email' and 'password' for the user
-        // In order to add custom fields you need to pass the validateNewUser function when you
-        // instantiate the 'accounts-password' package
         validateNewUser: (user) => {
+          if (!user.firstName) {
+            throw new Error('First name required');
+          }
+          if (!user.lastName) {
+            throw new Error('Last name required');
+          }
+
           // For example we can allow only some kind of emails
           if (user.email.endsWith('.xyz')) {
             throw new Error('Invalid email');
@@ -82,12 +101,7 @@ void (async () => {
           return user;
         },
       }),
-      createAccountsMikroORMModule({
-        UserEntity: User,
-        EmailEntity: Email,
-        // Provide EntityManager either via context or via Providers
-        em: orm.em,
-      }),
+      createAccountsMongoModule({ dbConn }),
     ],
     providers: [
       {
@@ -98,8 +112,8 @@ void (async () => {
     ],
     schemaBuilder: buildSchema({ typeDefs, resolvers }),
   });
-
   const { injector, createOperationController } = app;
+  const schema = app.createSchemaForApollo();
 
   injector.get(AccountsServer).on(ServerHooks.ValidateLogin, ({ user }) => {
     // This hook is called every time a user try to login.
@@ -108,29 +122,20 @@ void (async () => {
     console.log(`${user.firstName} ${user.lastName} logged in`);
   });
 
-  // Create a Yoga instance with a GraphQL schema.
-  const yoga = createYoga({
-    plugins: [useGraphQLModules(app)],
-    context: (ctx) =>
-      context(ctx, {
-        createOperationController,
-        // Provide EntityManager either via context or via Providers
-        // ctx: { em: orm.em.fork() }
-      }),
+  // Create the Apollo Server that takes a schema and configures internal stuff
+  const server = new ApolloServer({
+    schema,
+    plugins: [
+      process.env.NODE_ENV === 'production'
+        ? ApolloServerPluginLandingPageDisabled()
+        : ApolloServerPluginLandingPageGraphQLPlayground(),
+    ],
   });
 
-  // Pass it into a server to hook into request handlers.
-  const server = createServer(yoga);
-
-  // Start the server and you're done!
-  server.listen(4000, () => {
-    console.info('Server is running on http://localhost:4000/graphql');
+  const { url } = await startStandaloneServer(server, {
+    listen: { port: 4000 },
+    context: (ctx) => context(ctx, { createOperationController }),
   });
 
-  try {
-    const generator = orm.getSchemaGenerator();
-    await generator.createSchema({ wrap: true });
-  } catch {
-    // Schema has already been created
-  }
+  console.log(`🚀  Server ready at ${url}`);
 })();
