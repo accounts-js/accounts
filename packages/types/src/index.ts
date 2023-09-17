@@ -19,5 +19,5 @@ export * from './types/services/password/database-interface';
 export * from './types/services/password/login-user';
 export * from './types/services/magic-link/database-interface';
 export * from './types/services/magic-link/login-user';
-export * from './types/ctxAsyncLocalStorage';
+export * from './types/context';
 export * from './types/database-type';
