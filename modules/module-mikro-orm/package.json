@@ -71,7 +71,7 @@
     "@mikro-orm/postgresql": "5.8.1",
     "@mikro-orm/reflection": "5.8.1",
     "@types/request-ip": "0.0.38",
-    "graphql": "16.8.0",
+    "graphql": "16.8.1",
     "graphql-modules": "2.2.0",
     "graphql-tag": "2.12.6",
     "reflect-metadata": "0.1.13"

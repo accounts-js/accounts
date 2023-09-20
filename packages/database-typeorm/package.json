@@ -31,7 +31,7 @@
   "devDependencies": {
     "@accounts/database-tests": "^0.32.2",
     "@types/lodash": "4.14.198",
-    "graphql": "16.8.0",
+    "graphql": "16.8.1",
     "graphql-modules": "2.2.0",
     "pg": "8.11.3",
     "typeorm": "0.3.17"

@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@accounts/server": "^0.33.1",
-    "graphql": "16.8.0",
+    "graphql": "16.8.1",
     "graphql-modules": "2.2.0",
     "reflect-metadata": "0.1.13"
   },

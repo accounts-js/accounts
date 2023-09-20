@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@accounts/database-tests": "^0.32.2",
-    "graphql": "16.8.0",
+    "graphql": "16.8.1",
     "graphql-modules": "2.2.0"
   },
   "peerDependencies": {

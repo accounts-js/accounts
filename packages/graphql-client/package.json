@@ -44,6 +44,6 @@
     "@graphql-codegen/typed-document-node": "5.0.1",
     "@graphql-codegen/typescript": "4.0.1",
     "@graphql-codegen/typescript-operations": "4.0.1",
-    "graphql": "16.8.0"
+    "graphql": "16.8.1"
   }
 }

@@ -31,9 +31,9 @@
   "devDependencies": {
     "@accounts/server": "^0.33.1",
     "@accounts/types": "^0.33.1",
-    "@types/bcryptjs": "2.4.3",
+    "@types/bcryptjs": "2.4.4",
     "@types/lodash.set": "4.3.7",
-    "graphql": "16.8.0",
+    "graphql": "16.8.1",
     "graphql-modules": "2.2.0",
     "lodash.set": "4.3.2",
     "reflect-metadata": "0.1.13"
