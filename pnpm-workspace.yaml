@@ -1,5 +1,0 @@
-packages:
-  - 'modules/**'
-  - 'packages/**'
-  - 'examples/**'
-  - 'website/**'
