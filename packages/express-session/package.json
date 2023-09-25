@@ -39,9 +39,9 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/server": "^0.33.1",
-    "@types/express": "4.17.17",
-    "@types/express-session": "1.17.7",
-    "@types/lodash": "4.14.198",
+    "@types/express": "4.17.18",
+    "@types/express-session": "1.17.8",
+    "@types/lodash": "4.14.199",
     "@types/request-ip": "0.0.38",
     "express": "4.18.2",
     "express-session": "1.17.3"

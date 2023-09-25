@@ -51,7 +51,7 @@
     "@accounts/magic-link": "^0.1.1",
     "@accounts/password": "^0.32.1",
     "@accounts/server": "^0.33.1",
-    "@types/express": "4.17.17",
+    "@types/express": "4.17.18",
     "@types/request-ip": "0.0.38",
     "reflect-metadata": "0.1.13"
   }
