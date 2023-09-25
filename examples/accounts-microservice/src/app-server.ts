@@ -11,27 +11,26 @@ import {
   context,
   createAccountsCoreModule,
 } from '@accounts/module-core';
-import { createAccountsPasswordModule } from '@accounts/module-password';
 import { delegateToSchema } from '@graphql-tools/delegate';
 import { createApplication, createModule, gql } from 'graphql-modules';
 import { AuthenticationServicesToken } from '@accounts/server';
-import { AccountsPassword } from '@accounts/password';
-import { ApolloServer } from '@apollo/server';
-import { startStandaloneServer } from '@apollo/server/standalone';
-import { ApolloServerPluginLandingPageDisabled } from '@apollo/server/plugin/disabled';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
+import { createServer } from 'node:http';
+import { createYoga } from 'graphql-yoga';
+import { useGraphQLModules } from '@envelop/graphql-modules';
 
-const accountsServerUri = 'http://localhost:4003/';
+const accountsServerUri = 'http://localhost:4003/graphql';
 
 (async () => {
-  const typeDefs = gql`
+  const myTypeDefs = gql`
     type PrivateType @auth {
       field: String
     }
 
     extend type Query {
-      # Example of how to get the userId from the context and return the current logged in user or null
+      # Example of how to delegate to another field of the remote schema. Returns the currently logged in user or null.
       me: User
+      # Returns the currently logged in userId directly from the context without querying the remote schema.
+      myId: ID
       publicField: String
       # You can only query this if you are logged in
       privateField: String @auth
@@ -45,7 +44,7 @@ const accountsServerUri = 'http://localhost:4003/';
     }
   `;
 
-  const resolvers = {
+  const myResolvers = {
     Query: {
       me: {
         resolve: (parent, args, context, info) => {
@@ -59,6 +58,7 @@ const accountsServerUri = 'http://localhost:4003/';
           });
         },
       },
+      myId: (parent, args, context) => context.userId,
       publicField: () => 'public',
       privateField: () => 'private',
       privateFieldWithAuthResolver: authenticated(() => {
@@ -73,8 +73,6 @@ const accountsServerUri = 'http://localhost:4003/';
       publicMutation: () => 'public',
     },
   };
-
-  // // Note: the following steps are optional and only required if you want to stitch the remote accounts schema with your apps schema.
 
   const remoteExecutor: AsyncExecutor = async ({ document, variables, context }) => {
     console.log('context: ', context);
@@ -99,7 +97,7 @@ const accountsServerUri = 'http://localhost:4003/';
 
   const { authDirectiveTypeDefs, authDirectiveTransformer } = authDirective('auth');
 
-  const { createOperationController, createSchemaForApollo } = createApplication({
+  const app = createApplication({
     modules: [
       createAccountsCoreModule({
         tokenSecret: 'secret',
@@ -107,17 +105,20 @@ const accountsServerUri = 'http://localhost:4003/';
         // verify access tokens without any additional session logic
         micro: true,
       }),
-      createAccountsPasswordModule(),
-      createModule({ id: 'app', typeDefs }),
+      createModule({
+        id: 'app',
+        typeDefs: myTypeDefs,
+        resolvers: myResolvers,
+      }),
     ],
     providers: [
       {
         provide: AuthenticationServicesToken,
-        useValue: { password: AccountsPassword },
+        useValue: {},
         global: true,
       },
     ],
-    schemaBuilder: () =>
+    schemaBuilder: ({ typeDefs, resolvers }) =>
       authDirectiveTransformer(
         stitchSchemas({
           subschemas: [remoteSubschema],
@@ -127,22 +128,16 @@ const accountsServerUri = 'http://localhost:4003/';
       ),
   });
 
-  const schema = createSchemaForApollo();
+  const { createOperationController } = app;
 
-  // Create the Apollo Server that takes a schema and configures internal stuff
-  const server = new ApolloServer({
-    schema,
-    plugins: [
-      process.env.NODE_ENV === 'production'
-        ? ApolloServerPluginLandingPageDisabled()
-        : ApolloServerPluginLandingPageGraphQLPlayground(),
-    ],
-  });
-
-  const { url } = await startStandaloneServer(server, {
-    listen: { port: 4000 },
+  const yoga = createYoga({
+    plugins: [useGraphQLModules(app)],
     context: (ctx) => context(ctx, { createOperationController }),
   });
 
-  console.log(`🚀  Server ready at ${url}`);
+  const server = createServer(yoga);
+
+  server.listen(4000, () => {
+    console.info('Server is running on http://localhost:4000/graphql');
+  });
 })();

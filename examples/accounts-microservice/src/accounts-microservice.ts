@@ -5,10 +5,9 @@ import { createAccountsMongoModule } from '@accounts/module-mongo';
 import { createApplication, createModule, gql } from 'graphql-modules';
 import { AuthenticationServicesToken } from '@accounts/server';
 import { AccountsPassword } from '@accounts/password';
-import { ApolloServer } from '@apollo/server';
-import { startStandaloneServer } from '@apollo/server/standalone';
-import { ApolloServerPluginLandingPageDisabled } from '@apollo/server/plugin/disabled';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
+import { createServer } from 'node:http';
+import { createYoga } from 'graphql-yoga';
+import { useGraphQLModules } from '@envelop/graphql-modules';
 
 (async () => {
   const typeDefs = gql`
@@ -24,7 +23,7 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-p
     }
   `;
 
-  const { createOperationController, createSchemaForApollo } = createApplication({
+  const app = createApplication({
     modules: [
       createAccountsCoreModule({ tokenSecret: 'secret' }),
       createAccountsPasswordModule({
@@ -55,25 +54,19 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-p
         global: true,
       },
     ],
-    schemaBuilder: buildSchema({ typeDefs }),
+    schemaBuilder: buildSchema(),
   });
 
-  const schema = createSchemaForApollo();
+  const { createOperationController } = app;
 
-  // Create the Apollo Server that takes a schema and configures internal stuff
-  const server = new ApolloServer({
-    schema,
-    plugins: [
-      process.env.NODE_ENV === 'production'
-        ? ApolloServerPluginLandingPageDisabled()
-        : ApolloServerPluginLandingPageGraphQLPlayground(),
-    ],
-  });
-
-  const { url } = await startStandaloneServer(server, {
-    listen: { port: 4003 },
+  const yoga = createYoga({
+    plugins: [useGraphQLModules(app)],
     context: (ctx) => context(ctx, { createOperationController }),
   });
 
-  console.log(`🚀  Server ready at ${url}`);
+  const server = createServer(yoga);
+
+  server.listen(4003, () => {
+    console.info('Server is running on http://localhost:4003/graphql');
+  });
 })();

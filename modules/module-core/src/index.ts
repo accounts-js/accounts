@@ -1,4 +1,4 @@
-import { createModule, Provider } from 'graphql-modules';
+import { createModule, gql, Provider } from 'graphql-modules';
 import { mergeTypeDefs } from '@graphql-tools/merge';
 import { User, IContext } from '@accounts/types';
 import {
@@ -33,22 +33,30 @@ export type AccountsContextGraphQLModules<IUser extends User = User> = IContext<
 export const createAccountsCoreModule = (config: AccountsCoreModuleConfig) =>
   createModule({
     id: 'accounts-core',
-    typeDefs: mergeTypeDefs(
-      [
-        makeSchema(config),
-        TypesTypeDefs,
-        getQueryTypeDefs(config),
-        getMutationTypeDefs(config),
-        ...getSchemaDef(config),
-      ],
-      {
-        useSchemaDefinition: config.withSchemaDefinition,
-      }
-    ),
-    resolvers: {
-      [config.rootQueryName || 'Query']: Query,
-      [config.rootMutationName || 'Mutation']: Mutation,
-    },
+    typeDefs: config.micro
+      ? gql`
+          extend type Query {
+            _accounts_core: String
+          }
+        `
+      : mergeTypeDefs(
+          [
+            makeSchema(config),
+            TypesTypeDefs,
+            getQueryTypeDefs(config),
+            getMutationTypeDefs(config),
+            ...getSchemaDef(config),
+          ],
+          {
+            useSchemaDefinition: config.withSchemaDefinition,
+          }
+        ),
+    ...(!config.micro && {
+      resolvers: {
+        [config.rootQueryName || 'Query']: Query,
+        [config.rootMutationName || 'Mutation']: Mutation,
+      },
+    }),
     providers: () => {
       const providers: Provider[] = [
         {
