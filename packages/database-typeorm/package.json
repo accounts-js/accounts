@@ -32,7 +32,7 @@
     "@accounts/database-tests": "^0.32.2",
     "@types/lodash": "4.14.199",
     "graphql": "16.8.1",
-    "graphql-modules": "2.2.0",
+    "graphql-modules": "3.0.0-alpha-20231010152921-a1eddea3",
     "pg": "8.11.3",
     "typeorm": "0.3.17"
   },
@@ -44,7 +44,7 @@
   },
   "peerDependencies": {
     "graphql": "^16.0.0",
-    "graphql-modules": "^2.0.0",
+    "graphql-modules": "^3.0.0",
     "typeorm": "^0.3.0"
   }
 }

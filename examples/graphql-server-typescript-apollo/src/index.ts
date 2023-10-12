@@ -112,8 +112,8 @@ void (async () => {
     ],
     schemaBuilder: buildSchema({ typeDefs, resolvers }),
   });
-  const { injector, createOperationController } = app;
-  const schema = app.createSchemaForApollo();
+  const { injector, createOperationController, createApolloGateway } = app;
+  const gateway = createApolloGateway();
 
   injector.get(AccountsServer).on(ServerHooks.ValidateLogin, ({ user }) => {
     // This hook is called every time a user try to login.
@@ -124,7 +124,7 @@ void (async () => {
 
   // Create the Apollo Server that takes a schema and configures internal stuff
   const server = new ApolloServer({
-    schema,
+    gateway,
     plugins: [
       process.env.NODE_ENV === 'production'
         ? ApolloServerPluginLandingPageDisabled()

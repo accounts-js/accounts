@@ -21,7 +21,7 @@
     "@graphql-tools/merge": "9.0.0",
     "@graphql-tools/schema": "10.0.0",
     "graphql": "16.8.1",
-    "graphql-modules": "2.2.0",
+    "graphql-modules": "3.0.0-alpha-20231010152921-a1eddea3",
     "graphql-tag": "2.12.6",
     "mongoose": "7.6.1",
     "tslib": "2.6.2"

@@ -45,7 +45,7 @@
   "license": "MIT",
   "peerDependencies": {
     "graphql": "^16.0.0",
-    "graphql-modules": "^2.0.0"
+    "graphql-modules": "^3.0.0"
   },
   "dependencies": {
     "@accounts/types": "^0.33.1",
@@ -59,7 +59,7 @@
   "devDependencies": {
     "@types/lodash.merge": "4.6.7",
     "graphql": "16.8.1",
-    "graphql-modules": "2.2.0",
+    "graphql-modules": "3.0.0-alpha-20231010152921-a1eddea3",
     "reflect-metadata": "0.1.13"
   }
 }

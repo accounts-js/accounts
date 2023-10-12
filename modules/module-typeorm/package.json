@@ -39,7 +39,7 @@
     "@accounts/typeorm": "^0.33.1",
     "@accounts/types": "^0.32.0 || ^0.33.0",
     "graphql": "^16.0.0",
-    "graphql-modules": "^2.0.0",
+    "graphql-modules": "^3.0.0",
     "graphql-tag": "^2.10.0",
     "typeorm": "^0.3.0"
   },
@@ -65,7 +65,7 @@
     "@graphql-codegen/typescript-type-graphql": "3.0.0",
     "@types/request-ip": "0.0.39",
     "graphql": "16.8.1",
-    "graphql-modules": "2.2.0",
+    "graphql-modules": "3.0.0-alpha-20231010152921-a1eddea3",
     "graphql-tag": "2.12.6",
     "reflect-metadata": "0.1.13",
     "typeorm": "0.3.17"

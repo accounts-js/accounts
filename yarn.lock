@@ -96,7 +96,7 @@ __metadata:
     core-js: "npm:3.33.0"
     express: "npm:4.18.2"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     jest-localstorage-mock: "npm:2.4.26"
     mongoose: "npm:7.6.1"
     node-fetch: "npm:2.7.0"
@@ -165,13 +165,13 @@ __metadata:
     "@types/lodash.set": "npm:4.3.7"
     bcryptjs: "npm:2.4.3"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     lodash.set: "npm:4.3.2"
     reflect-metadata: "npm:0.1.13"
     tslib: "npm:2.6.2"
   peerDependencies:
     "@accounts/server": ^0.32.0 || ^0.33.0
-    graphql-modules: ^2.0.0
+    graphql-modules: ^3.0.0
   languageName: unknown
   linkType: soft
 
@@ -190,7 +190,7 @@ __metadata:
     "@mikro-orm/postgresql": "npm:5.8.8"
     "@mikro-orm/reflection": "npm:5.8.8"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     tslib: "npm:2.6.2"
   peerDependencies:
     "@mikro-orm/cli": ^5.0.0
@@ -200,7 +200,7 @@ __metadata:
     "@mikro-orm/migrations": ^5.0.0
     "@mikro-orm/postgresql": ^5.0.0
     "@mikro-orm/reflection": ^5.0.0
-    graphql-modules: ^2.0.0
+    graphql-modules: ^3.0.0
   languageName: unknown
   linkType: soft
 
@@ -222,7 +222,7 @@ __metadata:
     "@graphql-tools/utils": "npm:10.0.7"
     "@types/request-ip": "npm:0.0.39"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     graphql-tag: "npm:2.12.6"
     request-ip: "npm:3.3.0"
     tslib: "npm:2.6.2"
@@ -231,7 +231,7 @@ __metadata:
     "@accounts/types": ^0.32.0 || ^0.33.0
     "@graphql-tools/schema": ^10.0.0
     graphql: ^16.0.0
-    graphql-modules: ^2.0.0
+    graphql-modules: ^3.0.0
     graphql-tag: ^2.10.0
   languageName: unknown
   linkType: soft
@@ -255,7 +255,7 @@ __metadata:
     "@graphql-tools/utils": "npm:10.0.7"
     "@types/request-ip": "npm:0.0.39"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     graphql-tag: "npm:2.12.6"
     request-ip: "npm:3.3.0"
     tslib: "npm:2.6.2"
@@ -265,7 +265,7 @@ __metadata:
     "@accounts/server": ^0.32.0 || ^0.33.0
     "@accounts/types": ^0.32.0 || ^0.33.0
     graphql: ^16.0.0
-    graphql-modules: ^2.0.0
+    graphql-modules: ^3.0.0
     graphql-tag: ^2.10.0
   languageName: unknown
   linkType: soft
@@ -298,7 +298,7 @@ __metadata:
     "@mikro-orm/reflection": "npm:5.8.8"
     "@types/request-ip": "npm:0.0.39"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     graphql-tag: "npm:2.12.6"
     reflect-metadata: "npm:0.1.13"
     request-ip: "npm:3.3.0"
@@ -312,7 +312,7 @@ __metadata:
     "@accounts/types": ^0.32.0 || ^0.33.0
     "@mikro-orm/core": ^5.0.0
     graphql: ^16.0.0
-    graphql-modules: ^2.0.0
+    graphql-modules: ^3.0.0
     graphql-tag: ^2.10.0
   languageName: unknown
   linkType: soft
@@ -345,7 +345,7 @@ __metadata:
     "@mikro-orm/reflection": "npm:5.8.8"
     "@types/request-ip": "npm:0.0.39"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     graphql-tag: "npm:2.12.6"
     mongodb: "npm:5.9.0"
     reflect-metadata: "npm:0.1.13"
@@ -360,7 +360,7 @@ __metadata:
     "@accounts/types": ^0.32.0 || ^0.33.0
     "@mikro-orm/core": ^5.0.0
     graphql: ^16.0.0
-    graphql-modules: ^2.0.0
+    graphql-modules: ^3.0.0
     graphql-tag: ^2.10.0
   languageName: unknown
   linkType: soft
@@ -384,7 +384,7 @@ __metadata:
     "@graphql-tools/utils": "npm:10.0.7"
     "@types/request-ip": "npm:0.0.39"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     graphql-tag: "npm:2.12.6"
     request-ip: "npm:3.3.0"
     tslib: "npm:2.6.2"
@@ -394,7 +394,7 @@ __metadata:
     "@accounts/server": ^0.32.0 || ^0.33.0
     "@accounts/types": ^0.32.0 || ^0.33.0
     graphql: ^16.0.0
-    graphql-modules: ^2.0.0
+    graphql-modules: ^3.0.0
     graphql-tag: ^2.10.0
   languageName: unknown
   linkType: soft
@@ -420,7 +420,7 @@ __metadata:
     "@graphql-tools/utils": "npm:10.0.7"
     "@types/request-ip": "npm:0.0.39"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     graphql-tag: "npm:2.12.6"
     reflect-metadata: "npm:0.1.13"
     request-ip: "npm:3.3.0"
@@ -434,7 +434,7 @@ __metadata:
     "@accounts/typeorm": ^0.33.1
     "@accounts/types": ^0.32.0 || ^0.33.0
     graphql: ^16.0.0
-    graphql-modules: ^2.0.0
+    graphql-modules: ^3.0.0
     graphql-tag: ^2.10.0
     typeorm: ^0.3.0
   languageName: unknown
@@ -487,11 +487,11 @@ __metadata:
     "@accounts/mongo-sessions": "npm:^0.34.0"
     "@accounts/types": "npm:^0.33.1"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     mongodb: "npm:5.9.0"
     tslib: "npm:2.6.2"
   peerDependencies:
-    graphql-modules: ^2.0.0
+    graphql-modules: ^3.0.0
   languageName: unknown
   linkType: soft
 
@@ -525,13 +525,13 @@ __metadata:
     "@accounts/server": "npm:^0.33.1"
     "@accounts/types": "npm:^0.33.1"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     reflect-metadata: "npm:0.1.13"
     tslib: "npm:2.6.2"
   peerDependencies:
     "@accounts/server": ^0.32.0 || ^0.33.0
     graphql: ^16.0.0
-    graphql-modules: ^2.0.0
+    graphql-modules: ^3.0.0
   languageName: unknown
   linkType: soft
 
@@ -546,14 +546,14 @@ __metadata:
     "@types/lodash.set": "npm:4.3.7"
     bcryptjs: "npm:2.4.3"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     lodash.set: "npm:4.3.2"
     reflect-metadata: "npm:0.1.13"
     tslib: "npm:2.6.2"
   peerDependencies:
     "@accounts/server": ^0.32.0 || ^0.33.0
     graphql: ^16.0.0
-    graphql-modules: ^2.0.0
+    graphql-modules: ^3.0.0
   languageName: unknown
   linkType: soft
 
@@ -613,7 +613,7 @@ __metadata:
     "@types/lodash.merge": "npm:4.6.7"
     emittery: "npm:0.13.1"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     jsonwebtoken: "npm:9.0.2"
     jwt-decode: "npm:3.1.2"
     lodash.merge: "npm:4.6.2"
@@ -621,7 +621,7 @@ __metadata:
     tslib: "npm:2.6.2"
   peerDependencies:
     graphql: ^16.0.0
-    graphql-modules: ^2.0.0
+    graphql-modules: ^3.0.0
   languageName: unknown
   linkType: soft
 
@@ -643,7 +643,7 @@ __metadata:
     "@accounts/types": "npm:^0.33.1"
     "@types/lodash": "npm:4.14.199"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     lodash: "npm:4.17.21"
     pg: "npm:8.11.3"
     reflect-metadata: "npm:0.1.13"
@@ -651,7 +651,7 @@ __metadata:
     typeorm: "npm:0.3.17"
   peerDependencies:
     graphql: ^16.0.0
-    graphql-modules: ^2.0.0
+    graphql-modules: ^3.0.0
     typeorm: ^0.3.0
   languageName: unknown
   linkType: soft
@@ -661,7 +661,7 @@ __metadata:
   resolution: "@accounts/types@workspace:packages/types"
   dependencies:
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     tslib: "npm:2.6.2"
   languageName: unknown
   linkType: soft
@@ -4090,7 +4090,7 @@ __metadata:
     "@graphql-tools/wrap": "npm:10.0.1"
     "@types/lodash": "npm:4.14.199"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     graphql-yoga: "npm:4.0.5"
     lodash: "npm:4.17.21"
     node-fetch: "npm:2.7.0"
@@ -4121,7 +4121,7 @@ __metadata:
     "@mikro-orm/postgresql": "npm:5.8.8"
     "@mikro-orm/reflection": "npm:5.8.8"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     graphql-yoga: "npm:4.0.5"
     tslib: "npm:2.6.2"
   languageName: unknown
@@ -4142,7 +4142,7 @@ __metadata:
     "@graphql-tools/merge": "npm:9.0.0"
     "@graphql-tools/schema": "npm:10.0.0"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     graphql-tag: "npm:2.12.6"
     mongoose: "npm:7.6.1"
     tslib: "npm:2.6.2"
@@ -4164,7 +4164,7 @@ __metadata:
     "@graphql-tools/merge": "npm:9.0.0"
     "@graphql-tools/schema": "npm:10.0.0"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     graphql-tag: "npm:2.12.6"
     graphql-yoga: "npm:4.0.5"
     mongoose: "npm:7.6.1"
@@ -4188,7 +4188,7 @@ __metadata:
     "@graphql-tools/merge": "npm:9.0.0"
     dotenv: "npm:16.3.1"
     graphql: "npm:16.8.1"
-    graphql-modules: "npm:2.2.0"
+    graphql-modules: "npm:3.0.0-alpha-20231010152921-a1eddea3"
     pg: "npm:8.11.3"
     tslib: "npm:2.6.2"
     typeorm: "npm:0.3.17"
@@ -15203,17 +15203,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-modules@npm:2.2.0":
-  version: 2.2.0
-  resolution: "graphql-modules@npm:2.2.0"
+"graphql-modules@npm:3.0.0-alpha-20231010152921-a1eddea3":
+  version: 3.0.0-alpha-20231010152921-a1eddea3
+  resolution: "graphql-modules@npm:3.0.0-alpha-20231010152921-a1eddea3"
   dependencies:
     "@graphql-tools/schema": "npm:^10.0.0"
-    "@graphql-tools/wrap": "npm:^10.0.0"
     "@graphql-typed-document-node/core": "npm:^3.1.0"
     ramda: "npm:^0.29.0"
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: ab5074b910f5ffcd88142af3d667e1b6cf73bd1577096bafd9534b6a78b7872a1047f8fd84c51072531e7a178600b763e1b92733af8a9413231b8e630939bc00
+  checksum: 5364b573e21f083229e8b8634422734712b641d648cfa27851b7975de4617360017c337f09e72857cc7d4ab48963c80c440d82ea5be16a47cc7cbc46b840fe4c
   languageName: node
   linkType: hard
 

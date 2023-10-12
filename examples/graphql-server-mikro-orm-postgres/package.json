@@ -37,7 +37,7 @@
     "@mikro-orm/postgresql": "5.8.8",
     "@mikro-orm/reflection": "5.8.8",
     "graphql": "16.8.1",
-    "graphql-modules": "2.2.0",
+    "graphql-modules": "3.0.0-alpha-20231010152921-a1eddea3",
     "graphql-yoga": "4.0.5",
     "tslib": "2.6.2"
   },

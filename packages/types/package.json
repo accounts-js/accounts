@@ -48,6 +48,6 @@
   },
   "devDependencies": {
     "graphql": "16.8.1",
-    "graphql-modules": "2.2.0"
+    "graphql-modules": "3.0.0-alpha-20231010152921-a1eddea3"
   }
 }

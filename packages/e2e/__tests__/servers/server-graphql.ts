@@ -90,7 +90,7 @@ export class ServerGraphqlTest implements ServerTestInterface {
     });
 
     this.apolloServer = new ApolloServer({
-      schema: this.accountsApp.createSchemaForApollo(),
+      gateway: this.accountsApp.createApolloGateway(),
     });
 
     const apolloClient = new ApolloClient({
