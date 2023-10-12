@@ -31,11 +31,11 @@
     "@accounts/client": "^0.33.1",
     "@accounts/client-password": "^0.32.2",
     "@accounts/graphql-client": "^0.33.1",
-    "@apollo/client": "3.8.4",
+    "@apollo/client": "3.8.5",
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
-    "@mui/material": "5.14.10",
-    "@mui/styles": "5.14.10",
+    "@mui/material": "5.14.13",
+    "@mui/styles": "5.14.13",
     "graphql": "16.8.1",
     "graphql-tag": "2.12.6",
     "qrcode.react": "3.1.0",
@@ -47,13 +47,13 @@
   },
   "devDependencies": {
     "@types/qrcode.react": "1.0.3",
-    "@types/react": "18.2.22",
-    "@types/react-dom": "18.2.7",
+    "@types/react": "18.2.28",
+    "@types/react-dom": "18.2.13",
     "@types/react-router": "5.1.20",
     "@types/react-router-dom": "5.3.3",
-    "eslint": "8.50.0",
+    "eslint": "8.51.0",
     "eslint-config-react-app": "7.0.1",
     "react-scripts": "5.0.1",
-    "web-vitals": "3.4.0"
+    "web-vitals": "3.5.0"
   }
 }

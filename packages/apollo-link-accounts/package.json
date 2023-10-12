@@ -31,8 +31,8 @@
   },
   "devDependencies": {
     "@accounts/client": "^0.33.1",
-    "@apollo/client": "3.8.4",
+    "@apollo/client": "3.8.5",
     "graphql": "16.8.1",
-    "rimraf": "5.0.1"
+    "rimraf": "5.0.5"
   }
 }

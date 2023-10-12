@@ -17,7 +17,7 @@
     "@docusaurus/core": "2.4.3",
     "@docusaurus/preset-classic": "2.4.3",
     "docusaurus-plugin-fathom": "1.1.0",
-    "docusaurus-plugin-typedoc-api": "3.0.0",
+    "docusaurus-plugin-typedoc-api": "3.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
@@ -34,7 +34,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react": "18.2.22",
+    "@types/react": "18.2.28",
     "typescript": "5.0.4"
   }
 }

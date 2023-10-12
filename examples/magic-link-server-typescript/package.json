@@ -13,7 +13,7 @@
     "@accounts/magic-link": "^0.1.1",
     "@accounts/mongo": "^0.34.1",
     "@accounts/server": "^0.33.1",
-    "mongoose": "7.5.2",
+    "mongoose": "7.6.1",
     "tslib": "2.6.2"
   }
 }
