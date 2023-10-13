@@ -21,20 +21,34 @@ npm install @accounts/server --save
 
 ## Usage
 
+The easiest way to instanciate AccountsServer is via GraphQL Modules, via `@accounts/module-core`.
+You can use the injector to access the instance or you can skip GraphQL Modules altogether and manually instanciate it if all you care is REST.
+
 ```javascript
 import { AccountsServer } from '@accounts/server';
 
 const accountsServer = new AccountsServer(
   {
-    // The database adapter used for the users and sessions
-    db: ...,
     // A strong random secret
     tokenSecret: 'SECRET',
   },
+  // List of services to use with the server
   {
-    // List of services to use with the server
-  }
+    serviceName: AuthenticationServiceProvider,
+  },
+  // The database adapter used for the users (and eventually sessions as well)
+  new UsersDatabaseAdapter(),
+  // Optionally a different database adapter for sessions
+  new SessionsDatabaseAdapter()
 );
+```
+
+If you use GraphQL modules the first argument will be the argument of the core module, while the authentication services and the database adapters are automatically injected when instanciating AccountsServer depending on which modules you included in your application.
+
+You can access the instance using the injector:
+
+```javascript
+const accountsServer = injector.get(AccountsServer);
 ```
 
 ## Use cases
@@ -150,8 +164,7 @@ On the server you can check, if a request is done by an impersonated user by ins
 There you may have `impersonatorUserId`. This is the `id` of the user who impersonates.
 
 ```javascript
-const accountsContext = await accountsGraphQL.context(networkSession);
-const session = await accountsServer.findSessionByAccessToken(accountsContext.authToken);
+const session = await accountsServer.findSessionByAccessToken(graphqlContext.authToken);
 
 /**
  * session will have the following type

@@ -10,7 +10,13 @@ module.exports = {
         items: ['transports/rest-express', 'transports/rest-client'],
       },
     ],
-    Databases: ['databases/overview', 'databases/mongo', 'databases/redis', 'databases/typeorm'],
+    Databases: [
+      'databases/overview',
+      'databases/mongo',
+      'databases/redis',
+      'databases/typeorm',
+      'databases/mikro-orm',
+    ],
     Strategies: [
       {
         type: 'category',

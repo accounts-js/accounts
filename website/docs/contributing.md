@@ -18,15 +18,19 @@ The Accounts project was intended - since its inception - to be a community main
 ## Development
 
 - [Install Node.js](https://nodejs.org/en/download/).
-- [Install pnpm](https://pnpm.io/installation).
+- This project uses yarn/berry, so you will need to install it, preferably by enabling corepack:
+
+```
+corepack enable
+```
 
 #### Useful Commands:
 
-- Install project dependencies: `pnpm install`
-- Compile the packages `pnpm run compile`
-- Watch the packages for changes and recompile: `pnpm run start` (You need to run this command in the package subfolder you are updating)
-- Run `docker-compose up -d` to start database services required for tests.
-- Run `pnpm run test` to run all the tests.
+- Install project dependencies: `yarn install`
+- Compile the packages `yarn run compile`
+- Watch the packages for changes and recompile: `yarn workspace @accounts/packagename run start`
+- Run `docker compose up -d` to start database services required for tests.
+- Run `yarn run test` to run all the tests (`yarn workspace @accounts/packagename run test` to run tests for a certain package).
 
 ## Pull Requests
 
@@ -37,15 +41,15 @@ Alternatively, prepend your PR title with `[discuss]` to have a conversation aro
 
 #### All PRs:
 
-1.  Must not break the **test suite** (`pnpm run test`), nor reduce **test coverage** (`pnpm run coverage`). If you're fixing a bug, include a test that would fail without your fix.
+1.  Must not break the **test suite** (`yarn run test`), nor reduce **test coverage** (`yarn run coverage`). If you're fixing a bug, include a test that would fail without your fix. Also ensure that **all** examples still work as expected.
 
-2.  Must respect the **.eslintrc.js** (`pnpm run test:lint`). Ideally your editor supports `eslint`. Especially since the project is quite new, feel free to query default rules with us that don't make sense, or disable rules in a particular scope when it makes sense, together with a comment explaining why.
+2.  Must respect the **.eslintrc.js** (`yarn run test:lint`). Ideally your editor supports `eslint`. Especially since the project is quite new, feel free to query default rules with us that don't make sense, or disable rules in a particular scope when it makes sense, together with a comment explaining why.
 
 3.  Must be **isolated**. Avoid grouping many, unrelated changes in a single PR.
 
 4.  GitHub now allows auto-squashing of commits in a PR, so no need to rebase your commits before final submission.
 
-5.  Must contain a changeset file describing the changes and affected packages. Run `pnpx changeset` to generate one.
+5.  Must contain a changeset file describing the changes and affected packages. Run `yarn changeset` to generate one.
 
 ### Submission
 

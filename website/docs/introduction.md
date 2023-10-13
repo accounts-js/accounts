@@ -14,7 +14,7 @@ Since accounts-js is very flexible, it can be used with multiple transports. For
 
 #### 2. Databases
 
-We provide a native [mongo](/docs/databases/mongo) integration which is compatible with the meteor account system. We also have a [Typeorm](/docs/databases/typeorm) integration which will let you use accounts-js with any kind of databases.
+We provide a native [mongo](/docs/databases/mongo) integration which is compatible with the meteor account system. We also have [MikroORM](/docs/databases/mikro-orm) and [Typeorm](/docs/databases/typeorm) integrations which will let you use accounts-js with any kind of databases.
 
 #### 3. Strategies
 

@@ -1,143 +1,124 @@
 ---
 id: getting-started
-title: Getting started with @accounts/boost
-sidebar_label: '@accounts/boost'
+title: Getting started
+sidebar_label: 'Piecing together'
 ---
 
-The `@accounts` packages are modular by nature and can be manually installed and configured, however we provide `@accounts/boost` - a package containing useful abstractions to get a GraphQL accounts server started with minimal configuration.
+The `@accounts` packages are modular by nature and can be pieced together via [GraphQL Modules](https://the-guild.dev/graphql/modules) (but you can manually instanciate the providers if REST the only thing you care about).
 
-**Install the core**
+**Install the core module**
 
 ```bash
 // Npm
-npm install --save @accounts/boost
+npm install --save @accounts/module-core graphql-modules @accounts/server
 
 // Yarn
-yarn add @accounts/boost
+yarn add @accounts/module-core graphql-modules @accounts/server
 ```
 
 **Choose your database database driver**
 
 ```bash
 // Npm
-npm install --save @accounts/mongo
+npm install --save @accounts/module-mongo @accounts/mongo
 
 // Yarn
-yarn add @accounts/mongo
+yarn add @accounts/module-mongo @accounts/mongo
 ```
 
 **Choose your authentication services**
 
 ```bash
 // Npm
-npm install --save @accounts/password
+npm install --save @accounts/module-password @accounts/password
 
 // Yarn
-yarn add @accounts/password
+yarn add @accounts/module-password @accounts/password
 ```
 
-The following starts an accounts server using the database, transport, and authentication services you provided with the default settings.
+To piece everything together let's create an application module using the database and authentication modules of your choice.
 
 **Start the accounts server**
 
 ```javascript
-import accountsBoost from `@accounts/boost`;
+import { createAccountsCoreModule, buildSchema } from '@accounts/module-core';
+import { createAccountsMongoModule } from '@accounts/module-mongo';
+import { createAccountsPasswordModule } from '@accounts/module-password';
+import { createApplication } from 'graphql-modules';
+
+import { AuthenticationServicesToken } from '@accounts/server';
+import { AccountsPassword } from '@accounts/password';
 
 (async () => {
-
-  const accounts = await accountsBoost({
-    tokenSecret: 'your secret'
+  const myApp = createApplication({
+    modules: [
+      createAccountsCoreModule({ tokenSecret: 'your secret' }),
+      // If you don't provide a dbConn you have to await because MongoClient.connect is asynchronous
+      await createAccountsMongoModule(),
+      createAccountsPasswordModule(),
+    ],
+    // Ugly workaround because of current GraphQL Modules limitations
+    providers: [
+      {
+        provide: AuthenticationServicesToken,
+        useValue: { password: AccountsPassword },
+        global: true,
+      },
+    ],
+    // To apply the auth directive on top of your schema
+    // see https://the-guild.dev/graphql/tools/docs/schema-directives
+    schemaBuilder: buildSchema(),
   });
-  const accountsServer = await accounts.listen({
-    port: 4003
-  });
-
 })();
 ```
 
-At this point you will have an accounts GraphQL server running at http://localhost:4003 with a GraphQL playground available at the same address.
+The resulting application can be used in conjunction with a GraphQL Server like Yoga if that's the transport of your choice
 
-Configuring additional options, such as providing custom connection options for a database or additional parameters based on your chosen packages can be achieved by supplying an options object when initializing the `accountsBoost`.
+```javascript
+import { context } from '@accounts/module-core';
 
-Assuming you've installed the following packages, `@accounts/mongo` and `@accounts/password` the default mongo connection options will be applied and a database called `accounts-js` will be used.
+const { createOperationController } = myApp;
+
+const yoga = createYoga({
+  plugins: [useGraphQLModules(myApp)],
+  // To patch your GraphQL context with Accounts.js fields like authToken/user/etc.
+  context: (ctx) => context(ctx, { createOperationController }),
+});
+
+const server = createServer(yoga);
+
+server.listen(4000, () => {
+  console.info('Server is running on http://localhost:4000/graphql');
+});
+```
+
+or even as an Express middleware if you prefer REST
+
+```javascript
+import accountsExpress from '@accounts/rest-express';
+
+const { injector } = myApp;
+
+const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
+
+app.use(accountsExpress(injector.get(AccountsServer)));
+
+app.listen(process.env.PORT || 4000, () => {
+  console.log('Server listening on port 4000');
+});
+```
+
+[GraphQL Modules documentation](https://the-guild.dev/graphql/modules/docs/get-started#use-your-application) will get you started with your preferred GraphQL server.
+
+Configuring additional options, such as providing custom connection options for a database or additional parameters based on your chosen packages can be achieved by supplying an options object when creating each GraphQL module (like we did for the `tokenSecret` in the core module).
 
 Out of the box `@accounts/password` is preconfigured to allow users to sign up with usernames or email addresses.
 
 <!-- Add a link to the options type definitions  -->
-
-## Usage with an existing GraphQL server
-
-A GraphQL server can be extended with accounts functionality by using the `accountsBoost.graphql()` function.
-
-This function will return the type definitions, resolvers, schema directives, the accounts GraphQL context function used for authentication, and finally the executable GraphQL schema.
-
-These variables should then be referenced when creating your GraphQL server.
-
-**Adding accounts to a GraphQL server**
-
-```javascript
-import accountsBoost, { authenticated } from '@accounts/boost';
-import { ApolloServer } from 'apollo-server';
-import { merge } from 'lodash';
-
-(async () => {
-  const accounts = (await accountsBoost({
-    tokenSecret: 'terrible secret',
-  })).graphql();
-
-  const typeDefs = `
-    directive @auth on FIELD_DEFINITION | OBJECT
-
-    type PrivateType @auth {
-      privateField: String
-    }
-
-    type Query {
-      publicField: String
-      privateField: String @auth
-      privateType: PrivateType
-      privateFieldWithAuthResolver: String
-    }
-
-    type Mutation {
-      privateMutation: String @auth
-      publicMutation: String
-    }
-    `;
-
-  const resolvers = {
-    PrivateType: {
-      privateField: () => 'private',
-    },
-    Query: {
-      publicField: () => 'public',
-      privateField: () => 'private',
-      privateType: () => '',
-      privateFieldWithAuthResolver: authenticated((root, args, context) => {
-        return 'private';
-      }),
-    },
-    Mutation: {
-      privateMutation: () => 'private',
-      publicMutation: () => 'public',
-    },
-  };
-
-  const apolloServer = new ApolloServer({
-    typeDefs: [typeDefs, accounts.typeDefs],
-    resolvers: merge(accounts.resolvers, resolvers),
-    schemaDirectives: {
-      // In order for the `@auth` directive to work
-      ...accounts.schemaDirectives,
-    },
-    context: ({ req }) => accounts.context(req),
-  } as any)
-    .listen()
-    .then(res => {
-      console.log(`GraphQL server running at ${res.url}`);
-    });
-})();
-```
 
 ## Usage as a GraphQL microservice
 
@@ -145,98 +126,57 @@ Based on your requirements it can be advantageous to deploy a single accounts se
 
 The following examples will show you how to setup a GraphQL server which can be used to authenticate requests via JWT token.
 
-First start an accounts server:
+You can merge your existing GraphQL server schema with the remote accounts server schema via schema stitching.
 
 ```javascript
-import accountsBoost from '@accounts/boost';
+const accountsServerUri = 'http://localhost:4003/graphql';
 
 (async () => {
-  const accounts = await accountsBoost({
-    tokenSecret: 'terrible secret',
-  });
-
-  const accountsServer = await accounts.listen();
-})();
-```
-
-Next you need to configure your existing GraphQL server to authenticate incoming requests by using the context function provided by `accountsBoost`. Additionally you may merge your existing GraphQL server schema with the accounts server schema.
-
-```javascript
-import accountsBoost, { authenticated } from '@accounts/boost';
-import { mergeSchemas } from '@graphql-tools/merge';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { introspectSchema, makeRemoteExecutableSchema } from '@graphql-tools/wrap';
-import { HttpLink } from 'apollo-link-http';
-import { ApolloServer } from 'apollo-server';
-import fetch from 'node-fetch';
-import { setContext } from 'apollo-link-context';
-
-const accountsServerUri = 'http://localhost:4003/';
-
-(async () => {
-  const accounts = (
-    await accountsBoost({
-      tokenSecret: 'terrible secret',
-      micro: true, // setting micro to true will instruct `@accounts/boost` to only verify access tokens without any additional session logic
-    })
-  ).graphql();
-
-  // Note: the following steps are optional and only required if you want to stitch the remote accounts schema with your apps schema.
-
-  // Creates a link to fetch the remote schema from the accounts microservice.
-
-  const http = new HttpLink({ uri: accountsServerUri, fetch });
-
-  const link = setContext((request, previousContext) => {
-    if (!previousContext.graphqlContext) {
-      return {};
-    }
-    // Attach the Authorization to requests which are proxied to the remote schema.
-    // This step is optional and only required if you want the `getUser` query to return data.
-    return {
-      headers: {
-        Authorization: 'Bearer ' + previousContext.graphqlContext.authToken,
-      },
-    };
-  }).concat(http);
-
-  const remoteSchema = await introspectSchema(link);
-
-  const executableRemoteSchema = makeRemoteExecutableSchema({
-    schema: remoteSchema,
-    link,
-  });
-
-  const typeDefs = `
-    directive @auth on FIELD_DEFINITION | OBJECT
-
+  const myTypeDefs = gql`
     type PrivateType @auth {
-      privateField: String
+      field: String
     }
 
-    type Query {
+    extend type Query {
+      # Example of how to delegate to another field of the remote schema. Returns the currently logged in user or null.
+      me: User
+      # Returns the currently logged in userId directly from the context without querying the remote schema.
+      myId: ID
       publicField: String
+      # You can only query this if you are logged in
       privateField: String @auth
       privateType: PrivateType
       privateFieldWithAuthResolver: String
     }
 
-    type Mutation {
+    extend type Mutation {
       privateMutation: String @auth
       publicMutation: String
     }
-    `;
+  `;
 
-  const resolvers = {
-    PrivateType: {
-      privateField: () => 'private',
-    },
+  const myResolvers = {
     Query: {
+      me: {
+        resolve: (parent, args, context, info) => {
+          return delegateToSchema({
+            schema: remoteSubschema,
+            operation: OperationTypeNode.QUERY,
+            fieldName: 'getUser',
+            args,
+            context,
+            info,
+          });
+        },
+      },
+      myId: (parent, args, context) => context.userId,
       publicField: () => 'public',
       privateField: () => 'private',
-      privateType: () => '',
-      privateFieldWithAuthResolver: authenticated((root, args, context) => {
+      privateFieldWithAuthResolver: authenticated(() => {
         return 'private';
+      }),
+      privateType: () => ({
+        field: () => 'private',
       }),
     },
     Mutation: {
@@ -245,22 +185,71 @@ const accountsServerUri = 'http://localhost:4003/';
     },
   };
 
-  const executableLocalSchema = makeExecutableSchema({
-    typeDefs,
-    resolvers,
+  const remoteExecutor: AsyncExecutor = async ({ document, variables, context }) => {
+    console.log('context: ', context);
+    const query = print(document);
+    const fetchResult = await fetch(accountsServerUri, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Attach the Authorization to requests which are proxied to the remote schema.
+        // This step is optional and only required if you want the `getUser` query to return data.
+        ...(context?.authToken && { Authorization: `Bearer ${context.authToken}` }),
+      },
+      body: JSON.stringify({ query, variables }),
+    });
+    return fetchResult.json();
+  };
+
+  const remoteSubschema = {
+    schema: await schemaFromExecutor(remoteExecutor),
+    executor: remoteExecutor,
+  };
+
+  const { authDirectiveTypeDefs, authDirectiveTransformer } = authDirective('auth');
+
+  const app = createApplication({
+    modules: [
+      createAccountsCoreModule({
+        tokenSecret: 'secret',
+        // setting micro to true will instruct accounts-js to only
+        // verify access tokens without any additional session logic
+        micro: true,
+      }),
+      createModule({
+        id: 'app',
+        typeDefs: myTypeDefs,
+        resolvers: myResolvers,
+      }),
+    ],
+    providers: [
+      {
+        provide: AuthenticationServicesToken,
+        useValue: {},
+        global: true,
+      },
+    ],
+    schemaBuilder: ({ typeDefs, resolvers }) =>
+      authDirectiveTransformer(
+        stitchSchemas({
+          subschemas: [remoteSubschema],
+          typeDefs: mergeTypeDefs([typeDefs, authDirectiveTypeDefs]),
+          resolvers,
+        })
+      ),
   });
 
-  const apolloServer = await new ApolloServer({
-    schema: mergeSchemas({
-      schemas: [executableLocalSchema, executableRemoteSchema],
-      schemaDirectives: {
-        // In order for the `@auth` directive to work
-        ...accounts.schemaDirectives,
-      },
-    }),
-    context: ({ req }) => accounts.context(req),
-  }).listen();
+  const { createOperationController } = app;
 
-  console.log(`GraphQL server running at ${apolloServer.url}`);
+  const yoga = createYoga({
+    plugins: [useGraphQLModules(app)],
+    context: (ctx) => context(ctx, { createOperationController }),
+  });
+
+  const server = createServer(yoga);
+
+  server.listen(4000, () => {
+    console.info('Server is running on http://localhost:4000/graphql');
+  });
 })();
 ```
