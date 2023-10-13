@@ -14,7 +14,6 @@
     "@accounts/module-mongo": "^0.34.0",
     "@accounts/module-password": "^0.34.0",
     "@accounts/password": "^0.32.2",
-    "@accounts/rest-express": "^0.33.1",
     "@accounts/server": "^0.33.1",
     "@apollo/server": "4.9.4",
     "@apollo/server-plugin-landing-page-graphql-playground": "4.0.1",

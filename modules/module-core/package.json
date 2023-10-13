@@ -59,6 +59,7 @@
     "@graphql-tools/schema": "10.0.0",
     "@types/request-ip": "0.0.39",
     "graphql": "16.8.1",
+    "graphql-http": "1.22.0",
     "graphql-modules": "3.0.0-alpha-20231010152921-a1eddea3",
     "graphql-tag": "2.12.6"
   }

@@ -1,8 +1,11 @@
 import AccountsServer from '@accounts/server';
-import { IncomingMessage } from 'http';
+import { IncomingHttpHeaders, IncomingMessage } from 'http';
 import { getClientIp } from 'request-ip';
 import { IContext, User } from '@accounts/types';
 import { Application } from 'graphql-modules';
+import { Request as RequestGraphqlHttp, RequestHeaders } from 'graphql-http';
+import { RequestContext } from 'graphql-http/lib/use/http';
+import http from 'http';
 
 export type AccountsContextOptions<Ctx extends object> = {
   createOperationController: Application['createOperationController'];
@@ -11,12 +14,20 @@ export type AccountsContextOptions<Ctx extends object> = {
   excludeAddUserInContext?: boolean;
 };
 
-function isFetchRequest(request: Request | IncomingMessage): request is Request {
-  return (request as Request).headers.get != null;
+function isFetchHeaders(
+  headers: Headers | IncomingHttpHeaders | RequestHeaders
+): headers is Exclude<
+  Headers | IncomingHttpHeaders | RequestHeaders,
+  IncomingHttpHeaders | { [key: string]: string | string[] | undefined }
+> {
+  return headers.get != null;
 }
 
-function getHeader(request: Request | IncomingMessage, headerName: string): string | null {
-  const header = isFetchRequest(request)
+function getHeader(
+  request: Request | IncomingMessage | RequestGraphqlHttp<http.IncomingMessage, RequestContext>,
+  headerName: string
+): string | null {
+  const header = isFetchHeaders(request.headers)
     ? request.headers.get(headerName)
     : request.headers[headerName];
   if (Array.isArray(header)) {
@@ -36,7 +47,7 @@ export const context = async <IUser extends User = User, Ctx extends object = ob
       }
     | {
         req?: undefined;
-        request: Request;
+        request: Request | RequestGraphqlHttp<http.IncomingMessage, RequestContext>;
       },
   { createOperationController, ctx, ...options }: AccountsContextOptions<Ctx>
 ): AccountsContextOptions<Ctx> extends { ctx: any }
@@ -84,7 +95,12 @@ export const context = async <IUser extends User = User, Ctx extends object = ob
     //controller.destroy();
   }
 
-  const ip = getClientIp(req!); // TODO: we should be able to retrieve the ip from the request object as well
+  let ip: string | null = null;
+  try {
+    ip = getClientIp(req!); // TODO: we should be able to retrieve the ip from the fetch request object as well
+  } catch (e) {
+    console.error("Couldn't retrieve the IP from the headers");
+  }
   const userAgent =
     /* special case of UC Browser */ getHeader(reqOrRequest, 'x-ucbrowser-ua') ??
     getHeader(reqOrRequest, 'user-agent') ??

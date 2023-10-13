@@ -20,6 +20,7 @@
     "@examples/graphql-typeorm-typescript",
     "@examples/graphql-server-typescript",
     "@examples/graphql-server-typescript-apollo",
+    "@examples/graphql-server-typescript-basic",
     "@examples/magic-link-server-typescript",
     "@examples/react-graphql-typescript",
     "@examples/react-rest-typescript",
