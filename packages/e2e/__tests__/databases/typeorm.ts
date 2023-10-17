@@ -1,4 +1,4 @@
-import { AccountsTypeorm, entities } from '@accounts/typeorm';
+import { AccountsTypeorm, entities } from 'darkbasic-accounts-typeorm';
 import { DatabaseInterface } from '@accounts/types';
 import { Connection, ConnectionManager, ConnectionOptions } from 'typeorm';
 import { createAccountsTypeORMModule } from '@accounts/module-typeorm';

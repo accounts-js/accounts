@@ -1,5 +1,5 @@
 {
-  "name": "@accounts/typeorm",
+  "name": "darkbasic-accounts-typeorm",
   "version": "0.33.1",
   "description": "TypeORM adaptor for accounts",
   "main": "lib/index.js",
