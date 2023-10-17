@@ -12,7 +12,7 @@ import {
   UserService,
   AccountsTypeormOptions,
   AccountsTypeORMConfigToken,
-} from '@accounts/typeorm';
+} from 'darkbasic-accounts-typeorm';
 import { DatabaseType } from '@accounts/types';
 import { Connection } from 'typeorm';
 

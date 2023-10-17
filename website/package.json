@@ -16,6 +16,7 @@
   "dependencies": {
     "@docusaurus/core": "2.4.3",
     "@docusaurus/preset-classic": "2.4.3",
+    "@theguild/algolia": "2.0.0",
     "docusaurus-plugin-fathom": "1.1.0",
     "docusaurus-plugin-typedoc-api": "3.0.1",
     "react": "18.2.0",
