@@ -28,6 +28,6 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@types/request-promise": "4.1.49"
+    "@types/request-promise": "4.1.50"
   }
 }

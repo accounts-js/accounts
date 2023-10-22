@@ -38,6 +38,6 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "mongodb": "5.9.0"
+    "mongodb": "5.9.1"
   }
 }

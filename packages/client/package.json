@@ -47,7 +47,7 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "devDependencies": {
-    "@types/jsonwebtoken": "9.0.3",
+    "@types/jsonwebtoken": "9.0.4",
     "jest-localstorage-mock": "2.4.26",
     "jsonwebtoken": "9.0.2",
     "localstorage-polyfill": "1.0.1"

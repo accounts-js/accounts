@@ -40,6 +40,6 @@
   "devDependencies": {
     "@accounts/database-tests": "^0.32.2",
     "@types/ioredis": "4.28.10",
-    "@types/shortid": "0.0.30"
+    "@types/shortid": "0.0.31"
   }
 }

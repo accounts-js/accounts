@@ -15,15 +15,15 @@
     "@accounts/module-password": "^0.34.0",
     "@accounts/password": "^0.32.2",
     "@accounts/server": "^0.33.1",
-    "@envelop/core": "4.0.3",
-    "@envelop/graphql-modules": "5.0.3",
+    "@envelop/core": "5.0.0",
+    "@envelop/graphql-modules": "6.0.0",
     "@graphql-tools/merge": "9.0.0",
     "@graphql-tools/schema": "10.0.0",
     "graphql": "16.8.1",
-    "graphql-modules": "3.0.0-alpha-20231010152921-a1eddea3",
+    "graphql-modules": "3.0.0-alpha-20231018163544-36199b68",
     "graphql-tag": "2.12.6",
-    "graphql-yoga": "4.0.5",
-    "mongoose": "7.6.1",
+    "graphql-yoga": "5.0.0",
+    "mongoose": "7.6.3",
     "tslib": "2.6.2"
   }
 }

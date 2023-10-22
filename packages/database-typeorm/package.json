@@ -30,9 +30,9 @@
   "license": "MIT",
   "devDependencies": {
     "@accounts/database-tests": "^0.32.2",
-    "@types/lodash": "4.14.199",
+    "@types/lodash": "4.14.200",
     "graphql": "16.8.1",
-    "graphql-modules": "3.0.0-alpha-20231010152921-a1eddea3",
+    "graphql-modules": "3.0.0-alpha-20231018163544-36199b68",
     "pg": "8.11.3",
     "typeorm": "0.3.17"
   },
