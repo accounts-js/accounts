@@ -7,6 +7,9 @@
 
 const fs = require('fs');
 const path = require('path');
+const { themes } = require('prism-react-renderer');
+const theme = themes.github;
+const darkTheme = themes.dracula;
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
@@ -34,8 +37,8 @@ module.exports = {
       customDomain: 'https://goose.accountsjs.com',
     },
     prism: {
-      theme: require('prism-react-renderer/themes/github'),
-      darkTheme: require('prism-react-renderer/themes/dracula'),
+      theme,
+      darkTheme,
     },
     navbar: {
       logo: {

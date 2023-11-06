@@ -15,14 +15,14 @@
     "@accounts/module-password": "^0.34.0",
     "@accounts/password": "^0.32.2",
     "@accounts/server": "^0.33.1",
-    "@apollo/server": "4.9.4",
+    "@apollo/server": "4.9.5",
     "@apollo/server-plugin-landing-page-graphql-playground": "4.0.1",
     "@graphql-tools/merge": "9.0.0",
     "@graphql-tools/schema": "10.0.0",
     "graphql": "16.8.1",
     "graphql-modules": "3.0.0-alpha-20231018163544-36199b68",
     "graphql-tag": "2.12.6",
-    "mongoose": "7.6.3",
+    "mongoose": "7.6.4",
     "tslib": "2.6.2"
   }
 }

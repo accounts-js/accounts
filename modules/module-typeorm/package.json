@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@graphql-tools/merge": "9.0.0",
-    "@graphql-tools/utils": "10.0.7",
+    "@graphql-tools/utils": "10.0.8",
     "request-ip": "3.3.0",
     "tslib": "2.6.2"
   },
