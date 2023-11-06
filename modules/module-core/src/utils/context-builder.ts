@@ -66,11 +66,6 @@ export const context = async <IUser extends User = User, Ctx extends object = ob
     };
   }
 
-  const controller = createOperationController({
-    context: { ...ctx },
-    autoDestroy: false,
-  });
-
   const headerName = options.headerName || 'Authorization';
   let authToken =
     getHeader(reqOrRequest, headerName) ??
@@ -80,10 +75,10 @@ export const context = async <IUser extends User = User, Ctx extends object = ob
   let user;
 
   if (authToken && !options.excludeAddUserInContext) {
-    /*const controller = createOperationController({
+    const controller = createOperationController({
       context: { ...ctx },
       autoDestroy: false,
-    });*/
+    });
     try {
       user = await controller.injector
         .get<AccountsServer<IUser>>(AccountsServer)
@@ -92,7 +87,7 @@ export const context = async <IUser extends User = User, Ctx extends object = ob
       // Empty catch
       console.error(error);
     }
-    //controller.destroy();
+    controller.destroy();
   }
 
   let ip: string | null = null;
@@ -105,8 +100,6 @@ export const context = async <IUser extends User = User, Ctx extends object = ob
     /* special case of UC Browser */ getHeader(reqOrRequest, 'x-ucbrowser-ua') ??
     getHeader(reqOrRequest, 'user-agent') ??
     '';
-
-  controller.destroy();
 
   return {
     authToken,

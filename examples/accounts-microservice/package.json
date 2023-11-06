@@ -27,7 +27,7 @@
     "@graphql-tools/utils": "10.0.8",
     "@graphql-tools/wrap": "10.0.1",
     "graphql": "16.8.1",
-    "graphql-modules": "3.0.0-alpha-20231018163544-36199b68",
+    "graphql-modules": "3.0.0-alpha-20231106133212-0b04b56e",
     "graphql-yoga": "5.0.0",
     "lodash": "4.17.21",
     "node-fetch": "2.7.0",

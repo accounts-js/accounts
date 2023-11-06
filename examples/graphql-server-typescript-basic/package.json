@@ -19,7 +19,7 @@
     "@graphql-tools/schema": "10.0.0",
     "graphql": "16.8.1",
     "graphql-http": "1.22.0",
-    "graphql-modules": "3.0.0-alpha-20231018163544-36199b68",
+    "graphql-modules": "3.0.0-alpha-20231106133212-0b04b56e",
     "graphql-tag": "2.12.6",
     "mongoose": "7.6.4",
     "tslib": "2.6.2"

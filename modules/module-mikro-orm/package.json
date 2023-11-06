@@ -72,7 +72,7 @@
     "@mikro-orm/reflection": "5.9.2",
     "@types/request-ip": "0.0.40",
     "graphql": "16.8.1",
-    "graphql-modules": "3.0.0-alpha-20231018163544-36199b68",
+    "graphql-modules": "3.0.0-alpha-20231106133212-0b04b56e",
     "graphql-tag": "2.12.6",
     "reflect-metadata": "0.1.13"
   }
