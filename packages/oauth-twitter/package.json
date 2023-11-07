@@ -27,6 +27,6 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@types/oauth": "0.9.3"
+    "@types/oauth": "0.9.4"
   }
 }

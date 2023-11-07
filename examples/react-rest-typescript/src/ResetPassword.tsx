@@ -97,7 +97,9 @@ const ResetPassword = ({ match }: RouteComponentProps<RouteMatchProps>) => {
         open={!!error}
         onClose={() => setError(undefined)}
       >
-        <SnackBarContentError message={error} />
+        <div>
+          <SnackBarContentError message={error} />
+        </div>
       </Snackbar>
       <Snackbar
         anchorOrigin={{
