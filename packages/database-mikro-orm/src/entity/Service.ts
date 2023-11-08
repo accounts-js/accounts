@@ -1,10 +1,10 @@
-import { IdentifiedReference, Reference, EntitySchema } from '@mikro-orm/core';
+import { Ref, Reference, EntitySchema } from '@mikro-orm/core';
 import { IUser, UserCtor } from './User';
 
 export class Service<CustomUser extends IUser<any, any, any>> {
   id!: number;
 
-  user!: IdentifiedReference<CustomUser>;
+  user!: Ref<CustomUser>;
 
   name: string;
 
@@ -61,7 +61,7 @@ export const getServiceSchema = ({
     abstract,
     properties: {
       id: { type: 'number', primary: true },
-      user: { reference: 'm:1', wrappedReference: true, type: UserEntity?.name ?? 'User' },
+      user: { kind: 'm:1', ref: true, type: UserEntity?.name ?? 'User' },
       name: { type: 'string' },
       token: { type: 'string', nullable: true },
       options: { type: 'json', nullable: true },

@@ -204,7 +204,7 @@ export class AccountsMikroOrm<
   }
 
   public async unsetService(userId: string, serviceName: string): Promise<void> {
-    this.userRepository.remove(
+    this.em.remove(
       await this.serviceRepository.findOneOrFail({
         name: serviceName,
         user: Number(userId),
@@ -259,7 +259,7 @@ export class AccountsMikroOrm<
   }
 
   public async removeEmail(userId: string, email: string): Promise<void> {
-    const deleted = this.emailRepository.remove({ address: email.toLocaleLowerCase() });
+    const deleted = this.em.remove({ address: email.toLocaleLowerCase() });
     if (!deleted) {
       throw new Error('Email not found');
     }

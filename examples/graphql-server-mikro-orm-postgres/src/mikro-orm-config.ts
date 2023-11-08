@@ -8,6 +8,7 @@ import {
 import { ReflectMetadataProvider } from '@mikro-orm/core';
 import { User, AccountsUser } from './entities/user';
 import { Email } from './entities/email';
+import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 
 export default {
   metadataProvider: ReflectMetadataProvider,
@@ -23,7 +24,7 @@ export default {
   dbName: 'accounts',
   user: 'postgres',
   password: 'very-secret',
-  type: 'postgresql' as const,
+  driver: PostgreSqlDriver,
   forceUtcTimezone: true,
   debug: true,
 };

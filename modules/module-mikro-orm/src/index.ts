@@ -18,25 +18,25 @@ export * from './types';
 export * from './utils';
 
 export interface AccountsMikroORMModuleConfig<
-  CustomUser extends IUser<any, any, any>,
-  CustomEmail extends Email<any>,
-  CustomSession extends Session<any>,
-  CustomService extends Service<any>,
+  CustomUser extends IUser<CustomEmail, CustomSession, CustomService>,
+  CustomEmail extends Email<CustomUser>,
+  CustomSession extends Session<CustomUser>,
+  CustomService extends Service<CustomUser>,
 > {
   em?: EntityManager<IDatabaseDriver<Connection>>;
   // At the moment this database adapter cannot be split into user and sessions
   type?: DatabaseType.Both;
-  UserEntity?: Constructor<CustomUser | IUser<any, any, any>>;
-  EmailEntity?: Constructor<CustomEmail | Email<any>>;
-  SessionEntity?: Constructor<CustomSession | Session<any>>;
-  ServiceEntity?: Constructor<CustomService | Service<any>>;
+  UserEntity?: Constructor<CustomUser | IUser<CustomEmail, CustomSession, CustomService>>;
+  EmailEntity?: Constructor<CustomEmail | Email<CustomUser>>;
+  SessionEntity?: Constructor<CustomSession | Session<CustomUser>>;
+  ServiceEntity?: Constructor<CustomService | Service<CustomUser>>;
 }
 
 export const createAccountsMikroORMModule = <
-  CustomUser extends IUser<any, any, any>,
-  CustomEmail extends Email<any>,
-  CustomSession extends Session<any>,
-  CustomService extends Service<any>,
+  CustomUser extends IUser<CustomEmail, CustomSession, CustomService>,
+  CustomEmail extends Email<CustomUser>,
+  CustomSession extends Session<CustomUser>,
+  CustomService extends Service<CustomUser>,
 >({
   em,
   EmailEntity,

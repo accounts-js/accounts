@@ -19,12 +19,12 @@ export interface IUser<
 }
 
 export const getUserCtor = <
-  CustomEmail extends Email<any>,
-  CustomSession extends Session<any>,
-  CustomService extends Service<any>,
+  CustomEmail extends Email<IUser<CustomEmail, CustomSession, CustomService>>,
+  CustomSession extends Session<IUser<CustomEmail, CustomSession, CustomService>>,
+  CustomService extends Service<IUser<CustomEmail, CustomSession, CustomService>>,
   CustomUserCtorArgs extends UserCtorArgs,
-  CustomEmailCtorArgs extends EmailCtorArgs<any>,
-  CustomServiceCtorArgs extends ServiceCtorArgs<any>,
+  CustomEmailCtorArgs extends EmailCtorArgs<IUser<CustomEmail, CustomSession, CustomService>>,
+  CustomServiceCtorArgs extends ServiceCtorArgs<IUser<CustomEmail, CustomSession, CustomService>>,
 >({
   abstract = false,
   EmailEntity = Email as new (args: CustomEmailCtorArgs) => CustomEmail,
@@ -82,9 +82,9 @@ export interface UserCtorArgs {
 }
 
 export type UserCtor<
-  CustomEmail extends Email<any>,
-  CustomSession extends Session<any>,
-  CustomService extends Service<any>,
+  CustomEmail extends Email<IUser<CustomEmail, CustomSession, CustomService>>,
+  CustomSession extends Session<IUser<CustomEmail, CustomSession, CustomService>>,
+  CustomService extends Service<IUser<CustomEmail, CustomSession, CustomService>>,
   CustomUserCtorArgs extends UserCtorArgs,
 > = new (args: CustomUserCtorArgs) => IUser<CustomEmail, CustomSession, CustomService>;
 
@@ -96,9 +96,9 @@ export const getUserSchema = ({
   abstract = false,
 }: {
   AccountsUser: UserCtor<any, any, any, any>;
-  EmailEntity?: EmailCtor<any>;
-  SessionEntity?: SessionCtor<any>;
-  ServiceEntity?: ServiceCtor<any>;
+  EmailEntity?: EmailCtor<InstanceType<typeof AccountsUser>>;
+  SessionEntity?: SessionCtor<InstanceType<typeof AccountsUser>>;
+  ServiceEntity?: ServiceCtor<InstanceType<typeof AccountsUser>>;
   abstract?: boolean;
 }) => {
   if (abstract) {
@@ -119,19 +119,19 @@ export const getUserSchema = ({
       username: { type: 'string', nullable: true },
       deactivated: { type: 'boolean', default: false, onCreate: () => false },
       services: {
-        reference: '1:m',
+        kind: '1:m',
         entity: () => ServiceEntity?.name ?? Service.name,
-        mappedBy: (service: any) => service.user,
+        mappedBy: (service: InstanceType<typeof ServiceEntity>) => service.user,
       },
       emails: {
-        reference: '1:m',
+        kind: '1:m',
         entity: () => EmailEntity?.name ?? Email.name,
-        mappedBy: (email: any) => email.user,
+        mappedBy: (email: InstanceType<typeof EmailEntity>) => email.user,
       },
       sessions: {
-        reference: '1:m',
+        kind: '1:m',
         entity: () => SessionEntity?.name ?? Session.name,
-        mappedBy: (session: any) => session.user,
+        mappedBy: (session: InstanceType<typeof SessionEntity>) => session.user,
       },
     },
   });
