@@ -60,7 +60,7 @@
     "@graphql-codegen/typescript-operations": "4.0.1",
     "@graphql-codegen/typescript-resolvers": "4.0.1",
     "@graphql-codegen/typescript-type-graphql": "3.0.0",
-    "@types/request-ip": "0.0.40",
+    "@types/request-ip": "0.0.41",
     "graphql": "16.8.1",
     "graphql-modules": "3.0.0-alpha-20231106133212-0b04b56e",
     "graphql-tag": "2.12.6",

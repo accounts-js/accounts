@@ -52,7 +52,7 @@
     "@accounts/password": "^0.32.1",
     "@accounts/server": "^0.33.1",
     "@types/express": "4.17.21",
-    "@types/request-ip": "0.0.40",
+    "@types/request-ip": "0.0.41",
     "reflect-metadata": "0.1.13"
   }
 }
