@@ -3,7 +3,6 @@ import {
   UserCtorArgs as AccountsUserCtorArgs,
   Session,
   Service,
-  ServiceCtorArgs,
   UserCtor,
   getUserCtor,
 } from '@accounts/mikro-orm';
@@ -12,21 +11,15 @@ import { Email, EmailCtorArgs } from './email';
 
 type UserCtorArgs = AccountsUserCtorArgs & {
   firstName: string;
-  lastName: string;
+  lastName?: string;
 };
 
-export const AccountsUser: UserCtor<
-  Email,
-  Session<User>,
-  Service<User>,
-  UserCtorArgs
-> = getUserCtor<
+export const AccountsUser: UserCtor<Email, Session<User>, Service<User>> = getUserCtor<
   Email,
   Session<User>,
   Service<User>,
   UserCtorArgs,
-  EmailCtorArgs,
-  ServiceCtorArgs<User>
+  EmailCtorArgs
 >({
   abstract: true,
   EmailEntity: Email,
@@ -37,18 +30,15 @@ export const AccountsUser: UserCtor<
 
 @Entity()
 export class User extends AccountsUser {
-  @Property({ nullable: true })
-  firstName?: string;
+  @Property()
+  firstName: string;
 
   @Property({ nullable: true })
   lastName?: string;
 
-  constructor(args: UserCtorArgs) {
-    super(args);
-    const { firstName, lastName } = args;
-    if (firstName) {
-      this.firstName = firstName;
-    }
+  constructor({ firstName, lastName, ...otherProps }: UserCtorArgs) {
+    super(otherProps);
+    this.firstName = firstName;
     if (lastName) {
       this.lastName = lastName;
     }

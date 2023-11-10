@@ -7,21 +7,19 @@ import {
 import { Entity, Property } from '@mikro-orm/core';
 import { User } from './user';
 
-const AccountsEmail: EmailCtor<User> = getEmailCtor<User>({ abstract: true });
-
 export type EmailCtorArgs = AccountsEmailCtorArgs<User> & {
-  fullName?: string;
+  fullName: string;
 };
+
+const AccountsEmail: EmailCtor<User> = getEmailCtor<User>({ abstract: true });
 
 @Entity()
 export class Email extends AccountsEmail {
-  @Property({ nullable: true })
-  fullName?: string;
+  @Property()
+  fullName: string;
 
   constructor({ fullName, ...otherProps }: EmailCtorArgs) {
     super(otherProps);
-    if (fullName) {
-      this.fullName = fullName;
-    }
+    this.fullName = fullName;
   }
 }

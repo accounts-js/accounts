@@ -19,12 +19,12 @@ export interface IUser<
 }
 
 export const getUserCtor = <
-  CustomEmail extends Email<IUser<CustomEmail, CustomSession, CustomService>>,
-  CustomSession extends Session<IUser<CustomEmail, CustomSession, CustomService>>,
-  CustomService extends Service<IUser<CustomEmail, CustomSession, CustomService>>,
-  CustomUserCtorArgs extends UserCtorArgs,
-  CustomEmailCtorArgs extends EmailCtorArgs<IUser<CustomEmail, CustomSession, CustomService>>,
-  CustomServiceCtorArgs extends ServiceCtorArgs<IUser<CustomEmail, CustomSession, CustomService>>,
+  CustomEmail extends Email<any>,
+  CustomSession extends Session<any>,
+  CustomService extends Service<any>,
+  CustomUserCtorArgs extends UserCtorArgs = UserCtorArgs,
+  CustomEmailCtorArgs extends EmailCtorArgs<any> = EmailCtorArgs<any>,
+  CustomServiceCtorArgs extends ServiceCtorArgs<any> = ServiceCtorArgs<any>,
 >({
   abstract = false,
   EmailEntity = Email as new (args: CustomEmailCtorArgs) => CustomEmail,
@@ -72,7 +72,7 @@ export const getUserCtor = <
   if (abstract) {
     Object.defineProperty(User, 'name', { value: 'AccountsUser' });
   }
-  return User as UserCtor<CustomEmail, CustomSession, CustomService, CustomUserCtorArgs>;
+  return User as UserCtor<CustomEmail, CustomSession, CustomService, UserCtorArgs>;
 };
 
 export interface UserCtorArgs {
@@ -82,10 +82,10 @@ export interface UserCtorArgs {
 }
 
 export type UserCtor<
-  CustomEmail extends Email<IUser<CustomEmail, CustomSession, CustomService>>,
-  CustomSession extends Session<IUser<CustomEmail, CustomSession, CustomService>>,
-  CustomService extends Service<IUser<CustomEmail, CustomSession, CustomService>>,
-  CustomUserCtorArgs extends UserCtorArgs,
+  CustomEmail extends Email<any>,
+  CustomSession extends Session<any>,
+  CustomService extends Service<any>,
+  CustomUserCtorArgs extends UserCtorArgs = UserCtorArgs,
 > = new (args: CustomUserCtorArgs) => IUser<CustomEmail, CustomSession, CustomService>;
 
 export const getUserSchema = ({
@@ -96,9 +96,9 @@ export const getUserSchema = ({
   abstract = false,
 }: {
   AccountsUser: UserCtor<any, any, any, any>;
-  EmailEntity?: EmailCtor<InstanceType<typeof AccountsUser>>;
-  SessionEntity?: SessionCtor<InstanceType<typeof AccountsUser>>;
-  ServiceEntity?: ServiceCtor<InstanceType<typeof AccountsUser>>;
+  EmailEntity?: EmailCtor<any, any>;
+  SessionEntity?: SessionCtor<any, any>;
+  ServiceEntity?: ServiceCtor<any, any>;
   abstract?: boolean;
 }) => {
   if (abstract) {

@@ -1,10 +1,10 @@
-import { Ref, Reference, EntitySchema } from '@mikro-orm/core';
+import { Reference, EntitySchema, ref } from '@mikro-orm/core';
 import { IUser, UserCtor } from './User';
 
 export class Service<CustomUser extends IUser<any, any, any>> {
   id!: number;
 
-  user!: Ref<CustomUser>;
+  user!: Reference<CustomUser> & { id: number };
 
   name: string;
 
@@ -16,7 +16,7 @@ export class Service<CustomUser extends IUser<any, any, any>> {
     this.name = name;
 
     if (user) {
-      this.user = Reference.create(user);
+      this.user = ref(user);
     }
 
     if (password) {
@@ -31,19 +31,23 @@ export type ServiceCtorArgs<CustomUser extends IUser<any, any, any>> = {
   password?: string;
 };
 
-export type ServiceCtor<CustomUser extends IUser<any, any, any>> = new (
-  args: ServiceCtorArgs<CustomUser>
-) => Service<CustomUser>;
+export type ServiceCtor<
+  CustomUser extends IUser<any, any, any>,
+  CustomServiceCtorArgs extends ServiceCtorArgs<CustomUser> = ServiceCtorArgs<CustomUser>,
+> = new (args: CustomServiceCtorArgs) => Service<CustomUser>;
 
-export const getServiceCtor = <CustomUser extends IUser<any, any, any>>({
+export const getServiceCtor = <
+  CustomUser extends IUser<any, any, any>,
+  CustomServiceCtorArgs extends ServiceCtorArgs<CustomUser> = ServiceCtorArgs<CustomUser>,
+>({
   abstract = false,
 }: {
   abstract?: boolean;
-} = {}): ServiceCtor<CustomUser> => {
+} = {}): ServiceCtor<CustomUser, CustomServiceCtorArgs> => {
   if (abstract) {
     Object.defineProperty(Service, 'name', { value: 'AccountsService' });
   }
-  return Service as ServiceCtor<CustomUser>;
+  return Service as ServiceCtor<CustomUser, CustomServiceCtorArgs>;
 };
 
 export const getServiceSchema = ({

@@ -1,4 +1,4 @@
-import { Ref, Reference, EntitySchema } from '@mikro-orm/core';
+import { Reference, EntitySchema, ref } from '@mikro-orm/core';
 import { IUser, UserCtor } from './User';
 
 export class Session<CustomUser extends IUser<any, any, any>> {
@@ -8,7 +8,7 @@ export class Session<CustomUser extends IUser<any, any, any>> {
 
   updatedAt: Date = new Date();
 
-  user: Ref<CustomUser>;
+  user: Reference<CustomUser> & { id: number };
 
   token: string;
 
@@ -21,7 +21,7 @@ export class Session<CustomUser extends IUser<any, any, any>> {
   extra?: object;
 
   constructor({ user, token, valid, userAgent, ip, extra }: SessionCtorArgs<CustomUser>) {
-    this.user = Reference.create(user);
+    this.user = ref(user);
     this.token = token;
     this.valid = valid;
     if (userAgent) {
@@ -45,19 +45,23 @@ export type SessionCtorArgs<CustomUser extends IUser<any, any, any>> = {
   extra?: object;
 };
 
-export type SessionCtor<CustomUser extends IUser<any, any, any>> = new (
-  args: SessionCtorArgs<CustomUser>
-) => Session<CustomUser>;
+export type SessionCtor<
+  CustomUser extends IUser<any, any, any>,
+  CustomSessionCtorArgs extends SessionCtorArgs<CustomUser> = SessionCtorArgs<CustomUser>,
+> = new (args: CustomSessionCtorArgs) => Session<CustomUser>;
 
-export const getSessionCtor = <CustomUser extends IUser<any, any, any>>({
+export const getSessionCtor = <
+  CustomUser extends IUser<any, any, any>,
+  CustomSessionCtorArgs extends SessionCtorArgs<CustomUser> = SessionCtorArgs<CustomUser>,
+>({
   abstract = false,
 }: {
   abstract?: boolean;
-} = {}): SessionCtor<CustomUser> => {
+} = {}): SessionCtor<CustomUser, CustomSessionCtorArgs> => {
   if (abstract) {
     Object.defineProperty(Session, 'name', { value: 'AccountsSession' });
   }
-  return Session as SessionCtor<CustomUser>;
+  return Session as SessionCtor<CustomUser, CustomSessionCtorArgs>;
 };
 
 export const getSessionSchema = ({
