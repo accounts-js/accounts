@@ -10,6 +10,7 @@ export const buildSchema =
     typeDefs,
     resolvers,
     authDirective: { authDirectiveTypeDefs, authDirectiveTransformer } = authDirective('auth'),
+    directives = [],
   }: {
     typeDefs?: TypeSource;
     resolvers?:
@@ -19,19 +20,24 @@ export const buildSchema =
       authDirectiveTypeDefs: string;
       authDirectiveTransformer: (schema: GraphQLSchema) => GraphQLSchema;
     };
+    directives?: Array<[TypeSource, (schema: GraphQLSchema) => GraphQLSchema]>;
   } = {}): ApplicationConfig['schemaBuilder'] =>
-  ({ typeDefs: accountsTypeDefs, resolvers: accountsResolvers }) =>
-    authDirectiveTransformer(
-      makeExecutableSchema({
-        typeDefs: mergeTypeDefs([
-          ...accountsTypeDefs,
-          ...(typeDefs ? [typeDefs] : []),
-          authDirectiveTypeDefs,
-        ]),
-        resolvers: resolvers
-          ? mergeResolvers([resolvers, ...accountsResolvers] as Maybe<
-              Maybe<IResolvers<TSource, TContext>>[]
-            >)
-          : accountsResolvers,
-      })
-    );
+  ({ typeDefs: accountsTypeDefs, resolvers: accountsResolvers }) => {
+    let schema = makeExecutableSchema({
+      typeDefs: mergeTypeDefs([
+        ...accountsTypeDefs,
+        ...(typeDefs ? [typeDefs] : []),
+        authDirectiveTypeDefs,
+        ...directives.map(([directiveTypeDefs]) => directiveTypeDefs),
+      ]),
+      resolvers: resolvers
+        ? mergeResolvers([resolvers, ...accountsResolvers] as Maybe<
+            Maybe<IResolvers<TSource, TContext>>[]
+          >)
+        : accountsResolvers,
+    });
+    for (const [, directiveTransformer] of directives) {
+      schema = directiveTransformer(schema);
+    }
+    return authDirectiveTransformer(schema);
+  };
