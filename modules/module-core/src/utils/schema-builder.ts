@@ -20,7 +20,7 @@ export const buildSchema =
       authDirectiveTypeDefs: string;
       authDirectiveTransformer: (schema: GraphQLSchema) => GraphQLSchema;
     };
-    directives?: Array<[TypeSource, (schema: GraphQLSchema) => GraphQLSchema]>;
+    directives?: Array<[TypeSource | undefined, (schema: GraphQLSchema) => GraphQLSchema]>;
   } = {}): ApplicationConfig['schemaBuilder'] =>
   ({ typeDefs: accountsTypeDefs, resolvers: accountsResolvers }) => {
     let schema = makeExecutableSchema({
@@ -28,7 +28,12 @@ export const buildSchema =
         ...accountsTypeDefs,
         ...(typeDefs ? [typeDefs] : []),
         authDirectiveTypeDefs,
-        ...directives.map(([directiveTypeDefs]) => directiveTypeDefs),
+        ...directives.reduce<TypeSource[]>((acc, [directiveTypeDefs]) => {
+          if (directiveTypeDefs != null) {
+            acc.push(directiveTypeDefs);
+          }
+          return acc;
+        }, []),
       ]),
       resolvers: resolvers
         ? mergeResolvers([resolvers, ...accountsResolvers] as Maybe<
