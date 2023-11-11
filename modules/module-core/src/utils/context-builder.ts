@@ -36,7 +36,14 @@ function getHeader(
   return header ?? null;
 }
 
-export const context = async <IUser extends User = User, Ctx extends object = object>(
+export const context = async <
+  IUserOrContext extends object = User,
+  Ctx extends object = object,
+  _User_ extends User = IUserOrContext extends User ? IUserOrContext : User,
+  _Context_ extends object = IUserOrContext extends User
+    ? IContext<IUserOrContext>
+    : IUserOrContext,
+>(
   {
     req,
     request,
@@ -51,8 +58,8 @@ export const context = async <IUser extends User = User, Ctx extends object = ob
       },
   { createOperationController, ctx, ...options }: AccountsContextOptions<Ctx>
 ): AccountsContextOptions<Ctx> extends { ctx: any }
-  ? Promise<IContext<IUser> & Ctx>
-  : Promise<IContext<IUser>> => {
+  ? Promise<_Context_ & Ctx>
+  : Promise<_Context_> => {
   const reqOrRequest = request ?? req;
   if (!reqOrRequest) {
     return {
@@ -63,7 +70,7 @@ export const context = async <IUser extends User = User, Ctx extends object = ob
         userAgent: '',
       },
       ...ctx,
-    };
+    } satisfies IContext<_User_> as _Context_;
   }
 
   const headerName = options.headerName || 'Authorization';
@@ -81,7 +88,7 @@ export const context = async <IUser extends User = User, Ctx extends object = ob
     });
     try {
       user = await controller.injector
-        .get<AccountsServer<IUser>>(AccountsServer)
+        .get<AccountsServer<_User_>>(AccountsServer)
         .resumeSession(authToken);
     } catch (error) {
       // Empty catch
@@ -112,5 +119,5 @@ export const context = async <IUser extends User = User, Ctx extends object = ob
       ip,
     },
     ...ctx,
-  };
+  } satisfies IContext<_User_> as _Context_;
 };
