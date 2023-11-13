@@ -1,3 +1,5 @@
+import { GraphQLError } from 'graphql';
+
 export const authenticated =
   <
     CustomRoot,
@@ -18,7 +20,12 @@ export const authenticated =
       return func(root, args, context, info);
     }
     if (!context.userId && !context.user) {
-      throw new Error('Unauthorized');
+      throw new GraphQLError('Unauthorized', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 },
+        },
+      });
     }
     return func(root, args, context, info);
   };

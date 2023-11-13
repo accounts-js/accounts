@@ -7,13 +7,19 @@ import {
 } from '@accounts/password';
 import { AccountsServer, AccountsJsError } from '@accounts/server';
 import { MutationResolvers } from '../models';
+import { GraphQLError } from 'graphql';
 
 export const Mutation: MutationResolvers = {
   addEmail: async (_, { newEmail }, ctx) => {
     const { user, injector } = ctx;
 
     if (!(user && user.id)) {
-      throw new Error('Unauthorized');
+      throw new GraphQLError('Unauthorized', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 },
+        },
+      });
     }
 
     const userId = user.id;
@@ -25,7 +31,12 @@ export const Mutation: MutationResolvers = {
     const { user, injector } = ctx;
 
     if (!(user && user.id)) {
-      throw new Error('Unauthorized');
+      throw new GraphQLError('Unauthorized', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 },
+        },
+      });
     }
 
     const userId = user.id;
@@ -81,7 +92,12 @@ export const Mutation: MutationResolvers = {
 
     // Make sure user is logged in
     if (!(user && user.id)) {
-      throw new Error('Unauthorized');
+      throw new GraphQLError('Unauthorized', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 },
+        },
+      });
     }
 
     const userId = user.id;
@@ -94,7 +110,12 @@ export const Mutation: MutationResolvers = {
 
     // Make sure user is logged in
     if (!(user && user.id)) {
-      throw new Error('Unauthorized');
+      throw new GraphQLError('Unauthorized', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 },
+        },
+      });
     }
 
     const userId = user.id;
