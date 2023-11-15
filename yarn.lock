@@ -189,8 +189,10 @@ __metadata:
     "@mikro-orm/migrations": "npm:6.0.0-dev.151"
     "@mikro-orm/postgresql": "npm:6.0.0-dev.151"
     "@mikro-orm/reflection": "npm:6.0.0-dev.151"
+    "@types/lodash": "npm:^4.14.201"
     graphql: "npm:16.8.1"
     graphql-modules: "npm:3.0.0-alpha-20231106133212-0b04b56e"
+    lodash: "npm:^4.17.21"
     tslib: "npm:2.6.2"
   peerDependencies:
     "@mikro-orm/cli": ^6.0.0
@@ -591,6 +593,8 @@ __metadata:
     request-ip: "npm:3.3.0"
     tslib: "npm:2.6.2"
   peerDependencies:
+    "@accounts/magic-link": ^0.1.0
+    "@accounts/password": ^0.32.0
     "@accounts/server": ^0.32.0 || ^0.33.0
   languageName: unknown
   linkType: soft
@@ -8110,7 +8114,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:*, @types/lodash@npm:4.14.201":
+"@types/lodash@npm:*, @types/lodash@npm:4.14.201, @types/lodash@npm:^4.14.201":
   version: 4.14.201
   resolution: "@types/lodash@npm:4.14.201"
   checksum: 14dc43787296c429433d7d034ed47c5ac24b92217056f80a0e6c990449120b9c9c1058918188945fb88353c0c8333c5c36dccc40c51edbd39b05d2169ab2e0ad

@@ -14,6 +14,7 @@ import {
 import { User as AccountsUser } from '@accounts/types/lib/types/user';
 import { Session as ISession } from '@accounts/types/lib/types/session/session';
 import { ExecutionContext, Inject, Injectable } from 'graphql-modules';
+import { get, set } from 'lodash';
 
 const hasPassword = (opt: object): opt is { bcrypt: string } =>
   !!(opt as { bcrypt: string }).bcrypt;
@@ -23,6 +24,20 @@ const toUser = async (user: IUser<any, any, any> | null): Promise<AccountsUser |
     ...user,
     id: String(user.id),
     emails: await user.emails.loadItems(),
+    services: (await user.services.loadItems()).reduce(
+      (acc, { name, token, options }: { name: string; token?: string; options?: object }) => {
+        const multi = ['email.verificationTokens', 'password.reset'];
+        set(
+          acc,
+          name,
+          multi.includes(name)
+            ? (get(acc, name) ?? []).concat({ token, ...options })
+            : { ...get(acc, name), token, ...options }
+        );
+        return acc;
+      },
+      {}
+    ),
   };
 
 const toSession = async (session: Session<any> | null): Promise<ISession | null> =>
@@ -133,7 +148,7 @@ export class AccountsMikroOrm<
     return toUser(
       await this.userRepository.findOne({
         services: {
-          name: 'password.verificationTokens',
+          name: 'email.verificationTokens',
           token,
         },
       })
