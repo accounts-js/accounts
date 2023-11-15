@@ -46,6 +46,8 @@ export interface AccountsServerOptions<CustomUser extends User = User> {
   /**
    * If this flag is set to true - user will be automatically logged in after registration.
    * LoginResult data will be included into registration response.
+   * Can be enabled only if requireEmailVerification is set to false.
+   * Defaults to false.
    */
   enableAutologin?: boolean;
   /**

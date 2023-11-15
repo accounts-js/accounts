@@ -16,6 +16,7 @@ describe('registerPassword', () => {
   it('calls password.createUser and returns the user json response', async () => {
     const userId = '1';
     const passwordService = {
+      options: {},
       createUser: jest.fn(() => userId),
     };
     const accountsServer = {
@@ -47,9 +48,10 @@ describe('registerPassword', () => {
     expect(res.status).not.toHaveBeenCalled();
   });
 
-  it('calls password.createUser and obfuscate user id if server have ambiguousErrorMessages', async () => {
+  it('calls password.createUser and obfuscate user id if server have both ambiguousErrorMessages and requireEmailVerification', async () => {
     const userId = '1';
     const passwordService = {
+      options: { requireEmailVerification: true },
       createUser: jest.fn(() => userId),
     };
     const accountsServer = {
@@ -81,8 +83,44 @@ describe('registerPassword', () => {
     expect(res.status).not.toHaveBeenCalled();
   });
 
+  it('calls password.createUser and not obfuscate user id if server have ambiguousErrorMessages but not requireEmailVerification', async () => {
+    const userId = '1';
+    const passwordService = {
+      options: {},
+      createUser: jest.fn(() => userId),
+    };
+    const accountsServer = {
+      options: { ambiguousErrorMessages: true },
+      getServices: () => ({
+        password: passwordService,
+      }),
+    };
+    const middleware = registerPassword(accountsServer as any);
+
+    const req = {
+      body: {
+        user: {
+          username: 'toto',
+        },
+        extraFieldThatShouldNotBePassed: 'hey',
+      },
+      headers: {},
+    };
+    const reqCopy = { ...req };
+
+    await middleware(req as any, res);
+
+    expect(req).toEqual(reqCopy);
+    expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
+      username: 'toto',
+    });
+    expect(res.json).toHaveBeenCalledWith({ userId });
+    expect(res.status).not.toHaveBeenCalled();
+  });
+
   it('calls password.createUser and obfuscate EmailAlreadyExists error if server have ambiguousErrorMessages', async () => {
     const passwordService = {
+      options: {},
       createUser: jest.fn(() => {
         throw new AccountsJsError('EmailAlreadyExists', 'EmailAlreadyExists');
       }),
@@ -118,6 +156,7 @@ describe('registerPassword', () => {
 
   it('calls password.createUser and obfuscate UsernameAlreadyExists error if server have ambiguousErrorMessages', async () => {
     const passwordService = {
+      options: {},
       createUser: jest.fn(() => {
         throw new AccountsJsError('UsernameAlreadyExists', 'UsernameAlreadyExists');
       }),
@@ -156,6 +195,7 @@ describe('registerPassword', () => {
     const userEmail = 'test@test.com';
 
     const passwordService = {
+      options: {},
       createUser: jest.fn(() => userId),
     };
 
@@ -212,6 +252,7 @@ describe('registerPassword', () => {
   it('Sends error if it was thrown on loginWithService', async () => {
     const error = { message: 'Could not login' };
     const passwordService = {
+      options: {},
       createUser: jest.fn(() => {
         throw error;
       }),

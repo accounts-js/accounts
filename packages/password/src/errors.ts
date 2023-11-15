@@ -9,6 +9,7 @@ export const errors: ErrorMessages = {
   matchFailed: 'Match failed',
   invalidUsername: 'Invalid username',
   invalidEmail: 'Invalid email',
+  emailNotVerified: 'Email not verified',
   invalidPassword: 'Invalid password',
   invalidNewPassword: 'Invalid new password',
   invalidToken: 'Invalid token',
@@ -95,6 +96,7 @@ export enum ResetPasswordErrors {
 }
 
 export enum PasswordAuthenticatorErrors {
+  EmailNotVerified = 'EmailNotVerified',
   InvalidCredentials = 'InvalidCredentials',
   UserNotFound = 'UserNotFound',
   IncorrectPassword = 'IncorrectPassword',

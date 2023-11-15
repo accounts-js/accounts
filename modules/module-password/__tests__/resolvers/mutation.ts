@@ -14,6 +14,7 @@ describe('accounts-password resolvers mutation', () => {
     options: {},
   };
   const accountsPasswordMock = {
+    options: {},
     addEmail: jest.fn(),
     changePassword: jest.fn(),
     createUser: jest.fn(),
@@ -88,6 +89,63 @@ describe('accounts-password resolvers mutation', () => {
       expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
       expect(injector.get).toHaveBeenCalledWith(AccountsServer);
       expect(accountsPasswordMock.createUser).toHaveBeenCalledWith(user);
+    });
+
+    it('should call createUser and return the userId', async () => {
+      const createdUserMock = jest.fn(() => user.id);
+      injector.get = jest.fn((arg) =>
+        arg === AccountsPassword
+          ? {
+              options: {},
+              createUser: createdUserMock,
+            }
+          : {
+              options: {},
+            }
+      );
+      const res = await Mutation.createUser!({}, { user } as any, { injector } as any, {} as any);
+      expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
+      expect(injector.get).toHaveBeenCalledWith(AccountsServer);
+      expect(createdUserMock).toHaveBeenCalledWith(user);
+      expect(res).toEqual({ userId: user.id });
+    });
+
+    it('should return a null userId if both ambiguousErrorMessages and requireEmailVerification are enabled', async () => {
+      const createdUserMock = jest.fn(() => user.id);
+      injector.get = jest.fn((arg) =>
+        arg === AccountsPassword
+          ? {
+              options: { requireEmailVerification: true },
+              createUser: createdUserMock,
+            }
+          : {
+              options: { ambiguousErrorMessages: true },
+            }
+      );
+      const res = await Mutation.createUser!({}, { user } as any, { injector } as any, {} as any);
+      expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
+      expect(injector.get).toHaveBeenCalledWith(AccountsServer);
+      expect(createdUserMock).toHaveBeenCalledWith(user);
+      expect(res).toEqual({ userId: null });
+    });
+
+    it('should return the userId despite ambiguousErrorMessages being enabled if requireEmailVerification is disabled', async () => {
+      const createdUserMock = jest.fn(() => user.id);
+      injector.get = jest.fn((arg) =>
+        arg === AccountsPassword
+          ? {
+              options: { requireEmailVerification: false },
+              createUser: createdUserMock,
+            }
+          : {
+              options: { ambiguousErrorMessages: true },
+            }
+      );
+      const res = await Mutation.createUser!({}, { user } as any, { injector } as any, {} as any);
+      expect(injector.get).toHaveBeenCalledWith(AccountsPassword);
+      expect(injector.get).toHaveBeenCalledWith(AccountsServer);
+      expect(createdUserMock).toHaveBeenCalledWith(user);
+      expect(res).toEqual({ userId: user.id });
     });
 
     it('should call createUser and obfuscate EmailAlreadyExists error if server have ambiguousErrorMessages', async () => {

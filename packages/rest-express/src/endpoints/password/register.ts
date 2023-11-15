@@ -29,7 +29,8 @@ export const registerPassword =
 
       if (!accountsServer.options.enableAutologin) {
         return res.json(
-          accountsServer.options.ambiguousErrorMessages
+          accountsServer.options.ambiguousErrorMessages &&
+            accountsPassword.options.requireEmailVerification
             ? ({} as CreateUserResult)
             : ({
                 userId,
@@ -37,7 +38,7 @@ export const registerPassword =
         );
       }
 
-      // When initializing AccountsServer we check that enableAutologin and ambiguousErrorMessages options
+      // When initializing AccountsPassword we check that enableAutologin and requireEmailVerification options
       // are not enabled at the same time
 
       const createdUser = await accountsServer.findUserById(userId);
