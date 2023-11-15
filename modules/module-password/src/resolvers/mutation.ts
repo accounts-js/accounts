@@ -69,11 +69,15 @@ export const Mutation: MutationResolvers = {
 
     if (!accountsServer.options.enableAutologin) {
       return {
-        userId: accountsServer.options.ambiguousErrorMessages ? null : userId,
+        userId:
+          accountsServer.options.ambiguousErrorMessages &&
+          accountsPassword.options.requireEmailVerification
+            ? null
+            : userId,
       };
     }
 
-    // When initializing AccountsServer we check that enableAutologin and ambiguousErrorMessages options
+    // When initializing AccountsPassword we check that enableAutologin and requireEmailVerification options
     // are not enabled at the same time
 
     const createdUser = await accountsServer.findUserById(userId);

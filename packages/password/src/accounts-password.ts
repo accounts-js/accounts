@@ -51,6 +51,13 @@ export interface AccountsPasswordOptions {
    */
   twoFactor?: AccountsTwoFactorOptions;
   /**
+   * Whether the email needs to be verified in order to allow authentication.
+   * From an user enumeration perspective changes what is safe to return when ambiguousErrorMessages are enabled.
+   * Can be enabled only if enableAutologin is set to false.
+   * Defaults to false.
+   */
+  requireEmailVerification?: boolean;
+  /**
    * The number of milliseconds from when a link to verify the user email is sent until token expires and user can't verify his email with the link anymore.
    * Defaults to 3 days.
    */
@@ -136,6 +143,7 @@ export interface AccountsPasswordOptions {
 }
 
 const defaultOptions = {
+  requireEmailVerification: false,
   // 3 days - 3 * 24 * 60 * 60 * 1000
   verifyEmailTokenExpiration: 259200000,
   // 3 days - 3 * 24 * 60 * 60 * 1000
@@ -185,7 +193,7 @@ export default class AccountsPassword<CustomUser extends User = User>
   public serviceName = 'password';
   public server!: AccountsServer;
   public twoFactor: TwoFactor;
-  private options: AccountsPasswordOptions & typeof defaultOptions;
+  options: AccountsPasswordOptions & typeof defaultOptions;
   private db!: DatabaseInterfaceUser<CustomUser>;
   private dbSessions!: DatabaseInterfaceSessions;
 
@@ -196,7 +204,21 @@ export default class AccountsPassword<CustomUser extends User = User>
     @Inject(DatabaseInterfaceSessionsToken) dbSessions?: DatabaseInterfaceSessions,
     server?: AccountsServer
   ) {
-    this.options = { ...defaultOptions, ...options };
+    this.options = { ...defaultOptions, ...options } as typeof options & typeof defaultOptions;
+    if (this.options.requireEmailVerification) {
+      if (server?.options.enableAutologin) {
+        throw new Error(
+          "Can't enable autologin when requireEmailVerification is enabled. Please set either of them to false."
+        );
+      }
+      // AccountsPassword has been manually instantiated so there is no way to access the AccountsServer options
+      if (!server) {
+        console.log(
+          "Please ensure that 'enableAutologin' has not been set to true in AccountsServer."
+        );
+      }
+    }
+
     this.twoFactor = new TwoFactor(options.twoFactor);
     if (db) {
       this.db = db;
@@ -713,6 +735,19 @@ export default class AccountsPassword<CustomUser extends User = User>
         throw new AccountsJsError(
           this.options.errors.userNotFound,
           PasswordAuthenticatorErrors.UserNotFound
+        );
+      }
+    }
+    if (this.options.requireEmailVerification) {
+      // If the user logs in using the email it must be a verified address, if he provided an username at least one of the associated emails must be verified.
+      if (
+        !foundUser.emails?.find(({ address, verified }) =>
+          email ? address === email && verified : verified
+        )
+      ) {
+        throw new AccountsJsError(
+          this.options.errors.emailNotVerified,
+          PasswordAuthenticatorErrors.EmailNotVerified
         );
       }
     }

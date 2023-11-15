@@ -2,9 +2,9 @@ import gql from 'graphql-tag';
 
 export default gql`
   type CreateUserResult {
-    # Will be returned only if ambiguousErrorMessages is set to false.
+    # Will be returned only if ambiguousErrorMessages is set to false or requireEmailVerification is set to false.
     userId: ID
-    # Will be returned only if enableAutologin is set to true.
+    # Will be returned only if enableAutologin is set to true and requireEmailVerification is set to false.
     loginResult: LoginResult
   }
 

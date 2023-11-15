@@ -32,6 +32,10 @@ export interface ErrorMessages {
    */
   invalidEmail: string;
   /**
+   * Default to 'Email not verified'
+   */
+  emailNotVerified: string;
+  /**
    * Default to 'Invalid password'
    */
   invalidPassword: string;

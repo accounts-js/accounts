@@ -14,25 +14,6 @@ describe('AccountsServer', () => {
     createSession: () => Promise.resolve(),
   };
 
-  describe('config', () => {
-    it('should throw if ambiguousErrorMessages and enableAutologin flags enabled at the same time', async () => {
-      expect(
-        () =>
-          new AccountsServer(
-            {
-              tokenSecret: 'secret1',
-              enableAutologin: true,
-              ambiguousErrorMessages: true,
-            },
-            {},
-            {} as any
-          )
-      )
-        .toThrow(`Can't enable autologin when ambiguous error messages are enabled (https://www.accountsjs.com/docs/api/server/globals#ambiguouserrormessages).
-Please set ambiguousErrorMessages to false to be able to use autologin.`);
-    });
-  });
-
   describe('getServices', () => {
     it('should return instance services', async () => {
       const services: any = {

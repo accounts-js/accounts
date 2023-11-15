@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import set from 'lodash.set';
 import { AccountsPassword } from '../src';
+import { AccountsServer } from '@accounts/server';
 
 describe('AccountsPassword', () => {
   const server: any = {
@@ -19,6 +20,20 @@ describe('AccountsPassword', () => {
   });
 
   describe('config', () => {
+    it('should throw if requireEmailVerification and enableAutologin flags enabled at the same time', async () => {
+      expect(
+        () =>
+          new AccountsPassword(
+            { requireEmailVerification: true },
+            undefined,
+            undefined,
+            new AccountsServer({ enableAutologin: true, tokenSecret: 'secret' }, {}, {} as any)
+          )
+      ).toThrow(
+        "Can't enable autologin when requireEmailVerification is enabled. Please set either of them to false."
+      );
+    });
+
     it('should have default options', async () => {
       expect((password as any).options.passwordEnrollTokenExpiration).toBe(2592000000);
     });
@@ -48,6 +63,34 @@ describe('AccountsPassword', () => {
         password: 'toto',
       } as any);
       expect(ret).toEqual(user);
+    });
+
+    it('throws when email has not been verified and requireEmailVerification is true', async () => {
+      const findUserByEmail = jest.fn(() =>
+        Promise.resolve({
+          emails: [
+            {
+              address: 'toto@toto.com',
+              verified: false,
+            },
+          ],
+          id: '1',
+          deactivated: false,
+        })
+      );
+      const findPasswordHash = jest.fn(() => Promise.resolve('hashed'));
+      const verifyPassword = jest.fn(() => true);
+      const tmpAccountsPassword = new AccountsPassword({});
+      tmpAccountsPassword.options.verifyPassword = verifyPassword as any;
+      tmpAccountsPassword.options.requireEmailVerification = true;
+      tmpAccountsPassword.setUserStore({ findUserByEmail, findPasswordHash } as any);
+      tmpAccountsPassword.setSessionsStore();
+      await expect(
+        tmpAccountsPassword.authenticate({
+          user: 'toto@toto.com',
+          password: 'toto',
+        } as any)
+      ).rejects.toThrow('Email not verified');
     });
 
     it('throws when user not found', async () => {
