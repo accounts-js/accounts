@@ -1,6 +1,6 @@
 import * as express from 'express';
-import { AccountsServer } from '@accounts/server';
-import { AccountsPassword } from '@accounts/password';
+import { type AccountsServer } from '@accounts/server';
+import { type AccountsPassword } from '@accounts/password';
 import { sendError } from '../../utils/send-error';
 
 export const addEmail =

@@ -1,6 +1,6 @@
 import * as express from 'express';
-import { AccountsServer, AccountsJsError } from '@accounts/server';
-import { AccountsPassword, CreateUserErrors } from '@accounts/password';
+import { type AccountsServer, AccountsJsError } from '@accounts/server';
+import { type AccountsPassword, CreateUserErrors } from '@accounts/password';
 import { CreateUserResult } from '@accounts/types';
 import { sendError } from '../../utils/send-error';
 

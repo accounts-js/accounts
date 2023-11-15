@@ -39,6 +39,8 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "peerDependencies": {
+    "@accounts/magic-link": "^0.1.0",
+    "@accounts/password": "^0.32.0",
     "@accounts/server": "^0.32.0 || ^0.33.0"
   },
   "dependencies": {

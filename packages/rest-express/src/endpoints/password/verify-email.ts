@@ -1,6 +1,6 @@
 import * as express from 'express';
-import { AccountsJsError, AccountsServer } from '@accounts/server';
-import { AccountsPassword, SendVerificationEmailErrors } from '@accounts/password';
+import { AccountsJsError, type AccountsServer } from '@accounts/server';
+import { type AccountsPassword, SendVerificationEmailErrors } from '@accounts/password';
 import { sendError } from '../../utils/send-error';
 
 export const verifyEmail =

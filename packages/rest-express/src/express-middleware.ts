@@ -3,7 +3,7 @@ import { resetPassword, sendResetPasswordEmail } from './endpoints/password/rese
 import { verifyEmail, sendVerificationEmail } from './endpoints/password/verify-email';
 import * as express from 'express';
 import * as requestIp from 'request-ip';
-import { AccountsServer } from '@accounts/server';
+import { type AccountsServer } from '@accounts/server';
 import { refreshAccessToken } from './endpoints/refresh-access-token';
 import { getUser } from './endpoints/get-user';
 import { impersonate } from './endpoints/impersonate';

@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { AccountsServer } from '@accounts/server';
+import { type AccountsServer } from '@accounts/server';
 import { sendError } from '../utils/send-error';
 
 export const refreshAccessToken =

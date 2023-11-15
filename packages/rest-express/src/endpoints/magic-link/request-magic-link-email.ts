@@ -1,6 +1,6 @@
 import * as express from 'express';
-import { AccountsJsError, AccountsServer } from '@accounts/server';
-import { AccountsMagicLink, RequestMagicLinkEmailErrors } from '@accounts/magic-link';
+import { AccountsJsError, type AccountsServer } from '@accounts/server';
+import { type AccountsMagicLink, RequestMagicLinkEmailErrors } from '@accounts/magic-link';
 import { sendError } from '../../utils/send-error';
 
 export const requestMagicLinkEmail =
