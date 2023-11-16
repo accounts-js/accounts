@@ -6,15 +6,22 @@ import {
   createAccountsCoreModule,
 } from '@accounts/module-core';
 import { createAccountsPasswordModule } from '@accounts/module-password';
-import { AccountsPassword } from '@accounts/password';
+import {
+  AccountsPassword,
+  infosMiddleware,
+  resetPassword,
+  resetPasswordForm,
+  verifyEmail,
+} from '@accounts/password';
 import { AccountsServer, AuthenticationServicesToken, ServerHooks } from '@accounts/server';
 import gql from 'graphql-tag';
 import mongoose from 'mongoose';
 import { createApplication } from 'graphql-modules';
 import { createAccountsMongoModule } from '@accounts/module-mongo';
-import { createServer } from 'node:http';
 import { createYoga } from 'graphql-yoga';
 import { useGraphQLModules } from '@envelop/graphql-modules';
+import express from 'express';
+import helmet from 'helmet';
 
 void (async () => {
   // Create database connection
@@ -79,10 +86,14 @@ void (async () => {
     },
   };
 
+  const port = 4000;
+  const siteUrl = `http://localhost:${port}`;
   const app = createApplication({
     modules: [
-      createAccountsCoreModule({ tokenSecret: 'secret' }),
+      createAccountsCoreModule({ tokenSecret: 'secret', siteUrl }),
       createAccountsPasswordModule({
+        requireEmailVerification: true,
+        sendVerificationEmailAfterSignup: true,
         // This option is called when a new user create an account
         // Inside we can apply our logic to validate the user fields
         validateNewUser: (user) => {
@@ -127,11 +138,39 @@ void (async () => {
     context: (ctx) => context(ctx, { createOperationController }),
   });
 
-  // Pass it into a server to hook into request handlers.
-  const server = createServer(yoga);
+  const yogaRouter = express.Router();
+  // GraphiQL specefic CSP configuration
+  yogaRouter.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          'style-src': ["'self'", 'unpkg.com'],
+          'script-src': ["'self'", 'unpkg.com', "'unsafe-inline'"],
+          'img-src': ["'self'", 'raw.githubusercontent.com'],
+        },
+      },
+    })
+  );
+  yogaRouter.use(yoga);
+
+  const router = express.Router();
+  // By adding the GraphQL Yoga router before the global helmet middleware,
+  // you can be sure that the global CSP configuration will not be applied to the GraphQL Yoga endpoint
+  router.use(yoga.graphqlEndpoint, yogaRouter);
+  // Add the global CSP configuration for the rest of your server.
+  router.use(helmet());
+  router.use(express.urlencoded({ extended: true }));
+
+  router.use(infosMiddleware);
+  router.get('/verify-email/:token', verifyEmail(app.injector));
+  router.get('/reset-password/:token', resetPasswordForm);
+  router.post('/resetPassword', resetPassword(app.injector));
+
+  const expressApp = express();
+  expressApp.use(router);
 
   // Start the server and you're done!
-  server.listen(4000, () => {
-    console.info('Server is running on http://localhost:4000/graphql');
+  expressApp.listen(port, () => {
+    console.info(`Server is running on ${siteUrl}/graphql`);
   });
 })();

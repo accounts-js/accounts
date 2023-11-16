@@ -1,5 +1,6 @@
 import AccountsPassword, { AccountsPasswordOptions } from './accounts-password';
 export * from './types';
+export * from './endpoints';
 export {
   AddEmailErrors,
   ChangePasswordErrors,
