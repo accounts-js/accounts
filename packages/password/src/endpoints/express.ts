@@ -30,64 +30,76 @@ export const infosMiddleware = (req: Request, _res: Response, next: NextFunction
   next();
 };
 
-export const verifyEmail = (injector: Injector) => async (req: Request, res: Response) => {
-  try {
-    const { token } = req.params;
-    if (token == null) {
-      throw new Error('Token is missing');
-    }
-    await injector.get(AccountsPassword).verifyEmail(token);
-    res.send(
-      getHtml(
-        'Email successfully verified',
-        `
+export const verifyEmail =
+  (accountsPasswordOrInjector: Injector | AccountsPassword) =>
+  async (req: Request, res: Response) => {
+    try {
+      const { token } = req.params;
+      if (token == null) {
+        throw new Error('Token is missing');
+      }
+      const accountsPassword =
+        accountsPasswordOrInjector instanceof AccountsPassword
+          ? accountsPasswordOrInjector
+          : accountsPasswordOrInjector.get(AccountsPassword);
+      await accountsPassword.verifyEmail(token);
+      res.send(
+        getHtml(
+          'Email successfully verified',
+          `
       <h3>The email address has been successfully verified.</h3>
     `
-      )
-    );
-  } catch (err: any) {
-    res.send(
-      //codeql[js/xss-through-exception]
-      getHtml(
-        'Email verification error',
-        `
+        )
+      );
+    } catch (err: any) {
+      res.send(
+        //codeql[js/xss-through-exception]
+        getHtml(
+          'Email verification error',
+          `
       <h3>The email address couldn't be verified: ${err.message ?? 'unknown error'}</h3>
     `
-      )
-    );
-  }
-};
+        )
+      );
+    }
+  };
 
-export const resetPassword = (injector: Injector) => async (req: Request, res: Response) => {
-  try {
-    const { token, newPassword } = req.body;
-    if (token == null) {
-      throw new Error('Token is missing');
-    }
-    if (newPassword == null) {
-      throw new Error('New password is missing');
-    }
-    await injector.get(AccountsPassword).resetPassword(token, newPassword, req.infos);
-    res.send(
-      getHtml(
-        'Password successfully changed',
-        `
+export const resetPassword =
+  (accountsPasswordOrInjector: Injector | AccountsPassword) =>
+  async (req: Request, res: Response) => {
+    try {
+      const { token, newPassword } = req.body;
+      if (token == null) {
+        throw new Error('Token is missing');
+      }
+      if (newPassword == null) {
+        throw new Error('New password is missing');
+      }
+      const accountsPassword =
+        accountsPasswordOrInjector instanceof AccountsPassword
+          ? accountsPasswordOrInjector
+          : accountsPasswordOrInjector.get(AccountsPassword);
+      await accountsPassword.resetPassword(token, newPassword, req.infos);
+      res.send(
+        getHtml(
+          'Password successfully changed',
+          `
       <h3>The password has been successfully changed.</h3>
     `
-      )
-    );
-  } catch (err: any) {
-    //codeql[js/xss-through-exception]
-    res.send(
-      getHtml(
-        'Password reset error',
-        `
+        )
+      );
+    } catch (err: any) {
+      //codeql[js/xss-through-exception]
+      res.send(
+        getHtml(
+          'Password reset error',
+          `
       <h3>The password couldn't be changed: ${err.message ?? 'unknown error'}</h3>
     `
-      )
-    );
-  }
-};
+        )
+      );
+    }
+  };
 
 export const resetPasswordForm = (req: Request, res: Response): Response =>
   res.send(
