@@ -64,6 +64,39 @@ export const verifyEmail =
     }
   };
 
+export const somethingElse =
+  (accountsPasswordOrInjector: Injector | AccountsPassword) =>
+  async (req: Request, res: Response) => {
+    try {
+      const { token } = req.params;
+      if (token == null) {
+        throw new Error('Token is missing');
+      }
+      const accountsPassword =
+        accountsPasswordOrInjector instanceof AccountsPassword
+          ? accountsPasswordOrInjector
+          : accountsPasswordOrInjector.get(AccountsPassword);
+      await accountsPassword.verifyEmail(token);
+      res.send(
+        getHtml(
+          'Email successfully verified',
+          `
+      <h3>The email address has been successfully verified.</h3>
+    `
+        )
+      );
+    } catch (err: any) {
+      res.send(
+        getHtml(
+          'Email verification error',
+          `
+      <h3>The email address couldn't be verified: ${err.message ?? 'unknown error'}</h3>
+    `
+        )
+      );
+    }
+  };
+
 export const resetPassword =
   (accountsPasswordOrInjector: Injector | AccountsPassword) =>
   async (req: Request, res: Response) => {
@@ -110,6 +143,25 @@ export const resetPasswordForm = (req: Request, res: Response): Response =>
     <h1>Reset your password</h1>
     <form action="/resetPassword" method="POST">
       <input type="hidden" name="token" value=${validator.escape(req.params.token)} />
+      <div class="form-group">
+        <label for="newPassword">New password</label>
+        <input type="text" class="form-control" id="newPassword" value="" placeholder="Enter your new password" name="newPassword">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  `
+    )
+  );
+
+export const anotherReset = (req: Request, res: Response): Response =>
+  res.send(
+    getHtml(
+      'Reset password',
+      `
+    <div class="container">
+    <h1>Reset your password</h1>
+    <form action="/resetPassword" method="POST">
+      <input type="hidden" name="token" value=${req.params.token} />
       <div class="form-group">
         <label for="newPassword">New password</label>
         <input type="text" class="form-control" id="newPassword" value="" placeholder="Enter your new password" name="newPassword">
