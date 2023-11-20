@@ -1,7 +1,16 @@
 import { type Injector } from 'graphql-modules';
 import type { Request, Response, NextFunction } from 'express';
-import validator from 'validator';
 import AccountsPassword from '../accounts-password';
+import { body, matchedData, param, validationResult } from 'express-validator';
+
+function matchOrThrow<T extends Record<string, any> = Record<string, any>>(
+  ...args: Parameters<typeof matchedData>
+): T {
+  if (!validationResult(args[0]).isEmpty()) {
+    throw new Error('Validation error');
+  }
+  return matchedData(...args) as T;
+}
 
 function getHtml(title: string, body: string) {
   return `
@@ -30,14 +39,11 @@ export const infosMiddleware = (req: Request, _res: Response, next: NextFunction
   next();
 };
 
-export const verifyEmail =
-  (accountsPasswordOrInjector: Injector | AccountsPassword) =>
+export const verifyEmail = (accountsPasswordOrInjector: Injector | AccountsPassword) => [
+  param('token').isString().notEmpty(),
   async (req: Request, res: Response) => {
     try {
-      const { token } = req.params;
-      if (token == null) {
-        throw new Error('Token is missing');
-      }
+      const { token } = matchOrThrow<{ token: string }>(req);
       const accountsPassword =
         accountsPasswordOrInjector instanceof AccountsPassword
           ? accountsPasswordOrInjector
@@ -47,8 +53,8 @@ export const verifyEmail =
         getHtml(
           'Email successfully verified',
           `
-      <h3>The email address has been successfully verified.</h3>
-    `
+    <h3>The email address has been successfully verified.</h3>
+  `
         )
       );
     } catch (err: any) {
@@ -57,24 +63,20 @@ export const verifyEmail =
         getHtml(
           'Email verification error',
           `
-      <h3>The email address couldn't be verified: ${err.message ?? 'unknown error'}</h3>
-    `
+    <h3>The email address couldn't be verified: ${err.message ?? 'unknown error'}</h3>
+  `
         )
       );
     }
-  };
+  },
+];
 
-export const resetPassword =
-  (accountsPasswordOrInjector: Injector | AccountsPassword) =>
+export const resetPassword = (accountsPasswordOrInjector: Injector | AccountsPassword) => [
+  body('token').isString().notEmpty(),
+  body('newPassword').isString().notEmpty(),
   async (req: Request, res: Response) => {
     try {
-      const { token, newPassword } = req.body;
-      if (token == null) {
-        throw new Error('Token is missing');
-      }
-      if (newPassword == null) {
-        throw new Error('New password is missing');
-      }
+      const { token, newPassword } = matchOrThrow<{ token: string; newPassword: string }>(req);
       const accountsPassword =
         accountsPasswordOrInjector instanceof AccountsPassword
           ? accountsPasswordOrInjector
@@ -84,8 +86,44 @@ export const resetPassword =
         getHtml(
           'Password successfully changed',
           `
-      <h3>The password has been successfully changed.</h3>
-    `
+    <h3>The password has been successfully changed.</h3>
+  `
+        )
+      );
+    } catch (err: any) {
+      //codeql[js/xss-through-exception]
+      res.send(
+        getHtml(
+          'Password reset error',
+          `
+    <h3>The password couldn't be changed: ${err.message ?? 'unknown error'}</h3>
+  `
+        )
+      );
+    }
+  },
+];
+
+export const resetPasswordForm = [
+  param('token').isString().notEmpty().escape(),
+  (req: Request, res: Response) => {
+    try {
+      const { token } = matchOrThrow<{ token: string }>(req);
+      res.send(
+        getHtml(
+          'Reset password',
+          `
+          <div class="container">
+          <h1>Reset your password</h1>
+          <form action="/resetPassword" method="POST">
+            <input type="hidden" name="token" value=${token} />
+            <div class="form-group">
+              <label for="newPassword">New password</label>
+              <input type="text" class="form-control" id="newPassword" value="" placeholder="Enter your new password" name="newPassword">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        `
         )
       );
     } catch (err: any) {
@@ -99,23 +137,5 @@ export const resetPassword =
         )
       );
     }
-  };
-
-export const resetPasswordForm = (req: Request, res: Response): Response =>
-  res.send(
-    getHtml(
-      'Reset password',
-      `
-    <div class="container">
-    <h1>Reset your password</h1>
-    <form action="/resetPassword" method="POST">
-      <input type="hidden" name="token" value=${validator.escape(req.params.token)} />
-      <div class="form-group">
-        <label for="newPassword">New password</label>
-        <input type="text" class="form-control" id="newPassword" value="" placeholder="Enter your new password" name="newPassword">
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-  `
-    )
-  );
+  },
+];

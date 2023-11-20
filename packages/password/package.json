@@ -24,8 +24,8 @@
   "dependencies": {
     "@accounts/two-factor": "^0.32.4",
     "bcryptjs": "2.4.3",
-    "tslib": "2.6.2",
-    "validator": "^13.11.0"
+    "express-validator": "^7.0.1",
+    "tslib": "2.6.2"
   },
   "devDependencies": {
     "@accounts/server": "^0.33.1",
@@ -33,7 +33,6 @@
     "@types/bcryptjs": "2.4.6",
     "@types/express": "^4.17.21",
     "@types/lodash.set": "4.3.9",
-    "@types/validator": "^13",
     "graphql": "16.8.1",
     "graphql-modules": "3.0.0-alpha-20231106133212-0b04b56e",
     "lodash.set": "4.3.2",

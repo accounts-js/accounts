@@ -538,14 +538,13 @@ __metadata:
     "@types/bcryptjs": "npm:2.4.6"
     "@types/express": "npm:^4.17.21"
     "@types/lodash.set": "npm:4.3.9"
-    "@types/validator": "npm:^13"
     bcryptjs: "npm:2.4.3"
+    express-validator: "npm:^7.0.1"
     graphql: "npm:16.8.1"
     graphql-modules: "npm:3.0.0-alpha-20231106133212-0b04b56e"
     lodash.set: "npm:4.3.2"
     reflect-metadata: "npm:0.1.13"
     tslib: "npm:2.6.2"
-    validator: "npm:^13.11.0"
   peerDependencies:
     "@accounts/server": ^0.32.0 || ^0.33.0
     graphql: ^16.0.0
@@ -8539,13 +8538,6 @@ __metadata:
   version: 2.0.10
   resolution: "@types/unist@npm:2.0.10"
   checksum: 5f247dc2229944355209ad5c8e83cfe29419fa7f0a6d557421b1985a1500444719cc9efcc42c652b55aab63c931813c88033e0202c1ac684bcd4829d66e44731
-  languageName: node
-  linkType: hard
-
-"@types/validator@npm:^13":
-  version: 13.11.6
-  resolution: "@types/validator@npm:13.11.6"
-  checksum: 3201902a8e5d4784d1c67f5a5a796d1500bae10fe5413ed75fdbdf5d6b5572952445f3482ffe64908531b20171d4c5cfe94934de3fd401781bb6cf9f95766b02
   languageName: node
   linkType: hard
 
@@ -28921,7 +28913,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"validator@npm:^13.11.0, validator@npm:^13.9.0":
+"validator@npm:^13.9.0":
   version: 13.11.0
   resolution: "validator@npm:13.11.0"
   checksum: 0107da3add5a4ebc6391dac103c55f6d8ed055bbcc29a4c9cbf89eacfc39ba102a5618c470bdc33c6487d30847771a892134a8c791f06ef0962dd4b7a60ae0f5
