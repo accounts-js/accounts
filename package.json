@@ -79,6 +79,12 @@
   "resolutions": {
     "@types/express-serve-static-core": "4.17.38"
   },
+  "jest": {
+    "projects": [
+      "<rootDir>/packages/*",
+      "<rootDir>/modules/*"
+    ]
+  },
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/accounts-js",
