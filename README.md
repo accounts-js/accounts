@@ -57,6 +57,10 @@ The `@accounts` suite of packages aims to provide all the tools you need to buil
 
 Any contribution is very welcome, read our [contributing guide](CONTRIBUTING.md) to see how to locally setup the repository and see our development process.
 
+If you have any question you can also join our Discord server: https://discord.gg/nYSyrWPPdu
+
+[![Discord](https://github.com/darkbasic/accounts/assets/1047358/683b86e4-4553-4d5b-a338-089be4936f2e)](https://discord.gg/nYSyrWPPdu)
+
 ## Sponsors
 
 - Contribute via [Open Collective](https://opencollective.com/accounts-js)
