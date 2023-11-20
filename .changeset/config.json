@@ -7,6 +7,7 @@
   "baseBranch": "master",
   "updateInternalDependencies": "patch",
   "ignore": [
+    "accounts-js",
     "@accounts/e2e",
     "@examples/accounts-microservice",
     "@examples/graphql-mikro-orm-typescript",
