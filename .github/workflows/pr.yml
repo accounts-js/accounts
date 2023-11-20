@@ -30,5 +30,8 @@ jobs:
 
   dependencies:
     uses: darkbasic/shared-config/.github/workflows/changesets-dependencies.yaml@main
+    if: ${{ github.event.pull_request.title != 'Upcoming Release Changes' }}
+    with:
+      appId: ${{ vars.APP_ID }}
     secrets:
-      githubToken: ${{ secrets.GITHUB_TOKEN }}
+      privateKey: ${{ secrets.APP_PRIVATE_KEY }}
