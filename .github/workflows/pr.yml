@@ -5,12 +5,25 @@ on:
       - master
 
 jobs:
-  release:
+  alpha:
     uses: darkbasic/shared-config/.github/workflows/release-snapshot.yml@main
+    if: ${{ github.event.pull_request.title != 'Upcoming Release Changes' }}
     with:
       npmTag: alpha
       buildScript: compile
       nodeVersion: 18
+    secrets:
+      githubToken: ${{ secrets.GITHUB_TOKEN }}
+      npmToken: ${{ secrets.NPM_TOKEN }}
+
+  rc:
+    uses: darkbasic/shared-config/.github/workflows/release-snapshot.yml@main
+    if: ${{ github.event.pull_request.title == 'Upcoming Release Changes' }}
+    with:
+      npmTag: rc
+      buildScript: compile
+      nodeVersion: 18
+      restoreDeletedChangesets: true
     secrets:
       githubToken: ${{ secrets.GITHUB_TOKEN }}
       npmToken: ${{ secrets.NPM_TOKEN }}
