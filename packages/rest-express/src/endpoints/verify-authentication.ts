@@ -1,13 +1,16 @@
 import * as express from 'express';
 import { type AccountsServer } from '@accounts/server';
 import { sendError } from '../utils/send-error';
+import { param } from 'express-validator';
+import { matchOrThrow } from '../utils/matchOrTrow';
 
-export const serviceVerifyAuthentication =
-  (accountsServer: AccountsServer) => async (req: express.Request, res: express.Response) => {
+export const serviceVerifyAuthentication = (accountsServer: AccountsServer) => [
+  param('service').isString().notEmpty(),
+  async (req: express.Request, res: express.Response) => {
     try {
-      const serviceName = req.params.service;
+      const { service } = matchOrThrow<{ service: string }>(req);
       const isAuthenticated = await accountsServer.authenticateWithService(
-        serviceName,
+        service,
         req.body,
         req.infos
       );
@@ -15,4 +18,5 @@ export const serviceVerifyAuthentication =
     } catch (err) {
       sendError(res, err);
     }
-  };
+  },
+];

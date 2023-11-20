@@ -2,23 +2,28 @@ import * as express from 'express';
 import { AccountsJsError, type AccountsServer } from '@accounts/server';
 import { type AccountsPassword, SendVerificationEmailErrors } from '@accounts/password';
 import { sendError } from '../../utils/send-error';
+import { body } from 'express-validator';
+import { matchOrThrow } from '../../utils/matchOrTrow';
 
-export const verifyEmail =
-  (accountsServer: AccountsServer) => async (req: express.Request, res: express.Response) => {
+export const verifyEmail = (accountsServer: AccountsServer) => [
+  body('token').isString().notEmpty(),
+  async (req: express.Request, res: express.Response) => {
     try {
-      const { token } = req.body;
+      const { token } = matchOrThrow<{ token: string }>(req);
       const accountsPassword = accountsServer.getServices().password as AccountsPassword;
       await accountsPassword.verifyEmail(token);
       res.json(null);
     } catch (err) {
       sendError(res, err);
     }
-  };
+  },
+];
 
-export const sendVerificationEmail =
-  (accountsServer: AccountsServer) => async (req: express.Request, res: express.Response) => {
+export const sendVerificationEmail = (accountsServer: AccountsServer) => [
+  body('email').isEmail(),
+  async (req: express.Request, res: express.Response) => {
     try {
-      const { email } = req.body;
+      const { email } = matchOrThrow<{ email: string }>(req);
       const accountsPassword = accountsServer.getServices().password as AccountsPassword;
       try {
         await accountsPassword.sendVerificationEmail(email);
@@ -38,4 +43,5 @@ export const sendVerificationEmail =
     } catch (err) {
       sendError(res, err);
     }
-  };
+  },
+];

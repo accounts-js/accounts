@@ -1,9 +1,16 @@
-import { serviceAuthenticate } from '../../src/endpoints/service-authenticate';
+import 'reflect-metadata';
+import request from 'supertest';
+import accountsExpress from '../../src/express-middleware';
+import express from 'express';
 
-const res: any = {
-  json: jest.fn(),
-  status: jest.fn(() => res),
-};
+function getApp(accountsServer: any, path?: string) {
+  const router = accountsExpress(accountsServer as any, { path: path ?? '' });
+  const expressApp = express();
+  expressApp.use(express.json());
+  expressApp.use(express.urlencoded({ extended: true }));
+  expressApp.use(router);
+  return expressApp;
+}
 
 describe('serviceAuthenticate', () => {
   beforeEach(() => {
@@ -15,55 +22,28 @@ describe('serviceAuthenticate', () => {
       id: '1',
     };
     const accountsServer = {
+      getServices: () => jest.fn(),
       loginWithService: jest.fn(() => user),
     };
-    const middleware = serviceAuthenticate(accountsServer as any);
+    const response = await request(getApp(accountsServer)).post('/sms/authenticate');
 
-    const req = {
-      params: {
-        service: 'sms',
-      },
-      headers: {},
-      infos: {
-        ip: 'ipTest',
-        userAgent: 'userAgentTest',
-      },
-    };
-    const reqCopy = { ...req };
-
-    await middleware(req as any, res);
-
-    expect(req).toEqual(reqCopy);
-    expect(accountsServer.loginWithService).toHaveBeenCalledWith('sms', undefined, req.infos);
-    expect(res.json).toHaveBeenCalledWith(user);
-    expect(res.status).not.toHaveBeenCalled();
+    expect(response.status).toEqual(200);
+    expect(response.body).toEqual(user);
+    expect(accountsServer.loginWithService).toHaveBeenCalledWith('sms', {}, expect.anything());
   });
 
   it('Sends error if it was thrown on loginWithService', async () => {
     const error = { message: 'Could not login' };
     const accountsServer = {
+      getServices: () => jest.fn(),
       loginWithService: jest.fn(() => {
         throw error;
       }),
     };
-    const middleware = serviceAuthenticate(accountsServer as any);
-    const req = {
-      params: {
-        service: 'sms',
-      },
-      headers: {},
-      infos: {
-        ip: 'ipTest',
-        userAgent: 'userAgentTest',
-      },
-    };
-    const reqCopy = { ...req };
+    const response = await request(getApp(accountsServer)).post('/sms/authenticate');
 
-    await middleware(req as any, res);
-
-    expect(req).toEqual(reqCopy);
-    expect(accountsServer.loginWithService).toHaveBeenCalledWith('sms', undefined, req.infos);
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith(error);
+    expect(response.status).toEqual(400);
+    expect(response.body).toEqual(error);
+    expect(accountsServer.loginWithService).toHaveBeenCalledWith('sms', {}, expect.anything());
   });
 });

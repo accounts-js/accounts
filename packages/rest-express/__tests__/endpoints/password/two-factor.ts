@@ -1,13 +1,16 @@
-import {
-  twoFactorSecret,
-  twoFactorSet,
-  twoFactorUnset,
-} from '../../../src/endpoints/password/two-factor';
+import 'reflect-metadata';
+import request from 'supertest';
+import accountsExpress from '../../../src/express-middleware';
+import express from 'express';
 
-const res: any = {
-  json: jest.fn(),
-  status: jest.fn(() => res),
-};
+function getApp(accountsServer: any, path?: string) {
+  const router = accountsExpress(accountsServer as any, { path: path ?? '' });
+  const expressApp = express();
+  expressApp.use(express.json());
+  expressApp.use(express.urlencoded({ extended: true }));
+  expressApp.use(router);
+  return expressApp;
+}
 
 describe('twoFactor', () => {
   beforeEach(() => {
@@ -26,20 +29,11 @@ describe('twoFactor', () => {
           password: passwordService,
         }),
       };
-      const middleware = twoFactorSecret(accountsServer as any);
+      const response = await request(getApp(accountsServer)).post('/password/twoFactorSecret');
 
-      const req = {
-        body: {},
-        headers: {},
-      };
-      const reqCopy = { ...req };
-
-      await middleware(req as any, res);
-
-      expect(req).toEqual(reqCopy);
+      expect(response.status).toEqual(200);
+      expect(response.body).toEqual({ secret: 'secret' });
       expect(accountsServer.getServices().password.twoFactor.getNewAuthSecret).toHaveBeenCalled();
-      expect(res.json).toHaveBeenCalledWith({ secret: 'secret' });
-      expect(res.status).not.toHaveBeenCalled();
     });
 
     it('Sends error if it was thrown on twoFactorSecret', async () => {
@@ -56,21 +50,16 @@ describe('twoFactor', () => {
           password: passwordService,
         }),
       };
-      const middleware = twoFactorSecret(accountsServer as any);
-      const req = {
-        body: {
-          token: 'token',
-        },
-        headers: {},
+      const body = {
+        token: 'token',
       };
-      const reqCopy = { ...req };
+      const response = await request(getApp(accountsServer))
+        .post('/password/twoFactorSecret')
+        .send(body);
 
-      await middleware(req as any, res);
-
-      expect(req).toEqual(reqCopy);
+      expect(response.status).toEqual(400);
+      expect(response.body).toEqual(error);
       expect(accountsServer.getServices().password.twoFactor.getNewAuthSecret).toHaveBeenCalled();
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith(error);
     });
   });
 
@@ -85,36 +74,42 @@ describe('twoFactor', () => {
         getServices: () => ({
           password: passwordService,
         }),
+        resumeSession: jest.fn(() => ({ id: 'userId' })),
       };
-      const middleware = twoFactorSet(accountsServer as any);
-
-      const req = {
-        userId: 'userId',
-        body: {
-          secret: 'secret',
-          code: 'code',
-        },
+      const body = {
+        accessToken: 'token',
+        secret: { base32: 'secret' },
+        code: 'code',
       };
-      const reqCopy = { ...req };
+      const response = await request(getApp(accountsServer))
+        .post('/password/twoFactorSet')
+        .send(body);
 
-      await middleware(req as any, res);
-
-      expect(req).toEqual(reqCopy);
+      expect(response.status).toEqual(200);
+      expect(response.body).toEqual({});
       expect(accountsServer.getServices().password.twoFactor.set).toHaveBeenCalledWith(
         'userId',
-        'secret',
+        { base32: 'secret' },
         'code'
       );
-      expect(res.json).toHaveBeenCalled();
-      expect(res.status).not.toHaveBeenCalled();
     });
 
     it('Sends error if no userId', async () => {
-      const middleware = twoFactorSet(null as any);
-      await middleware({} as any, res);
+      const passwordService = {
+        twoFactor: {
+          set: jest.fn(() => null),
+        },
+      };
+      const accountsServer = {
+        getServices: () => ({
+          password: passwordService,
+        }),
+        resumeSession: jest.fn(() => undefined),
+      };
+      const response = await request(getApp(accountsServer)).post('/password/twoFactorSet');
 
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalled();
+      expect(response.status).toEqual(401);
+      expect(response.body).toEqual({ message: 'Unauthorized' });
     });
 
     it('Sends error if it was thrown on twoFactorSecret', async () => {
@@ -130,27 +125,24 @@ describe('twoFactor', () => {
         getServices: () => ({
           password: passwordService,
         }),
+        resumeSession: jest.fn(() => ({ id: 'userId' })),
       };
-      const middleware = twoFactorSet(accountsServer as any);
-      const req = {
-        userId: 'userId',
-        body: {
-          secret: 'secret',
-          code: 'code',
-        },
+      const body = {
+        accessToken: 'token',
+        secret: { base32: 'secret' },
+        code: 'code',
       };
-      const reqCopy = { ...req };
+      const response = await request(getApp(accountsServer))
+        .post('/password/twoFactorSet')
+        .send(body);
 
-      await middleware(req as any, res);
-
-      expect(req).toEqual(reqCopy);
+      expect(response.status).toEqual(400);
+      expect(response.body).toEqual(error);
       expect(accountsServer.getServices().password.twoFactor.set).toHaveBeenCalledWith(
         'userId',
-        'secret',
+        { base32: 'secret' },
         'code'
       );
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith(error);
     });
   });
 
@@ -165,34 +157,45 @@ describe('twoFactor', () => {
         getServices: () => ({
           password: passwordService,
         }),
+        resumeSession: jest.fn(() => ({ id: 'userId' })),
       };
-      const middleware = twoFactorUnset(accountsServer as any);
-
-      const req = {
-        userId: 'userId',
-        body: {
-          code: 'code',
-        },
+      const body = {
+        accessToken: 'token',
+        code: 'code',
       };
-      const reqCopy = { ...req };
+      const response = await request(getApp(accountsServer))
+        .post('/password/twoFactorUnset')
+        .send(body);
 
-      await middleware(req as any, res);
-
-      expect(req).toEqual(reqCopy);
+      expect(response.status).toEqual(200);
+      expect(response.body).toEqual({});
       expect(accountsServer.getServices().password.twoFactor.unset).toHaveBeenCalledWith(
         'userId',
         'code'
       );
-      expect(res.json).toHaveBeenCalled();
-      expect(res.status).not.toHaveBeenCalled();
     });
 
     it('Sends error if no userId', async () => {
-      const middleware = twoFactorUnset(null as any);
-      await middleware({} as any, res);
+      const passwordService = {
+        twoFactor: {
+          unset: jest.fn(() => null),
+        },
+      };
+      const accountsServer = {
+        getServices: () => ({
+          password: passwordService,
+        }),
+        resumeSession: jest.fn(() => undefined),
+      };
+      const body = {
+        accessToken: 'token',
+      };
+      const response = await request(getApp(accountsServer))
+        .post('/password/twoFactorUnset')
+        .send(body);
 
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalled();
+      expect(response.status).toEqual(401);
+      expect(response.body).toEqual({ message: 'Unauthorized' });
     });
 
     it('Sends error if it was thrown on twoFactorSecret', async () => {
@@ -208,25 +211,22 @@ describe('twoFactor', () => {
         getServices: () => ({
           password: passwordService,
         }),
+        resumeSession: jest.fn(() => ({ id: 'userId' })),
       };
-      const middleware = twoFactorUnset(accountsServer as any);
-      const req = {
-        userId: 'userId',
-        body: {
-          code: 'code',
-        },
+      const body = {
+        accessToken: 'token',
+        code: 'code',
       };
-      const reqCopy = { ...req };
+      const response = await request(getApp(accountsServer))
+        .post('/password/twoFactorUnset')
+        .send(body);
 
-      await middleware(req as any, res);
-
-      expect(req).toEqual(reqCopy);
+      expect(response.status).toEqual(400);
+      expect(response.body).toEqual(error);
       expect(accountsServer.getServices().password.twoFactor.unset).toHaveBeenCalledWith(
         'userId',
         'code'
       );
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith(error);
     });
   });
 });

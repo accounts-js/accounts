@@ -1,12 +1,18 @@
 import 'reflect-metadata';
-import { registerPassword } from '../../../src/endpoints/password/register';
 import { LoginResult } from '@accounts/types';
 import { AccountsJsError } from '@accounts/server';
+import request from 'supertest';
+import accountsExpress from '../../../src/express-middleware';
+import express from 'express';
 
-const res: any = {
-  json: jest.fn(),
-  status: jest.fn(() => res),
-};
+function getApp(accountsServer: any, path?: string) {
+  const router = accountsExpress(accountsServer as any, { path: path ?? '' });
+  const expressApp = express();
+  expressApp.use(express.json());
+  expressApp.use(express.urlencoded({ extended: true }));
+  expressApp.use(router);
+  return expressApp;
+}
 
 describe('registerPassword', () => {
   beforeEach(() => {
@@ -25,27 +31,20 @@ describe('registerPassword', () => {
         password: passwordService,
       }),
     };
-    const middleware = registerPassword(accountsServer as any);
-
-    const req = {
-      body: {
-        user: {
-          username: 'toto',
-        },
-        extraFieldThatShouldNotBePassed: 'hey',
+    const body = {
+      user: {
+        username: 'toto',
+        password: 'password',
       },
-      headers: {},
     };
-    const reqCopy = { ...req };
+    const response = await request(getApp(accountsServer)).post('/password/register').send(body);
 
-    await middleware(req as any, res);
-
-    expect(req).toEqual(reqCopy);
+    expect(response.status).toEqual(200);
+    expect(response.body).toEqual({ userId });
     expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
       username: 'toto',
+      password: 'password',
     });
-    expect(res.json).toHaveBeenCalledWith({ userId: '1' });
-    expect(res.status).not.toHaveBeenCalled();
   });
 
   it('calls password.createUser and obfuscate user id if server have both ambiguousErrorMessages and requireEmailVerification', async () => {
@@ -60,27 +59,20 @@ describe('registerPassword', () => {
         password: passwordService,
       }),
     };
-    const middleware = registerPassword(accountsServer as any);
-
-    const req = {
-      body: {
-        user: {
-          username: 'toto',
-        },
-        extraFieldThatShouldNotBePassed: 'hey',
+    const body = {
+      user: {
+        username: 'toto',
+        password: 'password',
       },
-      headers: {},
     };
-    const reqCopy = { ...req };
+    const response = await request(getApp(accountsServer)).post('/password/register').send(body);
 
-    await middleware(req as any, res);
-
-    expect(req).toEqual(reqCopy);
+    expect(response.status).toEqual(200);
+    expect(response.body).toEqual({});
     expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
       username: 'toto',
+      password: 'password',
     });
-    expect(res.json).toHaveBeenCalledWith({});
-    expect(res.status).not.toHaveBeenCalled();
   });
 
   it('calls password.createUser and not obfuscate user id if server have ambiguousErrorMessages but not requireEmailVerification', async () => {
@@ -95,27 +87,20 @@ describe('registerPassword', () => {
         password: passwordService,
       }),
     };
-    const middleware = registerPassword(accountsServer as any);
-
-    const req = {
-      body: {
-        user: {
-          username: 'toto',
-        },
-        extraFieldThatShouldNotBePassed: 'hey',
+    const body = {
+      user: {
+        username: 'toto',
+        password: 'password',
       },
-      headers: {},
     };
-    const reqCopy = { ...req };
+    const response = await request(getApp(accountsServer)).post('/password/register').send(body);
 
-    await middleware(req as any, res);
-
-    expect(req).toEqual(reqCopy);
+    expect(response.status).toEqual(200);
+    expect(response.body).toEqual({ userId });
     expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
       username: 'toto',
+      password: 'password',
     });
-    expect(res.json).toHaveBeenCalledWith({ userId });
-    expect(res.status).not.toHaveBeenCalled();
   });
 
   it('calls password.createUser and obfuscate EmailAlreadyExists error if server have ambiguousErrorMessages', async () => {
@@ -131,27 +116,20 @@ describe('registerPassword', () => {
         password: passwordService,
       }),
     };
-    const middleware = registerPassword(accountsServer as any);
-
-    const req = {
-      body: {
-        user: {
-          username: 'toto',
-        },
-        extraFieldThatShouldNotBePassed: 'hey',
+    const body = {
+      user: {
+        username: 'toto',
+        password: 'password',
       },
-      headers: {},
     };
-    const reqCopy = { ...req };
+    const response = await request(getApp(accountsServer)).post('/password/register').send(body);
 
-    await middleware(req as any, res);
-
-    expect(req).toEqual(reqCopy);
+    expect(response.status).toEqual(200);
+    expect(response.body).toEqual({});
     expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
       username: 'toto',
+      password: 'password',
     });
-    expect(res.json).toHaveBeenCalledWith({});
-    expect(res.status).not.toHaveBeenCalled();
   });
 
   it('calls password.createUser and obfuscate UsernameAlreadyExists error if server have ambiguousErrorMessages', async () => {
@@ -167,27 +145,20 @@ describe('registerPassword', () => {
         password: passwordService,
       }),
     };
-    const middleware = registerPassword(accountsServer as any);
-
-    const req = {
-      body: {
-        user: {
-          username: 'toto',
-        },
-        extraFieldThatShouldNotBePassed: 'hey',
+    const body = {
+      user: {
+        username: 'toto',
+        password: 'password',
       },
-      headers: {},
     };
-    const reqCopy = { ...req };
+    const response = await request(getApp(accountsServer)).post('/password/register').send(body);
 
-    await middleware(req as any, res);
-
-    expect(req).toEqual(reqCopy);
+    expect(response.status).toEqual(200);
+    expect(response.body).toEqual({});
     expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
       username: 'toto',
+      password: 'password',
     });
-    expect(res.json).toHaveBeenCalledWith({});
-    expect(res.status).not.toHaveBeenCalled();
   });
 
   it('should automatically login user after registration if enableAutologin flag is set to true', async () => {
@@ -224,29 +195,23 @@ describe('registerPassword', () => {
       findUserById: jest.fn(() => createdUser),
       loginWithUser: jest.fn(() => loginResult),
     };
-    const middleware = registerPassword(accountsServer as any);
-
-    const req = {
-      body: {
-        user: {
-          email: userEmail,
-        },
+    const body = {
+      user: {
+        email: userEmail,
+        password: 'password',
       },
-      headers: {},
     };
-    const reqCopy = { ...req };
+    const response = await request(getApp(accountsServer)).post('/password/register').send(body);
 
-    await middleware(req as any, res);
-
-    expect(req).toEqual(reqCopy);
-    expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
-      email: userEmail,
-    });
-    expect(res.json).toHaveBeenCalledWith({
+    expect(response.status).toEqual(200);
+    expect(response.body).toEqual({
       userId,
       loginResult,
     });
-    expect(res.status).not.toHaveBeenCalled();
+    expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
+      email: userEmail,
+      password: 'password',
+    });
   });
 
   it('Sends error if it was thrown on loginWithService', async () => {
@@ -263,25 +228,19 @@ describe('registerPassword', () => {
         password: passwordService,
       }),
     };
-    const middleware = registerPassword(accountsServer as any);
-    const req = {
-      body: {
-        user: {
-          username: 'toto',
-        },
-        extraFieldThatShouldNotBePassed: 'hey',
+    const body = {
+      user: {
+        username: 'toto',
+        password: 'password',
       },
-      headers: {},
     };
-    const reqCopy = { ...req };
+    const response = await request(getApp(accountsServer)).post('/password/register').send(body);
 
-    await middleware(req as any, res);
-
-    expect(req).toEqual(reqCopy);
+    expect(response.status).toEqual(400);
+    expect(response.body).toEqual(error);
     expect(accountsServer.getServices().password.createUser).toHaveBeenCalledWith({
       username: 'toto',
+      password: 'password',
     });
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith(error);
   });
 });

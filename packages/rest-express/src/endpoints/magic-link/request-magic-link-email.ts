@@ -2,11 +2,14 @@ import * as express from 'express';
 import { AccountsJsError, type AccountsServer } from '@accounts/server';
 import { type AccountsMagicLink, RequestMagicLinkEmailErrors } from '@accounts/magic-link';
 import { sendError } from '../../utils/send-error';
+import { body } from 'express-validator';
+import { matchOrThrow } from '../../utils/matchOrTrow';
 
-export const requestMagicLinkEmail =
-  (accountsServer: AccountsServer) => async (req: express.Request, res: express.Response) => {
+export const requestMagicLinkEmail = (accountsServer: AccountsServer) => [
+  body('email').isEmail(),
+  async (req: express.Request, res: express.Response) => {
     try {
-      const { email } = req.body;
+      const { email } = matchOrThrow<{ email: string }>(req);
       const accountsMagicLink = accountsServer.getServices().magicLink as AccountsMagicLink;
       try {
         await accountsMagicLink.requestMagicLinkEmail(email);
@@ -26,4 +29,5 @@ export const requestMagicLinkEmail =
     } catch (err) {
       sendError(res, err);
     }
-  };
+  },
+];

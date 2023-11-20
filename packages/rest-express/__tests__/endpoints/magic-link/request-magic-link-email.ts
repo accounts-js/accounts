@@ -1,12 +1,18 @@
 import 'reflect-metadata';
 import { RequestMagicLinkEmailErrors } from '@accounts/magic-link';
 import { AccountsJsError } from '@accounts/server';
-import { requestMagicLinkEmail } from '../../../src/endpoints/magic-link/request-magic-link-email';
+import request from 'supertest';
+import accountsExpress from '../../../src/express-middleware';
+import express from 'express';
 
-const res: any = {
-  json: jest.fn(),
-  status: jest.fn(() => res),
-};
+function getApp(accountsServer: any, path?: string) {
+  const router = accountsExpress(accountsServer as any, { path: path ?? '' });
+  const expressApp = express();
+  expressApp.use(express.json());
+  expressApp.use(express.urlencoded({ extended: true }));
+  expressApp.use(router);
+  return expressApp;
+}
 
 describe('verifyEmail', () => {
   beforeEach(() => {
@@ -23,24 +29,18 @@ describe('verifyEmail', () => {
           magicLink: magicLinkService,
         }),
       };
-      const middleware = requestMagicLinkEmail(accountsServer as any);
-
-      const req = {
-        body: {
-          email: 'email',
-        },
-        headers: {},
+      const body = {
+        email: 'valid@email.com',
       };
-      const reqCopy = { ...req };
+      const response = await request(getApp(accountsServer))
+        .post('/magiclink/requestMagicLinkEmail')
+        .send(body);
 
-      await middleware(req as any, res);
-
-      expect(req).toEqual(reqCopy);
+      expect(response.status).toEqual(200);
+      expect(response.body).toEqual(null);
       expect(accountsServer.getServices().magicLink.requestMagicLinkEmail).toHaveBeenCalledWith(
-        'email'
+        'valid@email.com'
       );
-      expect(res.json).toHaveBeenCalledWith(null);
-      expect(res.status).not.toHaveBeenCalled();
     });
 
     it('Sends error if it was thrown on requestMagicLinkEmail', async () => {
@@ -56,23 +56,18 @@ describe('verifyEmail', () => {
           magicLink: magicLinkService,
         }),
       };
-      const middleware = requestMagicLinkEmail(accountsServer as any);
-      const req = {
-        body: {
-          email: 'email',
-        },
-        headers: {},
+      const body = {
+        email: 'valid@email.com',
       };
-      const reqCopy = { ...req };
+      const response = await request(getApp(accountsServer))
+        .post('/magiclink/requestMagicLinkEmail')
+        .send(body);
 
-      await middleware(req as any, res);
-
-      expect(req).toEqual(reqCopy);
+      expect(response.status).toEqual(400);
+      expect(response.body).toEqual(error);
       expect(accountsServer.getServices().magicLink.requestMagicLinkEmail).toHaveBeenCalledWith(
-        'email'
+        'valid@email.com'
       );
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith(error);
     });
 
     it('hide UserNotFound error when ambiguousErrorMessages is true', async () => {
@@ -90,23 +85,18 @@ describe('verifyEmail', () => {
           magicLink: magicLinkService,
         }),
       };
-      const middleware = requestMagicLinkEmail(accountsServer as any);
-      const req = {
-        body: {
-          email: 'email',
-        },
-        headers: {},
+      const body = {
+        email: 'valid@email.com',
       };
-      const reqCopy = { ...req };
+      const response = await request(getApp(accountsServer))
+        .post('/magiclink/requestMagicLinkEmail')
+        .send(body);
 
-      await middleware(req as any, res);
-
-      expect(req).toEqual(reqCopy);
+      expect(response.status).toEqual(200);
+      expect(response.body).toEqual(null);
       expect(accountsServer.getServices().magicLink.requestMagicLinkEmail).toHaveBeenCalledWith(
-        'email'
+        'valid@email.com'
       );
-      expect(res.json).toHaveBeenCalledWith(null);
-      expect(res.status).not.toHaveBeenCalled();
     });
   });
 });

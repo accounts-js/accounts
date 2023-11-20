@@ -1,9 +1,16 @@
-import { impersonate } from '../../src/endpoints/impersonate';
+import 'reflect-metadata';
+import request from 'supertest';
+import accountsExpress from '../../src/express-middleware';
+import express from 'express';
 
-const res: any = {
-  json: jest.fn(),
-  status: jest.fn(() => res),
-};
+function getApp(accountsServer: any, path?: string) {
+  const router = accountsExpress(accountsServer as any, { path: path ?? '' });
+  const expressApp = express();
+  expressApp.use(express.json());
+  expressApp.use(express.urlencoded({ extended: true }));
+  expressApp.use(router);
+  return expressApp;
+}
 
 describe('impersonate', () => {
   beforeEach(() => {
@@ -15,57 +22,44 @@ describe('impersonate', () => {
       id: '1',
     };
     const accountsServer = {
+      getServices: () => jest.fn(),
       impersonate: jest.fn(() => impersonateReturnType),
     };
-    const middleware = impersonate(accountsServer as any);
-
-    const req = {
-      body: {
-        impersonated: 'toto',
-        accessToken: 'token',
-      },
-      headers: {},
-      infos: {
-        ip: 'ipTest',
-        userAgent: 'userAgentTest',
-      },
+    const body = {
+      impersonated: { username: 'toto' },
+      accessToken: 'token',
     };
-    const reqCopy = { ...req };
+    const response = await request(getApp(accountsServer)).post('/impersonate').send(body);
 
-    await middleware(req as any, res);
-
-    expect(req).toEqual(reqCopy);
-    expect(accountsServer.impersonate).toHaveBeenCalledWith('token', 'toto', req.infos);
-    expect(res.json).toHaveBeenCalledWith(impersonateReturnType);
-    expect(res.status).not.toHaveBeenCalled();
+    expect(response.status).toEqual(200);
+    expect(response.body).toEqual(impersonateReturnType);
+    expect(accountsServer.impersonate).toHaveBeenCalledWith(
+      'token',
+      { username: 'toto' },
+      expect.anything()
+    );
   });
 
   it('Sends error if it was thrown on impersonate', async () => {
     const error = { message: 'Could not impersonate' };
     const accountsServer = {
+      getServices: () => jest.fn(),
       impersonate: jest.fn(() => {
         throw error;
       }),
     };
-    const middleware = impersonate(accountsServer as any);
-    const req = {
-      body: {
-        impersonated: 'toto',
-        accessToken: 'token',
-      },
-      headers: {},
-      infos: {
-        ip: 'ipTest',
-        userAgent: 'userAgentTest',
-      },
+    const body = {
+      impersonated: { username: 'toto' },
+      accessToken: 'token',
     };
-    const reqCopy = { ...req };
+    const response = await request(getApp(accountsServer)).post('/impersonate').send(body);
 
-    await middleware(req as any, res);
-
-    expect(req).toEqual(reqCopy);
-    expect(accountsServer.impersonate).toHaveBeenCalledWith('token', 'toto', req.infos);
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith(error);
+    expect(response.status).toEqual(400);
+    expect(response.body).toEqual(error);
+    expect(accountsServer.impersonate).toHaveBeenCalledWith(
+      'token',
+      { username: 'toto' },
+      expect.anything()
+    );
   });
 });

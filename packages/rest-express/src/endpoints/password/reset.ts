@@ -2,23 +2,29 @@ import * as express from 'express';
 import { AccountsJsError, type AccountsServer } from '@accounts/server';
 import { type AccountsPassword, SendResetPasswordEmailErrors } from '@accounts/password';
 import { sendError } from '../../utils/send-error';
+import { body } from 'express-validator';
+import { matchOrThrow } from '../../utils/matchOrTrow';
 
-export const resetPassword =
-  (accountsServer: AccountsServer) => async (req: express.Request, res: express.Response) => {
+export const resetPassword = (accountsServer: AccountsServer) => [
+  body('token').isString().notEmpty(),
+  body('newPassword').isString().notEmpty(),
+  async (req: express.Request, res: express.Response) => {
     try {
-      const { token, newPassword } = req.body;
+      const { token, newPassword } = matchOrThrow<{ token: string; newPassword: string }>(req);
       const accountsPassword = accountsServer.getServices().password as AccountsPassword;
       const loginResult = await accountsPassword.resetPassword(token, newPassword, req.infos);
       res.json(loginResult);
     } catch (err) {
       sendError(res, err);
     }
-  };
+  },
+];
 
-export const sendResetPasswordEmail =
-  (accountsServer: AccountsServer) => async (req: express.Request, res: express.Response) => {
+export const sendResetPasswordEmail = (accountsServer: AccountsServer) => [
+  body('email').isEmail(),
+  async (req: express.Request, res: express.Response) => {
     try {
-      const { email } = req.body;
+      const { email } = matchOrThrow<{ email: string }>(req);
       const accountsPassword = accountsServer.getServices().password as AccountsPassword;
 
       try {
@@ -39,4 +45,5 @@ export const sendResetPasswordEmail =
     } catch (err) {
       sendError(res, err);
     }
-  };
+  },
+];

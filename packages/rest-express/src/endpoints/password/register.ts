@@ -1,13 +1,18 @@
 import * as express from 'express';
 import { type AccountsServer, AccountsJsError } from '@accounts/server';
 import { type AccountsPassword, CreateUserErrors } from '@accounts/password';
-import { CreateUserResult } from '@accounts/types';
+import { CreateUserResult, CreateUserServicePassword } from '@accounts/types';
 import { sendError } from '../../utils/send-error';
+import { body } from 'express-validator';
+import { matchOrThrow } from '../../utils/matchOrTrow';
 
-export const registerPassword =
-  (accountsServer: AccountsServer) => async (req: express.Request, res: express.Response) => {
+export const registerPassword = (accountsServer: AccountsServer) => [
+  body('user.username').optional().isString().notEmpty(),
+  body('user.email').optional().isEmail(),
+  body('user.password').isString().notEmpty(),
+  async (req: express.Request, res: express.Response) => {
     try {
-      const { user } = req.body;
+      const { user } = matchOrThrow<{ user: CreateUserServicePassword }>(req);
       const accountsPassword = accountsServer.getServices().password as AccountsPassword;
 
       let userId: string;
@@ -54,4 +59,5 @@ export const registerPassword =
     } catch (err) {
       sendError(res, err);
     }
-  };
+  },
+];

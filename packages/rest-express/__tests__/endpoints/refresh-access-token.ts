@@ -1,9 +1,16 @@
-import { refreshAccessToken } from '../../src/endpoints/refresh-access-token';
+import 'reflect-metadata';
+import request from 'supertest';
+import accountsExpress from '../../src/express-middleware';
+import express from 'express';
 
-const res: any = {
-  json: jest.fn(),
-  status: jest.fn(() => res),
-};
+function getApp(accountsServer: any, path?: string) {
+  const router = accountsExpress(accountsServer as any, { path: path ?? '' });
+  const expressApp = express();
+  expressApp.use(express.json());
+  expressApp.use(express.urlencoded({ extended: true }));
+  expressApp.use(router);
+  return expressApp;
+}
 
 describe('refreshAccessToken', () => {
   beforeEach(() => {
@@ -17,57 +24,44 @@ describe('refreshAccessToken', () => {
       },
     };
     const accountsServer = {
+      getServices: () => jest.fn(),
       refreshTokens: jest.fn(() => session),
     };
-    const middleware = refreshAccessToken(accountsServer as any);
-
-    const req = {
-      headers: {},
-      body: {
-        accessToken: 'token',
-        refreshToken: 'refresh',
-      },
-      infos: {
-        ip: 'ipTest',
-        userAgent: 'userAgentTest',
-      },
+    const body = {
+      accessToken: 'token',
+      refreshToken: 'refresh',
     };
-    const reqCopy = { ...req };
+    const response = await request(getApp(accountsServer)).post('/refreshTokens').send(body);
 
-    await middleware(req as any, res);
-
-    expect(accountsServer.refreshTokens).toHaveBeenCalledWith('token', 'refresh', req.infos);
-    expect(req).toEqual(reqCopy);
-    expect(res.json).toHaveBeenCalledWith(session);
-    expect(res.status).not.toHaveBeenCalled();
+    expect(response.status).toEqual(200);
+    expect(response.body).toEqual(session);
+    expect(accountsServer.refreshTokens).toHaveBeenCalledWith(
+      'token',
+      'refresh',
+      expect.anything()
+    );
   });
 
   it('Sends error if it was thrown on refreshTokens', async () => {
     const error = { message: 'error' };
     const accountsServer = {
+      getServices: () => jest.fn(),
       refreshTokens: jest.fn(() => {
         throw error;
       }),
     };
-    const middleware = refreshAccessToken(accountsServer as any);
-    const req = {
-      headers: {},
-      body: {
-        accessToken: 'token',
-        refreshToken: 'refresh',
-      },
-      infos: {
-        ip: 'ipTest',
-        userAgent: 'userAgentTest',
-      },
+    const body = {
+      accessToken: 'token',
+      refreshToken: 'refresh',
     };
-    const reqCopy = { ...req };
+    const response = await request(getApp(accountsServer)).post('/refreshTokens').send(body);
 
-    await middleware(req as any, res);
-
-    expect(req).toEqual(reqCopy);
-    expect(accountsServer.refreshTokens).toHaveBeenCalledWith('token', 'refresh', req.infos);
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith(error);
+    expect(response.status).toEqual(400);
+    expect(response.body).toEqual(error);
+    expect(accountsServer.refreshTokens).toHaveBeenCalledWith(
+      'token',
+      'refresh',
+      expect.anything()
+    );
   });
 });

@@ -1,12 +1,18 @@
 import 'reflect-metadata';
 import { SendVerificationEmailErrors } from '@accounts/password';
 import { AccountsJsError } from '@accounts/server';
-import { verifyEmail, sendVerificationEmail } from '../../../src/endpoints/password/verify-email';
+import request from 'supertest';
+import accountsExpress from '../../../src/express-middleware';
+import express from 'express';
 
-const res: any = {
-  json: jest.fn(),
-  status: jest.fn(() => res),
-};
+function getApp(accountsServer: any, path?: string) {
+  const router = accountsExpress(accountsServer as any, { path: path ?? '' });
+  const expressApp = express();
+  expressApp.use(express.json());
+  expressApp.use(express.urlencoded({ extended: true }));
+  expressApp.use(router);
+  return expressApp;
+}
 
 describe('verifyEmail', () => {
   beforeEach(() => {
@@ -23,22 +29,16 @@ describe('verifyEmail', () => {
           password: passwordService,
         }),
       };
-      const middleware = verifyEmail(accountsServer as any);
-
-      const req = {
-        body: {
-          token: 'token',
-        },
-        headers: {},
+      const body = {
+        token: 'token',
       };
-      const reqCopy = { ...req };
+      const response = await request(getApp(accountsServer))
+        .post('/password/verifyEmail')
+        .send(body);
 
-      await middleware(req as any, res);
-
-      expect(req).toEqual(reqCopy);
+      expect(response.status).toEqual(200);
+      expect(response.body).toEqual(null);
       expect(accountsServer.getServices().password.verifyEmail).toHaveBeenCalledWith('token');
-      expect(res.json).toHaveBeenCalledWith(null);
-      expect(res.status).not.toHaveBeenCalled();
     });
 
     it('Sends error if it was thrown on verifyEmail', async () => {
@@ -53,21 +53,16 @@ describe('verifyEmail', () => {
           password: passwordService,
         }),
       };
-      const middleware = verifyEmail(accountsServer as any);
-      const req = {
-        body: {
-          token: 'token',
-        },
-        headers: {},
+      const body = {
+        token: 'token',
       };
-      const reqCopy = { ...req };
+      const response = await request(getApp(accountsServer))
+        .post('/password/verifyEmail')
+        .send(body);
 
-      await middleware(req as any, res);
-
-      expect(req).toEqual(reqCopy);
+      expect(response.status).toEqual(400);
+      expect(response.body).toEqual(error);
       expect(accountsServer.getServices().password.verifyEmail).toHaveBeenCalledWith('token');
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith(error);
     });
   });
 
@@ -81,24 +76,18 @@ describe('verifyEmail', () => {
           password: passwordService,
         }),
       };
-      const middleware = sendVerificationEmail(accountsServer as any);
-
-      const req = {
-        body: {
-          email: 'email',
-        },
-        headers: {},
+      const body = {
+        email: 'valid@email.com',
       };
-      const reqCopy = { ...req };
+      const response = await request(getApp(accountsServer))
+        .post('/password/sendVerificationEmail')
+        .send(body);
 
-      await middleware(req as any, res);
-
-      expect(req).toEqual(reqCopy);
+      expect(response.status).toEqual(200);
+      expect(response.body).toEqual(null);
       expect(accountsServer.getServices().password.sendVerificationEmail).toHaveBeenCalledWith(
-        'email'
+        'valid@email.com'
       );
-      expect(res.json).toHaveBeenCalledWith(null);
-      expect(res.status).not.toHaveBeenCalled();
     });
 
     it('Sends error if it was thrown on sendVerificationEmail', async () => {
@@ -114,23 +103,18 @@ describe('verifyEmail', () => {
           password: passwordService,
         }),
       };
-      const middleware = sendVerificationEmail(accountsServer as any);
-      const req = {
-        body: {
-          email: 'email',
-        },
-        headers: {},
+      const body = {
+        email: 'valid@email.com',
       };
-      const reqCopy = { ...req };
+      const response = await request(getApp(accountsServer))
+        .post('/password/sendVerificationEmail')
+        .send(body);
 
-      await middleware(req as any, res);
-
-      expect(req).toEqual(reqCopy);
+      expect(response.status).toEqual(400);
+      expect(response.body).toEqual(error);
       expect(accountsServer.getServices().password.sendVerificationEmail).toHaveBeenCalledWith(
-        'email'
+        'valid@email.com'
       );
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith(error);
     });
 
     it('hide UserNotFound error when ambiguousErrorMessages is true', async () => {
@@ -148,23 +132,18 @@ describe('verifyEmail', () => {
           password: passwordService,
         }),
       };
-      const middleware = sendVerificationEmail(accountsServer as any);
-      const req = {
-        body: {
-          email: 'email',
-        },
-        headers: {},
+      const body = {
+        email: 'valid@email.com',
       };
-      const reqCopy = { ...req };
+      const response = await request(getApp(accountsServer))
+        .post('/password/sendVerificationEmail')
+        .send(body);
 
-      await middleware(req as any, res);
-
-      expect(req).toEqual(reqCopy);
+      expect(response.status).toEqual(200);
+      expect(response.body).toEqual(null);
       expect(accountsServer.getServices().password.sendVerificationEmail).toHaveBeenCalledWith(
-        'email'
+        'valid@email.com'
       );
-      expect(res.json).toHaveBeenCalledWith(null);
-      expect(res.status).not.toHaveBeenCalled();
     });
   });
 });

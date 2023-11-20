@@ -1,9 +1,16 @@
-import { addEmail } from '../../../src/endpoints/password/add-email';
+import 'reflect-metadata';
+import request from 'supertest';
+import accountsExpress from '../../../src/express-middleware';
+import express from 'express';
 
-const res: any = {
-  json: jest.fn(),
-  status: jest.fn(() => res),
-};
+function getApp(accountsServer: any, path?: string) {
+  const router = accountsExpress(accountsServer as any, { path: path ?? '' });
+  const expressApp = express();
+  expressApp.use(express.json());
+  expressApp.use(express.urlencoded({ extended: true }));
+  expressApp.use(router);
+  return expressApp;
+}
 
 describe('addEmail', () => {
   beforeEach(() => {
@@ -19,34 +26,37 @@ describe('addEmail', () => {
         getServices: () => ({
           password: passwordService,
         }),
+        resumeSession: jest.fn(() => ({ id: 'userId' })),
       };
-      const middleware = addEmail(accountsServer as any);
 
-      const req = {
-        userId: 'userId',
-        body: {
-          newEmail: 'newEmail',
-        },
+      const body = {
+        accessToken: 'token',
+        newEmail: 'valid@newEmail.com',
       };
-      const reqCopy = { ...req };
+      const response = await request(getApp(accountsServer)).post('/password/addEmail').send(body);
 
-      await middleware(req as any, res);
-
-      expect(req).toEqual(reqCopy);
+      expect(response.status).toEqual(200);
+      expect(response.body).toEqual(null);
       expect(accountsServer.getServices().password.addEmail).toHaveBeenCalledWith(
         'userId',
-        'newEmail'
+        'valid@newEmail.com'
       );
-      expect(res.json).toHaveBeenCalled();
-      expect(res.status).not.toHaveBeenCalled();
     });
 
     it('Sends error if no userId', async () => {
-      const middleware = addEmail(null as any);
-      await middleware({} as any, res);
+      const passwordService = {
+        addEmail: jest.fn(() => null),
+      };
+      const accountsServer = {
+        getServices: () => ({
+          password: passwordService,
+        }),
+        resumeSession: jest.fn(() => undefined),
+      };
+      const response = await request(getApp(accountsServer)).post('/password/addEmail');
 
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalled();
+      expect(response.status).toEqual(401);
+      expect(response.body).toEqual({ message: 'Unauthorized' });
     });
 
     it('Sends error if it was thrown on addEmail', async () => {
@@ -60,25 +70,20 @@ describe('addEmail', () => {
         getServices: () => ({
           password: passwordService,
         }),
+        resumeSession: jest.fn(() => ({ id: 'userId' })),
       };
-      const middleware = addEmail(accountsServer as any);
-      const req = {
-        userId: 'userId',
-        body: {
-          newEmail: 'newEmail',
-        },
+      const body = {
+        accessToken: 'token',
+        newEmail: 'valid@newEmail.com',
       };
-      const reqCopy = { ...req };
+      const response = await request(getApp(accountsServer)).post('/password/addEmail').send(body);
 
-      await middleware(req as any, res);
-
-      expect(req).toEqual(reqCopy);
+      expect(response.status).toEqual(400);
+      expect(response.body).toEqual(error);
       expect(accountsServer.getServices().password.addEmail).toHaveBeenCalledWith(
         'userId',
-        'newEmail'
+        'valid@newEmail.com'
       );
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith(error);
     });
   });
 });
