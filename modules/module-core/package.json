@@ -33,18 +33,16 @@
   },
   "homepage": "https://github.com/js-accounts/accounts",
   "peerDependencies": {
-    "@accounts/server": "^0.32.0 || ^0.33.0",
-    "@accounts/types": "^0.32.0 || ^0.33.0",
-    "@graphql-tools/schema": "^10.0.0",
-    "graphql": "^16.0.0",
-    "graphql-modules": "^3.0.0",
-    "graphql-tag": "^2.10.0"
+    "@accounts/server": "^0.33.0",
+    "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0",
+    "graphql-modules": "^3.0.0"
   },
   "dependencies": {
-    "@graphql-tools/merge": "9.0.0",
-    "@graphql-tools/utils": "10.0.8",
-    "request-ip": "3.3.0",
-    "tslib": "2.6.2"
+    "@graphql-tools/merge": "9.0.1",
+    "@graphql-tools/schema": "10.0.2",
+    "@graphql-tools/utils": "10.0.10",
+    "graphql-tag": "2.12.6",
+    "request-ip": "3.3.0"
   },
   "devDependencies": {
     "@accounts/server": "^0.33.1",
@@ -56,11 +54,9 @@
     "@graphql-codegen/typescript-operations": "4.0.1",
     "@graphql-codegen/typescript-resolvers": "4.0.1",
     "@graphql-codegen/typescript-type-graphql": "3.0.0",
-    "@graphql-tools/schema": "10.0.0",
     "@types/request-ip": "0.0.41",
     "graphql": "16.8.1",
     "graphql-http": "1.22.0",
-    "graphql-modules": "3.0.0-alpha-20231106133212-0b04b56e",
-    "graphql-tag": "2.12.6"
+    "graphql-modules": "3.0.0-alpha-20231106133212-0b04b56e"
   }
 }

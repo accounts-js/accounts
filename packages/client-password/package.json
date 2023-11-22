@@ -32,9 +32,8 @@
   },
   "author": "Leo Pradel",
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "@accounts/client": "^0.33.1",
-    "@accounts/types": "^0.33.1",
-    "tslib": "2.6.2"
+    "@accounts/types": "^0.33.1"
   }
 }

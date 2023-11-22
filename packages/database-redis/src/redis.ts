@@ -1,5 +1,5 @@
 import { type Redis } from 'ioredis';
-import * as shortid from 'shortid';
+import { generate } from 'shortid';
 import {
   type Session,
   type DatabaseInterfaceSessions,
@@ -14,7 +14,7 @@ const defaultOptions = {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
   },
-  idProvider: () => shortid.generate(),
+  idProvider: () => generate(),
   dateProvider: (date?: Date) => (date ? date.getTime() : Date.now()),
 };
 

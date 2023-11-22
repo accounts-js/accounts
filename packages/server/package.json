@@ -44,19 +44,18 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "peerDependencies": {
-    "graphql": "^16.0.0",
+    "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0",
     "graphql-modules": "^3.0.0"
   },
   "dependencies": {
-    "@accounts/types": "^0.33.1",
-    "@types/jsonwebtoken": "9.0.5",
     "emittery": "0.13.1",
     "jsonwebtoken": "9.0.2",
     "jwt-decode": "3.1.2",
-    "lodash.merge": "4.6.2",
-    "tslib": "2.6.2"
+    "lodash.merge": "4.6.2"
   },
   "devDependencies": {
+    "@accounts/types": "^0.33.1",
+    "@types/jsonwebtoken": "9.0.5",
     "@types/lodash.merge": "4.6.9",
     "graphql": "16.8.1",
     "graphql-modules": "3.0.0-alpha-20231106133212-0b04b56e",

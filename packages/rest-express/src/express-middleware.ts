@@ -2,7 +2,7 @@ import { providerCallback } from './endpoints/oauth/provider-callback';
 import { resetPassword, sendResetPasswordEmail } from './endpoints/password/reset';
 import { verifyEmail, sendVerificationEmail } from './endpoints/password/verify-email';
 import * as express from 'express';
-import * as requestIp from 'request-ip';
+import { getClientIp } from 'request-ip';
 import { type AccountsServer } from '@accounts/server';
 import { refreshAccessToken } from './endpoints/refresh-access-token';
 import { getUser } from './endpoints/get-user';
@@ -42,7 +42,7 @@ const accountsExpress = (
    */
   router.use((req, _, next) => {
     const userAgent = getUserAgent(req);
-    const ip = requestIp.getClientIp(req)!;
+    const ip = getClientIp(req)!;
     req.infos = {
       userAgent,
       ip,

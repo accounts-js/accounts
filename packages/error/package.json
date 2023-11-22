@@ -42,8 +42,5 @@
     "oauth"
   ],
   "author": "Elies Lou (Aetherall)",
-  "license": "MIT",
-  "dependencies": {
-    "tslib": "2.6.2"
-  }
+  "license": "MIT"
 }

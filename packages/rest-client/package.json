@@ -41,16 +41,10 @@
   ],
   "author": "Tim Mikeladze",
   "license": "MIT",
-  "peerDependencies": {
-    "@accounts/client": "^0.32.0 || ^0.33.0"
-  },
-  "dependencies": {
-    "@accounts/types": "^0.33.1",
-    "@types/node-fetch": "2.6.9",
-    "tslib": "2.6.2"
-  },
   "devDependencies": {
     "@accounts/client": "^0.33.1",
+    "@accounts/types": "^0.33.1",
+    "@types/node-fetch": "2.6.9",
     "node-fetch": "2.7.0"
   }
 }

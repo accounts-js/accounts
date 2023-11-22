@@ -1,6 +1,6 @@
-import type * as express from 'express';
+import type { Request } from 'express';
 
-export const getUserAgent = (req: express.Request) => {
+export const getUserAgent = (req: Request) => {
   let userAgent: string = (req.headers['user-agent'] as string) || '';
   if (req.headers['x-ucbrowser-ua']) {
     // special case of UC Browser

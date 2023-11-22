@@ -1,4 +1,4 @@
-import * as oauth from 'oauth';
+import { OAuth } from 'oauth';
 
 import { type Configuration } from './types/configuration';
 import { type OAuthProvider, type OAuthUser } from '@accounts/oauth';
@@ -11,7 +11,7 @@ export class AccountsOAuthTwitter implements OAuthProvider {
 
   constructor(config: Configuration) {
     this.config = config;
-    this.oauth = new oauth.OAuth(
+    this.oauth = new OAuth(
       'https://twitter.com/oauth/request_token',
       'https://twitter.com/oauth/access_token',
       this.config.key,

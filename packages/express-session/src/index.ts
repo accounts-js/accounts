@@ -1,7 +1,7 @@
 import { type AccountsServer } from '@accounts/server';
 import { type Tokens, type User, type LoginResult } from '@accounts/types';
 import { type Request, type Response, type NextFunction } from 'express';
-import * as requestIp from 'request-ip';
+import { getClientIp } from 'request-ip';
 import { merge } from 'lodash';
 import 'express-session';
 import { getUserAgent } from './utils/get-user-agent';
@@ -92,7 +92,7 @@ export class AccountsSession {
       const result = await this.accountsServer.refreshTokens(
         tokens.accessToken,
         tokens.refreshToken,
-        { ip: requestIp.getClientIp(req), userAgent: getUserAgent(req) }
+        { ip: getClientIp(req), userAgent: getUserAgent(req) }
       );
 
       this.set(req, result.tokens);

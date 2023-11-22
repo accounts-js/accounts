@@ -24,15 +24,12 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@apollo/client": "^3.0.0"
-  },
-  "dependencies": {
-    "tslib": "2.6.2"
+    "@apollo/client": "^3.0.0",
+    "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0"
   },
   "devDependencies": {
     "@accounts/client": "^0.33.1",
     "@apollo/client": "3.8.7",
-    "graphql": "16.8.1",
-    "rimraf": "5.0.5"
+    "graphql": "16.8.1"
   }
 }

@@ -1,12 +1,12 @@
 import 'reflect-metadata';
-import * as mongodb from 'mongodb';
+import { type Db, MongoClient, ObjectId } from 'mongodb';
 import { runDatabaseTests } from '@accounts/database-tests';
 import { Mongo } from '../src';
 
 export class DatabaseTests {
   public database!: Mongo;
-  public db!: mongodb.Db;
-  public client!: mongodb.MongoClient;
+  public db!: Db;
+  public client!: MongoClient;
   private options: any;
 
   constructor(options?: any) {
@@ -28,7 +28,7 @@ export class DatabaseTests {
 
   public createConnection = async () => {
     const url = 'mongodb://localhost:27017';
-    this.client = await mongodb.MongoClient.connect(url);
+    this.client = await MongoClient.connect(url);
     this.db = this.client.db('accounts-mongo-tests');
     this.database = new Mongo(this.db, this.options);
   };
@@ -45,8 +45,8 @@ export class DatabaseTests {
 runDatabaseTests(
   new DatabaseTests({
     convertUserIdToMongoObjectId: false,
-    idProvider: () => new mongodb.ObjectId().toString(),
+    idProvider: () => new ObjectId().toString(),
     convertSessionIdToMongoObjectId: false,
-    idSessionProvider: () => new mongodb.ObjectId().toString(),
+    idSessionProvider: () => new ObjectId().toString(),
   })
 );

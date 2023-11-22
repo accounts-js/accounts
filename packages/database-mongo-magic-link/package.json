@@ -33,12 +33,9 @@
   "peerDependencies": {
     "mongodb": "^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0"
   },
-  "dependencies": {
-    "@accounts/types": "^0.33.1",
-    "tslib": "2.6.2"
-  },
   "devDependencies": {
     "@accounts/mongo-password": "^0.33.0",
+    "@accounts/types": "^0.33.1",
     "mongodb": "6.3.0"
   }
 }

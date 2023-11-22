@@ -22,11 +22,10 @@
     "preset": "ts-jest"
   },
   "dependencies": {
-    "@accounts/oauth": "^0.32.2",
-    "oauth": "^0.10.0",
-    "tslib": "2.6.2"
+    "oauth": "^0.10.0"
   },
   "devDependencies": {
+    "@accounts/oauth": "^0.32.2",
     "@types/oauth": "0.9.4"
   }
 }

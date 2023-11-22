@@ -42,12 +42,5 @@
     "oauth"
   ],
   "author": "Elies Lou (Aetherall)",
-  "license": "MIT",
-  "dependencies": {
-    "tslib": "2.6.2"
-  },
-  "devDependencies": {
-    "graphql": "16.8.1",
-    "graphql-modules": "3.0.0-alpha-20231106133212-0b04b56e"
-  }
+  "license": "MIT"
 }

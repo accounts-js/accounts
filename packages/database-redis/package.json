@@ -32,14 +32,13 @@
   "author": "Leo Pradel",
   "license": "MIT",
   "dependencies": {
-    "@accounts/types": "^0.33.1",
-    "ioredis": "5.3.2",
-    "shortid": "2.2.16",
-    "tslib": "2.6.2"
+    "shortid": "2.2.16"
   },
   "devDependencies": {
     "@accounts/database-tests": "^0.32.2",
+    "@accounts/types": "^0.33.1",
     "@types/ioredis": "5.0.0",
-    "@types/shortid": "0.0.32"
+    "@types/shortid": "0.0.32",
+    "ioredis": "5.3.2"
   }
 }
