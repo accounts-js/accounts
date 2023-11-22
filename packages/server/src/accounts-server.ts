@@ -13,6 +13,7 @@ import {
   ConnectionInformations,
   DatabaseInterfaceUser,
   DatabaseInterfaceSessions,
+  AuthenticationService,
 } from '@accounts/types';
 
 import { generateAccessToken, generateRefreshToken, generateRandomToken } from './utils/tokens';
@@ -81,7 +82,10 @@ export class AccountsServer<CustomUser extends User = User> {
 
   constructor(
     @Inject(AccountsCoreConfigToken) options: AccountsServerOptions<CustomUser>,
-    @Inject(AuthenticationServicesToken) public services: AuthenticationServices<CustomUser>,
+    @Inject(AuthenticationServicesToken)
+    public services:
+      | AuthenticationServices<CustomUser>
+      | Record<string, new (args: any) => AuthenticationService<CustomUser>>,
     @Inject(DatabaseInterfaceUserToken)
     private db: DatabaseInterface<CustomUser> | DatabaseInterfaceUser<CustomUser>,
     @Inject(DatabaseInterfaceSessionsToken) dbSessions?: DatabaseInterfaceSessions
@@ -129,7 +133,16 @@ Please change it with a strong random token.`);
   }
 
   public getServices(): AuthenticationServices<CustomUser> {
-    return this.services;
+    return Object.entries(this.services).reduce<AuthenticationServices<CustomUser>>(
+      (acc, [name, instanceOrCtor]) => {
+        acc[name] =
+          typeof instanceOrCtor === 'function'
+            ? this.context.injector.get(instanceOrCtor)
+            : instanceOrCtor;
+        return acc;
+      },
+      {}
+    );
   }
 
   public getOptions(): AccountsServerOptions<CustomUser> {
