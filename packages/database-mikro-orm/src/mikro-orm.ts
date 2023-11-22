@@ -274,8 +274,13 @@ export class AccountsMikroOrm<
   }
 
   public async removeEmail(userId: string, email: string): Promise<void> {
-    const deleted = this.em.remove({ address: email.toLocaleLowerCase() });
-    if (!deleted) {
+    try {
+      this.em.remove(
+        await this.emailRepository.findOneOrFail({
+          address: email.toLocaleLowerCase(),
+        })
+      );
+    } catch {
       throw new Error('Email not found');
     }
     return this.em.flush();
