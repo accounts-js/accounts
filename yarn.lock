@@ -412,12 +412,14 @@ __metadata:
     "@types/bcryptjs": "npm:2.4.6"
     "@types/express": "npm:^4.17.21"
     "@types/lodash.set": "npm:4.3.9"
+    "@types/request-ip": "npm:0.0.41"
     bcryptjs: "npm:2.4.3"
     express-validator: "npm:^7.0.1"
     graphql: "npm:16.8.1"
     graphql-modules: "npm:3.0.0-alpha-20231106133212-0b04b56e"
     lodash.set: "npm:4.3.2"
     reflect-metadata: "npm:0.1.13"
+    request-ip: "npm:3.3.0"
   peerDependencies:
     "@accounts/server": ^0.33.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0

@@ -2,6 +2,7 @@ import { type Injector } from 'graphql-modules';
 import type { Request, Response, NextFunction } from 'express';
 import AccountsPassword from '../accounts-password';
 import { body, matchedData, param, validationResult } from 'express-validator';
+import { getClientIp } from 'request-ip';
 
 function matchOrThrow<T extends Record<string, any> = Record<string, any>>(
   ...args: Parameters<typeof matchedData>
@@ -11,6 +12,15 @@ function matchOrThrow<T extends Record<string, any> = Record<string, any>>(
   }
   return matchedData(...args) as T;
 }
+
+const getUserAgent = (req: Request) => {
+  let userAgent: string = (req.headers['user-agent'] as string) || '';
+  if (req.headers['x-ucbrowser-ua']) {
+    // special case of UC Browser
+    userAgent = req.headers['x-ucbrowser-ua'] as string;
+  }
+  return userAgent;
+};
 
 function getHtml(title: string, body: string) {
   return `
@@ -30,11 +40,9 @@ function getHtml(title: string, body: string) {
 }
 
 export const infosMiddleware = (req: Request, _res: Response, next: NextFunction) => {
-  const userAgent = 'userAgent';
-  const ip = 'ip';
   req.infos = {
-    userAgent,
-    ip,
+    userAgent: getUserAgent(req),
+    ip: getClientIp(req) ?? req.ip,
   };
   next();
 };
