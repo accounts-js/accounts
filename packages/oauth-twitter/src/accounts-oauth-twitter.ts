@@ -1,7 +1,7 @@
 import * as oauth from 'oauth';
 
-import { Configuration } from './types/configuration';
-import { OAuthProvider, OAuthUser } from '@accounts/oauth';
+import { type Configuration } from './types/configuration';
+import { type OAuthProvider, type OAuthUser } from '@accounts/oauth';
 
 export class AccountsOAuthTwitter implements OAuthProvider {
   private config: Configuration;

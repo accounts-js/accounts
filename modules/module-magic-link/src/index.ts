@@ -1,6 +1,6 @@
 import {
   AccountsMagicLink,
-  AccountsMagicLinkOptions,
+  type AccountsMagicLinkOptions,
   AccountsMagicLinkConfigToken,
 } from '@accounts/magic-link';
 import { createModule } from 'graphql-modules';

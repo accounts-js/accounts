@@ -1,4 +1,4 @@
-import * as express from 'express';
+import type * as express from 'express';
 import { type AccountsServer } from '@accounts/server';
 import { type AccountsPassword } from '@accounts/password';
 import { sendError } from '../../utils/send-error';

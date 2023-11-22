@@ -1,4 +1,4 @@
-import { TokenStorage } from '.';
+import { type TokenStorage } from '.';
 
 export interface AccountsClientOptions {
   /**

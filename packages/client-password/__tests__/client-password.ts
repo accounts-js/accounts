@@ -1,5 +1,5 @@
 import { AccountsClientPassword } from '../src/client-password';
-import { LoginResult, CreateUserResult } from '@accounts/types';
+import { type LoginResult, type CreateUserResult } from '@accounts/types';
 
 const mockCreateUserResult: CreateUserResult = {
   userId: '123',

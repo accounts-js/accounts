@@ -1,6 +1,6 @@
 import { authenticated } from './authenticated-resolver';
 import { getDirective, MapperKind, mapSchema } from '@graphql-tools/utils';
-import { defaultFieldResolver, GraphQLSchema } from 'graphql';
+import { defaultFieldResolver, type GraphQLSchema } from 'graphql';
 
 export function authDirective(directiveName = 'auth') {
   const typeDirectiveArgumentMaps: Record<string, any> = {};

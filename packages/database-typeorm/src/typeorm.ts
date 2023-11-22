@@ -1,11 +1,15 @@
-import { ConnectionInformations, CreateUser, DatabaseInterface } from '@accounts/types';
-import { Repository, getRepository, Not, In, FindOperator, Connection } from 'typeorm';
+import {
+  type ConnectionInformations,
+  type CreateUser,
+  type DatabaseInterface,
+} from '@accounts/types';
+import { type Repository, getRepository, Not, In, type FindOperator, Connection } from 'typeorm';
 import { User } from './entity/User';
 import { UserEmail } from './entity/UserEmail';
 import { UserService } from './entity/UserService';
 import { UserSession } from './entity/UserSession';
 import {
-  AccountsTypeormOptions,
+  type AccountsTypeormOptions,
   AccountsTypeORMConfigToken,
   UserToken,
   UserEmailToken,
@@ -25,7 +29,7 @@ export class AccountsTypeorm implements DatabaseInterface {
 
   constructor(
     @Inject(AccountsTypeORMConfigToken) private options: AccountsTypeormOptions,
-    private connection?: Connection,
+    @Inject(Connection) private connection?: Connection,
     @Inject(UserToken) private UserEntity: typeof User = User,
     @Inject(UserEmailToken) private UserEmailEntity: typeof UserEmail = UserEmail,
     @Inject(UserServiceToken) private UserServiceEntity: typeof UserService = UserService,

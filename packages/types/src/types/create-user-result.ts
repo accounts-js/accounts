@@ -1,4 +1,4 @@
-import { LoginResult } from './login-result';
+import { type LoginResult } from './login-result';
 
 export interface CreateUserResult {
   /**

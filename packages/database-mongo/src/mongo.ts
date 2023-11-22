@@ -1,15 +1,15 @@
-import { Collection, Db, ObjectId, CreateIndexesOptions } from 'mongodb';
+import { type Collection, type Db, ObjectId, type CreateIndexesOptions } from 'mongodb';
 import {
-  ConnectionInformations,
-  CreateUserServicePassword,
-  DatabaseInterface,
-  User,
-  Session,
+  type ConnectionInformations,
+  type CreateUserServicePassword,
+  type DatabaseInterface,
+  type User,
+  type Session,
 } from '@accounts/types';
 import { MongoSessions } from '@accounts/mongo-sessions';
 import { MongoServicePassword } from '@accounts/mongo-password';
 import { MongoServiceMagicLink } from '@accounts/mongo-magic-link';
-import { AccountsMongoConfigToken, AccountsMongoOptions } from './types';
+import { AccountsMongoConfigToken, type AccountsMongoOptions } from './types';
 import { MongoConnectionToken } from './types/MongoConnection.symbol';
 import { Inject, Injectable } from 'graphql-modules';
 

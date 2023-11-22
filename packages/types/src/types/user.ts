@@ -1,4 +1,4 @@
-import { EmailRecord } from './email-record';
+import { type EmailRecord } from './email-record';
 
 export interface User {
   username?: string;

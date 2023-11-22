@@ -1,4 +1,4 @@
-import { AccountsClient } from '@accounts/client';
+import { type AccountsClient } from '@accounts/client';
 
 const headers: { [key: string]: string } = {
   'Content-Type': 'application/json',

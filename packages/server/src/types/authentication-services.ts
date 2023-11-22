@@ -1,4 +1,4 @@
-import { AuthenticationService, User } from '@accounts/types';
+import { type AuthenticationService, type User } from '@accounts/types';
 
 export interface AuthenticationServices<CustomUser extends User = User> {
   [key: string]:

@@ -1,13 +1,13 @@
-import { AccountsClient, TransportInterface } from '@accounts/client';
+import { type AccountsClient, type TransportInterface } from '@accounts/client';
 import {
-  CreateUser,
-  ImpersonationResult,
-  LoginResult,
-  User,
-  CreateUserResult,
+  type CreateUser,
+  type ImpersonationResult,
+  type LoginResult,
+  type User,
+  type CreateUserResult,
 } from '@accounts/types';
-import { print, DocumentNode } from 'graphql/language';
-import { TypedDocumentNode } from '@graphql-typed-document-node/core';
+import { print, type DocumentNode } from 'graphql/language';
+import { type TypedDocumentNode } from '@graphql-typed-document-node/core';
 import {
   CreateUserDocument,
   AddEmailDocument,

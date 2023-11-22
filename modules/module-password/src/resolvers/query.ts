@@ -1,5 +1,5 @@
 import { GraphQLError } from 'graphql';
-import { QueryResolvers } from '../models';
+import { type QueryResolvers } from '../models';
 import { AccountsPassword } from '@accounts/password';
 
 export const Query: QueryResolvers = {

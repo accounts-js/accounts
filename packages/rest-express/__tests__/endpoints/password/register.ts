@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { LoginResult } from '@accounts/types';
+import { type LoginResult } from '@accounts/types';
 import { AccountsJsError } from '@accounts/server';
 import request from 'supertest';
 import accountsExpress from '../../../src/express-middleware';

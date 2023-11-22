@@ -1,5 +1,5 @@
-import { ConnectionInformations } from './connection-informations';
-import { User } from './user';
+import { type ConnectionInformations } from './connection-informations';
+import { type User } from './user';
 
 export interface IContext<IUser extends User = User> {
   authToken?: string;

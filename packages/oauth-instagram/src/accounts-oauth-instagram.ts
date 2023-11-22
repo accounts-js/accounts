@@ -1,6 +1,6 @@
 import rp from 'request-promise';
-import { OAuthProvider, OAuthUser } from '@accounts/oauth';
-import { Configuration } from './types/configuration';
+import { type OAuthProvider, type OAuthUser } from '@accounts/oauth';
+import { type Configuration } from './types/configuration';
 
 export class AccountsOAuthInstagram implements OAuthProvider {
   public getRegistrationPayload?: (oauthUser: OAuthUser) => Promise<any>;

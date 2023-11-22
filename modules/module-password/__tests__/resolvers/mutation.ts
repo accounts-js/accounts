@@ -5,9 +5,9 @@ import {
   SendResetPasswordEmailErrors,
   SendVerificationEmailErrors,
 } from '@accounts/password';
-import { LoginResult } from '@accounts/types';
+import { type LoginResult } from '@accounts/types';
 import { Mutation } from '../../src/resolvers/mutation';
-import { CreateUserInput } from '../../src';
+import { type CreateUserInput } from '../../src';
 
 describe('accounts-password resolvers mutation', () => {
   const accountsServerMock = {

@@ -1,4 +1,4 @@
-import { OAuthUser } from './oauth-user';
+import { type OAuthUser } from './oauth-user';
 
 /**
  * Interface to use for all custom implementations of OAuth providers

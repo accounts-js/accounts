@@ -1,5 +1,9 @@
-import { Collection, Db, ObjectId, CreateIndexesOptions } from 'mongodb';
-import { ConnectionInformations, DatabaseInterfaceSessions, Session } from '@accounts/types';
+import { type Collection, type Db, type ObjectId, type CreateIndexesOptions } from 'mongodb';
+import {
+  type ConnectionInformations,
+  type DatabaseInterfaceSessions,
+  type Session,
+} from '@accounts/types';
 import { toMongoID } from './utils';
 
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;

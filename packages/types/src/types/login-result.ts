@@ -1,5 +1,5 @@
-import { Tokens } from './tokens';
-import { User } from './user';
+import { type Tokens } from './tokens';
+import { type User } from './user';
 
 export interface LoginResult {
   sessionId: string;

@@ -1,11 +1,11 @@
-import { TransportInterface, AccountsClient } from '@accounts/client';
+import { type TransportInterface, type AccountsClient } from '@accounts/client';
 import {
-  User,
-  LoginResult,
-  CreateUser,
-  ImpersonationUserIdentity,
-  ImpersonationResult,
-  CreateUserResult,
+  type User,
+  type LoginResult,
+  type CreateUser,
+  type ImpersonationUserIdentity,
+  type ImpersonationResult,
+  type CreateUserResult,
 } from '@accounts/types';
 import { AccountsJsError } from './accounts-error';
 

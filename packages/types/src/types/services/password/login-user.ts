@@ -1,4 +1,4 @@
-import { LoginUserIdentity } from '../../login-user-identity';
+import { type LoginUserIdentity } from '../../login-user-identity';
 
 export interface LoginUserPasswordService {
   user: string | LoginUserIdentity;

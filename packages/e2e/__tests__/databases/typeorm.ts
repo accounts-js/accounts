@@ -1,10 +1,10 @@
 import { AccountsTypeorm, entities } from '@accounts/typeorm';
-import { DatabaseInterface } from '@accounts/types';
-import { Connection, ConnectionManager, ConnectionOptions } from 'typeorm';
+import { type DatabaseInterface } from '@accounts/types';
+import { type Connection, ConnectionManager, type ConnectionOptions } from 'typeorm';
 import { createAccountsTypeORMModule } from '@accounts/module-typeorm';
 
-import { DatabaseTestInterface } from '.';
-import { Module } from 'graphql-modules';
+import { type DatabaseTestInterface } from '.';
+import { type Module } from 'graphql-modules';
 
 const connectionName = 'typeorm-accounts-js-test';
 const connectionConfig: ConnectionOptions = {

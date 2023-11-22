@@ -1,18 +1,23 @@
-import { createModule, gql, Provider, Scope } from 'graphql-modules';
+import { createModule, gql, type Provider, Scope } from 'graphql-modules';
 import { DatabaseInterfaceSessionsToken, DatabaseInterfaceUserToken } from '@accounts/server';
 import {
   AccountsMikroOrm,
-  Email,
-  Session,
-  Service,
+  type Email,
+  type Session,
+  type Service,
   EmailToken,
-  IUser,
+  type IUser,
   SessionToken,
   ServiceToken,
   UserToken,
 } from '@accounts/mikro-orm';
-import { Connection, Constructor, EntityManager, IDatabaseDriver } from '@mikro-orm/core';
-import { DatabaseType } from '@accounts/types';
+import {
+  type Connection,
+  type Constructor,
+  EntityManager,
+  type IDatabaseDriver,
+} from '@mikro-orm/core';
+import { type DatabaseType } from '@accounts/types';
 
 export * from './types';
 export * from './utils';

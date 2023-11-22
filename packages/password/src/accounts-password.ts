@@ -1,18 +1,22 @@
 import {
-  User,
-  LoginUserIdentity,
-  EmailRecord,
-  TokenRecord,
-  DatabaseInterface,
-  AuthenticationService,
-  ConnectionInformations,
-  LoginResult,
-  CreateUserServicePassword,
-  LoginUserPasswordService,
-  DatabaseInterfaceSessions,
-  DatabaseInterfaceUser,
+  type User,
+  type LoginUserIdentity,
+  type EmailRecord,
+  type TokenRecord,
+  type DatabaseInterface,
+  type AuthenticationService,
+  type ConnectionInformations,
+  type LoginResult,
+  type CreateUserServicePassword,
+  type LoginUserPasswordService,
+  type DatabaseInterfaceSessions,
+  type DatabaseInterfaceUser,
 } from '@accounts/types';
-import { TwoFactor, AccountsTwoFactorOptions, getUserTwoFactorService } from '@accounts/two-factor';
+import {
+  TwoFactor,
+  type AccountsTwoFactorOptions,
+  getUserTwoFactorService,
+} from '@accounts/two-factor';
 import {
   AccountsServer,
   ServerHooks,
@@ -28,7 +32,7 @@ import {
   verifyPassword,
   isEmail,
 } from './utils';
-import { AccountsPasswordConfigToken, ErrorMessages } from './types';
+import { AccountsPasswordConfigToken, type ErrorMessages } from './types';
 import {
   errors,
   AddEmailErrors,
@@ -202,7 +206,7 @@ export default class AccountsPassword<CustomUser extends User = User>
     @Inject(DatabaseInterfaceUserToken)
     db?: DatabaseInterface<CustomUser> | DatabaseInterfaceUser<CustomUser>,
     @Inject(DatabaseInterfaceSessionsToken) dbSessions?: DatabaseInterfaceSessions,
-    server?: AccountsServer
+    @Inject(AccountsServer) server?: AccountsServer
   ) {
     this.options = { ...defaultOptions, ...options } as typeof options & typeof defaultOptions;
     if (this.options.requireEmailVerification) {

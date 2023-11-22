@@ -1,10 +1,10 @@
 import {
-  User,
-  DatabaseInterface,
-  AuthenticationService,
-  LoginUserMagicLinkService,
-  TokenRecord,
-  DatabaseInterfaceUser,
+  type User,
+  type DatabaseInterface,
+  type AuthenticationService,
+  type LoginUserMagicLinkService,
+  type TokenRecord,
+  type DatabaseInterfaceUser,
 } from '@accounts/types';
 import {
   AccountsServer,
@@ -12,7 +12,7 @@ import {
   generateRandomToken,
   DatabaseInterfaceUserToken,
 } from '@accounts/server';
-import { AccountsMagicLinkConfigToken, ErrorMessages } from './types';
+import { AccountsMagicLinkConfigToken, type ErrorMessages } from './types';
 import { errors, AuthenticateErrors, MagicLinkAuthenticatorErrors } from './errors';
 import { isString } from './utils/validation';
 import { RequestMagicLinkEmailErrors } from './errors';
@@ -50,7 +50,7 @@ export default class AccountsMagicLink<CustomUser extends User = User>
 
   constructor(
     @Inject(AccountsMagicLinkConfigToken) options: AccountsMagicLinkOptions = {},
-    server?: AccountsServer,
+    @Inject(AccountsServer) server?: AccountsServer,
     @Inject(DatabaseInterfaceUserToken)
     db?: DatabaseInterface<CustomUser> | DatabaseInterfaceUser<CustomUser>
   ) {

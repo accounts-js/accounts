@@ -1,4 +1,4 @@
-import * as express from 'express';
+import type * as express from 'express';
 import { type AccountsServer } from '@accounts/server';
 import { body } from 'express-validator';
 import { matchOrThrow } from './utils/matchOrTrow';

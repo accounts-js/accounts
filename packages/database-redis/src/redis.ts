@@ -1,7 +1,11 @@
 import { type Redis } from 'ioredis';
 import * as shortid from 'shortid';
-import { Session, DatabaseInterfaceSessions, ConnectionInformations } from '@accounts/types';
-import { AccountsRedisOptions } from './types';
+import {
+  type Session,
+  type DatabaseInterfaceSessions,
+  type ConnectionInformations,
+} from '@accounts/types';
+import { type AccountsRedisOptions } from './types';
 
 const defaultOptions = {
   userCollectionName: 'users',

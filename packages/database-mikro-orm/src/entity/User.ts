@@ -1,7 +1,7 @@
 import { Collection, EntitySchema } from '@mikro-orm/core';
-import { Service, ServiceCtor, ServiceCtorArgs } from './Service';
-import { Email, EmailCtor, EmailCtorArgs } from './Email';
-import { Session, SessionCtor } from './Session';
+import { Service, type ServiceCtor, type ServiceCtorArgs } from './Service';
+import { Email, type EmailCtor, type EmailCtorArgs } from './Email';
+import { Session, type SessionCtor } from './Session';
 
 export interface IUser<
   CustomEmail extends Email<any>,

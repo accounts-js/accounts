@@ -1,16 +1,16 @@
 import {
-  User,
-  DatabaseInterface,
-  AuthenticationService,
-  DatabaseInterfaceUser,
+  type User,
+  type DatabaseInterface,
+  type AuthenticationService,
+  type DatabaseInterfaceUser,
 } from '@accounts/types';
 import {
   AccountsServer,
   /*DatabaseInterfaceSessionsToken,*/ DatabaseInterfaceUserToken,
   ServerHooks,
 } from '@accounts/server';
-import { OAuthProviders } from './types/oauth-providers';
-import { OAuthUser } from './types/oauth-user';
+import { type OAuthProviders } from './types/oauth-providers';
+import { type OAuthUser } from './types/oauth-user';
 import { ExecutionContext, Inject, Injectable } from 'graphql-modules';
 import { OAuthProvidersToken } from './types/OAuthProviders.symbol';
 
@@ -37,7 +37,7 @@ export class AccountsOauth<CustomUser extends User = User>
     @Inject(DatabaseInterfaceUserToken)
     db?: DatabaseInterface<CustomUser> | DatabaseInterfaceUser<CustomUser>,
     // @Inject(DatabaseInterfaceSessionsToken) dbSessions?: DatabaseInterfaceSessions,
-    server?: AccountsServer
+    @Inject(AccountsServer) server?: AccountsServer
   ) {
     if (db) {
       this.db = db;

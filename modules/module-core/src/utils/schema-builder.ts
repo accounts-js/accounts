@@ -1,9 +1,9 @@
-import { GraphQLSchema } from 'graphql';
-import { ApplicationConfig } from 'graphql-modules';
+import { type GraphQLSchema } from 'graphql';
+import { type ApplicationConfig } from 'graphql-modules';
 import { authDirective } from './authenticated-directive';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
-import { IResolvers, Maybe, TypeSource } from '@graphql-tools/utils';
+import { type IResolvers, type Maybe, type TypeSource } from '@graphql-tools/utils';
 
 export const buildSchema =
   <TSource, TContext>({

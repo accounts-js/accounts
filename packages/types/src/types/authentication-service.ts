@@ -1,6 +1,6 @@
-import { User } from './user';
-import { DatabaseInterfaceUser } from './user/database-interface';
-import { DatabaseInterfaceSessions } from './session/database-interface';
+import { type User } from './user';
+import { type DatabaseInterfaceUser } from './user/database-interface';
+import { type DatabaseInterfaceSessions } from './session/database-interface';
 
 // TODO : Fix circular dependency for better type checking
 // import AccountsServer from '@accounts/server';

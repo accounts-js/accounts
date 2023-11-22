@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import jwtDecode from 'jwt-decode';
 import { AccountsServer } from '../src/accounts-server';
-import { JwtData } from '../src/types/jwt-data';
+import { type JwtData } from '../src/types/jwt-data';
 import { ServerHooks } from '../src/utils/server-hooks';
 
 const delay = (timeout: number) => new Promise((resolve) => setTimeout(resolve, timeout));

@@ -1,4 +1,4 @@
-import * as express from 'express';
+import type * as express from 'express';
 
 export const getUserAgent = (req: express.Request) => {
   let userAgent: string = (req.headers['user-agent'] as string) || '';

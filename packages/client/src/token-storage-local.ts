@@ -1,4 +1,4 @@
-import { TokenStorage } from './types';
+import { type TokenStorage } from './types';
 
 export const tokenStorageLocal: TokenStorage = {
   setItem(key: string, value: string): void {

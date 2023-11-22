@@ -1,4 +1,4 @@
-import * as express from 'express';
+import type * as express from 'express';
 import { AccountsJsError, type AccountsServer } from '@accounts/server';
 import { type AccountsMagicLink, RequestMagicLinkEmailErrors } from '@accounts/magic-link';
 import { sendError } from '../../utils/send-error';

@@ -1,5 +1,5 @@
 import { randomBytes } from 'crypto';
-import { MongoClient, Db, ObjectId } from 'mongodb';
+import { MongoClient, type Db, ObjectId } from 'mongodb';
 import { MongoSessions } from '../src/mongo-sessions';
 
 const delay = (time: number) => new Promise((resolve) => setTimeout(resolve, time));

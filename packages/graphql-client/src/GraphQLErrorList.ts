@@ -1,4 +1,4 @@
-import { GraphQLError } from 'graphql/error/GraphQLError';
+import { type GraphQLError } from 'graphql/error/GraphQLError';
 
 export class GraphQLErrorList extends Error {
   public errors: readonly GraphQLError[];

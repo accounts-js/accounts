@@ -1,4 +1,4 @@
-import { ErrorMessages } from './error-messages';
+import { type ErrorMessages } from './error-messages';
 
 export interface AccountsTwoFactorOptions {
   /**

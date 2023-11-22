@@ -2,18 +2,18 @@ import merge from 'lodash.merge';
 import * as jwt from 'jsonwebtoken';
 import Emittery from 'emittery';
 import {
-  User,
-  LoginResult,
-  Tokens,
-  Session,
-  ImpersonationUserIdentity,
-  ImpersonationResult,
-  HookListener,
-  DatabaseInterface,
-  ConnectionInformations,
-  DatabaseInterfaceUser,
-  DatabaseInterfaceSessions,
-  AuthenticationService,
+  type User,
+  type LoginResult,
+  type Tokens,
+  type Session,
+  type ImpersonationUserIdentity,
+  type ImpersonationResult,
+  type HookListener,
+  type DatabaseInterface,
+  type ConnectionInformations,
+  type DatabaseInterfaceUser,
+  type DatabaseInterfaceSessions,
+  type AuthenticationService,
 } from '@accounts/types';
 
 import { generateAccessToken, generateRefreshToken, generateRandomToken } from './utils/tokens';
@@ -21,10 +21,10 @@ import { generateAccessToken, generateRefreshToken, generateRandomToken } from '
 import { emailTemplates, sendMail } from './utils/email';
 import { ServerHooks } from './utils/server-hooks';
 
-import { AccountsServerOptions } from './types/accounts-server-options';
-import { JwtData } from './types/jwt-data';
-import { EmailTemplateType } from './types/email-template-type';
-import { JwtPayload } from './types/jwt-payload';
+import { type AccountsServerOptions } from './types/accounts-server-options';
+import { type JwtData } from './types/jwt-data';
+import { type EmailTemplateType } from './types/email-template-type';
+import { type JwtPayload } from './types/jwt-payload';
 import { AccountsJsError } from './utils/accounts-error';
 import {
   AuthenticateWithServiceErrors,
@@ -39,7 +39,7 @@ import { isString } from './utils/validation';
 import { ExecutionContext, Inject, Injectable } from 'graphql-modules';
 import { AccountsCoreConfigToken } from './types/AccountsCoreConfig.symbol';
 import { AuthenticationServicesToken } from './types/AuthenticationServices.symbol';
-import { AuthenticationServices } from './types/authentication-services';
+import { type AuthenticationServices } from './types/authentication-services';
 import { DatabaseInterfaceUserToken } from './types/DatabaseInterfaceUser.symbol';
 import { DatabaseInterfaceSessionsToken } from './types/DatabaseInterfaceSessions.symbol';
 

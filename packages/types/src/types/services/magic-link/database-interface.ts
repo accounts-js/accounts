@@ -1,4 +1,4 @@
-import { User } from '../../user';
+import { type User } from '../../user';
 
 export interface DatabaseInterfaceServiceMagicLink<CustomUser extends User = User> {
   findUserByLoginToken(token: string): Promise<CustomUser | null>;

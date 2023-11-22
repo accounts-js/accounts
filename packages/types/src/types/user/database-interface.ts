@@ -1,6 +1,6 @@
-import { User } from '../user';
-import { DatabaseInterfaceServicePassword } from '../services/password/database-interface';
-import { DatabaseInterfaceServiceMagicLink } from '../services/magic-link/database-interface';
+import { type User } from '../user';
+import { type DatabaseInterfaceServicePassword } from '../services/password/database-interface';
+import { type DatabaseInterfaceServiceMagicLink } from '../services/magic-link/database-interface';
 
 export interface DatabaseInterfaceUser<CustomUser extends User = User>
   extends DatabaseInterfaceServicePassword<CustomUser>,

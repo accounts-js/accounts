@@ -1,5 +1,5 @@
 import { AccountsServer } from '@accounts/server';
-import { MutationResolvers } from '../models';
+import { type MutationResolvers } from '../models';
 
 export const Mutation: MutationResolvers = {
   authenticate: async (_, args, ctx) => {

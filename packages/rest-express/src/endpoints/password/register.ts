@@ -1,7 +1,7 @@
-import * as express from 'express';
+import type * as express from 'express';
 import { type AccountsServer, AccountsJsError } from '@accounts/server';
 import { type AccountsPassword, CreateUserErrors } from '@accounts/password';
-import { CreateUserResult, CreateUserServicePassword } from '@accounts/types';
+import { type CreateUserResult, type CreateUserServicePassword } from '@accounts/types';
 import { sendError } from '../../utils/send-error';
 import { body } from 'express-validator';
 import { matchOrThrow } from '../../utils/matchOrTrow';

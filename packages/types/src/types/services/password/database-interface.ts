@@ -1,5 +1,5 @@
-import { User } from '../../user';
-import { CreateUserServicePassword } from './create-user';
+import { type User } from '../../user';
+import { type CreateUserServicePassword } from './create-user';
 
 export interface DatabaseInterfaceServicePassword<CustomUser extends User = User> {
   createUser(user: CreateUserServicePassword): Promise<string>;

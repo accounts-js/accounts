@@ -1,4 +1,4 @@
-import { User } from '@accounts/types';
+import { type User } from '@accounts/types';
 
 export function getFirstUserEmail(user: User, address: string): string {
   // Pick the first email if we weren't passed an email

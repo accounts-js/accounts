@@ -1,4 +1,4 @@
-import { createModule, gql, Provider } from 'graphql-modules';
+import { createModule, gql, type Provider } from 'graphql-modules';
 import { DatabaseInterfaceSessionsToken, DatabaseInterfaceUserToken } from '@accounts/server';
 import {
   AccountsTypeorm,
@@ -10,10 +10,10 @@ import {
   UserEmail,
   UserSession,
   UserService,
-  AccountsTypeormOptions,
+  type AccountsTypeormOptions,
   AccountsTypeORMConfigToken,
 } from '@accounts/typeorm';
-import { DatabaseType } from '@accounts/types';
+import { type DatabaseType } from '@accounts/types';
 import { Connection } from 'typeorm';
 
 export interface AccountsTypeORMModuleConfig extends AccountsTypeormOptions {

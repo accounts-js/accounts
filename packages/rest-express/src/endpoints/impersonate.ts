@@ -1,6 +1,6 @@
-import * as express from 'express';
+import type * as express from 'express';
 import { type AccountsServer } from '@accounts/server';
-import { ImpersonationUserIdentity } from '@accounts/types';
+import { type ImpersonationUserIdentity } from '@accounts/types';
 import { sendError } from '../utils/send-error';
 import { body } from 'express-validator';
 import { matchOrThrow } from '../utils/matchOrTrow';

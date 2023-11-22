@@ -1,5 +1,5 @@
-import { AccountsClient } from '@accounts/client';
-import { LoginResult, LoginUserMagicLinkService } from '@accounts/types';
+import { type AccountsClient } from '@accounts/client';
+import { type LoginResult, type LoginUserMagicLinkService } from '@accounts/types';
 
 export class AccountsClientMagicLink {
   private client: AccountsClient;

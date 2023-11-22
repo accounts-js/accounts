@@ -15,7 +15,7 @@ import { twoFactorSecret, twoFactorSet, twoFactorUnset } from './endpoints/passw
 import { changePassword } from './endpoints/password/change-password';
 import { addEmail } from './endpoints/password/add-email';
 import { userLoader } from './user-loader';
-import { AccountsExpressOptions } from './types';
+import { type AccountsExpressOptions } from './types';
 import { getUserAgent } from './utils/get-user-agent';
 import { requestMagicLinkEmail } from './endpoints/magic-link/request-magic-link-email';
 

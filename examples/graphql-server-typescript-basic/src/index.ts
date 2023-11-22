@@ -14,7 +14,7 @@ import { createApplication } from 'graphql-modules';
 import { createAccountsMongoModule } from '@accounts/module-mongo';
 import { createHandler } from 'graphql-http/lib/use/http';
 import http from 'http';
-import { IContext } from '@accounts/types';
+import { type IContext } from '@accounts/types';
 
 void (async () => {
   // Create database connection

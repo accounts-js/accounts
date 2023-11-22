@@ -1,12 +1,12 @@
 import {
-  LoginResult,
-  ImpersonationUserIdentity,
-  ImpersonationResult,
-  CreateUser,
-  User,
-  CreateUserResult,
+  type LoginResult,
+  type ImpersonationUserIdentity,
+  type ImpersonationResult,
+  type CreateUser,
+  type User,
+  type CreateUserResult,
 } from '@accounts/types';
-import { AccountsClient } from './accounts-client';
+import { type AccountsClient } from './accounts-client';
 
 export interface TransportInterface {
   client: AccountsClient;

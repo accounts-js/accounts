@@ -1,5 +1,5 @@
 import { InjectionToken } from 'graphql-modules';
-import { AccountsTypeormOptions } from '.';
+import { type AccountsTypeormOptions } from '.';
 
 export const AccountsTypeORMConfigToken = new InjectionToken<AccountsTypeormOptions>(
   'AccountsTypeORMConfigToken'

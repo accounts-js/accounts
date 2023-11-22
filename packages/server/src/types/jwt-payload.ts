@@ -1,4 +1,4 @@
-import { JwtData } from './jwt-data';
+import { type JwtData } from './jwt-data';
 
 export interface JwtPayload {
   data: JwtData;

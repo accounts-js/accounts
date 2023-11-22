@@ -1,18 +1,22 @@
-import { ConnectionInformations, CreateUser, DatabaseInterface } from '@accounts/types';
-import { IUser, getUserCtor } from './entity/User';
+import {
+  type ConnectionInformations,
+  type CreateUser,
+  type DatabaseInterface,
+} from '@accounts/types';
+import { type IUser, getUserCtor } from './entity/User';
 import { Email } from './entity/Email';
 import { Service } from './entity/Service';
 import { Session } from './entity/Session';
 import { EmailToken, ServiceToken, SessionToken, UserToken } from './types';
 import {
-  Connection,
-  Constructor,
+  type Connection,
+  type Constructor,
   EntityManager,
-  IDatabaseDriver,
+  type IDatabaseDriver,
   RequestContext,
 } from '@mikro-orm/core';
-import { User as AccountsUser } from '@accounts/types/lib/types/user';
-import { Session as ISession } from '@accounts/types/lib/types/session/session';
+import { type User as AccountsUser } from '@accounts/types/lib/types/user';
+import { type Session as ISession } from '@accounts/types/lib/types/session/session';
 import { ExecutionContext, Inject, Injectable } from 'graphql-modules';
 import { get, set } from 'lodash';
 

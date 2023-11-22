@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import { mergeTypeDefs } from '@graphql-tools/merge';
 import { schemaFromExecutor } from '@graphql-tools/wrap';
 import { stitchSchemas } from '@graphql-tools/stitch';
-import { AsyncExecutor } from '@graphql-tools/utils';
+import { type AsyncExecutor } from '@graphql-tools/utils';
 import { OperationTypeNode, print } from 'graphql';
 import {
   authDirective,

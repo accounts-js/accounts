@@ -1,6 +1,11 @@
-import { LoginResult, Tokens, ImpersonationResult, User } from '@accounts/types';
-import { TransportInterface } from './transport-interface';
-import { TokenStorage, AccountsClientOptions } from './types';
+import {
+  type LoginResult,
+  type Tokens,
+  type ImpersonationResult,
+  type User,
+} from '@accounts/types';
+import { type TransportInterface } from './transport-interface';
+import { type TokenStorage, type AccountsClientOptions } from './types';
 import { tokenStorageLocal } from './token-storage-local';
 import { isTokenExpired } from './utils';
 

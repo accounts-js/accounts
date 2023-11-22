@@ -1,5 +1,5 @@
-import { DatabaseInterface } from '@accounts/types';
-import { Module } from 'graphql-modules';
+import { type DatabaseInterface } from '@accounts/types';
+import { type Module } from 'graphql-modules';
 
 export interface DatabaseTestInterface {
   databaseModule: Module;

@@ -1,6 +1,6 @@
 import { AccountsMagicLink, RequestMagicLinkEmailErrors } from '@accounts/magic-link';
 import { AccountsServer, AccountsJsError } from '@accounts/server';
-import { MutationResolvers } from '../models';
+import { type MutationResolvers } from '../models';
 
 export const Mutation: MutationResolvers = {
   requestMagicLinkEmail: async (_, { email }, ctx) => {

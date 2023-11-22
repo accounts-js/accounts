@@ -1,4 +1,4 @@
-import { Connection, createConnection } from 'typeorm';
+import { type Connection, createConnection } from 'typeorm';
 import { AccountsTypeorm, entities } from '../src';
 
 const user = {

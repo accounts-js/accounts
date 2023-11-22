@@ -1,4 +1,4 @@
-import { CreateUser } from '../../create-user';
+import { type CreateUser } from '../../create-user';
 
 export interface CreateUserServicePassword extends CreateUser {
   username?: string;

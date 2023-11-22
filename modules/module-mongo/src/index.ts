@@ -1,9 +1,9 @@
-import { createModule, gql, Module, Provider } from 'graphql-modules';
+import { createModule, gql, type Module, type Provider } from 'graphql-modules';
 import { DatabaseInterfaceSessionsToken, DatabaseInterfaceUserToken } from '@accounts/server';
 import { DatabaseType } from '@accounts/types';
 import {
   AccountsMongoConfigToken,
-  AccountsMongoOptions,
+  type AccountsMongoOptions,
   Mongo,
   MongoConnectionToken,
 } from '@accounts/mongo';

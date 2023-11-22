@@ -1,4 +1,4 @@
-import { MongoClient, Db, ObjectId } from 'mongodb';
+import { MongoClient, type Db, ObjectId } from 'mongodb';
 import { MongoServiceMagicLink } from '../src/';
 import { MongoServicePassword } from '@accounts/mongo-password';
 

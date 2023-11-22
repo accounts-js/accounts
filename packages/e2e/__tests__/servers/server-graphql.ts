@@ -2,18 +2,18 @@ import { AccountsClient } from '@accounts/client';
 import { AccountsClientPassword } from '@accounts/client-password';
 import { context, createAccountsCoreModule } from '@accounts/module-core';
 import { createAccountsPasswordModule } from '@accounts/module-password';
-import { Application, Module, createApplication } from 'graphql-modules';
+import { type Application, type Module, createApplication } from 'graphql-modules';
 import { AccountsGraphQLClient } from '@accounts/graphql-client';
 import { AccountsPassword } from '@accounts/password';
 import { AuthenticationServicesToken, DatabaseInterfaceUserToken } from '@accounts/server';
-import { DatabaseInterface, User } from '@accounts/types';
+import { type DatabaseInterface, type User } from '@accounts/types';
 import { ApolloClient, InMemoryCache } from '@apollo/client/core';
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import fetch from 'node-fetch';
 
-import { ServerTestInterface } from '.';
-import { DatabaseTestInterface } from '../databases';
+import { type ServerTestInterface } from '.';
+import { type DatabaseTestInterface } from '../databases';
 import { DatabaseTest } from '../databases/mongo';
 
 // Server

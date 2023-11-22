@@ -1,5 +1,5 @@
-import { Collection, Db, CreateIndexesOptions } from 'mongodb';
-import { DatabaseInterfaceServiceMagicLink, User } from '@accounts/types';
+import { type Collection, type Db, type CreateIndexesOptions } from 'mongodb';
+import { type DatabaseInterfaceServiceMagicLink, type User } from '@accounts/types';
 import { toMongoID } from './utils';
 
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;

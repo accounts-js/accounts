@@ -1,7 +1,7 @@
-import { GeneratedSecret, generateSecret, totp } from '@levminer/speakeasy';
-import { User, DatabaseInterfaceUser } from '@accounts/types';
+import { type GeneratedSecret, generateSecret, totp } from '@levminer/speakeasy';
+import { type User, type DatabaseInterfaceUser } from '@accounts/types';
 import { errors } from './errors';
-import { AccountsTwoFactorOptions } from './types';
+import { type AccountsTwoFactorOptions } from './types';
 import { getUserTwoFactorService } from './utils';
 
 const defaultOptions = {

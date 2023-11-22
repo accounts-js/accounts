@@ -1,5 +1,5 @@
 import { randomBytes } from 'crypto';
-import { Connection, createConnection } from 'typeorm';
+import { type Connection, createConnection } from 'typeorm';
 import { AccountsTypeorm, entities } from '../src';
 
 const generateRandomToken = (length = 43): string => randomBytes(length).toString('hex');

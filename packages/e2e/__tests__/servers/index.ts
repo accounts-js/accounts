@@ -1,6 +1,6 @@
-import { DatabaseInterface } from '@accounts/types';
-import { AccountsClient } from '@accounts/client';
-import { AccountsClientPassword } from '@accounts/client-password';
+import { type DatabaseInterface } from '@accounts/types';
+import { type AccountsClient } from '@accounts/client';
+import { type AccountsClientPassword } from '@accounts/client-password';
 import { ServerGraphqlTest } from './server-graphql';
 import { ServerRestTest } from './server-rest';
 

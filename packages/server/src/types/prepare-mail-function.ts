@@ -1,5 +1,5 @@
-import { User } from '@accounts/types';
-import { EmailTemplateType } from './email-template-type';
+import { type User } from '@accounts/types';
+import { type EmailTemplateType } from './email-template-type';
 
 export type PrepareMailFunction = (
   to: string,

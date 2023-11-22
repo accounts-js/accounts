@@ -1,11 +1,11 @@
 import AccountsServer from '@accounts/server';
-import { IncomingHttpHeaders, IncomingMessage } from 'http';
+import { type IncomingHttpHeaders, type IncomingMessage } from 'http';
 import { getClientIp } from 'request-ip';
-import { IContext, User } from '@accounts/types';
-import { Application } from 'graphql-modules';
-import { Request as RequestGraphqlHttp, RequestHeaders } from 'graphql-http';
-import { RequestContext } from 'graphql-http/lib/use/http';
-import http from 'http';
+import { type IContext, type User } from '@accounts/types';
+import { type Application } from 'graphql-modules';
+import { type Request as RequestGraphqlHttp, type RequestHeaders } from 'graphql-http';
+import { type RequestContext } from 'graphql-http/lib/use/http';
+import type http from 'http';
 
 export type AccountsContextOptions<Ctx extends object> = {
   createOperationController: Application['createOperationController'];

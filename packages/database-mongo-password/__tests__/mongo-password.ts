@@ -1,4 +1,4 @@
-import { MongoClient, Db, ObjectId } from 'mongodb';
+import { MongoClient, type Db, ObjectId } from 'mongodb';
 import { MongoServicePassword } from '../src/mongo-password';
 
 const delay = (time: number) => new Promise((resolve) => setTimeout(resolve, time));

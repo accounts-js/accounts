@@ -1,11 +1,11 @@
-import { AccountsClient } from '@accounts/client';
+import { type AccountsClient } from '@accounts/client';
 import {
-  LoginResult,
-  CreateUserServicePassword,
-  CreateUserResult,
-  LoginUserPasswordService,
+  type LoginResult,
+  type CreateUserServicePassword,
+  type CreateUserResult,
+  type LoginUserPasswordService,
 } from '@accounts/types';
-import { AccountsClientPasswordOptions } from './types';
+import { type AccountsClientPasswordOptions } from './types';
 
 export class AccountsClientPassword {
   private client: AccountsClient;

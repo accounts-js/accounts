@@ -1,5 +1,5 @@
-import * as express from 'express';
-import { LoginResult } from '@accounts/types';
+import type * as express from 'express';
+import { type LoginResult } from '@accounts/types';
 
 export type OAuthSuccessCallback = (
   req: express.Request,

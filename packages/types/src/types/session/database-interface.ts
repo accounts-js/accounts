@@ -1,5 +1,5 @@
-import { Session } from './session';
-import { ConnectionInformations } from '../connection-informations';
+import { type Session } from './session';
+import { type ConnectionInformations } from '../connection-informations';
 
 export interface DatabaseInterfaceSessions {
   findSessionById(sessionId: string): Promise<Session | null>;

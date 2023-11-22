@@ -1,13 +1,13 @@
 import 'reflect-metadata';
 import {
-  UserCtorArgs as AccountsUserCtorArgs,
-  Session,
-  Service,
-  UserCtor,
+  type UserCtorArgs as AccountsUserCtorArgs,
+  type Session,
+  type Service,
+  type UserCtor,
   getUserCtor,
 } from '@accounts/mikro-orm';
 import { Entity, Property } from '@mikro-orm/core';
-import { Email, EmailCtorArgs } from './email';
+import { Email, type EmailCtorArgs } from './email';
 
 type UserCtorArgs = AccountsUserCtorArgs & {
   firstName: string;

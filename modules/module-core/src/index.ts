@@ -1,9 +1,9 @@
-import { createModule, gql, Provider } from 'graphql-modules';
+import { createModule, gql, type Provider } from 'graphql-modules';
 import { mergeTypeDefs } from '@graphql-tools/merge';
-import { User, IContext } from '@accounts/types';
+import { type User, type IContext } from '@accounts/types';
 import {
   AccountsServer,
-  AccountsServerOptions,
+  type AccountsServerOptions,
   AccountsCoreConfigToken,
   DatabaseInterfaceUserToken,
   DatabaseInterfaceSessionsToken,

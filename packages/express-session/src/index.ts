@@ -1,6 +1,6 @@
-import { AccountsServer } from '@accounts/server';
-import { Tokens, User, LoginResult } from '@accounts/types';
-import { Request, Response, NextFunction } from 'express';
+import { type AccountsServer } from '@accounts/server';
+import { type Tokens, type User, type LoginResult } from '@accounts/types';
+import { type Request, type Response, type NextFunction } from 'express';
 import * as requestIp from 'request-ip';
 import { merge } from 'lodash';
 import 'express-session';

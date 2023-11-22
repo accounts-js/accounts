@@ -1,10 +1,10 @@
-import * as jwt from 'jsonwebtoken';
-import { User, Session } from '@accounts/types';
-import { EmailTemplatesType } from './email-templates-type';
-import { PrepareMailFunction } from './prepare-mail-function';
-import { SendMailType } from './send-mail-type';
-import { TokenCreator } from './token-creator';
-import { JwtData } from './jwt-data';
+import type * as jwt from 'jsonwebtoken';
+import { type User, type Session } from '@accounts/types';
+import { type EmailTemplatesType } from './email-templates-type';
+import { type PrepareMailFunction } from './prepare-mail-function';
+import { type SendMailType } from './send-mail-type';
+import { type TokenCreator } from './token-creator';
+import { type JwtData } from './jwt-data';
 
 export interface AccountsServerOptions<CustomUser extends User = User> {
   micro?: boolean;

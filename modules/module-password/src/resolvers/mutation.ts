@@ -1,4 +1,4 @@
-import { CreateUserServicePassword } from '@accounts/types';
+import { type CreateUserServicePassword } from '@accounts/types';
 import {
   AccountsPassword,
   CreateUserErrors,
@@ -6,7 +6,7 @@ import {
   SendVerificationEmailErrors,
 } from '@accounts/password';
 import { AccountsServer, AccountsJsError } from '@accounts/server';
-import { MutationResolvers } from '../models';
+import { type MutationResolvers } from '../models';
 import { GraphQLError } from 'graphql';
 
 export const Mutation: MutationResolvers = {

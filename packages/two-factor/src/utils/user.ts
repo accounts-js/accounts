@@ -1,5 +1,5 @@
-import { User } from '@accounts/types';
-import { TwoFactorService } from '../types';
+import { type User } from '@accounts/types';
+import { type TwoFactorService } from '../types';
 
 /**
  * Return the user two factor service object

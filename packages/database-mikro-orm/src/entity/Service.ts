@@ -1,5 +1,5 @@
-import { Reference, EntitySchema, ref } from '@mikro-orm/core';
-import { IUser, UserCtor } from './User';
+import { type Reference, EntitySchema, ref } from '@mikro-orm/core';
+import { type IUser, type UserCtor } from './User';
 
 export class Service<CustomUser extends IUser<any, any, any>> {
   id!: number;

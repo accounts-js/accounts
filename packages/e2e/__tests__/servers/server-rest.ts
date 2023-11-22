@@ -1,22 +1,22 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import http from 'http';
+import type http from 'http';
 import fetch from 'node-fetch';
 
 // Server
 import { AccountsServer } from '@accounts/server';
 import { AccountsPassword } from '@accounts/password';
 import accountsExpress from '@accounts/rest-express';
-import { User, DatabaseInterface } from '@accounts/types';
+import { type User, type DatabaseInterface } from '@accounts/types';
 
 // Client
 import { AccountsClient } from '@accounts/client';
 import { AccountsClientPassword } from '@accounts/client-password';
 import { RestClient } from '@accounts/rest-client';
 
-import { DatabaseTestInterface } from '../databases';
+import { type DatabaseTestInterface } from '../databases';
 import { DatabaseTest } from '../databases/mongo';
-import { ServerTestInterface } from './index';
+import { type ServerTestInterface } from './index';
 
 (global as any).fetch = fetch;
 
