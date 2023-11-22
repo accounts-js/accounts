@@ -7,6 +7,7 @@ import { body } from 'express-validator';
 import { matchOrThrow } from '../../utils/matchOrTrow';
 
 export const registerPassword = (accountsServer: AccountsServer) => [
+  body('user').isObject().notEmpty(),
   body('user.username').optional().isString().notEmpty(),
   body('user.email').optional().isEmail(),
   body('user.password').isString().notEmpty(),
