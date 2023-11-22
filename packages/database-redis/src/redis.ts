@@ -1,4 +1,4 @@
-import * as IORedis from 'ioredis';
+import { type Redis } from 'ioredis';
 import * as shortid from 'shortid';
 import { Session, DatabaseInterfaceSessions, ConnectionInformations } from '@accounts/types';
 import { AccountsRedisOptions } from './types';
@@ -16,9 +16,9 @@ const defaultOptions = {
 
 export class RedisSessions implements DatabaseInterfaceSessions {
   private options: AccountsRedisOptions & typeof defaultOptions;
-  private db: IORedis.Redis;
+  private db: Redis;
 
-  constructor(db: IORedis.Redis, options: AccountsRedisOptions = {}) {
+  constructor(db: Redis, options: AccountsRedisOptions = {}) {
     this.options = {
       ...defaultOptions,
       ...options,

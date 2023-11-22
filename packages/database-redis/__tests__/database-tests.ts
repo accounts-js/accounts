@@ -1,11 +1,11 @@
 import { runDatabaseTests } from '@accounts/database-tests';
-import IORedis from 'ioredis';
+import { Redis } from 'ioredis';
 
 import { RedisSessions } from '../src/redis';
 
 export class DatabaseTests {
   public database!: RedisSessions;
-  private redis!: IORedis.Redis;
+  private redis!: Redis;
 
   public setup = async () => {
     await this.createConnection();
@@ -21,7 +21,7 @@ export class DatabaseTests {
   };
 
   public createConnection = async () => {
-    this.redis = new IORedis({
+    this.redis = new Redis({
       lazyConnect: true,
     });
     await this.redis.connect();

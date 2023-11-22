@@ -21,12 +21,12 @@ yarn add @accounts/redis @accounts/database-manager ioredis
 In order to use the redis adaptor in your project, you will need to pass a valid redis connection to `@accounts/redis`:
 
 ```javascript
-import IORedis from 'ioredis';
+import { Redis } from 'ioredis';
 import { AccountsServer } from '@accounts/server';
 import { DatabaseManager } from '@accounts/database-manager';
 import { RedisSessions } from '@accounts/redis';
 
-const ioRedis = new IORedis();
+const ioRedis = new Redis();
 
 const accountsRedis = new RedisSessions(ioRedis, {
   // options

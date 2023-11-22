@@ -25,7 +25,7 @@
     "graphql-tag": "2.12.6",
     "graphql-yoga": "5.0.0",
     "helmet": "^7.1.0",
-    "mongoose": "7.6.5",
+    "mongoose": "8.0.1",
     "tslib": "2.6.2"
   },
   "devDependencies": {

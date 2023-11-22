@@ -64,7 +64,7 @@
     "graphql": "16.8.1",
     "graphql-modules": "3.0.0-alpha-20231106133212-0b04b56e",
     "graphql-tag": "2.12.6",
-    "mongodb": "5.9.1",
+    "mongodb": "6.3.0",
     "reflect-metadata": "0.1.13"
   }
 }

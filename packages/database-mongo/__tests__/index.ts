@@ -39,7 +39,7 @@ describe('Mongo', () => {
     it('should throw when mongo id is not valid', async () => {
       const mongoTmp = new Mongo(databaseTests.db);
       await expect(mongoTmp.findUserById('invalid_hex')).rejects.toThrow(
-        'Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer'
+        'input must be a 24 character hex string, 12 byte Uint8Array, or an integer'
       );
     });
 
