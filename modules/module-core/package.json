@@ -40,7 +40,7 @@
   "dependencies": {
     "@graphql-tools/merge": "9.0.1",
     "@graphql-tools/schema": "10.0.2",
-    "@graphql-tools/utils": "10.0.10",
+    "@graphql-tools/utils": "10.0.11",
     "graphql-tag": "2.12.6",
     "request-ip": "3.3.0"
   },
