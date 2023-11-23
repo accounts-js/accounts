@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Button,
   Typography,
@@ -13,6 +13,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import QRCode from 'qrcode.react';
 import { useFormik, FormikErrors } from 'formik';
 import { accountsRest } from './accounts';
+import { type GeneratedSecret } from '@levminer/speakeasy';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -40,9 +41,11 @@ interface TwoFactorValues {
   oneTimeCode: string;
 }
 
+type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
+
 export const TwoFactor = () => {
   const classes = useStyles();
-  const [secret, setSecret] = useState<any>();
+  const [secret, setSecret] = useState<WithRequired<GeneratedSecret, 'otpauth_url'>>();
   const formik = useFormik<TwoFactorValues>({
     initialValues: {
       oneTimeCode: '',

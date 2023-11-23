@@ -13,14 +13,16 @@ const useStyles = makeStyles({
   },
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const SignUpLink = React.forwardRef<Link, any>((props, ref) => (
   <Link to="/signup" {...props} ref={ref} />
 ));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ResetPasswordLink = React.forwardRef<Link, any>((props, ref) => (
   <Link to="/reset-password" {...props} ref={ref} />
 ));
 
-const Login = ({ history }: RouteComponentProps<{}>) => {
+const Login = ({ history }: RouteComponentProps) => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

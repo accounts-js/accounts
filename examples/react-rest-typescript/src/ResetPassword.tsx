@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const LogInLink = React.forwardRef<RouterLink, any>((props, ref) => (
   <RouterLink to="/login" {...props} ref={ref} />
 ));
@@ -80,7 +81,8 @@ const ResetPassword = ({ match }: RouteComponentProps<RouteMatchProps>) => {
           await accountsRest.resetPassword(match.params.token, values.newPassword);
           setSuccess('Your password has been reset successfully');
         }
-      } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
         setError(error.message);
       }
       setSubmitting(false);

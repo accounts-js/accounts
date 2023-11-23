@@ -13,6 +13,7 @@ const useStyles = makeStyles({
   },
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const LogInLink = React.forwardRef<Link, any>((props, ref) => (
   <Link to="/login" {...props} ref={ref} />
 ));
@@ -24,7 +25,7 @@ interface UserForm {
   password: string;
 }
 
-const Signup = ({ history }: RouteComponentProps<{}>) => {
+const Signup = ({ history }: RouteComponentProps) => {
   const classes = useStyles();
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<UserForm>({

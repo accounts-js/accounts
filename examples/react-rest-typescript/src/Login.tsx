@@ -31,9 +31,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const SignUpLink = React.forwardRef<RouterLink, any>((props, ref) => (
   <RouterLink to="/signup" {...props} ref={ref} />
 ));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ResetPasswordLink = React.forwardRef<RouterLink, any>((props, ref) => (
   <RouterLink to="/reset-password" {...props} ref={ref} />
 ));
@@ -44,7 +46,7 @@ interface LoginValues {
   code: string;
 }
 
-const Login = ({ history }: RouteComponentProps<{}>) => {
+const Login = ({ history }: RouteComponentProps) => {
   const classes = useStyles();
   const { loginWithService } = useAuth();
   const [error, setError] = useState<string | undefined>();
@@ -74,7 +76,8 @@ const Login = ({ history }: RouteComponentProps<{}>) => {
           code: values.code,
         });
         history.push('/');
-      } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
         setError(error.message);
         setSubmitting(false);
       }

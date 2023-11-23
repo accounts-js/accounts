@@ -1,4 +1,3 @@
-import React from 'react';
 import { Typography, Divider } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { TwoFactor } from './TwoFactor';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Container } from '@mui/material';
 
 import makeStyles from '@mui/styles/makeStyles';
@@ -19,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface UnauthenticatedContainerProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: any;
 }
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { CssBaseline, Grid, Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';

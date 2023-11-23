@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -69,7 +69,8 @@ export const ChangePassword = () => {
         await accountsPassword.changePassword(values.oldPassword, values.newPassword);
         setMessage({ type: 'success', message: 'Password changed' });
         resetForm();
-      } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
         setMessage({ type: 'error', message: error.message });
       }
       setSubmitting(false);

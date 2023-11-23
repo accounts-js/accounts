@@ -1,4 +1,3 @@
-import React from 'react';
 import { SnackbarContent } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { green } from '@mui/material/colors';

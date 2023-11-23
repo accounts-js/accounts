@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
 import { Button, Typography } from '@mui/material';
 
@@ -9,7 +9,7 @@ interface RouteMatchProps {
   token: string;
 }
 
-const HomeLink = (props: any) => <Link to="/" {...props} />;
+const HomeLink = (props: object) => <Link to="/" {...props} />;
 
 const VerifyEmail = ({ match }: RouteComponentProps<RouteMatchProps>) => {
   const [success, setSuccess] = useState(false);

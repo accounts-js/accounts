@@ -13,7 +13,7 @@ const useStyles = makeStyles({
   },
 });
 
-const LogInLink = (props: any) => <Link to="/login" {...props} />;
+const LogInLink = (props: object) => <Link to="/login" {...props} />;
 
 interface RouteMatchProps {
   token: string;

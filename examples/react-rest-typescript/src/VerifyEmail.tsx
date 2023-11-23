@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const HomeLink = React.forwardRef<RouterLink, any>((props, ref) => (
   <RouterLink to="/" {...props} ref={ref} />
 ));
@@ -27,7 +28,8 @@ const VerifyEmail = () => {
     try {
       await accountsRest.verifyEmail(match.token);
       setSuccess(true);
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       setError(err.message);
     }
   };

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Container as MuiContainer } from '@mui/material';
 
 import makeStyles from '@mui/styles/makeStyles';
@@ -14,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface ContainerProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: any;
   maxWidth?: 'sm' | 'md';
 }

@@ -1,4 +1,3 @@
-import React from 'react';
 import { RouteComponentProps, Link, Redirect } from 'react-router-dom';
 import { Button, Typography } from '@mui/material';
 import gql from 'graphql-tag';
@@ -21,7 +20,7 @@ const GET_USER_QUERY = gql`
   }
 `;
 
-const Home = ({ history }: RouteComponentProps<{}>) => {
+const Home = ({ history }: RouteComponentProps) => {
   const { loading, error, data } = useQuery(GET_USER_QUERY);
 
   const onResendEmail = async () => {

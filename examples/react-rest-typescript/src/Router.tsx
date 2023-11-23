@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import { CssBaseline } from '@mui/material';
 import { AuthProvider, useAuth } from './components/AuthContext';
@@ -12,6 +11,7 @@ import { Security } from './Security';
 
 // A wrapper for <Route> that redirects to the login
 // screen if you're not yet authenticated.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const PrivateRoute = ({ children, ...rest }: any) => {
   const { user } = useAuth();
   return (
