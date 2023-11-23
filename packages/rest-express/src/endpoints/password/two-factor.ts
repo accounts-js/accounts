@@ -18,6 +18,7 @@ export const twoFactorSecret =
   };
 
 export const twoFactorSet = (accountsServer: AccountsServer) => [
+  body('secret').isObject().notEmpty(),
   body('secret.base32').isString().notEmpty(),
   body('code').isString().notEmpty(),
   async (req: express.Request, res: express.Response) => {
