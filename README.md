@@ -48,9 +48,11 @@ The `@accounts` suite of packages aims to provide all the tools you need to buil
 - Use the database you want
   - Mongo
   - Typeorm
+  - MikroORM
   - Redis (sessions only)
 - Add all the strategies you need
   - password
+  - magic link
   - Oauth (WIP)
 
 ## Contributing and community
