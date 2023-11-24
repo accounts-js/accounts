@@ -50,7 +50,7 @@
   "dependencies": {
     "emittery": "0.13.1",
     "jsonwebtoken": "9.0.2",
-    "jwt-decode": "3.1.2",
+    "jwt-decode": "4.0.0",
     "lodash.merge": "4.6.2"
   },
   "devDependencies": {

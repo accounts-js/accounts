@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { AccountsServer } from '../src/accounts-server';
 import { type JwtData } from '../src/types/jwt-data';
 import { ServerHooks } from '../src/utils/server-hooks';
