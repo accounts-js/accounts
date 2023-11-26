@@ -127,7 +127,7 @@ export interface AccountsPasswordOptions {
    * Function that check if the password is valid.
    * This function will be called when you call `createUser` and `changePassword`.
    */
-  validatePassword?: (password?: string) => boolean;
+  validatePassword?: <T extends User>(password?: string, user?: T) => Promise<boolean>;
   /**
    * Function that check if the username is a valid username.
    * This function will be called when you call `createUser`.
@@ -164,7 +164,7 @@ const defaultOptions = {
   validateEmail(email?: string): boolean {
     return isString(email) && isEmail(email);
   },
-  validatePassword(password?: string): boolean {
+  async validatePassword(password?: string): Promise<boolean> {
     return isString(password) && password !== '';
   },
   validateUsername(username?: string): boolean {
@@ -365,18 +365,19 @@ export default class AccountsPassword<CustomUser extends User = User>
     if (!token || !isString(token)) {
       throw new AccountsJsError(this.options.errors.invalidToken, ResetPasswordErrors.InvalidToken);
     }
-    if (!this.options.validatePassword(newPassword)) {
-      throw new AccountsJsError(
-        this.options.errors.invalidNewPassword,
-        ResetPasswordErrors.InvalidNewPassword
-      );
-    }
 
     const user = await this.db.findUserByResetPasswordToken(token);
     if (!user) {
       throw new AccountsJsError(
         this.options.errors.resetPasswordLinkExpired,
         ResetPasswordErrors.ResetPasswordLinkExpired
+      );
+    }
+
+    if (!(await this.options.validatePassword(newPassword, user))) {
+      throw new AccountsJsError(
+        this.options.errors.invalidNewPassword,
+        ResetPasswordErrors.InvalidNewPassword
       );
     }
 
@@ -471,14 +472,14 @@ export default class AccountsPassword<CustomUser extends User = User>
     oldPassword: string,
     newPassword: string
   ): Promise<void> {
-    if (!this.options.validatePassword(newPassword)) {
+    const user = await this.passwordAuthenticator({ id: userId }, oldPassword);
+
+    if (!(await this.options.validatePassword(newPassword, user))) {
       throw new AccountsJsError(
         this.options.errors.invalidPassword,
         ChangePasswordErrors.InvalidPassword
       );
     }
-
-    const user = await this.passwordAuthenticator({ id: userId }, oldPassword);
 
     const password = await this.options.hashPassword(newPassword);
     await this.db.setPassword(userId, password);
@@ -676,7 +677,7 @@ export default class AccountsPassword<CustomUser extends User = User>
     }
 
     if (user.password) {
-      if (!this.options.validatePassword(user.password)) {
+      if (!(await this.options.validatePassword(user.password))) {
         throw new AccountsJsError(
           this.options.errors.invalidPassword,
           CreateUserErrors.InvalidPassword
