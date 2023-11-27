@@ -1,5 +1,5 @@
 {
-  "name": "@examples/rest-express-typescript",
+  "name": "@examples/rest-express-typescript-without-modules",
   "private": true,
   "version": "0.32.0",
   "main": "lib/index.js",
@@ -10,9 +10,6 @@
     "test": "yarn run build"
   },
   "dependencies": {
-    "@accounts/module-core": "^0.34.0",
-    "@accounts/module-mongo": "^0.34.0",
-    "@accounts/module-password": "^0.34.0",
     "@accounts/mongo": "^0.34.1",
     "@accounts/password": "^0.32.2",
     "@accounts/rest-express": "^0.33.1",

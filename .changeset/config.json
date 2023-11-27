@@ -24,7 +24,8 @@
     "@examples/magic-link-server-typescript",
     "@examples/react-graphql-typescript",
     "@examples/react-rest-typescript",
-    "@examples/rest-express-typescript"
+    "@examples/rest-express-typescript",
+    "@examples/rest-express-typescript-without-modules"
   ],
   "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
     "onlyUpdatePeerDependentsWhenOutOfRange": true

@@ -4046,10 +4046,29 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@examples/rest-express-typescript-without-modules@workspace:examples/rest-express-typescript-without-modules":
+  version: 0.0.0-use.local
+  resolution: "@examples/rest-express-typescript-without-modules@workspace:examples/rest-express-typescript-without-modules"
+  dependencies:
+    "@accounts/mongo": "npm:^0.34.1"
+    "@accounts/password": "npm:^0.32.2"
+    "@accounts/rest-express": "npm:^0.33.1"
+    "@accounts/server": "npm:^0.33.1"
+    body-parser: "npm:1.20.2"
+    cors: "npm:2.8.5"
+    express: "npm:4.18.2"
+    mongoose: "npm:8.0.1"
+    tslib: "npm:2.6.2"
+  languageName: unknown
+  linkType: soft
+
 "@examples/rest-express-typescript@workspace:examples/rest-express-typescript":
   version: 0.0.0-use.local
   resolution: "@examples/rest-express-typescript@workspace:examples/rest-express-typescript"
   dependencies:
+    "@accounts/module-core": "npm:^0.34.0"
+    "@accounts/module-mongo": "npm:^0.34.0"
+    "@accounts/module-password": "npm:^0.34.0"
     "@accounts/mongo": "npm:^0.34.1"
     "@accounts/password": "npm:^0.32.2"
     "@accounts/rest-express": "npm:^0.33.1"
