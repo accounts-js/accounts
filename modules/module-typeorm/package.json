@@ -38,6 +38,9 @@
     "graphql-modules": "^3.0.0",
     "typeorm": "^0.3.0"
   },
+  "dependencies": {
+    "tslib": "2.6.2"
+  },
   "devDependencies": {
     "@accounts/server": "^0.33.1",
     "@accounts/typeorm": "^0.33.1",

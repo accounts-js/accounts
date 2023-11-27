@@ -39,7 +39,8 @@
     "graphql-modules": "^3.0.0"
   },
   "dependencies": {
-    "graphql-tag": "2.12.6"
+    "graphql-tag": "2.12.6",
+    "tslib": "2.6.2"
   },
   "devDependencies": {
     "@accounts/module-core": "^0.34.0",

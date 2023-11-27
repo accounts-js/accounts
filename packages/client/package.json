@@ -47,7 +47,8 @@
   "author": "Tim Mikeladze",
   "license": "MIT",
   "dependencies": {
-    "jwt-decode": "4.0.0"
+    "jwt-decode": "4.0.0",
+    "tslib": "2.6.2"
   },
   "devDependencies": {
     "@accounts/types": "^0.33.1",

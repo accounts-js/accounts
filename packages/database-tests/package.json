@@ -19,6 +19,9 @@
     "testEnvironment": "node",
     "preset": "ts-jest"
   },
+  "dependencies": {
+    "tslib": "2.6.2"
+  },
   "author": "Leo Pradel",
   "license": "MIT"
 }

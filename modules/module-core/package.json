@@ -42,7 +42,8 @@
     "@graphql-tools/schema": "10.0.2",
     "@graphql-tools/utils": "10.0.11",
     "graphql-tag": "2.12.6",
-    "request-ip": "3.3.0"
+    "request-ip": "3.3.0",
+    "tslib": "2.6.2"
   },
   "devDependencies": {
     "@accounts/server": "^0.33.1",

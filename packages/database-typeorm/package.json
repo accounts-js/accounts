@@ -34,7 +34,8 @@
     "typeorm": "^0.3.0"
   },
   "dependencies": {
-    "lodash": "4.17.21"
+    "lodash": "4.17.21",
+    "tslib": "2.6.2"
   },
   "devDependencies": {
     "@accounts/types": "^0.33.1",

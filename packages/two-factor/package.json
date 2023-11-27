@@ -26,7 +26,8 @@
     "preset": "ts-jest"
   },
   "dependencies": {
-    "@levminer/speakeasy": "1.4.2"
+    "@levminer/speakeasy": "1.4.2",
+    "tslib": "2.6.2"
   },
   "devDependencies": {
     "@accounts/types": "^0.33.2"

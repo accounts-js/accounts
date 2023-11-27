@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "request": "2.88.2",
-    "request-promise": "4.2.6"
+    "request-promise": "4.2.6",
+    "tslib": "2.6.2"
   },
   "devDependencies": {
     "@accounts/oauth": "^0.32.2",

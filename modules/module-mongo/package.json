@@ -39,6 +39,9 @@
     "graphql-modules": "^3.0.0",
     "mongodb": "^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0"
   },
+  "dependencies": {
+    "tslib": "2.6.2"
+  },
   "devDependencies": {
     "@accounts/mongo": "^0.34.0",
     "@accounts/server": "^0.33.1",
