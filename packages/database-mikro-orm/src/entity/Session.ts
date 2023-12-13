@@ -1,4 +1,4 @@
-import { type Reference, EntitySchema, ref } from '@mikro-orm/core';
+import { type Ref, EntitySchema, ref } from '@mikro-orm/core';
 import { type IUser, type UserCtor } from './User';
 
 export class Session<CustomUser extends IUser<any, any, any>> {
@@ -8,7 +8,7 @@ export class Session<CustomUser extends IUser<any, any, any>> {
 
   updatedAt: Date = new Date();
 
-  user: Reference<CustomUser> & { id: number };
+  user: Ref<CustomUser>;
 
   token: string;
 

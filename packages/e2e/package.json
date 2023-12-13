@@ -52,9 +52,9 @@
     "graphql": "16.8.1",
     "graphql-modules": "3.0.0-alpha-20231106133212-0b04b56e",
     "jest-localstorage-mock": "2.4.26",
-    "mongoose": "8.0.2",
+    "mongoose": "8.0.3",
     "node-fetch": "2.7.0",
-    "reflect-metadata": "0.1.13",
+    "reflect-metadata": "0.1.14",
     "typeorm": "0.3.17"
   }
 }

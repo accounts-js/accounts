@@ -21,7 +21,7 @@
     "graphql-http": "1.22.0",
     "graphql-modules": "3.0.0-alpha-20231106133212-0b04b56e",
     "graphql-tag": "2.12.6",
-    "mongoose": "8.0.2",
+    "mongoose": "8.0.3",
     "tslib": "2.6.2"
   }
 }

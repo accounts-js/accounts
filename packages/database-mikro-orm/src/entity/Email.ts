@@ -1,10 +1,10 @@
-import { type Reference, EntitySchema, ref } from '@mikro-orm/core';
+import { type Ref, EntitySchema, ref } from '@mikro-orm/core';
 import { type IUser, type UserCtor } from './User';
 
 export class Email<CustomUser extends IUser<any, any, any>> {
   id!: number;
 
-  user!: Reference<CustomUser> & { id: number };
+  user!: Ref<CustomUser>;
 
   address: string;
 

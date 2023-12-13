@@ -34,6 +34,6 @@
     "@accounts/types": "^0.33.1",
     "graphql": "16.8.1",
     "graphql-modules": "3.0.0-alpha-20231106133212-0b04b56e",
-    "reflect-metadata": "0.1.13"
+    "reflect-metadata": "0.1.14"
   }
 }
