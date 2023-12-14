@@ -47,8 +47,8 @@
     "@accounts/module-core": "^0.34.0",
     "@accounts/server": "^0.33.1",
     "@accounts/types": "^0.33.2",
-    "@mikro-orm/core": "6.0.0-dev.252",
-    "@mikro-orm/migrations": "6.0.0-dev.252",
+    "@mikro-orm/core": "6.0.0-dev.261",
+    "@mikro-orm/migrations": "6.0.0-dev.261",
     "graphql": "16.8.1",
     "graphql-modules": "3.0.0-alpha-20231106133212-0b04b56e"
   }

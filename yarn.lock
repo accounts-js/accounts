@@ -95,7 +95,7 @@ __metadata:
     jest-localstorage-mock: "npm:2.4.26"
     mongoose: "npm:8.0.3"
     node-fetch: "npm:2.7.0"
-    reflect-metadata: "npm:0.1.14"
+    reflect-metadata: "npm:0.2.0"
     tslib: "npm:2.6.2"
     typeorm: "npm:0.3.17"
   languageName: unknown
@@ -158,7 +158,7 @@ __metadata:
     graphql: "npm:16.8.1"
     graphql-modules: "npm:3.0.0-alpha-20231106133212-0b04b56e"
     lodash.set: "npm:4.3.2"
-    reflect-metadata: "npm:0.1.14"
+    reflect-metadata: "npm:0.2.0"
     tslib: "npm:2.6.2"
   peerDependencies:
     "@accounts/server": ^0.33.0
@@ -171,7 +171,7 @@ __metadata:
   resolution: "@accounts/mikro-orm@workspace:packages/database-mikro-orm"
   dependencies:
     "@accounts/types": "npm:^0.33.2"
-    "@mikro-orm/core": "npm:6.0.0-dev.252"
+    "@mikro-orm/core": "npm:6.0.0-dev.261"
     "@types/lodash": "npm:4.14.202"
     graphql: "npm:16.8.1"
     graphql-modules: "npm:3.0.0-alpha-20231106133212-0b04b56e"
@@ -248,8 +248,8 @@ __metadata:
     "@accounts/module-core": "npm:^0.34.0"
     "@accounts/server": "npm:^0.33.1"
     "@accounts/types": "npm:^0.33.2"
-    "@mikro-orm/core": "npm:6.0.0-dev.252"
-    "@mikro-orm/migrations": "npm:6.0.0-dev.252"
+    "@mikro-orm/core": "npm:6.0.0-dev.261"
+    "@mikro-orm/migrations": "npm:6.0.0-dev.261"
     graphql: "npm:16.8.1"
     graphql-modules: "npm:3.0.0-alpha-20231106133212-0b04b56e"
     tslib: "npm:2.6.2"
@@ -419,7 +419,7 @@ __metadata:
     "@accounts/types": "npm:^0.33.1"
     graphql: "npm:16.8.1"
     graphql-modules: "npm:3.0.0-alpha-20231106133212-0b04b56e"
-    reflect-metadata: "npm:0.1.14"
+    reflect-metadata: "npm:0.2.0"
     tslib: "npm:2.6.2"
   peerDependencies:
     "@accounts/server": ^0.33.0
@@ -444,7 +444,7 @@ __metadata:
     graphql: "npm:16.8.1"
     graphql-modules: "npm:3.0.0-alpha-20231106133212-0b04b56e"
     lodash.set: "npm:4.3.2"
-    reflect-metadata: "npm:0.1.14"
+    reflect-metadata: "npm:0.2.0"
     request-ip: "npm:3.3.0"
     tslib: "npm:2.6.2"
   peerDependencies:
@@ -493,7 +493,7 @@ __metadata:
     "@types/supertest": "npm:^2.0.16"
     express: "npm:4.18.2"
     express-validator: "npm:^7.0.1"
-    reflect-metadata: "npm:0.1.14"
+    reflect-metadata: "npm:0.2.0"
     request-ip: "npm:3.3.0"
     supertest: "npm:^6.3.3"
     tslib: "npm:2.6.2"
@@ -517,7 +517,7 @@ __metadata:
     jsonwebtoken: "npm:9.0.2"
     jwt-decode: "npm:4.0.0"
     lodash.merge: "npm:4.6.2"
-    reflect-metadata: "npm:0.1.14"
+    reflect-metadata: "npm:0.2.0"
     tslib: "npm:2.6.2"
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
@@ -3852,13 +3852,13 @@ __metadata:
     "@envelop/graphql-modules": "npm:6.0.0"
     "@graphql-tools/merge": "npm:9.0.1"
     "@graphql-tools/schema": "npm:10.0.2"
-    "@mikro-orm/cli": "npm:6.0.0-dev.252"
-    "@mikro-orm/core": "npm:6.0.0-dev.252"
-    "@mikro-orm/entity-generator": "npm:6.0.0-dev.252"
-    "@mikro-orm/knex": "npm:6.0.0-dev.252"
-    "@mikro-orm/migrations": "npm:6.0.0-dev.252"
-    "@mikro-orm/postgresql": "npm:6.0.0-dev.252"
-    "@mikro-orm/reflection": "npm:6.0.0-dev.252"
+    "@mikro-orm/cli": "npm:6.0.0-dev.261"
+    "@mikro-orm/core": "npm:6.0.0-dev.261"
+    "@mikro-orm/entity-generator": "npm:6.0.0-dev.261"
+    "@mikro-orm/knex": "npm:6.0.0-dev.261"
+    "@mikro-orm/migrations": "npm:6.0.0-dev.261"
+    "@mikro-orm/postgresql": "npm:6.0.0-dev.261"
+    "@mikro-orm/reflection": "npm:6.0.0-dev.261"
     graphql: "npm:16.8.1"
     graphql-modules: "npm:3.0.0-alpha-20231106133212-0b04b56e"
     graphql-yoga: "npm:5.0.2"
@@ -5507,97 +5507,97 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mikro-orm/cli@npm:6.0.0-dev.252":
-  version: 6.0.0-dev.252
-  resolution: "@mikro-orm/cli@npm:6.0.0-dev.252"
+"@mikro-orm/cli@npm:6.0.0-dev.261":
+  version: 6.0.0-dev.261
+  resolution: "@mikro-orm/cli@npm:6.0.0-dev.261"
   dependencies:
     "@jercle/yargonaut": "npm:1.1.5"
-    "@mikro-orm/core": "npm:6.0.0-dev.252"
-    "@mikro-orm/knex": "npm:6.0.0-dev.252"
+    "@mikro-orm/core": "npm:6.0.0-dev.261"
+    "@mikro-orm/knex": "npm:6.0.0-dev.261"
     fs-extra: "npm:11.2.0"
     tsconfig-paths: "npm:4.2.0"
     yargs: "npm:17.7.2"
   bin:
     mikro-orm: cli.js
     mikro-orm-esm: esm.js
-  checksum: 37e23a04f69b0f45a4c8610120f6e184c87e75cf7fbe0f6f5bd0ef8d5166e5ff57347a795d46120e0bee337cc508cc14a2f3ba5c2a622b278975953ed9490fc4
+  checksum: 97b0bcd29b0161ef04b936f19b7d6a1078f74b70b7ed862c79a73451be06ef5e648ecd5d6b4536559d2e2cad0de7c834e4d1833d7999cea1f53363fe25243c1a
   languageName: node
   linkType: hard
 
-"@mikro-orm/core@npm:6.0.0-dev.252":
-  version: 6.0.0-dev.252
-  resolution: "@mikro-orm/core@npm:6.0.0-dev.252"
+"@mikro-orm/core@npm:6.0.0-dev.261":
+  version: 6.0.0-dev.261
+  resolution: "@mikro-orm/core@npm:6.0.0-dev.261"
   dependencies:
     dataloader: "npm:2.2.2"
     dotenv: "npm:16.3.1"
     esprima: "npm:4.0.1"
     fs-extra: "npm:11.2.0"
     globby: "npm:11.1.0"
-    mikro-orm: "npm:6.0.0-dev.252"
+    mikro-orm: "npm:6.0.0-dev.261"
     reflect-metadata: "npm:0.1.14"
-  checksum: 827b3dd839959a80a6b1f5234e940fbd45a7b72d6770d7a8c3958197c0be461bc097ae21c0a680893220b38fbb7c197fc234a6ec581b130a81fa602a64208eda
+  checksum: 8bdfaa3211cbc12eb578d9e72880046e6829096b22ae5743610388c19c4afc6379e6eb4319045b4e2bb5f1409f8062e5dbdd501a42f92e781febc7bd96ce054f
   languageName: node
   linkType: hard
 
-"@mikro-orm/entity-generator@npm:6.0.0-dev.252":
-  version: 6.0.0-dev.252
-  resolution: "@mikro-orm/entity-generator@npm:6.0.0-dev.252"
+"@mikro-orm/entity-generator@npm:6.0.0-dev.261":
+  version: 6.0.0-dev.261
+  resolution: "@mikro-orm/entity-generator@npm:6.0.0-dev.261"
   dependencies:
-    "@mikro-orm/knex": "npm:6.0.0-dev.252"
+    "@mikro-orm/knex": "npm:6.0.0-dev.261"
     fs-extra: "npm:11.2.0"
   peerDependencies:
-    "@mikro-orm/core": 6.0.0-dev.252
-  checksum: 859c7edc48039e90f9b18bc93a867a19fd78278e150130280a1a4146535707bec985917472b5bd03e446034e14705a258da7f690f1097c762356482a7ab089f6
+    "@mikro-orm/core": 6.0.0-dev.261
+  checksum: 9038fece783831e5f1155971ea2b5c77f52ed193a9c088fecc6f20bad771f6545b5ca57ec6abb28554c0fb270fc1d0d83fbb07c86b5fafef117c0aca606dc811
   languageName: node
   linkType: hard
 
-"@mikro-orm/knex@npm:6.0.0-dev.252":
-  version: 6.0.0-dev.252
-  resolution: "@mikro-orm/knex@npm:6.0.0-dev.252"
+"@mikro-orm/knex@npm:6.0.0-dev.261":
+  version: 6.0.0-dev.261
+  resolution: "@mikro-orm/knex@npm:6.0.0-dev.261"
   dependencies:
     fs-extra: "npm:11.2.0"
     knex: "npm:3.1.0"
     sqlstring: "npm:2.3.3"
   peerDependencies:
-    "@mikro-orm/core": 6.0.0-dev.252
-  checksum: 598524fc0e45e04a6828d56f8b347ed19d1e129087601a858687d000b8dc04148fc218e7a17d9eb9319e937bd211f921257c7c165f9265d207b336e4ad995038
+    "@mikro-orm/core": 6.0.0-dev.261
+  checksum: 20244214f5213d6d17ae19423fbe45e2dceb9ee5febdec08361d7b5a21b26dcc519ae278911c13a630fcfc4233078ed52332e0eeff851191233f836ad4caccc1
   languageName: node
   linkType: hard
 
-"@mikro-orm/migrations@npm:6.0.0-dev.252":
-  version: 6.0.0-dev.252
-  resolution: "@mikro-orm/migrations@npm:6.0.0-dev.252"
+"@mikro-orm/migrations@npm:6.0.0-dev.261":
+  version: 6.0.0-dev.261
+  resolution: "@mikro-orm/migrations@npm:6.0.0-dev.261"
   dependencies:
-    "@mikro-orm/knex": "npm:6.0.0-dev.252"
+    "@mikro-orm/knex": "npm:6.0.0-dev.261"
     fs-extra: "npm:11.2.0"
     umzug: "npm:3.4.0"
   peerDependencies:
-    "@mikro-orm/core": 6.0.0-dev.252
-  checksum: 9682f284e5bd27e4d6b72e3cbc0a8ae8a0eef9ec82f6607fac859705b8aeb56bc9509207a258cb850001f01e3de3090823443412c784d62bed3d5bc848e15954
+    "@mikro-orm/core": 6.0.0-dev.261
+  checksum: 86c7ea6a995e1afac25a6d2f3ce927b5d20434aca665cb3e80ff9583cc8546eef52b160671156216e7958ae472e1dd3d7b63043fbc1d4a40aa3d6b983baaf72e
   languageName: node
   linkType: hard
 
-"@mikro-orm/postgresql@npm:6.0.0-dev.252":
-  version: 6.0.0-dev.252
-  resolution: "@mikro-orm/postgresql@npm:6.0.0-dev.252"
+"@mikro-orm/postgresql@npm:6.0.0-dev.261":
+  version: 6.0.0-dev.261
+  resolution: "@mikro-orm/postgresql@npm:6.0.0-dev.261"
   dependencies:
-    "@mikro-orm/knex": "npm:6.0.0-dev.252"
+    "@mikro-orm/knex": "npm:6.0.0-dev.261"
     pg: "npm:8.11.3"
   peerDependencies:
-    "@mikro-orm/core": 6.0.0-dev.252
-  checksum: 6104cc3a130618a97d92bd6734f0d44317cc064a48b6d6f308d91ce8453a377f6aa4e177e51d6540e21475bc97b3ad1dde5536cd5bd7290692917a04c65a302b
+    "@mikro-orm/core": 6.0.0-dev.261
+  checksum: 4be63210d2a2e2b3c6c523242177766444cb01127cd547c7147a6a0239559f4212a14bbb574a4da3543d72af6c04d89f5cfbe98fb88c9c534adc17eff2f41a57
   languageName: node
   linkType: hard
 
-"@mikro-orm/reflection@npm:6.0.0-dev.252":
-  version: 6.0.0-dev.252
-  resolution: "@mikro-orm/reflection@npm:6.0.0-dev.252"
+"@mikro-orm/reflection@npm:6.0.0-dev.261":
+  version: 6.0.0-dev.261
+  resolution: "@mikro-orm/reflection@npm:6.0.0-dev.261"
   dependencies:
     globby: "npm:11.1.0"
     ts-morph: "npm:21.0.1"
   peerDependencies:
-    "@mikro-orm/core": 6.0.0-dev.252
-  checksum: 38cf12d50caa3d84c7b3812c128ea3551919535e66511f283bf5f12a42aaf941e5c85bbc696ddd1211002cbc1d17fe0fef2df2d2af4207ec5302ff5fc811d170
+    "@mikro-orm/core": 6.0.0-dev.261
+  checksum: 0af1cab33ed07081a054656d31d0ce00216f2bf75507f7ecd7824023072961bb1ccfdcd9a5d585dea4a04afee4eceae3cd6d950c90a75eb3e29d87af389061be
   languageName: node
   linkType: hard
 
@@ -8110,12 +8110,12 @@ __metadata:
   linkType: hard
 
 "@whatwg-node/server@npm:^0.9.1":
-  version: 0.9.21
-  resolution: "@whatwg-node/server@npm:0.9.21"
+  version: 0.9.22
+  resolution: "@whatwg-node/server@npm:0.9.22"
   dependencies:
     "@whatwg-node/fetch": "npm:^0.9.10"
     tslib: "npm:^2.3.1"
-  checksum: 7eb5a28c80f1893a51aa26a47f783c9c659b4e7319ee1d27120a29651ba495ced7f4b3689b62570e66c78f39ac5a4edaff029f06d3fea419badcef2af18fb6e8
+  checksum: d8cf73428cea6e21a3aa2ca9778207d7afe46d85323f0f19d661b4266b74b592b49d623956bc5a046cbe26c9e32db067749dd9e4a08d5096c1ee5ddf81c96dd7
   languageName: node
   linkType: hard
 
@@ -11596,9 +11596,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.601":
-  version: 1.4.611
-  resolution: "electron-to-chromium@npm:1.4.611"
-  checksum: 597dcb3f0e73fa6218aab48a2622fc8a5b692d8d72303fe57ac318ae2714b89272567b8b3634245a755ca7afc47d7c8cd3bb53a9b48507aa7d4a17ab20951716
+  version: 1.4.612
+  resolution: "electron-to-chromium@npm:1.4.612"
+  checksum: 4afeae778beb67e81a47e362b72847efc24161b7673818b3d5a36fa0678f006629436a5cfa6b0bb0291927c61d01e58b66330942cc7f4109f170bdec6bfafd73
   languageName: node
   linkType: hard
 
@@ -17963,10 +17963,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mikro-orm@npm:6.0.0-dev.252":
-  version: 6.0.0-dev.252
-  resolution: "mikro-orm@npm:6.0.0-dev.252"
-  checksum: 4fa31d87b1d7705b186ea43c419c2257b85445826f78cf15ffa8f50cef83cc9c4c4dc5964efd507c2048023b0f209c3add712f5039e12636298b4e79d53689c6
+"mikro-orm@npm:6.0.0-dev.261":
+  version: 6.0.0-dev.261
+  resolution: "mikro-orm@npm:6.0.0-dev.261"
+  checksum: b09c81a7501eaba88672e518374a9b70d4f5402a9325daa6344508f59971ea9cd320cc0ee263101310041d0ec8ec28294cab8c012273fe8433a6c53806eb4d77
   languageName: node
   linkType: hard
 
@@ -21262,6 +21262,13 @@ __metadata:
   version: 0.1.14
   resolution: "reflect-metadata@npm:0.1.14"
   checksum: 3a6190c7f6cb224f26a012d11f9e329360c01c1945e2cbefea23976a8bacf9db6b794aeb5bf18adcb673c448a234fbc06fc41853c00a6c206b30f0777ecf019e
+  languageName: node
+  linkType: hard
+
+"reflect-metadata@npm:0.2.0":
+  version: 0.2.0
+  resolution: "reflect-metadata@npm:0.2.0"
+  checksum: 818c7b99d71a80da9374f85ffdc611ebdf851c60db3d5ad3c22a866c11cdd19f233c38b4d8ccd0bdb589b38ada28616a67f99abc256352896f002849a0d20cff
   languageName: node
   linkType: hard
 
