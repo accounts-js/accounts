@@ -42,6 +42,6 @@
     "@types/lodash": "4.14.202",
     "graphql": "16.8.1",
     "graphql-modules": "3.0.0-alpha-20231106133212-0b04b56e",
-    "typeorm": "0.3.17"
+    "typeorm": "0.3.19"
   }
 }
