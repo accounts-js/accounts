@@ -66,7 +66,6 @@ const controller = app.createOperationController({
   context: {},
 });
 const accountsServer = controller.injector.get(AccountsServer);
-expressApp.use(accountsExpress(accountsServer));
 
 accountsServer.on(ServerHooks.ValidateLogin, ({ user }) => {
   // This hook is called every time a user try to login.
