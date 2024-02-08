@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@accounts/client": "^0.33.1",
-    "@apollo/client": "3.9.0",
+    "@apollo/client": "3.9.4",
     "graphql": "16.8.1"
   }
 }

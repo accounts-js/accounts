@@ -34,7 +34,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react": "18.2.48",
+    "@types/react": "18.2.55",
     "typescript": "5.3.3"
   }
 }
