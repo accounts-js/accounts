@@ -38,6 +38,6 @@
   },
   "devDependencies": {
     "@accounts/types": "^0.33.2",
-    "mongodb": "6.3.0"
+    "mongodb": "6.4.0"
   }
 }

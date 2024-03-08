@@ -56,7 +56,7 @@
   },
   "devDependencies": {
     "@accounts/types": "^0.33.1",
-    "@types/jsonwebtoken": "9.0.5",
+    "@types/jsonwebtoken": "9.0.6",
     "@types/lodash.merge": "4.6.9",
     "graphql": "16.8.1",
     "graphql-modules": "3.0.0-alpha-20231106133212-0b04b56e",
