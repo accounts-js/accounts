@@ -10,9 +10,9 @@
     "test": "yarn run build"
   },
   "dependencies": {
-    "@accounts/magic-link": "^0.1.1",
-    "@accounts/mongo": "^0.34.1",
-    "@accounts/server": "^0.33.1",
+    "@accounts/magic-link": "^1.0.0",
+    "@accounts/mongo": "^1.0.0",
+    "@accounts/server": "^1.0.0",
     "mongoose": "8.2.1",
     "tslib": "2.6.2"
   }

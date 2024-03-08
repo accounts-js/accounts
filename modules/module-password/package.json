@@ -1,6 +1,6 @@
 {
   "name": "@accounts/module-password",
-  "version": "0.34.0",
+  "version": "1.0.0",
   "description": "Password module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -33,8 +33,8 @@
   },
   "homepage": "https://github.com/js-accounts/accounts",
   "peerDependencies": {
-    "@accounts/password": "^0.32.0",
-    "@accounts/server": "^0.33.0",
+    "@accounts/password": "^1.0.0",
+    "@accounts/server": "^1.0.0",
     "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0",
     "graphql-modules": "^3.0.0"
   },
@@ -43,10 +43,10 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@accounts/module-core": "^0.34.0",
-    "@accounts/password": "^0.32.1",
-    "@accounts/server": "^0.33.1",
-    "@accounts/types": "^0.33.2",
+    "@accounts/module-core": "^1.0.0",
+    "@accounts/password": "^1.0.0",
+    "@accounts/server": "^1.0.0",
+    "@accounts/types": "^1.0.0",
     "@graphql-codegen/add": "5.0.2",
     "@graphql-codegen/cli": "5.0.2",
     "@graphql-codegen/introspection": "4.0.3",

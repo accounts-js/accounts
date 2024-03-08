@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client-magic-link",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "@accounts/client-magic-link",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -36,7 +36,7 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@accounts/client": "^0.33.1",
-    "@accounts/types": "^0.33.1"
+    "@accounts/client": "^1.0.0",
+    "@accounts/types": "^1.0.0"
   }
 }

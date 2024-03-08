@@ -1,6 +1,6 @@
 {
   "name": "@accounts/module-typeorm",
-  "version": "0.34.0",
+  "version": "1.0.0",
   "description": "TypeORM Database Interface GraphQL Module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -32,8 +32,8 @@
   },
   "homepage": "https://github.com/js-accounts/accounts",
   "peerDependencies": {
-    "@accounts/server": "^0.33.0",
-    "@accounts/typeorm": "^0.33.1",
+    "@accounts/server": "^1.0.0",
+    "@accounts/typeorm": "^1.0.0",
     "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0",
     "graphql-modules": "^3.0.0",
     "typeorm": "^0.3.0"
@@ -42,9 +42,9 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@accounts/server": "^0.33.1",
-    "@accounts/typeorm": "^0.33.1",
-    "@accounts/types": "^0.33.2",
+    "@accounts/server": "^1.0.0",
+    "@accounts/typeorm": "^1.0.0",
+    "@accounts/types": "^1.0.0",
     "graphql": "16.8.1",
     "graphql-modules": "3.0.0-alpha-20231106133212-0b04b56e",
     "typeorm": "0.3.20"

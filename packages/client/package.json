@@ -1,6 +1,6 @@
 {
   "name": "@accounts/client",
-  "version": "0.33.1",
+  "version": "1.0.0",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -51,7 +51,7 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@accounts/types": "^0.33.1",
+    "@accounts/types": "^1.0.0",
     "jest-localstorage-mock": "2.4.26"
   }
 }

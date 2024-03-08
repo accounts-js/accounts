@@ -1,6 +1,6 @@
 {
   "name": "@accounts/apollo-link",
-  "version": "0.32.1",
+  "version": "1.0.0",
   "description": "Apollo link for account-js",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -31,7 +31,7 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@accounts/client": "^0.33.1",
+    "@accounts/client": "^1.0.0",
     "@apollo/client": "3.9.6",
     "graphql": "16.8.1"
   }

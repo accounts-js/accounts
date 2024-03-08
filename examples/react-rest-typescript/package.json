@@ -12,9 +12,9 @@
     "testonly": "yarn run build"
   },
   "dependencies": {
-    "@accounts/client": "^0.33.1",
-    "@accounts/client-password": "^0.32.2",
-    "@accounts/rest-client": "^0.33.1",
+    "@accounts/client": "^1.0.0",
+    "@accounts/client-password": "^1.0.0",
+    "@accounts/rest-client": "^1.0.0",
     "@emotion/react": "11.11.4",
     "@emotion/styled": "11.11.0",
     "@mui/icons-material": "5.15.12",
@@ -29,7 +29,7 @@
     "react-router-dom": "5.3.4"
   },
   "devDependencies": {
-    "@accounts/types": "^0.33.2",
+    "@accounts/types": "^1.0.0",
     "@levminer/speakeasy": "1.4.2",
     "@types/qrcode.react": "1.0.5",
     "@types/react": "^18.2.64",

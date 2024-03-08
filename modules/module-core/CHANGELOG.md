@@ -1,5 +1,50 @@
 # @accounts/graphql-api
 
+## 1.0.0
+
+### Major Changes
+
+- [#1258](https://github.com/accounts-js/accounts/pull/1258) [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8) Thanks [@darkbasic](https://github.com/darkbasic)! - Upgrade graphql-modules to v3 alpha
+
+- [#1258](https://github.com/accounts-js/accounts/pull/1258) [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8) Thanks [@darkbasic](https://github.com/darkbasic)! - Add @accounts/module-core
+
+- [#1258](https://github.com/accounts-js/accounts/pull/1258) [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8) Thanks [@darkbasic](https://github.com/darkbasic)! - Rearchitect accounts.js to better take advantage of graphql-modules
+
+- [#1258](https://github.com/accounts-js/accounts/pull/1258) [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8) Thanks [@darkbasic](https://github.com/darkbasic)! - Move graphql-api into graphql modules
+
+### Minor Changes
+
+- [#1258](https://github.com/accounts-js/accounts/pull/1258) [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8) Thanks [@darkbasic](https://github.com/darkbasic)! - Switch from pnpm to yarn4
+
+- [#1258](https://github.com/accounts-js/accounts/pull/1258) [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8) Thanks [@darkbasic](https://github.com/darkbasic)! - Return unmasked 401 errors when unauthorized
+
+- [#1258](https://github.com/accounts-js/accounts/pull/1258) [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8) Thanks [@darkbasic](https://github.com/darkbasic)! - Upgrade @graphql-tools/merge to v9
+
+- [#1258](https://github.com/accounts-js/accounts/pull/1258) [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8) Thanks [@darkbasic](https://github.com/darkbasic)! - Upgrade @graphql-tools/utils to v10
+
+- [#1258](https://github.com/accounts-js/accounts/pull/1258) [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8) Thanks [@darkbasic](https://github.com/darkbasic)! - Upgrade @graphql-tools/schema to v10
+
+- [#1258](https://github.com/accounts-js/accounts/pull/1258) [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8) Thanks [@darkbasic](https://github.com/darkbasic)! - Upgrade graphql to v16
+
+### Patch Changes
+
+- [#1270](https://github.com/accounts-js/accounts/pull/1270) [`d5dd32a`](https://github.com/accounts-js/accounts/commit/d5dd32ad43f4a19e77bd42592d4679636f20ff31) Thanks [@darkbasic](https://github.com/darkbasic)! - dependencies updates:
+
+  - Updated dependency [`@graphql-tools/utils@10.0.13` ↗︎](https://www.npmjs.com/package/@graphql-tools/utils/v/10.0.13) (from `10.0.12`, in `dependencies`)
+
+- [#1273](https://github.com/accounts-js/accounts/pull/1273) [`67c77b0`](https://github.com/accounts-js/accounts/commit/67c77b06d2f2ee88c08174084ba17b1819656bc0) Thanks [@darkbasic](https://github.com/darkbasic)! - dependencies updates:
+
+  - Updated dependency [`@graphql-tools/merge@9.0.3` ↗︎](https://www.npmjs.com/package/@graphql-tools/merge/v/9.0.3) (from `9.0.1`, in `dependencies`)
+  - Updated dependency [`@graphql-tools/schema@10.0.3` ↗︎](https://www.npmjs.com/package/@graphql-tools/schema/v/10.0.3) (from `10.0.2`, in `dependencies`)
+  - Updated dependency [`@graphql-tools/utils@10.1.0` ↗︎](https://www.npmjs.com/package/@graphql-tools/utils/v/10.1.0) (from `10.0.13`, in `dependencies`)
+
+- [#1258](https://github.com/accounts-js/accounts/pull/1258) [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8) Thanks [@darkbasic](https://github.com/darkbasic)! - Upgrade request-ip to 3.3
+
+- [#1258](https://github.com/accounts-js/accounts/pull/1258) [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8) Thanks [@darkbasic](https://github.com/darkbasic)! - Upgrade @graphql-codegen to v5
+
+- Updated dependencies [[`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8), [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8), [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8), [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8), [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8), [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8), [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8), [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8), [`da13d0d`](https://github.com/accounts-js/accounts/commit/da13d0dc96f05b83f28d5d367d1dc96a00210bf8)]:
+  - @accounts/server@1.0.0
+
 ## 0.33.2
 
 ### Patch Changes

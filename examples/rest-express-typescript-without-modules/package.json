@@ -10,10 +10,10 @@
     "test": "yarn run build"
   },
   "dependencies": {
-    "@accounts/mongo": "^0.34.1",
-    "@accounts/password": "^0.32.2",
-    "@accounts/rest-express": "^0.33.1",
-    "@accounts/server": "^0.33.1",
+    "@accounts/mongo": "^1.0.0",
+    "@accounts/password": "^1.0.0",
+    "@accounts/rest-express": "^1.0.0",
+    "@accounts/server": "^1.0.0",
     "body-parser": "1.20.2",
     "cors": "2.8.5",
     "express": "4.18.3",
