@@ -1,6 +1,6 @@
 {
   "name": "@accounts/mikro-orm",
-  "version": "0.34.0",
+  "version": "1.0.0",
   "description": "MikroORM adaptor for accounts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -35,7 +35,7 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@accounts/types": "^0.33.2",
+    "@accounts/types": "^1.0.0",
     "@mikro-orm/core": "6.1.8",
     "@types/lodash": "4.14.202",
     "graphql": "16.8.1",

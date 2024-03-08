@@ -19,12 +19,12 @@
     "test": "yarn run build"
   },
   "dependencies": {
-    "@accounts/mikro-orm": "^0.34.0",
-    "@accounts/module-core": "^0.34.0",
-    "@accounts/module-mikro-orm": "^0.34.0",
-    "@accounts/module-password": "^0.34.0",
-    "@accounts/password": "^0.32.1",
-    "@accounts/server": "^0.33.1",
+    "@accounts/mikro-orm": "^1.0.0",
+    "@accounts/module-core": "^1.0.0",
+    "@accounts/module-mikro-orm": "^1.0.0",
+    "@accounts/module-password": "^1.0.0",
+    "@accounts/password": "^1.0.0",
+    "@accounts/server": "^1.0.0",
     "@envelop/core": "5.0.0",
     "@envelop/graphql-modules": "6.0.0",
     "@graphql-tools/merge": "9.0.3",
@@ -42,6 +42,6 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@accounts/types": "^0.33.2"
+    "@accounts/types": "^1.0.0"
   }
 }

@@ -12,11 +12,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@accounts/apollo-link@npm:^0.32.1, @accounts/apollo-link@workspace:packages/apollo-link-accounts":
+"@accounts/apollo-link@npm:^1.0.0, @accounts/apollo-link@workspace:packages/apollo-link-accounts":
   version: 0.0.0-use.local
   resolution: "@accounts/apollo-link@workspace:packages/apollo-link-accounts"
   dependencies:
-    "@accounts/client": "npm:^0.33.1"
+    "@accounts/client": "npm:^1.0.0"
     "@apollo/client": "npm:3.9.6"
     graphql: "npm:16.8.1"
     tslib: "npm:2.6.2"
@@ -30,34 +30,34 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@accounts/client-magic-link@workspace:packages/client-magic-link"
   dependencies:
-    "@accounts/client": "npm:^0.33.1"
-    "@accounts/types": "npm:^0.33.1"
+    "@accounts/client": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     tslib: "npm:2.6.2"
   languageName: unknown
   linkType: soft
 
-"@accounts/client-password@npm:^0.32.2, @accounts/client-password@workspace:packages/client-password":
+"@accounts/client-password@npm:^1.0.0, @accounts/client-password@workspace:packages/client-password":
   version: 0.0.0-use.local
   resolution: "@accounts/client-password@workspace:packages/client-password"
   dependencies:
-    "@accounts/client": "npm:^0.33.1"
-    "@accounts/types": "npm:^0.33.1"
+    "@accounts/client": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     tslib: "npm:2.6.2"
   languageName: unknown
   linkType: soft
 
-"@accounts/client@npm:^0.33.1, @accounts/client@workspace:packages/client":
+"@accounts/client@npm:^1.0.0, @accounts/client@workspace:packages/client":
   version: 0.0.0-use.local
   resolution: "@accounts/client@workspace:packages/client"
   dependencies:
-    "@accounts/types": "npm:^0.33.1"
+    "@accounts/types": "npm:^1.0.0"
     jest-localstorage-mock: "npm:2.4.26"
     jwt-decode: "npm:4.0.0"
     tslib: "npm:2.6.2"
   languageName: unknown
   linkType: soft
 
-"@accounts/database-tests@npm:^0.32.2, @accounts/database-tests@workspace:packages/database-tests":
+"@accounts/database-tests@npm:^1.0.0, @accounts/database-tests@workspace:packages/database-tests":
   version: 0.0.0-use.local
   resolution: "@accounts/database-tests@workspace:packages/database-tests"
   dependencies:
@@ -69,20 +69,20 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@accounts/e2e@workspace:packages/e2e"
   dependencies:
-    "@accounts/client": "npm:^0.33.1"
-    "@accounts/client-password": "npm:^0.32.2"
-    "@accounts/graphql-client": "npm:^0.33.1"
-    "@accounts/module-core": "npm:^0.34.0"
-    "@accounts/module-mongo": "npm:^0.34.0"
-    "@accounts/module-password": "npm:^0.34.0"
-    "@accounts/module-typeorm": "npm:^0.34.0"
-    "@accounts/mongo": "npm:^0.34.1"
-    "@accounts/password": "npm:^0.32.2"
-    "@accounts/rest-client": "npm:^0.33.1"
-    "@accounts/rest-express": "npm:^0.33.1"
-    "@accounts/server": "npm:^0.33.1"
-    "@accounts/typeorm": "npm:^0.33.1"
-    "@accounts/types": "npm:^0.33.2"
+    "@accounts/client": "npm:^1.0.0"
+    "@accounts/client-password": "npm:^1.0.0"
+    "@accounts/graphql-client": "npm:^1.0.0"
+    "@accounts/module-core": "npm:^1.0.0"
+    "@accounts/module-mongo": "npm:^1.0.0"
+    "@accounts/module-password": "npm:^1.0.0"
+    "@accounts/module-typeorm": "npm:^1.0.0"
+    "@accounts/mongo": "npm:^1.0.0"
+    "@accounts/password": "npm:^1.0.0"
+    "@accounts/rest-client": "npm:^1.0.0"
+    "@accounts/rest-express": "npm:^1.0.0"
+    "@accounts/server": "npm:^1.0.0"
+    "@accounts/typeorm": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     "@apollo/client": "npm:3.9.6"
     "@apollo/server": "npm:4.10.1"
     "@types/body-parser": "npm:1.19.5"
@@ -113,8 +113,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@accounts/express-session@workspace:packages/express-session"
   dependencies:
-    "@accounts/server": "npm:^0.33.1"
-    "@accounts/types": "npm:^0.33.1"
+    "@accounts/server": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     "@types/express": "npm:4.17.21"
     "@types/express-session": "npm:1.18.0"
     "@types/lodash": "npm:4.14.202"
@@ -129,12 +129,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/graphql-client@npm:^0.33.1, @accounts/graphql-client@workspace:packages/graphql-client":
+"@accounts/graphql-client@npm:^1.0.0, @accounts/graphql-client@workspace:packages/graphql-client":
   version: 0.0.0-use.local
   resolution: "@accounts/graphql-client@workspace:packages/graphql-client"
   dependencies:
-    "@accounts/client": "npm:^0.33.1"
-    "@accounts/types": "npm:^0.33.1"
+    "@accounts/client": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     "@graphql-codegen/add": "npm:5.0.2"
     "@graphql-codegen/cli": "npm:5.0.2"
     "@graphql-codegen/typed-document-node": "npm:5.0.6"
@@ -148,12 +148,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/magic-link@npm:^0.1.1, @accounts/magic-link@workspace:packages/magic-link":
+"@accounts/magic-link@npm:^1.0.0, @accounts/magic-link@workspace:packages/magic-link":
   version: 0.0.0-use.local
   resolution: "@accounts/magic-link@workspace:packages/magic-link"
   dependencies:
-    "@accounts/server": "npm:^0.33.1"
-    "@accounts/types": "npm:^0.33.1"
+    "@accounts/server": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     "@types/lodash.set": "npm:4.3.9"
     graphql: "npm:16.8.1"
     graphql-modules: "npm:3.0.0-alpha-20231106133212-0b04b56e"
@@ -161,16 +161,16 @@ __metadata:
     reflect-metadata: "npm:0.2.1"
     tslib: "npm:2.6.2"
   peerDependencies:
-    "@accounts/server": ^0.33.0
+    "@accounts/server": ^1.0.0
     graphql-modules: ^3.0.0
   languageName: unknown
   linkType: soft
 
-"@accounts/mikro-orm@npm:^0.34.0, @accounts/mikro-orm@workspace:packages/database-mikro-orm":
+"@accounts/mikro-orm@npm:^1.0.0, @accounts/mikro-orm@workspace:packages/database-mikro-orm":
   version: 0.0.0-use.local
   resolution: "@accounts/mikro-orm@workspace:packages/database-mikro-orm"
   dependencies:
-    "@accounts/types": "npm:^0.33.2"
+    "@accounts/types": "npm:^1.0.0"
     "@mikro-orm/core": "npm:6.1.8"
     "@types/lodash": "npm:4.14.202"
     graphql: "npm:16.8.1"
@@ -184,12 +184,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/module-core@npm:^0.34.0, @accounts/module-core@workspace:modules/module-core":
+"@accounts/module-core@npm:^1.0.0, @accounts/module-core@workspace:modules/module-core":
   version: 0.0.0-use.local
   resolution: "@accounts/module-core@workspace:modules/module-core"
   dependencies:
-    "@accounts/server": "npm:^0.33.1"
-    "@accounts/types": "npm:^0.33.2"
+    "@accounts/server": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     "@graphql-codegen/add": "npm:5.0.2"
     "@graphql-codegen/cli": "npm:5.0.2"
     "@graphql-codegen/introspection": "npm:4.0.3"
@@ -208,7 +208,7 @@ __metadata:
     request-ip: "npm:3.3.0"
     tslib: "npm:2.6.2"
   peerDependencies:
-    "@accounts/server": ^0.33.0
+    "@accounts/server": ^1.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     graphql-modules: ^3.0.0
   languageName: unknown
@@ -218,9 +218,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@accounts/module-magic-link@workspace:modules/module-magic-link"
   dependencies:
-    "@accounts/magic-link": "npm:^0.1.1"
-    "@accounts/module-core": "npm:^0.34.0"
-    "@accounts/server": "npm:^0.33.1"
+    "@accounts/magic-link": "npm:^1.0.0"
+    "@accounts/module-core": "npm:^1.0.0"
+    "@accounts/server": "npm:^1.0.0"
     "@graphql-codegen/add": "npm:5.0.2"
     "@graphql-codegen/cli": "npm:5.0.2"
     "@graphql-codegen/introspection": "npm:4.0.3"
@@ -233,65 +233,65 @@ __metadata:
     graphql-tag: "npm:2.12.6"
     tslib: "npm:2.6.2"
   peerDependencies:
-    "@accounts/magic-link": ^0.1.0
-    "@accounts/module-core": ^0.34.0
-    "@accounts/server": ^0.33.0
+    "@accounts/magic-link": ^1.0.0
+    "@accounts/module-core": ^1.0.0
+    "@accounts/server": ^1.0.0
     graphql-modules: ^3.0.0
   languageName: unknown
   linkType: soft
 
-"@accounts/module-mikro-orm@npm:^0.34.0, @accounts/module-mikro-orm@workspace:modules/module-mikro-orm":
+"@accounts/module-mikro-orm@npm:^1.0.0, @accounts/module-mikro-orm@workspace:modules/module-mikro-orm":
   version: 0.0.0-use.local
   resolution: "@accounts/module-mikro-orm@workspace:modules/module-mikro-orm"
   dependencies:
-    "@accounts/mikro-orm": "npm:^0.34.0"
-    "@accounts/module-core": "npm:^0.34.0"
-    "@accounts/server": "npm:^0.33.1"
-    "@accounts/types": "npm:^0.33.2"
+    "@accounts/mikro-orm": "npm:^1.0.0"
+    "@accounts/module-core": "npm:^1.0.0"
+    "@accounts/server": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     "@mikro-orm/core": "npm:6.1.8"
     "@mikro-orm/migrations": "npm:6.1.8"
     graphql: "npm:16.8.1"
     graphql-modules: "npm:3.0.0-alpha-20231106133212-0b04b56e"
     tslib: "npm:2.6.2"
   peerDependencies:
-    "@accounts/mikro-orm": ^0.34.0
-    "@accounts/module-core": ^0.34.0
-    "@accounts/server": ^0.33.0
+    "@accounts/mikro-orm": ^1.0.0
+    "@accounts/module-core": ^1.0.0
+    "@accounts/server": ^1.0.0
     "@mikro-orm/core": ^6.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     graphql-modules: ^3.0.0
   languageName: unknown
   linkType: soft
 
-"@accounts/module-mongo@npm:^0.34.0, @accounts/module-mongo@workspace:modules/module-mongo":
+"@accounts/module-mongo@npm:^1.0.0, @accounts/module-mongo@workspace:modules/module-mongo":
   version: 0.0.0-use.local
   resolution: "@accounts/module-mongo@workspace:modules/module-mongo"
   dependencies:
-    "@accounts/mongo": "npm:^0.34.0"
-    "@accounts/server": "npm:^0.33.1"
-    "@accounts/types": "npm:^0.33.2"
+    "@accounts/mongo": "npm:^1.0.0"
+    "@accounts/server": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     graphql: "npm:16.8.1"
     graphql-modules: "npm:3.0.0-alpha-20231106133212-0b04b56e"
     mongodb: "npm:6.4.0"
     tslib: "npm:2.6.2"
   peerDependencies:
-    "@accounts/mongo": ^0.34.0
-    "@accounts/server": ^0.33.0
-    "@accounts/types": ^0.33.0
+    "@accounts/mongo": ^1.0.0
+    "@accounts/server": ^1.0.0
+    "@accounts/types": ^1.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     graphql-modules: ^3.0.0
     mongodb: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0
   languageName: unknown
   linkType: soft
 
-"@accounts/module-password@npm:^0.34.0, @accounts/module-password@workspace:modules/module-password":
+"@accounts/module-password@npm:^1.0.0, @accounts/module-password@workspace:modules/module-password":
   version: 0.0.0-use.local
   resolution: "@accounts/module-password@workspace:modules/module-password"
   dependencies:
-    "@accounts/module-core": "npm:^0.34.0"
-    "@accounts/password": "npm:^0.32.1"
-    "@accounts/server": "npm:^0.33.1"
-    "@accounts/types": "npm:^0.33.2"
+    "@accounts/module-core": "npm:^1.0.0"
+    "@accounts/password": "npm:^1.0.0"
+    "@accounts/server": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     "@graphql-codegen/add": "npm:5.0.2"
     "@graphql-codegen/cli": "npm:5.0.2"
     "@graphql-codegen/introspection": "npm:4.0.3"
@@ -304,39 +304,39 @@ __metadata:
     graphql-tag: "npm:2.12.6"
     tslib: "npm:2.6.2"
   peerDependencies:
-    "@accounts/password": ^0.32.0
-    "@accounts/server": ^0.33.0
+    "@accounts/password": ^1.0.0
+    "@accounts/server": ^1.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     graphql-modules: ^3.0.0
   languageName: unknown
   linkType: soft
 
-"@accounts/module-typeorm@npm:^0.34.0, @accounts/module-typeorm@workspace:modules/module-typeorm":
+"@accounts/module-typeorm@npm:^1.0.0, @accounts/module-typeorm@workspace:modules/module-typeorm":
   version: 0.0.0-use.local
   resolution: "@accounts/module-typeorm@workspace:modules/module-typeorm"
   dependencies:
-    "@accounts/server": "npm:^0.33.1"
-    "@accounts/typeorm": "npm:^0.33.1"
-    "@accounts/types": "npm:^0.33.2"
+    "@accounts/server": "npm:^1.0.0"
+    "@accounts/typeorm": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     graphql: "npm:16.8.1"
     graphql-modules: "npm:3.0.0-alpha-20231106133212-0b04b56e"
     tslib: "npm:2.6.2"
     typeorm: "npm:0.3.20"
   peerDependencies:
-    "@accounts/server": ^0.33.0
-    "@accounts/typeorm": ^0.33.1
+    "@accounts/server": ^1.0.0
+    "@accounts/typeorm": ^1.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     graphql-modules: ^3.0.0
     typeorm: ^0.3.0
   languageName: unknown
   linkType: soft
 
-"@accounts/mongo-magic-link@npm:^0.1.1, @accounts/mongo-magic-link@workspace:packages/database-mongo-magic-link":
+"@accounts/mongo-magic-link@npm:^1.0.0, @accounts/mongo-magic-link@workspace:packages/database-mongo-magic-link":
   version: 0.0.0-use.local
   resolution: "@accounts/mongo-magic-link@workspace:packages/database-mongo-magic-link"
   dependencies:
-    "@accounts/mongo-password": "npm:^0.33.0"
-    "@accounts/types": "npm:^0.33.1"
+    "@accounts/mongo-password": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     mongodb: "npm:6.4.0"
     tslib: "npm:2.6.2"
   peerDependencies:
@@ -344,11 +344,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/mongo-password@npm:^0.33.0, @accounts/mongo-password@workspace:packages/database-mongo-password":
+"@accounts/mongo-password@npm:^1.0.0, @accounts/mongo-password@workspace:packages/database-mongo-password":
   version: 0.0.0-use.local
   resolution: "@accounts/mongo-password@workspace:packages/database-mongo-password"
   dependencies:
-    "@accounts/types": "npm:^0.33.2"
+    "@accounts/types": "npm:^1.0.0"
     mongodb: "npm:6.4.0"
     tslib: "npm:2.6.2"
   peerDependencies:
@@ -356,11 +356,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/mongo-sessions@npm:^0.34.0, @accounts/mongo-sessions@workspace:packages/database-mongo-sessions":
+"@accounts/mongo-sessions@npm:^1.0.0, @accounts/mongo-sessions@workspace:packages/database-mongo-sessions":
   version: 0.0.0-use.local
   resolution: "@accounts/mongo-sessions@workspace:packages/database-mongo-sessions"
   dependencies:
-    "@accounts/types": "npm:^0.33.1"
+    "@accounts/types": "npm:^1.0.0"
     mongodb: "npm:6.4.0"
     tslib: "npm:2.6.2"
   peerDependencies:
@@ -368,15 +368,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/mongo@npm:^0.34.0, @accounts/mongo@npm:^0.34.1, @accounts/mongo@workspace:packages/database-mongo":
+"@accounts/mongo@npm:^1.0.0, @accounts/mongo@workspace:packages/database-mongo":
   version: 0.0.0-use.local
   resolution: "@accounts/mongo@workspace:packages/database-mongo"
   dependencies:
-    "@accounts/database-tests": "npm:^0.32.2"
-    "@accounts/mongo-magic-link": "npm:^0.1.1"
-    "@accounts/mongo-password": "npm:^0.33.0"
-    "@accounts/mongo-sessions": "npm:^0.34.0"
-    "@accounts/types": "npm:^0.33.1"
+    "@accounts/database-tests": "npm:^1.0.0"
+    "@accounts/mongo-magic-link": "npm:^1.0.0"
+    "@accounts/mongo-password": "npm:^1.0.0"
+    "@accounts/mongo-sessions": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     graphql: "npm:16.8.1"
     graphql-modules: "npm:3.0.0-alpha-20231106133212-0b04b56e"
     mongodb: "npm:6.4.0"
@@ -392,7 +392,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@accounts/oauth-instagram@workspace:packages/oauth-instagram"
   dependencies:
-    "@accounts/oauth": "npm:^0.32.2"
+    "@accounts/oauth": "npm:^1.0.0"
     "@types/request-promise": "npm:4.1.51"
     request: "npm:2.88.2"
     request-promise: "npm:4.2.6"
@@ -404,37 +404,37 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@accounts/oauth-twitter@workspace:packages/oauth-twitter"
   dependencies:
-    "@accounts/oauth": "npm:^0.32.2"
+    "@accounts/oauth": "npm:^1.0.0"
     "@types/oauth": "npm:0.9.4"
     oauth: "npm:^0.10.0"
     tslib: "npm:2.6.2"
   languageName: unknown
   linkType: soft
 
-"@accounts/oauth@npm:^0.32.2, @accounts/oauth@workspace:packages/oauth":
+"@accounts/oauth@npm:^1.0.0, @accounts/oauth@workspace:packages/oauth":
   version: 0.0.0-use.local
   resolution: "@accounts/oauth@workspace:packages/oauth"
   dependencies:
-    "@accounts/server": "npm:^0.33.1"
-    "@accounts/types": "npm:^0.33.1"
+    "@accounts/server": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     graphql: "npm:16.8.1"
     graphql-modules: "npm:3.0.0-alpha-20231106133212-0b04b56e"
     reflect-metadata: "npm:0.2.1"
     tslib: "npm:2.6.2"
   peerDependencies:
-    "@accounts/server": ^0.33.0
+    "@accounts/server": ^1.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     graphql-modules: ^3.0.0
   languageName: unknown
   linkType: soft
 
-"@accounts/password@npm:^0.32.1, @accounts/password@npm:^0.32.2, @accounts/password@workspace:packages/password":
+"@accounts/password@npm:^1.0.0, @accounts/password@workspace:packages/password":
   version: 0.0.0-use.local
   resolution: "@accounts/password@workspace:packages/password"
   dependencies:
-    "@accounts/server": "npm:^0.33.1"
-    "@accounts/two-factor": "npm:^0.32.4"
-    "@accounts/types": "npm:^0.33.1"
+    "@accounts/server": "npm:^1.0.0"
+    "@accounts/two-factor": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     "@types/bcryptjs": "npm:2.4.6"
     "@types/express": "npm:^4.17.21"
     "@types/lodash.set": "npm:4.3.9"
@@ -448,7 +448,7 @@ __metadata:
     request-ip: "npm:3.3.0"
     tslib: "npm:2.6.2"
   peerDependencies:
-    "@accounts/server": ^0.33.0
+    "@accounts/server": ^1.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     graphql-modules: ^3.0.0
   languageName: unknown
@@ -458,8 +458,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@accounts/redis@workspace:packages/database-redis"
   dependencies:
-    "@accounts/database-tests": "npm:^0.32.2"
-    "@accounts/types": "npm:^0.33.1"
+    "@accounts/database-tests": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     "@types/ioredis": "npm:5.0.0"
     "@types/shortid": "npm:0.0.32"
     ioredis: "npm:5.3.2"
@@ -468,26 +468,26 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/rest-client@npm:^0.33.1, @accounts/rest-client@workspace:packages/rest-client":
+"@accounts/rest-client@npm:^1.0.0, @accounts/rest-client@workspace:packages/rest-client":
   version: 0.0.0-use.local
   resolution: "@accounts/rest-client@workspace:packages/rest-client"
   dependencies:
-    "@accounts/client": "npm:^0.33.1"
-    "@accounts/types": "npm:^0.33.1"
+    "@accounts/client": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     "@types/node-fetch": "npm:2.6.11"
     node-fetch: "npm:2.7.0"
     tslib: "npm:2.6.2"
   languageName: unknown
   linkType: soft
 
-"@accounts/rest-express@npm:^0.33.1, @accounts/rest-express@workspace:packages/rest-express":
+"@accounts/rest-express@npm:^1.0.0, @accounts/rest-express@workspace:packages/rest-express":
   version: 0.0.0-use.local
   resolution: "@accounts/rest-express@workspace:packages/rest-express"
   dependencies:
-    "@accounts/magic-link": "npm:^0.1.1"
-    "@accounts/password": "npm:^0.32.1"
-    "@accounts/server": "npm:^0.33.1"
-    "@accounts/types": "npm:^0.33.1"
+    "@accounts/magic-link": "npm:^1.0.0"
+    "@accounts/password": "npm:^1.0.0"
+    "@accounts/server": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     "@types/express": "npm:4.17.21"
     "@types/request-ip": "npm:0.0.41"
     "@types/supertest": "npm:^6.0.2"
@@ -498,17 +498,17 @@ __metadata:
     supertest: "npm:^6.3.4"
     tslib: "npm:2.6.2"
   peerDependencies:
-    "@accounts/magic-link": ^0.1.0
-    "@accounts/password": ^0.32.0
-    "@accounts/server": ^0.32.0 || ^0.33.0
+    "@accounts/magic-link": ^1.0.0
+    "@accounts/password": ^1.0.0
+    "@accounts/server": ^1.0.0
   languageName: unknown
   linkType: soft
 
-"@accounts/server@npm:^0.33.1, @accounts/server@workspace:packages/server":
+"@accounts/server@npm:^1.0.0, @accounts/server@workspace:packages/server":
   version: 0.0.0-use.local
   resolution: "@accounts/server@workspace:packages/server"
   dependencies:
-    "@accounts/types": "npm:^0.33.1"
+    "@accounts/types": "npm:^1.0.0"
     "@types/jsonwebtoken": "npm:9.0.6"
     "@types/lodash.merge": "npm:4.6.9"
     emittery: "npm:0.13.1"
@@ -525,21 +525,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/two-factor@npm:^0.32.4, @accounts/two-factor@workspace:packages/two-factor":
+"@accounts/two-factor@npm:^1.0.0, @accounts/two-factor@workspace:packages/two-factor":
   version: 0.0.0-use.local
   resolution: "@accounts/two-factor@workspace:packages/two-factor"
   dependencies:
-    "@accounts/types": "npm:^0.33.2"
+    "@accounts/types": "npm:^1.0.0"
     "@levminer/speakeasy": "npm:1.4.2"
     tslib: "npm:2.6.2"
   languageName: unknown
   linkType: soft
 
-"@accounts/typeorm@npm:^0.33.1, @accounts/typeorm@workspace:packages/database-typeorm":
+"@accounts/typeorm@npm:^1.0.0, @accounts/typeorm@workspace:packages/database-typeorm":
   version: 0.0.0-use.local
   resolution: "@accounts/typeorm@workspace:packages/database-typeorm"
   dependencies:
-    "@accounts/types": "npm:^0.33.1"
+    "@accounts/types": "npm:^1.0.0"
     "@types/lodash": "npm:4.14.202"
     graphql: "npm:16.8.1"
     graphql-modules: "npm:3.0.0-alpha-20231106133212-0b04b56e"
@@ -553,7 +553,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@accounts/types@npm:^0.33.1, @accounts/types@npm:^0.33.2, @accounts/types@workspace:packages/types":
+"@accounts/types@npm:^1.0.0, @accounts/types@workspace:packages/types":
   version: 0.0.0-use.local
   resolution: "@accounts/types@workspace:packages/types"
   dependencies:
@@ -3821,12 +3821,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/accounts-microservice@workspace:examples/accounts-microservice"
   dependencies:
-    "@accounts/module-core": "npm:^0.34.0"
-    "@accounts/module-mongo": "npm:^0.34.0"
-    "@accounts/module-password": "npm:^0.34.0"
-    "@accounts/mongo": "npm:^0.34.0"
-    "@accounts/password": "npm:^0.32.1"
-    "@accounts/server": "npm:^0.33.1"
+    "@accounts/module-core": "npm:^1.0.0"
+    "@accounts/module-mongo": "npm:^1.0.0"
+    "@accounts/module-password": "npm:^1.0.0"
+    "@accounts/mongo": "npm:^1.0.0"
+    "@accounts/password": "npm:^1.0.0"
+    "@accounts/server": "npm:^1.0.0"
     "@envelop/core": "npm:5.0.0"
     "@envelop/graphql-modules": "npm:6.0.0"
     "@graphql-tools/delegate": "npm:10.0.4"
@@ -3849,13 +3849,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/graphql-mikro-orm-typescript@workspace:examples/graphql-server-mikro-orm-postgres"
   dependencies:
-    "@accounts/mikro-orm": "npm:^0.34.0"
-    "@accounts/module-core": "npm:^0.34.0"
-    "@accounts/module-mikro-orm": "npm:^0.34.0"
-    "@accounts/module-password": "npm:^0.34.0"
-    "@accounts/password": "npm:^0.32.1"
-    "@accounts/server": "npm:^0.33.1"
-    "@accounts/types": "npm:^0.33.2"
+    "@accounts/mikro-orm": "npm:^1.0.0"
+    "@accounts/module-core": "npm:^1.0.0"
+    "@accounts/module-mikro-orm": "npm:^1.0.0"
+    "@accounts/module-password": "npm:^1.0.0"
+    "@accounts/password": "npm:^1.0.0"
+    "@accounts/server": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     "@envelop/core": "npm:5.0.0"
     "@envelop/graphql-modules": "npm:6.0.0"
     "@graphql-tools/merge": "npm:9.0.3"
@@ -3878,11 +3878,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/graphql-server-typescript-apollo@workspace:examples/graphql-server-typescript-apollo"
   dependencies:
-    "@accounts/module-core": "npm:^0.34.0"
-    "@accounts/module-mongo": "npm:^0.34.0"
-    "@accounts/module-password": "npm:^0.34.0"
-    "@accounts/password": "npm:^0.32.2"
-    "@accounts/server": "npm:^0.33.1"
+    "@accounts/module-core": "npm:^1.0.0"
+    "@accounts/module-mongo": "npm:^1.0.0"
+    "@accounts/module-password": "npm:^1.0.0"
+    "@accounts/password": "npm:^1.0.0"
+    "@accounts/server": "npm:^1.0.0"
     "@apollo/server": "npm:4.10.1"
     "@apollo/server-plugin-landing-page-graphql-playground": "npm:4.0.1"
     "@graphql-tools/merge": "npm:9.0.3"
@@ -3899,11 +3899,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/graphql-server-typescript-basic@workspace:examples/graphql-server-typescript-basic"
   dependencies:
-    "@accounts/module-core": "npm:^0.34.0"
-    "@accounts/module-mongo": "npm:^0.34.0"
-    "@accounts/module-password": "npm:^0.34.0"
-    "@accounts/password": "npm:^0.32.2"
-    "@accounts/server": "npm:^0.33.1"
+    "@accounts/module-core": "npm:^1.0.0"
+    "@accounts/module-mongo": "npm:^1.0.0"
+    "@accounts/module-password": "npm:^1.0.0"
+    "@accounts/password": "npm:^1.0.0"
+    "@accounts/server": "npm:^1.0.0"
     "@graphql-tools/merge": "npm:9.0.3"
     "@graphql-tools/schema": "npm:10.0.3"
     graphql: "npm:16.8.1"
@@ -3919,11 +3919,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/graphql-server-typescript@workspace:examples/graphql-server-typescript"
   dependencies:
-    "@accounts/module-core": "npm:^0.34.0"
-    "@accounts/module-mongo": "npm:^0.34.0"
-    "@accounts/module-password": "npm:^0.34.0"
-    "@accounts/password": "npm:^0.32.2"
-    "@accounts/server": "npm:^0.33.1"
+    "@accounts/module-core": "npm:^1.0.0"
+    "@accounts/module-mongo": "npm:^1.0.0"
+    "@accounts/module-password": "npm:^1.0.0"
+    "@accounts/password": "npm:^1.0.0"
+    "@accounts/server": "npm:^1.0.0"
     "@envelop/core": "npm:5.0.0"
     "@envelop/graphql-modules": "npm:6.0.0"
     "@graphql-tools/merge": "npm:9.0.3"
@@ -3944,13 +3944,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/graphql-typeorm-typescript@workspace:examples/graphql-server-typeorm-postgres"
   dependencies:
-    "@accounts/module-core": "npm:^0.34.0"
-    "@accounts/module-password": "npm:^0.34.0"
-    "@accounts/module-typeorm": "npm:^0.34.0"
-    "@accounts/password": "npm:^0.32.2"
-    "@accounts/server": "npm:^0.33.1"
-    "@accounts/typeorm": "npm:^0.33.1"
-    "@accounts/types": "npm:^0.33.2"
+    "@accounts/module-core": "npm:^1.0.0"
+    "@accounts/module-password": "npm:^1.0.0"
+    "@accounts/module-typeorm": "npm:^1.0.0"
+    "@accounts/password": "npm:^1.0.0"
+    "@accounts/server": "npm:^1.0.0"
+    "@accounts/typeorm": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     "@envelop/core": "npm:5.0.0"
     "@envelop/graphql-modules": "npm:6.0.0"
     "@graphql-tools/merge": "npm:9.0.3"
@@ -3968,9 +3968,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/magic-link-server-typescript@workspace:examples/magic-link-server-typescript"
   dependencies:
-    "@accounts/magic-link": "npm:^0.1.1"
-    "@accounts/mongo": "npm:^0.34.1"
-    "@accounts/server": "npm:^0.33.1"
+    "@accounts/magic-link": "npm:^1.0.0"
+    "@accounts/mongo": "npm:^1.0.0"
+    "@accounts/server": "npm:^1.0.0"
     mongoose: "npm:8.2.1"
     tslib: "npm:2.6.2"
   languageName: unknown
@@ -3980,10 +3980,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/react-graphql-typescript@workspace:examples/react-graphql-typescript"
   dependencies:
-    "@accounts/apollo-link": "npm:^0.32.1"
-    "@accounts/client": "npm:^0.33.1"
-    "@accounts/client-password": "npm:^0.32.2"
-    "@accounts/graphql-client": "npm:^0.33.1"
+    "@accounts/apollo-link": "npm:^1.0.0"
+    "@accounts/client": "npm:^1.0.0"
+    "@accounts/client-password": "npm:^1.0.0"
+    "@accounts/graphql-client": "npm:^1.0.0"
     "@apollo/client": "npm:3.9.6"
     "@emotion/react": "npm:11.11.4"
     "@emotion/styled": "npm:11.11.0"
@@ -4018,10 +4018,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/react-rest-typescript@workspace:examples/react-rest-typescript"
   dependencies:
-    "@accounts/client": "npm:^0.33.1"
-    "@accounts/client-password": "npm:^0.32.2"
-    "@accounts/rest-client": "npm:^0.33.1"
-    "@accounts/types": "npm:^0.33.2"
+    "@accounts/client": "npm:^1.0.0"
+    "@accounts/client-password": "npm:^1.0.0"
+    "@accounts/rest-client": "npm:^1.0.0"
+    "@accounts/types": "npm:^1.0.0"
     "@emotion/react": "npm:11.11.4"
     "@emotion/styled": "npm:11.11.0"
     "@levminer/speakeasy": "npm:1.4.2"
@@ -4056,10 +4056,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/rest-express-typescript-without-modules@workspace:examples/rest-express-typescript-without-modules"
   dependencies:
-    "@accounts/mongo": "npm:^0.34.1"
-    "@accounts/password": "npm:^0.32.2"
-    "@accounts/rest-express": "npm:^0.33.1"
-    "@accounts/server": "npm:^0.33.1"
+    "@accounts/mongo": "npm:^1.0.0"
+    "@accounts/password": "npm:^1.0.0"
+    "@accounts/rest-express": "npm:^1.0.0"
+    "@accounts/server": "npm:^1.0.0"
     body-parser: "npm:1.20.2"
     cors: "npm:2.8.5"
     express: "npm:4.18.3"
@@ -4072,13 +4072,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/rest-express-typescript@workspace:examples/rest-express-typescript"
   dependencies:
-    "@accounts/module-core": "npm:^0.34.0"
-    "@accounts/module-mongo": "npm:^0.34.0"
-    "@accounts/module-password": "npm:^0.34.0"
-    "@accounts/mongo": "npm:^0.34.1"
-    "@accounts/password": "npm:^0.32.2"
-    "@accounts/rest-express": "npm:^0.33.1"
-    "@accounts/server": "npm:^0.33.1"
+    "@accounts/module-core": "npm:^1.0.0"
+    "@accounts/module-mongo": "npm:^1.0.0"
+    "@accounts/module-password": "npm:^1.0.0"
+    "@accounts/mongo": "npm:^1.0.0"
+    "@accounts/password": "npm:^1.0.0"
+    "@accounts/rest-express": "npm:^1.0.0"
+    "@accounts/server": "npm:^1.0.0"
     body-parser: "npm:1.20.2"
     cors: "npm:2.8.5"
     express: "npm:4.18.3"

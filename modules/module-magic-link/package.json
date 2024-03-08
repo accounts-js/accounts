@@ -1,6 +1,6 @@
 {
   "name": "@accounts/module-magic-link",
-  "version": "0.34.0",
+  "version": "1.0.0",
   "description": "Magic link module",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -33,9 +33,9 @@
   },
   "homepage": "https://github.com/js-accounts/accounts",
   "peerDependencies": {
-    "@accounts/magic-link": "^0.1.0",
-    "@accounts/module-core": "^0.34.0",
-    "@accounts/server": "^0.33.0",
+    "@accounts/magic-link": "^1.0.0",
+    "@accounts/module-core": "^1.0.0",
+    "@accounts/server": "^1.0.0",
     "graphql-modules": "^3.0.0"
   },
   "dependencies": {
@@ -43,9 +43,9 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@accounts/magic-link": "^0.1.1",
-    "@accounts/module-core": "^0.34.0",
-    "@accounts/server": "^0.33.1",
+    "@accounts/magic-link": "^1.0.0",
+    "@accounts/module-core": "^1.0.0",
+    "@accounts/server": "^1.0.0",
     "@graphql-codegen/add": "5.0.2",
     "@graphql-codegen/cli": "5.0.2",
     "@graphql-codegen/introspection": "4.0.3",

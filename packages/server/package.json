@@ -1,6 +1,6 @@
 {
   "name": "@accounts/server",
-  "version": "0.33.1",
+  "version": "1.0.0",
   "description": "Fullstack authentication and accounts-management",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -55,7 +55,7 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@accounts/types": "^0.33.1",
+    "@accounts/types": "^1.0.0",
     "@types/jsonwebtoken": "9.0.6",
     "@types/lodash.merge": "4.6.9",
     "graphql": "16.8.1",

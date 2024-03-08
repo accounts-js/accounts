@@ -1,6 +1,6 @@
 {
   "name": "@accounts/password",
-  "version": "0.32.2",
+  "version": "1.0.0",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -22,20 +22,20 @@
     "preset": "ts-jest"
   },
   "peerDependencies": {
-    "@accounts/server": "^0.33.0",
+    "@accounts/server": "^1.0.0",
     "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0",
     "graphql-modules": "^3.0.0"
   },
   "dependencies": {
-    "@accounts/two-factor": "^0.32.4",
+    "@accounts/two-factor": "^1.0.0",
     "bcryptjs": "2.4.3",
     "express-validator": "^7.0.1",
     "request-ip": "3.3.0",
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@accounts/server": "^0.33.1",
-    "@accounts/types": "^0.33.1",
+    "@accounts/server": "^1.0.0",
+    "@accounts/types": "^1.0.0",
     "@types/bcryptjs": "2.4.6",
     "@types/express": "^4.17.21",
     "@types/lodash.set": "4.3.9",

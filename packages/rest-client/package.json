@@ -1,6 +1,6 @@
 {
   "name": "@accounts/rest-client",
-  "version": "0.33.1",
+  "version": "1.0.0",
   "description": "REST client for accounts",
   "main": "lib/index",
   "typings": "lib/index",
@@ -45,8 +45,8 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@accounts/client": "^0.33.1",
-    "@accounts/types": "^0.33.1",
+    "@accounts/client": "^1.0.0",
+    "@accounts/types": "^1.0.0",
     "@types/node-fetch": "2.6.11",
     "node-fetch": "2.7.0"
   }

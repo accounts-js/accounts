@@ -1,6 +1,6 @@
 {
   "name": "@accounts/oauth-instagram",
-  "version": "0.32.1",
+  "version": "1.0.0",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -27,7 +27,7 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@accounts/oauth": "^0.32.2",
+    "@accounts/oauth": "^1.0.0",
     "@types/request-promise": "4.1.51"
   }
 }

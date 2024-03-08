@@ -1,6 +1,6 @@
 {
   "name": "@accounts/express-session",
-  "version": "0.32.2",
+  "version": "1.0.0",
   "description": "",
   "main": "lib/index",
   "typings": "lib/index",
@@ -46,8 +46,8 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@accounts/server": "^0.33.1",
-    "@accounts/types": "^0.33.1",
+    "@accounts/server": "^1.0.0",
+    "@accounts/types": "^1.0.0",
     "@types/express": "4.17.21",
     "@types/express-session": "1.18.0",
     "@types/lodash": "4.14.202",

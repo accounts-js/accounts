@@ -12,10 +12,10 @@
     "testonly": "yarn run build"
   },
   "dependencies": {
-    "@accounts/apollo-link": "^0.32.1",
-    "@accounts/client": "^0.33.1",
-    "@accounts/client-password": "^0.32.2",
-    "@accounts/graphql-client": "^0.33.1",
+    "@accounts/apollo-link": "^1.0.0",
+    "@accounts/client": "^1.0.0",
+    "@accounts/client-password": "^1.0.0",
+    "@accounts/graphql-client": "^1.0.0",
     "@apollo/client": "3.9.6",
     "@emotion/react": "11.11.4",
     "@emotion/styled": "11.11.0",
